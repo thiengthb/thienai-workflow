@@ -42,8 +42,9 @@ Từ mình đã chê (thêm vào đây mỗi lần mình chê):
 ## Gu UI
 - Design system của mình: thienui. Mỗi project web dùng thienui trước khi tự làm component.
 - Khi làm màn hình: AI đưa 2 đến 3 bố cục trong gu của mình, mình chọn trước, rồi AI giải thích vì sao bố cục đó hợp (người dùng nào, xu hướng nào). Mục đích là để mình học.
-- Làm rõ trong một thread riêng ("Làm rõ gu UI và trình độ hiện tại"), AI hỏi kỹ rồi mới điền.
+- Gốc: đồng bộ trước, đẹp sau. Chi tiết (font, cỡ, màu, icon, chuyển động, lỗi mình ghét) ở `UI-TASTE.md`. Project có giao diện thì AI đọc file đó trước khi làm màn hình.
 
 ## Trình độ hiện tại
-- Làm rõ trong cùng thread riêng đó: mình tự tin ở đâu, yếu ở đâu.
-- Mỗi milestone AI đề xuất cập nhật mục này dựa trên việc mình tự làm được, mình duyệt.
+- Chi tiết từng kỹ năng ở `SKILL-LEVEL.md`. AI đọc file đó ở mọi project.
+- Kỹ năng mình chưa đánh giá được (test, dễ truy cập, hiệu năng...): AI dựa vào test hoặc công cụ kiểm tra, không trông vào mình bắt lỗi.
+- Mỗi milestone AI đề xuất cập nhật dựa trên việc mình tự làm được, mình duyệt.
