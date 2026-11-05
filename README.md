@@ -7,6 +7,8 @@ Bộ quy trình chung khi thien làm việc với AI. Áp vào project mới ch�
 | File | Dùng để |
 |---|---|
 | `PROFILE.md` | Hồ sơ của thien: cách làm việc, cách ra quyết định với AI, ngôn ngữ, gu UI, trình độ |
+| `UI-TASTE.md` | Gu UI chi tiết: font, cỡ, màu, icon, chuyển động, lỗi thien ghét |
+| `SKILL-LEVEL.md` | Trình độ từng kỹ năng và cách AI dựa vào đó |
 | `AGENTS.template.md` | Mẫu `AGENTS.md` cho mỗi project, đọc được bởi Claude, Codex, Gemini |
 | `STATUS.template.md` | Mẫu `docs/STATUS.md`: project đang ở đâu, việc tiếp theo, đang chờ ai |
 | `DECISION.template.md` | Mẫu ghi quyết định khó sửa lại, trong `docs/decisions/` |
