@@ -4,17 +4,24 @@ Bộ quy trình chung khi thien làm việc với AI. Áp vào project mới ch�
 
 ## Có gì trong repo
 
-| File | Dùng để |
-|---|---|
-| `PROFILE.md` | Hồ sơ của thien: cách làm việc, cách ra quyết định với AI, ngôn ngữ, gu UI, trình độ |
-| `UI-TASTE.md` | Gu UI chi tiết: font, cỡ, màu, icon, chuyển động, lỗi thien ghét |
-| `SKILL-LEVEL.md` | Trình độ từng kỹ năng và cách AI dựa vào đó |
-| `AGENTS.template.md` | Mẫu `AGENTS.md` cho mỗi project, đọc được bởi Claude, Codex, Gemini |
-| (không có mẫu) | Mỗi project có thêm `CLAUDE.md` chỉ một dòng `@AGENTS.md`, để Claude Code chắc chắn đọc `AGENTS.md` |
-| `STATUS.template.md` | Mẫu `docs/STATUS.md`: project đang ở đâu, việc tiếp theo, đang chờ ai |
-| `DECISION.template.md` | Mẫu ghi quyết định khó sửa lại, trong `docs/decisions/` |
-| `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
-| `skills/start-project/` | Skill hỏi thien có áp quy trình không, rồi tạo các file trên trong project |
+```text
+profile/      Về thien: AI đọc ở mọi project
+templates/    File mẫu, chép vào repo của từng project
+skills/       Skill tải lên tài khoản Claude
+```
+
+| Thư mục | File | Dùng để |
+|---|---|---|
+| `profile/` | `PROFILE.md` | Hồ sơ của thien: cách làm việc, cách ra quyết định với AI, ngôn ngữ, gu UI, trình độ |
+| | `UI-TASTE.md` | Gu UI chi tiết: font, cỡ, màu, icon, chuyển động, lỗi thien ghét |
+| | `SKILL-LEVEL.md` | Trình độ từng kỹ năng và cách AI dựa vào đó |
+| `templates/` | `AGENTS.template.md` | Mẫu `AGENTS.md` cho mỗi project, đọc được bởi Claude, Codex, Gemini. Mỗi project có thêm `CLAUDE.md` chỉ một dòng `@AGENTS.md` |
+| | `STATUS.template.md` | Mẫu `docs/STATUS.md`: project đang ở đâu, việc tiếp theo, đang chờ ai |
+| | `DECISION.template.md` | Mẫu ghi quyết định khó sửa lại, trong `docs/decisions/` |
+| | `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
+| `skills/` | `start-project/` | Skill hỏi thien có áp quy trình không, rồi chép các file mẫu vào project |
+
+File mẫu giữ đuôi `.template.md` để không bị nhầm thành luật thật: Codex và Claude Code tự nạp file tên `AGENTS.md` hoặc `CLAUDE.md` khi làm việc trong thư mục chứa nó.
 
 ## Cài cho một tài khoản Claude (làm một lần cho mỗi tài khoản)
 
@@ -31,4 +38,4 @@ Codex, Gemini và người khác không cần cài gì: họ đọc `AGENTS.md` 
 
 ## Sửa quy trình
 
-Chỉ qua PR vào repo này, thien duyệt. Mỗi milestone AI đề xuất tối đa 3 thay đổi. `PROFILE.md` và phần chung của `AGENTS.template.md` mỗi file dưới 60 dòng: thêm một ý thì bỏ hoặc gộp một ý khác. Sửa skill thì phải tải lại file zip lên từng tài khoản.
+Chỉ qua PR vào repo này, thien duyệt. Mỗi milestone AI đề xuất tối đa 3 thay đổi. `profile/PROFILE.md` và phần chung của `templates/AGENTS.template.md` mỗi file dưới 60 dòng: thêm một ý thì bỏ hoặc gộp một ý khác. Sửa skill thì phải tải lại file zip lên từng tài khoản.
