@@ -17,7 +17,7 @@ Skill có thể được gọi ở coordinator hoặc ở một thread. Khi nói
 4. Thien chọn Có:
    - Đọc bốn file trong repo thienai-workflow.
    - Về quy trình, hỏi tối đa hai câu: project thuộc loại nào (web app, đồ án học thuật, BA, ghi chú...), repo nào. Câu hỏi về yêu cầu của app là việc của project, hỏi riêng sau bước này.
-   - Trong repo của project, qua một PR: tạo `AGENTS.md` (từ mẫu, thêm phần riêng của project), `docs/STATUS.md` (từ mẫu) và `docs/decisions/` (chép mẫu ghi quyết định vào).
+   - Trong repo của project, qua một PR: tạo `AGENTS.md` (từ mẫu, thêm phần riêng của project), `CLAUDE.md` chỉ có một dòng `@AGENTS.md`, `docs/STATUS.md` (từ mẫu) và `docs/decisions/` (chép mẫu ghi quyết định vào). Lý do có `CLAUDE.md`: Claude Code chỉ tự đọc `AGENTS.md` khi repo không có `CLAUDE.md`, và có phiên không đọc `AGENTS.md`; dòng `@AGENTS.md` bảo Claude nạp luật từ `AGENTS.md`. Repo đã có `CLAUDE.md` thì thêm dòng đó vào đầu file, không ghi đè.
    - Bước này hay bị quên: đưa thien đoạn sau để dán vào hướng dẫn của project (AI không tự sửa cài đặt được): "Project này theo quy trình thienai-workflow. Trước khi làm, đọc AGENTS.md và docs/STATUS.md trong repo <tên repo>."
    - Nếu lưu hồ sơ vào memory của project, ghi rõ đó là bản sao, bản gốc ở repo thienai-workflow.
 5. Báo lại trong 3 dòng: đã tạo gì, PR nào, thien cần làm gì.
