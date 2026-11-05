@@ -19,7 +19,7 @@ Mỗi phương án phải là thứ một người giỏi thật sự có thể 
 <Viết trước khi xem lựa chọn của AI: phương án nào, một câu vì sao. Hoặc ghi "bỏ qua bước này".>
 
 ## AI chọn
-<AI viết ra nháp trước khi thien trả lời, chỉ điền vào đây sau khi thien đã chọn. Nếu khác thien, nói rõ khác ở đâu.>
+<Trước khi hỏi thien, AI điền mục này và commit lên nhánh nhưng không nói ra; giờ commit là bằng chứng AI chọn trước. Chỉ nói ra sau khi thien đã chọn. Nếu khác thien, nói rõ khác ở đâu và AI đã bỏ sót điều gì.>
 
 ## Kết luận
 <Chọn gì, vì sao.>
@@ -30,4 +30,4 @@ Mỗi phương án phải là thứ một người giỏi thật sự có thể 
 - Xem lại khi: <ngày hoặc dấu hiệu, ví dụ "Anthropic ra tính năng tương đương">
 
 ## Tóm tắt bằng lời của thien
-<3 câu, thien tự viết; AI chỉ chỉ ra chỗ hiểu sai. Hoặc ghi "bỏ qua".>
+<3 câu, thien tự viết; AI chỉ chỉ ra chỗ hiểu sai. Chỉ ghi "bỏ qua" khi chính thien nói bỏ qua; AI không tự ghi thay.>
