@@ -13,6 +13,7 @@ Bộ quy trình chung khi thien làm việc với AI. Áp vào project mới ch�
 | (không có mẫu) | Mỗi project có thêm `CLAUDE.md` chỉ một dòng `@AGENTS.md`, để Claude Code chắc chắn đọc `AGENTS.md` |
 | `STATUS.template.md` | Mẫu `docs/STATUS.md`: project đang ở đâu, việc tiếp theo, đang chờ ai |
 | `DECISION.template.md` | Mẫu ghi quyết định khó sửa lại, trong `docs/decisions/` |
+| `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
 | `skills/start-project/` | Skill hỏi thien có áp quy trình không, rồi tạo các file trên trong project |
 
 ## Cài cho một tài khoản Claude (làm một lần cho mỗi tài khoản)
