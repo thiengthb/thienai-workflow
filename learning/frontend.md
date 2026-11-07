@@ -19,7 +19,8 @@ File này để tài khoản nào, model nào cũng dạy tiếp được cho th
 | Buổi | Ngày | Ý chính | Kết quả |
 |---|---|---|---|
 | 1 | 2026-11-07 | Một điểm nhấn (Todoist và TickTick, trang chủ) | 12 phút, độ dài và độ khó "vừa", đúng 4/4. Tự nói lại đúng. Cho TickTick 5 điểm về điểm nhấn, Todoist 3 (AI: 2 và 5). Về gu thích không khí xanh nhẹ của TickTick dù khen bố cục Todoist |
+| 2 | 2026-11-07 | Thứ bậc chữ (Slack và Linear, trang giá) | 13 phút, độ dài và độ khó "vừa", đúng 4/4. Câu nhớ lại chọn "một chỗ số 1, còn lại xếp bậc", tức đã hiểu đúng ý buổi 1. Chấm thứ bậc chữ Slack 3, Linear 3 (AI: 5 và 3): khớp AI ở Linear nhưng chưa thấy Slack làm tốt hơn hẳn (AI suy ra). Tự nói lại có cỡ chữ, màu và thứ tự, còn thiếu độ đậm, khoảng cách và ý "ít bậc, mỗi bậc khác hẳn nhau". Về gu chọn cách dùng chữ của Slack, nói là nhờ học xong mới nhận ra |
 
 ## Buổi tiếp theo
-- Buổi 2: câu nhớ lại hỏi lại "điểm nhấn" để xem thien hiểu là "chỗ nổi nhất" hay "chỉ một chỗ nổi". Ý mới: thứ bậc chữ (cỡ, độ đậm, khoảng cách cho biết cái gì quan trọng). Hai màn khác loại buổi 1, ví dụ màn đăng ký hoặc màn giá.
-- Buổi 3: khoảng trắng và nhịp khoảng cách.
+- Buổi 3: khoảng trắng và nhịp khoảng cách. Câu nhớ lại hỏi về độ đậm hoặc khoảng cách như một cách tạo bậc chữ, vì buổi 2 thien chưa nhắc tới. Có thể dùng lại khoảng trống lớn trong thẻ giá Slack làm ví dụ mở đầu. Hai màn khác loại buổi 1 và 2, ví dụ màn đăng ký, màn cài đặt hoặc màn chi tiết sản phẩm.
+- Cuối tuần 2: 15 phút so sánh mù lại các màn đã xem, làm mốc đầu tiên.
