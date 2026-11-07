@@ -9,6 +9,7 @@ profile/      Về thien: AI đọc ở mọi project
 templates/    File mẫu, chép vào repo của từng project
 skills/       Skill tải lên tài khoản Claude
 life/         Cấu hình trợ lý cuộc sống (Project `life`)
+learning/     Hồ sơ và trạng thái từng môn thien đang học cùng AI
 artifacts/    Mẫu artifact thien đã thích, dùng lại ở mọi project và tài khoản
 ```
 
@@ -22,6 +23,7 @@ artifacts/    Mẫu artifact thien đã thích, dùng lại ở mọi project v�
 | | `DECISION.template.md` | Mẫu ghi quyết định khó sửa lại, trong `docs/decisions/` |
 | | `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
 | `skills/` | `start-project/` | Skill hỏi thien có áp quy trình không, rồi chép các file mẫu vào project |
+| `learning/` | `frontend.md` | Đang học frontend tới đâu, buổi tiếp theo dạy gì, để tài khoản khác dạy tiếp |
 | `artifacts/` | `README.md` | Danh sách mẫu artifact thien thích và khi nào dùng; mỗi mẫu là một file HTML |
 | `life/` | `tracked-repos.md` | Danh sách repo mà bản tin sáng đọc `docs/STATUS.md` |
 
