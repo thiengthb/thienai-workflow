@@ -13,8 +13,7 @@ life/         Cấu hình trợ lý cuộc sống (Project `life`)
 
 | Thư mục | File | Dùng để |
 |---|---|---|
-| `profile/` | `PROFILE.md` | Hồ sơ của thien: cách làm việc, cách ra quyết định với AI, ngôn ngữ, gu UI, trình độ |
-| | `UI-TASTE.md` | Gu UI chi tiết: font, cỡ, màu, icon, chuyển động, lỗi thien ghét |
+| `profile/` | `PROFILE.md` | Hồ sơ của thien: cách làm việc, cách ra quyết định với AI, ngôn ngữ, gu UI, trình độ. Gu UI chi tiết ở repo [thienui](https://github.com/thiengthb/thienui), file `docs/taste.md` |
 | | `SKILL-LEVEL.md` | Trình độ từng kỹ năng và cách AI dựa vào đó |
 | `templates/` | `AGENTS.template.md` | Mẫu `AGENTS.md` cho mỗi project, đọc được bởi Claude, Codex, Gemini. Mỗi project có thêm `CLAUDE.md` chỉ một dòng `@AGENTS.md` |
 | | `STATUS.template.md` | Mẫu `docs/STATUS.md`: project đang ở đâu, việc tiếp theo, đang chờ ai |
