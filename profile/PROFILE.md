@@ -40,9 +40,9 @@ Từ mình đã chê (thêm vào đây mỗi lần mình chê):
 | trên chuyền, thoi bay, hậu kiểm, ròng | (từ lạ trong bài MLN; nói bằng lời thường) |
 
 ## Gu UI
-- Design system của mình: thienui. Mỗi project web dùng thienui trước khi tự làm component.
+- Mọi thứ về giao diện nằm ở repo `thiengthb/thienui`: gu chi tiết (`docs/taste.md`), token, luật, component, block và skill. Mỗi project có giao diện dùng thienui trước khi tự làm component; thứ dùng lại được thì gom về thienui (`docs/harvest.md`).
 - Khi làm màn hình: AI đưa 2 đến 3 bố cục trong gu của mình, mình chọn trước, rồi AI giải thích vì sao bố cục đó hợp (người dùng nào, xu hướng nào). Mục đích là để mình học.
-- Gốc: đồng bộ trước, đẹp sau. Chi tiết (font, cỡ, màu, icon, chuyển động, lỗi mình ghét) ở `profile/UI-TASTE.md`. Project có giao diện thì AI đọc file đó trước khi làm màn hình.
+- Gốc: đồng bộ trước, đẹp sau, nhưng luật chỉ giữ chi tiết đồng bộ. Trước khi nói xong một màn, AI chụp cả màn ở đúng cỡ thiết bị và tự chê bố cục (skill `new-screen` của thienui).
 
 ## Trình độ hiện tại
 - Chi tiết từng kỹ năng ở `profile/SKILL-LEVEL.md`. AI đọc file đó ở mọi project.
