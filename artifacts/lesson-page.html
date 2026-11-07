@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!-- Template: artifacts/lesson-page.html (thienai-workflow). Example content = lesson 1 "Một điểm nhấn". Replace __A__/__B__ with data: URIs of two phone-size screenshots, then rewrite texts, CRIT scores, quiz. Publish, then declare capabilities {db:{rules:[{path:"",read:"admin",write:"admin"}]},user:{}}. Results land in db collection "sessions". -->
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buổi học 1: Một điểm nhấn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--accent:#308E84;--accent-soft:#e3f1ef;--bad:#c2410c;--bad-soft:#fdeee6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Onest,system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:460px;margin:0 auto;padding:16px 16px 48px}
+.top{position:sticky;top:0;background:var(--bg);padding:12px 0 10px;z-index:5}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .25s ease}
+h1{font-size:26px;line-height:1.25;margin:20px 0 8px;font-weight:700;letter-spacing:-.01em}
+h2{font-size:20px;line-height:1.3;margin:8px 0 6px;font-weight:600}
+p{margin:0 0 12px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.step{display:none}.step.on{display:block;animation:in .2s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:26px;border:0;background:var(--ink);color:#fff;font:600 16px Onest,sans-serif;cursor:pointer;margin-top:16px}
+.btn[disabled]{opacity:.3;cursor:default}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);height:44px;font-weight:500}
+.opt{display:block;width:100%;text-align:left;padding:14px 16px;margin:8px 0;border:1px solid var(--line);border-radius:14px;background:#fff;font:15px/1.45 Onest,sans-serif;color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--accent);background:var(--accent-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+.why{display:none;font-size:14px;padding:12px 14px;border-radius:12px;background:#f3f1ec;margin-top:4px}
+.why.on{display:block}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.shot{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.shot img{display:block;width:100%;height:auto}
+.shot .tag{position:absolute;top:6px;left:6px;background:var(--ink);color:#fff;font-size:12px;font-weight:600;padding:2px 8px;border-radius:10px}
+.hl{position:absolute;border:2.5px solid #e11d48;border-radius:12px;box-shadow:0 0 0 999px rgba(0,0,0,.0);display:none}
+.hl.on{display:block}
+.hl.soft{border-style:dashed;border-color:#f59e0b}
+.big{display:block;width:100%;border-radius:14px;border:1px solid var(--line)}
+.tabs{display:flex;gap:8px;margin:8px 0 4px}
+.tab{flex:1;height:40px;border-radius:20px;border:1px solid var(--line);background:#fff;font:600 14px Onest,sans-serif;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.crit{padding:12px 0;border-top:1px solid var(--line)}
+.crit:first-child{border-top:0}
+.crit b{font-weight:600}
+.crit .d{font-size:13px;color:var(--muted);margin:2px 0 8px}
+.scale{display:flex;gap:6px}
+.scale button{flex:1;height:40px;border-radius:12px;border:1px solid var(--line);background:#fff;font:600 15px Onest,sans-serif;cursor:pointer;color:var(--ink)}
+.scale button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ends{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 4px;text-align:center;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+td.you{font-weight:600}
+textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:14px;padding:12px;font:15px/1.5 Onest,sans-serif;resize:vertical;background:#fff;color:var(--ink)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.chip{height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--line);background:#fff;font:500 14px Onest,sans-serif;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.kw{display:inline-block;background:var(--accent-soft);color:#1d5c55;font-weight:600;padding:0 6px;border-radius:6px}
+.legend{font-size:13px;color:var(--muted);display:flex;gap:14px;margin:4px 0 0}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border:2px solid #e11d48;border-radius:4px;margin-right:6px;vertical-align:-2px}
+.legend span.s::before{border-color:#f59e0b;border-style:dashed}
+.done{font-size:14px;padding:12px 14px;border-radius:12px;background:var(--accent-soft);color:#1d5c55;margin-top:12px;display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>Buổi 1 · Một điểm nhấn</span><span id="cnt">1/7</span></div><div class="bar"><i id="bar"></i></div></div>
+
+  <!-- 0 intro -->
+  <section class="step on" data-s="0">
+    <h1>Mắt người dùng nhìn vào đâu trước?</h1>
+    <p class="muted">Khoảng 15 phút. Không có bài tập nặng, không có gì phải nộp.</p>
+    <div class="card small">
+      <p><b>Hôm nay bạn sẽ:</b></p>
+      <p>1. Trả lời một câu nhớ lại.<br>2. Chấm hai màn hình thật trên điện thoại, chưa biết là app nào.<br>3. Học một ý: <span class="kw">một điểm nhấn</span>.<br>4. Làm 3 câu hỏi nhanh và 1 câu về gu.<br>5. Tự nói lại ý chính bằng một câu.</p>
+      <p class="muted" style="margin:0">Câu kiến thức có đúng sai. Câu về gu thì không có đúng sai, mình chỉ ghi lại để hiểu bạn.</p>
+    </div>
+    <button class="btn" onclick="go(1)">Bắt đầu</button>
+  </section>
+
+  <!-- 1 recall -->
+  <section class="step" data-s="1">
+    <h2>Nhớ lại</h2>
+    <p>Hôm nay bạn rút ra từ app why i buy: nó nhiều chữ hơn FAP mà vẫn được khen đẹp. Lý do chính là gì?</p>
+    <div class="q" data-q="recall" data-a="1">
+      <button class="opt">Thật ra why i buy ít chữ hơn, chỉ là nhìn không ra</button>
+      <button class="opt">Bố cục hài hòa và có một màu nhấn rõ, nên nhiều chữ vẫn dễ đọc</button>
+      <button class="opt">Nó dùng nhiều màu hơn nên vui mắt hơn</button>
+      <div class="why">Đúng ý bạn đã kể: why i buy nhiều chữ gấp 3–4 lần nhưng bố cục tốt, và chỉ dùng một màu nhấn vàng chanh cho thứ quan trọng. Hôm nay mình học kỹ hơn cái "một màu nhấn" đó.</div>
+    </div>
+    <button class="btn" id="n1" disabled onclick="go(2)">Tiếp</button>
+  </section>
+
+  <!-- 2 rate -->
+  <section class="step" data-s="2">
+    <h2>Chấm hai màn hình</h2>
+    <p class="small muted">Hai trang chủ của hai app quản lý việc cần làm, chụp ở cỡ điện thoại. Chấm từng tiêu chí trước, điểm chung sau cùng. 1 là rất kém, 5 là rất tốt.</p>
+    <div class="tabs"><button class="tab on" data-t="A">Màn A</button><button class="tab" data-t="B">Màn B</button></div>
+    <div id="rateA"></div>
+    <div id="rateB" style="display:none"></div>
+    <button class="btn" id="n2" disabled onclick="go(3)">Xem so sánh</button>
+  </section>
+
+  <!-- 3 compare + concept -->
+  <section class="step" data-s="3">
+    <h2>Điểm của bạn và của mình</h2>
+    <p class="small muted">Màn A là trang chủ <b>Todoist</b>, màn B là trang chủ <b>TickTick</b>. Điểm của mình chỉ là một ý kiến để bạn so, không phải đáp án.</p>
+    <div class="card" style="padding:8px 12px"><table id="cmp"></table></div>
+    <h2 style="margin-top:22px">Ý chính: một điểm nhấn</h2>
+    <p>Mỗi màn hình nên có <b>một chỗ mắt nhìn vào đầu tiên</b>, và chỗ đó nên là việc chính bạn muốn người dùng làm. Dân thiết kế gọi đây là <i>focal point</i>, nằm trong chuyện lớn hơn là <i>visual hierarchy</i> (thứ bậc thị giác: cái gì nhìn trước, cái gì nhìn sau).</p>
+    <div class="shots">
+      <div class="shot" id="sa"><img alt="Màn A: trang chủ Todoist trên điện thoại" src="__A__"><span class="tag">A</span>
+        <div class="hl on" style="left:28%;top:47.5%;width:44%;height:9%"></div></div>
+      <div class="shot" id="sb"><img alt="Màn B: trang chủ TickTick trên điện thoại" src="__B__"><span class="tag">B</span>
+        <div class="hl on" style="left:3.5%;top:42.6%;width:46%;height:6.6%"></div>
+        <div class="hl on" style="left:52%;top:42.6%;width:44.5%;height:6.6%"></div>
+        <div class="hl on soft" style="left:5%;top:55%;width:74%;height:28%"></div>
+        <div class="hl on soft" style="left:5%;top:86%;width:90%;height:14%"></div></div>
+    </div>
+    <div class="legend"><span>chỗ muốn được nhìn</span><span class="s">chỗ cũng giành sự chú ý</span></div>
+    <div class="card small">
+      <p><b>Màn A</b> chỉ có một thứ vừa to, vừa đậm, vừa khác màu: nút đỏ "Start for free", lại có bóng đổ nên như nổi lên. Mắt đi theo một đường: tiêu đề, rồi nút đỏ, rồi ảnh app bên dưới. Ảnh app được phóng to đủ để đọc chữ trên điện thoại.</p>
+      <p style="margin:0"><b>Màn B</b> có hai nút cạnh nhau cùng màu xanh, nên mắt phải dừng lại chọn. Bên dưới là ảnh màn hình máy tính thu nhỏ tới mức không đọc được, rồi bốn huy hiệu giải thưởng cũng muốn được nhìn. Màn B không xấu: nó gọn và đều. Vấn đề là quá nhiều thứ cùng xin sự chú ý.</p>
+    </div>
+    <p class="small muted">Liên hệ FAP: màu nhấn của FAP chỉ chiếm khoảng 0–2% diện tích màn hình, why i buy khoảng 6,6%. Không phải cứ nhiều màu nhấn là tốt, mà là màu nhấn phải rơi đúng vào một chỗ quan trọng nhất.</p>
+    <button class="btn" onclick="go(4)">Làm câu hỏi nhanh</button>
+  </section>
+
+  <!-- 4 quiz -->
+  <section class="step" data-s="4">
+    <h2>3 câu hỏi nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Một màn hình có hai nút cùng cỡ, cùng màu, đặt cạnh nhau. Điều gì thường xảy ra?</p>
+      <div class="q" data-q="q1" data-a="1">
+        <button class="opt">Người dùng bấm nhanh hơn vì có nhiều lựa chọn</button>
+        <button class="opt">Mắt phải dừng lại để chọn, điểm nhấn bị chia đôi</button>
+        <button class="opt">Màn hình cân đối nên chắc chắn đẹp hơn</button>
+        <div class="why">Hai thứ bằng nhau thì không thứ nào là "thứ nhất". Cân đối là tốt cho bố cục, nhưng điểm nhấn thì nên có một.</div>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Muốn nút chính nổi bật hơn mà không thêm màu mới, cách nào hợp nhất?</p>
+      <div class="q" data-q="q2" data-a="0">
+        <button class="opt">Giảm nút phụ: thành nút viền nhạt hoặc một dòng chữ có gạch chân</button>
+        <button class="opt">Làm cả hai nút to hơn</button>
+        <button class="opt">Thêm bóng đổ cho cả hai nút</button>
+        <div class="why">Muốn một thứ nổi lên thì thường dễ nhất là hạ những thứ xung quanh xuống. Làm to hay thêm bóng cho cả hai thì chúng vẫn ngang nhau.</div>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> Ảnh minh họa sản phẩm trên trang ở cỡ điện thoại nên thế nào?</p>
+      <div class="q" data-q="q3" data-a="1">
+        <button class="opt">Chụp cả màn hình máy tính cho thấy đủ tính năng</button>
+        <button class="opt">Chọn một phần nhỏ, phóng to đủ đọc được trên điện thoại</button>
+        <button class="opt">Đặt càng nhiều ảnh càng tốt</button>
+        <div class="why">Ảnh không đọc được thì chỉ là một mảng xám giành chỗ. Màn A cắt đúng một danh sách việc và để nó đủ to để đọc.</div>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>Về gu</b> <span class="muted small">(không có đúng sai)</span>: nếu chỉ giữ một, bạn thích không khí màn nào hơn, và vì sao? Một câu là đủ.</p>
+      <div class="chips" data-g="taste"><button class="chip">Màn A</button><button class="chip">Màn B</button><button class="chip">Như nhau</button></div>
+      <textarea id="tasteWhy" placeholder="Ví dụ: màn B sáng và nhẹ hơn, dù hơi rối"></textarea>
+    </div>
+    <button class="btn" id="n4" disabled onclick="go(5)">Tiếp</button>
+  </section>
+
+  <!-- 5 teach back -->
+  <section class="step" data-s="5">
+    <h2>Bạn nói lại ý chính</h2>
+    <p>Viết lại "một điểm nhấn" bằng một câu của bạn, như đang giải thích cho bạn cùng nhóm. Viết xong mới xem bản của mình.</p>
+    <textarea id="teach" placeholder="Một câu thôi"></textarea>
+    <button class="btn ghost" id="reveal" disabled>Xem bản của Claude</button>
+    <div class="why" id="mine">Mỗi màn hình chỉ nên có một thứ vừa to nhất, vừa đậm nhất, vừa khác màu nhất, và thứ đó phải là việc chính người dùng cần làm. Muốn nó nổi lên thì hạ những thứ xung quanh xuống.</div>
+    <button class="btn" id="n5" disabled onclick="go(6)">Tiếp</button>
+  </section>
+
+  <!-- 6 feedback -->
+  <section class="step" data-s="6">
+    <h2>Buổi này thế nào?</h2>
+    <p class="small muted">Đây là buổi thử. Bạn góp ý để mình chỉnh trước khi đặt lịch.</p>
+    <p style="margin-bottom:2px"><b>Độ dài</b></p>
+    <div class="chips" data-g="len"><button class="chip">Hơi ngắn</button><button class="chip">Vừa</button><button class="chip">Hơi dài</button></div>
+    <p style="margin-bottom:2px"><b>Độ khó</b></p>
+    <div class="chips" data-g="diff"><button class="chip">Dễ</button><button class="chip">Vừa</button><button class="chip">Khó</button></div>
+    <p style="margin-bottom:2px"><b>Chỗ nào chán, chỗ nào khó hiểu?</b></p>
+    <textarea id="fb" placeholder="Không bắt buộc"></textarea>
+    <button class="btn" id="finish">Xong buổi học</button>
+    <div class="done" id="saved"></div>
+    <button class="btn ghost" id="copy" style="display:none">Chép kết quả để dán vào thread</button>
+  </section>
+</div>
+<script>
+const CRIT=[["focus","Điểm nhấn","Mắt biết nhìn vào đâu đầu tiên"],["layout","Bố cục","Các khối xếp có trật tự, dễ đi theo từ trên xuống"],["type","Thứ bậc chữ","Chữ to nhỏ, đậm nhạt cho biết cái gì quan trọng"],["color","Màu","Ít màu, màu nào cũng có lý do"],["space","Khoảng trắng","Các khối có chỗ thở, khoảng cách đều nhau"],["overall","Điểm chung","Cảm giác tổng thể khi nhìn cả màn"]];
+const CLAUDE={A:{focus:5,layout:4,type:4,color:4,space:4,overall:4},B:{focus:2,layout:3,type:4,color:4,space:3,overall:3}};
+const IMG={A:"__A__",B:"__B__"};
+const R={start:new Date().toISOString(),rate:{A:{},B:{}},quiz:{},taste:null,tasteWhy:"",teach:"",len:null,diff:null,fb:""};
+const TOTAL=7;
+function go(n){document.querySelectorAll('.step').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));document.getElementById('cnt').textContent=(n+1)+'/'+TOTAL;document.getElementById('bar').style.width=(n/(TOTAL-1)*100)+'%';window.scrollTo({top:0,behavior:'smooth'});if(n===3)cmp();}
+go(0);
+// quiz
+document.querySelectorAll('.q').forEach(q=>{const opts=[...q.querySelectorAll('.opt')];opts.forEach((o,i)=>o.onclick=()=>{const a=+q.dataset.a;opts.forEach((x,j)=>{x.disabled=true;if(j===a)x.classList.add('right');});if(i!==a)o.classList.add('wrong');q.querySelector('.why').classList.add('on');R.quiz[q.dataset.q]={pick:i,right:i===a};check();});});
+// chips
+document.querySelectorAll('.chips').forEach(c=>{c.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{c.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');R[c.dataset.g]=b.textContent;check();});});
+// rating
+function buildRate(k){const box=document.getElementById('rate'+k);box.innerHTML='<img class="big" alt="Màn '+k+'" src="'+IMG[k]+'"><div class="card">'+CRIT.map(([id,n,d])=>'<div class="crit"><b>'+n+'</b><div class="d">'+d+'</div><div class="scale" data-k="'+k+'" data-c="'+id+'">'+[1,2,3,4,5].map(v=>'<button>'+v+'</button>').join('')+'</div><div class="ends"><span>rất kém</span><span>rất tốt</span></div></div>').join('')+'</div>';box.querySelectorAll('.scale').forEach(s=>s.querySelectorAll('button').forEach(b=>b.onclick=()=>{s.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');R.rate[s.dataset.k][s.dataset.c]=+b.textContent;check();if(s.dataset.k==='A'&&Object.keys(R.rate.A).length===CRIT.length&&!R._sw){R._sw=1;setTimeout(()=>tab('B'),350);}}));}
+buildRate('A');buildRate('B');
+function tab(k){document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.t===k));document.getElementById('rateA').style.display=k==='A'?'':'none';document.getElementById('rateB').style.display=k==='B'?'':'none';window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>tab(t.dataset.t));
+function cmp(){let h='<tr><th></th><th>A bạn</th><th>A Claude</th><th>B bạn</th><th>B Claude</th></tr>';CRIT.forEach(([id,n])=>{h+='<tr><td>'+n+'</td><td class="you">'+(R.rate.A[id]??'–')+'</td><td>'+CLAUDE.A[id]+'</td><td class="you">'+(R.rate.B[id]??'–')+'</td><td>'+CLAUDE.B[id]+'</td></tr>';});document.getElementById('cmp').innerHTML=h;}
+const teach=document.getElementById('teach');
+teach.oninput=()=>{R.teach=teach.value.trim();document.getElementById('reveal').disabled=R.teach.length<8;};
+document.getElementById('reveal').onclick=()=>{document.getElementById('mine').classList.add('on');document.getElementById('n5').disabled=false;};
+document.getElementById('tasteWhy').oninput=e=>{R.tasteWhy=e.target.value.trim();};
+document.getElementById('fb').oninput=e=>{R.fb=e.target.value.trim();};
+function check(){document.getElementById('n1').disabled=!R.quiz.recall;document.getElementById('n2').disabled=!(Object.keys(R.rate.A).length===CRIT.length&&Object.keys(R.rate.B).length===CRIT.length);document.getElementById('n4').disabled=!(R.quiz.q1&&R.quiz.q2&&R.quiz.q3&&R.taste);}
+function summary(){const q=['q1','q2','q3'].filter(k=>R.quiz[k]&&R.quiz[k].right).length;return 'Buổi 1 (một điểm nhấn)\nCâu đúng: '+q+'/3, nhớ lại: '+(R.quiz.recall&&R.quiz.recall.right?'đúng':'sai')+'\nChấm A: '+JSON.stringify(R.rate.A)+'\nChấm B: '+JSON.stringify(R.rate.B)+'\nGu: '+R.taste+' – '+R.tasteWhy+'\nNói lại: '+R.teach+'\nĐộ dài: '+R.len+', độ khó: '+R.diff+'\nGóp ý: '+R.fb;}
+document.getElementById('finish').onclick=async()=>{const btn=document.getElementById('finish');btn.disabled=true;R.end=new Date().toISOString();delete R._sw;const out=document.getElementById('saved');out.style.display='block';let ok=false;try{let dbp=null;try{dbp=window.claude&&window.claude.use?window.claude.use('db'):null;}catch(e){dbp=null;}const db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;if(db){await db.doc('sessions/s1-'+Date.now()).set(R);ok=true;}}catch(e){ok=false;}
+out.textContent=ok?'Đã lưu kết quả. Claude đọc được, bạn chỉ cần nhắn "xong" trong thread.':'Chưa lưu được tự động. Bấm nút dưới để chép kết quả rồi dán vào thread.';if(!ok){document.getElementById('copy').style.display='flex';}};
+document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());document.getElementById('copy').textContent='Đã chép';}catch(e){document.getElementById('saved').textContent=summary();}};
+</script>
+</body>
+</html>

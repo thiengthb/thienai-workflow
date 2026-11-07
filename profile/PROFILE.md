@@ -39,6 +39,12 @@ Từ mình đã chê (thêm vào đây mỗi lần mình chê):
 | lõi | bộ luật chung |
 | trên chuyền, thoi bay, hậu kiểm, ròng | (từ lạ trong bài MLN; nói bằng lời thường) |
 
+## Tra cứu
+- AI tra cứu theo `profile/RESEARCH.md`: chỉ trích nguồn đã mở và đọc, gắn nhãn đã kiểm chứng, suy luận hay chưa kiểm.
+
+## Artifact
+- Trước khi làm artifact, xem mẫu thien đã thích ở `artifacts/README.md` của repo thienai-workflow; có mẫu hợp thì dựng từ mẫu.
+
 ## Gu UI
 - Mọi thứ về giao diện nằm ở repo `thiengthb/thienui`: gu chi tiết (`docs/taste.md`), token, luật, component, block và skill. Mỗi project có giao diện dùng thienui trước khi tự làm component; thứ dùng lại được thì gom về thienui (`docs/harvest.md`).
 - Khi làm màn hình: AI đưa 2 đến 3 bố cục trong gu của mình, mình chọn trước, rồi AI giải thích vì sao bố cục đó hợp (người dùng nào, xu hướng nào). Mục đích là để mình học.
