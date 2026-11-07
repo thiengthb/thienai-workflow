@@ -39,6 +39,9 @@ Từ mình đã chê (thêm vào đây mỗi lần mình chê):
 | lõi | bộ luật chung |
 | trên chuyền, thoi bay, hậu kiểm, ròng | (từ lạ trong bài MLN; nói bằng lời thường) |
 
+## Tra cứu
+- AI tra cứu theo `profile/RESEARCH.md`: chỉ trích nguồn đã mở và đọc, gắn nhãn đã kiểm chứng, suy luận hay chưa kiểm.
+
 ## Gu UI
 - Design system của mình: thienui. Mỗi project web dùng thienui trước khi tự làm component.
 - Khi làm màn hình: AI đưa 2 đến 3 bố cục trong gu của mình, mình chọn trước, rồi AI giải thích vì sao bố cục đó hợp (người dùng nào, xu hướng nào). Mục đích là để mình học.

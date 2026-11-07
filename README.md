@@ -16,6 +16,7 @@ life/         Cấu hình trợ lý cuộc sống (Project `life`)
 | `profile/` | `PROFILE.md` | Hồ sơ của thien: cách làm việc, cách ra quyết định với AI, ngôn ngữ, gu UI, trình độ |
 | | `UI-TASTE.md` | Gu UI chi tiết: font, cỡ, màu, icon, chuyển động, lỗi thien ghét |
 | | `SKILL-LEVEL.md` | Trình độ từng kỹ năng và cách AI dựa vào đó |
+| | `RESEARCH.md` | 5 quy tắc khi AI tra cứu trên mạng, để không trích nguồn bịa hay nguồn chưa đọc |
 | `templates/` | `AGENTS.template.md` | Mẫu `AGENTS.md` cho mỗi project, đọc được bởi Claude, Codex, Gemini. Mỗi project có thêm `CLAUDE.md` chỉ một dòng `@AGENTS.md` |
 | | `STATUS.template.md` | Mẫu `docs/STATUS.md`: project đang ở đâu, việc tiếp theo, đang chờ ai |
 | | `DECISION.template.md` | Mẫu ghi quyết định khó sửa lại, trong `docs/decisions/` |
