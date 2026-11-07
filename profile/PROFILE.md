@@ -42,6 +42,9 @@ Từ mình đã chê (thêm vào đây mỗi lần mình chê):
 ## Tra cứu
 - AI tra cứu theo `profile/RESEARCH.md`: chỉ trích nguồn đã mở và đọc, gắn nhãn đã kiểm chứng, suy luận hay chưa kiểm.
 
+## Artifact
+- Trước khi làm artifact, xem mẫu thien đã thích ở `artifacts/README.md` của repo thienai-workflow; có mẫu hợp thì dựng từ mẫu.
+
 ## Gu UI
 - Design system của mình: thienui. Mỗi project web dùng thienui trước khi tự làm component.
 - Khi làm màn hình: AI đưa 2 đến 3 bố cục trong gu của mình, mình chọn trước, rồi AI giải thích vì sao bố cục đó hợp (người dùng nào, xu hướng nào). Mục đích là để mình học.
