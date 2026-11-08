@@ -8,7 +8,7 @@ Bộ quy trình chung khi thien làm việc với AI. Áp vào project mới ch�
 profile/      Về thien: AI đọc ở mọi project
 templates/    File mẫu, chép vào repo của từng project
 skills/       Skill tải lên tài khoản Claude
-life/         Cấu hình trợ lý cuộc sống (Project `life`)
+life/         Bản tin sáng và cấu hình trợ lý cuộc sống
 learning/     Hồ sơ và trạng thái từng môn thien đang học cùng AI
 artifacts/    Mẫu artifact thien đã thích, dùng lại ở mọi project và tài khoản
 ```
@@ -29,6 +29,7 @@ artifacts/    Mẫu artifact thien đã thích, dùng lại ở mọi project v�
 | | `glossary.md` | Bảng tra thuật ngữ tiếng Anh, AI thêm khi dùng từ thien chưa học |
 | `artifacts/` | `README.md` | Danh sách mẫu artifact thien thích và khi nào dùng; mỗi mẫu là một file HTML |
 | `life/` | `tracked-repos.md` | Danh sách repo mà bản tin sáng đọc `docs/STATUS.md` |
+| | `morning-brief/` | Script Google Apps Script gửi bản tin sáng qua mail: lịch, Google Tasks, tiến độ repo. Miễn phí, không dùng Claude |
 
 File mẫu giữ đuôi `.template.md` để không bị nhầm thành luật thật: Codex và Claude Code tự nạp file tên `AGENTS.md` hoặc `CLAUDE.md` khi làm việc trong thư mục chứa nó.
 
