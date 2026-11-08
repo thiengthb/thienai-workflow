@@ -14,7 +14,7 @@ Các trang artifact thien đã dùng và khen. Ở project nào, tài khoản n�
 - Mỗi màn chỉ một bước, có thanh tiến độ và số bước ("3/7") ở trên cùng.
 - Chưa làm xong bước thì nút "Tiếp" mờ đi, không bắt đọc hướng dẫn dài.
 - Kết quả tự lưu vào db của artifact để AI đọc lại; thien chỉ cần nhắn "xong". Lưu không được thì có nút chép kết quả.
-- Font Onest, nền trắng ngà, chữ gần đen, một màu nhấn (xanh teal) cho thứ đúng hoặc quan trọng. Theo gu ở `profile/UI-TASTE.md`.
+- Font Onest, nền trắng ngà, chữ gần đen, một màu nhấn (xanh teal) cho thứ đúng hoặc quan trọng. Theo gu ở repo [thienui](https://github.com/thiengthb/thienui), file `docs/taste.md`.
 - Tiếng Việt tự nhiên, giọng người kèm học thân thiện, thuật ngữ tiếng Anh giữ nguyên và giải thích một lần.
 
 ## Thêm hoặc bỏ mẫu
