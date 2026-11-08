@@ -12,7 +12,18 @@ Vì sao có file này: các công cụ AI đưa ra 5–18% đường dẫn khôn
 4. **Việc cần thông tin mới thì lấy bản mới.** Firecrawl có thể trả bản lưu từ trước: đặt `maxAge: 0` khi ngày tháng quan trọng. Trang cần đăng nhập thì nói là không vào được, không đoán nội dung.
 5. **Gắn nhãn mỗi nhận định:** đã kiểm chứng (có nguồn đã đọc), suy luận của AI, hay chưa kiểm.
 
-## Công cụ
+Cuối mỗi bài nghiên cứu có danh sách nguồn đã đọc, kèm ngày đọc. Nguồn chỉ thấy qua đoạn trích thì để riêng.
 
-- Firecrawl (connector): mở trang thật, đọc PDF, tìm bài nghiên cứu. Dùng khi cần nội dung trang, không chỉ đường dẫn.
-- Công cụ tìm kiếm có sẵn của Claude: dùng để tìm đường dẫn, sau đó vẫn phải mở trang.
+## Chọn công cụ
+
+| Cần gì | Dùng gì | Ghi chú |
+|---|---|---|
+| Tìm đường dẫn | Công cụ tìm kiếm có sẵn của Claude, hoặc tìm kiếm của Firecrawl | Tìm xong vẫn phải mở trang |
+| Đọc nội dung một trang, PDF | Firecrawl (connector) | Free 1.000 credit mỗi tháng: 1 trang 1 credit, 10 kết quả tìm 2 credit (giá đọc 2026-11-07) |
+| Chụp màn hình trang thật | Firecrawl (`formats: ["screenshot"]`, `mobile: true`) hoặc Playwright | Dùng cho buổi học và khi tự chê bố cục |
+| Tài liệu thư viện khi code | Context7 (connector), nếu đã bật | Thay cho trí nhớ của model, vốn có thể cũ |
+| Bài nghiên cứu | Công cụ tìm bài của Firecrawl | Đọc ít nhất phần tóm tắt, ghi rõ chỉ đọc tóm tắt hay cả bài |
+
+- Thiếu công cụ cho việc đang làm thì nói ra và đề xuất cái cần thêm, kèm giá và giới hạn. Không đoán thay.
+- Không thêm công cụ trùng việc với cái đã có: nhiều nguồn làm cùng một việc chỉ làm AI phân vân.
+- Bảng này cũ đi khi đổi connector: bật hay bỏ một connector thì sửa bảng trong cùng PR.
