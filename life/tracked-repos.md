@@ -1,7 +1,7 @@
 # Repo trong bản tin sáng
 
-Bản tin sáng của trợ lý (Project `life` trên Claude) đọc `docs/STATUS.md` của các repo dưới đây, rồi báo cho thien
-mỗi sáng repo nào đang chờ thien, việc gì.
+Bản tin sáng (Google Apps Script, xem [`morning-brief/`](morning-brief/README.md)) đọc `docs/STATUS.md` của các repo dưới đây,
+rồi gửi mail cho thien mỗi sáng: repo nào đang chờ thien, việc gì. Sửa bảng này là đủ, không phải sửa script.
 
 Thêm hoặc bỏ một repo: thien nói trong bất kỳ project nào ("đưa repo X vào bản tin sáng", "bỏ repo X khỏi bản tin
 sáng"), AI mở một PR sửa bảng này. Project mới áp quy trình chung thì được thêm vào trong cùng PR tạo `AGENTS.md`.
