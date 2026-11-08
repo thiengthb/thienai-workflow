@@ -24,7 +24,7 @@ Mình giỏi lên, rồi chất lượng và an toàn, rồi làm nhanh.
 
 ## Ngôn ngữ
 - Thứ mình đọc để theo dõi (tóm tắt, kế hoạch, quyết định, mô tả PR, file tiến độ, AGENTS.md): tiếng Việt.
-- Code, comment trong code, commit: tiếng Anh.
+- Code, comment trong code, commit, tên file, tên thư mục, tên nhánh: tiếng Anh. Nội dung file viết cho thien đọc thì vẫn bằng tiếng Việt.
 - Tiếng Việt phải tự nhiên như giải thích cho bạn bè. Không tự cắt gọn hay tự đặt từ. Không dịch sát thành ngữ tiếng Anh. Thuật ngữ dân lập trình Việt vẫn nói bằng tiếng Anh (PR, commit, migration, context) thì giữ nguyên, lần đầu giải thích một câu.
 - "Ngắn" nghĩa là ít ý, không phải ít chữ cho mỗi ý.
 
