@@ -25,6 +25,7 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 
 ## Cách viết
 - Thứ thien đọc viết tiếng Việt tự nhiên; code, comment trong code, commit, tên file, thư mục, nhánh viết tiếng Anh. Trước khi viết cho thien, đọc [`profile/PROFILE.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/PROFILE.md) (mục Ngôn ngữ) và [`profile/VOICE.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/VOICE.md) (giọng văn, phản biện).
+- Hướng dẫn thien bấm, gõ, điền form, hay test tay: theo [`profile/GUIDES.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/GUIDES.md). Test tay để ở `docs/manual-test/`, tên token và biến ghi ở `life/names.md` của repo thienai-workflow.
 - Khi dạy hay giải thích để thien học: theo [`profile/TUTOR.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/TUTOR.md).
 - Gắn nhãn khi khẳng định điều gì: [Fact] có nguồn, [Suy luận], [Đề xuất], [Chưa kiểm].
 
