@@ -26,6 +26,7 @@ artifacts/    Mẫu artifact thien đã thích, dùng lại ở mọi project v�
 | | `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
 | `skills/` | `start-project/` | Skill hỏi thien có áp quy trình không, rồi chép các file mẫu vào project |
 | `learning/` | `frontend.md` | Đang học frontend tới đâu, buổi tiếp theo dạy gì, để tài khoản khác dạy tiếp |
+| | `tu-khoa.md` | Bảng tra thuật ngữ tiếng Anh, AI thêm khi dùng từ thien chưa học |
 | `artifacts/` | `README.md` | Danh sách mẫu artifact thien thích và khi nào dùng; mỗi mẫu là một file HTML |
 | `life/` | `tracked-repos.md` | Danh sách repo mà bản tin sáng đọc `docs/STATUS.md` |
 
