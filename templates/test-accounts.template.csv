@@ -1,0 +1,4 @@
+role,display_name,email,password,used_in,note
+ADMIN,Demo Admin,admin.demo@example.test,Demo@2026,Admin web,Only for local or demo
+USER,Demo User 01,user01@example.test,Demo@2026,User web,Only for local or demo
+USER,Demo User 02,user02@example.test,Demo@2026,User web,Locked account case
