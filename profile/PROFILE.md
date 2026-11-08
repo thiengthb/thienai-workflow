@@ -28,19 +28,13 @@ Mình giỏi lên, rồi chất lượng và an toàn, rồi làm nhanh.
 - Tiếng Việt phải tự nhiên như giải thích cho bạn bè. Không tự cắt gọn hay tự đặt từ. Không dịch sát thành ngữ tiếng Anh. Thuật ngữ dân lập trình Việt vẫn nói bằng tiếng Anh (PR, commit, migration, context) thì giữ nguyên, lần đầu giải thích một câu.
 - "Ngắn" nghĩa là ít ý, không phải ít chữ cho mỗi ý.
 
-Từ mình đã chê (thêm vào đây mỗi lần mình chê):
-
-| Đừng viết | Viết thế này |
-|---|---|
-| khó đảo | làm rồi thì rất khó sửa lại |
-| canh bạc | làm thử mà chưa chắc thành |
-| phương án bù nhìn | phương án đưa vào cho đủ, không ai chọn thật |
-| ma sát | thêm bước làm mình ngại |
-| lõi | bộ luật chung |
-| trên chuyền, thoi bay, hậu kiểm, ròng | (từ lạ trong bài MLN; nói bằng lời thường) |
+- Giọng văn, câu mẫu, từ mình đã chê và cách AI phản biện mình: `profile/VOICE.md`.
 
 ## Tra cứu
-- AI tra cứu theo `profile/RESEARCH.md`: chỉ trích nguồn đã mở và đọc, gắn nhãn đã kiểm chứng, suy luận hay chưa kiểm.
+- AI tra cứu theo `profile/RESEARCH.md`: chỉ trích nguồn đã mở và đọc, gắn nhãn đã kiểm chứng, suy luận hay chưa kiểm, chọn công cụ theo bảng trong file đó.
+
+## Học cùng AI
+- Mọi môn (frontend, BA, tiếng Nhật, môn mới) dạy theo `profile/TUTOR.md`. Trạng thái từng môn ở `learning/`.
 
 ## Artifact
 - Trước khi làm artifact, xem mẫu thien đã thích ở `artifacts/README.md` của repo thienai-workflow; có mẫu hợp thì dựng từ mẫu.
