@@ -34,6 +34,7 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 
 ## Giữ file này ngắn
 - Phần chung dưới 60 dòng. Thêm một luật thì bỏ hoặc gộp một luật khác.
+- Phần chung tự đồng bộ từ repo thienai-workflow qua PR. Giữ nguyên dòng tiêu đề "Phần riêng của project" bên dưới: đó là mốc để biết phần nào là chung.
 
 ---
 
