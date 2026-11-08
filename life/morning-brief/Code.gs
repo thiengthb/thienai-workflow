@@ -13,7 +13,8 @@ const WORKFLOW_REPO = 'thiengthb/thienai-workflow';
 const TRACKED_FILE = 'life/tracked-repos.md';
 const STATUS_FILE = 'docs/STATUS.md';
 // Sections of STATUS.template.md worth reading at 6:30.
-const STATUS_SECTIONS = ['Đang chờ thien', 'Đang ở đâu', 'Việc tiếp theo', 'Đang vướng'];
+// Matched by prefix, so "## Đang chờ thien (tối đa 3)" still counts.
+const STATUS_SECTIONS = ['Đang chờ thien', 'Đang ở đâu', 'Đang làm', 'Việc tiếp theo', 'Đang vướng'];
 
 /** Run once by hand: creates the daily trigger around 6:30. */
 function setup() {
@@ -85,10 +86,13 @@ function tasksSection(now) {
 
 function reposSection() {
   const repos = parseTrackedRepos(githubFile(WORKFLOW_REPO, TRACKED_FILE));
-  const blocks = repos.map(repo => {
-    const status = githubFile(repo, STATUS_FILE);
-    if (status === null) return { repo, lines: ['Chưa có file tiến độ.'], waiting: false };
+  const blocks = repos.map(({ repo, path }) => {
+    const status = githubFile(repo, path);
+    if (status === null) return { repo, lines: [`Chưa có file tiến độ (${path}).`], waiting: false };
     const parsed = parseStatus(status, STATUS_SECTIONS);
+    if (!parsed.standard) {
+      return { repo, lines: [`File tiến độ không theo mẫu STATUS, mở xem: https://github.com/${repo}/blob/HEAD/${path}`], waiting: false };
+    }
     return { repo, lines: parsed.lines, waiting: parsed.waiting };
   });
   // Repos waiting on thien first.
@@ -116,12 +120,18 @@ function githubFile(repo, path) {
 
 /* ---------- Pure helpers (tested in test.js with Node) ---------- */
 
-/** Picks `owner/repo` from the first column of the table in tracked-repos.md. */
+/**
+ * Reads the table in tracked-repos.md: `owner/repo` in the first column and,
+ * optionally, the progress file path in backticks in the last column.
+ */
 function parseTrackedRepos(md) {
   const repos = [];
   md.split('\n').forEach(line => {
     const m = line.match(/^\|\s*`([\w.-]+\/[\w.-]+)`\s*\|/);
-    if (m) repos.push(m[1]);
+    if (!m) return;
+    const cells = line.split('|').map(c => c.trim()).filter(Boolean);
+    const last = cells[cells.length - 1].match(/^`([^`]+\.md)`$/);
+    repos.push({ repo: m[1], path: last ? last[1] : STATUS_FILE });
   });
   return repos;
 }
@@ -134,17 +144,25 @@ function parseStatus(md, wanted) {
     const h = line.match(/^##\s+(.+?)\s*$/);
     if (h) { current = h[1]; sections[current] = []; return; }
     if (!current) return;
-    const item = line.replace(/^\s*(?:[-*]|\d+\.)\s+/, '').trim();
+    // Drop list markers and Markdown bold/code marks: the email shows plain text.
+    const item = line.replace(/^\s*(?:[-*]|\d+\.)\s+/, '').replace(/\*\*|`/g, '').trim();
     if (!item || /^<.*>$/.test(item)) return;
     sections[current].push(item);
   });
+  const find = name => {
+    const key = Object.keys(sections).find(k => k.startsWith(name));
+    return key === undefined ? null : sections[key];
+  };
   const lines = [];
+  let standard = false;
   wanted.forEach(name => {
-    const items = sections[name] || [];
+    const items = find(name);
+    if (items === null) return;
+    standard = true;
     if (items.length) lines.push(`${name}: ${items.join('; ')}`);
   });
-  const waiting = (sections['Đang chờ thien'] || []).length > 0;
-  return { lines: lines.length ? lines : ['File tiến độ còn trống.'], waiting };
+  const waiting = (find('Đang chờ thien') || []).length > 0;
+  return { lines: lines.length ? lines : ['File tiến độ còn trống.'], waiting, standard };
 }
 
 function formatDay(isoDay) {

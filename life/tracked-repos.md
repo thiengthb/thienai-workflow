@@ -7,11 +7,11 @@ Thêm hoặc bỏ một repo: thien nói trong bất kỳ project nào ("đưa r
 sáng"), AI mở một PR sửa bảng này. Project mới áp quy trình chung thì được thêm vào trong cùng PR tạo `AGENTS.md`.
 Tối đa 6 repo: thêm một repo khi đã đủ 6 thì AI hỏi thien bỏ repo nào.
 
-| Repo | Ghi chú | Thêm ngày |
-|---|---|---|
-| `thiengthb/sakubun` | App học tiếng Nhật | 2026-11-05 |
-| `thiengthb/capstone-hub` | Code đồ án capstone | 2026-11-05 |
-| `thiengthb/ccp-docs` | Tài liệu BA đồ án capstone | 2026-11-05 |
-| `thiengthb/PRM393_Lab03_SE190533` | Lab đang làm môn PRM393 | 2026-11-05 |
+| Repo | Ghi chú | Thêm ngày | File tiến độ |
+|---|---|---|---|
+| `thiengthb/sakubun` | App học tiếng Nhật | 2026-11-05 | |
+| `thiengthb/capstone-hub` | Code đồ án capstone | 2026-11-05 | |
+| `thiengthb/ccp-docs` | Tài liệu BA đồ án capstone | 2026-11-05 | |
+| `thiengthb/PRM393_Lab03_SE190533` | Lab đang làm môn PRM393 | 2026-11-05 | |
 
-Repo chưa có `docs/STATUS.md` thì bản tin ghi "chưa có file tiến độ" thay vì đoán.
+Cột "File tiến độ" để trống thì bản tin đọc `docs/STATUS.md`. Repo đã có file tiến độ riêng (ví dụ repo nhóm) thì ghi đường dẫn file đó, trong dấu backtick. Không có file thì bản tin ghi "chưa có file tiến độ" thay vì đoán; file không theo mẫu STATUS thì bản tin đưa link để mở xem.

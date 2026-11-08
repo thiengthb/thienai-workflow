@@ -29,7 +29,7 @@ artifacts/    Mẫu artifact thien đã thích, dùng lại ở mọi project v�
 | | `test-accounts.template.csv` | Mẫu danh sách tài khoản test, chỉ mật khẩu giả |
 | | `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
 | `.github/` | `workflows/sync-agents-md.yml` | Mẫu `AGENTS.md` đổi thì tự mở PR vào từng repo trong `life/tracked-repos.md` để cập nhật phần chung, giữ nguyên phần riêng của project. Cần secret `SYNC_TOKEN` |
-| `skills/` | `start-project/` | Skill hỏi thien có áp quy trình không, rồi chép các file mẫu vào project |
+| `skills/` | `start-project/` | Skill hỏi thien có áp quy trình không, rồi chép các file mẫu vào project. `SKILL.md` chỉ trỏ tới `STEPS.md`; sửa các bước thì sửa `STEPS.md` |
 | `learning/` | `frontend.md` | Đang học frontend tới đâu, buổi tiếp theo dạy gì, để tài khoản khác dạy tiếp |
 | | `glossary.md` | Bảng tra thuật ngữ tiếng Anh, AI thêm khi dùng từ thien chưa học |
 | `artifacts/` | `README.md` | Danh sách mẫu artifact thien thích và khi nào dùng; mỗi mẫu là một file HTML |
@@ -54,4 +54,4 @@ Codex, Gemini và người khác không cần cài gì: họ đọc `AGENTS.md` 
 
 ## Sửa quy trình
 
-Chỉ qua PR vào repo này, thien duyệt. Mỗi milestone AI đề xuất tối đa 3 thay đổi. `profile/PROFILE.md` và phần chung của `templates/AGENTS.template.md` mỗi file dưới 60 dòng: thêm một ý thì bỏ hoặc gộp một ý khác. Sửa skill thì phải tải lại file zip lên từng tài khoản.
+Chỉ qua PR vào repo này, thien duyệt. Mỗi milestone AI đề xuất tối đa 3 thay đổi. `profile/PROFILE.md` và phần chung của `templates/AGENTS.template.md` mỗi file dưới 60 dòng: thêm một ý thì bỏ hoặc gộp một ý khác. Các bước của skill nằm ở `skills/start-project/STEPS.md` và được đọc từ repo mỗi lần chạy, nên sửa file đó là đủ. Chỉ khi sửa `SKILL.md` mới phải tải lại file zip lên từng tài khoản.
