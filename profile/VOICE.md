@@ -30,7 +30,7 @@ Thuật ngữ dân lập trình Việt vẫn nói bằng tiếng Anh (PR, commit
 
 1. Hai ba lần đầu viết tiếng Anh, kèm bản dịch sát nhất trong ngoặc tròn: "re-render (vẽ lại)".
 2. Sau đó chỉ viết tiếng Anh.
-3. Ghi từ đó vào `learning/tu-khoa.md` ngay lần đầu dùng, để thien tự tra khi quên mà không phải hỏi lại.
+3. Ghi từ đó vào `learning/glossary.md` ngay lần đầu dùng, để thien tự tra khi quên mà không phải hỏi lại.
 
 ### Câu mẫu
 

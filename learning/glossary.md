@@ -1,4 +1,4 @@
-# Từ khóa
+# Glossary: từ khóa
 
 Bảng tra thuật ngữ tiếng Anh thien gặp khi làm và học với AI. AI thêm một dòng ngay lần đầu dùng một từ mà thien chưa học (luật ở mục "Thuật ngữ tiếng Anh" trong `profile/VOICE.md`). Khi quên, thien tra ở đây trước, không cần hỏi lại.
 
