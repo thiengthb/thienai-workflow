@@ -1,0 +1,117 @@
+/* Starter deck: 1600x900 stage scaled to the window. Change tokens in :root per project; keep the rest. */
+@font-face { font-family: Onest; src: url(assets/fonts/onest-regular.woff2) format('woff2'); font-weight: 400; font-display: block; }
+@font-face { font-family: Onest; src: url(assets/fonts/onest-medium.woff2) format('woff2'); font-weight: 500; font-display: block; }
+@font-face { font-family: Onest; src: url(assets/fonts/onest-semibold.woff2) format('woff2'); font-weight: 600; font-display: block; }
+@font-face { font-family: Onest; src: url(assets/fonts/onest-bold.woff2) format('woff2'); font-weight: 700; font-display: block; }
+
+:root {
+  /* One accent per project, mid strength (thienui docs/taste.md). Warm accent -> ivory bg, cool accent -> cool white. */
+  --bg: #F7F8FA;
+  --surface: #FFFFFF;
+  --ink: #16181D;
+  --ink-2: #4A505C;   /* secondary text, 7:1+ on --bg */
+  --ink-3: #5F6673;   /* labels and source line, keep >= 4.5:1 for projectors */
+  --line: #D9DDE4;
+  --accent: #1D4ED8;
+  --accent-soft: #E6EDFD;
+  --on-accent: #FFFFFF;
+  --accent-2: #C2410C; /* optional second meaning colour; give it ONE meaning for the whole deck */
+  --font: Onest, system-ui, sans-serif;
+  --mono: ui-monospace, 'IBM Plex Mono', Menlo, monospace;
+  --r: 12px;
+  /* Type scale on the 1600x900 stage. 30px here is about 18pt on a PowerPoint slide, the usual minimum. */
+  --t-title: 64px;
+  --t-big: 120px;
+  --t-body: 34px;
+  --t-small: 26px;
+  --t-label: 22px;
+  --pad: 88px;
+}
+[data-theme='dark'] {
+  --bg: #111317; --surface: #191C22; --ink: #F2F3F5; --ink-2: #C4C8D0; --ink-3: #9AA0AB;
+  --line: #2C313A; --accent: #8FB0FF; --accent-soft: #1C2A4D; --on-accent: #0B1020; --accent-2: #FDBA74;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: #000; overflow: hidden; }
+body { font-family: var(--font); color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+.deck { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; transform-origin: 0 0; }
+.slide {
+  position: absolute; inset: 0; background: var(--bg); padding: var(--pad);
+  display: none; flex-direction: column; overflow: hidden;
+}
+.slide.on { display: flex; }
+.slide > .notes { display: none; }
+
+/* Headline = the claim of the slide, a full sentence (assertion-evidence). */
+.kicker { font-size: var(--t-label); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+h1, h2 { font-weight: 700; letter-spacing: -0.02em; line-height: 1.12; text-wrap: balance; }
+h1 { font-size: 92px; }
+h2 { font-size: var(--t-title); max-width: 1300px; }
+h2 em, h1 em { font-style: normal; color: var(--accent); }
+h2 .em2 { color: var(--accent-2); }
+.body { flex: 1; display: flex; align-items: center; gap: 64px; margin-top: 40px; min-height: 0; }
+.body.col { flex-direction: column; align-items: stretch; justify-content: center; }
+p, li { font-size: var(--t-body); line-height: 1.4; color: var(--ink-2); }
+.lead { font-size: 40px; color: var(--ink-2); max-width: 1100px; line-height: 1.35; }
+.small { font-size: var(--t-small); color: var(--ink-2); }
+.big { font-size: var(--t-big); font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: var(--accent); }
+ul.list { list-style: none; display: grid; gap: 22px; }
+ul.list li { padding-left: 34px; position: relative; color: var(--ink); }
+ul.list li::before { content: ''; position: absolute; left: 0; top: .62em; width: 12px; height: 12px; border-radius: 3px; background: var(--accent); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 32px 36px; }
+.card h3 { font-size: 36px; font-weight: 650; margin-bottom: 10px; color: var(--ink); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; width: 100%; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; width: 100%; }
+.fig { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; }
+.fig img, .fig svg { max-width: 100%; max-height: 600px; }
+img { border-radius: var(--r); }
+.muted { color: var(--ink-3); }
+.hl { color: var(--accent); font-weight: 600; }
+
+/* Diagram helpers for hand-written SVG: <svg class="dia"> with .box, .ln, .lbl */
+svg.dia { font-family: var(--font); }
+svg.dia .box { fill: var(--surface); stroke: var(--line); stroke-width: 2; }
+svg.dia .box.on { fill: var(--accent-soft); stroke: var(--accent); }
+svg.dia .ln { fill: none; stroke: var(--ink-3); stroke-width: 2.5; }
+svg.dia .ln.on { stroke: var(--accent); }
+svg.dia text { fill: var(--ink); font-size: 28px; }
+svg.dia .lbl { fill: var(--ink-3); font-size: 22px; }
+
+/* Footer: source on the left, slide number on the right. Nothing else in the corners. */
+.foot { position: absolute; left: var(--pad); right: var(--pad); bottom: 30px; display: flex; justify-content: space-between; gap: 40px;
+  font-size: var(--t-label); color: var(--ink-3); }
+.progress { position: absolute; left: 0; bottom: 0; height: 5px; background: var(--accent); }
+
+/* Steps: elements with data-step appear one key press at a time. */
+[data-step] { transition: opacity .35s ease, transform .45s cubic-bezier(.2,.8,.2,1); }
+[data-step].hide { opacity: 0; transform: translateY(14px); }
+.dim { opacity: .28; transition: opacity .35s ease; }
+@media (prefers-reduced-motion: reduce) { [data-step], .dim { transition: none; } }
+
+/* Speaker notes strip (N) and overview (O) */
+.notes-bar { position: fixed; left: 0; right: 0; bottom: 0; max-height: 34vh; overflow: auto; background: rgba(10,12,16,.92); color: #E8EAEE;
+  font: 20px/1.55 var(--font); padding: 18px 28px; white-space: pre-wrap; display: none; z-index: 5; }
+.notes-bar.on { display: block; }
+.overview { position: fixed; inset: 0; background: #0D0F13; overflow: auto; padding: 32px; display: none; z-index: 6;
+  grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.overview.on { display: grid; }
+.overview button { all: unset; cursor: pointer; color: #C9CDD4; font: 15px var(--font); }
+.overview .thumb { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 8px; outline: 2px solid transparent; position: relative; }
+.overview .thumb.cur { outline-color: var(--accent); }
+.overview .thumb > div { width: 1600px; height: 900px; transform-origin: 0 0; pointer-events: none; }
+.help { position: fixed; right: 20px; top: 20px; background: rgba(10,12,16,.92); color: #E8EAEE; font: 16px/1.7 var(--font); padding: 16px 20px; border-radius: 10px; display: none; z-index: 7; }
+.help.on { display: block; }
+.help kbd { font-family: var(--mono); background: #2A2F38; padding: 1px 7px; border-radius: 5px; margin-right: 6px; }
+
+/* Print / PDF: one slide per page, every step shown. */
+@page { size: 1600px 900px; margin: 0; }
+@media print {
+  html, body { background: none; overflow: visible; height: auto; }
+  .deck { position: static; transform: none !important; width: auto; height: auto; }
+  .slide { position: relative; display: flex !important; width: 1600px; height: 900px; page-break-after: always; break-after: page; }
+  [data-step].hide { opacity: 1; transform: none; }
+  .dim { opacity: 1; }
+  .notes-bar, .overview, .help { display: none !important; }
+}

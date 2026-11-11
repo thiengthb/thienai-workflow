@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slide mẫu</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<!-- data-budget: số phút được nói. check.mjs báo nếu lời nói ước tính vượt. -->
+<body data-budget="5">
+<div class="deck">
+
+<!-- Mỗi slide: data-title (tên ngắn cho cửa sổ người nói), data-min (số phút dự kiến), data-src (dòng nguồn).
+     Tiêu đề h2 là một câu khẳng định, không phải nhãn chủ đề. Lời nói trong <aside class="notes">, mỗi dòng một hơi. -->
+
+<section class="slide" data-title="Bìa" data-min="0.3" data-bare>
+  <div class="body col" style="justify-content:center">
+    <p class="kicker">Môn học · Nhóm · Ngày</p>
+    <h1>Một slide,<br><em>một ý để nhớ</em></h1>
+    <p class="lead" style="margin-top:28px">Câu phụ nói bài này giúp người nghe làm được gì.</p>
+  </div>
+  <aside class="notes">Chào thầy và các bạn.
+Hôm nay nhóm mình nói về một chuyện rất quen:
+vì sao nhiều bài thuyết trình nghe xong là quên.
+[Dừng một nhịp, nhìn lớp.]</aside>
+</section>
+
+<section class="slide" data-title="Câu hỏi mở" data-min="0.7">
+  <p class="kicker">Trước khi vào bài</p>
+  <h2>Bạn còn nhớ <em>một ý</em> nào từ bài thuyết trình tuần trước?</h2>
+  <div class="body">
+    <div class="card" style="flex:1"><p>Mời một hai bạn trả lời.<br><span class="muted">Không ai nói thì gợi ý: một con số, một hình, một câu chuyện.</span></p></div>
+  </div>
+  <aside class="notes">Mình hỏi thật nhé:
+tuần trước nghe nhiều nhóm như vậy,
+bạn còn nhớ được ý nào không?
+[Chờ 5 giây. Mời một bạn, tối đa 20 giây.]
+Thường mình chỉ nhớ một con số hay một cái hình.
+Bài hôm nay đi từ chính chỗ đó.</aside>
+</section>
+
+<section class="slide" data-title="Một con số" data-min="0.8" data-src="Ghi nguồn đã mở, năm, trang">
+  <p class="kicker">Ý chính</p>
+  <h2>Một con số lớn, kèm <em>một câu nói nó nghĩa là gì</em></h2>
+  <div class="body">
+    <div class="big">0,41%</div>
+    <p class="lead">Chữ trên slide chỉ giữ thứ người nghe cần nhìn. Phần giải thích nằm trong lời nói.</p>
+  </div>
+  <aside class="notes">Nhìn con số này trước đã.
+Không phần trăm, không bối cảnh thì nó chẳng nói gì cả.
+Nên mỗi con số luôn đi với một câu:
+nó so với cái gì, và vì sao mình nên để ý.</aside>
+</section>
+
+<section class="slide" data-title="Sơ đồ ba bước" data-min="1">
+  <p class="kicker">Cách hiện từng bước</p>
+  <h2>Mỗi lần bấm hiện đúng <em>một bước</em> mình đang nói</h2>
+  <div class="body">
+    <svg class="dia" viewBox="0 0 1424 300" width="1424">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <g data-step="1" data-dim><rect class="box on" x="0" y="90" width="380" height="120" rx="14"/><text x="190" y="160" text-anchor="middle">Hỏi người nghe</text></g>
+      <g data-step="2" data-dim><path class="ln on" d="M384 150h132" marker-end="url(#ar)"/><rect class="box on" x="522" y="90" width="380" height="120" rx="14"/><text x="712" y="160" text-anchor="middle">Đưa một bằng chứng</text></g>
+      <g data-step="3" data-dim><path class="ln on" d="M906 150h132" marker-end="url(#ar)"/><rect class="box on" x="1044" y="90" width="380" height="120" rx="14"/><text x="1234" y="160" text-anchor="middle">Chốt một câu</text></g>
+      <text class="lbl" x="0" y="270">Bấm → để hiện bước tiếp; bước đang nói sáng, bước cũ mờ đi.</text>
+    </svg>
+  </div>
+  <aside class="notes">Bài nào cũng nên đi theo ba nhịp.
+[Bấm.] Đầu tiên là hỏi, để người nghe tự nghĩ trước.
+[Bấm.] Rồi đưa một bằng chứng, càng cụ thể càng dễ nhớ.
+[Bấm.] Cuối cùng chốt lại bằng một câu thật ngắn.</aside>
+</section>
+
+<section class="slide" data-title="So sánh" data-min="1">
+  <p class="kicker">Hai cột</p>
+  <h2>Tiêu đề là câu khẳng định thì người nghe <em>biết ngay</em> phải nhớ gì</h2>
+  <div class="body">
+    <div class="grid2">
+      <div class="card"><h3 class="muted">Nhãn chủ đề</h3><p>"Kết quả khảo sát"</p></div>
+      <div class="card" style="border-color:var(--accent)"><h3>Câu khẳng định</h3><p>"Hai phần ba sinh viên ôn bài vào đêm trước"</p></div>
+    </div>
+  </div>
+  <aside class="notes">Hai tiêu đề này cùng nói về một slide.
+Bên trái chỉ cho biết chủ đề.
+Bên phải nói luôn điều cần nhớ,
+nên dù bạn lỡ một câu của mình, nhìn lên vẫn bắt kịp.</aside>
+</section>
+
+<section class="slide" data-title="Kết" data-min="0.5" data-bare>
+  <div class="body col" style="justify-content:center">
+    <p class="kicker">Nếu chỉ nhớ một câu</p>
+    <h1 style="font-size:84px">Một slide, một ý.<br><em>Lời nói làm phần còn lại.</em></h1>
+  </div>
+  <aside class="notes">Nếu chỉ nhớ một câu thì nhớ câu này.
+[Dừng, nói chậm.] Một slide, một ý.
+Cảm ơn thầy và các bạn đã nghe.
+Nhóm mình sẵn sàng nhận câu hỏi.</aside>
+</section>
+
+</div>
+<script src="deck.js"></script>
+</body>
+</html>

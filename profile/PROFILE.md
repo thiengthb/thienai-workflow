@@ -38,6 +38,7 @@ Mình giỏi lên, rồi chất lượng và an toàn, rồi làm nhanh.
 
 ## Artifact
 - Trước khi làm artifact, xem mẫu thien đã thích ở `artifacts/README.md` của repo thienai-workflow; có mẫu hợp thì dựng từ mẫu.
+- Slide thuyết trình: theo `slides/RULES.md` và skill `make-slides` của repo thienai-workflow.
 
 ## Gu UI
 - Mọi thứ về giao diện nằm ở repo `thiengthb/thienui`: gu chi tiết (`docs/taste.md`), token, luật, component, block và skill. Mỗi project có giao diện dùng thienui trước khi tự làm component; thứ dùng lại được thì gom về thienui (`docs/harvest.md`).
