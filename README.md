@@ -34,7 +34,9 @@ slides/       Bộ quy tắc làm slide và khung slide web dùng lại
 | | `make-slides/` | Skill làm slide: tóm tắt bài, dàn ý, dựng, kiểm, tập dượt, đăng. `SKILL.md` chỉ trỏ tới `STEPS.md` |
 | `slides/` | `RULES.md` | Bộ quy tắc làm slide (S1 đến S48), đọc trước mọi bài thuyết trình |
 | | `BRIEF.template.md`, `starter/` | Mẫu tóm tắt bài và khung slide web có máy kiểm tra, chép vào project. Xem `slides/README.md` |
-| `learning/` | `frontend.md` | Đang học frontend tới đâu, buổi tiếp theo dạy gì, để tài khoản khác dạy tiếp |
+| `learning/` | `README.md` | Vòng xoay nhiều môn: buổi tới học môn gì, khung một buổi, cách bắt đầu môn mới, mốc kiểm tra. thien nhắn "học" thì AI đọc file này trước |
+| | `cards.md` | Thẻ ôn của mọi môn, hỏi 3 thẻ đến hạn ở đầu mỗi buổi |
+| | `frontend.md` | Đang học frontend tới đâu, buổi tiếp theo dạy gì, để tài khoản khác dạy tiếp |
 | | `glossary.md` | Bảng tra thuật ngữ tiếng Anh, AI thêm khi dùng từ thien chưa học |
 | `artifacts/` | `README.md` | Danh sách mẫu artifact thien thích và khi nào dùng; mỗi mẫu là một file HTML |
 | `life/` | `names.md` | Tên token, project, biến đã thống nhất, để AI dùng lại mà không hỏi lại thien |

@@ -1,6 +1,6 @@
 # Khi AI dạy thien
 
-Áp cho mọi môn: frontend, BA, tiếng Nhật, môn mới sau này. Trạng thái từng môn nằm ở `learning/<môn>.md`; luật riêng của môn ở file đó thắng luật chung ở đây. Luyện dịch tiếng Nhật thì cách chấm của app sakubun thắng.
+Áp cho mọi môn: frontend, BA, tiếng Nhật, môn mới sau này. thien học nhiều môn xoay vòng: khi thien nhắn "học", đọc `learning/README.md` trước để biết buổi tới học môn gì. Trạng thái từng môn nằm ở `learning/<môn>.md`; luật riêng của môn ở file đó thắng luật chung ở đây. Luyện dịch tiếng Nhật thì cách chấm của app sakubun thắng.
 
 ## Vì sao phải theo nhịp này
 
@@ -13,16 +13,24 @@ Tutor đưa đáp án sớm làm người học giỏi lúc luyện nhưng kém 
 3. **Một buổi một ý chính**, khoảng 15 phút, làm trọn được trên điện thoại. Không giao bài thực hành nặng.
 4. **Đổi kiểu buổi** để không chán, giữ khung: nhớ lại, phần chính, học một ý, câu hỏi, tự nói lại, góp ý.
 5. **Cuối buổi thien tự nói lại ý chính** trước khi xem bản của AI.
+6. **Học bằng mắt và tay trước, chữ sau.** Mỗi buổi có ít nhất một phần thien bấm, kéo hay chỉnh và thấy kết quả ngay; giải thích đến sau khi thien đã tự thấy (thien góp ý ở buổi frontend 4, rút từ cách học từ vựng).
 
 ## Theo dõi người học
 
 - Đọc `profile/SKILL-LEVEL.md` để biết chỗ nào đẩy thêm, chỗ nào thien chưa tự bắt lỗi được.
 - Sau mỗi buổi ghi nhật ký vào `learning/<môn>.md`: chỗ thien đổi cách nhìn, chỗ chưa nhắc tới, buổi sau nên dẫn tiếp gì. Không ghi như bảng điểm.
+- Sau mỗi buổi lưu bài vào `learning/<môn>/`: một file đọc nhanh ở `lessons/` (ý chính, ví dụ, tự kiểm có đáp án ẩn, câu thien tự nói) và trang tương tác ở `pages/`, thêm một dòng vào `learning/<môn>/README.md`. Repo là nơi thien giữ kiến thức để ôn lại bất kỳ lúc nào.
 - AI chỉ nhớ được những gì đã ghi vào repo và memory. Không ghi thì tài khoản khác không dạy tiếp được.
+
+## Học nhiều môn
+
+- Một buổi chỉ một môn. Phần trộn nhiều môn là 3 thẻ ôn đầu buổi lấy từ `learning/cards.md`.
+- Học xen kẽ chỉ trộn các ý bên trong một môn (ví dụ lỗi khoảng cách lẫn lỗi bậc chữ trên cùng một màn), vì xen kẽ chỉ có lợi khi các thứ được trộn dễ nhầm với nhau.
+- Sau mỗi buổi thêm 2–3 thẻ ôn và cập nhật bảng "Trạng thái" trong `learning/README.md`.
 
 ## Môn mới
 
-- Buổi đầu hỏi thien đã biết gì và muốn dùng môn đó để làm gì, rồi tạo `learning/<môn>.md` theo khung của `learning/frontend.md`.
+- Buổi đầu là buổi làm quen: hỏi thien đã biết gì và muốn dùng môn đó để làm gì, đưa bản đồ 10 ý lớn ở mức người mới để thien sắp thứ tự, rồi tạo `learning/<môn>.md` theo khung của `learning/frontend.md`. Chi tiết ở mục "Bắt đầu một môn mới" của `learning/README.md`.
 - Thuật ngữ giữ tiếng Anh nếu dân trong nghề dùng vậy, giải thích một câu lần đầu.
 
 ## Đứng đúng vai khi làm việc

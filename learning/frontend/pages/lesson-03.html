@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buổi học 3: Khoảng trắng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--accent:#308E84;--accent-soft:#e3f1ef;--bad:#c2410c;--bad-soft:#fdeee6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Onest,system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:460px;margin:0 auto;padding:16px 16px 48px}
+.top{position:sticky;top:0;background:var(--bg);padding:12px 0 10px;z-index:5}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .25s ease}
+h1{font-size:26px;line-height:1.25;margin:20px 0 8px;font-weight:700;letter-spacing:-.01em}
+h2{font-size:20px;line-height:1.3;margin:8px 0 6px;font-weight:600}
+p{margin:0 0 12px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.step{display:none}.step.on{display:block;animation:in .2s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:26px;border:0;background:var(--ink);color:#fff;font:600 16px Onest,sans-serif;cursor:pointer;margin-top:16px}
+.btn[disabled]{opacity:.3;cursor:default}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);height:44px;font-weight:500}
+.opt{display:block;width:100%;text-align:left;padding:14px 16px;margin:8px 0;border:1px solid var(--line);border-radius:14px;background:#fff;font:15px/1.45 Onest,sans-serif;color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--accent);background:var(--accent-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+.why{display:none;font-size:14px;padding:12px 14px;border-radius:12px;background:#f3f1ec;margin-top:4px}
+.why.on{display:block}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.shot{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.shot img{display:block;width:100%;height:auto}
+.shot .tag{position:absolute;top:6px;left:6px;background:var(--ink);color:#fff;font-size:12px;font-weight:600;padding:2px 8px;border-radius:10px}
+.hl{position:absolute;border:2.5px solid #e11d48;border-radius:12px;box-shadow:0 0 0 999px rgba(0,0,0,.0);display:none}
+.hl.on{display:block}
+.hl.soft{border-style:dashed;border-color:#f59e0b}
+.big{display:block;width:100%;border-radius:14px;border:1px solid var(--line)}
+.tabs{display:flex;gap:8px;margin:8px 0 4px}
+.tab{flex:1;height:40px;border-radius:20px;border:1px solid var(--line);background:#fff;font:600 14px Onest,sans-serif;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.crit{padding:12px 0;border-top:1px solid var(--line)}
+.crit:first-child{border-top:0}
+.crit b{font-weight:600}
+.crit .d{font-size:13px;color:var(--muted);margin:2px 0 8px}
+.scale{display:flex;gap:6px}
+.scale button{flex:1;height:40px;border-radius:12px;border:1px solid var(--line);background:#fff;font:600 15px Onest,sans-serif;cursor:pointer;color:var(--ink)}
+.scale button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ends{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 4px;text-align:center;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+td.you{font-weight:600}
+textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:14px;padding:12px;font:15px/1.5 Onest,sans-serif;resize:vertical;background:#fff;color:var(--ink)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.chip{height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--line);background:#fff;font:500 14px Onest,sans-serif;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.kw{display:inline-block;background:var(--accent-soft);color:#1d5c55;font-weight:600;padding:0 6px;border-radius:6px}
+.legend{font-size:13px;color:var(--muted);display:flex;gap:14px;margin:4px 0 0}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border:2px solid #e11d48;border-radius:4px;margin-right:6px;vertical-align:-2px}
+.legend span.s::before{border-color:#f59e0b;border-style:dashed}
+.done{font-size:14px;padding:12px 14px;border-radius:12px;background:var(--accent-soft);color:#1d5c55;margin-top:12px;display:none}
+</style>
+<style>
+.mock{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px 16px 22px;margin:10px auto;max-width:330px;font-family:Onest,sans-serif;color:#1b1b1a;min-height:360px}
+.mock .bar2{height:6px;width:40px;border-radius:3px;background:#e7e3da;margin:0 auto 14px}
+.mock h3{font-size:20px;font-weight:700;margin:0}
+.mock .sub{font-size:13px;color:#6b6862}
+.mock label{display:block;font-size:13px;font-weight:600;color:#3a3936}
+.mock .inp{height:42px;border:1px solid #d9d5cc;border-radius:10px;background:#fbfaf7}
+.mock .cta{height:46px;border-radius:23px;background:#1b1b1a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px}
+.mock .set{border:1px solid #e7e3da;border-radius:14px;overflow:hidden}
+.mock .row{display:flex;justify-content:space-between;align-items:center;font-size:15px;border-top:1px solid #efece5}
+.mock .row:first-child{border-top:0}
+.mock .tog{width:36px;height:22px;border-radius:11px;background:#308E84;position:relative}
+.mock .tog::after{content:"";position:absolute;right:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff}
+.mock .tog.off{background:#d9d5cc}.mock .tog.off::after{left:3px;right:auto}
+.mock .val{color:#6b6862;font-size:14px}
+.mock .sec h4{font-size:16px;font-weight:700;margin:0}
+.mock .sec p{font-size:14px;line-height:1.5;color:#3a3936;margin:0}
+.mock .tagline{font-size:12px;font-weight:600;color:#308E84;text-transform:uppercase;letter-spacing:.04em}
+.pick{display:flex;gap:8px;margin:10px 0}
+.pick button{flex:1;height:46px;border-radius:23px;border:1px solid var(--line);background:#fff;font:600 15px Onest,sans-serif;cursor:pointer;color:var(--ink)}
+.pick button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.round{font-size:13px;color:var(--muted);margin:6px 0 0}
+.ann{outline:2.5px dashed #e11d48;outline-offset:2px;border-radius:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>Buổi 3 · Khoảng trắng</span><span id="cnt">1/7</span></div><div class="bar"><i id="bar"></i></div></div>
+
+  <section class="step on" data-s="0">
+    <h1>Khoảng trống cũng biết nói</h1>
+    <p class="muted">Khoảng 15 phút. Hôm nay đổi kiểu một chút: <b>tìm chỗ khác</b>.</p>
+    <div class="card small">
+      <p><b>Hôm nay bạn sẽ:</b></p>
+      <p>1. Trả lời một câu nhớ lại buổi chữ.<br>2. Xem 3 cặp màn hình. Mỗi cặp gần như giống hệt, chỉ khác một chỗ. Bạn chọn bản dễ nhìn hơn trước, rồi mới đoán khác ở đâu.<br>3. Học một ý: <span class="kw">khoảng cách là cách nhóm</span>.<br>4. 3 câu hỏi nhanh, 1 câu về gu.<br>5. Tự nói lại ý chính bằng một câu.</p>
+      <p class="muted" style="margin:0">Các màn hôm nay do mình tự dựng bằng HTML để chỉ đổi đúng một chi tiết, không phải màn của app thật.</p>
+    </div>
+    <button class="btn" onclick="go(1)">Bắt đầu</button>
+  </section>
+
+  <section class="step" data-s="1">
+    <h2>Nhớ lại</h2>
+    <p>Buổi trước bạn nói lại thứ bậc chữ bằng cỡ chữ, màu và thứ tự. Còn hai cách nữa để tạo bậc mà bạn chưa nhắc tới. Đó là gì?</p>
+    <div class="q" data-q="recall" data-a="0">
+      <button class="opt">Độ đậm của chữ và khoảng cách quanh chữ</button>
+      <button class="opt">Gạch chân và in nghiêng</button>
+      <button class="opt">Mỗi bậc dùng một font khác nhau</button>
+      <div class="why">Đúng là độ đậm và khoảng cách. Một tiêu đề không cần to hơn nhiều nếu nó đậm hơn và có khoảng trống phía trên lớn hơn phía dưới. Hôm nay mình đi sâu vào khoảng cách, phần bạn chưa nhắc tới.</div>
+    </div>
+    <button class="btn" id="n1" disabled onclick="go(2)">Tiếp</button>
+  </section>
+
+  <section class="step" data-s="2">
+    <h2 id="rtitle">Cặp 1/3</h2>
+    <p class="small muted" id="rdesc"></p>
+    <div class="tabs"><button class="tab on" data-v="1">Bản 1</button><button class="tab" data-v="2">Bản 2</button></div>
+    <p class="round">Bấm qua lại giữa hai bản vài lần để mắt bắt được chỗ khác.</p>
+    <div id="mockbox"></div>
+    <p style="margin:14px 0 0"><b>Bản nào dễ nhìn hơn?</b></p>
+    <div class="pick" id="pickBetter"><button>Bản 1</button><button>Bản 2</button></div>
+    <div id="diffq" style="display:none">
+      <p style="margin:10px 0 0"><b>Hai bản khác nhau ở đâu?</b></p>
+      <div class="q" id="dq"></div>
+    </div>
+    <button class="btn" id="n2" disabled>Cặp tiếp theo</button>
+  </section>
+
+  <section class="step" data-s="3">
+    <h2>Bạn chọn và chỗ khác</h2>
+    <div class="card" style="padding:8px 12px"><table id="cmp"></table></div>
+    <p class="small muted">Chọn khác giải thích dưới đây là chuyện bình thường, chi tiết khoảng cách rất khó thấy lúc đầu. Đọc xong, bạn thử nhớ lại hai bản xem giờ có thấy khác không.</p>
+    <h2 style="margin-top:22px">Ý chính: khoảng cách là cách nhóm</h2>
+    <p>Mắt người tự gom những thứ <b>đứng gần nhau</b> thành một nhóm. Dân thiết kế gọi đây là luật <i>proximity</i> (gần nhau thì là một nhóm). Vì vậy khoảng cách không chỉ để "cho thoáng", mà để nói cái gì đi với cái gì.</p>
+    <div class="card small">
+      <p><b>Cặp 1, form đăng ký:</b> khi nhãn "Email" cách ô của nó đúng bằng khoảng cách tới ô phía trên, mắt không biết nhãn thuộc ô nào. Nhãn sát ô của mình, các cặp nhãn và ô cách nhau xa hơn, là đọc được ngay.</p>
+      <p><b>Cặp 2, màn cài đặt:</b> chữ dính sát mép thẻ và các dòng ép vào nhau thì nhìn bí, khó bấm trên điện thoại. Thêm khoảng đệm bên trong thẻ (<i>padding</i>) và cho mỗi dòng cao khoảng 48px là dễ thở và dễ chạm hơn.</p>
+      <p style="margin:0"><b>Cặp 3, trang giới thiệu:</b> khi khoảng cách giữa hai phần còn nhỏ hơn khoảng cách giữa tiêu đề và đoạn văn của chính nó, các phần dính vào nhau. Quy tắc: khoảng cách <b>giữa các nhóm phải lớn hơn hẳn</b> khoảng cách <b>trong một nhóm</b>.</p>
+    </div>
+    <p class="small muted">Nhiều design system chỉ cho dùng một thang số cố định như 4, 8, 12, 16, 24, 32. Nhờ vậy các khoảng lặp lại thành nhịp, và hai khoảng khác nhau thì khác hẳn, không lưng chừng. Khoảng trống lớn trong thẻ giá của Slack buổi trước cũng là cách này: nó tách giá ra thành một nhóm riêng.</p>
+    <button class="btn" onclick="go(4)">Làm câu hỏi nhanh</button>
+  </section>
+
+  <section class="step" data-s="4">
+    <h2>3 câu hỏi nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Nhãn "Email" cách ô phía trên 14px và cách ô của chính nó cũng 14px. Vì sao người dùng thấy rối?</p>
+      <div class="q" data-q="q1" data-a="1">
+        <button class="opt">Vì 14px là quá nhỏ trên điện thoại</button>
+        <button class="opt">Vì mắt nhóm theo khoảng cách, hai bên bằng nhau thì không biết nhãn thuộc ô nào</button>
+        <button class="opt">Vì nhãn nên nằm bên trong ô nhập</button>
+        <div class="why">Con số không quan trọng bằng tỷ lệ. Nhãn phải gần ô của nó hơn hẳn so với ô khác, ví dụ 6px với ô của mình và 20px với ô kế tiếp.</div>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Khoảng cách giữa hai phần của một màn nên thế nào so với khoảng cách bên trong một phần?</p>
+      <div class="q" data-q="q2" data-a="2">
+        <button class="opt">Bằng nhau cho đều</button>
+        <button class="opt">Nhỏ hơn cho gọn</button>
+        <button class="opt">Lớn hơn rõ rệt, thường gấp đôi trở lên</button>
+        <div class="why">Đều nhau trông gọn nhưng làm mất nhóm. Khoảng giữa nhóm lớn hơn hẳn thì mắt tự thấy đâu là một phần.</div>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> Vì sao nhiều design system chỉ cho dùng các khoảng 4, 8, 12, 16, 24, 32?</p>
+      <div class="q" data-q="q3" data-a="0">
+        <button class="opt">Để các khoảng lặp lại có nhịp, và hai khoảng khác nhau thì khác hẳn</button>
+        <button class="opt">Vì trình duyệt chỉ hiển thị đúng các số này</button>
+        <button class="opt">Để màn hình nhỏ gọn hơn</button>
+        <div class="why">Một thang số cố định giúp cả nhóm và cả AI dùng khoảng cách giống nhau. thienui cũng có thang này; buổi sau mình có thể soi xem thang đó đã đủ cho điện thoại chưa.</div>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>Về gu</b> <span class="muted small">(không có đúng sai)</span>: bạn thích màn thoáng, nhiều khoảng trống như Apple, hay gọn chặt, nhiều thông tin trên một màn như công cụ dân chuyên?</p>
+      <div class="chips" data-g="taste"><button class="chip">Thoáng</button><button class="chip">Gọn chặt</button><button class="chip">Tùy loại app</button></div>
+      <textarea id="tasteWhy" placeholder="Một câu vì sao, hoặc app nào bạn nghĩ tới"></textarea>
+    </div>
+    <button class="btn" id="n4" disabled onclick="go(5)">Tiếp</button>
+  </section>
+
+  <section class="step" data-s="5">
+    <h2>Bạn nói lại ý chính</h2>
+    <p>Viết lại ý "khoảng cách là cách nhóm" bằng một câu của bạn, như đang giải thích cho bạn cùng nhóm. Viết xong mới xem bản của mình.</p>
+    <textarea id="teach" placeholder="Một câu thôi"></textarea>
+    <button class="btn ghost" id="reveal" disabled>Xem bản của Claude</button>
+    <div class="why" id="mine">Khoảng cách cho mắt biết cái gì đi với cái gì: thứ đứng gần nhau là một nhóm, nên khoảng cách giữa các nhóm phải lớn hơn hẳn khoảng cách bên trong một nhóm, và mọi khoảng đều lấy từ một thang số cố định để có nhịp.</div>
+    <button class="btn" id="n5" disabled onclick="go(6)">Tiếp</button>
+  </section>
+
+  <section class="step" data-s="6">
+    <h2>Buổi này thế nào?</h2>
+    <p class="small muted">Hôm nay là lần đầu thử kiểu "tìm chỗ khác". Bạn góp ý để mình biết có nên dùng tiếp không.</p>
+    <p style="margin-bottom:2px"><b>Độ dài</b></p>
+    <div class="chips" data-g="len"><button class="chip">Hơi ngắn</button><button class="chip">Vừa</button><button class="chip">Hơi dài</button></div>
+    <p style="margin-bottom:2px"><b>Độ khó</b></p>
+    <div class="chips" data-g="diff"><button class="chip">Dễ</button><button class="chip">Vừa</button><button class="chip">Khó</button></div>
+    <p style="margin-bottom:2px"><b>So với kiểu chấm điểm buổi 1 và 2</b></p>
+    <div class="chips" data-g="mode"><button class="chip">Thích kiểu này hơn</button><button class="chip">Như nhau</button><button class="chip">Thích kiểu chấm hơn</button></div>
+    <p style="margin-bottom:2px"><b>Chỗ nào chán, chỗ nào khó hiểu?</b></p>
+    <textarea id="fb" placeholder="Không bắt buộc"></textarea>
+    <button class="btn" id="finish">Xong buổi học</button>
+    <div role="status" aria-live="polite"><div class="done" id="saved"></div></div>
+    <button class="btn ghost" id="copy" style="display:none">Chép kết quả để dán vào thread</button>
+  </section>
+</div>
+<script>
+// good/bad builders: g=true means the well-spaced version
+function form(g){const lab=g?6:14,gap=g?22:14;let f='';[['Họ và tên'],['Email'],['Mật khẩu']].forEach((x,i)=>{f+='<div style="margin-top:'+(i?gap:0)+'px"><label style="margin-bottom:'+lab+'px">'+x[0]+'</label><div class="inp"></div></div>';});
+ return '<div class="mock"><div class="bar2"></div><h3>Tạo tài khoản</h3><div class="sub" style="margin:6px 0 22px">Mất chưa tới một phút</div>'+f+'<div class="cta" style="margin-top:28px">Đăng ký</div></div>';}
+function settings(g){const pad=g?16:6,h=g?48:32;const rows=[['Thông báo','<span class="tog"></span>'],['Chế độ tối','<span class="tog off"></span>'],['Ngôn ngữ','<span class="val">Tiếng Việt</span>'],['Âm thanh','<span class="tog"></span>']];
+ const r=rows.map(x=>'<div class="row" style="height:'+h+'px;padding:0 '+pad+'px">'+x[0]+x[1]+'</div>').join('');
+ const r2=[['Tài khoản','<span class="val">thien</span>'],['Đăng xuất','']].map(x=>'<div class="row" style="height:'+h+'px;padding:0 '+pad+'px">'+x[0]+x[1]+'</div>').join('');
+ return '<div class="mock"><div class="bar2"></div><h3 style="margin-bottom:18px">Cài đặt</h3><div class="set">'+r+'</div><div class="set" style="margin-top:18px">'+r2+'</div></div>';}
+function about(g){const inn=g?8:22,sec=g?30:12;const S=[['Học mỗi ngày 15 phút','Bài ngắn, làm trọn trên điện thoại, không cần ngồi vào bàn.'],['Tự thử trước, xem giải thích sau','Bạn chấm và đoán trước, rồi mới xem vì sao. Nhớ lâu hơn đọc lại.'],['Nhớ lại theo nhịp','Câu sai sẽ quay lại ở buổi sau, câu đúng thì giãn ra.']];
+ const s=S.map((x,i)=>'<div class="sec" style="margin-top:'+(i?sec:0)+'px"><h4 style="margin-bottom:'+inn+'px">'+x[0]+'</h4><p>'+x[1]+'</p></div>').join('');
+ return '<div class="mock"><div class="bar2"></div><div class="tagline">Cách học</div><h3 style="margin:6px 0 24px">Ít mà đều</h3>'+s+'<div class="cta" style="margin-top:30px">Bắt đầu</div></div>';}
+const PAIRS=[
+ {name:'Form đăng ký',build:form,desc:'Màn đăng ký tài khoản.',opts:['Khoảng cách giữa nhãn và ô nhập của nó','Cỡ chữ của nhãn','Độ bo góc của ô nhập'],a:0},
+ {name:'Màn cài đặt',build:settings,desc:'Màn cài đặt trong một app.',opts:['Màu công tắc','Khoảng đệm trong thẻ và chiều cao mỗi dòng','Độ đậm của chữ'],a:1},
+ {name:'Trang giới thiệu',build:about,desc:'Trang giới thiệu cách học, có 3 phần.',opts:['Cỡ chữ tiêu đề từng phần','Màu đoạn văn','Khoảng cách giữa các phần so với khoảng cách trong mỗi phần'],a:2}];
+// randomize which version is good
+PAIRS.forEach(p=>{p.goodIs=Math.random()<.5?1:2;});
+const R={start:new Date().toISOString(),lesson:3,mode:'tim-cho-khac',pairs:[],quiz:{},taste:null,tasteWhy:'',teach:'',len:null,diff:null,modePref:null,fb:''};
+const TOTAL=7;let cur=0,view=1;
+function go(n){document.querySelectorAll('.step').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));document.getElementById('cnt').textContent=(n+1)+'/'+TOTAL;document.getElementById('bar').style.width=(n/(TOTAL-1)*100)+'%';window.scrollTo({top:0,behavior:'smooth'});if(n===2)showPair();if(n===3)cmp();}
+function render(){const p=PAIRS[cur];document.getElementById('mockbox').innerHTML=p.build(view===p.goodIs);document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',+t.dataset.v===view));}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{view=+t.dataset.v;render();});
+function showPair(){const p=PAIRS[cur];view=1;document.getElementById('rtitle').textContent='Cặp '+(cur+1)+'/3 · '+p.name;document.getElementById('rdesc').textContent=p.desc;render();
+ document.querySelectorAll('#pickBetter button').forEach(b=>b.classList.remove('on'));document.getElementById('diffq').style.display='none';
+ const dq=document.getElementById('dq');dq.dataset.q='d'+cur;dq.dataset.a=p.a;dq.innerHTML=p.opts.map(o=>'<button class="opt">'+o+'</button>').join('')+'<div class="why">Chỉ khác đúng chỗ đó, mọi thứ còn lại giữ nguyên. Bản dễ nhìn hơn là <b>Bản '+p.goodIs+'</b>.</div>';
+ bindQ(dq);const n2=document.getElementById('n2');n2.disabled=true;n2.textContent=cur<2?'Cặp tiếp theo':'Xem giải thích';R.pairs[cur]={name:p.name,goodIs:p.goodIs};}
+document.querySelectorAll('#pickBetter button').forEach((b,i)=>b.onclick=()=>{document.querySelectorAll('#pickBetter button').forEach(x=>x.classList.remove('on'));b.classList.add('on');R.pairs[cur].picked=i+1;R.pairs[cur].pickedGood=(i+1)===PAIRS[cur].goodIs;document.getElementById('diffq').style.display='block';});
+document.getElementById('n2').onclick=()=>{if(cur<2){cur++;showPair();window.scrollTo({top:0,behavior:'smooth'});}else go(3);};
+function bindQ(q){const opts=[...q.querySelectorAll('.opt')];opts.forEach((o,i)=>o.onclick=()=>{const a=+q.dataset.a;opts.forEach((x,j)=>{x.disabled=true;if(j===a)x.classList.add('right');});if(i!==a)o.classList.add('wrong');q.querySelector('.why').classList.add('on');
+ if(q.id==='dq'){R.pairs[cur].diffRight=i===a;document.getElementById('n2').disabled=false;}else{R.quiz[q.dataset.q]={pick:i,right:i===a};}check();});}
+document.querySelectorAll('.q[data-q]').forEach(q=>{if(q.id!=='dq')bindQ(q);});
+document.querySelectorAll('.chips').forEach(c=>{c.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{c.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');R[c.dataset.g==='mode'?'modePref':c.dataset.g]=b.textContent;check();});});
+function cmp(){let h='<tr><th>Cặp</th><th>Bản bạn thấy dễ nhìn</th><th>Chỗ khác</th></tr>';R.pairs.forEach(p=>{h+='<tr><td>'+p.name+'</td><td class="you">'+(p.pickedGood?'Bản giãn đúng':'Bản sát nhau')+'</td><td>'+(p.diffRight?'Đã thấy':'Chưa thấy')+'</td></tr>';});document.getElementById('cmp').innerHTML=h;}
+const teach=document.getElementById('teach');teach.oninput=()=>{R.teach=teach.value.trim();document.getElementById('reveal').disabled=R.teach.length<8;};
+document.getElementById('reveal').onclick=()=>{document.getElementById('mine').classList.add('on');document.getElementById('n5').disabled=false;};
+document.getElementById('tasteWhy').oninput=e=>{R.tasteWhy=e.target.value.trim();};
+document.getElementById('fb').oninput=e=>{R.fb=e.target.value.trim();};
+function check(){document.getElementById('n1').disabled=!R.quiz.recall;document.getElementById('n4').disabled=!(R.quiz.q1&&R.quiz.q2&&R.quiz.q3&&R.taste);}
+function summary(){const q=['q1','q2','q3'].filter(k=>R.quiz[k]&&R.quiz[k].right).length;return 'Buổi 3 (khoảng trắng, tìm chỗ khác)\nCâu đúng: '+q+'/3, nhớ lại: '+(R.quiz.recall&&R.quiz.recall.right?'đúng':'sai')+'\nCác cặp: '+R.pairs.map(p=>p.name+': chọn '+(p.pickedGood?'bản tốt':'bản kia')+', tìm chỗ khác '+(p.diffRight?'đúng':'chưa')).join('; ')+'\nGu: '+R.taste+' – '+R.tasteWhy+'\nNói lại: '+R.teach+'\nĐộ dài: '+R.len+', độ khó: '+R.diff+', so kiểu cũ: '+R.modePref+'\nGóp ý: '+R.fb;}
+document.getElementById('finish').onclick=async()=>{const btn=document.getElementById('finish');btn.disabled=true;R.end=new Date().toISOString();const out=document.getElementById('saved');out.style.display='block';let ok=false;try{let dbp=null;try{dbp=window.claude&&window.claude.use?window.claude.use('db'):null;}catch(e){dbp=null;}const db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;if(db){await db.doc('sessions/s3-'+Date.now()).set(R);ok=true;}}catch(e){ok=false;}
+out.textContent=ok?'Đã lưu kết quả. Claude đọc được, bạn chỉ cần nhắn "xong" trong thread.':'Chưa lưu được tự động. Bấm nút dưới để chép kết quả rồi dán vào thread.';if(!ok){document.getElementById('copy').style.display='flex';}};
+document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());document.getElementById('copy').textContent='Đã chép';}catch(e){document.getElementById('saved').textContent=summary();}};
+// keep selection state readable by screen readers
+const syncPressed=()=>document.querySelectorAll('.chip,.pick button,.tab,.scale button').forEach(b=>{const v=b.classList.contains('on')?'true':'false';if(b.getAttribute('aria-pressed')!==v)b.setAttribute('aria-pressed',v);});
+new MutationObserver(syncPressed).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+go(0);syncPressed();
+</script>
+</body>
+</html>
