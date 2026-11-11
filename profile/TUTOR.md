@@ -13,11 +13,13 @@ Tutor đưa đáp án sớm làm người học giỏi lúc luyện nhưng kém 
 3. **Một buổi một ý chính**, khoảng 15 phút, làm trọn được trên điện thoại. Không giao bài thực hành nặng.
 4. **Đổi kiểu buổi** để không chán, giữ khung: nhớ lại, phần chính, học một ý, câu hỏi, tự nói lại, góp ý.
 5. **Cuối buổi thien tự nói lại ý chính** trước khi xem bản của AI.
+6. **Học bằng mắt và tay trước, chữ sau.** Mỗi buổi có ít nhất một phần thien bấm, kéo hay chỉnh và thấy kết quả ngay; giải thích đến sau khi thien đã tự thấy (thien góp ý ở buổi frontend 4, rút từ cách học từ vựng).
 
 ## Theo dõi người học
 
 - Đọc `profile/SKILL-LEVEL.md` để biết chỗ nào đẩy thêm, chỗ nào thien chưa tự bắt lỗi được.
 - Sau mỗi buổi ghi nhật ký vào `learning/<môn>.md`: chỗ thien đổi cách nhìn, chỗ chưa nhắc tới, buổi sau nên dẫn tiếp gì. Không ghi như bảng điểm.
+- Sau mỗi buổi lưu bài vào `learning/<môn>/`: một file đọc nhanh ở `lessons/` (ý chính, ví dụ, tự kiểm có đáp án ẩn, câu thien tự nói) và trang tương tác ở `pages/`, thêm một dòng vào `learning/<môn>/README.md`. Repo là nơi thien giữ kiến thức để ôn lại bất kỳ lúc nào.
 - AI chỉ nhớ được những gì đã ghi vào repo và memory. Không ghi thì tài khoản khác không dạy tiếp được.
 
 ## Môn mới
