@@ -11,6 +11,7 @@ skills/       Skill tải lên tài khoản Claude
 life/         Bản tin sáng và cấu hình trợ lý cuộc sống
 learning/     Hồ sơ và trạng thái từng môn thien đang học cùng AI
 artifacts/    Mẫu artifact thien đã thích, dùng lại ở mọi project và tài khoản
+slides/       Bộ quy tắc làm slide và khung slide web dùng lại
 ```
 
 | Thư mục | File | Dùng để |
@@ -30,6 +31,9 @@ artifacts/    Mẫu artifact thien đã thích, dùng lại ở mọi project v�
 | | `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
 | `.github/` | `workflows/sync-agents-md.yml` | Mẫu `AGENTS.md` đổi thì tự mở PR vào từng repo trong `life/tracked-repos.md` để cập nhật phần chung, giữ nguyên phần riêng của project. Cần secret `SYNC_TOKEN` |
 | `skills/` | `start-project/` | Skill hỏi thien có áp quy trình không, rồi chép các file mẫu vào project. `SKILL.md` chỉ trỏ tới `STEPS.md`; sửa các bước thì sửa `STEPS.md` |
+| | `make-slides/` | Skill làm slide: tóm tắt bài, dàn ý, dựng, kiểm, tập dượt, đăng. `SKILL.md` chỉ trỏ tới `STEPS.md` |
+| `slides/` | `RULES.md` | Bộ quy tắc làm slide (S1 đến S48), đọc trước mọi bài thuyết trình |
+| | `BRIEF.template.md`, `starter/` | Mẫu tóm tắt bài và khung slide web có máy kiểm tra, chép vào project. Xem `slides/README.md` |
 | `learning/` | `frontend.md` | Đang học frontend tới đâu, buổi tiếp theo dạy gì, để tài khoản khác dạy tiếp |
 | | `glossary.md` | Bảng tra thuật ngữ tiếng Anh, AI thêm khi dùng từ thien chưa học |
 | `artifacts/` | `README.md` | Danh sách mẫu artifact thien thích và khi nào dùng; mỗi mẫu là một file HTML |
@@ -47,7 +51,7 @@ File mẫu giữ đuôi `.template.md` để không bị nhầm thành luật th
    Khi bắt đầu project mới, dùng skill start-project: hỏi mình trước, mình đồng ý mới áp.
    Trả lời bằng tiếng Việt tự nhiên, không tự chế từ, không dịch sát chữ từ tiếng Anh.
    ```
-2. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên file zip của thư mục `skills/start-project/`.
+2. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên file zip của thư mục `skills/start-project/` và `skills/make-slides/`.
 3. Mở một project mới: coordinator sẽ hỏi có áp quy trình không.
 
 Codex, Gemini và người khác không cần cài gì: họ đọc `AGENTS.md` và `docs/STATUS.md` trong repo của project.
