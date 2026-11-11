@@ -2,7 +2,7 @@
 
 <!-- Mẫu hướng dẫn cài đặt. Luật viết ở profile/GUIDES.md trong repo thienai-workflow. Xoá các dòng chú thích như dòng này trước khi gửi. -->
 
-Cài xong thì [kết quả thấy được, ví dụ: mỗi sáng 6:30 có mail "Bản tin sáng" trong Gmail]. Mất khoảng [số] phút.
+Cài xong thì [kết quả thấy được, ví dụ: mở trang chủ thấy tên tài khoản ở góc phải]. Mất khoảng [số] phút.
 
 Đã thử ngày [YYYY-MM-DD]: bước [x] đến [y]. Bước có ghi `(chưa thử)` là mình viết theo [tên tài liệu](link), đọc ngày [YYYY-MM-DD], nên có thể lệch với màn hình của bạn. Lệch chỗ nào thì nhắn mình số bước.
 

@@ -1,6 +1,6 @@
 ---
 name: start-project
-description: Dùng khi thien bắt đầu một project mới, một repo mới chưa có AGENTS.md, khi thien nói "xem lại quy trình" hay vừa xong một milestone, hoặc khi thien muốn thêm hay bỏ một repo khỏi bản tin sáng. Hỏi thien có áp quy trình chung không; chỉ áp khi thien đồng ý.
+description: Dùng khi thien bắt đầu một project mới, một repo mới chưa có AGENTS.md, khi thien nói "xem lại quy trình" hay vừa xong một milestone, hoặc khi thien muốn thêm hay bỏ một repo khỏi danh sách đồng bộ AGENTS.md. Hỏi thien có áp quy trình chung không; chỉ áp khi thien đồng ý.
 ---
 
 # Bắt đầu project với quy trình chung của thien
