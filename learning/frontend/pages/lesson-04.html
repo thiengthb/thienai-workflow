@@ -369,8 +369,9 @@ document.getElementById('finish').onclick=async()=>{const btn=document.getElemen
 out.textContent=ok?'Đã lưu kết quả. Claude đọc được, bạn chỉ cần nhắn "xong" trong thread.':'Chưa lưu được tự động. Bấm nút dưới để chép kết quả rồi dán vào thread.';if(!ok){document.getElementById('copy').style.display='flex';}};
 document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());document.getElementById('copy').textContent='Đã chép';}catch(e){document.getElementById('saved').textContent=summary();}};
 // keep selection state readable by screen readers
-document.addEventListener('click',()=>setTimeout(()=>document.querySelectorAll('.chip,.pick button,.tab').forEach(b=>b.setAttribute('aria-pressed',b.classList.contains('on')?'true':'false'))));
-go(0);
+const syncPressed=()=>document.querySelectorAll('.chip,.pick button,.tab,.scale button').forEach(b=>{const v=b.classList.contains('on')?'true':'false';if(b.getAttribute('aria-pressed')!==v)b.setAttribute('aria-pressed',v);});
+new MutationObserver(syncPressed).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+go(0);syncPressed();
 </script>
 </body>
 </html>
