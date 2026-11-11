@@ -5,10 +5,10 @@ File này để tài khoản nào, model nào cũng dạy tiếp được cho th
 ## Mục tiêu và nhịp
 - Mục tiêu: nhìn ra vì sao một màn hình đẹp hay cấn mắt ở mức cả màn (bố cục, điểm nhấn, chữ, màu, khoảng trắng), để dần làm giàu thienui. Bài học gốc: luật chỉ đồng bộ chi tiết, không làm cả màn đẹp (thua app why i buy).
 - Kiểu khóa: thói quen dài hạn, mỗi buổi khoảng 15 phút, tối 19–23h.
-- Lịch linh hoạt (AI đề xuất 2026-11-11 sau khi thien nói lịch cứng hay bị lỡ vì bận, quên hoặc hết usage): mỗi tuần 3 buổi, tối nào cũng được, tối thiểu 2. Lỡ thì thôi, không dồn nợ. Một tối tối đa 2 buổi. Lỡ một lần gần như không ảnh hưởng việc hình thành thói quen ([Lally và cộng sự, 2010](https://doi.org/10.1002/ejsp.674)).
+- Lịch: từ 2026-11-12 frontend là môn chính trong vòng xoay nhiều môn, chiếm khoảng một nửa số buổi (vòng, nhịp tuần và mốc ở `learning/README.md`). Lỡ thì thôi, không dồn nợ ([Lally và cộng sự, 2010](https://doi.org/10.1002/ejsp.674)).
 - Thử nghiệm kết thúc chủ nhật 2026-11-22 bằng 15 phút so sánh mù lại các màn đã xem. Sau đó thành thói quen: giữ các kiểu buổi thien thích, khoảng 2 tuần một buổi áp vào việc thật (kiểu 5 hoặc 6).
 - Bài đã học lưu ở `learning/frontend/` (file đọc nhanh và trang làm lại); thêm bài sau mỗi buổi.
-- Sau frontend sẽ học BA, rồi chiến tranh, cùng cách này.
+- Học song song với BA và chiến tranh theo vòng Frontend → BA → Frontend → Chiến tranh.
 
 ## Cách một buổi chạy
 - Dựng trang từ mẫu `artifacts/lesson-page.html`, làm trên điện thoại.
