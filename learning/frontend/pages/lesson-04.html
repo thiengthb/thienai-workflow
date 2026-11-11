@@ -293,7 +293,7 @@ function order(o){
  const money=rows([['Tạm tính','145.000đ'],['Phí giao','15.000đ'],['Giảm giá','−20.000đ'],['Tổng cộng','140.000đ',T.totl,T.totv]],T.tl,T.tv);
  let btns;
  if(o.btn==='orig'){btns=['Theo dõi đơn','Liên hệ quán','Hủy đơn'].map((t,i)=>'<div class="b" style="height:46px;background:#1b1b1a;color:#fff;margin-top:'+(i?si:0)+'px">'+t+'</div>').join('');}
- else if(o.btn==='good'){btns='<div class="b" style="height:48px;background:#1b1b1a;color:#fff">Theo dõi đơn</div><div class="b" style="height:46px;border:1px solid #d9d5cc;margin-top:'+si+'px">Liên hệ quán</div><div style="text-align:center;font-size:14px;color:#6b6862;margin-top:'+(si+4)+'px">Hủy đơn</div>';}
+ else if(o.btn==='good'){btns='<div class="b" style="height:48px;font-size:16px;background:#1b1b1a;color:#fff">Theo dõi đơn</div><div class="b" style="height:46px;font-size:16px;border:1px solid #d9d5cc;margin-top:'+si+'px">Liên hệ quán</div><div style="text-align:center;font-size:13px;color:#6b6862;margin-top:'+(si+4)+'px">Hủy đơn</div>';}
  else if(o.btn==='soft'){btns='<div style="display:flex;gap:8px">'+['Theo dõi','Liên hệ','Hủy đơn'].map(t=>'<div class="b" style="flex:1;height:44px;background:#e3f1ef;color:#1d5c55;font-size:14px">'+t+'</div>').join('')+'</div>';}
  else {btns='<div class="b" style="height:48px;background:#dc2626;color:#fff">Hủy đơn</div><div style="display:flex;gap:8px;margin-top:'+si+'px"><div class="b" style="flex:1;height:44px;border:1px solid #d9d5cc;font-size:14px">Theo dõi đơn</div><div class="b" style="flex:1;height:44px;border:1px solid #d9d5cc;font-size:14px">Liên hệ quán</div></div>';}
  return '<div class="mock"><div class="bar2"></div>'+
