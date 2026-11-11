@@ -40,7 +40,11 @@
   function render() {
     slides.forEach((s, i) => s.classList.toggle('on', i === cur));
     const s = slides[cur];
-    $$('[data-step]', s).forEach((e) => e.classList.toggle('hide', +e.dataset.step > step));
+    $$('[data-step]', s).forEach((e) => {
+      const hidden = +e.dataset.step > step;
+      e.classList.toggle('hide', hidden);
+      e.inert = hidden; // hidden steps are not focusable nor read by screen readers
+    });
     const dimmer = $$('[data-step][data-dim]', s).filter((e) => +e.dataset.step <= step).pop();
     $$('[data-step]', s).forEach((e) => e.classList.toggle('dim', !!dimmer && e !== dimmer && +e.dataset.step <= step));
     $('.notes-bar').textContent = notesOf(s);
@@ -54,7 +58,7 @@
     cur = Math.max(0, Math.min(total - 1, i));
     step = st === 'end' ? stepsOf(slides[cur]) : st;
     render();
-    if (chan && from !== 'remote') chan.postMessage({ cur, step });
+    if (chan && !from) chan.postMessage({ cur, step });
   }
   const next = () => (step < stepsOf(slides[cur]) ? go(cur, step + 1) : cur < total - 1 && go(cur + 1, 0));
   const prev = () => (step > 0 ? go(cur, step - 1) : cur > 0 && go(cur - 1, 'end'));
@@ -119,6 +123,8 @@
   addEventListener('keydown', (e) => {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const k = e.key;
+    const onControl = e.target.closest?.('button, a, input, textarea, select');
+    if ((k === ' ' || k === 'Enter') && onControl) return; // let a focused control (overview) activate
     if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); next(); }
     else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); prev(); }
     else if (k === 'Home') go(0);
@@ -137,6 +143,8 @@
     (e.clientX > innerWidth / 3 ? next : prev)();
   });
   if (chan) chan.onmessage = ({ data }) => {
+    // A presenter window that just opened asks for the current slide and timer.
+    if (data.hello) { if (!presenter) chan.postMessage({ cur, step, timer: t0 }); return; }
     if ('timer' in data) { t0 = data.timer; clearInterval(tick); if (t0) tick = setInterval(() => presenter && renderPresenter(), 1000); }
     if ('cur' in data) go(data.cur, data.step, 'remote');
   };
@@ -144,6 +152,7 @@
 
   const [h, hs] = location.hash.slice(1).split('.');
   fit();
-  go((+h || 1) - 1, +hs || 0);
+  go((+h || 1) - 1, +hs || 0, 'init'); // loading a window never moves the other one
+  if (presenter && chan) chan.postMessage({ hello: 1 });
   window.deckApi = { go, total, slides, stepsOf, notesOf }; // used by check.mjs
 })();

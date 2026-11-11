@@ -49,11 +49,33 @@ for (let i = 0; i < total; i++) {
       const st = getComputedStyle(e);
       return own && st.visibility !== 'hidden' && st.display !== 'none' && +st.opacity !== 0;
     });
+    // Measure the text itself (direct text nodes), not the element box: an unbroken string can spill out of
+    // its box, and two boxes can touch while their text does not.
+    const textRect = (e) => {
+      let l = Infinity, t = Infinity, r = -Infinity, b = -Infinity;
+      for (const n of e.childNodes) {
+        if (n.nodeType !== 3 || !n.textContent.trim()) continue;
+        const range = document.createRange();
+        range.selectNodeContents(n);
+        for (const q of range.getClientRects()) {
+          if (!q.width || !q.height) continue;
+          l = Math.min(l, q.left); t = Math.min(t, q.top); r = Math.max(r, q.right); b = Math.max(b, q.bottom);
+        }
+      }
+      return l === Infinity ? e.getBoundingClientRect() : { left: l, top: t, width: r - l, height: b - t };
+    };
+    // Font size as drawn on the stage: SVG text is also scaled by its viewBox, so use the element's screen
+    // transform divided by the deck-wide scale k.
+    const stageFont = (e) => {
+      const fs = parseFloat(getComputedStyle(e).fontSize);
+      const m = e instanceof SVGGraphicsElement && e.getScreenCTM();
+      return m ? Math.round(((fs * Math.hypot(m.a, m.b)) / k) * 10) / 10 : fs;
+    };
     const boxes = leaves.map((e) => {
-      const b = e.getBoundingClientRect();
-      return { e, x: (b.left - stage.left) / k, y: (b.top - stage.top) / k, w: b.width / k, h: b.height / k,
-        fs: parseFloat(getComputedStyle(e).fontSize), t: e.textContent.trim().slice(0, 40),
-        label: !!e.closest('.kicker, .foot, .lbl, .muted, .small, svg') };
+      const q = textRect(e);
+      return { e, x: (q.left - stage.left) / k, y: (q.top - stage.top) / k, w: q.width / k, h: q.height / k,
+        fs: stageFont(e), t: e.textContent.trim().slice(0, 40),
+        label: !!e.closest('.kicker, .foot, .lbl, .muted, .small') };
     });
     const out = [], small = [], under = [], overlap = [];
     for (const b of boxes) {

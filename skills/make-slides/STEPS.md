@@ -35,13 +35,15 @@ Không chắc thì chọn web và xuất PDF kèm. Ghi lựa chọn vào `BRIEF.
 - Chụp cả 3 slide ở cỡ thật, đưa thien chọn. Không làm thêm hướng thứ ba trừ khi thien chê cả hai.
 
 ## 5. Dựng đủ bài
-- Chép `slides/starter/` vào thư mục `slides/` của project (đổi tên `deck.html` theo bài nếu có nhiều bộ). Đổi token màu ở đầu `deck.css` theo màu chủ đạo của bài (S31); không sửa phần còn lại của khung trừ khi thiếu.
-- Mỗi slide: tiêu đề câu khẳng định, một hình chính, chữ dưới 30 từ, `data-min`, `data-src` nếu có số liệu, lời nói đầy đủ trong `<aside class="notes">` theo S15 đến S20.
+- Bài web: chép `slides/starter/` vào thư mục `slides/` của project, giữ tên `deck.html`. Project có nhiều bộ slide thì mỗi bộ một thư mục riêng (`slides/lab3/deck.html`, `slides/final/deck.html`), còn `check.mjs` để chung ở `slides/`; mọi lệnh ở bước 6 dùng đúng đường dẫn của bộ đó, `pages.yml` tự tìm mọi `deck.html`. Đổi token màu ở đầu `deck.css` theo màu chủ đạo của bài (S31); không sửa phần còn lại của khung trừ khi thiếu.
+- Bài .pptx: dựng bằng skill `pptx` theo đúng dàn ý đã duyệt, lời nói đặt trong phần ghi chú của từng slide. Bài Canva: xem bước 9.
+- Mỗi slide: tiêu đề câu khẳng định, một hình chính, chữ dưới 30 từ, `data-min`, `data-src` cho dòng nguồn ở chân slide nếu có số liệu (bài cần bấm vào con số để xem nguồn theo S40 thì thêm `proofs.js` của PRM393), lời nói đầy đủ trong `<aside class="notes">` theo S15 đến S20.
 - Số liệu: chỉ thứ đã mở nguồn (S39). Ảnh sản phẩm: chụp từ app chạy thật, cắt đúng vùng đang nói (S24).
 - Chuyển động: chỉ dùng `data-step` (hiện từng bước) và `data-dim` (làm mờ bước cũ) có sẵn. Thêm hiệu ứng khác thì phải trả lời được "nó nói điều gì" (S34) và không nằm trong danh sách đã bỏ (S38).
 
 ## 6. Kiểm máy và tự chê
-- Chạy `node slides/check.mjs slides/deck.html --pdf` (cần Playwright; trên máy Claude cloud dùng `NODE_PATH=$(npm root -g) node ...`). Sửa đến khi không còn ERROR; WARN nào giữ lại thì ghi lý do.
+- Bài .pptx hay Canva: không có máy kiểm tra, nên xuất ra PDF, chụp từng trang và tự kiểm bằng mắt theo đúng các luật S9, S10, S28, S42 (tiêu đề, số chữ, cỡ chữ, thời lượng tính từ kịch bản), rồi làm phần tự chê bên dưới.
+- Bài web: chạy `node slides/check.mjs slides/deck.html --pdf` (cần Playwright; trên máy Claude cloud dùng `NODE_PATH=$(npm root -g) node ...`). Sửa đến khi không còn ERROR; WARN nào giữ lại thì ghi lý do.
 - Mở `check/sheet.png` (cả bài trên một trang) và tự chê ở mức cả bài trước: nhịp có đều không, các slide có như một người vẽ không, có slide nào dày hơn hẳn, khoảnh khắc đáng nhớ nằm ở đâu (S33). Rồi xem từng slide ở cỡ thật với phép thử 3 giây: che lời nói, nhìn 3 giây, có nói lại được ý của slide không.
 - Đọc to lời nói của 3 slide bất kỳ: chỗ nào vấp thì sửa câu (S15, S16).
 
@@ -55,6 +57,7 @@ Không chắc thì chọn web và xuất PDF kèm. Ghi lựa chọn vào `BRIEF.
 - Đăng lên GitHub Pages của repo: chép `slides/starter/pages.yml` vào `.github/workflows/`, thien bật Pages một lần (Settings > Pages > Source: GitHub Actions).
 - Một PR cho cả bài. Báo thien trong 5 dòng: link slide, link PDF, tổng thời gian ước tính so với thời lượng, những chỗ còn "chưa kiểm", việc thien cần làm (tập, thử máy chiếu).
 - thien duyệt bằng cách mở link thật toàn màn hình, tốt nhất trên màn to. Không gửi từng slide lẻ để duyệt.
+- Bài .pptx hay Canva: bỏ phần Pages; mốc duyệt 2 là chính file đó (file .pptx trong PR, hoặc link Canva) kèm PDF và kịch bản.
 
 ## 9. Canva khi cần
 - Có Canva connector: đưa thẳng bản PDF đã xuất vào Canva bằng công cụ nhập thiết kế từ link (chữ thành chữ sửa được), hoặc dựng từ mẫu thương hiệu của nhóm nếu có. Kịch bản dán vào phần ghi chú của từng trang.
