@@ -190,7 +190,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     <p style="margin-bottom:2px"><b>Chỗ nào chán, chỗ nào khó hiểu?</b></p>
     <textarea id="fb" placeholder="Không bắt buộc"></textarea>
     <button class="btn" id="finish">Xong buổi học</button>
-    <div class="done" id="saved"></div>
+    <div role="status" aria-live="polite"><div class="done" id="saved"></div></div>
     <button class="btn ghost" id="copy" style="display:none">Chép kết quả để dán vào thread</button>
   </section>
 </div>
@@ -201,6 +201,8 @@ const IMG={A:"__A__",B:"__B__"};
 const R={start:new Date().toISOString(),rate:{A:{},B:{}},quiz:{},taste:null,tasteWhy:"",teach:"",len:null,diff:null,fb:""};
 const TOTAL=7;
 function go(n){document.querySelectorAll('.step').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));document.getElementById('cnt').textContent=(n+1)+'/'+TOTAL;document.getElementById('bar').style.width=(n/(TOTAL-1)*100)+'%';window.scrollTo({top:0,behavior:'smooth'});if(n===3)cmp();}
+// keep selection state readable by screen readers
+document.addEventListener('click',()=>setTimeout(()=>document.querySelectorAll('.chip,.pick button,.tab').forEach(b=>b.setAttribute('aria-pressed',b.classList.contains('on')?'true':'false'))));
 go(0);
 // quiz
 document.querySelectorAll('.q').forEach(q=>{const opts=[...q.querySelectorAll('.opt')];opts.forEach((o,i)=>o.onclick=()=>{const a=+q.dataset.a;opts.forEach((x,j)=>{x.disabled=true;if(j===a)x.classList.add('right');});if(i!==a)o.classList.add('wrong');q.querySelector('.why').classList.add('on');R.quiz[q.dataset.q]={pick:i,right:i===a};check();});});

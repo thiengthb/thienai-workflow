@@ -205,7 +205,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     <p style="margin-bottom:2px"><b>Chỗ nào chán, chỗ nào khó hiểu?</b></p>
     <textarea id="fb" placeholder="Không bắt buộc"></textarea>
     <button class="btn" id="finish">Xong buổi học</button>
-    <div class="done" id="saved"></div>
+    <div role="status" aria-live="polite"><div class="done" id="saved"></div></div>
     <button class="btn ghost" id="copy" style="display:none">Chép kết quả để dán vào thread</button>
   </section>
 </div>
@@ -251,6 +251,8 @@ function summary(){const q=['q1','q2','q3'].filter(k=>R.quiz[k]&&R.quiz[k].right
 document.getElementById('finish').onclick=async()=>{const btn=document.getElementById('finish');btn.disabled=true;R.end=new Date().toISOString();const out=document.getElementById('saved');out.style.display='block';let ok=false;try{let dbp=null;try{dbp=window.claude&&window.claude.use?window.claude.use('db'):null;}catch(e){dbp=null;}const db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;if(db){await db.doc('sessions/s3-'+Date.now()).set(R);ok=true;}}catch(e){ok=false;}
 out.textContent=ok?'Đã lưu kết quả. Claude đọc được, bạn chỉ cần nhắn "xong" trong thread.':'Chưa lưu được tự động. Bấm nút dưới để chép kết quả rồi dán vào thread.';if(!ok){document.getElementById('copy').style.display='flex';}};
 document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());document.getElementById('copy').textContent='Đã chép';}catch(e){document.getElementById('saved').textContent=summary();}};
+// keep selection state readable by screen readers
+document.addEventListener('click',()=>setTimeout(()=>document.querySelectorAll('.chip,.pick button,.tab').forEach(b=>b.setAttribute('aria-pressed',b.classList.contains('on')?'true':'false'))));
 go(0);
 </script>
 </body>

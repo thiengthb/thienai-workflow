@@ -273,7 +273,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     <p style="margin-bottom:2px"><b>Chỗ nào chán, chỗ nào khó hiểu?</b></p>
     <textarea id="fb" placeholder="Không bắt buộc"></textarea>
     <button class="btn" id="finish">Xong buổi học</button>
-    <div class="done" id="saved"></div>
+    <div role="status" aria-live="polite"><div class="done" id="saved"></div></div>
     <button class="btn ghost" id="copy" style="display:none">Chép kết quả để dán vào thread</button>
   </section>
 </div>
@@ -283,7 +283,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
 function order(o){
  const T={
   orig:{name:'font-size:22px;font-weight:700',sub:'font-size:15px;font-weight:600;color:#3a3936',status:'font-size:18px;font-weight:700;color:#c2410c',item:'font-size:16px;font-weight:700',price:'font-size:16px;font-weight:700',tl:'font-size:16px;font-weight:600',tv:'font-size:16px;font-weight:600',totl:'font-size:16px;font-weight:400',totv:'font-size:16px;font-weight:400',al:'font-size:15px;font-weight:700',av:'font-size:16px;font-weight:600'},
-  good:{name:'font-size:20px;font-weight:700',sub:'font-size:13px;color:#6b6862',status:'font-size:16px;font-weight:600;color:#1d5c55',item:'font-size:15px',price:'font-size:15px',tl:'font-size:14px;color:#6b6862',tv:'font-size:14px;color:#6b6862',totl:'font-size:17px;font-weight:700',totv:'font-size:20px;font-weight:700',al:'font-size:13px;color:#6b6862',av:'font-size:15px'},
+  good:{name:'font-size:20px;font-weight:700',sub:'font-size:13px;color:#6b6862',status:'font-size:16px;font-weight:600;color:#1d5c55',item:'font-size:16px',price:'font-size:16px',tl:'font-size:13px;color:#6b6862',tv:'font-size:13px;color:#6b6862',totl:'font-size:16px;font-weight:700',totv:'font-size:20px;font-weight:700',al:'font-size:13px;color:#6b6862',av:'font-size:16px'},
   header:{name:'font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.15',sub:'font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8a867e',status:'font-size:14px;color:#6b6862',item:'font-size:14px;color:#6b6862',price:'font-size:14px;color:#6b6862',tl:'font-size:13px;color:#8a867e',tv:'font-size:13px;color:#8a867e',totl:'font-size:14px;color:#6b6862',totv:'font-size:14px;color:#6b6862',al:'font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8a867e',av:'font-size:14px;color:#6b6862'},
   flat:{name:'font-size:15px;font-weight:500',sub:'font-size:15px',status:'font-size:15px',item:'font-size:15px',price:'font-size:15px',tl:'font-size:15px',tv:'font-size:15px',totl:'font-size:15px',totv:'font-size:15px',al:'font-size:15px',av:'font-size:15px'}
  }[o.type];
@@ -310,7 +310,7 @@ const ROUNDS=[
         {v:'soft',kind:'pretty',t:'Ba nút màu dịu đều nhau, trông cân đối và dễ chịu hơn bản gốc. Nhưng vẫn chưa có điểm nhấn: ba việc ngang hàng nhau, người dùng phải đọc hết mới biết bấm gì. Đẹp hơn mà chưa đúng mục đích.'},
         {v:'danger',kind:'wrong',t:'Có điểm nhấn rõ, nhưng đặt nhầm chỗ. Nút nổi nhất lại là "Hủy đơn", việc ít ai muốn làm và không quay lại được. Nút đỏ to còn làm người ta dễ bấm nhầm.'}]},
  {name:'Thứ bậc chữ',base:{btn:'good',sin:12,sout:12},key:'type',orig:'orig',
-  opts:[{v:'good',kind:'best',t:'Chỉ còn 3 cỡ chữ chính, chênh nhau rõ. Trạng thái đơn và tổng tiền được kéo lên vì đó là hai thứ người dùng tìm; món ăn và phí để chữ thường.'},
+  opts:[{v:'good',kind:'best',t:'Chỉ còn 3 cỡ chữ: 13, 16 và 20, chênh nhau rõ. Trạng thái đơn và tổng tiền được kéo lên vì đó là hai thứ người dùng tìm; món ăn và phí để chữ thường.'},
         {v:'header',kind:'pretty',t:'Tên quán to, thanh lịch như bìa tạp chí, nhìn đẹp nhất trong ba bản. Nhưng trạng thái đơn và tổng tiền bị chìm xuống, mà đó mới là thứ người dùng mở màn để xem.'},
         {v:'flat',kind:'wrong',t:'Mọi chữ cùng một cỡ và độ đậm nên nhìn gọn, sạch. Nhưng không còn bậc nào: mắt phải đọc từng dòng mới tìm ra tổng tiền.'}]}];
 ROUNDS.forEach(r=>{r.order=[0,1,2].sort(()=>Math.random()-.5);});
@@ -338,7 +338,7 @@ ROUNDS.forEach((r,ri)=>{
 
 // ---- self fix ----
 const IN=[4,8,12,16,24],OUT=[8,12,16,24,32,48];let sin=12,sout=12;
-function chips(id,arr,get,set){const c=document.getElementById(id);c.innerHTML=arr.map(v=>'<button class="chip'+(v===get()?' on':'')+'">'+v+'</button>').join('');[...c.children].forEach((b,i)=>b.onclick=()=>{set(arr[i]);[...c.children].forEach(x=>x.classList.toggle('on',x===b));renderFix();});}
+function chips(id,arr,get,set){const c=document.getElementById(id);c.innerHTML=arr.map(v=>'<button class="chip'+(v===get()?' on':'')+'">'+v+'</button>').join('');[...c.children].forEach((b,i)=>b.onclick=()=>{set(arr[i]);[...c.children].forEach(x=>x.classList.toggle('on',x===b));R.fix.final=null;document.getElementById('ba').style.display='none';document.getElementById('n5').disabled=true;renderFix();});}
 chips('cin',IN,()=>sin,v=>{sin=v;});chips('cout',OUT,()=>sout,v=>{sout=v;});
 function renderFix(){document.getElementById('fixbox').innerHTML=order({btn:'good',type:'good',sin:sin,sout:sout});document.getElementById('verdict').style.display='none';}
 document.getElementById('judge').onclick=()=>{const k=sout/sin;let t;
@@ -368,6 +368,8 @@ function summary(){const q=['q1','q2','q3'].filter(k=>R.quiz[k]&&R.quiz[k].right
 document.getElementById('finish').onclick=async()=>{const btn=document.getElementById('finish');btn.disabled=true;R.end=new Date().toISOString();const out=document.getElementById('saved');out.style.display='block';let ok=false;try{let dbp=null;try{dbp=window.claude&&window.claude.use?window.claude.use('db'):null;}catch(e){dbp=null;}const db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;if(db){await db.doc('sessions/s4-'+Date.now()).set(R);ok=true;}}catch(e){ok=false;}
 out.textContent=ok?'Đã lưu kết quả. Claude đọc được, bạn chỉ cần nhắn "xong" trong thread.':'Chưa lưu được tự động. Bấm nút dưới để chép kết quả rồi dán vào thread.';if(!ok){document.getElementById('copy').style.display='flex';}};
 document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());document.getElementById('copy').textContent='Đã chép';}catch(e){document.getElementById('saved').textContent=summary();}};
+// keep selection state readable by screen readers
+document.addEventListener('click',()=>setTimeout(()=>document.querySelectorAll('.chip,.pick button,.tab').forEach(b=>b.setAttribute('aria-pressed',b.classList.contains('on')?'true':'false'))));
 go(0);
 </script>
 </body>

@@ -13,7 +13,7 @@ Trước khi sửa, hỏi một câu: **người dùng mở màn này để làm
 Màn chi tiết đơn hàng giao đồ ăn (tự dựng), người dùng mở để xem đơn tới đâu và hết bao nhiêu tiền.
 
 - **Điểm nhấn:** bản gốc có ba nút đặc giống hệt nhau. Bản đúng: "Theo dõi đơn" là nút đặc, "Liên hệ quán" là nút viền, "Hủy đơn" thành dòng chữ nhỏ. Bản ba nút màu dịu đều nhau thì đẹp hơn nhưng không cho biết nên bấm gì. Bản nút "Hủy đơn" đỏ to thì có điểm nhấn nhưng đặt nhầm chỗ.
-- **Thứ bậc chữ:** bản gốc nhiều cỡ, chữ nào cũng đậm, tổng tiền lại chữ thường. Bản đúng: 3 cỡ chính, trạng thái đơn và tổng tiền đậm lên. Bản tên quán to kiểu bìa tạp chí đẹp nhất nhưng giấu mất tổng tiền. Bản mọi chữ cùng cỡ thì gọn nhưng không còn bậc.
+- **Thứ bậc chữ:** bản gốc nhiều cỡ, chữ nào cũng đậm, tổng tiền lại chữ thường. Bản đúng: chỉ 3 cỡ (13, 16, 20), trạng thái đơn và tổng tiền đậm lên. Bản tên quán to kiểu bìa tạp chí đẹp nhất nhưng giấu mất tổng tiền. Bản mọi chữ cùng cỡ thì gọn nhưng không còn bậc.
 - **Khoảng cách:** bạn tự chỉnh, chọn trong nhóm 8, giữa nhóm 24 ngay lần đầu.
 
 ## Con số để nhớ
