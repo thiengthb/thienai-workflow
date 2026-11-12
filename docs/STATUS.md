@@ -21,11 +21,11 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Cài dòng Settings mới cho từng tài khoản Claude | README, bước 1 | 2026-11-12 | thien tự làm, AI không kiểm được |
 
 ## Vừa xong
+- Codex dạy học được qua repo: `AGENTS.md` ở gốc, `learning/codex.md` (PR này)
 - Bộ khung chung cho trang học: tự lưu chỗ đang học, chế độ tối (PR #33)
 - Môn chiến tranh buổi 1 và 2, luật nguồn cho bài lịch sử (PR #32, #33)
 - Theo dõi kế hoạch, trang tiến độ, lộ trình học (PR #31)
 - Buổi học frontend 5 về màu (PR #30)
-- Luật nhắc việc dở khi bắt đầu việc mới, script kiểm STATUS (PR #28, #29)
 
 ## Việc tiếp theo
 1. Từ tài khoản đã đăng 3 trang: chạy lại `templates/progress-page.mjs` và đăng lại trang tiến độ, trang lộ trình học (dữ liệu trên trang còn từ trước PR #32, #33). Tài khoản khác không đăng lại được, chỉ sửa file.
