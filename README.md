@@ -67,7 +67,7 @@ File mẫu giữ đuôi `.template.md` để không bị nhầm thành luật th
 
 Codex và Gemini đọc luật qua file trong repo của project, không cần skill:
 - Codex tự đọc `AGENTS.md`.
-- Gemini CLI mặc định chỉ đọc `GEMINI.md`. Muốn nó đọc `AGENTS.md` thì thêm `"context": { "fileName": ["AGENTS.md", "GEMINI.md"] }` vào `.gemini/settings.json` của repo project.
+- Gemini: thien hiện chỉ dùng bản web miễn phí để hỏi, nên không đọc được luật trong repo. Nếu sau này dùng Gemini CLI (bản miễn phí cho cá nhân đã ngừng từ 2026-06-18): CLI mặc định chỉ đọc `GEMINI.md`. Muốn nó đọc `AGENTS.md` thì thêm `"context": { "fileName": ["AGENTS.md", "GEMINI.md"] }` vào `.gemini/settings.json` của repo project.
 - Link trong `AGENTS.md` trỏ về repo này chỉ mở được nếu công cụ đó đã nối với tài khoản GitHub của thien, vì repo để riêng tư.
 
 ## Sửa quy trình
