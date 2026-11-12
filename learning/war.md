@@ -21,12 +21,15 @@ Tìm hiểu ngày 2026-11-12, trước buổi làm quen.
 - Nhìn lại thấy kết cục là tất nhiên. Lúc đó người chỉ huy không biết trước, nên phải học từ góc nhìn của họ trước khi xem kết cục.
 - Chỉ nhìn trận đánh, bỏ qua lương thực, đường tiếp tế, mục tiêu chính trị.
 - Tin vào "thiên tài một người", bỏ qua điều kiện: địa hình, thời tiết, tinh thần, sai lầm của bên kia.
-- Số liệu thời xưa (quân số, thương vong) thường là ước tính và có thể bị thổi phồng. Phải nói rõ khi số liệu không chắc.
+- Số liệu thời xưa (quân số, thương vong) thường là ước tính và có thể bị thổi phồng.
+
+**Luật về nguồn (thien yêu cầu 2026-11-12, xem luật 10 trong `profile/TUTOR.md`).** Chi tiết thật nào cũng phải có nguồn kiểm được, ưu tiên sử gốc; trang có mục "Nguồn". Sử chép khác nhau thì nói ra. Không có nguồn thì bỏ. Quân số thời xưa không có nguồn tin được thì không đưa. Cách đánh khác với chuyện thật, sơ đồ minh họa, trận giả định: gắn nhãn "Mô phỏng" và ghi dựa trên trận nào.
 
 **Áp vào bài.**
 - Mỗi buổi một trận hoặc một quyết định có thật, kiểu 6 "Làm chỉ huy": cho xem bên kia trước, vẽ từng lựa chọn thành hình nhỏ, chọn, rồi kéo thời gian xem chuyện thật. Lựa chọn khác thì ghi rõ là phỏng đoán.
 - Kiểu 5 (xếp sự kiện vào dòng thời gian) và 8 (vẽ dự đoán quân số, thương vong) xen vào khi hợp.
 - Màu theo nội dung: nước, đất, rừng theo màu tự nhiên. Màu hai bên chọn cho dễ phân biệt và ghi rõ nếu sử sách không nói màu cờ.
+- Số liệu thời xưa (quân số, thương vong) thường không chắc; có nguồn thì ghi nguồn và nói mức chắc chắn, không có thì không đưa.
 - Ưu tiên trận của Việt Nam khi hợp ý, vì gần với thien và có địa danh thật để tra.
 
 ## Bản đồ 10 ý lớn
