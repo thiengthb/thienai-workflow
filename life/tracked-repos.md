@@ -12,3 +12,4 @@ Trang tổng quan tiến độ của các repo trong bảng (và chính repo thi
 | Repo | Ghi chú | Thêm ngày |
 |---|---|---|
 | `thiengthb/sakubun` | App học tiếng Nhật | 2026-11-05 |
+| `thiengthb/tiktok` | Kênh TikTok riêng (nghiên cứu, nội dung) | 2026-11-12 |
