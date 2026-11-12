@@ -496,7 +496,14 @@ const LK='lesson-kit:'+ID, DOC='drafts/'+ID.replace(/[^a-z0-9-]/gi,'-');
 const btns=()=>[...document.querySelectorAll('button:not(#kit-bar button)')], tas=()=>[...document.querySelectorAll('textarea')];
 const FP=btns().length+'b'+tas().length+'t';
 const lab=b=>(b.textContent||'').replace(/\s+/g,' ').trim().slice(0,60); /* chữ trên nút, để khi bấm lại biết đúng nút cũ */
-const ctx=b=>{const p=b.parentElement;return p?(p.textContent||'').replace(/\s+/g,' ').trim().slice(0,120):'';}; /* chữ quanh nút: phân biệt hai nút "Chưa" ở hai câu khác nhau */
+const ctx=b=>{ /* chỗ của nút: đi lên tới khối đầu tiên có chữ ngoài các nút (câu hỏi, tên dòng), kèm id hay data-* trên đường đi.
+   Nhờ vậy hai nút "Chưa" ở dòng "User story" và dòng "Use case" không bị nhầm với nhau. */
+ const sq=t=>(t||'').replace(/\s+/g,' ').trim();let tag='';
+ for(let p=b.parentElement;p&&p!==document.body;p=p.parentElement){
+  tag+=(p.id?'#'+p.id:'')+[...p.attributes].filter(a=>a.name.startsWith('data-')&&a.name!=='data-part').map(a=>'['+a.name+'='+a.value+']').join('');
+  let rest=p.textContent||'';for(const x of p.querySelectorAll('button'))rest=rest.split(x.textContent||'').join('');
+  if(sq(rest))return (tag+'|'+sq(p.textContent)).slice(0,160);}
+ return tag;};
 let S={fp:FP,log:[],finished:false,everDone:false,doneAt:null,start:new Date().toISOString(),ts:0};
 let replaying=false,acted=false,timer=null,writing=false,again=false,db=null;
 const bar=document.createElement('div');bar.id='kit-bar';bar.setAttribute('role','status');document.body.appendChild(bar);
