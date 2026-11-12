@@ -1,12 +1,12 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-12 (sau PR #33) · Claude (project Claude, tài khoản khác với tài khoản đăng trang) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
+Cập nhật lần cuối: 2026-11-12 (sau PR #36) · Claude (project Claude, tài khoản khác với tài khoản đăng trang) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu.
 Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
 
 ## Đang ở đâu
-Bộ quy trình chung đã dùng được: luật, mẫu, skill start-project, học nhiều môn xoay vòng (frontend 5 buổi, BA 1, chiến tranh 2), theo dõi kế hoạch và lộ trình học (PR #31 đã merge). Bản tin sáng qua mail đã bỏ (PR #24).
+Bộ quy trình chung đã dùng được: luật, mẫu, skill start-project, học nhiều môn xoay vòng (frontend 5 buổi, BA 1, chiến tranh 3), theo dõi kế hoạch và lộ trình học (PR #31 đã merge). Bản tin sáng qua mail đã bỏ (PR #24).
 
 ## Kế hoạch đang chạy
 Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
@@ -21,11 +21,11 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Cài dòng Settings mới cho từng tài khoản Claude | README, bước 1 | 2026-11-12 | thien tự làm, AI không kiểm được |
 
 ## Vừa xong
-- Codex dạy học được qua repo: `AGENTS.md` ở gốc, `learning/codex.md` (PR này)
+- Môn chiến tranh buổi 3 (ba tầng, Điện Biên Phủ), luật gọi tên người cho đúng văn hóa (PR này)
+- Codex dạy học được qua repo: `AGENTS.md` ở gốc, `learning/codex.md` (PR #36)
 - Bộ khung chung cho trang học: tự lưu chỗ đang học, chế độ tối (PR #33)
 - Môn chiến tranh buổi 1 và 2, luật nguồn cho bài lịch sử (PR #32, #33)
 - Theo dõi kế hoạch, trang tiến độ, lộ trình học (PR #31)
-- Buổi học frontend 5 về màu (PR #30)
 
 ## Việc tiếp theo
 1. Từ tài khoản đã đăng 3 trang: chạy lại `templates/progress-page.mjs` và đăng lại trang tiến độ, trang lộ trình học (dữ liệu trên trang còn từ trước PR #32, #33). Tài khoản khác không đăng lại được, chỉ sửa file.
