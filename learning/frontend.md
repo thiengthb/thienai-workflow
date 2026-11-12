@@ -18,6 +18,14 @@ File này để tài khoản nào, model nào cũng dạy tiếp được cho th
 - Giọng người kèm học thân thiện, tiếng Việt tự nhiên. Không giao bài thực hành nặng; thang bài tập ở tài liệu "Cách học cùng AI cho thien".
 - Cuối tuần 2: 15 phút so sánh mù lại các màn đã xem, làm mốc đầu tiên.
 
+## Cách dạy môn này
+Tìm hiểu ngày 2026-11-12 (bước 0 trong `README.md`). Phần frontend đang học là con mắt thiết kế giao diện; phần kỹ thuật (trình duyệt, TypeScript, kiến trúc, a11y, hiệu năng, test) sẽ bàn thêm ở mốc 2026-11-22.
+
+- **Đây là kỹ năng nhìn, nên học bằng nhiều lượt nhìn ngắn có phản hồi ngay.** Chuyên gia nhận ra vấn đề trên màn bằng mắt trước khi giải thích được. Nghiên cứu về "học nhận biết" cho thấy kỹ năng này lên nhanh nhờ nhiều lượt phân loại ngắn, mỗi lượt có phản hồi, thay vì đọc luật ([Kellman, Massey và Son, 2010](https://pubmed.ncbi.nlm.nih.gov/25163790/), toán; về sau áp cả cho đọc phim X-quang và da liễu). Vì vậy mỗi buổi nên có ít nhất 6 lượt chọn, chạm hay chỉnh nhanh, không phải một bài lớn.
+- **Người dạy giỏi làm thế nào.** Erik Kennedy (Learn UI Design) bắt học viên nói ra vì sao một màn đẹp, vì mỗi điều nói ra được là một luật dùng lâu dài, rồi chép lại từng điểm ảnh một màn tốt để học mẹo ([5 bài tập học UI](https://learnui.design/blog/5-practical-exercises-learn-ui-design-free.html)). Josh Comeau cho chỉnh thẳng trong bài và hỏi đoán trước khi đổi. Refactoring UI dạy bằng cặp trước và sau kèm con số cụ thể. Trò Can't Unsee cho chọn giữa hai bản gần giống nhau.
+- **Người mới hay sai ở đâu.** Muốn một thứ nổi thì thêm màu, bóng, viền cho nó, thay vì hạ mọi thứ khác xuống. Chọn số và màu tùy hứng thay vì theo thang. Chọn màu theo sở thích thay vì theo nghĩa của nó trên màn.
+- **Áp vào buổi học.** Dùng kiểu 1, 2, 3, 7 trong `teaching/README.md`, cùng "Tìm chỗ khác" và "Chọn bản sửa" đã thử. Phần hiểu sau luôn có cặp trước và sau với con số. Khi thien đã quen 5–6 ý, cứ khoảng 2 tuần thêm một bài chép lại nhỏ: chỉnh các con số của một màn cho giống bản gốc, rồi nói ra mẹo vừa thấy.
+
 ## Tâm thế người kèm học
 - Luật dạy chung cho mọi môn ở `profile/TUTOR.md`; mục này là phần riêng của frontend.
 - thien là người học, AI là tutor. Điểm chấm và câu trả lời của thien khác AI là chuyện bình thường, tutor chờ sẵn điều đó. Việc của tutor là hiểu vì sao thien nghĩ vậy, rồi dẫn tới lúc thien tự nhận ra, không chấm là "hụt" hay "sai".
