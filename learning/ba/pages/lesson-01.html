@@ -62,6 +62,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
 .chip{-webkit-tap-highlight-color:transparent}
 .kw{display:inline-block;background:var(--accent-soft);color:#1d5c55;font-weight:600;padding:0 6px;border-radius:6px}
 .done{font-size:14px;padding:12px 14px;border-radius:12px;background:var(--accent-soft);color:#1d5c55;margin-top:12px;display:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .sort{display:grid;gap:8px;margin:10px 0}
 .sc{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;font:15px/1.45 Onest,sans-serif;color:var(--ink);cursor:pointer;text-align:left;width:100%}
 .sc .tg{flex:0 0 auto;font-size:12px;font-weight:600;padding:3px 10px;border-radius:10px;background:#f3f1ec;color:var(--muted)}
@@ -104,7 +105,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     <p class="small muted">Trả lời theo trí nhớ, sai cũng không sao. Câu sai sẽ được hỏi lại sớm hơn.</p>
     <div class="card">
       <p><b>1.</b> Hai nút cùng cỡ, cùng màu đặt cạnh nhau thì sao?</p>
-      <div class="q" data-q="F1" data-a="1">
+      <div class="q" data-q="F1" data-a="1"><div class="status sr" role="status"></div>
         <button class="opt">Màn cân đối, người dùng dễ chọn</button>
         <button class="opt">Mắt phải dừng lại để chọn, không nút nào là thứ nhất</button>
         <button class="opt">Không sao, miễn là chữ trên nút rõ</button>
@@ -113,7 +114,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     </div>
     <div class="card">
       <p><b>2.</b> Ngoài cỡ chữ, màu và thứ tự, còn hai cách nào để tạo bậc chữ?</p>
-      <div class="q" data-q="F3" data-a="2">
+      <div class="q" data-q="F3" data-a="2"><div class="status sr" role="status"></div>
         <button class="opt">Font khác nhau và gạch chân</button>
         <button class="opt">Viết hoa và in nghiêng</button>
         <button class="opt">Độ đậm và khoảng cách quanh chữ</button>
@@ -122,7 +123,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     </div>
     <div class="card">
       <p><b>3.</b> Trong nhóm các dòng cách nhau 8px. Giữa hai nhóm nên bao nhiêu?</p>
-      <div class="q" data-q="F4" data-a="0">
+      <div class="q" data-q="F4" data-a="0"><div class="status sr" role="status"></div>
         <button class="opt">Khoảng 24px</button>
         <button class="opt">10px, hơn một chút là đủ</button>
         <button class="opt">8px, cho đều nhau</button>
@@ -163,7 +164,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
       <p>Trong nhóm capstone, một bạn nhắn:</p>
       <div class="say"><b>Tin nhắn</b>"Khách hàng muốn thêm nút <b style="display:inline;font-size:15px;color:var(--ink)">xuất Excel</b> ở trang danh sách đơn hàng."</div>
       <p style="margin-bottom:4px">Bạn là BA. Bạn hỏi lại câu nào <b>đầu tiên</b>?</p>
-      <div class="q" data-q="try" data-a="1">
+      <div class="q" data-q="try" data-a="1"><div class="status sr" role="status"></div>
         <button class="opt">"File Excel cần những cột nào, để định dạng gì?"</button>
         <button class="opt">"Khách hàng lấy file đó ra để làm gì?"</button>
         <button class="opt">"Khi nào khách cần có nút này?"</button>
@@ -193,7 +194,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     </div>
     <div class="card">
       <p><b>1.</b> Người dùng app học tiếng Nhật nói: "Cho mình thêm bộ lọc từ vựng theo ngày." Câu nào giúp tìm vấn đề thật?</p>
-      <div class="q" data-q="q1" data-a="2">
+      <div class="q" data-q="q1" data-a="2"><div class="status sr" role="status"></div>
         <button class="opt">"Lọc theo ngày thêm từ hay ngày ôn gần nhất?"</button>
         <button class="opt">"Bạn muốn bộ lọc nằm trên hay dưới danh sách?"</button>
         <button class="opt">"Lọc xong bạn định làm gì với các từ đó?"</button>
@@ -202,7 +203,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     </div>
     <div class="card">
       <p><b>2.</b> Câu nào là <b>nhu cầu</b>, không phải giải pháp?</p>
-      <div class="q" data-q="q2" data-a="0">
+      <div class="q" data-q="q2" data-a="0"><div class="status sr" role="status"></div>
         <button class="opt">"Mình hay quên ôn bài nếu không ai nhắc"</button>
         <button class="opt">"Thêm thông báo đẩy lúc 8 giờ tối"</button>
         <button class="opt">"Thêm huy hiệu khi học đủ 7 ngày liền"</button>
@@ -247,7 +248,7 @@ const R={start:new Date().toISOString(),subject:'ba',lesson:1,mode:'lam-quen',re
 const TOTAL=8;
 function go(n){document.querySelectorAll('.step').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));document.getElementById('cnt').textContent=(n+1)+'/'+TOTAL;document.getElementById('bar').style.width=(n/(TOTAL-1)*100)+'%';window.scrollTo({top:0,behavior:'smooth'});}
 
-function bindQ(q){const opts=[...q.querySelectorAll('.opt')];opts.forEach((o,i)=>o.onclick=()=>{const a=+q.dataset.a;opts.forEach((x,j)=>{x.disabled=true;if(j===a)x.classList.add('right');});if(i!==a)o.classList.add('wrong');q.querySelector('.why').classList.add('on');const k=q.dataset.q;if(/^F\d/.test(k))R.review[k]=i===a;else R.quiz[k]={pick:i,right:i===a};check();});}
+function bindQ(q){const opts=[...q.querySelectorAll('.opt')];opts.forEach((o,i)=>o.onclick=()=>{const a=+q.dataset.a;opts.forEach((x,j)=>{x.disabled=true;if(j===a)x.classList.add('right');});if(i!==a)o.classList.add('wrong');q.querySelector('.why').classList.add('on');const so=q.querySelector('.status');if(so)so.textContent=(i===a?'Đúng. ':'Chưa đúng. ')+'Đáp án đúng: '+opts[a].textContent.trim();const k=q.dataset.q;if(/^F\d/.test(k))R.review[k]=i===a;else R.quiz[k]={pick:i,right:i===a};check();});}
 document.querySelectorAll('.q[data-q]').forEach(bindQ);
 
 document.querySelectorAll('.chips[data-k]').forEach(c=>{c.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{c.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');R.know[c.dataset.k]=b.textContent;check();});});
@@ -260,7 +261,7 @@ const CARDS=[{t:'Thêm nút xuất Excel',k:'sol'},{t:'Sếp cần biết số �
 const ord=[0,1,2,3,4].sort(()=>Math.random()-.5);const st={};let sortDone=false;
 const sortBox=document.getElementById('sort');
 function renderSort(){sortBox.innerHTML=ord.map(i=>{const v=st[i];return '<button class="sc'+(v?' '+v:'')+'" data-i="'+i+'"><span>'+CARDS[i].t+'</span><span class="tg">'+(v==='need'?'Nhu cầu':v==='sol'?'Giải pháp':'Chưa xếp')+'</span></button>';}).join('');
- [...sortBox.children].forEach(b=>b.onclick=()=>{if(sortDone)return;const i=+b.dataset.i;st[i]=st[i]==='need'?'sol':'need';renderSort();document.getElementById('chk').disabled=Object.keys(st).length<CARDS.length;});}
+ [...sortBox.children].forEach(b=>b.onclick=()=>{if(sortDone)return;const i=+b.dataset.i;st[i]=st[i]==='need'?'sol':'need';renderSort();sortBox.querySelector('[data-i="'+i+'"]').focus();document.getElementById('chk').disabled=Object.keys(st).length<CARDS.length;});}
 renderSort();
 document.getElementById('chk').onclick=()=>{sortDone=true;let right=0;[...sortBox.children].forEach(b=>{const i=+b.dataset.i;const ok=st[i]===CARDS[i].k;if(ok)right++;b.classList.add(ok?'right':'wrong');if(!ok){b.querySelector('.tg').textContent+=' → '+(CARDS[i].k==='need'?'Nhu cầu':'Giải pháp');}});R.sort={right:right,total:CARDS.length,picks:Object.fromEntries(Object.entries(st).map(([i,v])=>[CARDS[i].t,v]))};document.getElementById('chk').disabled=true;document.getElementById('sortWhy').classList.add('on');document.getElementById('n4').disabled=false;};
 
@@ -278,7 +279,7 @@ const MAP=[
  ['Dữ liệu nhìn từ nghiệp vụ','Các "thứ" trong hệ thống và quan hệ giữa chúng']];
 const pick=[];const mapBox=document.getElementById('map');
 function renderMap(){mapBox.innerHTML=MAP.map((m,i)=>{const p=pick.indexOf(i);return '<button class="mi'+(p>=0?' on':'')+'" data-i="'+i+'"><span class="n">'+(p>=0?p+1:'')+'</span><span><b>'+m[0]+'</b>'+m[1]+'</span></button>';}).join('');
- [...mapBox.children].forEach(b=>b.onclick=()=>{const i=+b.dataset.i;const p=pick.indexOf(i);if(p>=0)pick.splice(p,1);else pick.push(i);R.map=pick.map(j=>MAP[j][0]);renderMap();check();});}
+ [...mapBox.children].forEach(b=>b.onclick=()=>{const i=+b.dataset.i;const p=pick.indexOf(i);if(p>=0)pick.splice(p,1);else pick.push(i);R.map=pick.map(j=>MAP[j][0]);renderMap();mapBox.querySelector('[data-i="'+i+'"]').focus();check();});}
 renderMap();
 document.getElementById('mapReset').onclick=()=>{pick.length=0;R.map=[];renderMap();check();};
 const teach=document.getElementById('teach');teach.oninput=()=>{R.teach=teach.value.trim();document.getElementById('reveal').disabled=R.teach.length<8;};
@@ -293,7 +294,7 @@ function check(){
  document.getElementById('n6').disabled=!(R.map.length>=3&&R.revealed);}
 
 function summary(){return 'BA buổi 1 (làm quen)\nÔn frontend: '+JSON.stringify(R.review)+'\nĐã biết: '+JSON.stringify(R.know)+'\nMuốn dùng BA để: '+R.goals.join('; ')+(R.goalTxt?' / '+R.goalTxt:'')+'\nThử trước: '+(R.quiz.try&&R.quiz.try.right?'đúng':'khác')+', xếp thẻ: '+(R.sort.right||0)+'/5\nCâu hỏi: '+['q1','q2'].filter(k=>R.quiz[k]&&R.quiz[k].right).length+'/2\nThứ tự muốn học: '+R.map.join(' > ')+'\nNói lại: '+R.teach+'\nĐộ dài: '+R.len+', độ khó: '+R.diff+', hứng thú: '+R.interest+'\nGóp ý: '+R.fb;}
-document.getElementById('finish').onclick=async()=>{const btn=document.getElementById('finish');btn.disabled=true;R.end=new Date().toISOString();const out=document.getElementById('saved');out.style.display='block';out.textContent='Đang lưu...';let ok=false;try{let dbp=null;try{dbp=window.claude&&window.claude.use?window.claude.use('db'):null;}catch(e){dbp=null;}const db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;if(db){await db.doc('sessions/ba1-'+Date.now()).set(R);ok=true;}}catch(e){ok=false;}
+document.getElementById('finish').onclick=async()=>{const btn=document.getElementById('finish');btn.disabled=true;R.end=new Date().toISOString();const out=document.getElementById('saved');out.style.display='block';out.textContent='Đang lưu...';let ok=false;try{let dbp=null;try{dbp=window.claude&&window.claude.use?window.claude.use('db'):null;}catch(e){dbp=null;}const db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;if(db){await Promise.race([db.doc('sessions/ba1-'+Date.now()).set(R),new Promise((_,j)=>setTimeout(()=>j(new Error('save timeout')),10000))]);ok=true;}}catch(e){ok=false;}
 out.textContent=ok?'Đã lưu kết quả. Bạn chỉ cần nhắn "xong" trong thread.':'Chưa lưu được tự động. Bấm nút dưới để chép kết quả rồi dán vào thread.';if(!ok){document.getElementById('copy').style.display='flex';}};
 document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());document.getElementById('copy').textContent='Đã chép';}catch(e){document.getElementById('saved').textContent=summary();}};
 const syncPressed=()=>document.querySelectorAll('.chip,.sc,.mi').forEach(b=>{const v=(b.classList.contains('on')||b.classList.contains('need')||b.classList.contains('sol'))?'true':'false';if(b.getAttribute('aria-pressed')!==v)b.setAttribute('aria-pressed',v);});
