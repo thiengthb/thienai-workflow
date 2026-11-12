@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-12 · Cập nhật: 2026-11-12 �
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 2 đến 4 đã làm xong trong PR #31, chờ thien xem.
-- Còn thiếu: thien xem 3 trang trên điện thoại và laptop, merge PR #31. Lần nhắc đầu tiên chạy tối nay 18:47.
-- thien cần làm: mở 3 trang trong tin nhắn của thread, rồi merge [PR #31](https://github.com/thiengthb/thienai-workflow/pull/31).
+- Đang ở: checkpoint 5, chờ lần nhắc đầu tiên tối nay 18:47. PR #31 đã merge.
+- Còn thiếu: lần nhắc đầu tiên chạy được và thien nhận được.
+- thien cần làm: không có gì; nếu thấy trang nào khó theo thì nhắn trong thread.
 
 ## Mục tiêu
 Khi thien mở lại sau vài ngày, trong 2 phút biết kế hoạch nào đã duyệt và đang chạy, đang ở checkpoint nào, đã tick gì, gặp lỗi gì, đổi bước nào, và việc tiếp theo của thien. Cùng lúc có một lộ trình học riêng cho từng môn.
@@ -26,20 +26,20 @@ Xong khi: thien duyệt kế hoạch nghiên cứu.
 
 ### 2. Luật và mẫu
 Xong khi: PR merge, mẫu có trong `templates/`.
-- [ ] `profile/PLANNING.md`, `templates/PLAN.template.md`, bảng "Kế hoạch đang chạy" trong mẫu STATUS (chờ merge PR #31)
-- [ ] Nối vào mẫu AGENTS và `PROFILE.md` (chờ merge PR #31)
-- [ ] Script kiểm file kế hoạch đủ mục, chạy trong CI (chờ merge PR #31)
+- [x] `profile/PLANNING.md`, `templates/PLAN.template.md`, bảng "Kế hoạch đang chạy" trong mẫu STATUS
+- [x] Nối vào mẫu AGENTS và `PROFILE.md`
+- [x] Script kiểm file kế hoạch đủ mục, chạy trong CI
 
 ### 3. Trang tiến độ
 Xong khi: thien mở được trang của repo này và trang tổng quan trên cả điện thoại lẫn laptop.
-- [ ] Script `templates/progress-page.mjs` sinh trang từ STATUS và file kế hoạch (chờ merge PR #31)
-- [ ] Trang tiến độ của repo thienai-workflow
-- [ ] Trang tổng quan các repo đang áp quy trình
+- [x] Script `templates/progress-page.mjs` sinh trang từ STATUS và file kế hoạch
+- [x] Trang tiến độ của repo thienai-workflow
+- [x] Trang tổng quan các repo đang áp quy trình
 
 ### 4. Lộ trình học
 Xong khi: thien mở trang và thấy mỗi môn đang ở chặng nào, buổi tới học gì, nguồn học ở đâu.
-- [ ] `learning/roadmap.md` cho frontend, BA, chiến tranh (chờ merge PR #31)
-- [ ] Trang lộ trình học
+- [x] `learning/roadmap.md` cho frontend, BA, chiến tranh
+- [x] Trang lộ trình học
 
 ### 5. Nhắc theo lịch
 Xong khi: thien nhận được lần nhắc đầu tiên, hoặc chọn không cần.
