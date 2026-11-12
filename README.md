@@ -52,10 +52,14 @@ File mẫu giữ đuôi `.template.md` để không bị nhầm thành luật th
    Khi bắt đầu project mới, dùng skill start-project: hỏi mình trước, mình đồng ý mới áp.
    Trả lời bằng tiếng Việt tự nhiên, không tự chế từ, không dịch sát chữ từ tiếng Anh.
    ```
-2. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên file zip của thư mục `skills/start-project/` và `skills/make-slides/`.
-3. Mở một project mới: coordinator sẽ hỏi có áp quy trình không.
+2. Nối GitHub cho tài khoản đó (Settings > Connectors > GitHub), cho phép repo `thienai-workflow`. Repo này để riêng tư, nên không nối thì skill không đọc được các bước.
+3. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên file zip của thư mục `skills/start-project/` và `skills/make-slides/`.
+4. Mở một project mới: coordinator sẽ hỏi có áp quy trình không.
 
-Codex, Gemini và người khác không cần cài gì: họ đọc `AGENTS.md` và `docs/STATUS.md` trong repo của project.
+Codex và Gemini đọc luật qua file trong repo của project, không cần skill:
+- Codex tự đọc `AGENTS.md`.
+- Gemini CLI mặc định chỉ đọc `GEMINI.md`. Muốn nó đọc `AGENTS.md` thì thêm `"context": { "fileName": ["AGENTS.md", "GEMINI.md"] }` vào `.gemini/settings.json` của repo project.
+- Link trong `AGENTS.md` trỏ về repo này chỉ mở được nếu công cụ đó đã nối với tài khoản GitHub của thien, vì repo để riêng tư.
 
 ## Sửa quy trình
 

@@ -8,7 +8,8 @@ description: Dùng khi thien cần làm, sửa hay tập một bài thuyết tr�
 Skill này chỉ chỉ đường. Luật và các bước nằm trong repo để sửa một chỗ là mọi tài khoản dùng được ngay, không phải tải lại skill.
 
 1. Đọc bản mới nhất của hai file, theo cách đầu tiên làm được:
-   - Mở https://raw.githubusercontent.com/thiengthb/thienai-workflow/main/skills/make-slides/STEPS.md và https://raw.githubusercontent.com/thiengthb/thienai-workflow/main/slides/RULES.md
-   - Hoặc dùng GitHub connector đọc `skills/make-slides/STEPS.md` và `slides/RULES.md`, repo `thiengthb/thienai-workflow`, nhánh `main`.
+   - Dùng GitHub connector (hoặc GitHub MCP) đọc `skills/make-slides/STEPS.md` và `slides/RULES.md`, repo `thiengthb/thienai-workflow`, nhánh `main`.
+   - Hoặc, nếu đang ở máy có `gh` đã đăng nhập: `gh api repos/thiengthb/thienai-workflow/contents/<đường dẫn file> -H "Accept: application/vnd.github.raw"`.
+   - Repo này để riêng tư, nên link `raw.githubusercontent.com` không mở được khi chưa đăng nhập.
 2. Làm đúng theo các bước trong `STEPS.md` và luật trong `RULES.md`. Hai file đó thắng mọi thứ bạn nhớ về skill này.
-3. Không đọc được: nói thẳng với thien là chưa mở được repo quy trình, rồi chỉ làm bước đầu tiên chắc chắn đúng: hỏi thời lượng, ai chấm, và câu người nghe phải nhớ. Không tự đoán các bước còn lại.
+3. Không đọc được: nói thẳng với thien là chưa mở được repo quy trình (thường do tài khoản này chưa nối GitHub), rồi chỉ làm bước đầu tiên chắc chắn đúng: hỏi thời lượng, ai chấm, và câu người nghe phải nhớ. Không tự đoán các bước còn lại.
