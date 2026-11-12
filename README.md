@@ -29,7 +29,8 @@ slides/       Bộ quy tắc làm slide và khung slide web dùng lại
 | | `MANUAL-TEST.template.md` | Mẫu hướng dẫn test tay: chuẩn bị, tài khoản test, ca test có mã, bảng kết quả. Chép vào `docs/manual-test/` |
 | | `test-accounts.template.csv` | Mẫu danh sách tài khoản test, chỉ mật khẩu giả |
 | | `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
-| `.github/` | `workflows/sync-agents-md.yml` | Mẫu `AGENTS.md` đổi thì tự mở PR vào từng repo trong `life/tracked-repos.md` để cập nhật phần chung, giữ nguyên phần riêng của project. Cần secret `SYNC_TOKEN` |
+| `.github/` | `workflows/test.yml` | Chạy test của script đồng bộ ở mỗi PR, để lỗi bị chặn trước khi merge |
+| | `workflows/sync-agents-md.yml` | Mẫu `AGENTS.md` đổi thì tự mở PR vào từng repo trong `life/tracked-repos.md` để cập nhật phần chung, giữ nguyên phần riêng của project. Cần secret `SYNC_TOKEN` |
 | `skills/` | `start-project/` | Skill hỏi thien có áp quy trình không, rồi chép các file mẫu vào project. `SKILL.md` chỉ trỏ tới `STEPS.md`; sửa các bước thì sửa `STEPS.md` |
 | | `make-slides/` | Skill làm slide: tóm tắt bài, dàn ý, dựng, kiểm, tập dượt, đăng. `SKILL.md` chỉ trỏ tới `STEPS.md` |
 | `slides/` | `RULES.md` | Bộ quy tắc làm slide (S1 đến S48), đọc trước mọi bài thuyết trình |
@@ -52,10 +53,14 @@ File mẫu giữ đuôi `.template.md` để không bị nhầm thành luật th
    Khi bắt đầu project mới, dùng skill start-project: hỏi mình trước, mình đồng ý mới áp.
    Trả lời bằng tiếng Việt tự nhiên, không tự chế từ, không dịch sát chữ từ tiếng Anh.
    ```
-2. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên file zip của thư mục `skills/start-project/` và `skills/make-slides/`.
-3. Mở một project mới: coordinator sẽ hỏi có áp quy trình không.
+2. Nối GitHub cho tài khoản đó (Settings > Connectors > GitHub), cho phép repo `thienai-workflow`. Repo này để riêng tư, nên không nối thì skill không đọc được các bước.
+3. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên file zip của thư mục `skills/start-project/` và `skills/make-slides/`.
+4. Mở một project mới: coordinator sẽ hỏi có áp quy trình không.
 
-Codex, Gemini và người khác không cần cài gì: họ đọc `AGENTS.md` và `docs/STATUS.md` trong repo của project.
+Codex và Gemini đọc luật qua file trong repo của project, không cần skill:
+- Codex tự đọc `AGENTS.md`.
+- Gemini CLI mặc định chỉ đọc `GEMINI.md`. Muốn nó đọc `AGENTS.md` thì thêm `"context": { "fileName": ["AGENTS.md", "GEMINI.md"] }` vào `.gemini/settings.json` của repo project.
+- Link trong `AGENTS.md` trỏ về repo này chỉ mở được nếu công cụ đó đã nối với tài khoản GitHub của thien, vì repo để riêng tư.
 
 ## Sửa quy trình
 

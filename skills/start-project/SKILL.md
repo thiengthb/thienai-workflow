@@ -8,7 +8,8 @@ description: Dùng khi thien bắt đầu một project mới, một repo mới 
 Skill này chỉ chỉ đường. Các bước nằm trong repo để sửa một chỗ là mọi tài khoản dùng được ngay, không phải tải lại skill.
 
 1. Đọc bản mới nhất của các bước, theo cách đầu tiên làm được:
-   - Mở https://raw.githubusercontent.com/thiengthb/thienai-workflow/main/skills/start-project/STEPS.md
-   - Hoặc dùng GitHub connector đọc file `skills/start-project/STEPS.md`, repo `thiengthb/thienai-workflow`, nhánh `main`.
+   - Dùng GitHub connector (hoặc GitHub MCP) đọc file `skills/start-project/STEPS.md`, repo `thiengthb/thienai-workflow`, nhánh `main`.
+   - Hoặc, nếu đang ở máy có `gh` đã đăng nhập: `gh api repos/thiengthb/thienai-workflow/contents/skills/start-project/STEPS.md -H "Accept: application/vnd.github.raw"`.
+   - Repo này để riêng tư, nên link `raw.githubusercontent.com` không mở được khi chưa đăng nhập.
 2. Làm đúng theo các bước trong file đó. File đó thắng mọi thứ bạn nhớ về skill này.
-3. Không đọc được cả hai cách: nói thẳng với thien là chưa mở được repo quy trình nên chưa áp gì, chỉ hỏi một câu "Áp quy trình chung của bạn cho project này không? Có / Không / Chỉ dùng hồ sơ", rồi chờ. Không tự đoán các bước còn lại.
+3. Không đọc được: nói thẳng với thien là chưa mở được repo quy trình (thường do tài khoản này chưa nối GitHub) nên chưa áp gì, chỉ hỏi một câu "Áp quy trình chung của bạn cho project này không? Có / Không / Chỉ dùng hồ sơ", rồi chờ. Không tự đoán các bước còn lại.

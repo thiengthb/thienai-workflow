@@ -26,7 +26,7 @@ Mỗi bước chỉ làm một việc trên một màn hình. Một bước mà 
 ## 2. Link
 
 - Mọi đường dẫn, file, trang đều là link bấm được. Không để đường dẫn trơn trong backtick.
-- File trong repo thì link tới bản trên GitHub. Phải copy nội dung file thì link tới bản raw (`raw.githubusercontent.com/...`) để thien bấm Ctrl+A, Ctrl+C.
+- File trong repo thì link tới bản trên GitHub. Phải copy nội dung file thì link tới bản raw (nút Raw trên trang file) để thien bấm Ctrl+A, Ctrl+C. Repo riêng tư thì link raw chỉ mở được khi thien đã đăng nhập GitHub trên trình duyệt đó.
 - Link phải mở được bằng tài khoản của thien. AI mở thử link trước khi gửi; link cần đăng nhập mà AI không mở được thì ghi rõ là chưa mở thử.
 
 ## 3. Tên đã thống nhất

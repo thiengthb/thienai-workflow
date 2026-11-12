@@ -6,5 +6,5 @@ Thêm một dòng mỗi khi có tên mới. Tên do thien tự đặt thì giữ
 
 | Ở đâu | Thứ gì | Tên | Dùng cho | Ghi chú |
 |---|---|---|---|---|
-| GitHub, Fine-grained tokens | Token | `workflow-sync` | Action `Sync AGENTS.md` mở PR vào các repo project | Đặt ngày 08/11/2026. All repositories; Contents và Pull requests: Read and write. Hạn 1 năm |
+| GitHub, Fine-grained tokens | Token | `workflow-sync` | Action `Sync AGENTS.md` mở PR vào các repo project | Đặt ngày 08/11/2026, hạn 1 năm. Chỉ cho các repo trong `tracked-repos.md` (thu hẹp ngày 12/11/2026). Thêm repo vào danh sách thì thêm vào token |
 | Repo `thienai-workflow`, Actions secrets | Secret | `SYNC_TOKEN` | Chứa token `workflow-sync` | |
