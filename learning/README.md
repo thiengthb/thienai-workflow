@@ -48,7 +48,7 @@ Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakub
 6. **Tự nói lại ý chính** rồi mới xem bản của AI.
 7. **Góp ý** độ dài và độ khó.
 
-Sau buổi: ghi nhật ký vào `learning/<môn>.md`, lưu bài vào `learning/<môn>/`, thêm 2–3 thẻ vào `cards.md`, cập nhật bảng "Trạng thái" ở trên. Luật dạy chung ở `profile/TUTOR.md`.
+Sau buổi: ghi nhật ký vào `learning/<môn>.md`, lưu bài vào `learning/<môn>/`, thêm 2–3 thẻ vào `cards.md`, cập nhật bảng "Trạng thái" ở trên, và tick chặng trong [roadmap.md](roadmap.md) kèm link bài. Luật dạy chung ở `profile/TUTOR.md`.
 
 ## Bắt đầu một môn mới
 

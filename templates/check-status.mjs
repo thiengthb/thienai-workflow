@@ -2,7 +2,10 @@
 // Checks the size limits of docs/STATUS.md, so the file stays readable in two minutes.
 // Copy to scripts/check-status.mjs in a project and run it in CI: node scripts/check-status.mjs
 // Limits: whole file at most 40 lines, at most 3 items under "## Đang chờ thien".
-import { readFileSync } from 'node:fs';
+// Also checks every docs/plans/*.md written from PLAN.template.md (has "## Checkpoint") has the sections
+// the progress page reads (rules in profile/PLANNING.md of thienai-workflow).
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { join, dirname } from 'node:path';
 
 export const MAX_LINES = 40;
 export const MAX_WAITING = 3;
@@ -28,10 +31,32 @@ export function checkStatus(text) {
   return problems;
 }
 
+export const PLAN_SECTIONS = ['Đang ở đâu', 'Mục tiêu', 'Không làm', 'Checkpoint', 'Đã đổi', 'Lỗi gặp'];
+
+/** Returns problems for one plan file; plans written before the template (no "## Checkpoint") are skipped. */
+export function checkPlan(text) {
+  if (!/^## Checkpoint/m.test(text)) return [];
+  const problems = [];
+  if (!/^Trạng thái:\s*(đang chạy|tạm dừng|xong|bỏ)\b/m.test(text)) {
+    problems.push('thiếu dòng "Trạng thái: đang chạy | tạm dừng | xong | bỏ" ở đầu file.');
+  }
+  for (const name of PLAN_SECTIONS) {
+    if (!new RegExp(`^## ${name}`, 'm').test(text)) problems.push(`thiếu mục "## ${name}".`);
+  }
+  if (!/^### /m.test(text)) problems.push('mục Checkpoint chưa có checkpoint nào ("### 1. ...").');
+  return problems;
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const file = process.argv[2] ?? 'docs/STATUS.md';
-  const problems = checkStatus(readFileSync(file, 'utf8'));
-  for (const p of problems) console.error(`${file}: ${p}`);
+  const problems = checkStatus(readFileSync(file, 'utf8')).map((p) => `${file}: ${p}`);
+  const plansDir = join(dirname(file), 'plans');
+  if (existsSync(plansDir)) {
+    for (const f of readdirSync(plansDir).filter((n) => n.endsWith('.md'))) {
+      for (const p of checkPlan(readFileSync(join(plansDir, f), 'utf8'))) problems.push(`${join(plansDir, f)}: ${p}`);
+    }
+  }
+  for (const p of problems) console.error(p);
   if (problems.length) process.exit(1);
   console.log(`${file}: ổn`);
 }
