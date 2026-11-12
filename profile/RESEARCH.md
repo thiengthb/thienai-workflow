@@ -33,7 +33,7 @@ Cuối mỗi bài nghiên cứu có danh sách nguồn đã đọc, kèm ngày �
 thien tự nhận hay bị FOMO khi thấy marketplace có nhiều thứ mới. AI (và thien) xét theo 4 câu, theo thứ tự, gặp câu nào trả lời "không" thì dừng ở đó và bỏ:
 
 1. **Có việc đau thật không?** Trong 2 tuần qua có việc nào thien làm từ 2 lần trở lên mà thấy mệt, chậm hay hay quên không, và thứ này giải đúng việc đó? Chỉ "nghe hay" thì không tính.
-2. **Đã có cái làm việc này chưa?** Xem bảng công cụ ở trên, `profile/TUTOR.md` (dạy học), memory của project và `docs/STATUS.md` (nhớ việc), skill trong `skills/`. Có rồi thì bỏ, vì hai thứ cùng làm một việc chỉ làm AI phân vân.
+2. **Thứ đang có còn thiếu việc này không?** Xem bảng công cụ ở trên, `profile/TUTOR.md` (dạy học), memory của project và `docs/STATUS.md` (nhớ việc), skill trong `skills/`. Đã có cái làm được rồi (tức là "không thiếu") thì bỏ, vì hai thứ cùng làm một việc chỉ làm AI phân vân.
 3. **Chạy được ở chỗ thien dùng không?** thien dùng Claude desktop và claude.ai, thỉnh thoảng Codex. Thứ chỉ chạy trong Claude Code (hook, lệnh `/`, statusline) hay cần MCP phải tự dựng thì bỏ.
 4. **Ai làm và nó đụng tới gì?** Ưu tiên Anthropic hoặc đối tác. Plugin cộng đồng có quyền rộng (đọc mọi phiên, hook chạy mỗi lượt) thì chỉ cài khi câu 1 rất rõ.
 
