@@ -447,17 +447,19 @@ document.addEventListener('input',e=>{if(replaying||!e.isTrusted||e.target.tagNa
  if(last&&last.t===i)last.v=e.target.value;else rec({t:i,v:e.target.value,p:e.target.placeholder});acted=true;S.ts=Date.now();save();},true);
 function reviewOff(){document.documentElement.classList.add('kit-review-off');document.querySelectorAll('[data-review-gate]').forEach(b=>b.disabled=false);
  if(typeof R!=='undefined'&&R)R.mode='hoc-lai';}
+/* trả lại chữ đã gõ theo ô (tìm bằng placeholder), kể cả khi đã xóa trống, rồi ghi lại vào S.log để tải lại không mất */
+function keepText(log){const last=new Map();for(const a of log)if('t' in a&&typeof a.v==='string'){const t=tas().find(x=>x.placeholder===a.p);if(t)last.set(t,a.v);}
+ for(const [t,v] of last){t.value=v;t.dispatchEvent(new Event('input',{bubbles:true}));S.log.push({t:tas().indexOf(t),v,p:t.placeholder});}}
 function apply(d){if(!d)return false;S.everDone=!!d.everDone;S.doneAt=d.doneAt||null;if(S.everDone)reviewOff();
  if(d.finished||!d.log||!d.log.length){return false;}
  if(d.fp!==FP){ /* trang đã đổi số nút: chỉ trả lại chữ đã gõ */
-  for(const a of d.log)if('t' in a){const t=tas().find(x=>x.placeholder===a.p);if(t&&a.v){t.value=a.v;t.dispatchEvent(new Event('input',{bubbles:true}));}}
+  S.log=[];keepText(d.log);S.start=d.start||S.start;S.ts=Date.now();save();
   say('Trang vừa được sửa nên mình chỉ giữ lại được chữ bạn đã gõ.',false);return true;}
  replaying=true;let n=0,cut=false;try{for(const a of d.log){if('c' in a){const b=btns()[a.c];
    if(a.x!==undefined&&(!b||lab(b)!==a.x)){cut=true;break;} /* nút ở chỗ đó đã khác (trang đổi thứ tự, hay xáo đáp án): dừng, không bấm nhầm */
    if(b&&!b.disabled)b.click();}else{const t=tas()[a.t];if(t){t.value=a.v;t.dispatchEvent(new Event('input',{bubbles:true}));}}n++;}}catch(e){}
  replaying=false;
- if(cut){for(const a of d.log.slice(n))if('t' in a){const t=tas().find(x=>x.placeholder===a.p);if(t&&a.v){t.value=a.v;t.dispatchEvent(new Event('input',{bubbles:true}));}}
-  S.log=d.log.slice(0,n);S.start=d.start||S.start;S.ts=Date.now();save();
+ if(cut){S.log=d.log.slice(0,n);keepText(d.log.slice(n));S.start=d.start||S.start;S.ts=Date.now();save();
   say('Trang đã đổi nên mình chỉ mở lại được tới chỗ còn khớp, kèm chữ bạn đã gõ.',true);return true;}
  S.log=d.log;S.start=d.start||S.start;S.ts=d.ts||Date.now();
  if(typeof R!=='undefined'&&R&&d.start)R.start=d.start;
