@@ -438,6 +438,7 @@ const LK='lesson-kit:'+ID, DOC='drafts/'+ID.replace(/[^a-z0-9-]/gi,'-');
 const btns=()=>[...document.querySelectorAll('button:not(#kit-bar button)')], tas=()=>[...document.querySelectorAll('textarea')];
 const FP=btns().length+'b'+tas().length+'t';
 const lab=b=>(b.textContent||'').replace(/\s+/g,' ').trim().slice(0,60); /* chữ trên nút, để khi bấm lại biết đúng nút cũ */
+const ctx=b=>{const p=b.parentElement;return p?(p.textContent||'').replace(/\s+/g,' ').trim().slice(0,120):'';}; /* chữ quanh nút: phân biệt hai nút "Chưa" ở hai câu khác nhau */
 let S={fp:FP,log:[],finished:false,everDone:false,doneAt:null,start:new Date().toISOString(),ts:0};
 let replaying=false,acted=false,timer=null,writing=false,again=false,db=null;
 const bar=document.createElement('div');bar.id='kit-bar';bar.setAttribute('role','status');document.body.appendChild(bar);
@@ -452,7 +453,7 @@ function save(){clearTimeout(timer);timer=setTimeout(flush,700);}
 function rec(a){if(replaying)return;acted=true;S.log.push(a);S.ts=Date.now();save();}
 document.addEventListener('click',e=>{if(!e.isTrusted)return;const b=e.target.closest('button');if(!b||b.closest('#kit-bar')||b.id==='copy')return;
  if(b.id==='finish'){acted=true;S.finished=true;S.everDone=true;S.doneAt=new Date().toISOString();S.ts=Date.now();flush(true);return;}
- const i=btns().indexOf(b);if(i>=0)rec({c:i,x:lab(b)});},true);
+ const i=btns().indexOf(b);if(i>=0)rec({c:i,x:lab(b),y:ctx(b)});},true);
 document.addEventListener('input',e=>{if(replaying||!e.isTrusted||e.target.tagName!=='TEXTAREA')return;const i=tas().indexOf(e.target),last=S.log[S.log.length-1];
  if(last&&last.t===i)last.v=e.target.value;else rec({t:i,v:e.target.value,p:e.target.placeholder});acted=true;S.ts=Date.now();save();},true);
 function reviewOff(){document.documentElement.classList.add('kit-review-off');document.querySelectorAll('[data-review-gate]').forEach(b=>b.disabled=false);
@@ -466,7 +467,7 @@ function apply(d){if(!d)return false;S.everDone=!!d.everDone;S.doneAt=d.doneAt||
   S.log=[];keepText(d.log);S.start=d.start||S.start;S.ts=Date.now();save();
   say('Trang vừa được sửa nên mình chỉ giữ lại được chữ bạn đã gõ.',false);return true;}
  replaying=true;let n=0,cut=false;try{for(const a of d.log){if('c' in a){const b=btns()[a.c];
-   if(a.x!==undefined&&(!b||lab(b)!==a.x)){cut=true;break;} /* nút ở chỗ đó đã khác (trang đổi thứ tự, hay xáo đáp án): dừng, không bấm nhầm */
+   if((a.x!==undefined&&(!b||lab(b)!==a.x))||(a.y!==undefined&&(!b||ctx(b)!==a.y))){cut=true;break;} /* nút ở chỗ đó đã khác (trang đổi thứ tự, hay xáo đáp án): dừng, không bấm nhầm */
    if(b&&!b.disabled)b.click();}else{const t=tas()[a.t];if(t){t.value=a.v;t.dispatchEvent(new Event('input',{bubbles:true}));}}n++;}}catch(e){}
  replaying=false;
  if(cut){S.log=d.log.slice(0,n);keepText(d.log.slice(n));S.start=d.start||S.start;S.ts=Date.now();save();
