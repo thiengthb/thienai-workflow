@@ -85,7 +85,7 @@ input[type=range]{width:100%;height:44px;margin:6px 0;accent-color:var(--accent)
 /* 3. từ hình tới ký hiệu */
 .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
 .seg .btn{justify-content:center;text-align:center;font-size:14px;padding:10px 6px;min-height:44px}
-.seg .btn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:600}
+.seg .btn[aria-pressed="true"],#p7tog .btn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:600}
 .layers{position:relative;height:250px}
 .layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.97);transition:opacity .35s ease,transform .45s var(--spring);pointer-events:none}
 .layer.on{opacity:1;transform:none;pointer-events:auto}
@@ -103,7 +103,9 @@ input[type=range]{width:100%;height:44px;margin:6px 0;accent-color:var(--accent)
 .ann.g16{background:#c2410c}.ann.g12{background:#7c3aed}.ann.g8{background:var(--accent)}
 code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .code{background:#1f1e1c;color:#ece8df;border-radius:12px;padding:14px 16px;font-size:13.5px;line-height:1.7;width:100%;max-width:320px;margin:0;white-space:pre;overflow-x:auto}
-.tok{font:inherit;border:0;border-radius:5px;padding:0 4px;cursor:pointer;color:#fff;min-height:24px}
+.tok{font:inherit;border:0;border-radius:5px;padding:0 4px;cursor:pointer;color:#fff;min-height:24px;position:relative}
+.tok::before{content:"";position:absolute;inset:-10px -8px}
+#kyhieu .code{line-height:3.3}
 .tok.c16{background:#c2410c}.tok.c12{background:#7c3aed}.tok.c8{background:var(--accent)}
 .tok[aria-pressed="true"]{outline:2px solid #fff;outline-offset:1px}
 /* 4. sơ đồ từng bước */
@@ -315,7 +317,7 @@ code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 <div class="demo">
  <p class="q" style="margin-top:0">Chạm vào phần làm màn này khó dùng nhất.</p>
  <div class="stage"><div class="screen before" id="p7screen">
-  <button class="hot" data-v="img"><div class="ph"></div></button>
+  <button class="hot" data-v="img" aria-label="Ảnh sản phẩm"><div class="ph"></div></button>
   <button class="hot" data-v="txt"><div class="pname">Tai nghe chống ồn</div><div class="pprice">1.290.000 đ</div></button>
   <button class="hot" data-v="btn"><div class="bt3"><span>Mua ngay</span><span>Thêm vào giỏ</span><span>Chia sẻ</span></div></button>
  </div></div>
@@ -333,14 +335,14 @@ code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 <section class="pat" id="ve">
 <header><h2><span class="num">8</span>Vẽ dự đoán rồi so với số thật</h2><p class="small muted" style="margin:0">Ví dụ: học cách học, đường quên của Ebbinghaus</p></header>
 <div class="demo">
- <p style="margin-top:0">Học thuộc một danh sách rồi để đó, không ôn. Theo bạn, bao lâu thì còn giữ được bao nhiêu? <b>Kéo ngón tay hoặc chuột trên biểu đồ để vẽ.</b></p>
+ <p style="margin-top:0">Học thuộc một danh sách rồi để đó, không ôn. Một thời gian sau học lại cho thuộc, theo bạn sẽ tiết kiệm được bao nhiêu phần trăm thời gian so với lần học đầu? <b>Kéo ngón tay hoặc chuột trên biểu đồ để vẽ.</b></p>
  <svg class="chart" id="p8svg" viewBox="0 0 340 220" aria-label="Biểu đồ vẽ dự đoán"></svg>
  <div class="row" style="margin-top:8px"><button class="btn primary" id="p8show" disabled>Xem số thật</button><button class="btn ghost" id="p8reset" style="flex:0 0 auto">Vẽ lại</button></div>
  <div class="fb" id="p8fb" role="status"></div>
 </div>
 <div class="meta">
  <p><b>Dùng khi</b> bài có số liệu thật (kinh tế, lịch sử, hiệu năng). Bắt người học đặt cược bằng một đường vẽ trước, rồi mới hiện dữ liệu, nên chỗ lệch giữa đoán và thật rất khó quên.</p>
- <p><b>Vì sao</b> vẫn là đoán trước rồi được sửa (kiểu 1), nhưng với cả một hình dạng chứ không phải một đáp án. Số liệu: Ebbinghaus năm 1885, được Murre và Dros làm lại năm 2015 cho kết quả gần như cũ.</p>
+ <p><b>Vì sao</b> vẫn là đoán trước rồi được sửa (kiểu 1), nhưng với cả một hình dạng chứ không phải một đáp án. Số liệu: thí nghiệm gốc của Ebbinghaus năm 1885, đo phần thời gian tiết kiệm được khi học lại (không phải phần trăm còn nhớ). Murre và Dros làm lại năm 2015 ra đường có hình dạng gần giống.</p>
  <p><span class="tag">số liệu</span><span class="tag">kinh tế</span><span class="tag">lịch sử</span></p>
 </div>
 </section>
@@ -376,7 +378,8 @@ $$('#truot .opt').forEach(o=>o.onclick=()=>{$$('#truot .opt').forEach(x=>x.setAt
 
 /* 3 */
 (()=>{const bs=$$('#kyhieu .seg .btn'),ls=$$('#kyhieu .layer'),fb=$('#p3fb');
-bs.forEach(b=>b.onclick=()=>{bs.forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));ls.forEach(l=>l.classList.toggle('on',l.dataset.l===b.dataset.l));});
+bs.forEach(b=>b.onclick=()=>{bs.forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));ls.forEach(l=>{const on=l.dataset.l===b.dataset.l;l.classList.toggle('on',on);l.inert=!on;});});
+ls.forEach(l=>l.inert=!l.classList.contains('on'));
 $$('#kyhieu .tok').forEach(t=>t.onclick=()=>{$$('#kyhieu .tok').forEach(x=>x.setAttribute('aria-pressed',x===t?'true':'false'));const g=t.dataset.g;
  if(g==='8')setFb(fb,'Đúng: 8px trong .actions. Cùng màu xanh với nhãn 8 ở bước 2, nằm giữa hai nút ở bước 1. Khoảng nhỏ nhất dành cho những thứ dính nhau nhất.','good');
  else setFb(fb,(g==='16'?'16px là khoảng giữa phần trên (ảnh và tên) với hàng nút, nhãn màu cam ở bước 2.':'12px là khoảng giữa ảnh đại diện và tên, nhãn màu tím ở bước 2.')+' Quay lại bước 2 xem nhãn cùng màu với số bạn cần tìm.','bad');});})();
@@ -464,7 +467,7 @@ const x0=40,x1=310,y0=18,y1=184,xs=i=>x0+i*(x1-x0)/(X.length-1),ys=v=>y1-(v/100)
 const el=(n,a,p=svg)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;};
 [0,25,50,75,100].forEach(v=>{el('line',{x1:x0,x2:x1,y1:ys(v),y2:ys(v),stroke:'#e7e3da'});el('text',{x:x0-6,y:ys(v)+4,'font-size':10,fill:'#6b6862','text-anchor':'end'}).textContent=v+'%';});
 X.forEach((l,i)=>el('text',{x:xs(i),y:y1+16,'font-size':9.5,fill:'#6b6862','text-anchor':'middle'}).textContent=l);
-el('text',{x:x0,y:10,'font-size':10,fill:'#6b6862'}).textContent='Phần còn giữ được';
+el('text',{x:x0,y:10,'font-size':10,fill:'#6b6862'}).textContent='Thời gian tiết kiệm khi học lại';
 const gl=el('polyline',{fill:'none',stroke:'#308E84','stroke-width':3,'stroke-linejoin':'round','stroke-linecap':'round'});
 const rl=el('polyline',{fill:'none',stroke:'#1b1b1a','stroke-width':2.5,'stroke-dasharray':'6 5',opacity:0});
 const dots=X.map((_,i)=>el('circle',{cx:xs(i),cy:ys(100),r:5,fill:'#fff',stroke:'#308E84','stroke-width':2,opacity:.35}));
@@ -481,7 +484,7 @@ sh.onclick=()=>{shown=true;sh.disabled=true;rl.setAttribute('points',REAL.map((v
  const len=rl.getTotalLength();rl.style.strokeDasharray=len;rl.style.strokeDashoffset=len;rl.setAttribute('opacity',1);rl.getBoundingClientRect();rl.style.transition='stroke-dashoffset 1.2s ease';rl.style.strokeDashoffset=0;
  setTimeout(()=>{rl.style.transition='';rl.style.strokeDasharray='6 5';},1300);
  const F=filled(),d1=F[3],d31=F[6];
- setFb(fb,'Đường đen nét đứt là số thật. Sau 1 ngày chỉ còn khoảng 34% (bạn đoán '+Math.round(d1)+'%), nhưng từ đó giảm rất chậm: sau 31 ngày vẫn còn khoảng 21% (bạn đoán '+Math.round(d31)+'%). Phần lớn quên xảy ra trong vài giờ đầu, nên lần ôn đầu tiên nên đến sớm.','');};
+ setFb(fb,'Đường đen nét đứt là số Ebbinghaus tự đo năm 1885. Sau 1 ngày, học lại chỉ nhanh hơn khoảng 34% (bạn đoán '+Math.round(d1)+'%), nhưng từ đó giảm rất chậm: sau 31 ngày vẫn nhanh hơn khoảng 21% (bạn đoán '+Math.round(d31)+'%). Phần lớn sụt giảm xảy ra trong vài giờ đầu, nên lần ôn đầu tiên nên đến sớm.','');};
 $('#p8reset').onclick=()=>{G=X.map(()=>null);shown=false;rl.setAttribute('opacity',0);rl.style.strokeDashoffset=0;setFb(fb,'');render();};render();})();
 </script>
 </body>

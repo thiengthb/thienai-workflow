@@ -9,6 +9,12 @@
 //  4. Bấm nút nào cũng thấy có gì đó đổi trên màn (so ảnh chụp trước và sau khi bấm).
 //     Chỉ đổi class hay aria-pressed mà màn không đổi thì vẫn tính là lỗi.
 //     Đây là lỗi của buổi BA 1: bấm được nhưng nút không đổi màu, trông như bấm không ăn.
+//
+// Giới hạn: chỉ bấm các nút có sẵn lúc mới mở trang, mỗi nút trên một trang vừa tải lại.
+// Nút đang được chọn, nút bị khóa lúc đầu (như "Kiểm tra" khi chưa xếp xong) và nút cần
+// trạng thái trước (như "Làm lại") không được kiểm đúng, phải tự bấm thử.
+// Trang có hiệu ứng chạy liên tục (đồng hồ, nền chuyển động) thì ảnh luôn khác nhau,
+// nên bài kiểm này không bắt được nút hỏng trên trang đó.
 const { chromium, devices } = require('playwright');
 const path = require('path');
 const fs = require('fs');
