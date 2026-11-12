@@ -62,7 +62,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
 .chip{-webkit-tap-highlight-color:transparent}
 .kw{display:inline-block;background:var(--accent-soft);color:#1d5c55;font-weight:600;padding:0 6px;border-radius:6px}
 .done{font-size:14px;padding:12px 14px;border-radius:12px;background:var(--accent-soft);color:#1d5c55;margin-top:12px;display:none}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.status{font-size:14px;font-weight:600;margin:6px 0 0}.status:empty{display:none}
 .sort{display:grid;gap:8px;margin:10px 0}
 .sc{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;font:15px/1.45 Onest,sans-serif;color:var(--ink);cursor:pointer;text-align:left;width:100%}
 .sc .tg{flex:0 0 auto;font-size:12px;font-weight:600;padding:3px 10px;border-radius:10px;background:#f3f1ec;color:var(--muted)}
@@ -105,7 +105,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     <p class="small muted">Trả lời theo trí nhớ, sai cũng không sao. Câu sai sẽ được hỏi lại sớm hơn.</p>
     <div class="card">
       <p><b>1.</b> Hai nút cùng cỡ, cùng màu đặt cạnh nhau thì sao?</p>
-      <div class="q" data-q="F1" data-a="1"><div class="status sr" role="status"></div>
+      <div class="q" data-q="F1" data-a="1"><div class="status" role="status"></div>
         <button class="opt">Màn cân đối, người dùng dễ chọn</button>
         <button class="opt">Mắt phải dừng lại để chọn, không nút nào là thứ nhất</button>
         <button class="opt">Không sao, miễn là chữ trên nút rõ</button>
@@ -114,7 +114,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     </div>
     <div class="card">
       <p><b>2.</b> Ngoài cỡ chữ, màu và thứ tự, còn hai cách nào để tạo bậc chữ?</p>
-      <div class="q" data-q="F3" data-a="2"><div class="status sr" role="status"></div>
+      <div class="q" data-q="F3" data-a="2"><div class="status" role="status"></div>
         <button class="opt">Font khác nhau và gạch chân</button>
         <button class="opt">Viết hoa và in nghiêng</button>
         <button class="opt">Độ đậm và khoảng cách quanh chữ</button>
@@ -123,7 +123,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     </div>
     <div class="card">
       <p><b>3.</b> Trong nhóm các dòng cách nhau 8px. Giữa hai nhóm nên bao nhiêu?</p>
-      <div class="q" data-q="F4" data-a="0"><div class="status sr" role="status"></div>
+      <div class="q" data-q="F4" data-a="0"><div class="status" role="status"></div>
         <button class="opt">Khoảng 24px</button>
         <button class="opt">10px, hơn một chút là đủ</button>
         <button class="opt">8px, cho đều nhau</button>
@@ -164,7 +164,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
       <p>Trong nhóm capstone, một bạn nhắn:</p>
       <div class="say"><b>Tin nhắn</b>"Khách hàng muốn thêm nút <b style="display:inline;font-size:15px;color:var(--ink)">xuất Excel</b> ở trang danh sách đơn hàng."</div>
       <p style="margin-bottom:4px">Bạn là BA. Bạn hỏi lại câu nào <b>đầu tiên</b>?</p>
-      <div class="q" data-q="try" data-a="1"><div class="status sr" role="status"></div>
+      <div class="q" data-q="try" data-a="1"><div class="status" role="status"></div>
         <button class="opt">"File Excel cần những cột nào, để định dạng gì?"</button>
         <button class="opt">"Khách hàng lấy file đó ra để làm gì?"</button>
         <button class="opt">"Khi nào khách cần có nút này?"</button>
@@ -194,7 +194,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     </div>
     <div class="card">
       <p><b>1.</b> Người dùng app học tiếng Nhật nói: "Cho mình thêm bộ lọc từ vựng theo ngày." Câu nào giúp tìm vấn đề thật?</p>
-      <div class="q" data-q="q1" data-a="2"><div class="status sr" role="status"></div>
+      <div class="q" data-q="q1" data-a="2"><div class="status" role="status"></div>
         <button class="opt">"Lọc theo ngày thêm từ hay ngày ôn gần nhất?"</button>
         <button class="opt">"Bạn muốn bộ lọc nằm trên hay dưới danh sách?"</button>
         <button class="opt">"Lọc xong bạn định làm gì với các từ đó?"</button>
@@ -203,7 +203,7 @@ textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:1
     </div>
     <div class="card">
       <p><b>2.</b> Câu nào là <b>nhu cầu</b>, không phải giải pháp?</p>
-      <div class="q" data-q="q2" data-a="0"><div class="status sr" role="status"></div>
+      <div class="q" data-q="q2" data-a="0"><div class="status" role="status"></div>
         <button class="opt">"Mình hay quên ôn bài nếu không ai nhắc"</button>
         <button class="opt">"Thêm thông báo đẩy lúc 8 giờ tối"</button>
         <button class="opt">"Thêm huy hiệu khi học đủ 7 ngày liền"</button>
