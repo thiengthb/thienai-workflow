@@ -27,6 +27,8 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | W7 | Chiến tranh | Phá Khâm, Liêm rồi vây thành Ung hơn 40 ngày là tầng chiến lược, chiến dịch hay chiến thuật? | [bài 3](war/lessons/03-three-levels-dien-bien-phu.md) | 1 | 2026-11-13 |
 | W8 | Chiến tranh | Vì sao Đại tướng Võ Nguyên Giáp hoãn trận đánh Điện Biên Phủ ngày 26/1/1954? | [bài 3](war/lessons/03-three-levels-dien-bien-phu.md) | 1 | 2026-11-13 |
 | W9 | Chiến tranh | Vì sao "hoãn vài ngày rồi đánh theo kế hoạch cũ" vẫn chưa đủ? | [bài 3](war/lessons/03-three-levels-dien-bien-phu.md) | 1 | 2026-11-13 |
+| W10 | Chiến tranh | Khi đổi sang "đánh chắc tiến chắc", đạn và gạo tăng bao nhiêu lần? Thứ nào tăng mạnh hơn, vì sao? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 1 | 2026-11-13 |
+| W11 | Chiến tranh | Vì sao hậu cần Điện Biên Phủ không dồn hết vào xe ô tô? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 1 | 2026-11-13 |
 | F9 | Frontend | Ngoài khối màu to, hai thứ nhỏ nào cũng hay giành mắt mà dễ bị bỏ sót? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 1 | 2026-11-13 |
 | W1 | Chiến tranh | Theo Toàn thư, vì sao thuyền Nam Hán bị lật ở Bạch Đằng năm 938? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
 | W2 | Chiến tranh | Vì sao Ngô Quyền không đem thuyền ra chặn thẳng ở cửa biển? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
