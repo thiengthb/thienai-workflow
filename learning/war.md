@@ -39,8 +39,8 @@ Tìm hiểu ngày 2026-11-12, trước buổi làm quen.
 
 | Thứ tự | Ý | Một dòng | Trạng thái |
 |---|---|---|---|
-| 1 | Mục tiêu chính trị | Chiến tranh để đạt điều gì; thắng trận mà không đạt mục tiêu thì vẫn thua | Buổi 2 |
-| 2 | Ba tầng: chiến lược, chiến dịch, chiến thuật | Cả cuộc chiến, một đợt đánh, một trận | |
+| 1 | Mục tiêu chính trị | Chiến tranh để đạt điều gì; thắng trận mà không đạt mục tiêu thì vẫn thua | Đã học ở buổi 2 |
+| 2 | Ba tầng: chiến lược, chiến dịch, chiến thuật | Cả cuộc chiến, một đợt đánh, một trận | Buổi 3 |
 | 3 | Địa hình và thời tiết | Sông, núi, mùa, thủy triều quyết định đánh ở đâu, lúc nào | Đã chạm ở buổi 1 (Bạch Đằng) |
 | 4 | Hậu cần | Lương thực, đạn dược, đường tiếp tế; quân đói thì không đánh được | |
 | 5 | Đánh chỗ yếu, tránh chỗ mạnh | Dùng điểm mạnh của mình vào điểm yếu của bên kia | Đã chạm ở buổi 1 |
@@ -54,9 +54,10 @@ Tìm hiểu ngày 2026-11-12, trước buổi làm quen.
 | Buổi | Ngày | Ý chính | Kết quả |
 |---|---|---|---|
 | 1 | 2026-11-12 | Làm quen, làm chỉ huy trận Bạch Đằng 938 ([bài](war/lessons/01-bach-dang-938.md)) | 12 phút, độ dài và độ khó "vừa", thấy môn này "thích". Chọn đúng cách của Ngô Quyền ngay lần đầu, đúng 2/2 câu hỏi. Chỉ xem diễn biến thật, chưa mở hai mô phỏng A và C. Tự nói lại đủ ý: hiểu địa hình, dụ địch, dùng quy luật tự nhiên, biến lợi thế của địch thành điểm yếu. Xếp cả 10 ý, mục tiêu chính trị đứng đầu. Viết dài về điều muốn học (xem "Mục tiêu"). Góp ý: mở đầu tốt, tiếp tục phát huy và sáng tạo thêm |
+| 2 | 2026-11-12 | Mục tiêu chính trị: làm triều đình Lý năm 1075 và 1077 ([bài](war/lessons/02-ly-song-war-1075-1077.md)) | 13 phút, thấy "dài" và "khó"; làm triều đình hay làm tướng "như nhau". Chọn đúng cách triều Lý cả hai lần, lần này mở xem cả hai mô phỏng ở cả hai quyết định. Đúng câu nhớ lại và 2/2 câu hỏi. Tự nói lại: vượt sông sẽ làm triều Tống bẽ mặt, dẫn tới chiến tranh tổng lực và lâu dài. Rút ra: chiến tranh là công cụ của chính trị; không có lựa chọn nào đúng tuyệt đối, lựa chọn nào cũng có giá. Thích phần suy luận "chừa đường lui". Góp ý về trang: mất dữ liệu khi tải lại, muốn chế độ tối, học lại thì bỏ phần ôn đầu buổi (đã làm bộ khung chung, xem `teaching/README.md`) |
 
 ## Buổi tiếp theo
-- Buổi 2: ý "Mục tiêu chính trị", đúng câu thien hỏi "vì sao người cầm quyền chọn chiến tranh thay vì hòa bình". Vẫn kiểu 6 "Làm chỉ huy", nhưng ở tầng người lãnh đạo: chọn đánh hay không đánh, đánh tới đâu thì dừng. Chọn một trường hợp có nguồn rõ, gợi ý: Lý Thường Kiệt đánh sang đất Tống năm 1075 rồi chủ động giảng hòa năm 1077 (nguồn: Toàn thư, Tống sử), để thấy thắng trận và đạt mục tiêu là hai chuyện. Kiểm nguồn theo luật 10 trước khi dựng.
-- Câu nhớ lại: vì sao Ngô Quyền không đấu thuyền với thuyền.
-- Nhắc thien mở thử một mô phỏng sai ở đầu buổi nếu bài có, vì buổi 1 chưa xem A và C.
-- Dàn binh bố trận và hậu cần (điều thien muốn nhất) nằm ở ý 2 và 4, sẽ tới sớm. Câu hỏi "do sinh học hay chính trị" là chuyện lớn và còn tranh cãi; khi tới thì nói rõ các trường phái và mức chắc chắn, không chọn hộ một đáp án.
+- Buổi 3: ý "Ba tầng: chiến lược, chiến dịch, chiến thuật" (thien xếp thứ 2). Gợi ý: dùng lại cuộc chiến 1075–1077 thien vừa biết, xếp từng quyết định vào đúng tầng (triều đình đánh trước hay chờ là chiến lược; đợt đánh Khâm, Liêm, Ung là chiến dịch; giữ bờ sông Như Nguyệt là chiến thuật), rồi sang một trận mới. Kiểm nguồn theo luật 10.
+- Buổi 2 thien thấy "dài" và "khó": buổi 3 ngắn hơn, chữ ít hơn. Phần "hiểu sau" tối đa 3 ý, không thêm khối kiến thức phụ.
+- Câu nhớ lại (đặt trong phần ôn, `data-part="review"`): vì sao triều Lý không vượt sông đánh tan quân Tống.
+- Dàn binh bố trận và hậu cần (điều thien muốn nhất) nằm ở ý 2 và 4, sẽ tới ngay sau.

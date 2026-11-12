@@ -19,7 +19,7 @@ Tối đa 3 môn cùng lúc. Thêm một môn thì phải cho một môn nghỉ.
 |---|---|---|---|
 | Frontend | Môn chính, một nửa số buổi | [frontend.md](frontend.md) | Đã học 5 buổi |
 | BA | Môn mở rộng | [ba.md](ba.md) | Đã học 1 buổi |
-| Chiến tranh | Môn mở rộng | [war.md](war.md) | Đã học 1 buổi |
+| Chiến tranh | Môn mở rộng | [war.md](war.md) | Đã học 2 buổi |
 
 Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakubun nên không nằm trong vòng.
 
@@ -36,12 +36,14 @@ Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakub
 
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
-| Chiến tranh 1 (Bạch Đằng 938) | 2026-11-12 | Chiến tranh | **BA 2 (hỏi chuyện người dùng)**, rồi Frontend 6, rồi Chiến tranh 2 |
+| Chiến tranh 2 (mục tiêu chính trị, 1075–1077) | 2026-11-12 | Chiến tranh | **BA 2 (hỏi chuyện người dùng)**, rồi Frontend 6, rồi Chiến tranh 3 (ba tầng) |
 
 ## Khung một buổi, chung cho mọi môn
 
 1. **Ôn trộn (2 phút):** 3 thẻ đến hạn trong [cards.md](cards.md), môn nào cũng được. thien trả lời trước rồi mới lật.
 2. **Nhớ lại buổi trước của môn này (1 phút):** một hình, một câu.
+
+Hai phần ôn này chỉ dành cho lần học đầu: trong trang, bọc chúng bằng `data-part="review"`, nút đi tiếp bị khóa bởi chúng thì thêm `data-review-gate`. Học xong, lần mở sau trang tự ẩn phần ôn, chỉ còn nội dung và câu hỏi của chính bài đó (thien yêu cầu 2026-11-12). Xem "Bộ khung chung" trong [teaching/README.md](teaching/README.md).
 3. **Thử trước (5–6 phút):** bấm, kéo, chọn, sắp xếp. Chưa có lý thuyết. Chọn kiểu bài trong [teaching/README.md](teaching/README.md).
 4. **Hiểu sau (3 phút):** giải thích ý chính, có số liệu hoặc ví dụ cụ thể, nhắc lại đúng lựa chọn thien vừa làm.
 5. **Câu hỏi nhanh (2 phút).**
