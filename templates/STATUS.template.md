@@ -8,6 +8,13 @@ Lịch sử nằm trong git và PR, không ghi ở đây. Cả file dưới 40 d
 ## Đang ở đâu
 <1 đến 3 câu. Ví dụ: "Đang làm trang đăng nhập, xong phần giao diện, còn nối API.">
 
+## Việc dở
+Việc đã bắt đầu mà chưa xong. Phiên sau đọc mục này đầu tiên để nhắc thien. Xong việc nào thì xoá dòng đó.
+
+| Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
+|---|---|---|---|
+| <ví dụ: trang đăng nhập> | <link PR> | <ngày> | <nối API, chờ thien duyệt> |
+
 ## Vừa xong
 - <tối đa 5 dòng, mỗi dòng kèm link PR>
 

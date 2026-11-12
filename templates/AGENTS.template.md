@@ -5,6 +5,7 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 ## Đầu phiên
 - Đọc `docs/STATUS.md` và file này. Nếu thực tế (git, PR, CI) khác với file tiến độ, nói ra trước khi làm.
 - Số liệu (số commit, trạng thái PR, kết quả test) lấy từ công cụ, không lấy từ trí nhớ.
+- thien giao việc mới: trước khi làm, nhắc việc dở (thread chưa xong, PR mở, câu hỏi chờ, mục "Việc dở" của STATUS) kèm mức quan trọng, hỏi có giải quyết trước không. Làm đúng mục "Nhắc việc dở" trong [`profile/PROFILE.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/PROFILE.md).
 
 ## Ai quyết
 - AI đề xuất, thien quyết. Đề xuất nào cũng kèm các phương án đã xét và lý do mạnh nhất để không chọn từng cái.
@@ -30,7 +31,7 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 - Gắn nhãn khi khẳng định điều gì: [Fact] có nguồn, [Suy luận], [Đề xuất], [Chưa kiểm].
 
 ## Cuối phiên
-- Cập nhật `docs/STATUS.md` (đang ở đâu, vừa xong, việc tiếp theo, đang chờ ai). Việc dở vẫn commit và push.
+- Cập nhật `docs/STATUS.md` (đang ở đâu, việc dở, vừa xong, việc tiếp theo, đang chờ ai). Việc dở vẫn commit và push, và ghi vào mục "Việc dở" kèm nhánh hoặc PR.
 - Nếu project có `docs/ai-log.md`: thêm dòng cho phiên này, để trống hai cột "Người kiểm gì" và "Quyết định" cho người điền.
 
 ## Giữ file này ngắn
