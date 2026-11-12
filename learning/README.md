@@ -20,7 +20,7 @@ Tối đa 3 môn cùng lúc. Thêm một môn thì phải cho một môn nghỉ.
 | Môn | Vai | File môn | Trạng thái |
 |---|---|---|---|
 | Frontend | Môn chính, một nửa số buổi | [frontend.md](frontend.md) | Đã học 5 buổi |
-| BA | Môn mở rộng | [ba.md](ba.md) | Đã học 1 buổi |
+| BA | Môn mở rộng | [ba.md](ba.md) | Đã học 2 buổi |
 | Chiến tranh | Môn mở rộng | [war.md](war.md) | Đã học 2 buổi |
 
 Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakubun nên không nằm trong vòng.
@@ -38,7 +38,7 @@ Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakub
 
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
-| Chiến tranh 2 (mục tiêu chính trị, 1075–1077) | 2026-11-12 | Chiến tranh | **BA 2 (hỏi chuyện người dùng)**, rồi Frontend 6, rồi Chiến tranh 3 (ba tầng) |
+| BA 2 (hỏi chuyện người dùng) | 2026-11-12 | BA | **Frontend 6 (chọn màu cho app)**, rồi Chiến tranh 3, rồi Frontend |
 
 ## Khung một buổi, chung cho mọi môn
 

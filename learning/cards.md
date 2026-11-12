@@ -28,3 +28,5 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | W1 | Chiến tranh | Theo Toàn thư, vì sao thuyền Nam Hán bị lật ở Bạch Đằng năm 938? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
 | W2 | Chiến tranh | Vì sao Ngô Quyền không đem thuyền ra chặn thẳng ở cửa biển? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
 | W3 | Chiến tranh | Toàn thư và sử Trung Quốc chép khác nhau thế nào về cái chết của Hoằng Tháo? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
+| B4 | BA | Hỏi thế nào để biết người dùng đã xử lý việc quên ôn ra sao? | [BA bài 2](ba/lessons/02-user-interviews.md) | 1 | 2026-11-13 |
+| B5 | BA | Vì sao tránh hỏi “bạn cũng thấy thông báo là tốt nhất đúng không?” | [BA bài 2](ba/lessons/02-user-interviews.md) | 1 | 2026-11-13 |

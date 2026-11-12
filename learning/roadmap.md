@@ -44,7 +44,7 @@ Môn mở rộng, khoảng một buổi mỗi tuần. Đích sau 6 tháng: làm 
 ### Chặng 1: Mười ý lớn
 Xong khi: học đủ 10 ý trên bản đồ, mỗi ý một buổi; thứ tự do thien xếp ở buổi 1.
 - [x] Yêu cầu và nhu cầu (buổi 1, 2026-11-12)
-- [ ] Hỏi chuyện người dùng (buổi 2)
+- [x] Hỏi chuyện người dùng (buổi 2, 2026-11-12)
 - [ ] Các bên liên quan
 - [ ] User story
 - [ ] Điều kiện hoàn thành
@@ -61,7 +61,7 @@ Xong khi: có một tính năng capstone đi trọn từ phỏng vấn người 
 - [ ] Vẽ bản đồ user story cho cả capstone
 
 ### Bài đã học
-- Bài 1: đọc nhanh và làm lại ở [ba/README.md](ba/README.md)
+- Bài 1–2: đọc nhanh và làm lại ở [ba/README.md](ba/README.md)
 - Trang buổi 1: [Yêu cầu và nhu cầu](https://claude.ai/artifact/TXQ8HGSbo7dXQ51XVsq1Q9)
 
 ### Nguồn học
