@@ -27,3 +27,22 @@ Cuối mỗi bài nghiên cứu có danh sách nguồn đã đọc, kèm ngày �
 - Thiếu công cụ cho việc đang làm thì nói ra và đề xuất cái cần thêm, kèm giá và giới hạn. Không đoán thay.
 - Không thêm công cụ trùng việc với cái đã có: nhiều nguồn làm cùng một việc chỉ làm AI phân vân.
 - Bảng này cũ đi khi đổi connector: bật hay bỏ một connector thì sửa bảng trong cùng PR.
+
+## Khi thien hỏi "có nên thêm plugin, skill hay connector này không"
+
+thien tự nhận hay bị FOMO khi thấy marketplace có nhiều thứ mới. AI (và thien) xét theo 4 câu, theo thứ tự, gặp câu nào trả lời "không" thì dừng ở đó và bỏ:
+
+1. **Có việc đau thật không?** Trong 2 tuần qua có việc nào thien làm từ 2 lần trở lên mà thấy mệt, chậm hay hay quên không, và thứ này giải đúng việc đó? Chỉ "nghe hay" thì không tính.
+2. **Đã có cái làm việc này chưa?** Xem bảng công cụ ở trên, `profile/TUTOR.md` (dạy học), memory của project và `docs/STATUS.md` (nhớ việc), skill trong `skills/`. Có rồi thì bỏ, vì hai thứ cùng làm một việc chỉ làm AI phân vân.
+3. **Chạy được ở chỗ thien dùng không?** thien dùng Claude desktop và claude.ai, thỉnh thoảng Codex. Thứ chỉ chạy trong Claude Code (hook, lệnh `/`, statusline) hay cần MCP phải tự dựng thì bỏ.
+4. **Ai làm và nó đụng tới gì?** Ưu tiên Anthropic hoặc đối tác. Plugin cộng đồng có quyền rộng (đọc mọi phiên, hook chạy mỗi lượt) thì chỉ cài khi câu 1 rất rõ.
+
+Qua đủ 4 câu thì thử 1 tuần. Hết tuần không dùng tới thì gỡ. Thứ chưa qua câu 1 thì ghi một dòng vào cuối file này kèm ngày; 30 ngày sau không ai nhắc lại thì xoá dòng đó.
+
+### Đã xét
+| Ngày | Thứ đã xét | Kết luận | Vì sao |
+|---|---|---|---|
+| 2026-11-12 | Tutor, learning-tutor, Ágora Learning | Bỏ | Trùng `profile/TUTOR.md`, vốn đã chỉnh theo thien qua 10 buổi |
+| 2026-11-12 | Cognee Memory, memory-agent, memory-toolkit, oak-memory, Exit Memory Update | Bỏ | Trùng memory của project và `docs/STATUS.md`; phần lớn dựa vào hook của Claude Code |
+| 2026-11-12 | Productivity | Bỏ | Cần Notion, Asana, Slack; thien không dùng |
+| 2026-11-12 | Design (Anthropic) | Giữ | Đã bật, dùng `accessibility-review` khi làm giao diện; các connector Slack, Notion đi kèm thì kệ |
