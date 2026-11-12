@@ -42,8 +42,8 @@ Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakub
 
 1. **Ôn trộn (2 phút):** 3 thẻ đến hạn trong [cards.md](cards.md), môn nào cũng được. thien trả lời trước rồi mới lật.
 2. **Nhớ lại buổi trước của môn này (1 phút):** một hình, một câu.
-3. **Thử trước (5–6 phút):** bấm, kéo, chọn, sắp xếp. Chưa có lý thuyết.
-4. **Hiểu sau (3 phút):** giải thích ý chính, có số liệu hoặc ví dụ cụ thể.
+3. **Thử trước (5–6 phút):** bấm, kéo, chọn, sắp xếp. Chưa có lý thuyết. Chọn kiểu bài trong [teaching/README.md](teaching/README.md).
+4. **Hiểu sau (3 phút):** giải thích ý chính, có số liệu hoặc ví dụ cụ thể, nhắc lại đúng lựa chọn thien vừa làm.
 5. **Câu hỏi nhanh (2 phút).**
 6. **Tự nói lại ý chính** rồi mới xem bản của AI.
 7. **Góp ý** độ dài và độ khó.
@@ -52,7 +52,8 @@ Sau buổi: ghi nhật ký vào `learning/<môn>.md`, lưu bài vào `learning/<
 
 ## Bắt đầu một môn mới
 
-1. **Buổi làm quen (10 phút):** hỏi thien đã biết gì và muốn dùng môn này để làm gì. Đưa ra **bản đồ 10 ý lớn** ở mức người mới, là những điều cần biết để nói chuyện được với dân trong nghề, không phải mục lục giáo trình. thien sắp thứ tự theo ý thích. Tạo `learning/<môn>.md` theo khung của `frontend.md`.
+0. **Tìm cách dạy hợp với môn, trước buổi làm quen.** AI tự làm, thien không cần nhắc. Tìm xem người dạy giỏi và nghiên cứu về dạy môn đó làm thế nào: môn này hiểu bằng hình gì (kinh tế dùng đồ thị cung cầu, ngôn ngữ dùng nghe và nhắc lại, luật dùng tình huống thật), người mới hay hiểu sai ở đâu, nên luyện kiểu gì. Ghi kết quả vào mục "Cách dạy môn này" trong `learning/<môn>.md`, có nguồn, không quá một màn hình. Đối chiếu với 8 kiểu bài trong [teaching/README.md](teaching/README.md): kiểu nào hợp thì dùng, môn cần kiểu mới thì dựng thêm vào `teaching/patterns.html` và bảng gợi ý theo môn. Môn đang học mà chưa có mục này thì làm trước buổi kế tiếp của môn đó.
+1. **Buổi làm quen (10 phút):** nói thien nghe 2–3 dòng về cách sẽ dạy môn này và vì sao. hỏi thien đã biết gì và muốn dùng môn này để làm gì. Đưa ra **bản đồ 10 ý lớn** ở mức người mới, là những điều cần biết để nói chuyện được với dân trong nghề, không phải mục lục giáo trình. thien sắp thứ tự theo ý thích. Tạo `learning/<môn>.md` theo khung của `frontend.md`.
 2. **10 buổi đầu:** mỗi buổi một ý trên bản đồ. Từ buổi thứ 4, phần thử trước trộn các ý đã học với nhau.
 3. **Sau khoảng 10 buổi:** thien quyết định đào sâu, giữ ở mức ôn, hay cho môn nghỉ để môn trong hàng chờ lên.
 
