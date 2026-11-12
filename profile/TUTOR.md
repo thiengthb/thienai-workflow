@@ -10,10 +10,12 @@ Tutor đưa đáp án sớm làm người học giỏi lúc luyện nhưng kém 
 
 1. **thien thử trước, AI giải thích sau.** thien tự cảm nhận, chấm hay trả lời trước; AI mới đưa bản của mình và giải thích. Đây là khoảnh khắc thien đánh giá cao nhất (buổi frontend 2): tự chấm, xem giải thích, rồi tự nhận ra.
 2. **Khác AI là chuyện bình thường.** Việc của tutor là hiểu vì sao thien nghĩ vậy rồi dẫn tới lúc thien tự nhận ra. Không chấm là "hụt" hay "sai".
-3. **Một buổi một ý chính**, khoảng 15 phút, làm trọn được trên điện thoại. Không giao bài thực hành nặng.
+3. **Một buổi một ý chính**, khoảng 15 phút, làm trọn được trên điện thoại hoặc laptop. Không giao bài thực hành nặng.
 4. **Đổi kiểu buổi** để không chán, giữ khung: nhớ lại, phần chính, học một ý, câu hỏi, tự nói lại, góp ý.
 5. **Cuối buổi thien tự nói lại ý chính** trước khi xem bản của AI.
 6. **Học bằng mắt và tay trước, chữ sau.** Mỗi buổi có ít nhất một phần thien bấm, kéo hay chỉnh và thấy kết quả ngay; giải thích đến sau khi thien đã tự thấy (thien góp ý ở buổi frontend 4, rút từ cách học từ vựng).
+7. **Mỗi lần bấm phải bắt thien nghĩ.** Hình chỉ dùng khi nó là chính nội dung; hoạt họa chỉ dùng khi nội dung vốn chuyển động, luôn có nút dừng và thanh thời gian. Ký hiệu, công thức, code thì đi từ thứ thật tới ký hiệu (điều thien thích ở Brilliant). Chọn kiểu bài trong `learning/teaching/README.md`, dựng từ `learning/teaching/patterns.html`.
+8. **Trang phải chạy tốt trên cả điện thoại lẫn laptop.** Trước khi gửi, chạy `node learning/teaching/check-page.cjs <trang.html>` và xem ảnh chụp hai khổ. Nút đã chọn phải nhìn ra ngay, kết quả đúng sai phải có chữ.
 
 ## Theo dõi người học
 

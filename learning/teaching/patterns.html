@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8 kiểu bài học trực quan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--soft:#f3f1ec;--accent:#308E84;--accent-ink:#1d5c55;--accent-soft:#e3f1ef;--bad:#c2410c;--bad-soft:#fdeee6;--rome:#b4533a;--rome-soft:#f3ddd5;--carth:#2f6f9f;--carth-soft:#dbe8f2;--spring:cubic-bezier(.3,1.25,.5,1)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Onest,system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 64px}
+h1{font-size:26px;line-height:1.2;letter-spacing:-.02em;margin:8px 0 6px}
+h2{font-size:19px;line-height:1.3;letter-spacing:-.01em;margin:0 0 4px}
+p{margin:0 0 10px}
+.muted{color:var(--muted)}.small{font-size:14px}
+.lead{font-size:16px;color:var(--muted);max-width:640px}
+nav{display:flex;gap:8px;overflow-x:auto;padding:12px 0 4px;margin:0 -16px 8px;padding-left:16px;padding-right:16px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{flex:0 0 auto;font-size:14px;font-weight:500;color:var(--ink);text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;min-height:44px;display:flex;align-items:center}
+nav a:hover{border-color:var(--accent)}
+.rules{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:12px 0 20px}
+.rules ol{margin:6px 0 0;padding-left:20px}.rules li{margin:4px 0}
+.pat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 16px;margin:0 0 18px;display:grid;gap:16px;scroll-margin-top:12px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:var(--accent-soft);color:var(--accent-ink);font-size:14px;font-weight:700;margin-right:8px;vertical-align:2px}
+.meta{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.meta b{color:var(--ink);font-weight:600}
+.meta p{margin:0 0 8px}
+.tag{display:inline-block;font-size:12px;font-weight:600;color:var(--accent-ink);background:var(--accent-soft);border-radius:6px;padding:1px 8px;margin:0 4px 4px 0}
+.demo{min-width:0}
+.q{font-weight:600;margin:4px 0 8px}
+@media (min-width:900px){
+ .wrap{padding:32px 32px 80px}
+ h1{font-size:32px}
+ nav{margin:0 0 12px;padding-left:0;padding-right:0;flex-wrap:wrap}
+ .pat{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:28px;padding:24px}
+ .pat>header{grid-column:1/-1}
+ .meta{border-top:0;border-left:1px solid var(--line);padding:0 0 0 24px}
+}
+/* nút chung: trạng thái chọn phải nhìn thấy được, không chỉ dựa vào màu */
+.btn,.opt{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:14px;min-height:48px;padding:12px 14px;cursor:pointer;text-align:left;width:100%;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background-color .15s,transform .2s var(--spring)}
+.btn:active,.opt:active{transform:scale(.98)}
+.btn:focus-visible,.opt:focus-visible,.tok:focus-visible,.hot:focus-visible,nav a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.opt[aria-pressed="true"]::after{content:"Đã chọn";margin-left:auto;font-size:12px;font-weight:600;color:var(--accent-ink)}
+.opt.right{border-color:var(--accent);background:var(--accent-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.right::after{content:"Đúng";margin-left:auto;font-size:12px;font-weight:700;color:var(--accent-ink)}
+.opt.wrong::after{content:"Bạn chọn";margin-left:auto;font-size:12px;font-weight:700;color:var(--bad)}
+.opt[disabled]{cursor:default;opacity:1;color:var(--ink)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row .btn{width:auto;flex:1 1 auto;justify-content:center;text-align:center}
+.primary{background:var(--ink);color:#fff;border-color:var(--ink);justify-content:center;font-weight:600}
+.primary[disabled]{background:#cfcbc2;border-color:#cfcbc2;color:#fff;cursor:default}
+.ghost{justify-content:center}
+.fb{font-size:15px;border-radius:12px;padding:10px 12px;margin-top:10px;background:var(--soft)}
+.fb:empty{display:none}
+.fb.good{background:var(--accent-soft);color:var(--accent-ink)}
+.fb.bad{background:var(--bad-soft);color:#7c2d12}
+.stage{background:var(--soft);border-radius:14px;padding:14px;position:relative;overflow:hidden}
+/* 1. đoán rồi xem */
+.mock{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;max-width:340px;margin:0 auto}
+.mock .gt{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;transition:margin .5s var(--spring),color .3s}
+.mock .it{display:flex;justify-content:space-between;font-size:15px;padding:8px 0;transition:border-color .3s,padding .5s var(--spring)}
+.mock .it span:last-child{color:var(--muted)}
+.mock .gap2{height:0;transition:height .55s var(--spring)}
+.mock.lines .it{border-bottom:1px solid var(--line)}
+.mock.color .g2 .it span:first-child{color:var(--carth)}
+.mock.space .gap2{height:22px}
+.labelchip{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:6px;background:#fff;border:1px solid var(--line);margin-bottom:8px}
+/* 2. thanh trượt */
+.sample{background:#fff;border-radius:12px;padding:16px;border:1px solid var(--line)}
+.sample .big{font-size:20px;font-weight:600;margin:0 0 4px}
+.sample .sm{font-size:15px;margin:0}
+input[type=range]{width:100%;height:44px;margin:6px 0;accent-color:var(--accent);touch-action:pan-y}
+.ratio{display:flex;align-items:baseline;gap:8px;margin-top:6px}
+.ratio b{font-size:28px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.scale{position:relative;height:56px;margin-top:6px}
+.scale .bar{position:absolute;left:0;right:0;top:18px;height:10px;border-radius:5px;background:linear-gradient(90deg,#f1d4c7 0%,#f1d4c7 36.5%,#f6ead0 36.5%,#f6ead0 48.4%,#d4ebe7 48.4%)}
+.scale .mk{position:absolute;top:8px;width:2px;height:30px;background:var(--ink);opacity:.5}
+.scale .mkl{position:absolute;top:38px;font-size:12px;color:var(--muted);transform:translateX(-50%);white-space:nowrap}
+.scale .pin{position:absolute;top:10px;width:4px;height:26px;border-radius:2px;background:var(--ink);transform:translateX(-2px);transition:left .12s}
+/* 3. từ hình tới ký hiệu */
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.seg .btn{justify-content:center;text-align:center;font-size:14px;padding:10px 6px;min-height:44px}
+.seg .btn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:600}
+.layers{position:relative;height:250px}
+.layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.97);transition:opacity .35s ease,transform .45s var(--spring);pointer-events:none}
+.layer.on{opacity:1;transform:none;pointer-events:auto}
+.pcard{width:250px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:16px}
+.pcard .top{display:flex;gap:12px;align-items:center}
+.av{width:44px;height:44px;border-radius:50%;background:#d8cfc0;flex:0 0 auto}
+.pcard .nm b{display:block;font-size:16px}.pcard .nm span{font-size:13px;color:var(--muted)}
+.pcard .acts{display:flex;gap:8px}
+.pcard .acts div{flex:1;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
+.a1{background:var(--accent);color:#fff}.a2{background:var(--soft)}
+.boxes .pcard{background:transparent;border-style:dashed;position:relative}
+.boxes .av,.boxes .a1,.boxes .a2,.boxes .nm b,.boxes .nm span{background:#d9d4ca!important;color:transparent!important;border-radius:6px}
+.boxes .nm b{height:14px;margin-bottom:6px;width:110px}.boxes .nm span{display:block;height:10px;width:70px}
+.ann{position:absolute;font-size:12px;font-weight:700;padding:1px 6px;border-radius:6px;color:#fff}
+.ann.g16{background:#c2410c}.ann.g12{background:#7c3aed}.ann.g8{background:var(--accent)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.code{background:#1f1e1c;color:#ece8df;border-radius:12px;padding:14px 16px;font-size:13.5px;line-height:1.7;width:100%;max-width:320px;margin:0;white-space:pre;overflow-x:auto}
+.tok{font:inherit;border:0;border-radius:5px;padding:0 4px;cursor:pointer;color:#fff;min-height:24px}
+.tok.c16{background:#c2410c}.tok.c12{background:#7c3aed}.tok.c8{background:var(--accent)}
+.tok[aria-pressed="true"]{outline:2px solid #fff;outline-offset:1px}
+/* 4. sơ đồ từng bước */
+.flow{display:flex;flex-direction:column;gap:0;padding:4px 0}
+.node{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;font-size:15px;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .45s var(--spring),border-color .3s,background-color .3s;display:none}
+.node.show{display:block}
+.node.in{opacity:1;transform:none}
+.node.cur{border-color:var(--accent);background:var(--accent-soft)}
+.node.past{opacity:.6}
+.node .who{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:2px}
+.node.real{border-color:var(--carth);background:var(--carth-soft)}
+.arrow{height:20px;display:none;justify-content:center}
+.arrow.show{display:flex}
+.arrow svg{width:12px;height:20px}
+.cap{min-height:48px;font-size:15px;margin-top:10px}
+/* 5. xếp thứ tự */
+.pool,.seq{display:grid;gap:8px}
+.seq{margin-bottom:12px;min-height:56px;border:1px dashed var(--line);border-radius:14px;padding:8px}
+.seq:empty::before{content:"Chạm vào các bước bên dưới theo thứ tự bạn nghĩ";color:var(--muted);font-size:14px;padding:8px}
+.seq .btn{background:var(--accent-soft);border-color:var(--accent)}
+.seq .btn .k{flex:0 0 auto;width:24px;height:24px;border-radius:7px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.seq .btn.right{background:var(--accent-soft);border-color:var(--accent)}
+.seq .btn.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.seq .btn .note{margin-left:auto;font-size:12px;font-weight:700}
+/* 6. bản đồ trận đánh */
+.map{width:100%;height:auto;display:block;background:#efe9da;border-radius:12px}
+.timeline{display:flex;align-items:center;gap:10px;margin-top:10px}
+.timeline .btn{width:auto;flex:0 0 auto;justify-content:center;min-width:48px}
+.phase{font-size:15px;min-height:72px;margin-top:6px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.hide{display:none!important}
+/* 7. chạm vào chỗ sai */
+.screen{max-width:300px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px 16px;position:relative}
+.hot{display:block;width:100%;font:inherit;text-align:left;background:transparent;border:2px solid transparent;border-radius:12px;padding:6px;margin:0 0 6px;cursor:pointer;color:inherit;transition:border-color .2s,background-color .2s}
+.hot:hover{border-color:var(--line)}
+.hot.right{border-color:var(--accent);background:rgba(48,142,132,.08)}
+.hot.wrong{border-color:var(--bad);background:rgba(194,65,12,.06)}
+.ph{height:120px;border-radius:12px;background:linear-gradient(135deg,#e9e2d3,#d8cfc0)}
+.pname{font-size:17px;font-weight:600}.pprice{font-size:15px;color:var(--muted)}
+.bt3{display:flex;flex-direction:column;gap:8px}
+.bt3 span{display:flex;align-items:center;justify-content:center;height:42px;border-radius:12px;font-size:15px;font-weight:600;transition:all .4s var(--spring)}
+.before .bt3 span{background:var(--accent);color:#fff}
+.after .bt3 span:nth-child(1){background:var(--accent);color:#fff}
+.after .bt3 span:nth-child(2){background:#fff;color:var(--ink);border:1px solid var(--line)}
+.after .bt3 span:nth-child(3){background:transparent;color:var(--accent-ink);height:34px}
+/* 8. vẽ dự đoán */
+.chart{width:100%;height:auto;display:block;touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair}
+.chart text{font-family:Onest,system-ui,sans-serif}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="small muted" style="margin:0">Thư viện mẫu cho các buổi học · 2026-11-12</p>
+<h1>8 kiểu bài học trực quan</h1>
+<p class="lead">Mỗi kiểu bên dưới là một bài thật, bạn làm thử được ngay. Bên cạnh là lúc nên dùng và nghiên cứu nói gì về nó. Các buổi học sau sẽ ghép từ những kiểu này.</p>
+
+<nav aria-label="Các kiểu bài">
+<a href="#doan">1. Đoán rồi xem</a><a href="#truot">2. Kéo thấy ngay</a><a href="#kyhieu">3. Từ hình tới ký hiệu</a><a href="#tungbuoc">4. Sơ đồ từng bước</a><a href="#xep">5. Xếp thứ tự</a><a href="#chihuy">6. Làm chỉ huy</a><a href="#chosai">7. Chạm chỗ sai</a><a href="#ve">8. Vẽ dự đoán</a>
+</nav>
+
+<div class="rules">
+<b>5 luật chung cho mọi kiểu</b>
+<ol class="small">
+<li>Mỗi lần bấm phải bắt bạn nghĩ: đoán, chọn, sắp xếp, giải thích. Bấm chỉ để qua trang thì không tính.</li>
+<li>Hình phải là chính nội dung cần học. Hình trang trí thì bỏ.</li>
+<li>Chỉ cho chuyển động khi nội dung vốn là thứ thay đổi theo thời gian (một luồng, một trận đánh). Bạn được tự dừng, tua lại.</li>
+<li>Đoán trước, giải thích sau. Sai thì được thấy hậu quả của lựa chọn mình, rồi mới xem cách đúng.</li>
+<li>Kết quả luôn có chữ đi kèm, không chỉ đổi màu. Nút đã chọn phải nhìn ra ngay.</li>
+</ol>
+</div>
+
+<!-- 1 ĐOÁN RỒI XEM -->
+<section class="pat" id="doan">
+<header><h2><span class="num">1</span>Đoán rồi xem</h2><p class="small muted" style="margin:0">Ví dụ: frontend, khoảng cách giữa các nhóm</p></header>
+<div class="demo">
+ <div class="stage">
+  <span class="labelchip" id="p1label">Màn hiện tại</span>
+  <div class="mock" id="p1mock">
+   <div class="g1"><div class="gt">Tài khoản</div><div class="it"><span>Tên hiển thị</span><span>thien</span></div><div class="it"><span>Email</span><span>đã ẩn</span></div></div>
+   <div class="gap2"></div>
+   <div class="g2"><div class="gt">Thông báo</div><div class="it"><span>Nhắc ôn bài</span><span>20:00</span></div><div class="it"><span>Âm thanh</span><span>Tắt</span></div></div>
+  </div>
+ </div>
+ <p class="q">Hai nhóm đang dính vào nhau. Muốn mắt thấy ngay có 2 nhóm, bạn đổi gì?</p>
+ <div id="p1opts">
+  <button class="opt" data-v="lines">Kẻ một đường mảnh dưới mọi dòng</button>
+  <button class="opt" data-v="space">Tăng khoảng trống giữa hai nhóm, giữ nguyên trong nhóm</button>
+  <button class="opt" data-v="color">Đổi màu chữ của nhóm thứ hai</button>
+ </div>
+ <div class="row" style="margin-top:8px"><button class="btn ghost hide" id="p1best">Xem cách tốt hơn</button><button class="btn ghost hide" id="p1reset">Làm lại</button></div>
+ <div class="fb" id="p1fb" role="status"></div>
+</div>
+<div class="meta">
+ <p><b>Dùng khi</b> có một quy tắc mà người học hay làm theo cảm tính sai. Hợp nhất với frontend.</p>
+ <p><b>Vì sao</b> đoán trước rồi được sửa giúp nhớ tốt hơn chỉ đọc đáp án, kể cả khi đoán sai (tổng hợp về hỏi trước khi học của Pan và Carpenter, 2023). Ở đây chọn sai cũng được thấy màn biến đổi theo lựa chọn của mình, giống chơi game rơi xuống hố thì biết mình nhảy sớm.</p>
+ <p><span class="tag">frontend</span><span class="tag">BA</span></p>
+</div>
+</section>
+
+<!-- 2 KÉO THẤY NGAY -->
+<section class="pat" id="truot">
+<header><h2><span class="num">2</span>Kéo thanh trượt, thấy đổi ngay</h2><p class="small muted" style="margin:0">Ví dụ: frontend, con số "4.5:1" về độ tương phản chữ</p></header>
+<div class="demo">
+ <div class="sample"><p class="big" id="p2big">Ôn từ hôm qua</p><p class="sm" id="p2sm">12 từ đến hạn, khoảng 4 phút</p></div>
+ <label class="small muted" for="p2r" style="display:block;margin-top:12px">Kéo để làm chữ nhạt dần</label>
+ <input type="range" id="p2r" min="10" max="88" value="20" aria-describedby="p2out">
+ <div class="ratio"><b id="p2ratio">0:1</b><span class="muted small" id="p2out"></span></div>
+ <div class="scale" aria-hidden="true"><div class="bar"></div><div class="mk" style="left:36.5%"></div><div class="mkl" style="left:36.5%">3:1</div><div class="mk" style="left:48.4%"></div><div class="mkl" style="left:48.4%">4.5:1</div><div class="mkl" style="left:4%">1:1</div><div class="mkl" style="left:94%">21:1</div><div class="pin" id="p2pin"></div></div>
+ <p class="q" style="margin-top:14px">Kéo tới đúng chỗ chữ nhỏ vừa hết đạt. Bạn thấy chữ lúc đó còn dễ đọc không?</p>
+ <div class="row"><button class="btn opt" data-v="ok" style="width:auto;flex:1">Vẫn đọc được</button><button class="btn opt" data-v="hard" style="width:auto;flex:1">Bắt đầu khó đọc</button></div>
+ <div class="fb" id="p2fb" role="status"></div>
+</div>
+<div class="meta">
+ <p><b>Dùng khi</b> có một con số hay ký hiệu khô khan (tỉ lệ, công thức, px). Biến nó thành thứ kéo được để thấy nó có nghĩa gì. Đây là điều bạn thích ở Brilliant.</p>
+ <p><b>Vì sao</b> Bret Victor gọi đây là leo lên xuống "thang trừu tượng": nắm quyền điều khiển một biến, thấy ngay kết quả, rồi mới nhìn tới con số tóm tắt. Cách học viên dùng hình quan trọng hơn hình đẹp cỡ nào (Hundhausen và cộng sự, 2002, tổng hợp 24 nghiên cứu).</p>
+ <p><span class="tag">frontend</span><span class="tag">số liệu</span></p>
+</div>
+</section>
+
+<!-- 3 TỪ HÌNH TỚI KÝ HIỆU -->
+<section class="pat" id="kyhieu">
+<header><h2><span class="num">3</span>Từ hình thật tới ký hiệu</h2><p class="small muted" style="margin:0">Ví dụ: frontend, từ một thẻ hồ sơ tới đoạn CSS của nó</p></header>
+<div class="demo">
+ <div class="seg" role="group" aria-label="Mức trừu tượng">
+  <button class="btn" data-l="0" aria-pressed="true">1. Màn thật</button><button class="btn" data-l="1" aria-pressed="false">2. Khối</button><button class="btn" data-l="2" aria-pressed="false">3. Ký hiệu</button>
+ </div>
+ <div class="stage layers">
+  <div class="layer on" data-l="0"><div class="pcard"><div class="top"><div class="av"></div><div class="nm"><b>Trần Thiện</b><span>Đã học 5 buổi</span></div></div><div class="acts"><div class="a1">Học tiếp</div><div class="a2">Ôn lại</div></div></div></div>
+  <div class="layer boxes" data-l="1"><div class="pcard" style="position:relative"><div class="top"><div class="av"></div><div class="nm"><b></b><span></span></div></div><div class="acts"><div class="a1"></div><div class="a2"></div></div>
+   <span class="ann g12" style="left:58px;top:28px">12</span><span class="ann g16" style="left:20px;top:59px">16</span><span class="ann g8" style="left:115px;top:85px">8</span></div></div>
+  <div class="layer" data-l="2"><pre class="code">.card    { gap: <button class="tok c16" data-g="16" aria-pressed="false">16px</button>; }
+.top     { gap: <button class="tok c12" data-g="12" aria-pressed="false">12px</button>; }
+.actions { gap: <button class="tok c8" data-g="8" aria-pressed="false">8px</button>; }</pre></div>
+ </div>
+ <p class="q" id="p3q">Đi lần lượt 1 → 2 → 3. Ở bước 3, chạm vào con số làm hai nút cách nhau.</p>
+ <div class="fb" id="p3fb" role="status"></div>
+</div>
+<div class="meta">
+ <p><b>Dùng khi</b> phải học một ký hiệu, công thức hay đoạn code. Bắt đầu từ thứ thật, bỏ dần chi tiết, cuối cùng mới tới ký hiệu, và giữ màu nối ba mức với nhau.</p>
+ <p><b>Vì sao</b> đi từ cụ thể tới trừu tượng một cách từ từ giúp hiểu ký hiệu nghĩa là gì và dùng được ở chỗ mới (Fyfe và cộng sự, 2014, tổng quan về "concreteness fading"). Nicky Case cũng dựng mọi bài giải thích của mình theo cách này: bắt đầu từ trải nghiệm cụ thể rồi leo lên từng bước.</p>
+ <p><span class="tag">frontend</span><span class="tag">công thức</span></p>
+</div>
+</section>
+
+<!-- 4 SƠ ĐỒ TỪNG BƯỚC -->
+<section class="pat" id="tungbuoc">
+<header><h2><span class="num">4</span>Sơ đồ hiện từng bước</h2><p class="small muted" style="margin:0">Ví dụ: BA, hỏi "để làm gì" cho tới vấn đề thật</p></header>
+<div class="demo">
+ <div class="stage"><div class="flow" id="p4flow"></div></div>
+ <div class="cap" id="p4cap" role="status"></div>
+ <div class="row"><button class="btn ghost" id="p4back" style="flex:0 0 auto">Lùi</button><button class="btn primary" id="p4next" style="flex:1">Tiếp</button></div>
+</div>
+<div class="meta">
+ <p><b>Dùng khi</b> nội dung là một luồng, một chuỗi nguyên nhân, hay một quy trình. Mỗi lần bấm chỉ hiện thêm một ô, ô đang nói tới được tô nổi.</p>
+ <p><b>Vì sao</b> chia bài thành đoạn ngắn, người học tự bấm qua, giúp nhớ và áp dụng tốt hơn xem liền một mạch (Rey và cộng sự, 2019, tổng hợp 56 nghiên cứu). Tô nổi đúng chỗ đang nói cũng giúp nhớ hơn (Schneider và cộng sự, 2018, tổng hợp 103 nghiên cứu, mức tác động trung bình).</p>
+ <p><span class="tag">BA</span><span class="tag">luồng</span></p>
+</div>
+</section>
+
+<!-- 5 XẾP THỨ TỰ -->
+<section class="pat" id="xep">
+<header><h2><span class="num">5</span>Xếp thứ tự bằng cách chạm</h2><p class="small muted" style="margin:0">Ví dụ: BA, các bước xử lý một lời nhờ của khách</p></header>
+<div class="demo">
+ <p class="q" style="margin-top:0">Khách nhờ thêm một chức năng. Bạn làm theo thứ tự nào?</p>
+ <div class="seq" id="p5seq" aria-label="Thứ tự của bạn"></div>
+ <div class="pool" id="p5pool" aria-label="Các bước chưa xếp"></div>
+ <div class="row" style="margin-top:10px"><button class="btn primary" id="p5chk" disabled>Kiểm tra</button><button class="btn ghost" id="p5reset" style="flex:0 0 auto">Xếp lại</button></div>
+ <div class="fb" id="p5fb" role="status"></div>
+</div>
+<div class="meta">
+ <p><b>Dùng khi</b> cần nhớ một quy trình hay thứ tự trước sau. Chạm để xếp chạy tốt trên cả điện thoại lẫn laptop, chắc hơn kéo thả.</p>
+ <p><b>Vì sao</b> tự sắp xếp bắt bạn nghĩ xem bước nào cần bước nào, đó là mức "tự tạo ra" trong khung ICAP, học sâu hơn chỉ đọc hay chỉ bấm theo (Chi và Wylie, 2014). Sai chỗ nào thì chỉ đúng chỗ đó.</p>
+ <p><span class="tag">BA</span><span class="tag">chiến tranh</span><span class="tag">quy trình</span></p>
+</div>
+</section>
+
+<!-- 6 LÀM CHỈ HUY -->
+<section class="pat" id="chihuy">
+<header><h2><span class="num">6</span>Làm chỉ huy trên bản đồ, rồi xem chuyện thật</h2><p class="small muted" style="margin:0">Ví dụ: chiến tranh, trận Cannae năm 216 trước Công nguyên</p></header>
+<div class="demo">
+ <div id="p6ask">
+  <p style="margin-top:0">Bạn là Hannibal. Quân La Mã đông gần gấp đôi bạn (sử gia Polybius chép khoảng 86.000 người) và dồn rất dày ở giữa để đâm thủng trận. Bạn có kỵ binh giỏi hơn họ. Bạn xếp bộ binh thế nào?</p>
+  <div id="p6opts">
+   <button class="opt" data-v="A">Dồn quân mạnh nhất vào giữa để chặn thẳng mũi tấn công</button>
+   <button class="opt" data-v="B">Giữa mỏng và cong ra trước, quân mạnh nhất đứng ở hai đầu</button>
+   <button class="opt" data-v="C">Lùi về giữ trại, chờ quân La Mã mệt</button>
+  </div>
+ </div>
+ <div id="p6play" class="hide">
+  <svg class="map" id="p6svg" viewBox="0 0 340 250" role="img" aria-label="Bản đồ trận Cannae"></svg>
+  <div class="timeline"><button class="btn" id="p6btn" aria-label="Chạy">▶</button><input type="range" id="p6t" min="0" max="300" value="0" aria-label="Thời gian trận đánh"></div>
+  <div class="legend"><span><i style="background:var(--rome)"></i>La Mã</span><span><i style="background:var(--carth)"></i>Carthage</span><span><i style="background:#1f3f5b;border-radius:50%"></i>Kỵ binh Carthage</span></div>
+  <div class="phase" id="p6phase" role="status"></div>
+ </div>
+ <div class="fb" id="p6fb"></div>
+</div>
+<div class="meta">
+ <p><b>Dùng khi</b> học lịch sử, chiến tranh, hay bất cứ chuyện gì diễn ra theo thời gian trên một không gian. Ra quyết định trước rồi mới xem chuyện thật, và tự kéo thời gian để dừng ở lúc mình muốn.</p>
+ <p><b>Vì sao</b> hoạt họa chỉ hơn hình tĩnh khi nội dung vốn là chuyển động (Höffler và Leutner, 2007), và người học tự điều khiển nhịp thì không bị trôi mất chi tiết. Đặt mình vào vai người trong cuộc là "tự do thử vai" mà đội thiết kế Brilliant lấy từ game.</p>
+ <p><span class="tag">chiến tranh</span><span class="tag">lịch sử</span></p>
+</div>
+</section>
+
+<!-- 7 CHẠM CHỖ SAI -->
+<section class="pat" id="chosai">
+<header><h2><span class="num">7</span>Chạm vào chỗ sai</h2><p class="small muted" style="margin:0">Ví dụ: frontend, màn chi tiết sản phẩm</p></header>
+<div class="demo">
+ <p class="q" style="margin-top:0">Chạm vào phần làm màn này khó dùng nhất.</p>
+ <div class="stage"><div class="screen before" id="p7screen">
+  <button class="hot" data-v="img"><div class="ph"></div></button>
+  <button class="hot" data-v="txt"><div class="pname">Tai nghe chống ồn</div><div class="pprice">1.290.000 đ</div></button>
+  <button class="hot" data-v="btn"><div class="bt3"><span>Mua ngay</span><span>Thêm vào giỏ</span><span>Chia sẻ</span></div></button>
+ </div></div>
+ <div class="row hide" id="p7tog" style="margin-top:10px"><button class="btn" data-s="before" aria-pressed="true">Trước</button><button class="btn" data-s="after" aria-pressed="false">Sau khi sửa</button></div>
+ <div class="fb" id="p7fb" role="status"></div>
+</div>
+<div class="meta">
+ <p><b>Dùng khi</b> muốn luyện mắt bắt lỗi trên màn thật hay trong một tài liệu (user story thiếu ý, bản đồ trận sai chỗ). Sau khi tìm đúng, cho xem bản sửa cạnh bản cũ.</p>
+ <p><b>Vì sao</b> tự tìm và giải thích lỗi là cách tạo ra kiến thức, không chỉ nhận vào. Tự giải thích là một trong 8 cách học có hiệu quả rõ (Fiorella và Mayer, 2016).</p>
+ <p><span class="tag">frontend</span><span class="tag">BA</span></p>
+</div>
+</section>
+
+<!-- 8 VẼ DỰ ĐOÁN -->
+<section class="pat" id="ve">
+<header><h2><span class="num">8</span>Vẽ dự đoán rồi so với số thật</h2><p class="small muted" style="margin:0">Ví dụ: học cách học, đường quên của Ebbinghaus</p></header>
+<div class="demo">
+ <p style="margin-top:0">Học thuộc một danh sách rồi để đó, không ôn. Theo bạn, bao lâu thì còn giữ được bao nhiêu? <b>Kéo ngón tay hoặc chuột trên biểu đồ để vẽ.</b></p>
+ <svg class="chart" id="p8svg" viewBox="0 0 340 220" aria-label="Biểu đồ vẽ dự đoán"></svg>
+ <div class="row" style="margin-top:8px"><button class="btn primary" id="p8show" disabled>Xem số thật</button><button class="btn ghost" id="p8reset" style="flex:0 0 auto">Vẽ lại</button></div>
+ <div class="fb" id="p8fb" role="status"></div>
+</div>
+<div class="meta">
+ <p><b>Dùng khi</b> bài có số liệu thật (kinh tế, lịch sử, hiệu năng). Bắt người học đặt cược bằng một đường vẽ trước, rồi mới hiện dữ liệu, nên chỗ lệch giữa đoán và thật rất khó quên.</p>
+ <p><b>Vì sao</b> vẫn là đoán trước rồi được sửa (kiểu 1), nhưng với cả một hình dạng chứ không phải một đáp án. Số liệu: Ebbinghaus năm 1885, được Murre và Dros làm lại năm 2015 cho kết quả gần như cũ.</p>
+ <p><span class="tag">số liệu</span><span class="tag">kinh tế</span><span class="tag">lịch sử</span></p>
+</div>
+</section>
+
+<p class="small muted">Nguồn và cách chọn kiểu bài cho từng môn nằm ở <code>learning/teaching/README.md</code> trong repo thienai-workflow.</p>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const setFb=(el,t,k)=>{el.className='fb'+(k?' '+k:'');el.textContent=t;};
+
+/* 1 */
+(()=>{const mock=$('#p1mock'),fb=$('#p1fb'),lab=$('#p1label'),best=$('#p1best'),rs=$('#p1reset'),opts=$$('#p1opts .opt');
+const T={lines:['Đường kẻ dưới mọi dòng chia đều tất cả, nên hai nhóm vẫn chưa tách ra. Màn còn rối hơn vì nhiều nét.','bad'],
+ space:['Đúng. Khoảng trống giữa nhóm lớn hơn hẳn khoảng trong nhóm (khoảng gấp 3), mắt tự gom thành 2 khối mà không cần thêm nét nào.','good'],
+ color:['Màu khác làm nhóm 2 nổi lên như thứ quan trọng hơn, trong khi hai nhóm ngang hàng. Ranh giới giữa nhóm vẫn chưa rõ.','bad']};
+opts.forEach(o=>o.onclick=()=>{const v=o.dataset.v;mock.className='mock '+v;lab.textContent='Màn theo lựa chọn của bạn';
+ opts.forEach(x=>{x.disabled=true;x.setAttribute('aria-pressed','false');if(x.dataset.v==='space')x.classList.add('right');});if(v!=='space')o.classList.add('wrong');
+ setFb(fb,T[v][0],T[v][1]);if(v!=='space')best.classList.remove('hide');rs.classList.remove('hide');});
+best.onclick=()=>{mock.className='mock space';lab.textContent='Cách tốt hơn: thêm khoảng trống giữa nhóm';best.classList.add('hide');setFb(fb,'Đây là cách tốt hơn: chỉ tăng khoảng giữa hai nhóm lên khoảng 24px, trong nhóm giữ 8px.','good');};
+rs.onclick=()=>{mock.className='mock';lab.textContent='Màn hiện tại';opts.forEach(x=>{x.disabled=false;x.classList.remove('right','wrong');});best.classList.add('hide');rs.classList.add('hide');setFb(fb,'');};})();
+
+/* 2 */
+(()=>{const r=$('#p2r'),big=$('#p2big'),sm=$('#p2sm'),out=$('#p2ratio'),desc=$('#p2out'),pin=$('#p2pin'),fb=$('#p2fb');
+const lin=c=>{c/=255;return c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4)};
+function upd(){const L=+r.value,v=Math.round(L/100*255),lum=lin(v),ratio=1.05/(lum+.05);const col='rgb('+v+','+v+','+v+')';big.style.color=col;sm.style.color=col;
+ out.textContent=ratio.toFixed(1)+':1';desc.textContent=ratio>=4.5?'Đạt cho cả chữ nhỏ':ratio>=3?'Chỉ đạt cho chữ to (từ khoảng 24px)':'Không đạt, kể cả chữ to';
+ const pos=Math.log(ratio)/Math.log(21);pin.style.left=(4+pos*90)+'%';}
+r.oninput=upd;upd();
+$$('#truot .opt').forEach(o=>o.onclick=()=>{$$('#truot .opt').forEach(x=>x.setAttribute('aria-pressed',x===o?'true':'false'));
+ const ratio=parseFloat(out.textContent);const near=ratio>=4.2&&ratio<=5;
+ setFb(fb,(near?'Bạn dừng đúng quanh 4.5:1. ':'Bạn đang ở '+out.textContent+', thử kéo tới ngay chỗ mốc 4.5:1 rồi chọn lại. ')+'Ở 4.5:1 chữ vẫn đọc được nhưng đã nhạt rõ. Con số này là mức sàn để người mắt kém cũng đọc được, nên chữ phụ thường nên đậm hơn mức sàn một chút.',near?'good':'');});})();
+
+/* 3 */
+(()=>{const bs=$$('#kyhieu .seg .btn'),ls=$$('#kyhieu .layer'),fb=$('#p3fb');
+bs.forEach(b=>b.onclick=()=>{bs.forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));ls.forEach(l=>l.classList.toggle('on',l.dataset.l===b.dataset.l));});
+$$('#kyhieu .tok').forEach(t=>t.onclick=()=>{$$('#kyhieu .tok').forEach(x=>x.setAttribute('aria-pressed',x===t?'true':'false'));const g=t.dataset.g;
+ if(g==='8')setFb(fb,'Đúng: 8px trong .actions. Cùng màu xanh với nhãn 8 ở bước 2, nằm giữa hai nút ở bước 1. Khoảng nhỏ nhất dành cho những thứ dính nhau nhất.','good');
+ else setFb(fb,(g==='16'?'16px là khoảng giữa phần trên (ảnh và tên) với hàng nút, nhãn màu cam ở bước 2.':'12px là khoảng giữa ảnh đại diện và tên, nhãn màu tím ở bước 2.')+' Quay lại bước 2 xem nhãn cùng màu với số bạn cần tìm.','bad');});})();
+
+/* 4 */
+(()=>{const S=[
+ {w:'Khách',t:'"Thêm giúp mình nút xuất Excel ở trang đơn hàng."',c:'Đây là lời nhờ. Nó đã là một giải pháp khách tự nghĩ ra.'},
+ {w:'Bạn hỏi',t:'"Lấy file đó ra để làm gì ạ?"',c:'Đừng hỏi cột nào, định dạng gì. Những câu đó đã chọn sẵn giải pháp.'},
+ {w:'Khách',t:'"Để cộng số đơn của từng chi nhánh."',c:'Đã sâu hơn một lớp, nhưng cộng số vẫn là một việc làm, chưa phải cái khổ thật.'},
+ {w:'Bạn hỏi',t:'"Cộng xong thì dùng vào việc gì?"',c:'Hỏi thêm một lần "để làm gì". Thường chỉ cần 2 đến 3 lần.'},
+ {w:'Khách',t:'"Sáng thứ hai nào cũng báo cáo sếp, mất khoảng 30 phút."',c:'Đây rồi: một việc tốn thời gian thật của một người thật.'},
+ {w:'Vấn đề thật',t:'30 phút cộng tay mỗi tuần để báo cáo sếp',c:'Giờ nhóm mới so được nhiều cách: nút Excel, màn thống kê theo tuần, hay email tự gửi cho sếp. Hai cách sau xoá hẳn 30 phút đó.',real:1}];
+const fl=$('#p4flow'),cap=$('#p4cap'),nx=$('#p4next'),bk=$('#p4back');
+fl.innerHTML=S.map((s,i)=>(i?'<div class="arrow" data-i="'+i+'"><svg viewBox="0 0 12 20"><path d="M6 0v16M1 11l5 6 5-6" fill="none" stroke="#9a958b" stroke-width="1.6"/></svg></div>':'')+'<div class="node'+(s.real?' realn':'')+'" data-i="'+i+'"><span class="who">'+s.w+'</span>'+s.t+'</div>').join('');
+let k=0;function show(){$$('.node',fl).forEach(n=>{const i=+n.dataset.i;n.classList.toggle('show',i<=k);n.classList.toggle('cur',i===k&&!S[i].real);n.classList.toggle('real',i===k&&!!S[i].real);n.classList.toggle('past',i<k);
+ if(i<=k)requestAnimationFrame(()=>requestAnimationFrame(()=>n.classList.add('in')));else n.classList.remove('in');});
+ $$('.arrow',fl).forEach(a=>a.classList.toggle('show',+a.dataset.i<=k));cap.textContent=S[k].c;bk.disabled=k===0;nx.disabled=k===S.length-1;nx.textContent=k===S.length-1?'Hết':'Tiếp';}
+nx.onclick=()=>{if(k<S.length-1){k++;show();}};bk.onclick=()=>{if(k>0){k--;show();}};show();})();
+
+/* 5 */
+(()=>{const STEPS=['Nghe hết lời nhờ, chưa hứa gì','Hỏi "để làm gì" 2–3 lần','Viết ra vấn đề thật bằng một câu','Nghĩ ít nhất 3 cách giải','Cùng khách chọn một cách'];
+const seq=$('#p5seq'),pool=$('#p5pool'),chk=$('#p5chk'),fb=$('#p5fb');let order=[],shuffled=[],done=false;
+function init(){order=[];done=false;shuffled=[3,0,4,2,1];setFb(fb,'');render();}
+function render(){seq.innerHTML=order.map((i,p)=>'<button class="btn" data-i="'+i+'"><span class="k">'+(p+1)+'</span><span>'+STEPS[i]+'</span><span class="note"></span></button>').join('');
+ pool.innerHTML=shuffled.filter(i=>!order.includes(i)).map(i=>'<button class="btn" data-i="'+i+'">'+STEPS[i]+'</button>').join('');
+ $$('.btn',pool).forEach(b=>b.onclick=()=>{if(done)return;order.push(+b.dataset.i);render();const nb=pool.querySelector('.btn')||seq.lastElementChild;if(nb)nb.focus();});
+ $$('.btn',seq).forEach(b=>b.onclick=()=>{if(done)return;order=order.filter(i=>i!==+b.dataset.i);render();});
+ chk.disabled=order.length<STEPS.length||done;}
+chk.onclick=()=>{done=true;let right=0;$$('.btn',seq).forEach((b,p)=>{const i=+b.dataset.i,ok=i===p;if(ok)right++;b.classList.add(ok?'right':'wrong');b.querySelector('.note').textContent=ok?'Đúng chỗ':'Nên ở vị trí '+(i+1);});chk.disabled=true;
+ setFb(fb,right===5?'Đúng cả 5. Chỗ hay bị đảo là bước 3: viết vấn đề thật ra thành câu trước, rồi mới nghĩ cách giải.':'Đúng '+right+'/5. Mấu chốt: phải có vấn đề thật (bước 3) trước khi nghĩ cách giải, nếu không chỉ còn một cách là thứ khách nhờ.',right===5?'good':'bad');};
+$('#p5reset').onclick=init;init();})();
+
+/* 6 */
+(()=>{const svg=$('#p6svg'),t=$('#p6t'),ph=$('#p6phase'),btn=$('#p6btn'),fb=$('#p6fb');const NS='http://www.w3.org/2000/svg';
+const el=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);svg.appendChild(e);return e;};
+el('path',{d:'M0 236 C80 226 160 244 340 232 L340 250 L0 250Z',fill:'#cbdde6'});
+el('text',{x:8,y:246,'font-size':10,fill:'#5a7d8f'},).textContent='sông Aufidus';
+const rome=el('rect',{rx:4,fill:'#b4533a',opacity:.92});
+const rcl=el('rect',{rx:3,fill:'#d98f7a'}),rcr=el('rect',{rx:3,fill:'#d98f7a'});
+const center=el('path',{fill:'none',stroke:'#2f6f9f','stroke-width':9,'stroke-linecap':'round'});
+const libL=el('rect',{rx:3,fill:'#1f3f5b'}),libR=el('rect',{rx:3,fill:'#1f3f5b'});
+const cavL=el('circle',{r:9,fill:'#1f3f5b'}),cavR=el('circle',{r:9,fill:'#1f3f5b'});
+const ring=el('ellipse',{cx:170,cy:132,rx:96,ry:62,fill:'none',stroke:'#1f3f5b','stroke-width':2,'stroke-dasharray':'5 5',opacity:0});
+const lab=el('text',{'font-size':11,fill:'#fff','text-anchor':'middle','font-weight':600});
+/* keyframes at phase 0..3 */
+const K={rome:[[110,30,120,60],[110,48,120,60],[112,92,116,68],[118,108,104,64]],
+ rcl:[[70,40,34,22],[60,50,34,22],[40,70,20,14],[20,80,10,8]],rcr:[[236,40,34,22],[246,50,34,22],[280,70,20,14],[310,80,10,8]],
+ bulge:[16,12,-20,-28],cy:[140,138,146,150],
+ libL:[[78,138,22,42],[80,136,22,42],[88,118,22,46],[98,100,22,56]],libR:[[240,138,22,42],[238,136,22,42],[230,118,22,46],[220,100,22,56]],
+ cavL:[[56,150],[44,70],[30,40],[140,48]],cavR:[[284,150],[296,70],[310,40],[200,48]]};
+const P=['Hai bên dàn trận. Phần giữa của Hannibal mỏng và cong ra phía trước. Bộ binh châu Phi mạnh nhất đứng lùi ở hai đầu.',
+ 'Kỵ binh Carthage đánh tan kỵ binh La Mã ở hai cánh rồi đuổi theo.',
+ 'Bộ binh La Mã đẩy phần giữa lùi dần, đường cong bị đẩy lõm vào. Càng tiến sâu, quân La Mã càng chen chúc, không vung vũ khí được.',
+ 'Bộ binh châu Phi ở hai đầu quay vào đánh vào hai bên sườn, kỵ binh quay lại chặn sau lưng. Quân La Mã bị vây kín. Đây là trận vây hai cánh nổi tiếng nhất lịch sử.'];
+const L=(a,b,f)=>a+(b-a)*f;const LA=(A,B,f)=>A.map((v,i)=>L(v,B[i],f));
+function at(arr,x){const i=Math.min(2,Math.floor(x)),f=x-i;return Array.isArray(arr[0])?LA(arr[i],arr[i+1],f):L(arr[i],arr[i+1],f);}
+const R=(e,[x,y,w,h])=>{e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('width',w);e.setAttribute('height',h);};
+function draw(){const x=+t.value/100;R(rome,at(K.rome,x));R(rcl,at(K.rcl,x));R(rcr,at(K.rcr,x));R(libL,at(K.libL,x));R(libR,at(K.libR,x));
+ const b=at(K.bulge,x),cy=at(K.cy,x);center.setAttribute('d','M104 '+cy+' Q170 '+(cy-2*b)+' 236 '+cy);ring.setAttribute('opacity',Math.max(0,(x-2.4)/0.6)*0.9);
+ const [lx,ly]=at(K.cavL,x),[rx,ry]=at(K.cavR,x);cavL.setAttribute('cx',lx);cavL.setAttribute('cy',ly);cavR.setAttribute('cx',rx);cavR.setAttribute('cy',ry);
+ const rr=at(K.rome,x);lab.setAttribute('x',rr[0]+rr[2]/2);lab.setAttribute('y',rr[1]+rr[3]/2+4);lab.textContent='La Mã';
+ ph.textContent='Giai đoạn '+(Math.min(3,Math.round(x))+1)+'/4. '+P[Math.min(3,Math.round(x))];}
+t.oninput=()=>{stop();draw();};let raf=null,last=0;
+function stop(){if(raf){cancelAnimationFrame(raf);raf=null;btn.textContent='▶';btn.setAttribute('aria-label','Chạy');}}
+function tick(ts){if(!last)last=ts;const dt=ts-last;last=ts;let v=+t.value+dt*0.03;if(v>=300){v=300;t.value=v;draw();stop();return;}t.value=v;draw();raf=requestAnimationFrame(tick);}
+btn.onclick=()=>{if(raf){stop();return;}if(+t.value>=300)t.value=0;last=0;btn.textContent='❚❚';btn.setAttribute('aria-label','Dừng');raf=requestAnimationFrame(tick);};
+const M={A:'Bạn chọn chặn thẳng. Hannibal làm ngược lại: ông cố ý để phần giữa yếu để bị đẩy lùi, biến sức mạnh của La Mã thành cái bẫy.',
+ B:'Bạn chọn giống Hannibal. Kéo thanh thời gian để xem vì sao phần giữa mỏng lại là cái bẫy.',
+ C:'Bạn chọn chờ. Thật ra quân La Mã mới là bên muốn đánh ngay. Hannibal chấp nhận đánh, nhưng xếp quân để chính sức đẩy của La Mã kéo họ vào giữa vòng vây.'};
+$$('#p6opts .opt').forEach(o=>o.onclick=()=>{const v=o.dataset.v;$$('#p6opts .opt').forEach(x=>{x.disabled=true;if(x.dataset.v==='B')x.classList.add('right');});if(v!=='B')o.classList.add('wrong');
+ setFb(fb,M[v],v==='B'?'good':'bad');$('#p6play').classList.remove('hide');draw();});})();
+
+/* 7 */
+(()=>{const hs=$$('#p7screen .hot'),fb=$('#p7fb'),tg=$('#p7tog'),sc=$('#p7screen');let done=false;
+const W={img:'Ảnh to và rõ là đúng chỗ của nó ở màn sản phẩm. Thử chỗ khác.',txt:'Tên và giá dễ đọc, có thứ bậc rõ. Thử chỗ khác.'};
+hs.forEach(h=>h.onclick=()=>{if(done)return;const v=h.dataset.v;hs.forEach(x=>x.classList.remove('wrong'));
+ if(v==='btn'){done=true;h.classList.add('right');setFb(fb,'Đúng. Ba nút cùng màu, cùng cỡ nên mắt không biết bấm cái nào trước. Cách sửa: một nút chính đậm, nút phụ viền nhạt, việc ít dùng chỉ còn chữ. Bấm "Sau khi sửa" để so.','good');tg.classList.remove('hide');}
+ else{h.classList.add('wrong');setFb(fb,W[v],'bad');}});
+$$('#p7tog .btn').forEach(b=>b.onclick=()=>{$$('#p7tog .btn').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));sc.classList.remove('before','after');sc.classList.add(b.dataset.s);});})();
+
+/* 8 */
+(()=>{const svg=$('#p8svg'),fb=$('#p8fb'),sh=$('#p8show');const NS='http://www.w3.org/2000/svg';
+const X=['20 ph','1 giờ','9 giờ','1 ngày','2 ngày','6 ngày','31 ngày'],REAL=[58.2,44.2,35.8,33.7,27.8,25.4,21.1];
+const x0=40,x1=310,y0=18,y1=184,xs=i=>x0+i*(x1-x0)/(X.length-1),ys=v=>y1-(v/100)*(y1-y0),vy=y=>Math.max(0,Math.min(100,(y1-y)/(y1-y0)*100));
+const el=(n,a,p=svg)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;};
+[0,25,50,75,100].forEach(v=>{el('line',{x1:x0,x2:x1,y1:ys(v),y2:ys(v),stroke:'#e7e3da'});el('text',{x:x0-6,y:ys(v)+4,'font-size':10,fill:'#6b6862','text-anchor':'end'}).textContent=v+'%';});
+X.forEach((l,i)=>el('text',{x:xs(i),y:y1+16,'font-size':9.5,fill:'#6b6862','text-anchor':'middle'}).textContent=l);
+el('text',{x:x0,y:10,'font-size':10,fill:'#6b6862'}).textContent='Phần còn giữ được';
+const gl=el('polyline',{fill:'none',stroke:'#308E84','stroke-width':3,'stroke-linejoin':'round','stroke-linecap':'round'});
+const rl=el('polyline',{fill:'none',stroke:'#1b1b1a','stroke-width':2.5,'stroke-dasharray':'6 5',opacity:0});
+const dots=X.map((_,i)=>el('circle',{cx:xs(i),cy:ys(100),r:5,fill:'#fff',stroke:'#308E84','stroke-width':2,opacity:.35}));
+let G=X.map(()=>null),drawing=false,shown=false;
+function ptToSvg(e){const r=svg.getBoundingClientRect();return[(e.clientX-r.left)/r.width*340,(e.clientY-r.top)/r.height*220];}
+function setAt(e){if(shown)return;const[px,py]=ptToSvg(e);const i=Math.round((px-x0)/((x1-x0)/(X.length-1)));if(i<0||i>=X.length)return;G[i]=vy(py);render();}
+function filled(){const idx=G.map((v,i)=>v==null?null:i).filter(v=>v!=null);if(!idx.length)return null;return G.map((v,i)=>{if(v!=null)return v;let a=null,b=null;for(const j of idx){if(j<i)a=j;if(j>i&&b==null)b=j;}if(a==null)return G[b];if(b==null)return G[a];return G[a]+(G[b]-G[a])*(i-a)/(b-a);});}
+function render(){const F=filled();dots.forEach((d,i)=>{const v=F?F[i]:100;d.setAttribute('cy',ys(v));d.setAttribute('opacity',G[i]!=null?1:.35);});
+ gl.setAttribute('points',F?F.map((v,i)=>xs(i)+','+ys(v)).join(' '):'');sh.disabled=G.filter(v=>v!=null).length<3||shown;}
+svg.addEventListener('pointerdown',e=>{drawing=true;svg.setPointerCapture(e.pointerId);setAt(e);});
+svg.addEventListener('pointermove',e=>{if(drawing)setAt(e);});
+['pointerup','pointercancel'].forEach(n=>svg.addEventListener(n,()=>drawing=false));
+sh.onclick=()=>{shown=true;sh.disabled=true;rl.setAttribute('points',REAL.map((v,i)=>xs(i)+','+ys(v)).join(' '));
+ const len=rl.getTotalLength();rl.style.strokeDasharray=len;rl.style.strokeDashoffset=len;rl.setAttribute('opacity',1);rl.getBoundingClientRect();rl.style.transition='stroke-dashoffset 1.2s ease';rl.style.strokeDashoffset=0;
+ setTimeout(()=>{rl.style.transition='';rl.style.strokeDasharray='6 5';},1300);
+ const F=filled(),d1=F[3],d31=F[6];
+ setFb(fb,'Đường đen nét đứt là số thật. Sau 1 ngày chỉ còn khoảng 34% (bạn đoán '+Math.round(d1)+'%), nhưng từ đó giảm rất chậm: sau 31 ngày vẫn còn khoảng 21% (bạn đoán '+Math.round(d31)+'%). Phần lớn quên xảy ra trong vài giờ đầu, nên lần ôn đầu tiên nên đến sớm.','');};
+$('#p8reset').onclick=()=>{G=X.map(()=>null);shown=false;rl.setAttribute('opacity',0);rl.style.strokeDashoffset=0;setFb(fb,'');render();};render();})();
+</script>
+</body>
+</html>

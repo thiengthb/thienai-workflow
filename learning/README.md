@@ -42,8 +42,8 @@ Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakub
 
 1. **Ôn trộn (2 phút):** 3 thẻ đến hạn trong [cards.md](cards.md), môn nào cũng được. thien trả lời trước rồi mới lật.
 2. **Nhớ lại buổi trước của môn này (1 phút):** một hình, một câu.
-3. **Thử trước (5–6 phút):** bấm, kéo, chọn, sắp xếp. Chưa có lý thuyết.
-4. **Hiểu sau (3 phút):** giải thích ý chính, có số liệu hoặc ví dụ cụ thể.
+3. **Thử trước (5–6 phút):** bấm, kéo, chọn, sắp xếp. Chưa có lý thuyết. Chọn kiểu bài trong [teaching/README.md](teaching/README.md).
+4. **Hiểu sau (3 phút):** giải thích ý chính, có số liệu hoặc ví dụ cụ thể, nhắc lại đúng lựa chọn thien vừa làm.
 5. **Câu hỏi nhanh (2 phút).**
 6. **Tự nói lại ý chính** rồi mới xem bản của AI.
 7. **Góp ý** độ dài và độ khó.
