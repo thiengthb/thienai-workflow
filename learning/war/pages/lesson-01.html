@@ -113,7 +113,7 @@ input[type=range]{flex:1;height:44px;accent-color:var(--ink);touch-action:pan-y}
 <style id="lesson-kit-css">
 /* Bộ khung chung cho trang học. Sửa ở đây rồi chạy apply-kit.mjs, đừng sửa bản chép trong từng trang. */
 @media (prefers-color-scheme:dark){
- :root{--bg:#161615;--card:#1f1f1d;--ink:#ecebe7;--muted:#a19e97;--line:#34322e;--soft:#262523;--accent:#ecebe7;--accent-soft:#2f2e2a;
+ :root:root{--bg:#161615;--card:#1f1f1d;--ink:#ecebe7;--muted:#a19e97;--line:#34322e;--soft:#262523;--accent:#4fb3a6;--accent-soft:#1c3330;--accent-ink:#8fd9c9;
   --good:#4fb07a;--good-ink:#8fd9ab;--good-soft:#1c3125;--bad:#f0763f;--bad-soft:#3b2219;--bad-ink:#f6b796}
  body{background:var(--bg);color:var(--ink)}
  .primary{color:var(--bg)!important}
@@ -122,10 +122,23 @@ input[type=range]{flex:1;height:44px;accent-color:var(--ink);touch-action:pan-y}
  .primary[disabled]{background:var(--line)!important;border-color:var(--line)!important;color:var(--muted)!important}
  .seg button[aria-pressed="true"],.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
  .fb.bad,.guess{color:var(--bad-ink)!important}
- .opt.right{background:var(--good-soft)}.opt.wrong{background:var(--bad-soft)}
  /* bản đồ, ảnh chụp màn hình và khung mô phỏng giữ màu gốc, chỉ dịu bớt độ sáng */
- svg.terrain,.opt svg,img,.keep-light{filter:brightness(.86)}
+ svg.terrain,.opt svg,img,.keep-light,.mock,.phone{filter:brightness(.9)}
  a{color:var(--ink)}
+ /* các lớp hay dùng trong trang cũ có màu trắng viết cứng: đưa về biến màu */
+ .card,.sc,.tab,.scale button,.pick button,.ln,.trap,.note,.rc{background:var(--card);color:var(--ink)}
+ .btn:not(.ghost):not(.primary){background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)}
+ .btn.ghost{background:transparent!important;color:var(--ink)!important}
+ .btn[disabled]{opacity:.35}
+ .tab.on,.scale button.on,.pick button.on,.chip.on,.mi.on .n,.mi[aria-pressed="true"] .n{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important}
+ .why,.mine{background:var(--soft)!important;color:var(--ink)!important}
+ .kw,.purpose,.done{background:var(--accent-soft)!important;color:var(--accent-ink)!important}
+ .sc .tg,.mi .n{background:var(--soft);color:var(--muted)}
+ .sc.need .tg{background:var(--accent-soft);color:var(--accent-ink)}.sc.sol .tg{background:#2b2540;color:#c4b5fd}
+ .opt.right,.sc.right{background:var(--accent-soft)!important;border-color:var(--accent)!important}
+ .opt.wrong,.sc.wrong{background:var(--bad-soft)!important;border-color:var(--bad)!important}
+ /* màn mô phỏng giao diện (điện thoại, ảnh dựng lại) là nội dung bài: giữ nguyên màu sáng */
+ .mock,.phone,.shot,.sw,.keep-light{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--soft:#f3f1ec;color:#1b1b1a}
  .han-t{color:#9fb3d6!important}.ngo-t{color:#ec8a78!important}
 }
 h1:focus,h2:focus{outline:none}
