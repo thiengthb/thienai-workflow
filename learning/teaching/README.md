@@ -84,7 +84,7 @@ Khung 7 bước trong [`../README.md`](../README.md) giữ nguyên. Thay đổi:
 2. Xem bằng mắt ảnh chụp cả hai khổ mà nó lưu lại.
 3. Tự làm bài một lượt trên khổ điện thoại, kể cả chọn sai.
 
-Bài kiểm không bắt được: nội dung sai, chữ khó hiểu, thao tác kéo trên biểu đồ. Nó cũng chỉ bấm các nút có sẵn lúc mới mở trang, mỗi nút trên một trang vừa tải lại, nên bỏ qua nút đang được chọn, nút bị khóa lúc đầu (như "Kiểm tra" khi chưa xếp xong) và nút chỉ có tác dụng sau một bước khác (như "Làm lại"). Trang có hiệu ứng chạy liên tục thì ảnh trước và sau luôn khác nhau, nên nút hỏng trên trang đó cũng lọt qua. Những thứ đó vẫn phải tự bấm thử trên cả khổ điện thoại lẫn laptop.
+Bài kiểm không bắt được: nội dung sai, chữ khó hiểu, thao tác kéo trên biểu đồ. Nó cũng chỉ bấm các nút có sẵn lúc mới mở trang, mỗi nút trên một trang vừa tải lại, nên bỏ qua nút đang được chọn, nút bị khóa lúc đầu (như "Kiểm tra" khi chưa xếp xong) và nút chỉ có tác dụng sau một bước khác (như "Làm lại"; gắn thuộc tính `data-reset` cho loại nút này để bài kiểm bỏ qua, không báo nhầm). Trang có hiệu ứng chạy liên tục thì ảnh trước và sau luôn khác nhau, nên nút hỏng trên trang đó cũng lọt qua. Những thứ đó vẫn phải tự bấm thử trên cả khổ điện thoại lẫn laptop.
 
 ## Chưa chắc, cần xem lại
 
