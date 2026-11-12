@@ -49,6 +49,8 @@ const SIZES = [
   for (const size of SIZES) {
     const ctx = await browser.newContext(size.opts);
     const page = await ctx.newPage();
+    // bộ khung chung tự lưu chỗ đang học vào localStorage; xóa trước mỗi lần tải để mỗi lần bấm thử bắt đầu từ trang sạch
+    await ctx.addInitScript(() => { try { localStorage.clear(); } catch (e) {} });
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)/.test(m.text())) errors.push(m.text()); });

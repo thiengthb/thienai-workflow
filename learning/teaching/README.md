@@ -88,6 +88,24 @@ Khung 7 bước trong [`../README.md`](../README.md) giữ nguyên. Thay đổi:
 
 Bài kiểm không bắt được: nội dung sai, chữ khó hiểu, thao tác kéo trên biểu đồ. Nó cũng chỉ bấm các nút có sẵn lúc mới mở trang, mỗi nút trên một trang vừa tải lại, nên bỏ qua nút đang được chọn, nút bị khóa lúc đầu (như "Kiểm tra" khi chưa xếp xong) và nút chỉ có tác dụng sau một bước khác (như "Làm lại"; gắn thuộc tính `data-reset` cho loại nút này để bài kiểm bỏ qua, không báo nhầm). Trang có hiệu ứng chạy liên tục thì ảnh trước và sau luôn khác nhau, nên nút hỏng trên trang đó cũng lọt qua. Những thứ đó vẫn phải tự bấm thử trên cả khổ điện thoại lẫn laptop.
 
+## Bộ khung chung: tự lưu, chế độ tối, học lại
+
+thien góp ý ngày 2026-11-12: tắt màn hình một lúc hay khi AI sửa trang thì trang tải lại và mất hết chữ đã gõ; muốn chế độ tối tự theo máy; học lại bài cũ thì không cần phần ôn đầu buổi. Bộ khung ở [`kit/`](kit/) giải quyết cả ba, gắn vào trang bằng một lệnh:
+
+```
+node learning/teaching/kit/apply-kit.mjs learning/<môn>/pages/lesson-NN.html
+```
+
+Lệnh này chép `kit.css` và `kit.js` vào trang (chạy lại thì thay bản cũ), thêm `<meta name="lesson-id">` theo đường dẫn, ví dụ `war-02`. Sửa bộ khung thì sửa trong `kit/` rồi chạy lại lệnh cho từng trang.
+
+**Tự lưu chỗ đang học.** Bộ khung ghi lại từng lần bấm nút và chữ đã gõ, lưu ngay vào máy (localStorage) và vào db của trang ở `drafts/<lesson-id>`. Mở lại trang, kể cả trên máy khác hay sau khi AI đăng bản sửa, nó bấm lại đúng thứ tự để về chỗ cũ và hiện dòng "Đã mở lại đúng chỗ bạn đang học", kèm nút "Học lại từ đầu". Vì sao chọn cách bấm lại thay vì lưu từng biến: trang nào cũng dùng được mà không phải viết thêm code. Giới hạn: nếu bản sửa làm đổi số nút trong trang, bộ khung chỉ trả lại được chữ đã gõ (khớp theo placeholder) và nói rõ điều đó. Vì vậy khi sửa trang thien đang học dở, cố giữ nguyên số nút.
+
+**Chế độ tối.** Theo cài đặt của máy (`prefers-color-scheme`), không có công tắc. Bộ khung đổi các biến màu chung (`--bg`, `--ink`, `--card`...). Bản đồ, ảnh chụp màn hình, khung mô phỏng giao diện giữ màu gốc vì màu là nội dung bài, chỉ dịu độ sáng. Khung nào cần giữ nguyên thì thêm class `keep-light`.
+
+**Học lại.** Bấm "Xong buổi học" thì bộ khung đánh dấu bài đã học. Lần mở sau trang ẩn mọi phần có `data-part="review"` (ôn thẻ, nhớ lại buổi trước) và mở khóa nút có `data-review-gate`; kết quả gửi đi có `mode: "hoc-lai"`. Trang chỉ còn nội dung và câu hỏi của chính bài.
+
+**Khi soạn trang mới:** dùng id `#finish` cho nút xong, `#copy` cho nút chép kết quả; bọc phần ôn bằng `data-part="review"`; gắn bộ khung trước khi chạy `check-page.cjs` (công cụ kiểm tự xóa bản lưu trước mỗi lần tải để không bị lẫn).
+
 ## Chưa chắc, cần xem lại
 
 - Trang mẫu mới được AI dựng và kiểm, chưa được bạn học thật. Buổi Frontend 5 (màu) là buổi đầu dùng các kiểu này.

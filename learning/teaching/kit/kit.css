@@ -1,0 +1,26 @@
+/* Bộ khung chung cho trang học. Sửa ở đây rồi chạy apply-kit.mjs, đừng sửa bản chép trong từng trang. */
+@media (prefers-color-scheme:dark){
+ :root{--bg:#161615;--card:#1f1f1d;--ink:#ecebe7;--muted:#a19e97;--line:#34322e;--soft:#262523;--accent:#ecebe7;--accent-soft:#2f2e2a;
+  --good:#4fb07a;--good-ink:#8fd9ab;--good-soft:#1c3125;--bad:#f0763f;--bad-soft:#3b2219;--bad-ink:#f6b796}
+ body{background:var(--bg);color:var(--ink)}
+ .primary{color:var(--bg)!important}
+ .seg button,.chip,textarea,.mi,.say,.btn,.opt{background:var(--card);color:var(--ink)}
+ .primary{background:var(--ink)!important;border-color:var(--ink)!important}
+ .primary[disabled]{background:var(--line)!important;border-color:var(--line)!important;color:var(--muted)!important}
+ .seg button[aria-pressed="true"],.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+ .fb.bad,.guess{color:var(--bad-ink)!important}
+ .opt.right{background:var(--good-soft)}.opt.wrong{background:var(--bad-soft)}
+ /* bản đồ, ảnh chụp màn hình và khung mô phỏng giữ màu gốc, chỉ dịu bớt độ sáng */
+ svg.terrain,.opt svg,img,.keep-light{filter:brightness(.86)}
+ a{color:var(--ink)}
+ .han-t{color:#9fb3d6!important}.ngo-t{color:#ec8a78!important}
+}
+h1:focus,h2:focus{outline:none}
+#kit-bar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:50;display:none;align-items:center;gap:10px;max-width:calc(100% - 24px);
+ background:var(--ink);color:var(--bg);border-radius:22px;padding:8px 8px 8px 16px;font:500 14px/1.35 Onest,system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+#kit-bar.on{display:flex}
+#kit-bar span{flex:1 1 auto;min-width:0}
+#kit-bar{width:min(460px,calc(100% - 24px))}
+#kit-bar button{font:600 13px Onest,system-ui,sans-serif;border:0;border-radius:16px;min-height:36px;padding:6px 12px;cursor:pointer;background:var(--bg);color:var(--ink);flex:0 0 auto;width:auto}
+#kit-bar button.x{background:transparent;color:var(--bg);padding:6px 8px}
+.kit-review-off [data-part~="review"]{display:none!important}

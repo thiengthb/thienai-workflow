@@ -69,15 +69,18 @@ Xong khi: có một tính năng capstone đi trọn từ phỏng vấn người 
 - [Bản đồ user story của Jeff Patton](https://jpattonassociates.com/the-new-backlog/): xếp việc thành xương sống và các nhánh để thấy bức tranh lớn. Hợp với chặng 2. Đã đọc đoạn trích.
 
 ## Chiến tranh
-Môn mở rộng, khoảng một buổi mỗi tuần. Đích và lý do học: ghi sau buổi làm quen. Chi tiết ở `war.md` (đang được thêm ở thread học).
+Môn mở rộng, khoảng một buổi mỗi tuần. Đích và lý do học: ở mục "Mục tiêu" của `war.md`.
 
 ### Chặng 1: Làm quen và mười ý lớn
 Xong khi: thien xếp xong 10 ý lớn và học được vài ý đầu qua các trận có thật.
-- [ ] Buổi làm quen: làm chỉ huy trận Bạch Đằng 938 (đang làm, 2026-11-12)
-- [ ] thien xếp thứ tự 10 ý lớn
+- [x] Buổi làm quen: làm chỉ huy trận Bạch Đằng 938 (2026-11-12, [bài](war/lessons/01-bach-dang-938.md))
+- [x] thien xếp thứ tự 10 ý lớn (buổi 1, ở `war.md`)
+- [x] Ý 1, mục tiêu chính trị: làm triều đình Lý 1075–1077 (2026-11-12, [bài](war/lessons/02-ly-song-war-1075-1077.md))
+- [ ] Ý 2, ba tầng: chiến lược, chiến dịch, chiến thuật
 
 ### Bài đã học
 - Trang buổi 1: [Bạch Đằng 938](https://claude.ai/artifact/EZzNBAA7saekceEaKU36up)
+- Trang buổi 2: [Mục tiêu chính trị](https://claude.ai/artifact/ESWNPJdCAgzDYZyDWG8xfP)
 
 ### Nguồn học
 - Cách dạy môn này (bắt người học quyết định trước khi biết kết cục, như trường quân sự Mỹ): ở mục "Cách dạy môn này" của `war.md`.
