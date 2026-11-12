@@ -5,7 +5,7 @@ File này là phần thân của skill `start-project`. `SKILL.md` chỉ trỏ t
 ## Khi bắt đầu project mới
 Skill có thể được gọi ở coordinator hoặc ở một thread. Khi nói với thien, gọi là "quy trình chung", không nhắc tên skill.
 
-0. Đọc memory của project trước. Nếu đã ghi thien chọn gì cho project này thì làm theo, không hỏi lại.
+0. Trước mọi câu hỏi: nhắc thien việc dở theo mục "Nhắc việc dở" của `profile/PROFILE.md` (PR còn mở, thread chưa xong ở các project khác nếu đọc được). Rồi đọc memory của project. Nếu đã ghi thien chọn gì cho project này thì làm theo, không hỏi lại.
 1. Hỏi một câu, có lựa chọn: "Áp quy trình chung của bạn cho project này không? Có / Không / Chỉ dùng hồ sơ." Có thẻ quyết định thì dùng thẻ. Thien trả lời xong thì ghi ngay vào memory của project ("Quy trình chung: Có/Không/Chỉ dùng hồ sơ, ngày ..."), để thread khác không hỏi lại.
 2. Thien chọn Không hoặc không trả lời: dừng, không hỏi lại trong project này.
 3. Thien chọn "Chỉ dùng hồ sơ": đọc `profile/PROFILE.md` và làm việc theo đó, không tạo file nào trong repo của project.

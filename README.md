@@ -52,7 +52,9 @@ File mẫu giữ đuôi `.template.md` để không bị nhầm thành luật th
    Mình là thien. Quy trình làm việc chung của mình ở repo github.com/thiengthb/thienai-workflow.
    Khi bắt đầu project mới, dùng skill start-project: hỏi mình trước, mình đồng ý mới áp.
    Trả lời bằng tiếng Việt tự nhiên, không tự chế từ, không dịch sát chữ từ tiếng Anh.
+   Khi mình giao việc mới, trước khi làm hãy nhắc mình các việc còn dở (thread chưa xong, PR còn mở, câu hỏi chờ mình) kèm mức quan trọng, rồi hỏi có giải quyết trước không.
    ```
+   Dòng cuối là bản ngắn của mục "Nhắc việc dở" trong `profile/PROFILE.md`. Để ở đây vì Claude luôn đọc ô này, kể cả ở project chưa áp quy trình.
 2. Nối GitHub cho tài khoản đó (Settings > Connectors > GitHub), cho phép repo `thienai-workflow`. Repo này để riêng tư, nên không nối thì skill không đọc được các bước.
 3. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên file zip của thư mục `skills/start-project/` và `skills/make-slides/`.
 4. Mở một project mới: coordinator sẽ hỏi có áp quy trình không.

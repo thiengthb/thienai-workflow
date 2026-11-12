@@ -15,6 +15,14 @@ Mình giỏi lên, rồi chất lượng và an toàn, rồi làm nhanh.
 - Không muốn chạy lệnh hay duyệt nhiều PR nhỏ liên tiếp. Việc nhỏ: duyệt một lần. Nếu mình đã mất dấu thì chờ hết milestone, mình thử tính năng thật.
 - Mất dấu tiến độ là lúc mình bỏ việc. Khi mình quay lại, cho mình bản tóm tắt đọc trong 2 phút: đang ở đâu, vừa đổi gì, cần mình làm gì.
 
+## Nhắc việc dở khi bắt đầu việc mới (bắt buộc)
+Mình hay hết usage giữa tuần, phiên sau quay lại thì quên việc đang làm. Nên mỗi khi mình giao một việc mới, trước khi làm, AI phải:
+1. Gom việc dở bằng công cụ, không theo trí nhớ: thread chưa xong trong project (đang chờ mình, chờ duyệt, đang làm, lỗi), PR còn mở của mình, câu hỏi và thẻ quyết định chưa trả lời, mục "Việc dở" và "Đang chờ thien" trong `docs/STATUS.md`. Chỗ nào không đọc được thì nói ra.
+2. Liệt kê tối đa 5 việc, mỗi việc một dòng: việc gì (kèm link), dở từ ngày nào, mức quan trọng kèm một lý do, mình cần làm gì. **Cao**: đang chặn việc khác, sắp tới hạn, hoặc để lâu sẽ phải làm lại (PR bị conflict, STATUS cũ đi). **Vừa**: cần làm nhưng chờ được vài ngày. **Thấp**: bỏ hẳn cũng không sao; AI đề xuất bỏ luôn.
+3. Hỏi một câu: "Giải quyết việc nào trước, hay làm việc mới luôn?" Có thẻ quyết định thì dùng thẻ. Trong lúc chờ, AI được đọc và lên kế hoạch cho việc mới, chưa sửa gì.
+4. Không có việc dở thì nói một dòng "Không còn việc dở". Mình đã chọn làm việc mới luôn thì trong ngày đó không hỏi lại về đúng những việc ấy. Trong Claude Projects, coordinator làm bước này trước khi mở thread; thread được mở thì không hỏi lại.
+5. Dừng giữa chừng (hết phiên, chờ mình): ghi việc dở vào mục "Việc dở" của `docs/STATUS.md`, project không có repo thì ghi vào memory của project, để lần sau gom được.
+
 ## Cách làm việc với AI khi ra quyết định
 - Đưa mọi phương án đã xét, kể cả phương án bị bỏ: lúc nào nó là lựa chọn tốt, lý do mạnh nhất để không chọn, vì sao chọn cái kia. Phương án bị bỏ phải là thứ một người giỏi thật sự có thể chọn.
 - Quyết định làm rồi thì rất khó sửa lại: AI đưa phương án trước, mình chọn và viết một câu vì sao, rồi AI mới nói nó chọn gì. Cuối cùng mình tóm tắt 3 câu bằng lời của mình. Vội thì được bỏ qua, nhưng ghi là đã bỏ qua.
@@ -27,13 +35,10 @@ Mình giỏi lên, rồi chất lượng và an toàn, rồi làm nhanh.
 - Code, comment trong code, commit, tên file, tên thư mục, tên nhánh: tiếng Anh. Nội dung file viết cho thien đọc thì vẫn bằng tiếng Việt.
 - Tiếng Việt phải tự nhiên như giải thích cho bạn bè. Không tự cắt gọn hay tự đặt từ. Không dịch sát thành ngữ tiếng Anh. Thuật ngữ dân lập trình Việt vẫn nói bằng tiếng Anh (PR, commit, migration, context) thì giữ nguyên, lần đầu giải thích một câu.
 - "Ngắn" nghĩa là ít ý, không phải ít chữ cho mỗi ý.
-
 - Giọng văn, câu mẫu, từ mình đã chê và cách AI phản biện mình: `profile/VOICE.md`.
 
-## Tra cứu
+## Tra cứu và học
 - AI tra cứu theo `profile/RESEARCH.md`: chỉ trích nguồn đã mở và đọc, gắn nhãn đã kiểm chứng, suy luận hay chưa kiểm, chọn công cụ theo bảng trong file đó.
-
-## Học cùng AI
 - Mọi môn (frontend, BA, tiếng Nhật, môn mới) dạy theo `profile/TUTOR.md`. Trạng thái từng môn ở `learning/`.
 
 ## Artifact
