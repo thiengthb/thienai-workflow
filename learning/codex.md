@@ -13,11 +13,20 @@
 | Tra nguồn trên web cho bài lịch sử | Chỉ dùng nguồn khi Codex tra và đọc được thật. Không tra được thì dùng nguồn đã có ở bài trước, hoặc đổi sang buổi ôn; không đoán chi tiết lịch sử |
 | Memory của Claude | Không có. Mọi thứ cần nhớ ghi vào repo |
 
-## Hai cách học
+## Buổi học là một trang, không phải chat
 
-**Có trang (đủ nhất).** Codex chạy trên laptop, mở thư mục repo (Codex app, CLI hay extension trong VS Code). Codex dựng trang theo `learning/teaching/README.md`, gắn bộ khung bằng `node learning/teaching/kit/apply-kit.mjs <trang>`, chạy `node learning/teaching/check-page.cjs <trang>` nếu máy có Playwright (không có thì nói "chưa kiểm khổ điện thoại"), rồi đưa thien đường dẫn file để mở.
+thien quen học bằng trang tương tác như ở Claude. Ngày 2026-11-12 Codex mở buổi BA 2 bằng cách hỏi câu nhớ lại ngay trong chat, và thien thấy đó không phải quy trình học. Vì vậy:
 
-**Chỉ chat (khi vội, hoặc dùng Codex trên web).** Giữ đúng nhịp "thử trước, hiểu sau": AI hỏi từng câu, chờ thien trả lời rồi mới giải thích. Phần bấm, kéo thay bằng chọn A/B/C, gõ thứ tự (ví dụ "3 1 2"), hay mô tả hai bản rồi hỏi chọn bản nào. Mỗi lần chỉ hỏi một câu. Buổi kiểu này không có trang trong `pages/`; ghi "học bằng chat" vào nhật ký.
+- **Không hỏi gì trong chat trước khi có trang.** Đọc file rồi dựng trang luôn. Câu trả lời đầu tiên cho thien là đường dẫn trang và cách mở, kèm một dòng nói buổi này học gì.
+- **Trang chứa đủ 7 bước** của khung buổi trong `learning/README.md`: 3 thẻ ôn (không có thẻ đến hạn thì lấy thẻ cũ nhất của môn khác), nhớ lại buổi trước, thử trước, hiểu sau, câu hỏi nhanh, tự nói lại rồi mới xem bản của AI, góp ý. Phần ôn bọc bằng `data-part="review"`. Cuối trang có nút `#finish` và `#copy`.
+- **Dựng từ trang buổi trước của cùng môn** (ví dụ `learning/ba/pages/lesson-01.html`): giữ bố cục, màu, cách chuyển bước, cách gom kết quả; chỉ thay nội dung. Chọn kiểu bài theo `learning/teaching/README.md` và mục "Buổi tiếp theo" của môn.
+- Các bước dựng:
+  1. Ghi trang vào `learning/<môn>/pages/lesson-NN.html` (NN là số buổi, hai chữ số).
+  2. Gắn bộ khung: `node learning/teaching/kit/apply-kit.mjs learning/<môn>/pages/lesson-NN.html`.
+  3. Nếu máy có Playwright: `node learning/teaching/check-page.cjs learning/<môn>/pages/lesson-NN.html`, sửa hết lỗi. Không có thì ghi "chưa kiểm khổ điện thoại".
+  4. Gửi thien đường dẫn đầy đủ của file trên máy và cách mở: mở thư mục đó rồi bấm đúp vào file, hoặc kéo file vào Chrome.
+- **Codex chạy trên cloud** (chatgpt.com/codex) thì thien không mở được file. Nói thẳng điều đó, khuyên mở Codex trên laptop, không tự chuyển sang dạy bằng chat.
+- **Chỉ dạy bằng chat khi thien tự xin** ("học bằng chat"). Khi đó vẫn giữ nhịp thử trước, hiểu sau, mỗi lần một câu, và ghi "học bằng chat" vào nhật ký.
 
 ## Trước buổi
 - Làm trên máy thì `git pull` trước.
@@ -26,4 +35,5 @@
 ## Sau buổi
 1. Ghi đủ như mục "Sau buổi" trong `learning/README.md`: nhật ký trong `learning/<môn>.md`, file bài trong `learning/<môn>/lessons/` và dòng trong `learning/<môn>/README.md`, 2–3 thẻ trong `cards.md`, bảng "Trạng thái", tick chặng trong `roadmap.md`. Sửa luôn mục "Buổi tiếp theo" của môn đó.
 2. Trong dòng nhật ký, ghi công cụ: "(Codex)". Để sau này so được buổi ở Codex với buổi ở Claude.
-3. Tạo nhánh `learning/<môn>-<số buổi>` (ví dụ `learning/ba-02`), commit, push, mở PR. Không mở được PR thì đưa thien link tạo PR. Nhắc thien merge trước buổi kế tiếp, ở công cụ nào cũng vậy.
+3. thien dán kết quả (nút "Chép kết quả") vào chat. Đọc kết quả rồi mới ghi nhật ký; ghi chỗ thien đổi cách nhìn, không ghi như bảng điểm.
+4. Tạo nhánh `learning/<môn>-<số buổi>` (ví dụ `learning/ba-02`), commit, push, mở PR. Không mở được PR thì đưa thien link tạo PR. Nhắc thien merge trước buổi kế tiếp, ở công cụ nào cũng vậy.
