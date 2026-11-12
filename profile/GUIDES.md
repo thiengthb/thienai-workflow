@@ -35,7 +35,7 @@ Tên token, tên project, tên biến, tên trigger do AI đặt sẵn và ghi v
 
 - Trước khi đặt tên mới, AI đọc `names.md`. Tên đã có thì dùng lại, không hỏi lại thien.
 - Thien đã đặt tên khác thì AI ghi tên thien đặt vào bảng, không bắt đổi.
-- Tên luôn bằng tiếng Anh, chữ thường, nối bằng gạch ngang (`morning-brief-github`), trừ khi hệ thống bắt kiểu khác (biến môi trường viết hoa: `GITHUB_TOKEN`).
+- Tên luôn bằng tiếng Anh, chữ thường, nối bằng gạch ngang (`workflow-sync`), trừ khi hệ thống bắt kiểu khác (biến môi trường viết hoa: `GITHUB_TOKEN`).
 
 ## 4. AI tự thử trước khi đưa
 
