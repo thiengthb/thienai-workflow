@@ -24,6 +24,9 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | W4 | Chiến tranh | Theo Tống sử, vì sao Quách Quỳ rút quân năm 1077? | [bài 2](war/lessons/02-ly-song-war-1075-1077.md) | 1 | 2026-11-13 |
 | W5 | Chiến tranh | Quảng Nguyên về lại với Đại Việt bằng cách nào? | [bài 2](war/lessons/02-ly-song-war-1075-1077.md) | 1 | 2026-11-13 |
 | W6 | Chiến tranh | Thắng trận và đạt mục tiêu chính trị khác nhau thế nào? Cho một ví dụ. | [bài 2](war/lessons/02-ly-song-war-1075-1077.md) | 1 | 2026-11-13 |
+| W7 | Chiến tranh | Phá Khâm, Liêm rồi vây thành Ung hơn 40 ngày là tầng chiến lược, chiến dịch hay chiến thuật? | [bài 3](war/lessons/03-three-levels-dien-bien-phu.md) | 1 | 2026-11-13 |
+| W8 | Chiến tranh | Vì sao Đại tướng Võ Nguyên Giáp hoãn trận đánh Điện Biên Phủ ngày 26/1/1954? | [bài 3](war/lessons/03-three-levels-dien-bien-phu.md) | 1 | 2026-11-13 |
+| W9 | Chiến tranh | Vì sao "hoãn vài ngày rồi đánh theo kế hoạch cũ" vẫn chưa đủ? | [bài 3](war/lessons/03-three-levels-dien-bien-phu.md) | 1 | 2026-11-13 |
 | F9 | Frontend | Ngoài khối màu to, hai thứ nhỏ nào cũng hay giành mắt mà dễ bị bỏ sót? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 1 | 2026-11-13 |
 | W1 | Chiến tranh | Theo Toàn thư, vì sao thuyền Nam Hán bị lật ở Bạch Đằng năm 938? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
 | W2 | Chiến tranh | Vì sao Ngô Quyền không đem thuyền ra chặn thẳng ở cửa biển? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |

@@ -40,7 +40,7 @@ Tìm hiểu ngày 2026-11-12, trước buổi làm quen.
 | Thứ tự | Ý | Một dòng | Trạng thái |
 |---|---|---|---|
 | 1 | Mục tiêu chính trị | Chiến tranh để đạt điều gì; thắng trận mà không đạt mục tiêu thì vẫn thua | Đã học ở buổi 2 |
-| 2 | Ba tầng: chiến lược, chiến dịch, chiến thuật | Cả cuộc chiến, một đợt đánh, một trận | Buổi 3 |
+| 2 | Ba tầng: chiến lược, chiến dịch, chiến thuật | Cả cuộc chiến, một đợt đánh, một trận | Đã học ở buổi 3 |
 | 3 | Địa hình và thời tiết | Sông, núi, mùa, thủy triều quyết định đánh ở đâu, lúc nào | Đã chạm ở buổi 1 (Bạch Đằng) |
 | 4 | Hậu cần | Lương thực, đạn dược, đường tiếp tế; quân đói thì không đánh được | |
 | 5 | Đánh chỗ yếu, tránh chỗ mạnh | Dùng điểm mạnh của mình vào điểm yếu của bên kia | Đã chạm ở buổi 1 |
@@ -55,9 +55,11 @@ Tìm hiểu ngày 2026-11-12, trước buổi làm quen.
 |---|---|---|---|
 | 1 | 2026-11-12 | Làm quen, làm chỉ huy trận Bạch Đằng 938 ([bài](war/lessons/01-bach-dang-938.md)) | 12 phút, độ dài và độ khó "vừa", thấy môn này "thích". Chọn đúng cách của Ngô Quyền ngay lần đầu, đúng 2/2 câu hỏi. Chỉ xem diễn biến thật, chưa mở hai mô phỏng A và C. Tự nói lại đủ ý: hiểu địa hình, dụ địch, dùng quy luật tự nhiên, biến lợi thế của địch thành điểm yếu. Xếp cả 10 ý, mục tiêu chính trị đứng đầu. Viết dài về điều muốn học (xem "Mục tiêu"). Góp ý: mở đầu tốt, tiếp tục phát huy và sáng tạo thêm |
 | 2 | 2026-11-12 | Mục tiêu chính trị: làm triều đình Lý năm 1075 và 1077 ([bài](war/lessons/02-ly-song-war-1075-1077.md)) | 13 phút, thấy "dài" và "khó"; làm triều đình hay làm tướng "như nhau". Chọn đúng cách triều Lý cả hai lần, lần này mở xem cả hai mô phỏng ở cả hai quyết định. Đúng câu nhớ lại và 2/2 câu hỏi. Tự nói lại: vượt sông sẽ làm triều Tống bẽ mặt, dẫn tới chiến tranh tổng lực và lâu dài. Rút ra: chiến tranh là công cụ của chính trị; không có lựa chọn nào đúng tuyệt đối, lựa chọn nào cũng có giá. Thích phần suy luận "chừa đường lui". Góp ý về trang: mất dữ liệu khi tải lại, muốn chế độ tối, học lại thì bỏ phần ôn đầu buổi (đã làm bộ khung chung, xem `teaching/README.md`) |
+| 3 | 2026-11-12 | Ba tầng: xếp 6 việc của cuộc chiến 1075–1077 vào tầng, rồi làm Đại tướng Võ Nguyên Giáp đêm 25/1/1954 ở Điện Biên Phủ ([bài](war/lessons/03-three-levels-dien-bien-phu.md)) | Khoảng 20 phút (trang ghi 12), độ dài và độ khó "vừa"; trận gần đây hay trận xưa "như nhau". Đúng câu nhớ lại và 2/2 câu hỏi. Xếp tầng 4/6: chỗ lệch nằm giữa hai tầng dưới (đợt Khâm, Liêm, Ung xếp là "một trận"; trận lớn trên sông xếp là "đợt đánh"), hai việc ở tầng chiến lược đều đúng, kể cả việc gửi voi. Chọn đúng cách thật (rút, đổi cách đánh) ngay lần đầu và mở cả hai mô phỏng. Tự nói lại: không bảo đảm thắng 100% nên đổi từ đánh nhanh sang đánh chắc; chưa nối lý do với tầng trên ("bại thì hết vốn"). Góp ý quan trọng: gọi danh nhân Việt Nam trống không ("Giáp") là bất kính; phải gọi đủ họ tên, chức danh (Đại tướng Võ Nguyên Giáp) hoặc "bác Giáp", và xưng danh ai cũng theo văn hóa của người đó. Đã sửa trang, thêm luật 12 trong `profile/TUTOR.md` |
 
 ## Buổi tiếp theo
-- Buổi 3: ý "Ba tầng: chiến lược, chiến dịch, chiến thuật" (thien xếp thứ 2). Gợi ý: dùng lại cuộc chiến 1075–1077 thien vừa biết, xếp từng quyết định vào đúng tầng (triều đình đánh trước hay chờ là chiến lược; đợt đánh Khâm, Liêm, Ung là chiến dịch; giữ bờ sông Như Nguyệt là chiến thuật), rồi sang một trận mới. Kiểm nguồn theo luật 10.
-- Buổi 2 thien thấy "dài" và "khó": buổi 3 ngắn hơn, chữ ít hơn. Phần "hiểu sau" tối đa 3 ý, không thêm khối kiến thức phụ.
-- Câu nhớ lại (đặt trong phần ôn, `data-part="review"`): vì sao triều Lý không vượt sông đánh tan quân Tống.
-- Dàn binh bố trận và hậu cần (điều thien muốn nhất) nằm ở ý 2 và 4, sẽ tới ngay sau.
+- Buổi 4: ý 4 "Hậu cần" (điều thien muốn nhất, cùng với dàn binh bố trận). Ý 3 "Địa hình và thời tiết" đã chạm ở buổi 1 nên để xen vào. Gợi ý: nối tiếp Điện Biên Phủ, vì buổi 3 đã có sẵn câu của Chủ nhiệm cung cấp "không đánh ngay thì sau càng không đánh được" và việc đưa pháo vào lại. Kiểm nguồn theo luật 10.
+- Gọi tên người theo luật 12 (`profile/TUTOR.md`): danh nhân Việt Nam gọi đủ họ tên kèm chức danh, hoặc "bác"; không gọi trống không.
+- Buổi 3 xếp lệch ở hai tầng dưới: phần thử trước của buổi 4 cài 1–2 việc để phân biệt "một đợt đánh" với "một trận" (trộn ý cũ, từ buổi 4 trở đi).
+- Câu nhớ lại (đặt trong phần ôn, `data-part="review"`): vì sao Đại tướng Võ Nguyên Giáp hoãn trận đánh, và quyết định đó nằm ở tầng nào. Dẫn thien tự nối "không chắc thắng" với "bại thì hết vốn".
+- Giữ độ dài như buổi 3 (thien chấm "vừa"), nhưng trang ghi 12 phút mà thật ra mất khoảng 20: ghi thời gian sát hơn.
