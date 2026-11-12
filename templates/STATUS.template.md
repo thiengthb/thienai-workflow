@@ -3,7 +3,7 @@
 Cập nhật lần cuối: <ngày> · <ai cập nhật: người hoặc AI, tài khoản nào>
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết project đang ở đâu.
-Lịch sử nằm trong git và PR, không ghi ở đây. Cả file dưới 40 dòng.
+Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien; `scripts/check-status.mjs` kiểm trong CI.
 
 ## Đang ở đâu
 <1 đến 3 câu. Ví dụ: "Đang làm trang đăng nhập, xong phần giao diện, còn nối API.">

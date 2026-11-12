@@ -32,6 +32,7 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 
 ## Cuối phiên
 - Cập nhật `docs/STATUS.md` (đang ở đâu, việc dở, vừa xong, việc tiếp theo, đang chờ ai). Việc dở vẫn commit và push, và ghi vào mục "Việc dở" kèm nhánh hoặc PR.
+- Sửa STATUS thì gộp vào PR của tính năng đang làm. PR chỉ sửa STATUS thì nhắc thien merge ngay, vì để lâu là nó cũ và bị conflict.
 - Nếu project có `docs/ai-log.md`: thêm dòng cho phiên này, để trống hai cột "Người kiểm gì" và "Quyết định" cho người điền.
 
 ## Giữ file này ngắn
