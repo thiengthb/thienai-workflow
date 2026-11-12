@@ -13,7 +13,7 @@ Thứ tự học. 3 ý đầu do thien chọn ở buổi 1; 7 ý sau AI xếp th
 | Thứ tự | Ý | Một dòng | Trạng thái |
 |---|---|---|---|
 | 1 | Yêu cầu và nhu cầu | Tìm vấn đề thật đằng sau điều người ta nhờ | Đã học buổi 1 |
-| 2 | Hỏi chuyện người dùng | Hỏi sao cho họ kể chuyện thật, không nói điều họ nghĩ bạn muốn nghe | Buổi 2 |
+| 2 | Hỏi chuyện người dùng | Hỏi sao cho họ kể chuyện thật, không nói điều họ nghĩ bạn muốn nghe | Đã học buổi 2 |
 | 3 | Các bên liên quan | Ai dùng, ai trả tiền, ai quyết định, ai bị ảnh hưởng | |
 | 4 | User story | Viết một nhu cầu thành câu "Là…, tôi muốn…, để…" | |
 | 5 | Điều kiện hoàn thành | Thế nào thì coi là xong, để không ai cãi nhau lúc nghiệm thu | |
@@ -22,6 +22,10 @@ Thứ tự học. 3 ý đầu do thien chọn ở buổi 1; 7 ý sau AI xếp th
 | 8 | Use case | Ai làm gì với hệ thống, kể cả khi có lỗi | |
 | 9 | Yêu cầu không ai nói ra | Nhanh, an toàn, dễ dùng: người dùng không nhờ nhưng sẽ phàn nàn | |
 | 10 | Dữ liệu nhìn từ nghiệp vụ | Các "thứ" trong hệ thống và quan hệ giữa chúng | |
+
+## Cách dạy môn này
+
+Phỏng vấn mô phỏng và chọn câu hỏi để thấy lời đáp thay đổi; sau đó rút ra cách hỏi. Dùng câu mở, trung tính, hỏi về trải nghiệm cụ thể và hỏi tiếp theo điều người dùng kể ([GOV.UK: phỏng vấn chuyên sâu](https://www.gov.uk/service-manual/user-research/using-in-depth-interviews); [hỏi về hành vi](https://userresearch.blog.gov.uk/2014/07/11/what-makes-a-good-user-research-facilitator/)). Một cuộc phỏng vấn tạo giả thuyết, chưa đủ chứng minh nhu cầu phổ biến. Kết hợp các tình huống của sakubun và capstone; thể hiện luồng bằng hình, ít chữ, cho biết đang ở bước nào.
 
 ## Kiểu buổi
 Khung chung ở `README.md`. Phần "thử trước" của BA (AI đề xuất, mới thử kiểu 1 và 2):
@@ -37,7 +41,10 @@ Lấy tình huống từ việc thật của thien khi có thể: đồ án caps
 | Buổi | Ngày | Ý chính | Kết quả |
 |---|---|---|---|
 | 1 | 2026-11-12 | Làm quen, yêu cầu và nhu cầu (nút xuất Excel trong nhóm capstone) | 13 phút, độ dài và độ khó "vừa". Ôn frontend đúng 3/3. Chọn đúng câu hỏi lại "để làm gì", xếp đúng 5/5 thẻ nhu cầu và giải pháp, câu hỏi đúng 2/2. Tự nói lại có ý "vấn đề nằm sâu trong nhu cầu, giải pháp không hẳn là thứ họ muốn", chưa nhắc tới cách làm là hỏi "để làm gì" vài lần. Thấy BA "bình thường". Trang lỗi nút chọn không đổi màu lần đầu, đã sửa trong buổi |
+| 2 | 2026-11-12 | Hỏi chuyện người dùng, phỏng vấn sakubun mô phỏng (Codex) | Khoảng 6 phút; nhớ lại đúng, chọn câu về lần cụ thể và câu hỏi tiếp, đúng câu hỏi nhanh. Tự nói lại: "bạn bị mắc vấn đề gì, tại sao lại vậy"; chưa nhắc đến một lần cụ thể và tránh dẫn dắt. Thấy hơi dài, độ khó vừa; nhiều chữ, ít hình, dẫn dắt kém, không biết luồng đi. thien chê giao diện trang của Codex kém hơn các trang trước (không theo khung chung, không theo thienui), nên Claude làm lại trang ([lesson-02.html](ba/pages/lesson-02.html), bản Codex giữ ở [lesson-02-codex.html](ba/pages/lesson-02-codex.html)): bản đồ 4 chặng phỏng vấn, sổ ghi chép dữ kiện thật và lời đoán, 5 cái bẫy khi hỏi, bắt lỗi một đoạn phỏng vấn. Buổi làm lại (Claude, 25 phút): ôn đúng 3/3. Phỏng vấn đúng chặng 1 và 3, nhưng chặng 2 rơi vào bẫy gợi sẵn giải pháp; có bấm thử một câu khác để xem lời đáp. Bắt lỗi đoạn phỏng vấn được 2/3 chỗ, câu hỏi nhanh đúng 2/2. Tự nói lại chỉ còn "bạn mắc vấn đề gì", ngắn hơn bản ở Codex. thien thấy bản này tốt hơn bản Codex, độ dài và độ khó vừa, mạch "tạm được", hứng thú "bình thường", nhưng nói thẳng: "hôm nay học quá nhiều nên không theo được nữa" (cùng ngày đã học BA 1, BA 2 bản Codex rồi bản làm lại). Chỗ cần chắc lại: nghe người dùng kể xong thì hỏi tiếp về chuyện đã xảy ra, chưa đưa giải pháp ra hỏi. |
 
 ## Buổi tiếp theo
-- Buổi BA 2: ý "Hỏi chuyện người dùng", kiểu 3 "Đóng vai phỏng vấn" để có phần bấm và thấy kết quả đổi ngay. Câu nhớ lại hỏi cách làm của buổi 1 (hỏi "để làm gì" 2–3 lần), vì thien chưa nói ra.
+- Đầu buổi BA 3 dành nhiều chỗ hơn để ôn BA 2, vì thien học buổi làm lại lúc đã mệt và tự nói "không theo được nữa": một vòng phỏng vấn ngắn chỉ để tập hỏi tiếp sau khi người dùng kể, không đưa giải pháp ra hỏi (thẻ B6), và để thien tự nói lại cách hỏi về một lần cụ thể. Nếu thien vẫn thấy chưa chắc thì cho thien chọn học lại BA 2 thay vì sang ý mới.
+- Không xếp hai buổi BA trong một ngày. Buổi làm lại dài 25 phút là quá tải; buổi BA sau giữ khoảng 15 phút, ít bước hơn.
+- Buổi BA 3: các bên liên quan. Dùng sơ đồ người liên quan trong capstone; thể hiện rõ bước hiện tại và đích của luồng, ít chữ, tình huống trực quan. Nhắc lại cách hỏi về một lần cụ thể và tránh gợi sẵn đáp án.
 - Tình huống nên lấy từ đồ án capstone hoặc sakubun, vì sau buổi 1 thien thấy BA "bình thường". Hỏi thêm một câu ngắn ở cuối buổi: điều gì làm buổi BA hấp dẫn hơn.
