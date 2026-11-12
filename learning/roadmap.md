@@ -76,11 +76,13 @@ Xong khi: thien xếp xong 10 ý lớn và học được vài ý đầu qua cá
 - [x] Buổi làm quen: làm chỉ huy trận Bạch Đằng 938 (2026-11-12, [bài](war/lessons/01-bach-dang-938.md))
 - [x] thien xếp thứ tự 10 ý lớn (buổi 1, ở `war.md`)
 - [x] Ý 1, mục tiêu chính trị: làm triều đình Lý 1075–1077 (2026-11-12, [bài](war/lessons/02-ly-song-war-1075-1077.md))
-- [ ] Ý 2, ba tầng: chiến lược, chiến dịch, chiến thuật
+- [x] Ý 2, ba tầng: xếp việc 1075–1077 vào tầng, làm Đại tướng Võ Nguyên Giáp ở Điện Biên Phủ (2026-11-12, [bài](war/lessons/03-three-levels-dien-bien-phu.md))
+- [ ] Ý 4, hậu cần
 
 ### Bài đã học
 - Trang buổi 1: [Bạch Đằng 938](https://claude.ai/artifact/EZzNBAA7saekceEaKU36up)
 - Trang buổi 2: [Mục tiêu chính trị](https://claude.ai/artifact/ESWNPJdCAgzDYZyDWG8xfP)
+- Trang buổi 3: [Ba tầng](https://claude.ai/artifact/3JnZLK7bgfqWoqRfoEtZWr)
 
 ### Nguồn học
 - Cách dạy môn này (bắt người học quyết định trước khi biết kết cục, như trường quân sự Mỹ): ở mục "Cách dạy môn này" của `war.md`.
@@ -94,3 +96,4 @@ Testing, kinh tế, chính trị. Một môn chỉ vào học khi có môn khác
 | 2026-11-11 | Từ chỉ học frontend sang 3 môn xoay vòng: frontend, BA, chiến tranh | thien muốn học rộng nhiều lĩnh vực |
 | 2026-11-12 | Buổi frontend 6 đổi thành chọn màu cho cả một app | thien muốn học sâu về màu sau buổi 5 |
 | 2026-11-12 | Học buổi làm quen chiến tranh trước BA 2 | thien muốn học chiến tranh ngay |
+| 2026-11-12 | Học chiến tranh 3 trước BA 2 | thien nhắn "học tiếp chiến tranh" |
