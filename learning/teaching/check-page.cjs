@@ -73,6 +73,9 @@ const SIZES = [
     // Bấm từng nút trên một trang mới tải lại, so trước và sau.
     for (const t of targets.filter(x => x.btn)) {
       await page.goto(url, { waitUntil: 'load' });
+      // Chờ như lần đầu: bước đầu có hiệu ứng hiện dần, chưa chờ thì nút của nó bị coi là ẩn,
+      // số thứ tự các nút lệch đi một, và bài kiểm bấm nhầm nút đứng trước.
+      await page.waitForTimeout(300);
       await reveal();
       await page.evaluate(() => { const shown = e => { if (e.offsetParent === null && getComputedStyle(e).position !== 'fixed') return false; let o = 1; for (let n = e; n && n.nodeType === 1; n = n.parentElement) { const cs = getComputedStyle(n); if (cs.visibility === 'hidden' || cs.display === 'none') return false; o *= +cs.opacity; } return o > 0.05; }; [...document.querySelectorAll('button, a[href], input, select, textarea, [role=button]')].filter(shown).forEach((e, i) => e.dataset.chk = i); });
       const loc = page.locator(`[data-chk="${t.i}"]`);

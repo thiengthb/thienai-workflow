@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buổi 5: Màu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--soft:#f3f1ec;--accent:#1b1b1a;--accent-soft:#ebe8e1;--good:#2e7d4f;--good-ink:#1f5c39;--good-soft:#e4f2e8;--bad:#c2410c;--bad-soft:#fdeee6;--spring:cubic-bezier(.3,1.25,.5,1);
+ --app:#2563eb;--app-ink:#1d4ed8;--purple:#7c3aed;--green:#16a34a;--green-soft:#dcfce7;--green-ink:#166534;--orange:#ea580c;--orange-soft:#ffedd5;--orange-ink:#9a3412;--red:#e11d48;--grey:#8a8780;--grey-soft:#f1efea}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Onest,system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:480px;margin:0 auto;padding:0 16px 56px}
+.top{position:sticky;top:0;background:var(--bg);padding:12px 0 10px;z-index:5}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .25s ease}
+h1{font-size:26px;line-height:1.25;margin:20px 0 8px;font-weight:700;letter-spacing:-.01em}
+h2{font-size:20px;line-height:1.3;margin:8px 0 6px;font-weight:600;letter-spacing:-.01em}
+p{margin:0 0 12px}
+.muted{color:var(--muted)}.small{font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.step{display:none}.step.on{display:block;animation:in .2s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hide{display:none!important}
+/* nút chung: trạng thái chọn phải nhìn thấy được, không chỉ dựa vào màu */
+.btn,.opt{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:14px;min-height:48px;padding:12px 14px;cursor:pointer;text-align:left;width:100%;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background-color .15s,transform .2s var(--spring)}
+.btn:active,.opt:active{transform:scale(.98)}
+.btn:focus-visible,.opt:focus-visible,.hot:focus-visible,.seg button:focus-visible,textarea:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.opt{margin:8px 0;font-size:15px;line-height:1.45}
+.opt[aria-pressed="true"]{border-color:var(--ink);background:var(--accent-soft)}
+.opt[aria-pressed="true"]::after{content:"Đã chọn";margin-left:auto;font-size:12px;font-weight:600;flex:0 0 auto}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.right::after{content:"Đúng";margin-left:auto;font-size:12px;font-weight:700;color:var(--good-ink);flex:0 0 auto}
+.opt.wrong::after{content:"Bạn chọn";margin-left:auto;font-size:12px;font-weight:700;color:var(--bad);flex:0 0 auto}
+.opt[disabled]{cursor:default;color:var(--ink)}
+.primary{background:var(--ink);color:#fff;border-color:var(--ink);justify-content:center;font-weight:600;margin-top:16px;height:52px;border-radius:26px}
+.primary[disabled]{background:#cfcbc2;border-color:#cfcbc2;color:#fff;cursor:default}
+.ghost{justify-content:center;margin-top:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row .btn{width:auto;flex:1 1 0;justify-content:center;text-align:center}
+.fb{font-size:15px;border-radius:12px;padding:10px 12px;margin-top:10px;background:var(--soft)}
+.fb:empty{display:none}
+.fb.good{background:var(--good-soft);color:var(--good-ink)}
+.fb.bad{background:var(--bad-soft);color:#7c2d12}
+.why{display:none;font-size:14px;padding:12px 14px;border-radius:12px;background:var(--soft);margin-top:4px}
+.why.on{display:block}
+.status{font-size:14px;font-weight:600;margin:6px 0 0}.status:empty{display:none}
+.stage{background:var(--soft);border-radius:16px;padding:14px}
+.lab{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px;text-align:center}
+
+/* màn phòng khám */
+.phone{max-width:320px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;font-size:14px;line-height:1.4;color:#1f1f1f}
+.ph-head{display:block;width:100%;padding:14px 16px;text-align:left;font:inherit;border:0;border-bottom:1px solid transparent;transition:background-color .3s,color .3s,border-color .3s}
+.ph-head b{display:block;font-size:16px}
+.ph-head span{font-size:12px;opacity:.85}
+.h-solid .ph-head{background:var(--app);color:#fff}
+.h-white .ph-head{background:#fff;color:#1f1f1f;border-bottom-color:#eceae4}
+.ph-body{padding:14px 16px 16px}
+.doc{display:flex;gap:10px;align-items:flex-start}
+.ava{flex:0 0 44px;width:44px;height:44px;border-radius:22px;background:#e7e4dd;display:flex;align-items:center;justify-content:center;font-weight:600;color:#6b6862}
+.who{flex:1;min-width:0}
+.nm{font-size:16px;font-weight:600;transition:color .3s}
+.n-purple .nm{color:var(--purple)}.n-black .nm{color:#1f1f1f}
+.sp{font-size:13px;color:#6b6862}
+.heart{flex:0 0 auto;width:36px;height:36px;display:flex;align-items:center;justify-content:center}
+.heart svg{width:22px;height:22px;transition:fill .3s,stroke .3s}
+.ht-solid .heart svg{fill:var(--red);stroke:var(--red)}
+.ht-line .heart svg{fill:none;stroke:#8a8780}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 10px}
+.tg{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:13px;font-size:12px;font-weight:600;transition:background-color .3s,color .3s}
+.t-solid .tg.st{background:var(--green);color:#fff}
+.t-soft .tg.st{background:var(--green-soft);color:var(--green-ink)}
+.t-grey .tg.st{background:var(--grey-soft);color:#5d5a54}
+.b-solid .tg.dc{background:var(--orange);color:#fff}
+.b-soft .tg.dc{background:var(--orange-soft);color:var(--orange-ink)}
+.b-grey .tg.dc{background:var(--grey-soft);color:#5d5a54}
+.price{font-size:13px;color:#6b6862;margin:0 0 12px}
+.price b{color:#1f1f1f;font-weight:600}
+.cta{display:flex;align-items:center;justify-content:center;height:44px;border-radius:12px;background:var(--app);color:#fff;font-weight:600;font-size:15px}
+/* vùng chạm ở bước "thử trước" */
+.hot{position:relative;display:block;font:inherit;color:inherit;text-align:left;background:transparent;border:2px solid transparent;border-radius:10px;padding:2px;margin:-4px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background-color .15s}
+.hot.inl{display:inline-block}
+.hot[aria-pressed="true"]{border-color:var(--ink);border-style:dashed;background:rgba(27,27,26,.05)}
+.hot.right{border-style:solid;border-color:var(--good)}
+.hot.wrong{border-style:solid;border-color:var(--bad)}
+.hot.miss{border-style:dashed;border-color:var(--bad)}
+.legend{font-size:13px;color:var(--muted);margin:8px 0 0;text-align:center}
+.legend span{display:inline-block;width:18px;height:12px;border-radius:4px;vertical-align:-1px;margin:0 4px 0 8px}
+.hot[disabled]{cursor:default}
+.ph-head.hot{margin:0;border-radius:0;padding:12px 14px}
+/* bước tự sửa */
+.ctl{padding:10px 0;border-top:1px solid var(--line)}
+.ctl:first-child{border-top:0;padding-top:0}
+.ctl>span{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg.two{grid-template-columns:repeat(2,1fr)}
+.seg button{font:500 14px Onest,sans-serif;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:12px;min-height:44px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.seg button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}
+.live{font-size:14px;margin:10px 0 0;text-align:center}
+.live b{font-weight:700}
+/* bước hiểu sau */
+.rule{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.rule:first-child{border-top:0}
+.rule .k{flex:0 0 62px;font-size:20px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.rule p{margin:0;font-size:15px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.cmp .sw{border-radius:12px;padding:12px 10px;text-align:center;border:1px solid var(--line);background:#fff}
+.cmp .sw .tg{margin-bottom:6px}
+.cmp .sw b{display:block;font-size:22px;letter-spacing:-.02em}
+.cmp .sw small{display:block;font-size:12px;color:var(--muted)}
+.mine{display:none}.mine.on{display:block}
+.say{font-size:15px;padding:14px;border-radius:14px;background:#fff;border:1px solid var(--line);margin:10px 0}
+.say b{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:600}
+textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:14px;padding:12px;font:15px/1.5 Onest,sans-serif;resize:vertical;background:#fff;color:var(--ink)}
+.crit{padding:12px 0;border-top:1px solid var(--line)}
+.crit:first-child{border-top:0;padding-top:0}
+.crit b{font-weight:600;display:block;margin-bottom:6px;font-size:15px}
+#saved{display:none;font-size:14px;padding:12px 14px;border-radius:12px;background:var(--soft);margin-top:12px}
+/* laptop: màn mẫu một bên, phần làm một bên */
+.split{display:block}
+ /* điện thoại: màn mẫu dính trên cùng để vừa chỉnh vừa thấy */
+@media (max-width:899px){
+ #s4mock{position:sticky;top:50px;z-index:4;background:var(--bg);padding-bottom:6px}
+ #s4mock .stage{padding:8px}
+ #s4mock .phone{font-size:13px}
+ #s4mock .ph-head{padding:8px 14px}
+ #s4mock .ph-body{padding:10px 14px 12px}
+ #s4mock .tags{margin:8px 0 6px}
+ #s4mock .price{margin:0 0 8px}
+ #s4mock .cta{height:36px}
+ #s4mock .live{margin-top:6px}
+}
+@media (min-width:900px){
+ .wrap{max-width:980px;padding:0 32px 72px}
+ .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+ .split>.stick{position:sticky;top:64px}
+ .narrow{max-width:560px}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="top"><div class="meta"><span>Frontend buổi 5 · Màu</span><span id="cnt">1/9</span></div><div class="bar"><i id="bar"></i></div></div>
+
+ <!-- 0 -->
+ <section class="step on narrow" data-s="0">
+  <h1>Màu: mỗi màn một màu nhấn</h1>
+  <p class="muted">Khoảng 15 phút. Buổi này bạn sẽ chạm và chỉnh nhiều hơn đọc.</p>
+  <div class="card small">
+   <p style="margin:0">1. Ba câu ôn nhanh.<br>2. Một câu nhớ lại buổi trước.<br>3. Chạm vào những chỗ giành mắt trên một màn đặt lịch khám.<br>4. Tự sửa màu màn đó và thấy đổi ngay.<br>5. Rồi mới đọc ý chính, có số cụ thể.</p>
+  </div>
+  <button class="btn primary" data-go="1">Bắt đầu</button>
+ </section>
+
+ <!-- 1 ôn -->
+ <section class="step narrow" data-s="1">
+  <h2>Ôn nhanh</h2>
+  <p class="small muted">Trả lời theo trí nhớ. Câu sai sẽ được hỏi lại sớm hơn.</p>
+  <div class="card">
+   <p><b>1.</b> Muốn nút chính nổi hơn mà không thêm màu mới thì làm gì?</p>
+   <div class="q" data-q="F2" data-a="1"><div class="status" role="status"></div>
+    <button class="opt">Làm nút chính to hơn và thêm bóng đổ</button>
+    <button class="opt">Hạ nút phụ xuống: thành nút viền nhạt hoặc một dòng chữ</button>
+    <button class="opt">Đổi chữ trên nút chính thành chữ in hoa</button>
+    <div class="why">Hạ những thứ khác xuống thì nút chính tự nổi lên. Làm to hay thêm bóng cho cả hai thì chúng vẫn ngang nhau.</div>
+   </div>
+  </div>
+  <div class="card">
+   <p><b>2.</b> Vì sao nhiều design system chỉ cho dùng 4, 8, 12, 16, 24, 32?</p>
+   <div class="q" data-q="F5" data-a="2"><div class="status" role="status"></div>
+    <button class="opt">Vì màn hình chia hết cho 8</button>
+    <button class="opt">Để code CSS ngắn hơn</button>
+    <button class="opt">Để khoảng cách có nhịp, và hai khoảng khác nhau thì khác hẳn, không lưng chừng</button>
+    <div class="why">Thang số cố định giúp không ai chọn 13px hay 18px tùy hứng. Khoảng giữa nhóm và trong nhóm luôn khác nhau rõ ràng.</div>
+   </div>
+  </div>
+  <div class="card">
+   <p><b>3.</b> Màn thanh toán có hai nút đặc: "Thanh toán" và "Thêm mã giảm giá". Sửa thế nào?</p>
+   <div class="q" data-q="F6" data-a="0"><div class="status" role="status"></div>
+    <button class="opt">Giữ "Thanh toán" đặc, đổi nút mã giảm giá thành nút viền hoặc dòng chữ</button>
+    <button class="opt">Đổi nút mã giảm giá sang màu cam cho dễ phân biệt</button>
+    <button class="opt">Để hai nút cùng hàng, mỗi nút một nửa chiều ngang</button>
+    <div class="why">Đổi sang màu khác là tạo thêm một điểm nhấn thứ hai. Đây cũng chính là chuyện của buổi hôm nay.</div>
+   </div>
+  </div>
+  <button class="btn primary" data-go="2" id="n1" disabled>Tiếp</button>
+ </section>
+
+ <!-- 2 nhớ lại -->
+ <section class="step narrow" data-s="2">
+  <h2>Nhớ lại buổi 4</h2>
+  <p>Các dòng trong một nhóm cách nhau 8px. Khoảng giữa hai nhóm nên là bao nhiêu để mắt thấy rõ có hai nhóm?</p>
+  <div class="q" data-q="recall" data-a="1"><div class="status" role="status"></div>
+   <button class="opt">10px, hơn một chút là đủ</button>
+   <button class="opt">Khoảng 16 tới 24px, gấp 2 tới 3 lần</button>
+   <button class="opt">48px trở lên, càng xa càng rõ</button>
+   <div class="why">Gấp 2 tới 3 lần khoảng trong nhóm. 10px so với 8px thì mắt gần như không thấy khác (buổi 4 bạn đã chọn 10px). Xa quá thì hai nhóm trông như hai màn khác nhau.</div>
+  </div>
+  <button class="btn primary" data-go="3" id="n2" disabled>Tiếp</button>
+ </section>
+
+ <!-- 3 thử trước: chạm chỗ giành mắt -->
+ <section class="step" data-s="3">
+  <div class="split">
+   <div class="stick">
+    <h2>Thử trước</h2>
+    <p>Đây là màn đặt lịch khám. Việc chính người dùng cần làm là bấm <b>Đặt lịch</b>.</p>
+    <p class="small muted">Chạm vào <b>mọi chỗ</b> đang giành mắt với nút Đặt lịch. Chạm lại để bỏ. Xong thì bấm Kiểm tra.</p>
+   </div>
+   <div>
+    <div class="stage">
+     <div class="phone h-solid n-purple t-solid b-solid ht-solid" id="m3">
+      <button class="hot ph-head" data-k="head" aria-pressed="false"><b>Phòng khám An Tâm</b><span>Đặt lịch khám trong ngày</span></button>
+      <div class="ph-body">
+       <div class="doc">
+        <button class="hot" data-k="ava" aria-pressed="false" aria-label="Ảnh đại diện bác sĩ"><div class="ava">L</div></button>
+        <div class="who">
+         <button class="hot" data-k="name" aria-pressed="false"><div class="nm">BS. Nguyễn Thu Lan</div></button>
+         <button class="hot" data-k="spec" aria-pressed="false"><div class="sp">Nội tổng quát · 12 năm</div></button>
+        </div>
+        <button class="hot" data-k="heart" aria-pressed="false" aria-label="Nút yêu thích"><div class="heart"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></div></button>
+       </div>
+       <div class="tags">
+        <button class="hot inl" data-k="tag" aria-pressed="false"><span class="tg st">Còn 3 chỗ hôm nay</span></button>
+        <button class="hot inl" data-k="badge" aria-pressed="false"><span class="tg dc">Giảm 20%</span></button>
+       </div>
+       <button class="hot" data-k="price" aria-pressed="false" style="width:100%"><p class="price" style="margin:0">Phí khám <b>240.000 đ</b> · 15 phút</p></button>
+       <div style="height:12px"></div>
+       <div class="cta">Đặt lịch</div>
+      </div>
+     </div>
+    </div>
+    <div class="status" role="status" id="c3" style="text-align:center"></div>
+    <p class="legend hide" id="lg3"><span style="border:2px solid var(--good)"></span>đúng<span style="border:2px solid var(--bad)"></span>chạm nhầm<span style="border:2px dashed var(--bad)"></span>bỏ sót</p>
+    <button class="btn primary" id="chk3" disabled>Kiểm tra</button>
+    <div class="fb" id="fb3" role="status"></div>
+    <button class="btn primary hide" data-go="4" id="n3">Tiếp: tự sửa màn này</button>
+   </div>
+  </div>
+ </section>
+
+ <!-- 4 tự sửa -->
+ <section class="step" data-s="4">
+  <h2>Tự sửa</h2>
+  <p class="small muted">Nút Đặt lịch giữ nguyên màu xanh. Chỉnh từng phần, màn đổi ngay. Mục tiêu: mắt nhìn vào Đặt lịch trước, mà màn vẫn không mất thông tin.</p>
+  <div class="split">
+   <div class="stick" id="s4mock">
+    <div class="stage">
+     <div class="phone h-solid n-purple t-solid b-solid ht-solid" id="m4">
+      <div class="ph-head"><b>Phòng khám An Tâm</b><span>Đặt lịch khám trong ngày</span></div>
+      <div class="ph-body">
+       <div class="doc"><div class="ava">L</div><div class="who"><div class="nm">BS. Nguyễn Thu Lan</div><div class="sp">Nội tổng quát · 12 năm</div></div><div class="heart"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></div></div>
+       <div class="tags"><span class="tg st">Còn 3 chỗ hôm nay</span><span class="tg dc">Giảm 20%</span></div>
+       <p class="price">Phí khám <b>240.000 đ</b> · 15 phút</p>
+       <div class="cta">Đặt lịch</div>
+      </div>
+     </div>
+     <p class="live" id="live4" role="status"></p>
+    </div>
+   </div>
+   <div>
+    <div class="card" id="ctl4">
+     <div class="ctl"><span>Thanh đầu trang</span><div class="seg two" data-c="h"><button data-v="solid" aria-pressed="true">Xanh đặc</button><button data-v="white" aria-pressed="false">Nền trắng</button></div></div>
+     <div class="ctl"><span>Tên bác sĩ</span><div class="seg two" data-c="n"><button data-v="purple" aria-pressed="true">Chữ tím</button><button data-v="black" aria-pressed="false">Chữ đen</button></div></div>
+     <div class="ctl"><span>Thẻ "Còn 3 chỗ hôm nay"</span><div class="seg" data-c="t"><button data-v="solid" aria-pressed="true">Đặc</button><button data-v="soft" aria-pressed="false">Nhạt</button><button data-v="grey" aria-pressed="false">Xám</button></div></div>
+     <div class="ctl"><span>Nhãn "Giảm 20%"</span><div class="seg" data-c="b"><button data-v="solid" aria-pressed="true">Đặc</button><button data-v="soft" aria-pressed="false">Nhạt</button><button data-v="grey" aria-pressed="false">Xám</button></div></div>
+     <div class="ctl"><span>Nút yêu thích</span><div class="seg two" data-c="ht"><button data-v="solid" aria-pressed="true">Tim đỏ đặc</button><button data-v="line" aria-pressed="false">Viền xám</button></div></div>
+    </div>
+    <button class="btn primary" id="chk4">Xong, xem nhận xét</button>
+    <div class="fb" id="fb4" role="status"></div>
+    <button class="btn primary hide" data-go="5" id="n4">Tiếp: ý chính</button>
+   </div>
+  </div>
+ </section>
+
+ <!-- 5 hiểu sau -->
+ <section class="step" data-s="5">
+  <div class="split">
+   <div>
+    <h2>Ý chính</h2>
+    <p id="echo5" class="small"></p>
+    <div class="card">
+     <div class="rule"><div class="k">1</div><p><b>Một màu nhấn cho mỗi màn.</b> Màu của thương hiệu dành cho thứ người dùng cần bấm. Đầu trang, tên, biểu tượng để đen, trắng, xám. Chỉ còn một chỗ có màu đặc thì mắt biết nhìn đâu trước.</p></div>
+     <div class="rule"><div class="k">8–10</div><p><b>Sắc xám làm phần lớn công việc.</b> Một màn tốt thường có 8 tới 10 sắc xám cho chữ, viền, nền, và rất ít màu. Nhiều màu không làm màn sinh động hơn, chỉ làm mắt không biết dừng ở đâu.</p></div>
+     <div class="rule"><div class="k">nghĩa</div><p><b>Màu khác chỉ dùng khi nó mang nghĩa.</b> Xanh lá là ổn, đỏ là lỗi hay hết, vàng cam là cần chú ý. Dùng nền nhạt và chữ đậm cùng tông, để nó báo tin mà không giành mắt. Màu tím cho tên bác sĩ không mang nghĩa gì, nên bỏ.</p></div>
+     <div class="rule"><div class="k">5–8%</div><p><b>Không để màu nói một mình.</b> Khoảng 5 tới 8% nam giới khó phân biệt đỏ và xanh lá. Thẻ "Còn 3 chỗ" vẫn có chữ nên không sao; một chấm xanh hay chấm đỏ trơn thì họ không đọc được.</p></div>
+    </div>
+   </div>
+   <div>
+    <p class="small"><b>Một điều bất ngờ:</b> thẻ nhạt không chỉ bớt giành mắt, mà còn <b>dễ đọc hơn</b> thẻ đặc. Đây là độ tương phản giữa chữ và nền của chính hai thẻ trong bài (chữ nhỏ cần ít nhất 4,5:1):</p>
+    <div class="cmp">
+     <div class="sw t-solid"><span class="tg st">Còn 3 chỗ</span><b>3,3:1</b><small>Chữ trắng trên xanh đặc. Chưa đạt cho chữ nhỏ</small></div>
+     <div class="sw t-soft"><span class="tg st">Còn 3 chỗ</span><b>6,5:1</b><small>Chữ xanh đậm trên nền nhạt. Đạt</small></div>
+    </div>
+    <p class="small muted">Nhãn cam cũng vậy: đặc 3,6:1, nhạt 6,4:1. Nút Đặt lịch chữ trắng trên xanh dương đạt 5,2:1.</p>
+    <p class="q" style="font-weight:600;margin:14px 0 6px">Vậy thẻ "Còn 3 chỗ" nên nhạt hay xám?</p>
+    <div class="q" data-q="tagq" data-a="0"><div class="status" role="status"></div>
+     <button class="opt">Nhạt: còn chỗ là tin quan trọng để quyết định đặt, màu xanh lá giúp thấy nhanh</button>
+     <button class="opt">Xám: chỉ nút chính mới được có màu</button>
+     <div class="why">Nhạt. "Một màu nhấn" là nói về màu đặc giành mắt, không phải cấm mọi màu. Màu trạng thái mang nghĩa thì giữ, chỉ cho nó nhỏ và nhạt. Còn nhãn "Giảm 20%" thì nhạt hay xám đều được, tùy màn có muốn khuyến mãi được chú ý hay không.</div>
+    </div>
+    <button class="btn primary" data-go="6" id="n5" disabled>Tiếp</button>
+   </div>
+  </div>
+ </section>
+
+ <!-- 6 câu hỏi nhanh -->
+ <section class="step narrow" data-s="6">
+  <h2>Câu hỏi nhanh</h2>
+  <div class="card">
+   <p><b>1.</b> App có màu thương hiệu xanh dương. Liên kết, nút chính, ô đang chọn đều dùng màu đó. Có sai luật "một màu nhấn" không?</p>
+   <div class="q" data-q="q1" data-a="1"><div class="status" role="status"></div>
+    <button class="opt">Sai, mỗi màn chỉ được một chỗ màu xanh</button>
+    <button class="opt">Không sai, cùng một màu nhấn cho mọi thứ bấm được; chỉ cần một thứ là khối đặc to nhất</button>
+    <button class="opt">Sai, phải dùng mỗi loại một màu khác nhau cho dễ phân biệt</button>
+    <div class="why">Một màu nhấn nghĩa là một màu, dùng nhất quán cho thứ bấm được hay đang chọn. Liên kết là chữ xanh nhỏ, ô chọn là viền xanh; chỉ nút chính là khối xanh đặc. Mỗi loại một màu mới là làm màn rối.</div>
+   </div>
+  </div>
+  <div class="card">
+   <p><b>2.</b> Trong bảng đơn hàng, thẻ trạng thái "Đã thanh toán" nên trông thế nào?</p>
+   <div class="q" data-q="q2" data-a="2"><div class="status" role="status"></div>
+    <button class="opt">Nền xanh lá đặc, chữ trắng, cho nổi</button>
+    <button class="opt">Chỉ một chấm xanh lá, không chữ, cho gọn</button>
+    <button class="opt">Nền xanh lá nhạt, chữ xanh lá đậm, có chữ "Đã thanh toán"</button>
+    <div class="why">Bảng có hàng chục dòng, thẻ đặc lặp lại sẽ giành hết mắt. Chấm không chữ thì người khó phân biệt đỏ và xanh lá không đọc được. Nền nhạt chữ đậm vừa yên vừa dễ đọc.</div>
+   </div>
+  </div>
+  <div class="card">
+   <p><b>3.</b> Màn cài đặt có nút "Xóa tài khoản". Nên làm nó thế nào?</p>
+   <div class="q" data-q="q3" data-a="0"><div class="status" role="status"></div>
+    <button class="opt">Chữ đỏ hoặc nút viền đỏ, để ở cuối; nút đỏ đặc chỉ hiện ở bước xác nhận xóa</button>
+    <button class="opt">Nút đỏ đặc to ở đầu trang để ai cũng thấy</button>
+    <button class="opt">Xám như mọi thứ khác, không cần màu</button>
+    <div class="why">Đỏ mang nghĩa "nguy hiểm" nên nên giữ, nhưng việc này hiếm khi làm nên không được giành mắt. Tới bước xác nhận thì xóa mới là việc chính, lúc đó nút đỏ đặc là đúng chỗ.</div>
+   </div>
+  </div>
+  <button class="btn primary" data-go="7" id="n6" disabled>Tiếp</button>
+ </section>
+
+ <!-- 7 tự nói lại -->
+ <section class="step narrow" data-s="7">
+  <h2>Tự nói lại</h2>
+  <p>Viết 1–2 câu: chọn màu cho một màn thế nào? Viết như đang nói với bạn cùng nhóm đồ án.</p>
+  <textarea id="teach" placeholder="Mình sẽ..."></textarea>
+  <button class="btn ghost" id="showMine">Xem bản của mình</button>
+  <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Chọn một màu nhấn và chỉ để nó thành khối đặc ở việc chính của màn. Mọi thứ khác dùng đen, trắng, xám. Màu khác chỉ khi mang nghĩa như ổn, lỗi, cảnh báo, và khi đó dùng nền nhạt chữ đậm, luôn có chữ đi kèm.</div></div>
+  <button class="btn primary" data-go="8" id="n7" disabled>Tiếp</button>
+ </section>
+
+ <!-- 8 góp ý -->
+ <section class="step narrow" data-s="8">
+  <h2>Góp ý buổi này</h2>
+  <div class="card">
+   <div class="crit"><b>Độ dài</b><div class="seg" data-f="len"><button data-v="ngắn" aria-pressed="false">Ngắn</button><button data-v="vừa" aria-pressed="false">Vừa</button><button data-v="dài" aria-pressed="false">Dài</button></div></div>
+   <div class="crit"><b>Độ khó</b><div class="seg" data-f="hard"><button data-v="dễ" aria-pressed="false">Dễ</button><button data-v="vừa" aria-pressed="false">Vừa</button><button data-v="khó" aria-pressed="false">Khó</button></div></div>
+   <div class="crit"><b>Cách học mới (chạm, tự chỉnh) so với các buổi trước</b><div class="seg" data-f="style"><button data-v="hơn" aria-pressed="false">Thích hơn</button><button data-v="như nhau" aria-pressed="false">Như nhau</button><button data-v="kém" aria-pressed="false">Kém hơn</button></div></div>
+   <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+  </div>
+  <button class="btn primary" id="finish">Xong buổi học</button>
+  <div id="saved" role="status"></div>
+  <button class="btn ghost" id="copy" style="display:none">Chép kết quả</button>
+ </section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const R={lesson:'frontend-5',start:new Date().toISOString(),review:{},quiz:{},taps:null,fix:null,teach:'',feedback:{}};
+const TOTAL=9;
+function go(n){$$('.step').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));$('#cnt').textContent=(n+1)+'/'+TOTAL;$('#bar').style.width=(n/(TOTAL-1)*100)+'%';window.scrollTo(0,0);const h=$('.step.on h1, .step.on h2');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}
+$$('[data-go]').forEach(b=>b.addEventListener('click',()=>go(+b.dataset.go)));
+function setFb(el,t,c){el.textContent=t;el.className='fb'+(c?' '+c:'');}
+
+/* câu hỏi một lựa chọn */
+const gates={F2:'n1',F5:'n1',F6:'n1',recall:'n2',tagq:'n5',q1:'n6',q2:'n6',q3:'n6'};
+const groups={n1:['F2','F5','F6'],n2:['recall'],n5:['tagq'],n6:['q1','q2','q3']};
+const answered={};
+$$('.q[data-q]').forEach(q=>{const id=q.dataset.q,a=+q.dataset.a,os=[...q.querySelectorAll('.opt')],st=q.querySelector('.status'),why=q.querySelector('.why');
+ os.forEach((o,i)=>o.addEventListener('click',()=>{if(answered[id]!==undefined)return;answered[id]=i;const ok=i===a;
+  os.forEach((x,j)=>{x.disabled=true;if(j===a)x.classList.add('right');});if(!ok)o.classList.add('wrong');
+  st.textContent=ok?'Đúng.':'Chưa đúng. Đáp án đúng được đánh dấu "Đúng".';st.style.color=ok?'var(--good-ink)':'var(--bad)';
+  if(why)why.classList.add('on');
+  const rec={pick:i,ok};if(['F2','F5','F6'].includes(id))R.review[id]=rec;else R.quiz[id]=rec;
+  const g=gates[id];if(g&&groups[g].every(k=>answered[k]!==undefined))$('#'+g).disabled=false;}));});
+
+/* bước 3: chạm chỗ giành mắt */
+(()=>{const hs=$$('#m3 .hot'),c=$('#c3'),chk=$('#chk3'),fb=$('#fb3');
+ const COMP=['head','name','tag','badge','heart'];
+ const NAME={head:'thanh đầu trang',name:'tên bác sĩ',tag:'thẻ "Còn 3 chỗ"',badge:'nhãn "Giảm 20%"',heart:'trái tim',ava:'ảnh đại diện',spec:'dòng chuyên khoa',price:'dòng phí khám'};
+ function upd(){const n=hs.filter(h=>h.getAttribute('aria-pressed')==='true').length;c.textContent=n?('Đã chạm '+n+' chỗ'):'';chk.disabled=!n;}
+ hs.forEach(h=>h.addEventListener('click',()=>{if(h.disabled)return;h.setAttribute('aria-pressed',h.getAttribute('aria-pressed')==='true'?'false':'true');upd();}));
+ chk.addEventListener('click',()=>{const picked=hs.filter(h=>h.getAttribute('aria-pressed')==='true').map(h=>h.dataset.k);
+  const right=picked.filter(k=>COMP.includes(k)),wrong=picked.filter(k=>!COMP.includes(k)),miss=COMP.filter(k=>!picked.includes(k));
+  hs.forEach(h=>{const k=h.dataset.k;h.disabled=true;h.setAttribute('aria-pressed','false');if(right.includes(k))h.classList.add('right');else if(wrong.includes(k))h.classList.add('wrong');else if(miss.includes(k))h.classList.add('miss');});
+  chk.classList.add('hide');c.textContent='';$('#lg3').classList.remove('hide');
+  let t='Bạn tìm được '+right.length+'/5 chỗ giành mắt. ';
+  if(miss.length)t+='Bỏ sót: '+miss.map(k=>NAME[k]).join(', ')+'. ';
+  if(wrong.length){const w=wrong.map(k=>NAME[k]).join(', ');t+=w.charAt(0).toUpperCase()+w.slice(1)+' là chữ hay hình xám, không giành mắt. ';}
+  t+='Cả 5 chỗ có chung một điểm: đều là màu đặc, đậm. Thanh đầu trang còn trùng đúng màu xanh của nút Đặt lịch, nên mắt không biết khối xanh nào mới là chỗ bấm.';
+  setFb(fb,t,miss.length||wrong.length?'bad':'good');
+  R.taps={picked,right:right.length,missed:miss,wrongPicks:wrong};$('#n3').classList.remove('hide');});
+ upd();})();
+
+/* bước 4: tự sửa */
+(()=>{const m=$('#m4'),live=$('#live4'),fb=$('#fb4');const S={h:'solid',n:'purple',t:'solid',b:'solid',ht:'solid'};
+ const PFX={h:'h-',n:'n-',t:'t-',b:'b-',ht:'ht-'};
+ const LBL={h:'thanh đầu trang',n:'tên bác sĩ',t:'thẻ "Còn 3 chỗ"',b:'nhãn "Giảm 20%"',ht:'trái tim'};
+ function loud(){return Object.keys(S).filter(k=>(k==='n'?S[k]==='purple':S[k]==='solid'));}
+ function render(){m.className='phone '+Object.keys(S).map(k=>PFX[k]+S[k]).join(' ');const L=loud();
+  live.innerHTML=L.length?('Còn <b>'+L.length+'</b> chỗ màu đặc giành mắt với Đặt lịch'):'Chỉ còn <b>một</b> chỗ màu đặc: nút Đặt lịch';}
+ $$('#ctl4 .seg').forEach(sg=>{const k=sg.dataset.c;sg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{S[k]=b.dataset.v;sg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));render();}));});
+ $('#chk4').addEventListener('click',()=>{const L=loud(),notes=[];
+  if(S.h==='solid')notes.push('Thanh đầu trang vẫn xanh đặc, trùng màu nút. Đây là chỗ giành mắt mạnh nhất vì nó to nhất.');
+  if(S.n==='purple')notes.push('Tên bác sĩ màu tím không mang nghĩa gì; chữ đen và độ đậm đã đủ làm tên nổi.');
+  if(S.t==='solid')notes.push('Thẻ "Còn 3 chỗ" đặc vẫn giành mắt, mà chữ trắng trên xanh lá lại khó đọc.');
+  if(S.t==='grey')notes.push('Thẻ "Còn 3 chỗ" bạn để xám: yên, nhưng mất tín hiệu "còn chỗ" mà người dùng cần để quyết định. Nhạt sẽ tốt hơn.');
+  if(S.b==='solid')notes.push('Nhãn "Giảm 20%" đặc màu cam là chỗ thứ hai kéo mắt khỏi nút.');
+  if(S.ht==='solid')notes.push('Tim đỏ đặc là màu mạnh nhất trên màn, cho một việc phụ.');
+  const good=!L.length&&S.t==='soft';
+  setFb(fb,(good?'Rất tốt. Bạn hạ hết các chỗ màu đặc, và vẫn giữ màu xanh lá nhạt cho tin "còn chỗ". Giờ mắt đi thẳng tới Đặt lịch. ':(L.length?'Màn đã yên hơn, còn vài chỗ: ':'Gần xong: '))+notes.join(' '),good?'good':(L.length?'bad':''));
+  R.fix={state:{...S},loud:L.length,good};$('#n4').classList.remove('hide');
+  const e=[];e.push(R.taps&&R.taps.missed.length?('Ở bước thử, bạn bỏ sót '+R.taps.missed.length+' chỗ giành mắt'):'Ở bước thử, bạn tìm đủ 5 chỗ giành mắt');
+  e.push(L.length?('khi tự sửa còn để '+L.length+' chỗ màu đặc'):'khi tự sửa bạn đã hạ hết màu đặc ngoài nút chính');
+  $('#echo5').textContent=e.join(', ')+'. Bốn ý dưới đây giải thích vì sao.';});
+ render();})();
+
+/* tự nói lại */
+$('#teach').addEventListener('input',e=>{R.teach=e.target.value;$('#n7').disabled=e.target.value.trim().length<5;});
+$('#showMine').addEventListener('click',()=>{$('#mine').classList.add('on');$('#showMine').classList.add('hide');R.sawMineBeforeWriting=R.teach.trim().length<5;});
+
+/* góp ý */
+$$('[data-f]').forEach(sg=>sg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{R.feedback[sg.dataset.f]=b.dataset.v;sg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));})));
+$('#note').addEventListener('input',e=>{R.feedback.note=e.target.value;});
+
+function summary(){return 'Frontend 5 (màu)\n'+JSON.stringify(R,null,1);}
+document.getElementById('finish').onclick=async()=>{const btn=document.getElementById('finish');btn.disabled=true;R.end=new Date().toISOString();const out=document.getElementById('saved');out.style.display='block';out.textContent='Đang lưu...';let ok=false;try{let dbp=null;try{dbp=window.claude&&window.claude.use?window.claude.use('db'):null;}catch(e){dbp=null;}const db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;if(db){await Promise.race([db.doc('sessions/f5-'+Date.now()).set(R),new Promise((_,j)=>setTimeout(()=>j(new Error('save timeout')),10000))]);ok=true;}}catch(e){ok=false;}
+out.textContent=ok?'Đã lưu kết quả. Bạn chỉ cần nhắn "xong" trong thread.':'Chưa lưu được tự động. Bấm nút dưới để chép kết quả rồi dán vào thread.';if(!ok){document.getElementById('copy').style.display='flex';}};
+document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());document.getElementById('copy').textContent='Đã chép';}catch(e){document.getElementById('saved').textContent=summary();}};
+</script>
+</body>
+</html>
