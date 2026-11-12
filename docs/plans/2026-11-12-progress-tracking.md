@@ -6,7 +6,7 @@ Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đ�
 
 ## Đang ở đâu
 - Đang ở: checkpoint 2 đến 4 đã làm xong trong PR #31, chờ thien xem.
-- Còn thiếu: thien xem 3 trang trên điện thoại và laptop, merge PR #31; chọn có bật nhắc theo lịch không.
+- Còn thiếu: thien xem 3 trang trên điện thoại và laptop, merge PR #31. Lần nhắc đầu tiên chạy tối nay 18:47.
 - thien cần làm: mở 3 trang trong tin nhắn của thread, rồi merge [PR #31](https://github.com/thiengthb/thienai-workflow/pull/31).
 
 ## Mục tiêu
@@ -43,7 +43,9 @@ Xong khi: thien mở trang và thấy mỗi môn đang ở chặng nào, buổi 
 
 ### 5. Nhắc theo lịch
 Xong khi: thien nhận được lần nhắc đầu tiên, hoặc chọn không cần.
-- [ ] thien chọn có bật không
+- [x] thien chọn bật, hai lần mỗi tuần (2026-11-12)
+- [x] Đặt lịch nhắc thứ Hai và thứ Năm, 18:47
+- [ ] thien nhận lần nhắc đầu tiên (tối 2026-11-12)
 
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
