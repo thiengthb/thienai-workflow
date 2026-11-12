@@ -60,14 +60,14 @@ Một điều đi ngược trực giác: hoạt họa *tự chạy* lại hơn h
 | 7. Chạm vào chỗ sai | Luyện mắt bắt lỗi | Ba nút cùng màu trên màn sản phẩm |
 | 8. Vẽ dự đoán rồi so | Số liệu thật | Đường quên của Ebbinghaus |
 
-Gợi ý cho từng môn:
+Gợi ý cho từng môn. 8 kiểu trên là dạng chung, nhưng ví dụ mới chỉ có cho frontend, BA và chiến tranh, và gợi ý dưới đây dựa trên nghiên cứu chung chứ chưa tìm hiểu riêng từng môn. Mỗi môn phải qua bước "Tìm cách dạy hợp với môn" trước, bảng này chỉ là điểm bắt đầu:
 
 | Môn | Kiểu nên dùng nhiều |
 |---|---|
 | Frontend | 1, 2, 3, 7. Mỗi khái niệm CSS nên có một ô chỉnh được như Josh Comeau |
 | BA | 4, 5, 7 (tìm chỗ thiếu trong user story), và đóng vai phỏng vấn |
 | Chiến tranh | 6, 5 (xếp sự kiện vào dòng thời gian), 8 (quân số, thương vong) |
-| Testing, kinh tế, chính trị (hàng chờ) | 2 và 8 cho kinh tế; 7 cho testing |
+| Testing, kinh tế, chính trị (hàng chờ) | Chưa tìm hiểu. Làm bước 0 "Tìm cách dạy hợp với môn" trong [`../README.md`](../README.md) trước buổi đầu |
 
 ## Đặt vào khung buổi học
 

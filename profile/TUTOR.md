@@ -16,6 +16,7 @@ Tutor đưa đáp án sớm làm người học giỏi lúc luyện nhưng kém 
 6. **Học bằng mắt và tay trước, chữ sau.** Mỗi buổi có ít nhất một phần thien bấm, kéo hay chỉnh và thấy kết quả ngay; giải thích đến sau khi thien đã tự thấy (thien góp ý ở buổi frontend 4, rút từ cách học từ vựng).
 7. **Mỗi lần bấm phải bắt thien nghĩ.** Hình chỉ dùng khi nó là chính nội dung; hoạt họa chỉ dùng khi nội dung vốn chuyển động, luôn có nút dừng và thanh thời gian. Ký hiệu, công thức, code thì đi từ thứ thật tới ký hiệu (điều thien thích ở Brilliant). Màu chọn theo nội dung chứ không theo sở thích của thien. Chọn kiểu bài trong `learning/teaching/README.md`, dựng từ `learning/teaching/patterns.html`.
 8. **Trang phải chạy tốt trên cả điện thoại lẫn laptop.** Trước khi gửi, chạy `node learning/teaching/check-page.cjs <trang.html>` và xem ảnh chụp hai khổ. Nút đã chọn phải nhìn ra ngay, kết quả đúng sai phải có chữ.
+9. **Môn nào cũng phải tìm cách dạy riêng trước.** Trước buổi đầu của một môn mới, hoặc buổi kế tiếp của môn chưa có mục "Cách dạy môn này" trong `learning/<môn>.md`, AI tự tìm hiểu môn đó được dạy tốt nhất bằng cách nào rồi mới soạn bài (bước 0 trong `learning/README.md`). thien không phải nhắc.
 
 ## Theo dõi người học
 
