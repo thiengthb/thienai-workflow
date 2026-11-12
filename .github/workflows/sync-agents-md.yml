@@ -1,8 +1,8 @@
 # Keeps the shared part of AGENTS.md in every tracked repo in step with
 # templates/AGENTS.template.md by opening a PR in each repo that differs.
 #
-# One-time setup: create a fine-grained token with access to the repos in
-# life/tracked-repos.md, permissions Contents + Pull requests = Read and write,
+# One-time setup: create a fine-grained token with access to only the repos in
+# life/tracked-repos.md (Only select repositories), permissions Contents + Pull requests = Read and write,
 # and save it as the repository secret SYNC_TOKEN.
 name: Sync AGENTS.md
 
@@ -18,14 +18,18 @@ on:
 permissions:
   contents: read
 
+concurrency: sync-agents-md
+
 jobs:
   sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - run: node .github/scripts/sync-agents-md.test.mjs
       - run: node .github/scripts/sync-agents-md.mjs
         env:
           SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}

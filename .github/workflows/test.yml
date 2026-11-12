@@ -1,0 +1,22 @@
+# Runs the repo's own tests on every PR, so a broken sync script is caught
+# before it is merged and pushed out to other repos.
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node .github/scripts/sync-agents-md.test.mjs

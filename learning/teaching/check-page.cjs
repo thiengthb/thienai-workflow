@@ -2,7 +2,10 @@
 // Cách chạy: node learning/teaching/check-page.cjs <đường-dẫn-trang.html> [thư-mục-ảnh] [--show=.step]
 // Cần Playwright (môi trường cloud của Claude Code có sẵn).
 //
-// Kiểm 4 thứ:
+// Kiểm 6 thứ:
+//  0a. Không còn chữ giữ chỗ của mẫu, kiểu __A__ hay __IMG_A__ (quên thay khi dựng từ mẫu).
+//  0b. Lưu kết quả (db.doc(...).set(...)) phải có giới hạn thời gian, để nút không treo mãi
+//      mà không hiện nút chép kết quả. Cách viết đúng: xem nút finish trong artifacts/lesson-page.html.
 //  1. Không có lỗi JavaScript.
 //  2. Không tràn ngang (không phải cuộn sang phải).
 //  3. Vùng bấm không nhỏ hơn 24px (luật tối thiểu WCAG 2.2), cảnh báo nếu dưới 44px.
@@ -37,8 +40,12 @@ const SIZES = [
 ];
 
 (async () => {
-  const browser = await chromium.launch();
   let fails = 0, warns = 0;
+  const src = fs.readFileSync(path.resolve(file), 'utf8');
+  const holders = [...new Set(src.match(/__[A-Z][A-Z0-9_]*__/g) || [])];
+  if (holders.length) { fails++; console.log(`LỖI còn chữ giữ chỗ của mẫu: ${holders.join(', ')}`); }
+  if (/await\s+db\.doc\([^;]*?\)\.set\(/.test(src)) { fails++; console.log('LỖI lưu kết quả không có giới hạn thời gian: bọc db.doc(...).set(...) trong Promise.race với setTimeout'); }
+  const browser = await chromium.launch();
   for (const size of SIZES) {
     const ctx = await browser.newContext(size.opts);
     const page = await ctx.newPage();
