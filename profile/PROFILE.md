@@ -13,6 +13,7 @@ Mình giỏi lên, rồi chất lượng và an toàn, rồi làm nhanh.
 ## Cách mình làm việc
 - Làm nhiều project cùng lúc, nhiều tài khoản Claude. Claude làm chính; Codex và Gemini để review và test.
 - Không muốn chạy lệnh hay duyệt nhiều PR nhỏ liên tiếp. Việc nhỏ: duyệt một lần. Nếu mình đã mất dấu thì chờ hết milestone, mình thử tính năng thật.
+- Kế hoạch mình đã duyệt phải nằm trong repo và có trang tiến độ để mình xem trên điện thoại: theo `profile/PLANNING.md`.
 - Mất dấu tiến độ là lúc mình bỏ việc. Khi mình quay lại, cho mình bản tóm tắt đọc trong 2 phút: đang ở đâu, vừa đổi gì, cần mình làm gì.
 
 ## Nhắc việc dở khi bắt đầu việc mới (bắt buộc)

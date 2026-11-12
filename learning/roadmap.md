@@ -1,0 +1,93 @@
+# Lộ trình học của thien
+
+Mỗi môn đi từ người mới đến khá qua vài chặng. Mỗi chặng ghi học xong thì biết gì, làm được gì, và thế nào là xong. Chặng đang học thì chi tiết; chặng sau chỉ phác, sẽ rõ dần khi tới gần. Lộ trình được đổi, nhưng mỗi lần đổi đều ghi ở bảng cuối file kèm lý do.
+
+Cách cập nhật: sau mỗi buổi học, AI tick việc đã xong trong chặng và thêm link bài vào mục "Bài đã học" của môn đó, trong cùng PR ghi nhật ký buổi. Vòng xoay và buổi tới học gì ở [README.md](README.md); trạng thái chi tiết từng môn ở file của môn. Nguồn học ghi rõ đã đọc hay chưa, theo `profile/RESEARCH.md`. Trang để xem trên điện thoại: https://claude.ai/artifact/Vubbj6ghT9L7eKYegTfT9n, AI đăng lại bằng `templates/progress-page.mjs --roadmap` sau mỗi lần sửa file này.
+
+## Frontend
+Môn chính, một nửa số buổi. Đích sau 6 tháng: nhìn một màn bất kỳ, chỉ ra được chỗ cấn mắt ở mức cả màn, sửa được và nói được vì sao; viết được luật cho thienui từ những gì đã học. Chi tiết ở [frontend.md](frontend.md).
+
+### Chặng 1: Con mắt nhìn cả màn
+Xong khi: bài so sánh mù ngày 2026-11-22, thien chấm lại các màn cũ và giải thích được bằng các ý đã học.
+- [x] Một điểm nhấn cho mỗi màn (buổi 1, 2026-11-07)
+- [x] Thứ bậc chữ: ít bậc, mỗi bậc khác hẳn nhau (buổi 2, 2026-11-07)
+- [x] Khoảng cách là cách nhóm (buổi 3, 2026-11-11)
+- [x] Sửa theo mục đích của màn (buổi 4, 2026-11-11)
+- [x] Một màu nhấn, màu khác chỉ khi mang nghĩa (buổi 5, 2026-11-12)
+- [ ] Chọn màu cho cả một app theo loại app, người dùng, độ tuổi (buổi 6)
+- [ ] So sánh mù các màn đã xem (2026-11-22)
+
+### Chặng 2: Áp vào app của mình
+Xong khi: thien tự sửa được một màn của sakubun hoặc todo và viết được 3 luật cho thienui. Bắt đầu sau mốc 2026-11-22.
+- [ ] Soi một màn của app mình dùng hằng ngày, chọn một chỗ sửa
+- [ ] Chép lại một màn tốt theo đúng con số, rồi nói ra mẹo vừa thấy
+- [ ] Viết luật đầu tiên cho thienui, kiểm bằng hai màn thật
+
+### Chặng 3: Phần kỹ thuật nền
+Chưa chốt. Ở mốc 2026-11-22 sẽ chọn học phần nào trước trong: trình duyệt và mạng, TypeScript, kiến trúc, dễ truy cập (a11y), hiệu năng, test.
+- [ ] Chốt thứ tự ở mốc 2026-11-22
+
+### Bài đã học
+- Bài 1 đến 5: đọc nhanh và làm lại ở [frontend/README.md](frontend/README.md)
+- Trang buổi 1: [Một điểm nhấn](https://claude.ai/artifact/A3nqpsF7j3wnNaYpfdmoKC)
+- Trang buổi 5: [Màu](https://claude.ai/artifact/Gn4VUaqRzfT7jBDFz9GZ5z)
+- Thẻ ôn của mọi môn: [cards.md](cards.md)
+
+### Nguồn học
+- [5 bài tập học UI của Erik Kennedy](https://learnui.design/blog/5-practical-exercises-learn-ui-design-free.html): nói ra vì sao một màn đẹp, chép lại một màn tốt. Thread học đã đọc khi viết "Cách dạy môn này".
+- [Bản đồ frontend cho người mới của roadmap.sh](https://roadmap.sh/frontend-beginner): dùng ở chặng 3 để chọn phần kỹ thuật, không học theo hết. Mới thấy qua tìm kiếm, chưa đọc.
+- Sách Refactoring UI (trả phí): dạy bằng cặp trước và sau có con số. Chưa đọc.
+
+## BA
+Môn mở rộng, khoảng một buổi mỗi tuần. Đích sau 6 tháng: làm PO đồ án capstone tốt hơn, tức là hỏi ra được nhu cầu thật, viết user story có điều kiện hoàn thành rõ, và giao việc cho AI không phải sửa lại nhiều. Chi tiết ở [ba.md](ba.md).
+
+### Chặng 1: Mười ý lớn
+Xong khi: học đủ 10 ý trên bản đồ, mỗi ý một buổi; thứ tự do thien xếp ở buổi 1.
+- [x] Yêu cầu và nhu cầu (buổi 1, 2026-11-12)
+- [ ] Hỏi chuyện người dùng (buổi 2)
+- [ ] Các bên liên quan
+- [ ] User story
+- [ ] Điều kiện hoàn thành
+- [ ] Vẽ luồng công việc
+- [ ] Xếp ưu tiên
+- [ ] Use case
+- [ ] Yêu cầu không ai nói ra
+- [ ] Dữ liệu nhìn từ nghiệp vụ
+
+### Chặng 2: Áp vào đồ án capstone
+Xong khi: có một tính năng capstone đi trọn từ phỏng vấn người dùng đến user story có điều kiện hoàn thành, nhóm dùng được.
+- [ ] Phỏng vấn một người dùng thật của capstone
+- [ ] Viết 3 user story kèm điều kiện hoàn thành cho một tính năng
+- [ ] Vẽ bản đồ user story cho cả capstone
+
+### Bài đã học
+- Bài 1: đọc nhanh và làm lại ở [ba/README.md](ba/README.md)
+- Trang buổi 1: [Yêu cầu và nhu cầu](https://claude.ai/artifact/TXQ8HGSbo7dXQ51XVsq1Q9)
+
+### Nguồn học
+- [The Mom Test](https://www.momtestbook.com/) của Rob Fitzpatrick: 3 luật hỏi chuyện người dùng (hỏi về đời sống của họ chứ không về ý tưởng của mình, hỏi chuyện cụ thể đã xảy ra, nghe nhiều nói ít). Hợp với buổi BA 2. Đã đọc trang giới thiệu và [một bản tóm tắt](https://readingraphics.com/book-summary-the-mom-test/), chưa đọc sách.
+- [Bản đồ user story của Jeff Patton](https://jpattonassociates.com/the-new-backlog/): xếp việc thành xương sống và các nhánh để thấy bức tranh lớn. Hợp với chặng 2. Đã đọc đoạn trích.
+
+## Chiến tranh
+Môn mở rộng, khoảng một buổi mỗi tuần. Đích và lý do học: ghi sau buổi làm quen. Chi tiết ở `war.md` (đang được thêm ở thread học).
+
+### Chặng 1: Làm quen và mười ý lớn
+Xong khi: thien xếp xong 10 ý lớn và học được vài ý đầu qua các trận có thật.
+- [ ] Buổi làm quen: làm chỉ huy trận Bạch Đằng 938 (đang làm, 2026-11-12)
+- [ ] thien xếp thứ tự 10 ý lớn
+
+### Bài đã học
+- Trang buổi 1: [Bạch Đằng 938](https://claude.ai/artifact/EZzNBAA7saekceEaKU36up)
+
+### Nguồn học
+- Cách dạy môn này (bắt người học quyết định trước khi biết kết cục, như trường quân sự Mỹ): ở mục "Cách dạy môn này" của `war.md`.
+
+## Hàng chờ
+Testing, kinh tế, chính trị. Một môn chỉ vào học khi có môn khác nghỉ, tối đa 3 môn cùng lúc (luật ở [README.md](README.md)). Mốc xem lại: 2026-11-22 cho frontend, 2026-12-13 cho cả ba môn.
+
+## Lộ trình đã đổi
+| Ngày | Đổi gì | Vì sao |
+|---|---|---|
+| 2026-11-11 | Từ chỉ học frontend sang 3 môn xoay vòng: frontend, BA, chiến tranh | thien muốn học rộng nhiều lĩnh vực |
+| 2026-11-12 | Buổi frontend 6 đổi thành chọn màu cho cả một app | thien muốn học sâu về màu sau buổi 5 |
+| 2026-11-12 | Học buổi làm quen chiến tranh trước BA 2 | thien muốn học chiến tranh ngay |

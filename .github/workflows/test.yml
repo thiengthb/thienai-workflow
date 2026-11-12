@@ -21,3 +21,5 @@ jobs:
           node-version: 20
       - run: node .github/scripts/sync-agents-md.test.mjs
       - run: node .github/scripts/check-status.test.mjs
+      - run: node .github/scripts/progress-page.test.mjs
+      - run: node templates/check-status.mjs docs/STATUS.md

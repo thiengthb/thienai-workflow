@@ -1,12 +1,19 @@
 # Tiến độ
 
-Cập nhật lần cuối: <ngày> · <ai cập nhật: người hoặc AI, tài khoản nào>
+Cập nhật lần cuối: <ngày> · <ai cập nhật: người hoặc AI, tài khoản nào> · Trang tiến độ: <link artifact>
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết project đang ở đâu.
 Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien; `scripts/check-status.mjs` kiểm trong CI.
 
 ## Đang ở đâu
 <1 đến 3 câu. Ví dụ: "Đang làm trang đăng nhập, xong phần giao diện, còn nối API.">
+
+## Kế hoạch đang chạy
+Kế hoạch thien đã duyệt, chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md` của repo thienai-workflow.
+
+| Kế hoạch | Đang ở checkpoint | Đã tick |
+|---|---|---|
+| <[tên](plans/2026-01-01-example.md)> | <2/4: tên checkpoint> | <5/9> |
 
 ## Việc dở
 Việc đã bắt đầu mà chưa xong. Phiên sau đọc mục này đầu tiên để nhắc thien. Xong việc nào thì xoá dòng đó.
