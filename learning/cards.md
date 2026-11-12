@@ -10,9 +10,12 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 
 | Thẻ | Môn | Câu hỏi | Đáp án ở | Hộp | Hỏi lại |
 |---|---|---|---|---|---|
-| F1 | Frontend | Hai nút cùng cỡ, cùng màu đặt cạnh nhau thì sao? | [bài 1](frontend/lessons/01-one-focal-point.md) | 1 | 2026-11-12 |
+| F1 | Frontend | Hai nút cùng cỡ, cùng màu đặt cạnh nhau thì sao? | [bài 1](frontend/lessons/01-one-focal-point.md) | 2 | 2026-11-15 |
 | F2 | Frontend | Muốn nút chính nổi hơn mà không thêm màu mới thì làm gì? | [bài 1](frontend/lessons/01-one-focal-point.md) | 1 | 2026-11-12 |
-| F3 | Frontend | Ngoài cỡ chữ, màu và thứ tự, còn hai cách nào để tạo bậc chữ? | [bài 2](frontend/lessons/02-type-hierarchy.md) | 1 | 2026-11-12 |
-| F4 | Frontend | Trong nhóm các dòng cách nhau 8px. Giữa hai nhóm nên bao nhiêu? | [bài 3](frontend/lessons/03-spacing-groups.md) | 1 | 2026-11-12 |
+| F3 | Frontend | Ngoài cỡ chữ, màu và thứ tự, còn hai cách nào để tạo bậc chữ? | [bài 2](frontend/lessons/02-type-hierarchy.md) | 2 | 2026-11-15 |
+| F4 | Frontend | Trong nhóm các dòng cách nhau 8px. Giữa hai nhóm nên bao nhiêu? | [bài 3](frontend/lessons/03-spacing-groups.md) | 2 | 2026-11-15 |
 | F5 | Frontend | Vì sao nhiều design system chỉ cho dùng 4, 8, 12, 16, 24, 32? | [bài 3](frontend/lessons/03-spacing-groups.md) | 1 | 2026-11-12 |
 | F6 | Frontend | Màn thanh toán có hai nút đặc "Thanh toán" và "Thêm mã giảm giá". Sửa thế nào? | [bài 4](frontend/lessons/04-fix-a-whole-screen.md) | 1 | 2026-11-12 |
+| B1 | BA | Khách nhờ "thêm nút xuất Excel". Câu nào nên hỏi đầu tiên? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 1 | 2026-11-13 |
+| B2 | BA | "Thêm thông báo đẩy lúc 8 giờ tối" là nhu cầu hay giải pháp? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 1 | 2026-11-13 |
+| B3 | BA | Vì sao không nên làm ngay đúng thứ được nhờ? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 1 | 2026-11-13 |
