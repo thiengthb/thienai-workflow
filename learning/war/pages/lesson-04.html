@@ -27,7 +27,7 @@ p{margin:0 0 12px}
 .step{display:none}.step.on{display:block;animation:in .2s ease}
 @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .hide{display:none!important}
-/* nút chung: trạng thái chọn phải nhìn thấy được, không chỉ dựa vào màu */
+/* shared buttons: the selected state must be visible without relying on colour alone */
 .btn,.opt{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:14px;min-height:48px;padding:12px 14px;cursor:pointer;text-align:left;width:100%;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background-color .15s,transform .2s var(--spring)}
 .btn:active,.opt:active{transform:scale(.98)}
 .btn:focus-visible,.opt:focus-visible,.hot:focus-visible,.seg button:focus-visible,textarea:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
@@ -63,7 +63,7 @@ p{margin:0 0 12px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 .chip{border-radius:22px;padding:6px 14px;text-align:left}
 textarea{width:100%;min-height:72px;border:1px solid var(--line);border-radius:14px;padding:12px;font:15px/1.5 Onest,sans-serif;resize:vertical;background:#fff;color:var(--ink)}
-/* bản đồ */
+/* map */
 .terrain{width:100%;height:auto;display:block;border-radius:14px;background:var(--land)}
 .terrain text{font-family:Onest,system-ui,sans-serif}
 .forces{display:grid;gap:8px;margin:10px 0}
@@ -83,7 +83,7 @@ input[type=range]{flex:1;height:44px;accent-color:var(--ink);touch-action:pan-y}
 .real{display:inline-block;font-size:12px;font-weight:700;background:var(--good-soft);color:var(--good-ink);border-radius:6px;padding:1px 8px;margin-bottom:6px}
 .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
 .legend i{display:inline-block;width:14px;height:10px;border-radius:3px;margin-right:5px;vertical-align:0}
-/* xếp thứ tự */
+/* ordering */
 .mlist{display:grid;gap:8px;margin:10px 0}
 .mi{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;font:14px/1.45 Onest,sans-serif;color:var(--ink);cursor:pointer;text-align:left;width:100%;-webkit-tap-highlight-color:transparent}
 .mi .n{flex:0 0 28px;height:28px;border-radius:14px;border:1px dashed #b9b4a8;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--muted)}
@@ -177,7 +177,7 @@ h1:focus,h2:focus{outline:none}
 <div class="wrap">
  <div class="top"><div class="meta"><span>Chiến tranh buổi 4 · Hậu cần</span><span id="cnt">1/5</span></div><div class="bar"><i id="bar"></i></div></div>
 
- <!-- 0 mở đầu + nhớ lại -->
+ <!-- 0 opening + recall -->
  <section class="step on narrow" data-s="0">
   <h1>Đánh chắc thì phải ăn chắc</h1>
   <p class="muted">Khoảng 10 phút, buổi nhẹ. Vẫn ở Điện Biên Phủ năm 1954, nhưng hôm nay bạn không lo đánh, mà lo cho cả mặt trận có gạo và đạn.</p>
@@ -193,7 +193,7 @@ h1:focus,h2:focus{outline:none}
   <button class="btn primary" data-go="1" id="n0" data-review-gate disabled>Bắt đầu</button>
  </section>
 
- <!-- 1 thử trước: đoán nhu cầu -->
+ <!-- 1 try first: guess the demand -->
  <section class="step narrow" data-s="1">
   <h2>Đoán trước: đánh chắc thì cần thêm bao nhiêu?</h2>
   <p>Với kế hoạch "đánh nhanh", chiến dịch dự tính cần <b>434 tấn đạn</b> và <b>7.730 tấn gạo</b>. Giờ chuyển sang "đánh chắc tiến chắc": đánh lâu hơn, từng cứ điểm một. Kéo để đoán mỗi thứ cần gấp mấy lần.</p>
@@ -214,7 +214,7 @@ h1:focus,h2:focus{outline:none}
   </div>
  </section>
 
- <!-- 2 quyết định -->
+ <!-- 2 decision -->
  <section class="step narrow" data-s="2">
   <div id="ask1">
    <h2>Bạn lo hậu cần cho mặt trận</h2>
@@ -237,7 +237,7 @@ h1:focus,h2:focus{outline:none}
   </div>
  </section>
 
- <!-- 3 hiểu sau -->
+ <!-- 3 explanation -->
  <section class="step narrow" data-s="3">
   <h2>Hậu cần đi theo cách đánh</h2>
   <div class="card">
@@ -263,7 +263,7 @@ h1:focus,h2:focus{outline:none}
   <button class="btn primary" data-go="4" id="n3" disabled>Tiếp</button>
  </section>
 
- <!-- 4 tự nói lại + góp ý -->
+ <!-- 4 explain it back + feedback -->
  <section class="step narrow" data-s="4">
   <h2>Tự nói lại, rồi xong</h2>
   <p>Một câu thôi: vì sao quyết định "đánh chắc tiến chắc" cũng là một quyết định về hậu cần?</p>
@@ -289,7 +289,7 @@ function go(n){$$('.step').forEach(s=>s.classList.toggle('on',+s.dataset.s===n))
 $$('[data-go]').forEach(b=>b.addEventListener('click',()=>go(+b.dataset.go)));
 function setFb(el,t){el.textContent=t;el.className='fb';}
 
-/* đoán */
+/* guess */
 let moved={a:false,r:false};
 const fmt=v=>'×'+String(v).replace('.',',');
 function upd(){$('#oAmmo').textContent=fmt($('#gAmmo').value);$('#oRice').textContent=fmt($('#gRice').value);$('#guessBtn').disabled=!(moved.a&&moved.r);}
@@ -301,7 +301,7 @@ $('#guessBtn').addEventListener('click',()=>{if(R.guess)return;const a=+$('#gAmm
  const near=Math.abs(a-AMMO)<=.5&&Math.abs(r-RICE)<=.5;
  setFb($('#guessFb'),t+(near?'Bạn đoán sát cả hai.':(a<r?'Bạn đoán gạo tăng nhiều hơn đạn; thật ra đạn tăng mạnh hơn, vì đánh chắc là bắn pháo vào từng cứ điểm suốt nhiều tuần.':'Để ý đạn tăng mạnh hơn gạo: đánh chắc là bắn pháo vào từng cứ điểm suốt nhiều tuần.')));});
 
-/* quyết định */
+/* decision */
 const V={
  A:'<span class="guess">Mô phỏng, dựa trên tình hình hậu cần Điện Biên Phủ, không có thật</span><p>Chỉ 628 xe ô tô có trong tay (con số thật cả chiến dịch). Đường ô tô hư hỏng, lại là chỗ máy bay Pháp nhắm vào. Theo mình suy luận: dồn hết vào vài con đường là dồn hết trứng vào một giỏ; một cây cầu sập là cả mặt trận đói.</p>',
  B:'<span class="real">Chuyện thật, theo báo Quân đội nhân dân</span><p style="margin:6px 0">Hội đồng cung cấp mặt trận huy động:</p><div class="means">'+
@@ -314,7 +314,7 @@ $$('#play1 .tabs .btn').forEach(b=>b.addEventListener('click',()=>open(b.dataset
 $$('#opts1 .opt').forEach(o=>o.addEventListener('click',()=>{if(R.c1)return;const v=o.dataset.v;R.c1=v;$$('#opts1 .opt').forEach(x=>x.disabled=true);
  setFb($('#fb1'),M[v]);$('#ask1').classList.add('hide');$('#play1').classList.remove('hide');open(v);window.scrollTo(0,0);}));
 
-/* câu hỏi */
+/* quiz */
 $$('.q[data-q]').forEach(q=>{const id=q.dataset.q,a=+q.dataset.a,os=[...q.querySelectorAll('.opt')],st=q.querySelector('.status'),why=q.querySelector('.why');
  os.forEach((o,i)=>o.addEventListener('click',()=>{if(id==='r1'?R.recall:R.quiz[id])return;const ok=i===a;if(id==='r1')R.recall={pick:i,ok};else R.quiz[id]={pick:i,ok};
   os.forEach((x,j)=>{x.disabled=true;if(j===a)x.classList.add('right');});if(!ok)o.classList.add('wrong');
@@ -367,8 +367,8 @@ document.addEventListener('click',e=>{if(!e.isTrusted)return;const b=e.target.cl
  if(b.id==='finish'){acted=true;S.finished=true;S.everDone=true;S.doneAt=new Date().toISOString();S.ts=Date.now();flush(true);return;}
  const i=btns().indexOf(b);if(i>=0)rec({c:i,x:lab(b),y:ctx(b)});},true);
 document.addEventListener('input',e=>{if(replaying||!e.isTrusted)return;
- if(e.target.matches('input[type=range]')){const i=rngs().indexOf(e.target),last=S.log[S.log.length-1]; /* thanh kéo: ghi giá trị, kéo liền nhiều lần chỉ giữ lần cuối */
-  if(last&&last.r===i)last.v=e.target.value;else rec({r:i,v:e.target.value});acted=true;S.ts=Date.now();save();return;}
+ if(e.target.matches('input[type=range]')){const i=rngs().indexOf(e.target),last=S.log[S.log.length-1]; /* slider: record its value; a continuous drag keeps only the latest value */
+  if(last&&last.r===i)last.v=e.target.value;else rec({r:i,v:e.target.value,id:e.target.id});acted=true;S.ts=Date.now();save();return;}
  if(e.target.tagName!=='TEXTAREA')return;const i=tas().indexOf(e.target),last=S.log[S.log.length-1];
  if(last&&last.t===i)last.v=e.target.value;else rec({t:i,v:e.target.value,p:e.target.placeholder});acted=true;S.ts=Date.now();save();},true);
 function reviewOff(){document.documentElement.classList.add('kit-review-off');document.querySelectorAll('[data-review-gate]').forEach(b=>b.disabled=false);
@@ -383,7 +383,8 @@ function apply(d){if(!d)return false;S.everDone=!!d.everDone;S.doneAt=d.doneAt||
   say('Trang vừa được sửa nên mình chỉ giữ lại được chữ bạn đã gõ.',false);return true;}
  replaying=true;let n=0,cut=false;try{for(const a of d.log){if('c' in a){const b=btns()[a.c];
    if((a.x!==undefined&&(!b||lab(b)!==a.x))||(a.y!==undefined&&(!b||ctx(b)!==a.y))){cut=true;break;} /* nút ở chỗ đó đã khác (trang đổi thứ tự, hay xáo đáp án): dừng, không bấm nhầm */
-   if(b&&!b.disabled)b.click();}else if('r' in a){const g=rngs()[a.r];if(g){g.value=a.v;g.dispatchEvent(new Event('input',{bubbles:true}));}}else{const t=tas()[a.t];if(t){t.value=a.v;t.dispatchEvent(new Event('input',{bubbles:true}));}}n++;}}catch(e){}
+   if(b&&!b.disabled)b.click();}else if('r' in a){const g=rngs()[a.r];if(a.id!==undefined&&(!g||g.id!==a.id)){cut=true;break;} /* slider at that index is a different one now: stop */
+   if(g){g.value=a.v;g.dispatchEvent(new Event('input',{bubbles:true}));}}else{const t=tas()[a.t];if(t){t.value=a.v;t.dispatchEvent(new Event('input',{bubbles:true}));}}n++;}}catch(e){}
  replaying=false;
  if(cut){S.log=d.log.slice(0,n);keepText(d.log.slice(n));S.start=d.start||S.start;S.ts=Date.now();save();
   say('Trang đã đổi nên mình chỉ mở lại được tới chỗ còn khớp, kèm chữ bạn đã gõ.',true);return true;}

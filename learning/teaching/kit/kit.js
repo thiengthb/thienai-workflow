@@ -33,8 +33,8 @@ document.addEventListener('click',e=>{if(!e.isTrusted)return;const b=e.target.cl
  if(b.id==='finish'){acted=true;S.finished=true;S.everDone=true;S.doneAt=new Date().toISOString();S.ts=Date.now();flush(true);return;}
  const i=btns().indexOf(b);if(i>=0)rec({c:i,x:lab(b),y:ctx(b)});},true);
 document.addEventListener('input',e=>{if(replaying||!e.isTrusted)return;
- if(e.target.matches('input[type=range]')){const i=rngs().indexOf(e.target),last=S.log[S.log.length-1]; /* thanh kéo: ghi giá trị, kéo liền nhiều lần chỉ giữ lần cuối */
-  if(last&&last.r===i)last.v=e.target.value;else rec({r:i,v:e.target.value});acted=true;S.ts=Date.now();save();return;}
+ if(e.target.matches('input[type=range]')){const i=rngs().indexOf(e.target),last=S.log[S.log.length-1]; /* slider: record its value; a continuous drag keeps only the latest value */
+  if(last&&last.r===i)last.v=e.target.value;else rec({r:i,v:e.target.value,id:e.target.id});acted=true;S.ts=Date.now();save();return;}
  if(e.target.tagName!=='TEXTAREA')return;const i=tas().indexOf(e.target),last=S.log[S.log.length-1];
  if(last&&last.t===i)last.v=e.target.value;else rec({t:i,v:e.target.value,p:e.target.placeholder});acted=true;S.ts=Date.now();save();},true);
 function reviewOff(){document.documentElement.classList.add('kit-review-off');document.querySelectorAll('[data-review-gate]').forEach(b=>b.disabled=false);
@@ -49,7 +49,8 @@ function apply(d){if(!d)return false;S.everDone=!!d.everDone;S.doneAt=d.doneAt||
   say('Trang vừa được sửa nên mình chỉ giữ lại được chữ bạn đã gõ.',false);return true;}
  replaying=true;let n=0,cut=false;try{for(const a of d.log){if('c' in a){const b=btns()[a.c];
    if((a.x!==undefined&&(!b||lab(b)!==a.x))||(a.y!==undefined&&(!b||ctx(b)!==a.y))){cut=true;break;} /* nút ở chỗ đó đã khác (trang đổi thứ tự, hay xáo đáp án): dừng, không bấm nhầm */
-   if(b&&!b.disabled)b.click();}else if('r' in a){const g=rngs()[a.r];if(g){g.value=a.v;g.dispatchEvent(new Event('input',{bubbles:true}));}}else{const t=tas()[a.t];if(t){t.value=a.v;t.dispatchEvent(new Event('input',{bubbles:true}));}}n++;}}catch(e){}
+   if(b&&!b.disabled)b.click();}else if('r' in a){const g=rngs()[a.r];if(a.id!==undefined&&(!g||g.id!==a.id)){cut=true;break;} /* slider at that index is a different one now: stop */
+   if(g){g.value=a.v;g.dispatchEvent(new Event('input',{bubbles:true}));}}else{const t=tas()[a.t];if(t){t.value=a.v;t.dispatchEvent(new Event('input',{bubbles:true}));}}n++;}}catch(e){}
  replaying=false;
  if(cut){S.log=d.log.slice(0,n);keepText(d.log.slice(n));S.start=d.start||S.start;S.ts=Date.now();save();
   say('Trang đã đổi nên mình chỉ mở lại được tới chỗ còn khớp, kèm chữ bạn đã gõ.',true);return true;}
