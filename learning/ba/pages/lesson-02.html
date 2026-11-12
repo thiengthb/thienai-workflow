@@ -1,8 +1,106 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="lesson-id" content="ba-02"><title>BA 2 · Hỏi chuyện người dùng</title><style>
-:root{--bg:#f8f7f3;--card:#fff;--ink:#20211f;--muted:#686c65;--line:#daddd6}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,sans-serif}.wrap{max-width:620px;margin:auto;padding:24px 20px 80px}h1{line-height:1.15;font-size:32px}h2{font-size:23px;line-height:1.3}.step{display:none}.step.on{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0}.muted{color:var(--muted)}button{font:inherit;cursor:pointer;color:var(--ink)}.choice,.next{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:8px 0}.choice.selected{border:2px solid var(--ink);font-weight:600}.next{background:var(--ink);color:var(--card);text-align:center;font-weight:600}.next:disabled{opacity:.4}.reply{padding:14px;background:var(--bg);border-radius:12px;margin:12px 0}.hidden{display:none}textarea{width:100%;min-height:100px;padding:12px;font:inherit;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}.meta{color:var(--muted);font-size:14px}a{color:inherit}
-</style><style id="lesson-kit-css">
+<meta name="lesson-id" content="ba-02">
+<title>BA buổi 2: Hỏi chuyện người dùng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--soft:#f3f1ec;--accent:#308E84;--accent-soft:#e3f1ef;--accent-ink:#1d5c55;--bad:#c2410c;--bad-soft:#fdeee6;--bad-ink:#9a3412}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Onest,system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:460px;margin:0 auto;padding:16px 16px 56px}
+.top{position:sticky;top:0;background:var(--bg);padding:12px 0 10px;z-index:5}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .25s ease}
+h1{font-size:26px;line-height:1.25;margin:20px 0 8px;font-weight:700;letter-spacing:-.01em}
+h2{font-size:20px;line-height:1.3;margin:8px 0 6px;font-weight:600}
+p{margin:0 0 12px}
+.muted{color:var(--muted)}.small{font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.step{display:none}.step.on{display:block;animation:in .2s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:26px;border:0;background:var(--ink);color:#fff;font:600 16px Onest,sans-serif;cursor:pointer;margin-top:16px}
+.btn[disabled]{opacity:.3;cursor:default}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);height:44px;font-weight:500}
+.opt{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;padding:14px 16px;margin:8px 0;border:1px solid var(--line);border-radius:14px;background:#fff;font:15px/1.45 Onest,sans-serif;color:var(--ink);cursor:pointer}
+.opt>span:first-child{flex:1 1 auto}
+.opt .tg{flex:0 0 auto;font-size:12px;font-weight:700;padding-top:2px}
+.opt.right{border-color:var(--accent);background:var(--accent-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.right .tg{color:var(--accent-ink)}.opt.wrong .tg{color:var(--bad-ink)}
+.opt.seen{border-style:dashed}
+.opt.mine{border-color:var(--ink);border-width:2px;padding:13px 15px}
+.why{display:none;font-size:14px;padding:12px 14px;border-radius:12px;background:var(--soft);margin-top:4px}
+.why.on{display:block}
+.status{font-size:14px;font-weight:600;margin:6px 0 0}.status:empty{display:none}
+textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:14px;padding:12px;font:15px/1.5 Onest,sans-serif;resize:vertical;background:#fff;color:var(--ink)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.chip{min-height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--line);background:#fff;font:500 14px Onest,sans-serif;cursor:pointer;color:var(--ink);-webkit-tap-highlight-color:transparent}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.done{font-size:14px;padding:12px 14px;border-radius:12px;background:var(--accent-soft);color:var(--accent-ink);margin-top:12px;display:none}
+.mine-txt{display:none}.mine-txt.on{display:block}
+.lbl{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em;margin:0 0 6px}
+
+/* bản đồ cuộc phỏng vấn */
+.flow{display:flex;align-items:flex-start;margin:12px 0 4px}
+.node{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11.5px;line-height:1.25;color:var(--muted);text-align:center;position:relative}
+.node .dot{width:26px;height:26px;border-radius:13px;border:1.5px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;position:relative;z-index:1}
+.node:not(:last-child)::after{content:"";position:absolute;top:12px;left:calc(50% + 13px);right:calc(-50% + 13px);height:2px;background:var(--line)}
+.node.passed .dot{background:var(--accent);border-color:var(--accent);color:#fff}
+.node.passed:not(:last-child)::after{background:var(--accent)}
+.node.now .dot{border-color:var(--ink);border-width:2px;color:var(--ink)}
+.node.now{color:var(--ink);font-weight:600}
+.iv-head{position:sticky;top:44px;background:var(--bg);z-index:4;padding-bottom:4px}
+
+/* lời nói */
+.say{font-size:15px;padding:12px 14px;border-radius:14px 14px 14px 4px;background:#fff;border:1px solid var(--line);margin:10px 0;max-width:92%}
+.say b{display:block;font-size:12px;color:var(--muted);margin-bottom:2px;font-weight:600}
+.say.me{margin-left:auto;border-radius:14px 14px 4px 14px;background:var(--ink);color:#fff;border-color:var(--ink)}
+.say.me b{color:#c9c6bf}
+.say.pop{animation:in .25s ease}
+
+/* sổ ghi chép */
+.note{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin:12px 0}
+.note .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.note .row b{font-size:14px}
+.note .row span{font-size:13px;color:var(--muted)}
+.facts{display:flex;flex-wrap:wrap;gap:6px;min-height:28px}
+.fact{font-size:13px;line-height:1.3;padding:5px 10px;border-radius:8px;animation:in .25s ease}
+.fact.real{background:var(--accent-soft);color:var(--accent-ink);font-weight:500}
+.fact.empty{background:transparent;color:var(--muted);border:1px dashed #cfcac0}
+.facts .ph{font-size:13px;color:var(--muted)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* 4 bẫy */
+.trap{border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px 14px;margin:8px 0}
+.trap .h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.trap .h b{font-size:15px}
+.trap .you{font-size:12px;font-weight:700;color:var(--bad-ink);background:var(--bad-soft);padding:2px 8px;border-radius:8px}
+.trap .you.ok{color:var(--accent-ink);background:var(--accent-soft)}
+.pair{display:grid;gap:4px;font-size:14px}
+.pair .x{color:var(--bad-ink)}.pair .x::before{content:"✕  ";font-weight:700}
+.pair .v{color:var(--accent-ink)}.pair .v::before{content:"✓  ";font-weight:700}
+
+/* chạm chỗ sai */
+.ln{display:block;width:100%;text-align:left;font:15px/1.45 Onest,sans-serif;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:6px 0;cursor:pointer}
+.ln b{font-size:12px;color:var(--muted);display:block;font-weight:600}
+.ln.who-u{background:var(--soft);cursor:default}
+.ln.pick{border-color:var(--ink);border-width:2px;padding:9px 11px}
+.ln.hit{border-color:var(--accent);background:var(--accent-soft)}
+.ln.miss{border-color:var(--bad);background:var(--bad-soft)}
+.ln.over{border-color:var(--bad);border-style:dashed}
+.ln .res{display:none;font-size:13px;font-weight:600;margin-top:4px}
+.ln.hit .res,.ln.miss .res,.ln.over .res{display:block}
+.ln.hit .res{color:var(--accent-ink)}.ln.miss .res,.ln.over .res{color:var(--bad-ink)}
+.kit-review-off [data-part~="review"]{display:none!important}
+</style>
+<style id="lesson-kit-css">
 /* Bộ khung chung cho trang học. Sửa ở đây rồi chạy apply-kit.mjs, đừng sửa bản chép trong từng trang. */
 @media (prefers-color-scheme:dark){
  :root{--bg:#161615;--card:#1f1f1d;--ink:#ecebe7;--muted:#a19e97;--line:#34322e;--soft:#262523;--accent:#ecebe7;--accent-soft:#2f2e2a;
@@ -30,21 +128,243 @@ h1:focus,h2:focus{outline:none}
 #kit-bar button.x{background:transparent;color:var(--bg);padding:6px 8px}
 .kit-review-off [data-part~="review"]{display:none!important}
 </style>
-</head><body><main class="wrap"><p class="meta">BA · BUỔI 2 / HỎI CHUYỆN NGƯỜI DÙNG</p>
-<section class="step on" id="s0"><h1>Hỏi sao để nghe được chuyện thật?</h1><p>Bạn sẽ vào vai BA của sakubun và phỏng vấn một người học tiếng Nhật. Khoảng 10–15 phút.</p><div class="card">Tình huống và nhân vật trong bài là <b>mô phỏng</b>. Hãy chọn theo cách bạn nghĩ trước; phần giải thích đến sau.</div><button class="next" onclick="go(document.documentElement.classList.contains('kit-review-off') ? 2 : 1)">Bắt đầu</button></section>
-<section class="step" id="s1" data-part="review"><h2>Nhớ lại buổi trước</h2><p>Nhóm capstone được nhờ thêm nút xuất Excel. Cách nào giúp đi từ lời nhờ tới nhu cầu?</p><div class="group" data-key="recall"><button class="choice" data-v="0">Hỏi nút nên đặt ở đâu.</button><button class="choice" data-v="1">Hỏi họ cần xuất để làm gì, rồi hỏi tiếp về mục đích phía sau.</button><button class="choice" data-v="2">Làm nút trước, hỏi sau.</button></div><div id="recallReply" class="reply hidden">Hỏi “để làm gì?” rồi hỏi tiếp giúp tìm vấn đề phía sau giải pháp được đề nghị. Hôm nay ta đi sâu hơn vào cách hỏi.</div><button class="next" id="recallNext" data-review-gate disabled onclick="go(2)">Vào cuộc phỏng vấn</button></section>
-<section class="step" id="s2"><h2>Cuộc trò chuyện bắt đầu</h2><div class="card"><b>Người học · mô phỏng</b><p>“Dạo này mình hay bỏ ôn tiếng Nhật. Mình nghĩ app nên nhắc học mỗi tối.”</p></div><p>Bạn muốn hiểu việc bỏ ôn. Bạn hỏi gì trước?</p><div class="group" data-key="first"><button class="choice" data-v="0">“Nếu có thông báo 8 giờ tối, bạn sẽ dùng chứ?”</button><button class="choice" data-v="1">“Lần gần nhất bạn định ôn mà không ôn là khi nào? Lúc đó chuyện gì xảy ra?”</button><button class="choice" data-v="2">“Bạn cũng thấy thông báo là cách tốt nhất đúng không?”</button></div><div id="firstReply" class="reply hidden" aria-live="polite"></div><button class="next" id="firstNext" disabled onclick="go(3)">Hỏi tiếp</button></section>
-<section class="step" id="s3"><h2>Đi sâu thêm một bước</h2><div class="card"><b>Người học · mô phỏng</b><p>“Tối thứ ba mình định ôn sau khi ăn, nhưng còn làm bài nhóm. Đến lúc xong thì mệt; mình đã để danh sách từ trong ghi chú.”</p></div><p>Bạn hỏi tiếp câu nào?</p><div class="group" data-key="second"><button class="choice" data-v="0">“Bạn có thích giao diện màu xanh không?”</button><button class="choice" data-v="1">“Sau đó bạn làm gì với danh sách từ? Có lần nào bạn ôn được không?”</button><button class="choice" data-v="2">“Vậy chắc bạn cần thêm thông báo, nhỉ?”</button></div><div id="secondReply" class="reply hidden" aria-live="polite"></div><button class="next" id="secondNext" disabled onclick="go(4)">Xem lại cuộc trò chuyện</button></section>
-<section class="step" id="s4"><h2>Nhìn lại lựa chọn</h2><div class="card" id="reflection"></div><p><b>Ba điều giữ lại:</b></p><p>1. Hỏi về một lần cụ thể đã xảy ra để nghe hành vi và bối cảnh.</p><p>2. Hỏi mở, trung tính; câu dẫn dắt có thể khiến người kia chỉ đồng ý với ý tưởng của bạn.</p><p>3. Nghe và hỏi tiếp về điều họ vừa kể. Một cuộc phỏng vấn gợi giả thuyết, chưa chứng minh nhu cầu phổ biến hay giải pháp hiệu quả.</p><p class="muted">Nguồn: <a href="https://www.gov.uk/service-manual/user-research/using-in-depth-interviews">GOV.UK: phỏng vấn chuyên sâu</a> và <a href="https://userresearch.blog.gov.uk/2014/07/11/what-makes-a-good-user-research-facilitator/">hỏi về hành vi</a>.</p><button class="next" onclick="go(5)">Thử thêm</button></section>
-<section class="step" id="s5"><h2>Câu hỏi nhanh</h2><p>Một người nói họ hay quên ôn từ. Câu nào giúp bạn tìm hiểu cách họ đang xử lý?</p><div class="group" data-key="quiz"><button class="choice" data-v="0">“Bạn có dùng app của mình mỗi ngày không?”</button><button class="choice" data-v="1">“Lần gần đây nhất bạn nhớ ra cần ôn, bạn đã làm gì?”</button><button class="choice" data-v="2">“Bạn chắc chắn cần thông báo hàng ngày đúng không?”</button></div><div id="quizReply" class="reply hidden"></div><button class="next" id="quizNext" disabled onclick="go(6)">Tiếp</button></section>
-<section class="step" id="s6"><h2>Tự nói lại</h2><p>Nếu mai đi hỏi người dùng thật, bạn sẽ hỏi thế nào để họ kể chuyện hữu ích?</p><textarea id="teach" placeholder="Viết theo lời bạn trước khi xem gợi ý"></textarea><button class="next" id="reveal" disabled>Xem bản của mình</button><div id="model" class="card hidden">Hỏi về một lần cụ thể gần đây, nghe họ kể và hỏi tiếp về việc họ làm, bối cảnh và khó khăn. Tránh gài ý tưởng của mình vào câu hỏi.</div><button class="next" id="teachNext" disabled onclick="go(7)">Góp ý</button></section>
-<section class="step" id="s7"><h2>Góp ý buổi học</h2><p>Độ dài và độ khó thế nào? Điều gì sẽ làm BA hấp dẫn hơn?</p><textarea id="feedback" placeholder="Viết góp ý của bạn"></textarea><button class="next" id="finish">Xong buổi học</button><div id="saved" class="reply hidden"></div><button class="choice hidden" id="copy">Chép kết quả</button><textarea id="result" class="hidden" aria-label="Kết quả để sao chép"></textarea></section>
-</main><script>
-const R={subject:'ba',lesson:2,start:new Date().toISOString(),choices:{}};function go(n){document.querySelectorAll('.step').forEach(x=>x.classList.remove('on'));document.getElementById('s'+n).classList.add('on');window.scrollTo(0,0)}
-const replies={recall:['Hãy nghĩ tiếp về mục đích của người nhờ.','Đúng: hỏi mục đích rồi đào sâu thêm.','Làm ngay có thể bỏ sót vấn đề thật.'],first:['“Có lẽ có, mình cũng không chắc.”','“Tối thứ ba, mình định ôn sau bữa ăn, nhưng còn làm bài nhóm.”','“Ừ, chắc vậy.”'],second:['“Mình chưa nghĩ đến màu.”','“Mình lưu lại rồi quên. Chủ nhật mình có ôn được vì mở ghi chú lúc rảnh.”','“Ừ, có thể.”'],quiz:['Câu này hỏi chung, chưa cho biết họ xử lý thế nào.','Đúng: câu hỏi dẫn tới một hành động cụ thể gần đây.','Câu này gợi sẵn đáp án và giải pháp.']};
-document.querySelectorAll('.group').forEach(g=>g.querySelectorAll('button').forEach(b=>b.onclick=()=>{let k=g.dataset.key,v=+b.dataset.v;R.choices[k]=v;g.querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===b));let box=document.getElementById(k+'Reply');box.textContent=(k==='first'||k==='second'?'Người học: ':'')+replies[k][v];box.classList.remove('hidden');document.getElementById(k+'Next').disabled=false;if(k==='second')document.getElementById('reflection').textContent='Bạn hỏi: '+document.querySelector('[data-key="first"] .selected').textContent+' Sau đó: '+b.textContent+' Hãy so lượng thông tin nhận được: câu hỏi mở về lần cụ thể cho thấy bối cảnh, còn câu gợi ý có thể chỉ nhận được lời đồng ý.'}));
-document.getElementById('teach').oninput=e=>document.getElementById('reveal').disabled=e.target.value.trim().length<8;document.getElementById('reveal').onclick=()=>{document.getElementById('model').classList.remove('hidden');document.getElementById('teachNext').disabled=false};document.getElementById('finish').onclick=()=>{R.end=new Date().toISOString();R.teach=document.getElementById('teach').value;R.feedback=document.getElementById('feedback').value;let s='BA 2 (Codex)\n'+JSON.stringify(R,null,2);document.getElementById('result').value=s;document.getElementById('result').classList.remove('hidden');document.getElementById('saved').textContent='Chưa lưu tự động. Hãy chép kết quả bên dưới và dán vào chat Codex.';document.getElementById('saved').classList.remove('hidden');document.getElementById('copy').classList.remove('hidden')};document.getElementById('copy').onclick=async()=>{let t=document.getElementById('result');try{await navigator.clipboard.writeText(t.value);document.getElementById('copy').textContent='Đã chép'}catch(e){t.focus();t.select()}};
-</script><script id="lesson-kit">
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>BA buổi 2 · Hỏi chuyện người dùng</span><span id="cnt">1/8</span></div><div class="bar"><i id="bar"></i></div></div>
+
+  <!-- 0 -->
+  <section class="step on" data-s="0">
+    <h1>Hỏi sao để nghe được chuyện thật?</h1>
+    <p class="muted">Khoảng 12 phút. Bạn phỏng vấn một người học tiếng Nhật đang dùng sakubun. Câu bạn hỏi quyết định bạn ghi được gì vào sổ.</p>
+    <div class="card">
+      <p class="lbl">CUỘC PHỎNG VẤN ĐI QUA 4 CHẶNG</p>
+      <div class="flow" id="flow0"></div>
+      <p class="small muted" style="margin:10px 0 0">Mỗi chặng bạn chọn một câu hỏi. Người dùng trả lời theo đúng câu bạn chọn, và sổ ghi chép hiện ra thứ bạn thu được.</p>
+    </div>
+    <div class="card small muted">Người dùng và câu chuyện là <b>mô phỏng</b>, dựng theo các lỗi phỏng vấn hay gặp. Buổi này làm lại buổi BA 2 bạn học với Codex, đi sâu hơn: 5 cái bẫy khi hỏi.</div>
+    <button class="btn" onclick="go(document.documentElement.classList.contains('kit-review-off')?2:1)">Bắt đầu</button>
+  </section>
+
+  <!-- 1 -->
+  <section class="step" data-s="1">
+    <div data-part="review">
+      <h2>Ôn nhanh</h2>
+      <p class="small muted">Trả lời theo trí nhớ, sai cũng không sao.</p>
+      <div class="card"><p><b>1.</b> Thanh đầu trang cùng màu đặc với nút chính thì sao?</p>
+        <div class="q" data-q="F7" data-a="1"><div class="status" role="status"></div>
+          <button class="opt"><span>Đẹp hơn, vì màu thương hiệu xuất hiện nhiều</span></button>
+          <button class="opt"><span>Hai chỗ giành mắt nhau, nút chính hết nổi</span></button>
+          <button class="opt"><span>Không sao, vì hai thứ ở hai đầu màn hình</span></button>
+          <div class="why">Màu đặc là tín hiệu "nhìn vào đây". Có hai chỗ thì tín hiệu yếu đi một nửa. Để đầu trang trắng hoặc nhạt, giữ màu đặc cho nút chính.</div></div></div>
+      <div class="card"><p><b>2.</b> Theo Tống sử, vì sao Quách Quỳ rút quân năm 1077?</p>
+        <div class="q" data-q="W4" data-a="2"><div class="status" role="status"></div>
+          <button class="opt"><span>Vì nhà Tống ra lệnh rút để đổi lấy hòa ước</span></button>
+          <button class="opt"><span>Vì bị đánh tan trong một trận lớn trên sông</span></button>
+          <button class="opt"><span>Quân và phu chết quá nửa vì nắng nóng, lam chướng, cách sông không tiến được</span></button>
+          <div class="why">Tống sử chép 30 vạn quân và phu chết quá nửa vì nắng nóng, lam chướng; cách một con sông mà không tiến được, nên rút. Xem lại ở bài chiến tranh 2.</div></div></div>
+      <div class="card"><p><b>3.</b> Khách nhờ "thêm nút xuất Excel". Câu nào nên hỏi đầu tiên?</p>
+        <div class="q" data-q="B1" data-a="0"><div class="status" role="status"></div>
+          <button class="opt"><span>"Lấy file đó ra để làm gì?"</span></button>
+          <button class="opt"><span>"File cần những cột nào?"</span></button>
+          <button class="opt"><span>"Nút đặt ở đâu thì tiện?"</span></button>
+          <div class="why">"Xuất Excel" là cách khách tự nghĩ ra. Hỏi "để làm gì" trước để tìm vấn đề thật. Hôm nay là bước tiếp theo: làm sao để câu trả lời là chuyện thật chứ không phải lời đoán.</div></div></div>
+      <button class="btn" id="n1" disabled onclick="go(2)">Vào phỏng vấn</button>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="step" data-s="2">
+    <div class="iv-head"><div class="flow" id="flow"></div></div>
+    <div id="chat"></div>
+    <div class="card" id="askBox">
+      <p class="lbl" id="askLbl"></p>
+      <p style="font-weight:600;margin-bottom:4px" id="askQ"></p>
+      <div id="opts"></div>
+      <div class="why" id="ivWhy"></div>
+    </div>
+    <div class="note">
+      <div class="row"><b>Sổ ghi chép</b><span id="noteCnt">0 dữ kiện thật</span></div>
+      <div class="facts" id="facts"><span class="ph">Chưa ghi gì.</span></div>
+      <div class="legend"><span><i style="background:var(--accent-soft)"></i>Chuyện đã xảy ra</span><span><i style="border:1px dashed #cfcac0"></i>Ý kiến, lời đoán</span></div>
+    </div>
+    <button class="btn" id="ivNext" disabled>Chặng tiếp</button>
+  </section>
+
+  <!-- 3 -->
+  <section class="step" data-s="3">
+    <h2>Minh thật sự gặp chuyện gì?</h2>
+    <div class="card">
+      <p class="lbl">ĐIỀU MINH NHỜ</p>
+      <p>"App nên nhắc mình ôn."</p>
+      <p class="lbl">ĐIỀU SỔ GHI CHÉP CHO THẤY</p>
+      <p style="margin:0">Minh không quên. Minh <b>có mở app</b> lúc 11 giờ, thấy <b>60 thẻ</b> thì ngán và tắt. Hôm sau thẻ dồn lên 90, Minh bỏ luôn 4 ngày. Nhắc thêm lần nữa thì Minh vẫn gặp đúng đống thẻ đó.</p>
+    </div>
+    <p class="small">Vậy chỗ nên bàn là <b>số thẻ mỗi lần ôn</b> (ví dụ ôn từng lượt 10 thẻ), không phải giờ nhắc. Nhưng đây mới là <b>một người</b>: đó là giả thuyết, cần hỏi thêm vài người nữa mới biết có nhiều người như vậy không.</p>
+    <h2 style="margin-top:20px">5 cái bẫy khi hỏi</h2>
+    <p class="small muted">Mỗi bẫy làm người dùng trả lời bằng ý kiến hay lời đoán, không phải chuyện đã xảy ra.</p>
+    <div id="traps"></div>
+    <div class="card small muted" style="margin-top:12px"><b style="color:var(--ink)">Về câu "tại sao lại vậy".</b> Ở buổi với Codex, bạn tự tóm là "bạn bị mắc vấn đề gì, tại sao lại vậy". Hướng đi đúng, chỉ có chữ "tại sao" là dễ làm người ta tự bào chữa ("chắc tại mình lười"). Hỏi "hôm đó chuyện gì đã xảy ra" thì lý do tự hiện ra trong câu chuyện.</div>
+    <p class="small muted">Nguồn: The Mom Test (Rob Fitzpatrick): hỏi về chuyện cụ thể đã qua, không hỏi chung chung hay ý kiến về tương lai. Nielsen Norman Group: người dùng không đoán được mình có dùng một tính năng chưa có hay không, và dễ tự bịa lý do. GOV.UK Service Manual: hỏi mở, trung tính, tập trung vào chuyện và ví dụ thật.</p>
+    <button class="btn" onclick="go(4)">Tiếp</button>
+  </section>
+
+  <!-- 4 -->
+  <section class="step" data-s="4">
+    <h2>Bắt lỗi giúp bạn thực tập</h2>
+    <p class="small">Một bạn trong nhóm capstone phỏng vấn thủ thư về app mượn sách. Chạm vào <b>3 câu hỏi</b> rơi vào bẫy. Chạm lần nữa để bỏ chọn.</p>
+    <div id="script"></div>
+    <button class="btn ghost" id="scChk" disabled>Kiểm tra</button>
+    <div class="why" id="scWhy">Câu hỏi tốt nhất trong đoạn là câu "Tuần trước lúc nhập sách mới…": nó kéo ra chuyện thật, có giờ, có bước, có chỗ tắc (gõ tay mã sách mất 40 phút).</div>
+    <button class="btn" id="n4" disabled onclick="go(5)">Tiếp</button>
+  </section>
+
+  <!-- 5 -->
+  <section class="step" data-s="5">
+    <h2>Câu hỏi nhanh</h2>
+    <div class="card"><p><b>1.</b> Sửa câu "Nếu có nút xuất Excel, bạn có dùng không?" thành câu nào tốt nhất?</p>
+      <div class="q" data-q="q1" data-a="2"><div class="status" role="status"></div>
+        <button class="opt"><span>"Bạn có thích xuất Excel không?"</span></button>
+        <button class="opt"><span>"Bạn thường xuất báo cáo bao nhiêu lần?"</span></button>
+        <button class="opt"><span>"Lần gần nhất bạn cần số liệu này, bạn đã lấy nó thế nào?"</span></button>
+        <div class="why">Câu 3 hỏi chuyện đã xảy ra. Câu 1 hỏi ý kiến, câu 2 hỏi "thường", người ta sẽ đoán một con số.</div></div></div>
+    <div class="card"><p><b>2.</b> Phỏng vấn 1 người, họ kể rất rõ một vấn đề. Nên kết luận thế nào?</p>
+      <div class="q" data-q="q2" data-a="1"><div class="status" role="status"></div>
+        <button class="opt"><span>Đã đủ, làm tính năng sửa vấn đề đó</span></button>
+        <button class="opt"><span>Đây là giả thuyết, hỏi thêm vài người xem có lặp lại không</span></button>
+        <button class="opt"><span>Chưa tin được, vì một người thì không có ý nghĩa gì</span></button>
+        <div class="why">Một câu chuyện thật là điểm xuất phát rất tốt, nhưng mới là giả thuyết. Hỏi thêm vài người: nếu chuyện giống nhau lặp lại thì mới chắc.</div></div></div>
+    <button class="btn" id="n5" disabled onclick="go(6)">Tiếp</button>
+  </section>
+
+  <!-- 6 -->
+  <section class="step" data-s="6">
+    <h2>Tự nói lại</h2>
+    <div class="card">
+      <p>Mai bạn phỏng vấn một người dùng thật. Bạn sẽ nhắc mình điều gì khi đặt câu hỏi? Một hai câu theo lời bạn.</p>
+      <textarea id="teach" placeholder="Viết trước, rồi mới xem bản của mình"></textarea>
+      <button class="btn ghost" id="reveal" disabled>Xem bản của mình</button>
+      <div class="why mine-txt" id="mine">Hỏi về <b>một lần cụ thể đã xảy ra</b> ("lần gần nhất… hôm đó thế nào?"), rồi hỏi tiếp từ chính điều họ vừa kể. Tránh hỏi tương lai, hỏi "thường", hỏi ý kiến, và đừng gợi sẵn giải pháp của mình.</div>
+    </div>
+    <button class="btn" id="n6" disabled onclick="go(7)">Tiếp</button>
+  </section>
+
+  <!-- 7 -->
+  <section class="step" data-s="7">
+    <h2>Góp ý</h2>
+    <div class="card">
+      <p class="small"><b>Độ dài</b></p>
+      <div class="chips" data-g="len"><button class="chip">Ngắn quá</button><button class="chip">Vừa</button><button class="chip">Dài quá</button></div>
+      <p class="small"><b>Độ khó</b></p>
+      <div class="chips" data-g="diff"><button class="chip">Dễ quá</button><button class="chip">Vừa</button><button class="chip">Khó quá</button></div>
+      <p class="small"><b>Bạn có biết mình đang ở đâu trong bài không?</b></p>
+      <div class="chips" data-g="flow"><button class="chip">Rõ</button><button class="chip">Tạm được</button><button class="chip">Vẫn rối</button></div>
+      <p class="small"><b>So với bản BA 2 của Codex</b></p>
+      <div class="chips" data-g="vsCodex"><button class="chip">Tốt hơn</button><button class="chip">Như nhau</button><button class="chip">Kém hơn</button></div>
+      <p class="small"><b>BA thế nào sau buổi này?</b></p>
+      <div class="chips" data-g="interest"><button class="chip">Muốn học tiếp</button><button class="chip">Bình thường</button><button class="chip">Chưa thấy hứng</button></div>
+      <textarea id="fb" placeholder="Điều gì làm buổi BA hấp dẫn hơn với bạn?"></textarea>
+    </div>
+    <button class="btn" id="finish">Xong buổi học</button>
+    <div class="done" id="saved"></div>
+    <button class="btn ghost" id="copy" style="display:none">Chép kết quả</button>
+  </section>
+</div>
+<script>
+const R={start:new Date().toISOString(),subject:'ba',lesson:2,mode:'lam-lai-sau-codex',review:{},iv:[],ivTried:[],traps:[],script:{},quiz:{},teach:'',len:null,diff:null,flow:null,vsCodex:null,interest:null,fb:''};
+const TOTAL=8;
+function go(n){document.querySelectorAll('.step').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));document.getElementById('cnt').textContent=(n+1)+'/'+TOTAL;document.getElementById('bar').style.width=(n/(TOTAL-1)*100)+'%';window.scrollTo({top:0,behavior:'smooth'});if(n===3)renderTraps();}
+
+function bindQ(q){const opts=[...q.querySelectorAll('.opt')];opts.forEach((o,i)=>o.onclick=()=>{const a=+q.dataset.a;opts.forEach((x,j)=>{x.disabled=true;if(j===a){x.classList.add('right');}});if(i!==a)o.classList.add('wrong');o.insertAdjacentHTML('beforeend','<span class="tg">Bạn chọn</span>');q.querySelector('.why').classList.add('on');q.querySelector('.status').textContent=(i===a?'Đúng. ':'Chưa đúng. ')+'Đáp án: '+opts[a].textContent.replace('Bạn chọn','').trim();const k=q.dataset.q;if(/^[FWB]\d/.test(k))R.review[k]=i===a;else R.quiz[k]={pick:i,right:i===a};check();});}
+document.querySelectorAll('.q[data-q]').forEach(bindQ);
+
+// ===== phỏng vấn =====
+const STAGES=['Mở đầu','Lần gần nhất','Hỏi tiếp','Vấn đề thật'];
+function flowHTML(cur){return STAGES.map((s,i)=>'<div class="node'+(i<cur?' passed':i===cur?' now':'')+'"><span class="dot">'+(i<cur?'✓':i+1)+'</span><span>'+s+'</span></div>').join('');}
+document.getElementById('flow0').innerHTML=flowHTML(-1);
+// trap ids: fut = hỏi tương lai, gen = hỏi "thường", sol = gợi sẵn giải pháp, op = hỏi ý kiến/khen, why = "tại sao" thẳng
+const IV=[
+ {intro:'Minh, sinh viên năm 2, học N3 bằng sakubun. Bạn hỏi Minh thấy app thế nào, Minh nói:',say:'"App ổn. Mà mình hay bỏ ôn lắm. Chắc app nên nhắc mình."',lbl:'CHẶNG 1 · MỞ ĐẦU',q:'Bạn hỏi tiếp câu nào?',best:3,opts:[
+  {t:'"Nếu app nhắc lúc 8 giờ tối, bạn có dùng không?"',a:'"Ừ, chắc có. Nghe hay đó."',f:[['Đồng ý với ý của bạn','e']],trap:'fut',w:'Minh trả lời về tương lai và về giải pháp bạn đưa ra. Đồng ý thì dễ, dùng thật thì chưa chắc.'},
+  {t:'"Bạn thường ôn mấy buổi một tuần?"',a:'"Chắc 4–5 buổi."',f:[['4–5 buổi/tuần (Minh đoán)','e']],trap:'gen',w:'Hỏi "thường" thì người ta đoán, và hay đoán đẹp hơn thật. Minh vừa nói hay bỏ ôn mà lại đoán 4–5 buổi.'},
+  {t:'"Tại sao bạn hay bỏ ôn?"',a:'"Chắc tại mình lười thôi."',f:[['Tự nhận lười','e']],trap:'why',w:'Hỏi thẳng "tại sao" thì người ta nghĩ ra một lý do cho xong. "Lười" không cho bạn biết hôm đó chuyện gì xảy ra.'},
+  {t:'"Lần gần nhất bạn định ôn mà không ôn là khi nào? Hôm đó thế nào?"',a:'"Tối thứ ba. Mình định ôn sau khi ăn, mà còn bài nhóm, làm tới 11 giờ."',f:[['Tối thứ ba','r'],['Bài nhóm tới 11 giờ','r']],w:'Một lần cụ thể đã xảy ra: có ngày, có giờ, có việc chen vào. Đây là thứ để hỏi tiếp.'}]},
+ {intro:'Minh kể về tối thứ ba:',say:'"Tối thứ ba. Mình định ôn sau khi ăn, mà còn bài nhóm, làm tới 11 giờ."',lbl:'CHẶNG 2 · LẦN GẦN NHẤT',q:'Bạn hỏi tiếp câu nào?',best:1,opts:[
+  {t:'"Vậy nếu app nhắc lúc 10 giờ thì có giúp không?"',a:'"Chắc có… mà lúc đó mình đang làm bài, chắc cũng tắt đi."',f:[['Đoán về tính năng chưa có','e']],trap:'sol',w:'Bạn vừa đưa giải pháp vào miệng Minh. Câu trả lời là lời đoán, dù có lộ ra một chút ("chắc cũng tắt đi").'},
+  {t:'"Lúc 11 giờ đó, bạn đã làm gì với phần ôn?"',a:'"Mình có mở app. Thấy 60 thẻ đến hạn, ngán quá nên tắt. Ghi vào note là mai ôn."',f:[['Có mở app lúc 11 giờ','r'],['60 thẻ đến hạn','r'],['Ngán nên tắt','r']],w:'Bạn hỏi tiếp từ đúng chữ Minh vừa nói ("11 giờ"). Lộ ra chuyện bất ngờ: Minh không quên, Minh có mở app.'},
+  {t:'"Bạn thấy app có dễ dùng không?"',a:'"Dễ mà, giao diện đẹp."',f:[['Lời khen','e']],trap:'op',w:'Hỏi ý kiến thì nhận lời khen cho phải phép. Lời khen không cho biết gì về tối thứ ba.'},
+  {t:'"Bạn nghĩ người khác có bị như bạn không?"',a:'"Chắc ai cũng vậy."',f:[['Đoán về người khác','e']],trap:'gen',w:'Minh không biết người khác. Câu này kéo cuộc nói chuyện ra khỏi chuyện của Minh.'}]},
+ {intro:'Minh vừa kể:',say:'"Mình có mở app. Thấy 60 thẻ đến hạn, ngán quá nên tắt. Ghi vào note là mai ôn."',lbl:'CHẶNG 3 · HỎI TIẾP',q:'Bạn hỏi tiếp câu nào?',best:1,opts:[
+  {t:'"Vậy vấn đề là bạn cần app nhắc, đúng không?"',a:'"Ừ, đúng rồi."',f:[['Đồng ý với kết luận của bạn','e']],trap:'sol',w:'Câu có đáp án sẵn ("đúng không?"). Minh gật cho nhanh, và bạn mất luôn manh mối 60 thẻ.'},
+  {t:'"Hôm sau thì sao, bạn có ôn số thẻ đó không?"',a:'"Không. Hôm sau lên 90 thẻ, mình bỏ luôn 4 ngày. Chủ nhật rảnh mới ôn được 20 thẻ."',f:[['Hôm sau dồn lên 90 thẻ','r'],['Bỏ 4 ngày','r'],['Ít thẻ thì ôn được','r']],w:'Vẫn là chuyện đã xảy ra, đi tiếp theo thời gian. Giờ thấy rõ vòng lặp: thẻ dồn, ngán, bỏ, thẻ dồn thêm.'},
+  {t:'"Bạn muốn app có thêm tính năng gì nhất?"',a:'"Chắc chế độ tối, với thêm mini game."',f:[['Danh sách ước','e']],trap:'op',w:'Hỏi mong muốn thì ai cũng nghĩ ra được vài thứ, kể cả thứ họ sẽ không dùng.'},
+  {t:'"Lúc thấy 60 thẻ, bạn mong điều gì?"',a:'"Mong nó ít lại. Ôn 10 thẻ thôi cũng được."',f:[['Muốn ôn ít một','r']],ok:true,w:'Khá tốt: vẫn bám vào khoảnh khắc thật. Chỉ là "mong" thì vẫn hơi nghiêng về ý kiến; câu hỏi tiếp theo thời gian cho nhiều dữ kiện hơn.'}]}
+];
+const TRAPS={
+ fut:{n:'Hỏi về tương lai',x:'"Nếu app nhắc, bạn có dùng không?"',v:'"Lần gần nhất bạn quên ôn, hôm đó thế nào?"'},
+ gen:{n:'Hỏi "thường", hỏi chung chung',x:'"Bạn thường ôn mấy buổi?"',v:'"Tuần này bạn ôn những hôm nào?"'},
+ sol:{n:'Gợi sẵn giải pháp hay đáp án',x:'"Vậy bạn cần app nhắc, đúng không?"',v:'"Rồi sau đó bạn làm gì?"'},
+ op:{n:'Hỏi ý kiến, xin lời khen',x:'"App có dễ dùng không?"',v:'"Lúc đó bạn đã bấm vào đâu?"'},
+ why:{n:'Hỏi thẳng "tại sao"',x:'"Tại sao bạn bỏ ôn?"',v:'"Hôm đó chuyện gì đã xảy ra?"'}};
+let stage=0,picked=null;const facts=[];
+const chat=document.getElementById('chat'),optsBox=document.getElementById('opts'),ivWhy=document.getElementById('ivWhy'),ivNext=document.getElementById('ivNext');
+function esc(s){return s.replace(/</g,'&lt;');}
+function renderFacts(){const b=document.getElementById('facts');if(!facts.length){b.innerHTML='<span class="ph">Chưa ghi gì.</span>';}else b.innerHTML=facts.map(f=>'<span class="fact '+(f[1]==='r'?'real':'empty')+'">'+esc(f[0])+'</span>').join('');document.getElementById('noteCnt').textContent=facts.filter(f=>f[1]==='r').length+' dữ kiện thật';}
+function renderStage(){const S=IV[stage]; document.getElementById('flow').innerHTML=flowHTML(stage);
+ const prev=R.iv[stage-1];const intro=stage>0&&prev&&!prev.best?'Giả sử ở chặng trước bạn hỏi câu hay nhất. '+S.intro:S.intro;
+ chat.innerHTML='<p class="small muted" style="margin:8px 0 0">'+intro+'</p><div class="say pop"><b>Minh</b>'+esc(S.say)+'</div>';
+ document.getElementById('askLbl').textContent=S.lbl;document.getElementById('askQ').textContent=S.q;
+ optsBox.innerHTML=S.opts.map((o,i)=>'<button class="opt" data-i="'+i+'"><span>'+esc(o.t)+'</span></button>').join('');
+ ivWhy.classList.remove('on');ivNext.disabled=true;picked=null;
+ [...optsBox.children].forEach(b=>b.onclick=()=>pickOpt(+b.dataset.i));
+ ivNext.textContent=stage<IV.length-1?'Chặng tiếp':'Xem Minh thật sự gặp chuyện gì';}
+function pickOpt(i){const S=IV[stage],o=S.opts[i];const btns=[...optsBox.children];
+ if(picked===null){picked=i;R.iv.push({stage:stage+1,pick:i,best:i===S.best,trap:o.trap||null});if(o.trap)R.traps.push(o.trap);
+  o.f.forEach(f=>facts.push(f));renderFacts();btns[i].classList.add('mine');}
+ else{R.ivTried.push(stage+1+':'+i);}
+ const b=btns[i];if(!b.querySelector('.tg')){const good=i===S.best||o.ok;b.classList.add(good?'right':'wrong');b.insertAdjacentHTML('beforeend','<span class="tg">'+(i===S.best?'Hay nhất':o.ok?'Khá':'Bẫy')+'</span>');}
+ if(i!==picked)b.classList.add('seen');
+ chat.querySelectorAll('.say.me,.say.ans').forEach(x=>x.remove());
+ chat.insertAdjacentHTML('beforeend','<div class="say me pop"><b>Bạn'+(i!==picked?' (thử câu khác)':'')+'</b>'+esc(o.t)+'</div><div class="say ans pop"><b>Minh</b>'+esc(o.a)+'</div>');
+ ivWhy.innerHTML=(o.trap?'<b>Bẫy: '+TRAPS[o.trap].n+'.</b> ':'')+o.w+(i===picked?'<br><span class="muted">Thử bấm các câu còn lại để xem Minh trả lời sao. Sổ ghi chép chỉ tính câu bạn chọn đầu tiên.</span>':'');ivWhy.classList.add('on');
+ ivNext.disabled=false;}
+ivNext.onclick=()=>{if(stage<IV.length-1){stage++;renderStage();window.scrollTo({top:0,behavior:'smooth'});}else{document.getElementById('flow').innerHTML=flowHTML(4);go(3);}};
+renderStage();renderFacts();
+function renderTraps(){const fell=new Set(R.traps);document.getElementById('traps').innerHTML=Object.entries(TRAPS).map(([k,t])=>'<div class="trap"><div class="h"><b>'+t.n+'</b>'+(fell.has(k)?'<span class="you">Bạn vừa gặp</span>':'')+'</div><div class="pair"><span class="x">'+esc(t.x)+'</span><span class="v">'+esc(t.v)+'</span></div></div>').join('');}
+
+// ===== bắt lỗi =====
+const SC=[
+ {w:'u',t:'Chị thấy hệ thống hiện tại có tốt không?',bad:'op',res:'Bẫy: hỏi ý kiến'},
+ {w:'l',t:'Cũng được em, quen rồi.'},
+ {w:'u',t:'Tuần trước lúc nhập sách mới, chị làm những bước nào?',good:1,res:'Câu hay: một lần cụ thể'},
+ {w:'l',t:'Chị gõ tay mã từng cuốn, 120 cuốn mất khoảng 40 phút.'},
+ {w:'u',t:'Nếu có máy quét mã vạch thì chị có dùng không?',bad:'fut',res:'Bẫy: hỏi tương lai, gợi sẵn giải pháp'},
+ {w:'l',t:'Chắc có chứ.'},
+ {w:'u',t:'Thường thì một tháng chị nhập sách mấy lần?',bad:'gen',res:'Bẫy: hỏi "thường"'},
+ {w:'l',t:'Chắc hai, ba lần gì đó.'}];
+const scBox=document.getElementById('script');const scPick=new Set();let scDone=false;
+scBox.innerHTML=SC.map((l,i)=>l.w==='u'?'<button class="ln" data-i="'+i+'"><b>Bạn thực tập</b>'+esc(l.t)+'<span class="res">'+(l.res||'')+'</span></button>':'<div class="ln who-u"><b>Thủ thư</b>'+esc(l.t)+'</div>').join('');
+scBox.querySelectorAll('button.ln').forEach(b=>b.onclick=()=>{if(scDone)return;const i=+b.dataset.i;if(scPick.has(i))scPick.delete(i);else scPick.add(i);b.classList.toggle('pick',scPick.has(i));document.getElementById('scChk').disabled=scPick.size!==3;});
+document.getElementById('scChk').onclick=()=>{scDone=true;let hit=0;scBox.querySelectorAll('button.ln').forEach(b=>{const i=+b.dataset.i,l=SC[i],p=scPick.has(i);b.classList.remove('pick');if(l.bad&&p){b.classList.add('hit');b.querySelector('.res').textContent='Bắt đúng · '+l.res;hit++;}else if(l.bad&&!p){b.classList.add('miss');b.querySelector('.res').textContent='Bỏ sót · '+l.res;}else if(p){b.classList.add('over');b.querySelector('.res').textContent='Chọn nhầm · câu này hay: hỏi một lần cụ thể đã xảy ra';}else if(l.good){b.classList.add('hit');}b.disabled=true;});R.script={hit:hit,total:3,picked:[...scPick]};document.getElementById('scChk').disabled=true;document.getElementById('scWhy').classList.add('on');document.getElementById('n4').disabled=false;};
+
+const teach=document.getElementById('teach');teach.oninput=()=>{R.teach=teach.value.trim();document.getElementById('reveal').disabled=R.teach.length<8;};
+document.getElementById('reveal').onclick=()=>{document.getElementById('mine').classList.add('on');R.revealed=true;check();};
+document.querySelectorAll('.chips[data-g]').forEach(c=>{c.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{c.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');R[c.dataset.g]=b.textContent;});});
+document.getElementById('fb').oninput=e=>{R.fb=e.target.value.trim();};
+function check(){
+ document.getElementById('n1').disabled=Object.keys(R.review).length<3;
+ document.getElementById('n5').disabled=!(R.quiz.q1&&R.quiz.q2);
+ document.getElementById('n6').disabled=!R.revealed;}
+
+function summary(){const best=R.iv.filter(x=>x.best).length;return 'BA buổi 2 (làm lại sau Codex)\nÔn: '+JSON.stringify(R.review)+'\nPhỏng vấn: chọn câu hay nhất '+best+'/3, bẫy đã gặp: '+(R.traps.join(', ')||'không')+', dữ kiện thật: '+facts.filter(f=>f[1]==='r').length+'\nThử thêm câu khác: '+R.ivTried.length+' lần\nBắt lỗi: '+(R.script.hit||0)+'/3\nCâu hỏi: '+['q1','q2'].filter(k=>R.quiz[k]&&R.quiz[k].right).length+'/2\nNói lại: '+R.teach+'\nĐộ dài: '+R.len+', độ khó: '+R.diff+', luồng: '+R.flow+', so với Codex: '+R.vsCodex+', hứng thú: '+R.interest+'\nGóp ý: '+R.fb;}
+document.getElementById('finish').onclick=async()=>{const btn=document.getElementById('finish');btn.disabled=true;R.end=new Date().toISOString();R.facts=facts;const out=document.getElementById('saved');out.style.display='block';out.textContent='Đang lưu...';let ok=false;try{let dbp=null;try{dbp=window.claude&&window.claude.use?window.claude.use('db'):null;}catch(e){dbp=null;}const db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;if(db){await Promise.race([db.doc('sessions/ba2-'+Date.now()).set(R),new Promise((_,j)=>setTimeout(()=>j(new Error('save timeout')),10000))]);ok=true;}}catch(e){ok=false;}
+out.textContent=ok?'Đã lưu kết quả. Bạn chỉ cần nhắn "xong" trong thread.':'Chưa lưu được tự động. Bấm nút dưới để chép kết quả rồi dán vào chat.';if(!ok){document.getElementById('copy').style.display='flex';}};
+document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());document.getElementById('copy').textContent='Đã chép';}catch(e){document.getElementById('saved').textContent=summary();}};
+const syncPressed=()=>document.querySelectorAll('.chip,.ln').forEach(b=>{if(b.tagName!=='BUTTON')return;const v=(b.classList.contains('on')||b.classList.contains('pick'))?'true':'false';if(b.getAttribute('aria-pressed')!==v)b.setAttribute('aria-pressed',v);});
+new MutationObserver(syncPressed).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+go(0);syncPressed();
+</script>
+<script id="lesson-kit">
 /* Bộ khung chung cho trang học (xem learning/teaching/README.md, mục "Bộ khung chung").
    1. Tự lưu chỗ đang học: ghi lại từng lần bấm và chữ đã gõ, lưu vào máy (localStorage) và vào db của trang (drafts/<id>).
       Mở lại, tải lại, hay trang được đăng bản sửa: bấm lại đúng thứ tự để về chỗ cũ.
@@ -90,4 +410,5 @@ const L=local();apply(L);
  if(acted)save();})();
 })();
 </script>
-</body></html>
+</body>
+</html>
