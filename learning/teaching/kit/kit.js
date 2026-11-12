@@ -36,9 +36,10 @@ function apply(d){if(!d)return false;S.everDone=!!d.everDone;S.doneAt=d.doneAt||
  replaying=false;S.log=d.log;S.start=d.start||S.start;S.ts=d.ts||Date.now();
  if(typeof R!=='undefined'&&R&&d.start)R.start=d.start;
  say('Đã mở lại đúng chỗ bạn đang học.',true);return true;}
-const L=local();apply(L);
+const L=local();const usedL=apply(L);
 (async()=>{try{const dbp=window.claude&&window.claude.use?window.claude.use('db'):null;db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;}catch(e){db=null;}
  if(!db)return;let d=null;try{const snap=await Promise.race([db.doc(DOC).get(),new Promise(r=>setTimeout(()=>r(null),8000))]);d=snap&&(typeof snap.data==='function'?snap.data():snap.data!==undefined?snap.data:snap);}catch(e){d=null;}
- if(d&&!acted&&(!L||(d.ts||0)>(L.ts||0)))apply(d);else if(d&&d.everDone&&!S.everDone){S.everDone=true;S.doneAt=d.doneAt;reviewOff();}
+ if(d&&!acted&&(!L||(d.ts||0)>(L.ts||0))){ /* bản trên db mới hơn: nếu đã bấm lại bản trong máy thì nạp lại trang từ bản db, để không bấm chồng hai lần */
+  if(usedL){try{localStorage.setItem(LK,JSON.stringify(d));location.reload();return;}catch(e){}}apply(d);}else if(d&&d.everDone&&!S.everDone){S.everDone=true;S.doneAt=d.doneAt;reviewOff();}
  if(acted)save();})();
 })();

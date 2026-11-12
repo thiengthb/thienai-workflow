@@ -197,7 +197,7 @@ h1:focus,h2:focus{outline:none}
     <div class="card">
       <p class="lbl">ĐIỀU MINH NHỜ</p>
       <p>"App nên nhắc mình ôn."</p>
-      <p class="lbl">ĐIỀU SỔ GHI CHÉP CHO THẤY</p>
+      <p class="lbl">ĐIỀU HỎI ĐÚNG CÂU SẼ RA</p>
       <p style="margin:0">Minh không quên. Minh <b>có mở app</b> lúc 11 giờ, thấy <b>60 thẻ</b> thì ngán và tắt. Hôm sau thẻ dồn lên 90, Minh bỏ luôn 4 ngày. Nhắc thêm lần nữa thì Minh vẫn gặp đúng đống thẻ đó.</p>
     </div>
     <p class="small">Vậy chỗ nên bàn là <b>số thẻ mỗi lần ôn</b> (ví dụ ôn từng lượt 10 thẻ), không phải giờ nhắc. Nhưng đây mới là <b>một người</b>: đó là giả thuyết, cần hỏi thêm vài người nữa mới biết có nhiều người như vậy không.</p>
@@ -403,10 +403,11 @@ function apply(d){if(!d)return false;S.everDone=!!d.everDone;S.doneAt=d.doneAt||
  replaying=false;S.log=d.log;S.start=d.start||S.start;S.ts=d.ts||Date.now();
  if(typeof R!=='undefined'&&R&&d.start)R.start=d.start;
  say('Đã mở lại đúng chỗ bạn đang học.',true);return true;}
-const L=local();apply(L);
+const L=local();const usedL=apply(L);
 (async()=>{try{const dbp=window.claude&&window.claude.use?window.claude.use('db'):null;db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;}catch(e){db=null;}
  if(!db)return;let d=null;try{const snap=await Promise.race([db.doc(DOC).get(),new Promise(r=>setTimeout(()=>r(null),8000))]);d=snap&&(typeof snap.data==='function'?snap.data():snap.data!==undefined?snap.data:snap);}catch(e){d=null;}
- if(d&&!acted&&(!L||(d.ts||0)>(L.ts||0)))apply(d);else if(d&&d.everDone&&!S.everDone){S.everDone=true;S.doneAt=d.doneAt;reviewOff();}
+ if(d&&!acted&&(!L||(d.ts||0)>(L.ts||0))){ /* bản trên db mới hơn: nếu đã bấm lại bản trong máy thì nạp lại trang từ bản db, để không bấm chồng hai lần */
+  if(usedL){try{localStorage.setItem(LK,JSON.stringify(d));location.reload();return;}catch(e){}}apply(d);}else if(d&&d.everDone&&!S.everDone){S.everDone=true;S.doneAt=d.doneAt;reviewOff();}
  if(acted)save();})();
 })();
 </script>
