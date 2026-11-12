@@ -3,8 +3,10 @@
 File này để tài khoản nào, model nào cũng dạy tiếp được cho thien. Đọc hết trước khi soạn buổi mới. Cập nhật mục "Nhật ký" và "Buổi tiếp theo" sau mỗi buổi. Vòng xoay giữa các môn và khung một buổi ở [`README.md`](README.md); luật dạy chung ở `profile/TUTOR.md`.
 
 ## Mục tiêu
-- Môn mở rộng trong vòng xoay (khoảng 1 buổi mỗi tuần).
-- thien muốn dùng môn này để làm gì: ghi sau buổi làm quen.
+- Môn mở rộng trong vòng xoay (khoảng 1 buổi mỗi tuần). Cũng là sở thích riêng của thien.
+- thien chọn (buổi 1): hiểu lịch sử Việt Nam và thế giới, hiểu tin tức thời sự, học cách quyết định khi thiếu thông tin, học chiến lược để dùng cho việc và đồ án.
+- Lời của thien (buổi 1, rút gọn): qua chiến tranh để hiểu tâm lý, hành vi con người và xã hội; hiểu bối cảnh chính trị, kinh tế, xã hội thời đó; hỏi vì sao người cầm quyền chọn chiến tranh thay vì hòa bình, do sinh học hay do chính trị, ngoại giao. Muốn học cả phần cụ thể: điều khiển một trận, hậu cần, chiến lược và chiến thuật, các học thuyết chiến tranh từ Âu sang Á, triết lý và bài học; đặc biệt là dàn binh bố trận, chuẩn bị quân nhu. Muốn đứng ở góc nhìn người lãnh đạo, vị tướng khi quyết định lớn: vì sao chọn vậy, vì sao phải hy sinh.
+- Đã biết (thien tự chọn, buổi 1): Binh pháp Tôn Tử "biết khá"; các trận của Việt Nam, hai cuộc thế chiến, chiến tranh đang diễn ra "nghe qua".
 
 ## Cách dạy môn này
 
@@ -33,24 +35,28 @@ Tìm hiểu ngày 2026-11-12, trước buổi làm quen.
 - Ưu tiên trận của Việt Nam khi hợp ý, vì gần với thien và có địa danh thật để tra.
 
 ## Bản đồ 10 ý lớn
-Ở mức người mới, đủ để nói chuyện với người trong nghề. thien xếp thứ tự ở buổi làm quen.
+Ở mức người mới, đủ để nói chuyện với người trong nghề. Thứ tự do thien xếp cả 10 ý ở buổi 1.
 
-| Ý | Một dòng |
-|---|---|
-| Mục tiêu chính trị | Chiến tranh để đạt điều gì; thắng trận mà không đạt mục tiêu thì vẫn thua |
-| Địa hình và thời tiết | Sông, núi, mùa, thủy triều quyết định đánh ở đâu, lúc nào |
-| Hậu cần | Lương thực, đạn dược, đường tiếp tế; quân đói thì không đánh được |
-| Đánh chỗ yếu, tránh chỗ mạnh | Dùng điểm mạnh của mình vào điểm yếu của bên kia |
-| Bất ngờ và lừa địch | Giả thua, giấu quân, đánh lúc không ai ngờ |
-| Tinh thần | Quân bỏ chạy thường vì sợ chứ không phải vì hết người |
-| Vũ khí và công nghệ | Cung nỏ, thuốc súng, xe tăng, máy bay đổi cách đánh thế nào |
-| Ba tầng: chiến lược, chiến dịch, chiến thuật | Cả cuộc chiến, một đợt đánh, một trận |
-| Chiến tranh nhân dân và du kích | Bên yếu hơn đánh lâu dài để bên mạnh mệt và bỏ cuộc |
-| Thông tin và "sương mù chiến tranh" | Không ai biết hết; ai biết nhiều hơn và nhanh hơn thì có lợi |
+| Thứ tự | Ý | Một dòng | Trạng thái |
+|---|---|---|---|
+| 1 | Mục tiêu chính trị | Chiến tranh để đạt điều gì; thắng trận mà không đạt mục tiêu thì vẫn thua | Buổi 2 |
+| 2 | Ba tầng: chiến lược, chiến dịch, chiến thuật | Cả cuộc chiến, một đợt đánh, một trận | |
+| 3 | Địa hình và thời tiết | Sông, núi, mùa, thủy triều quyết định đánh ở đâu, lúc nào | Đã chạm ở buổi 1 (Bạch Đằng) |
+| 4 | Hậu cần | Lương thực, đạn dược, đường tiếp tế; quân đói thì không đánh được | |
+| 5 | Đánh chỗ yếu, tránh chỗ mạnh | Dùng điểm mạnh của mình vào điểm yếu của bên kia | Đã chạm ở buổi 1 |
+| 6 | Bất ngờ và lừa địch | Giả thua, giấu quân, đánh lúc không ai ngờ | Đã chạm ở buổi 1 |
+| 7 | Tinh thần | Quân bỏ chạy thường vì sợ chứ không phải vì hết người | |
+| 8 | Vũ khí và công nghệ | Cung nỏ, thuốc súng, xe tăng, máy bay đổi cách đánh thế nào | |
+| 9 | Thông tin và "sương mù chiến tranh" | Không ai biết hết; ai biết nhiều hơn và nhanh hơn thì có lợi | |
+| 10 | Chiến tranh nhân dân và du kích | Bên yếu hơn đánh lâu dài để bên mạnh mệt và bỏ cuộc | |
 
 ## Nhật ký
 | Buổi | Ngày | Ý chính | Kết quả |
 |---|---|---|---|
+| 1 | 2026-11-12 | Làm quen, làm chỉ huy trận Bạch Đằng 938 ([bài](war/lessons/01-bach-dang-938.md)) | 12 phút, độ dài và độ khó "vừa", thấy môn này "thích". Chọn đúng cách của Ngô Quyền ngay lần đầu, đúng 2/2 câu hỏi. Chỉ xem diễn biến thật, chưa mở hai mô phỏng A và C. Tự nói lại đủ ý: hiểu địa hình, dụ địch, dùng quy luật tự nhiên, biến lợi thế của địch thành điểm yếu. Xếp cả 10 ý, mục tiêu chính trị đứng đầu. Viết dài về điều muốn học (xem "Mục tiêu"). Góp ý: mở đầu tốt, tiếp tục phát huy và sáng tạo thêm |
 
 ## Buổi tiếp theo
-- Buổi 1: làm quen. Làm chỉ huy trận Bạch Đằng 938, rồi xếp bản đồ 10 ý lớn.
+- Buổi 2: ý "Mục tiêu chính trị", đúng câu thien hỏi "vì sao người cầm quyền chọn chiến tranh thay vì hòa bình". Vẫn kiểu 6 "Làm chỉ huy", nhưng ở tầng người lãnh đạo: chọn đánh hay không đánh, đánh tới đâu thì dừng. Chọn một trường hợp có nguồn rõ, gợi ý: Lý Thường Kiệt đánh sang đất Tống năm 1075 rồi chủ động giảng hòa năm 1077 (nguồn: Toàn thư, Tống sử), để thấy thắng trận và đạt mục tiêu là hai chuyện. Kiểm nguồn theo luật 10 trước khi dựng.
+- Câu nhớ lại: vì sao Ngô Quyền không đấu thuyền với thuyền.
+- Nhắc thien mở thử một mô phỏng sai ở đầu buổi nếu bài có, vì buổi 1 chưa xem A và C.
+- Dàn binh bố trận và hậu cần (điều thien muốn nhất) nằm ở ý 2 và 4, sẽ tới sớm. Câu hỏi "do sinh học hay chính trị" là chuyện lớn và còn tranh cãi; khi tới thì nói rõ các trường phái và mức chắc chắn, không chọn hộ một đáp án.

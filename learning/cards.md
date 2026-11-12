@@ -22,3 +22,6 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | F7 | Frontend | Thanh đầu trang cùng màu đặc với nút chính thì sao? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 1 | 2026-11-13 |
 | F8 | Frontend | Thẻ trạng thái "Đã thanh toán" nên đặc hay nhạt, vì sao? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 1 | 2026-11-13 |
 | F9 | Frontend | Ngoài khối màu to, hai thứ nhỏ nào cũng hay giành mắt mà dễ bị bỏ sót? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 1 | 2026-11-13 |
+| W1 | Chiến tranh | Theo Toàn thư, vì sao thuyền Nam Hán bị lật ở Bạch Đằng năm 938? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
+| W2 | Chiến tranh | Vì sao Ngô Quyền không đem thuyền ra chặn thẳng ở cửa biển? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
+| W3 | Chiến tranh | Toàn thư và sử Trung Quốc chép khác nhau thế nào về cái chết của Hoằng Tháo? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
