@@ -2,6 +2,8 @@
 
 File này cho biết buổi tới học môn gì. Khi thien nhắn "học" (tài khoản nào, model nào cũng vậy), AI đọc file này trước, mở buổi cho môn kế tiếp trong vòng, rồi cập nhật bảng "Trạng thái" sau buổi.
 
+Học ở Codex hay công cụ khác Claude (ví dụ khi hết quota) thì vẫn theo file này, đọc thêm [codex.md](codex.md) cho phần khác. Trước khi mở buổi, ở công cụ nào cũng vậy, xem có PR buổi học nào chưa merge không: có thì bảng "Trạng thái" dưới đây còn thiếu buổi đó.
+
 Kế hoạch đầy đủ và lý do nằm ở tài liệu "Kế hoạch học nhiều lĩnh vực song song" (https://claude.ai/artifact/QJwWL3z4pTjZerq5U3Fb9G), thien đồng ý ngày 2026-11-12.
 
 ## Vì sao học kiểu này
@@ -50,7 +52,7 @@ Hai phần ôn này chỉ dành cho lần học đầu: trong trang, bọc chún
 6. **Tự nói lại ý chính** rồi mới xem bản của AI.
 7. **Góp ý** độ dài và độ khó.
 
-Sau buổi: ghi nhật ký vào `learning/<môn>.md`, lưu bài vào `learning/<môn>/`, thêm 2–3 thẻ vào `cards.md`, cập nhật bảng "Trạng thái" ở trên, và tick chặng trong [roadmap.md](roadmap.md) kèm link bài. Luật dạy chung ở `profile/TUTOR.md`.
+Sau buổi: ghi nhật ký vào `learning/<môn>.md`, lưu bài vào `learning/<môn>/`, thêm 2–3 thẻ vào `cards.md`, cập nhật bảng "Trạng thái" ở trên, và tick chặng trong [roadmap.md](roadmap.md) kèm link bài. Buổi học ngoài Claude thì ghi tên công cụ vào nhật ký, ví dụ "(Codex)". Xong thì mở PR để thien merge. Luật dạy chung ở `profile/TUTOR.md`.
 
 ## Bắt đầu một môn mới
 
