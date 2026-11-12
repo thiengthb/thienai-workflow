@@ -140,7 +140,7 @@ function planCard(p) {
   }).join('');
   const sec = (name, rows, cls) => rows.length ? `<details class="log ${cls}"><summary>${name} <span class="ck-count">${rows.length}</span></summary>${blocks(p.doc.sections.find((s) => s.title.startsWith(name)).lines, p.linkBase)}</details>` : '';
   return `<article class="plan">
-  <header><h3>${inline(p.title, p.linkBase)}</h3><span class="pill state">${esc(state)}</span></header>
+  <header><h4 class="plan-title">${inline(p.title, p.linkBase)}</h4><span class="pill state">${esc(state)}</span></header>
   <div class="progress">${bar(p.all)}</div>
   <p class="meta">${['Duyệt', 'Cập nhật'].filter((k) => p.meta[k]).map((k) => `${k} ${esc(p.meta[k])}`).join(' · ')}${p.meta.Thread ? ` · ${inline(p.meta.Thread, p.linkBase)}` : ''}</p>
   <div class="where">${blocks(p.where, p.linkBase)}</div>
@@ -163,25 +163,34 @@ function repoSection(dir, repo) {
   const updated = status ? (status.intro.find((l) => /^Cập nhật/.test(l)) ?? '').split('·').slice(0, 2).join('·').trim() : '';
   const running = plans.filter((p) => !/^(xong|bỏ)/.test(p.meta['Trạng thái'] || ''));
   const waiting = pick('Đang chờ thien');
-  const waitingItems = waiting ? waiting.lines.filter((l) => /^\s*([-*]|\d+\.)\s+\S/.test(l) && !/<.*>/.test(l)) : [];
+  const waitingItems = [];
+  let keep = false;
+  for (const l of waiting?.lines ?? []) {
+    if (/^\s*([-*]|\d+\.)\s+\S/.test(l) && !/^\s/.test(l)) { keep = !/<.*>/.test(l); if (keep) waitingItems.push(l); }
+    else if (keep && /^\s+\S/.test(l)) waitingItems.push(l);
+    else if (!l.trim()) keep = false;
+  }
   const unfinished = pick('Việc dở');
-  const id = repo.split('/')[1];
+  const id = repoId(repo);
   return `<section class="repo" id="${esc(id)}">
-  <h2><a href="https://github.com/${esc(repo)}">${esc(id)}</a></h2>
+  <h2><a href="https://github.com/${esc(repo)}">${esc(repo.split('/')[1])}</a></h2>
   ${updated ? `<p class="meta">${inline(updated, base('docs/STATUS.md'))}</p>` : ''}
-  ${status ? `<div class="now-box"><h4>Đang ở đâu</h4>${blocks(pick('Đang ở đâu')?.lines ?? [], base('docs/STATUS.md'))}</div>` : '<p class="muted">Repo này chưa có <code>docs/STATUS.md</code>.</p>'}
-  ${waitingItems.length ? `<div class="ask"><h4>Cần thien làm</h4>${blocks(waitingItems, base('docs/STATUS.md'))}</div>` : ''}
-  ${unfinished && tableRows(unfinished.lines).length ? `<div><h4>Việc dở</h4>${blocks(unfinished.lines.filter((l) => /^\s*\|/.test(l)), base('docs/STATUS.md'))}</div>` : ''}
-  <h4>Kế hoạch đang chạy</h4>
+  ${status ? `<div class="now-box"><h3 class="label">Đang ở đâu</h3>${blocks(pick('Đang ở đâu')?.lines ?? [], base('docs/STATUS.md'))}</div>` : '<p class="muted">Repo này chưa có <code>docs/STATUS.md</code>.</p>'}
+  ${waitingItems.length ? `<div class="ask"><h3 class="label">Cần thien làm</h3>${blocks(waitingItems, base('docs/STATUS.md'))}</div>` : ''}
+  ${unfinished && tableRows(unfinished.lines).length ? `<div><h3 class="label">Việc dở</h3>${blocks(unfinished.lines.filter((l) => /^\s*\|/.test(l)), base('docs/STATUS.md'))}</div>` : ''}
+  <h3 class="label">Kế hoạch đang chạy</h3>
   ${running.length ? running.map(planCard).join('\n') : '<p class="muted">Không có kế hoạch nào đang chạy.</p>'}
   ${legacy ? `<p class="muted">${legacy} kế hoạch viết trước khi có mẫu, chưa có checkpoint để đếm: xem trong <a href="https://github.com/${esc(repo)}/tree/main/docs/plans">docs/plans</a>.</p>` : ''}
   ${plans.length > running.length ? `<details class="done-plans"><summary>Kế hoạch đã xong hoặc đã bỏ <span class="ck-count">${plans.length - running.length}</span></summary>${plans.filter((p) => !running.includes(p)).map((p) => `<p>${inline(p.title, p.linkBase)} · ${esc(p.meta['Trạng thái'] || '')}</p>`).join('')}</details>` : ''}
 </section>`;
 }
 
+/** Section id from the full owner/repo, so two repos with the same name never share an anchor. */
+export const repoId = (repo) => repo.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
 function overview(repos) {
   if (repos.length < 2) return '';
-  return `<nav class="overview" aria-label="Các repo">${repos.map((r) => `<a href="#${esc(r.id)}" class="tile${r.missing ? ' missing' : ''}"><strong>${esc(r.id)}</strong>${r.upd ? `<span>Cập nhật ${esc(r.upd)}</span>` : ''}<span>${esc(r.line)}</span></a>`).join('')}</nav>`;
+  return `<nav class="overview" aria-label="Các repo">${repos.map((r) => `<a href="#${esc(r.id)}" class="tile${r.missing ? ' missing' : ''}"><strong>${esc(r.name)}</strong>${r.upd ? `<span>Cập nhật ${esc(r.upd)}</span>` : ''}<span>${esc(r.line)}</span></a>`).join('')}</nav>`;
 }
 
 function roadmap(file, linkBase) {
@@ -239,8 +248,8 @@ body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--font); }
 main { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; display: grid; gap: 20px; }
 h1 { font-size: 26px; line-height: 1.25; margin: 0; text-wrap: balance; }
 h2 { font-size: 20px; margin: 0; } h2 a { color: inherit; text-decoration: none; }
-h3 { font-size: 17px; margin: 0; text-wrap: balance; }
-h4 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 6px; }
+h3, h4 { font-size: 17px; margin: 0; text-wrap: balance; }
+.label { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 6px; }
 p { margin: 0 0 8px; } a { color: inherit; text-underline-offset: 3px; }
 a:focus-visible, summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 6px; }
 code { font-size: .9em; background: var(--line); padding: 1px 5px; border-radius: 5px; overflow-wrap: anywhere; }
@@ -248,7 +257,7 @@ code { font-size: .9em; background: var(--line); padding: 1px 5px; border-radius
 .repo, .subject { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: grid; gap: 14px; }
 .now-box p, .now-box li { font-size: 16px; }
 .ask { background: var(--wait-soft); border-radius: 12px; padding: 12px 14px; }
-.ask h4 { color: var(--wait); }
+.ask .label { color: var(--wait); }
 .plan { border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 8px; }
 .plan header { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
 .progress { display: flex; align-items: center; gap: 10px; }
@@ -317,15 +326,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const parsed = repos.map((a) => {
       if (a.startsWith('missing=')) {
         const [repo, ...why] = a.slice(8).split(':');
-        const id = repo.split('/')[1];
-        return { id, missing: true, line: 'Chưa đọc được', html: `<section class="repo" id="${esc(id)}"><h2>${esc(id)}</h2><p class="muted">${esc(why.join(':'))}</p></section>` };
+        const id = repoId(repo), name = repo.split('/')[1];
+        return { id, name, missing: true, line: 'Chưa đọc được', html: `<section class="repo" id="${esc(id)}"><h2>${esc(name)}</h2><p class="muted">${esc(why.join(':'))}</p></section>` };
       }
       const [dir, repo] = a.split('=');
-      const id = repo.split('/')[1];
+      const id = repoId(repo), name = repo.split('/')[1];
       const st = join(dir, 'docs/STATUS.md');
       const where = existsSync(st) ? (sections(readFileSync(st, 'utf8')).sections.find((s) => s.title.startsWith('Đang ở đâu'))?.lines.find((l) => l.trim()) ?? '') : 'Chưa có STATUS';
       const upd = existsSync(st) ? (/Cập nhật lần cuối:\s*([0-9-]+)/.exec(readFileSync(st, 'utf8'))?.[1] ?? '') : '';
-      return { id, upd, line: where.replace(/[*`[\]]/g, '').replace(/\(([^)]*)\)/g, '').slice(0, 90), html: repoSection(dir, repo) };
+      return { id, name, upd, line: where.replace(/[*`[\]]/g, '').replace(/\(([^)]*)\)/g, '').slice(0, 90), html: repoSection(dir, repo) };
     });
     process.stdout.write(page(title, overview(parsed) + parsed.map((r) => r.html).join('\n'), stampNow()));
   }

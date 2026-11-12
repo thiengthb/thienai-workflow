@@ -37,7 +37,7 @@ export const PLAN_SECTIONS = ['Đang ở đâu', 'Mục tiêu', 'Không làm', '
 export function checkPlan(text) {
   if (!/^## Checkpoint/m.test(text)) return [];
   const problems = [];
-  if (!/^Trạng thái:\s*(đang chạy|tạm dừng|xong|bỏ)\b/m.test(text)) {
+  if (!/^Trạng thái:\s*(đang chạy|tạm dừng|xong|bỏ)(?=[\s.,;·]|$)/m.test(text)) {
     problems.push('thiếu dòng "Trạng thái: đang chạy | tạm dừng | xong | bỏ" ở đầu file.');
   }
   for (const name of PLAN_SECTIONS) {

@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { parsePlan, blocks, inline } from '../../templates/progress-page.mjs';
+import { parsePlan, blocks, inline, repoId } from '../../templates/progress-page.mjs';
 
 const plan = parsePlan([
   '# Kế hoạch thử', '', 'Trạng thái: đang chạy · Duyệt: 2026-01-01 · Cập nhật: 2026-01-02', '',
@@ -19,6 +19,8 @@ assert.equal(plan.errors.length, 0, 'empty table has no rows');
 assert.match(inline('[a](../STATUS.md)', 'o/r:docs/plans/x.md'), /github\.com\/o\/r\/blob\/main\/docs\/STATUS\.md/, 'relative links go to GitHub');
 assert.match(inline('<script>', ''), /&lt;script&gt;/, 'html is escaped');
 assert.match(blocks(['| A | B |', '|---|---|', '| <x> | <y> |'], ''), /Chưa có/, 'placeholder-only table shows "Chưa có"');
+
+assert.notEqual(repoId('owner-a/app'), repoId('owner-b/app'), 'same repo name under two owners gets two anchors');
 
 const run = (...args) => execFileSync('node', ['templates/progress-page.mjs', ...args], { encoding: 'utf8' });
 const repoPage = run('--title', 'T', '.=thiengthb/thienai-workflow', 'missing=thiengthb/x:không đọc được');
