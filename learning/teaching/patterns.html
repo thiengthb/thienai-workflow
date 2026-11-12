@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--soft:#f3f1ec;--accent:#308E84;--accent-ink:#1d5c55;--accent-soft:#e3f1ef;--bad:#c2410c;--bad-soft:#fdeee6;--rome:#b4533a;--rome-soft:#f3ddd5;--carth:#2f6f9f;--carth-soft:#dbe8f2;--spring:cubic-bezier(.3,1.25,.5,1)}
+:root{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--soft:#f3f1ec;--accent:#1b1b1a;--accent-ink:#1b1b1a;--accent-soft:#ebe8e1;--good:#2e7d4f;--good-ink:#1f5c39;--good-soft:#e4f2e8;--app:#2563eb;--app-ink:#1d4ed8;--bad:#c2410c;--bad-soft:#fdeee6;--rome:#a8322d;--rome-cav:#dd8f84;--afr:#4b1f57;--gaul:#a77bb5;--carth-cav:#2a1030;--rome-soft:#f3ddd5;--carth:#2f6f9f;--carth-soft:#dbe8f2;--spring:cubic-bezier(.3,1.25,.5,1)}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Onest,system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -45,9 +45,9 @@ nav a:hover{border-color:var(--accent)}
 .btn:focus-visible,.opt:focus-visible,.tok:focus-visible,.hot:focus-visible,nav a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
 .opt[aria-pressed="true"]::after{content:"Đã chọn";margin-left:auto;font-size:12px;font-weight:600;color:var(--accent-ink)}
-.opt.right{border-color:var(--accent);background:var(--accent-soft)}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
 .opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
-.opt.right::after{content:"Đúng";margin-left:auto;font-size:12px;font-weight:700;color:var(--accent-ink)}
+.opt.right::after{content:"Đúng";margin-left:auto;font-size:12px;font-weight:700;color:var(--good-ink)}
 .opt.wrong::after{content:"Bạn chọn";margin-left:auto;font-size:12px;font-weight:700;color:var(--bad)}
 .opt[disabled]{cursor:default;opacity:1;color:var(--ink)}
 .row{display:flex;gap:8px;flex-wrap:wrap}
@@ -57,7 +57,7 @@ nav a:hover{border-color:var(--accent)}
 .ghost{justify-content:center}
 .fb{font-size:15px;border-radius:12px;padding:10px 12px;margin-top:10px;background:var(--soft)}
 .fb:empty{display:none}
-.fb.good{background:var(--accent-soft);color:var(--accent-ink)}
+.fb.good{background:var(--good-soft);color:var(--good-ink)}
 .fb.bad{background:var(--bad-soft);color:#7c2d12}
 .stage{background:var(--soft);border-radius:14px;padding:14px;position:relative;overflow:hidden}
 /* 1. đoán rồi xem */
@@ -95,18 +95,18 @@ input[type=range]{width:100%;height:44px;margin:6px 0;accent-color:var(--accent)
 .pcard .nm b{display:block;font-size:16px}.pcard .nm span{font-size:13px;color:var(--muted)}
 .pcard .acts{display:flex;gap:8px}
 .pcard .acts div{flex:1;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
-.a1{background:var(--accent);color:#fff}.a2{background:var(--soft)}
+.a1{background:var(--app);color:#fff}.a2{background:var(--soft)}
 .boxes .pcard{background:transparent;border-style:dashed;position:relative}
 .boxes .av,.boxes .a1,.boxes .a2,.boxes .nm b,.boxes .nm span{background:#d9d4ca!important;color:transparent!important;border-radius:6px}
 .boxes .nm b{height:14px;margin-bottom:6px;width:110px}.boxes .nm span{display:block;height:10px;width:70px}
 .ann{position:absolute;font-size:12px;font-weight:700;padding:1px 6px;border-radius:6px;color:#fff}
-.ann.g16{background:#c2410c}.ann.g12{background:#7c3aed}.ann.g8{background:var(--accent)}
+.ann.g16{background:#c2410c}.ann.g12{background:#7c3aed}.ann.g8{background:#0369a1}
 code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .code{background:#1f1e1c;color:#ece8df;border-radius:12px;padding:14px 16px;font-size:13.5px;line-height:1.7;width:100%;max-width:320px;margin:0;white-space:pre;overflow-x:auto}
 .tok{font:inherit;border:0;border-radius:5px;padding:0 4px;cursor:pointer;color:#fff;min-height:24px;line-height:1.5;position:relative}
 .tok::before{content:"";position:absolute;inset:-10px -8px}
 #kyhieu .code{line-height:3.3}
-.tok.c16{background:#c2410c}.tok.c12{background:#7c3aed}.tok.c8{background:var(--accent)}
+.tok.c16{background:#c2410c}.tok.c12{background:#7c3aed}.tok.c8{background:#0369a1}
 .tok[aria-pressed="true"]{outline:2px solid #fff;outline-offset:1px}
 /* 4. sơ đồ từng bước */
 .flow{display:flex;flex-direction:column;gap:0;padding:4px 0}
@@ -127,10 +127,19 @@ code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .seq:empty::before{content:"Chạm vào các bước bên dưới theo thứ tự bạn nghĩ";color:var(--muted);font-size:14px;padding:8px}
 .seq .btn{background:var(--accent-soft);border-color:var(--accent)}
 .seq .btn .k{flex:0 0 auto;width:24px;height:24px;border-radius:7px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
-.seq .btn.right{background:var(--accent-soft);border-color:var(--accent)}
+.seq .btn.right{background:var(--good-soft);border-color:var(--good)}
 .seq .btn.wrong{background:var(--bad-soft);border-color:var(--bad)}
 .seq .btn .note{margin-left:auto;font-size:12px;font-weight:700}
 /* 6. bản đồ trận đánh */
+.forces{display:grid;gap:8px;margin:10px 0}
+.forces div{background:var(--soft);border-radius:12px;padding:8px 12px;font-size:14px;color:var(--muted)}
+.forces b{display:block;font-size:15px}
+.rome-t{color:var(--rome)}.carth-t{color:var(--afr)}
+.opt.fm{flex-direction:column;align-items:stretch;gap:6px}
+.opt.fm svg{width:100%;max-width:260px;height:auto;align-self:center;background:#efe9da;border-radius:10px}
+.opt.fm::after{margin-left:0;align-self:flex-end}
+@media (min-width:600px){#p6opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}#p6opts .opt{margin:0}}
+
 .map{width:100%;height:auto;display:block;background:#efe9da;border-radius:12px}
 .timeline{display:flex;align-items:center;gap:10px;margin-top:10px}
 .timeline .btn{width:auto;flex:0 0 auto;justify-content:center;min-width:48px}
@@ -142,16 +151,16 @@ code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .screen{max-width:300px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px 16px;position:relative}
 .hot{display:block;width:100%;font:inherit;text-align:left;background:transparent;border:2px solid transparent;border-radius:12px;padding:6px;margin:0 0 6px;cursor:pointer;color:inherit;transition:border-color .2s,background-color .2s}
 .hot:hover{border-color:var(--line)}
-.hot.right{border-color:var(--accent);background:rgba(48,142,132,.08)}
+.hot.right{border-color:var(--good);background:var(--good-soft)}
 .hot.wrong{border-color:var(--bad);background:rgba(194,65,12,.06)}
 .ph{height:120px;border-radius:12px;background:linear-gradient(135deg,#e9e2d3,#d8cfc0)}
 .pname{font-size:17px;font-weight:600}.pprice{font-size:15px;color:var(--muted)}
 .bt3{display:flex;flex-direction:column;gap:8px}
 .bt3 span{display:flex;align-items:center;justify-content:center;height:42px;border-radius:12px;font-size:15px;font-weight:600;transition:all .4s var(--spring)}
-.before .bt3 span{background:var(--accent);color:#fff}
-.after .bt3 span:nth-child(1){background:var(--accent);color:#fff}
+.before .bt3 span{background:var(--app);color:#fff}
+.after .bt3 span:nth-child(1){background:var(--app);color:#fff}
 .after .bt3 span:nth-child(2){background:#fff;color:var(--ink);border:1px solid var(--line)}
-.after .bt3 span:nth-child(3){background:transparent;color:var(--accent-ink);height:34px}
+.after .bt3 span:nth-child(3){background:transparent;color:var(--app-ink);height:34px}
 /* 8. vẽ dự đoán */
 .chart{width:100%;height:auto;display:block;touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .chart text{font-family:Onest,system-ui,sans-serif}
@@ -289,17 +298,25 @@ code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 <header><h2><span class="num">6</span>Làm chỉ huy trên bản đồ, rồi xem chuyện thật</h2><p class="small muted" style="margin:0">Ví dụ: chiến tranh, trận Cannae năm 216 trước Công nguyên</p></header>
 <div class="demo">
  <div id="p6ask">
-  <p style="margin-top:0">Bạn là Hannibal. Quân La Mã đông gần gấp đôi bạn (sử gia Polybius chép khoảng 86.000 người) và dồn rất dày ở giữa để đâm thủng trận. Bạn có kỵ binh giỏi hơn họ. Bạn xếp bộ binh thế nào?</p>
+  <p style="margin-top:0">Bạn là Hannibal, đang ở giữa đất Ý, xa nhà. Trước mặt là quân La Mã. Nhìn đội hình của họ trước đã.</p>
+  <svg class="map" id="p6enemy" viewBox="0 0 340 190" role="img" aria-label="Đội hình quân La Mã trước trận"></svg>
+  <div class="forces">
+   <div><b class="rome-t">La Mã: khoảng 86.000</b><span>80.000 bộ binh xếp rất sâu ở giữa, 6.000 kỵ binh ở hai cánh</span></div>
+   <div><b class="carth-t">Bạn: khoảng 50.000</b><span>40.000 bộ binh (giỏi nhất là bộ binh châu Phi), 10.000 kỵ binh giỏi hơn kỵ binh La Mã</span></div>
+  </div>
+  <p>Họ đông gần gấp đôi và định dùng khối bộ binh dày ở giữa để đâm thủng trận của bạn. Bạn xếp quân thế nào?</p>
   <div id="p6opts">
-   <button class="opt" data-v="A">Dồn quân mạnh nhất vào giữa để chặn thẳng mũi tấn công</button>
-   <button class="opt" data-v="B">Giữa mỏng và cong ra trước, quân mạnh nhất đứng ở hai đầu</button>
-   <button class="opt" data-v="C">Lùi về giữ trại, chờ quân La Mã mệt</button>
+   <button class="opt fm" data-v="A"><svg viewBox="0 0 200 110" aria-hidden="true" data-fm="A"></svg><span><b>A.</b> Dồn quân mạnh nhất vào giữa để chặn thẳng mũi tấn công</span></button>
+   <button class="opt fm" data-v="B"><svg viewBox="0 0 200 110" aria-hidden="true" data-fm="B"></svg><span><b>B.</b> Giữa mỏng và cong ra trước, quân mạnh nhất đứng ở hai đầu</span></button>
+   <button class="opt fm" data-v="C"><svg viewBox="0 0 200 110" aria-hidden="true" data-fm="C"></svg><span><b>C.</b> Rút vào trại giữ thế, chờ quân La Mã mệt</span></button>
   </div>
  </div>
  <div id="p6play" class="hide">
+  <div class="seg" id="p6tabs" style="margin-bottom:10px"><button class="btn" data-s="A" aria-pressed="false">A. Chặn giữa</button><button class="btn" data-s="B" aria-pressed="false">B. Hannibal</button><button class="btn" data-s="C" aria-pressed="false">C. Giữ trại</button></div>
+  <p class="small muted" id="p6note" style="margin:0 0 8px"></p>
   <svg class="map" id="p6svg" viewBox="0 0 340 250" role="img" aria-label="Bản đồ trận Cannae"></svg>
   <div class="timeline"><button class="btn" id="p6btn" aria-label="Chạy">▶</button><input type="range" id="p6t" min="0" max="300" value="0" aria-label="Thời gian trận đánh"></div>
-  <div class="legend"><span><i style="background:var(--rome)"></i>La Mã</span><span><i style="background:var(--carth)"></i>Carthage</span><span><i style="background:#1f3f5b;border-radius:50%"></i>Kỵ binh Carthage</span></div>
+  <div class="legend"><span><i style="background:var(--rome)"></i>Bộ binh La Mã</span><span><i style="background:var(--rome-cav)"></i>Kỵ binh La Mã</span><span><i style="background:var(--afr)"></i>Bộ binh châu Phi</span><span><i style="background:var(--gaul)"></i>Bộ binh Gaul, Tây Ban Nha</span><span><i style="background:var(--carth-cav);border-radius:50%"></i>Kỵ binh Carthage</span></div>
   <div class="phase" id="p6phase" role="status"></div>
  </div>
  <div class="fb" id="p6fb"></div>
@@ -413,44 +430,96 @@ chk.onclick=()=>{done=true;let right=0;$$('.btn',seq).forEach((b,p)=>{const i=+b
 $('#p5reset').onclick=init;init();})();
 
 /* 6 */
-(()=>{const svg=$('#p6svg'),t=$('#p6t'),ph=$('#p6phase'),btn=$('#p6btn'),fb=$('#p6fb');const NS='http://www.w3.org/2000/svg';
-const el=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);svg.appendChild(e);return e;};
-el('path',{d:'M0 236 C80 226 160 244 340 232 L340 250 L0 250Z',fill:'#cbdde6'});
-el('text',{x:8,y:246,'font-size':10,fill:'#5a7d8f'},).textContent='sông Aufidus';
-const rome=el('rect',{rx:4,fill:'#b4533a',opacity:.92});
-const rcl=el('rect',{rx:3,fill:'#d98f7a'}),rcr=el('rect',{rx:3,fill:'#d98f7a'});
-const center=el('path',{fill:'none',stroke:'#2f6f9f','stroke-width':9,'stroke-linecap':'round'});
-const libL=el('rect',{rx:3,fill:'#1f3f5b'}),libR=el('rect',{rx:3,fill:'#1f3f5b'});
-const cavL=el('circle',{r:9,fill:'#1f3f5b'}),cavR=el('circle',{r:9,fill:'#1f3f5b'});
-const ring=el('ellipse',{cx:170,cy:132,rx:96,ry:62,fill:'none',stroke:'#1f3f5b','stroke-width':2,'stroke-dasharray':'5 5',opacity:0});
-const lab=el('text',{'font-size':11,fill:'#fff','text-anchor':'middle','font-weight':600});
-/* keyframes at phase 0..3 */
-const K={rome:[[110,30,120,60],[110,48,120,60],[112,92,116,68],[118,108,104,64]],
- rcl:[[70,40,34,22],[60,50,34,22],[40,70,20,14],[20,80,10,8]],rcr:[[236,40,34,22],[246,50,34,22],[280,70,20,14],[310,80,10,8]],
- bulge:[16,12,-20,-28],cy:[140,138,146,150],
- libL:[[78,138,22,42],[80,136,22,42],[88,118,22,46],[98,100,22,56]],libR:[[240,138,22,42],[238,136,22,42],[230,118,22,46],[220,100,22,56]],
- cavL:[[56,150],[44,70],[30,40],[140,48]],cavR:[[284,150],[296,70],[310,40],[200,48]]};
-const P=['Hai bên dàn trận. Phần giữa của Hannibal mỏng và cong ra phía trước. Bộ binh châu Phi mạnh nhất đứng lùi ở hai đầu.',
- 'Kỵ binh Carthage đánh tan kỵ binh La Mã ở hai cánh rồi đuổi theo.',
- 'Bộ binh La Mã đẩy phần giữa lùi dần, đường cong bị đẩy lõm vào. Càng tiến sâu, quân La Mã càng chen chúc, không vung vũ khí được.',
- 'Bộ binh châu Phi ở hai đầu quay vào đánh vào hai bên sườn, kỵ binh quay lại chặn sau lưng. Quân La Mã bị vây kín. Đây là trận vây hai cánh nổi tiếng nhất lịch sử.'];
-const L=(a,b,f)=>a+(b-a)*f;const LA=(A,B,f)=>A.map((v,i)=>L(v,B[i],f));
-function at(arr,x){const i=Math.min(2,Math.floor(x)),f=x-i;return Array.isArray(arr[0])?LA(arr[i],arr[i+1],f):L(arr[i],arr[i+1],f);}
-const R=(e,[x,y,w,h])=>{e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('width',w);e.setAttribute('height',h);};
-function draw(){const x=+t.value/100;R(rome,at(K.rome,x));R(rcl,at(K.rcl,x));R(rcr,at(K.rcr,x));R(libL,at(K.libL,x));R(libR,at(K.libR,x));
- const b=at(K.bulge,x),cy=at(K.cy,x);center.setAttribute('d','M104 '+cy+' Q170 '+(cy-2*b)+' 236 '+cy);ring.setAttribute('opacity',Math.max(0,(x-2.4)/0.6)*0.9);
- const [lx,ly]=at(K.cavL,x),[rx,ry]=at(K.cavR,x);cavL.setAttribute('cx',lx);cavL.setAttribute('cy',ly);cavR.setAttribute('cx',rx);cavR.setAttribute('cy',ry);
- const rr=at(K.rome,x);lab.setAttribute('x',rr[0]+rr[2]/2);lab.setAttribute('y',rr[1]+rr[3]/2+4);lab.textContent='La Mã';
- ph.textContent='Giai đoạn '+(Math.min(3,Math.round(x))+1)+'/4. '+P[Math.min(3,Math.round(x))];}
+(()=>{const NS='http://www.w3.org/2000/svg';
+const C={rome:'#a8322d',rcav:'#dd8f84',afr:'#4b1f57',gaul:'#a77bb5',cav:'#2a1030',river:'#cbdde6'};
+const mk=(p,n,a={})=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;};
+const tx=(p,x,y,s,o={})=>{const e=mk(p,'text',Object.assign({x,y,'font-size':10,fill:'#4a4740','text-anchor':'middle'},o));e.textContent=s;return e;};
+const box=(p,[x,y,w,h],fill,o={})=>mk(p,'rect',Object.assign({x,y,width:w,height:h,rx:3,fill},o));
+/* đội hình La Mã trước trận */
+(()=>{const e=$('#p6enemy');
+ box(e,[110,34,120,64],C.rome,{rx:4});tx(e,170,62,'Bộ binh La Mã',{fill:'#fff','font-weight':600,'font-size':11});tx(e,170,76,'xếp rất sâu',{fill:'#fff','font-size':10});
+ box(e,[66,48,34,22],C.rcav);box(e,[240,48,34,22],C.rcav);tx(e,83,42,'Kỵ binh');tx(e,257,42,'Kỵ binh');
+ mk(e,'path',{d:'M170 104 L170 136',stroke:C.rome,'stroke-width':3,'stroke-linecap':'round'});mk(e,'path',{d:'M162 128 L170 140 L178 128',fill:'none',stroke:C.rome,'stroke-width':3,'stroke-linecap':'round','stroke-linejoin':'round'});
+ tx(e,214,124,'hướng đâm vào',{fill:C.rome,'font-weight':600});
+ box(e,[60,148,220,26],'none',{stroke:'#8a7f6a','stroke-dasharray':'5 4',rx:8});tx(e,170,165,'Quân của bạn đứng ở đây',{fill:'#6b6250'});
+ mk(e,'path',{d:'M0 182 C80 177 160 186 340 180 L340 190 L0 190Z',fill:C.river});})();
+/* hình nhỏ cho từng lựa chọn: La Mã mờ ở trên, đội hình của bạn ở dưới */
+const FM={A:g=>{box(g,[74,64,52,16],C.afr);box(g,[48,68,26,8],C.gaul);box(g,[126,68,26,8],C.gaul);mk(g,'circle',{cx:34,cy:72,r:5,fill:C.cav});mk(g,'circle',{cx:166,cy:72,r:5,fill:C.cav});},
+ B:g=>{mk(g,'path',{d:'M70 72 Q100 50 130 72',fill:'none',stroke:C.gaul,'stroke-width':6,'stroke-linecap':'round'});box(g,[52,64,16,22],C.afr);box(g,[132,64,16,22],C.afr);mk(g,'circle',{cx:36,cy:74,r:5,fill:C.cav});mk(g,'circle',{cx:164,cy:74,r:5,fill:C.cav});},
+ C:g=>{box(g,[64,62,72,38],'rgba(0,0,0,.03)',{stroke:'#7a6f5c','stroke-dasharray':'3 2',rx:4});box(g,[80,70,40,12],C.afr);box(g,[76,85,48,6],C.gaul);mk(g,'circle',{cx:86,cy:95,r:3.5,fill:C.cav});mk(g,'circle',{cx:114,cy:95,r:3.5,fill:C.cav});}};
+$$('#p6opts svg').forEach(s=>{const r=mk(s,'g',{opacity:.5});box(r,[70,8,60,28],C.rome);box(r,[42,14,18,12],C.rcav);box(r,[140,14,18,12],C.rcav);
+ mk(s,'path',{d:'M0 104 C60 101 120 108 200 103 L200 110 L0 110Z',fill:C.river});FM[s.dataset.fm](mk(s,'g'));});
+/* bản đồ chạy theo thời gian, mỗi lựa chọn một kịch bản */
+const svg=$('#p6svg'),t=$('#p6t'),ph=$('#p6phase'),btn=$('#p6btn'),fb=$('#p6fb'),note=$('#p6note');
+mk(svg,'path',{d:'M0 236 C80 226 160 244 340 232 L340 250 L0 250Z',fill:C.river});tx(svg,8,246,'sông Aufidus',{fill:'#5a7d8f','text-anchor':'start'});
+const g=mk(svg,'g');
+const RCAV=[[70,40,34,22],[60,50,34,22],[40,70,20,14],[20,80,10,8]],RCAV2=[[236,40,34,22],[246,50,34,22],[280,70,20,14],[310,80,10,8]];
+const S={
+ B:{note:'Chuyện thật, theo sử gia Polybius và Livy.',items:[
+  {t:'rect',fill:C.rome,rx:4,kf:[[110,30,120,60],[110,48,120,60],[112,92,116,68],[118,108,104,64]],label:'La Mã'},
+  {t:'rect',fill:C.rcav,kf:RCAV},{t:'rect',fill:C.rcav,kf:RCAV2},
+  {t:'curve',stroke:C.gaul,kf:[[104,140,236,16],[104,138,236,12],[104,146,236,-20],[104,150,236,-28]]},
+  {t:'rect',fill:C.afr,kf:[[78,138,22,42],[80,136,22,42],[88,118,22,46],[98,100,22,56]]},
+  {t:'rect',fill:C.afr,kf:[[240,138,22,42],[238,136,22,42],[230,118,22,46],[220,100,22,56]]},
+  {t:'circle',r:9,fill:C.cav,kf:[[56,150],[44,70],[30,40],[140,48]]},{t:'circle',r:9,fill:C.cav,kf:[[284,150],[296,70],[310,40],[200,48]]},
+  {t:'ring',op:[0,0,0,.9]}],
+  P:['Hai bên dàn trận. Phần giữa (bộ binh Gaul và Tây Ban Nha) mỏng và cong ra phía trước. Bộ binh châu Phi mạnh nhất đứng lùi ở hai đầu.',
+  'Kỵ binh Carthage đánh tan kỵ binh La Mã ở hai cánh rồi đuổi theo.',
+  'Bộ binh La Mã đẩy phần giữa lùi dần, đường cong bị đẩy lõm vào. Càng tiến sâu, quân La Mã càng chen chúc, không vung vũ khí được.',
+  'Bộ binh châu Phi ở hai đầu quay vào đánh hai bên sườn, kỵ binh quay lại chặn sau lưng. Quân La Mã bị vây kín. Đây là trận vây hai cánh nổi tiếng nhất lịch sử.']},
+ A:{note:'Phỏng đoán: ngoài đời Hannibal không xếp như vậy. Hình này cho thấy vì sao cách này dễ thua.',items:[
+  {t:'rect',fill:C.rome,rx:4,kf:[[110,30,120,60],[110,44,120,60],[112,72,116,62],[98,104,144,68]],label:'La Mã'},
+  {t:'rect',fill:C.rcav,kf:RCAV},{t:'rect',fill:C.rcav,kf:RCAV2},
+  {t:'rect',fill:C.afr,kf:[[128,140,84,22],[128,138,84,22],[130,134,80,22],[138,174,64,14]],op:[1,1,1,.5]},
+  {t:'rect',fill:C.gaul,kf:[[84,145,44,10],[84,143,44,10],[80,146,44,10],[62,178,30,8]],op:[1,1,.8,.35]},
+  {t:'rect',fill:C.gaul,kf:[[212,145,44,10],[212,143,44,10],[216,146,44,10],[248,178,30,8]],op:[1,1,.8,.35]},
+  {t:'circle',r:9,fill:C.cav,kf:[[56,150],[44,70],[30,40],[34,50]]},{t:'circle',r:9,fill:C.cav,kf:[[284,150],[296,70],[310,40],[306,50]]}],
+  P:['Bạn đặt quân mạnh nhất (bộ binh châu Phi) ở giữa, đối thẳng khối La Mã. Hai bên chỉ còn bộ binh Gaul mỏng.',
+  'Kỵ binh của bạn vẫn thắng ở hai cánh, giống ngoài đời.',
+  'Hai khối bộ binh đâm thẳng vào nhau. Khối La Mã sâu gấp mấy lần: người hàng sau đẩy lên thay người mệt, còn phía bạn không có ai thay. Hai cánh Gaul mỏng bị lấn trước.',
+  'Phần giữa vỡ, quân La Mã tràn qua trước khi kỵ binh kịp quay lại. Không có vòng vây nào, nên số đông của La Mã quyết định trận đánh.']},
+ C:{note:'Phỏng đoán: ngoài đời Hannibal không làm vậy. Hình này cho thấy vì sao ông không chờ.',items:[
+  {t:'rect',fill:'rgba(0,0,0,.03)',stroke:'#7a6f5c',dash:'4 3',rx:8,kf:[[96,150,148,74]]},
+  {t:'text',kf:[[170,146]],text:'Trại của bạn'},
+  {t:'rect',fill:C.afr,kf:[[130,170,80,18]]},{t:'rect',fill:C.gaul,kf:[[118,194,104,10]]},
+  {t:'circle',r:7,fill:C.cav,kf:[[112,213]]},{t:'circle',r:7,fill:C.cav,kf:[[228,213]]},
+  {t:'rect',fill:C.rome,rx:4,kf:[[110,30,120,60],[110,58,120,56],[110,62,120,56],[110,62,120,56]],label:'La Mã'},
+  {t:'rect',fill:C.rcav,kf:[[70,40,34,22],[68,64,34,22],[66,70,34,22],[66,70,34,22]]},{t:'rect',fill:C.rcav,kf:[[236,40,34,22],[238,64,34,22],[240,70,34,22],[240,70,34,22]]},
+  {t:'rect',fill:'none',stroke:C.rome,dash:'4 3',rx:8,kf:[[54,52,232,84]],op:[0,0,.8,.8]},
+  {t:'rect',fill:'#ddd5c4',kf:[[12,12,96,8]]},{t:'rect',fill:'#b7791f',kf:[[12,12,96,8],[12,12,74,8],[12,12,42,8],[12,12,14,8]]},
+  {t:'text',kf:[[12,32]],text:'Lương thực của bạn',anchor:'start'}],
+  P:['Bạn rút vào trại và đóng cửa. Quân La Mã đông gấp đôi kéo tới, đứng ngay trước mặt.',
+  'Trong trại, kỵ binh giỏi của bạn không có chỗ để chạy, nên lợi thế lớn nhất của bạn hết tác dụng.',
+  'La Mã đóng trại đối diện. Họ ở trên đất của mình nên tiếp tế dễ. Bạn ở xa nhà, lương thực chỉ lấy được quanh vùng và cạn dần.',
+  'Không có trận thắng nào, nên các thành ở Ý không bỏ La Mã sang phe bạn, và đội quân La Mã vẫn còn nguyên. Người phải vội là bạn, nên ngoài đời Hannibal chủ động tìm trận đánh.']}};
+const L=(a,b,f)=>a+(b-a)*f;
+function at(kf,x){if(kf.length===1)return kf[0];const i=Math.min(2,Math.floor(x)),f=x-i;return Array.isArray(kf[0])?kf[i].map((v,j)=>L(v,kf[i+1][j],f)):L(kf[i],kf[i+1],f);}
+let cur='B',els=[];
+function build(k){cur=k;g.replaceChildren();els=S[k].items.map(it=>{let e,lab=null;
+ if(it.t==='rect'){e=mk(g,'rect',{rx:it.rx??3,fill:it.fill,stroke:it.stroke||'none','stroke-width':it.stroke?1.5:0});if(it.dash)e.setAttribute('stroke-dasharray',it.dash);if(it.label)lab=tx(g,0,0,it.label,{fill:'#fff','font-size':11,'font-weight':600});}
+ else if(it.t==='circle')e=mk(g,'circle',{r:it.r,fill:it.fill});
+ else if(it.t==='curve')e=mk(g,'path',{fill:'none',stroke:it.stroke,'stroke-width':9,'stroke-linecap':'round'});
+ else if(it.t==='ring')e=mk(g,'ellipse',{cx:170,cy:132,rx:96,ry:62,fill:'none',stroke:C.cav,'stroke-width':2,'stroke-dasharray':'5 5'});
+ else if(it.t==='text'){const[x,y]=it.kf[0];e=tx(g,x,y,it.text,{'text-anchor':it.anchor||'middle',fill:'#6b6250'});}
+ return {it,e,lab};});
+ note.textContent=S[k].note;$$('#p6tabs .btn').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===k?'true':'false'));}
+function draw(){const x=+t.value/100;for(const {it,e,lab} of els){
+ if(it.op)e.setAttribute('opacity',at(it.op,x));
+ if(it.t==='rect'){const[a,b,w,h]=at(it.kf,x);e.setAttribute('x',a);e.setAttribute('y',b);e.setAttribute('width',w);e.setAttribute('height',h);if(lab){lab.setAttribute('x',a+w/2);lab.setAttribute('y',b+h/2+4);}}
+ else if(it.t==='circle'){const[a,b]=at(it.kf,x);e.setAttribute('cx',a);e.setAttribute('cy',b);}
+ else if(it.t==='curve'){const[x1,y,x2,bu]=at(it.kf,x);e.setAttribute('d','M'+x1+' '+y+' Q'+(x1+x2)/2+' '+(y-2*bu)+' '+x2+' '+y);}}
+ const i=Math.min(3,Math.round(x));ph.textContent='Giai đoạn '+(i+1)+'/4. '+S[cur].P[i];}
 t.oninput=()=>{stop();draw();};let raf=null,last=0;
 function stop(){if(raf){cancelAnimationFrame(raf);raf=null;btn.textContent='▶';btn.setAttribute('aria-label','Chạy');}}
 function tick(ts){if(!last)last=ts;const dt=ts-last;last=ts;let v=+t.value+dt*0.03;if(v>=300){v=300;t.value=v;draw();stop();return;}t.value=v;draw();raf=requestAnimationFrame(tick);}
 btn.onclick=()=>{if(raf){stop();return;}if(+t.value>=300)t.value=0;last=0;btn.textContent='❚❚';btn.setAttribute('aria-label','Dừng');raf=requestAnimationFrame(tick);};
-const M={A:'Bạn chọn chặn thẳng. Hannibal làm ngược lại: ông cố ý để phần giữa yếu để bị đẩy lùi, biến sức mạnh của La Mã thành cái bẫy.',
- B:'Bạn chọn giống Hannibal. Kéo thanh thời gian để xem vì sao phần giữa mỏng lại là cái bẫy.',
- C:'Bạn chọn chờ. Thật ra quân La Mã mới là bên muốn đánh ngay. Hannibal chấp nhận đánh, nhưng xếp quân để chính sức đẩy của La Mã kéo họ vào giữa vòng vây.'};
+$$('#p6tabs .btn').forEach(b=>b.onclick=()=>{stop();t.value=0;build(b.dataset.s);draw();});
+const M={A:'Bạn chọn chặn thẳng. Hannibal làm ngược lại: ông cố ý để phần giữa yếu để bị đẩy lùi, biến sức đẩy của La Mã thành cái bẫy. Kéo thời gian xem cách của bạn đánh ra sao, rồi bấm B để so.',
+ B:'Bạn chọn giống Hannibal. Kéo thời gian để xem vì sao phần giữa mỏng lại là cái bẫy, rồi bấm A và C để xem hai cách kia thua ở đâu.',
+ C:'Bạn chọn chờ. Nhưng người phải vội lại là bạn: xa nhà, thiếu lương thực, và cần một trận thắng để các thành ở Ý bỏ La Mã. Kéo thời gian xem cách của bạn diễn ra thế nào, rồi bấm B để so.'};
 $$('#p6opts .opt').forEach(o=>o.onclick=()=>{const v=o.dataset.v;$$('#p6opts .opt').forEach(x=>{x.disabled=true;if(x.dataset.v==='B')x.classList.add('right');});if(v!=='B')o.classList.add('wrong');
- setFb(fb,M[v],v==='B'?'good':'bad');$('#p6play').classList.remove('hide');draw();});})();
+ setFb(fb,M[v],v==='B'?'good':'bad');$('#p6play').classList.remove('hide');build(v);draw();});
+build('B');draw();})();
 
 /* 7 */
 (()=>{const hs=$$('#p7screen .hot'),fb=$('#p7fb'),tg=$('#p7tog'),sc=$('#p7screen');let done=false;
@@ -468,9 +537,9 @@ const el=(n,a,p=svg)=>{const e=document.createElementNS(NS,n);for(const k in a)e
 [0,25,50,75,100].forEach(v=>{el('line',{x1:x0,x2:x1,y1:ys(v),y2:ys(v),stroke:'#e7e3da'});el('text',{x:x0-6,y:ys(v)+4,'font-size':10,fill:'#6b6862','text-anchor':'end'}).textContent=v+'%';});
 X.forEach((l,i)=>el('text',{x:xs(i),y:y1+16,'font-size':9.5,fill:'#6b6862','text-anchor':'middle'}).textContent=l);
 el('text',{x:x0,y:10,'font-size':10,fill:'#6b6862'}).textContent='Thời gian tiết kiệm khi học lại';
-const gl=el('polyline',{fill:'none',stroke:'#308E84','stroke-width':3,'stroke-linejoin':'round','stroke-linecap':'round'});
+const gl=el('polyline',{fill:'none',stroke:'#2563eb','stroke-width':3,'stroke-linejoin':'round','stroke-linecap':'round'});
 const rl=el('polyline',{fill:'none',stroke:'#1b1b1a','stroke-width':2.5,'stroke-dasharray':'6 5',opacity:0});
-const dots=X.map((_,i)=>el('circle',{cx:xs(i),cy:ys(100),r:5,fill:'#fff',stroke:'#308E84','stroke-width':2,opacity:.35}));
+const dots=X.map((_,i)=>el('circle',{cx:xs(i),cy:ys(100),r:5,fill:'#fff',stroke:'#2563eb','stroke-width':2,opacity:.35}));
 let G=X.map(()=>null),drawing=false,shown=false;
 function ptToSvg(e){const r=svg.getBoundingClientRect();return[(e.clientX-r.left)/r.width*340,(e.clientY-r.top)/r.height*220];}
 function setAt(e){if(shown)return;const[px,py]=ptToSvg(e);const i=Math.round((px-x0)/((x1-x0)/(X.length-1)));if(i<0||i>=X.length)return;G[i]=vy(py);render();}

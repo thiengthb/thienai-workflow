@@ -77,6 +77,8 @@ Khung 7 bước trong [`../README.md`](../README.md) giữ nguyên. Thay đổi:
 - **Bước "Hiểu sau"** dùng kiểu 3 hoặc 4, và câu giải thích nhắc lại đúng lựa chọn người học vừa làm ("bạn chọn kẻ đường, nên…").
 - Mỗi buổi tối đa 2 kiểu, để không phải học cách dùng giao diện thay vì học nội dung.
 - Thanh trượt, bản đồ, biểu đồ phải có chữ đi kèm nói kết quả, không chỉ đổi màu.
+- Màu chọn theo nội dung, không theo sở thích của người học. Khung trang (nút, chọn, chuyển bước) để trung tính đen trắng, màu chỉ dùng khi nó mang nghĩa: xanh lá là đúng, cam đỏ là sai, còn màu trong bài lấy từ chính nội dung (ví dụ trận Cannae: La Mã đỏ, Carthage tím, theo màu tím Tyre của người Phoenicia).
+- Bài có lựa chọn về vị trí, đội hình, bố cục thì vẽ từng lựa chọn thành hình nhỏ và cho xem phía bên kia trước khi chọn. Sau khi chọn, cho xem cả những lựa chọn sai diễn ra thế nào, ghi rõ đó là phỏng đoán.
 
 ## Kiểm trước khi gửi trang
 
