@@ -12,6 +12,7 @@ Trạng thái học, nhật ký và kế hoạch buổi sau nằm ở [`../front
 | 2 | Ít bậc chữ, mỗi bậc khác hẳn nhau: cỡ, độ đậm, màu, khoảng cách | [02-type-hierarchy.md](lessons/02-type-hierarchy.md) | chưa lưu |
 | 3 | Gần nhau là một nhóm; giữa nhóm gấp 2–3 lần trong nhóm | [03-spacing-groups.md](lessons/03-spacing-groups.md) | [lesson-03.html](pages/lesson-03.html) |
 | 4 | Sửa theo mục đích của màn; bản đẹp hơn chưa chắc đúng | [04-fix-a-whole-screen.md](lessons/04-fix-a-whole-screen.md) | [lesson-04.html](pages/lesson-04.html) |
+| 5 | Một màu nhấn cho mỗi màn; màu khác chỉ khi mang nghĩa, để nhạt | [05-one-accent-colour.md](lessons/05-one-accent-colour.md) | [lesson-05.html](pages/lesson-05.html) |
 
 ## Ôn lại thế nào
 
