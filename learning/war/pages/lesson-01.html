@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chiến tranh buổi 1: Bạch Đằng 938</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--soft:#f3f1ec;--accent:#1b1b1a;--accent-soft:#ebe8e1;--good:#2e7d4f;--good-ink:#1f5c39;--good-soft:#e4f2e8;--bad:#c2410c;--bad-soft:#fdeee6;--spring:cubic-bezier(.3,1.25,.5,1);
+ --ngo:#b23a2a;--han:#2f3e5c;--land:#e6e0cc;--mud:#cdbf9a;--water:#8fb8cf;--water-low:#b9d2df}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Onest,system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:480px;margin:0 auto;padding:0 16px 56px}
+.top{position:sticky;top:0;background:var(--bg);padding:12px 0 10px;z-index:5}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .25s ease}
+h1{font-size:26px;line-height:1.25;margin:20px 0 8px;font-weight:700;letter-spacing:-.01em}
+h2{font-size:20px;line-height:1.3;margin:8px 0 6px;font-weight:600;letter-spacing:-.01em}
+p{margin:0 0 12px}
+.muted{color:var(--muted)}.small{font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.step{display:none}.step.on{display:block;animation:in .2s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hide{display:none!important}
+/* nút chung: trạng thái chọn phải nhìn thấy được, không chỉ dựa vào màu */
+.btn,.opt{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:14px;min-height:48px;padding:12px 14px;cursor:pointer;text-align:left;width:100%;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background-color .15s,transform .2s var(--spring)}
+.btn:active,.opt:active{transform:scale(.98)}
+.btn:focus-visible,.opt:focus-visible,.hot:focus-visible,.seg button:focus-visible,textarea:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.opt{margin:8px 0;font-size:15px;line-height:1.45}
+.opt[aria-pressed="true"]{border-color:var(--ink);background:var(--accent-soft)}
+.opt[aria-pressed="true"]::after{content:"Đã chọn";margin-left:auto;font-size:12px;font-weight:600;flex:0 0 auto}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.right::after{content:"Đúng";margin-left:auto;font-size:12px;font-weight:700;color:var(--good-ink);flex:0 0 auto}
+.opt.wrong::after{content:"Bạn chọn";margin-left:auto;font-size:12px;font-weight:700;color:var(--bad);flex:0 0 auto}
+.opt[disabled]{cursor:default;color:var(--ink)}
+.primary{background:var(--ink);color:#fff;border-color:var(--ink);justify-content:center;font-weight:600;margin-top:16px;height:52px;border-radius:26px}
+.primary[disabled]{background:#cfcbc2;border-color:#cfcbc2;color:#fff;cursor:default}
+.ghost{justify-content:center;margin-top:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row .btn{width:auto;flex:1 1 0;justify-content:center;text-align:center}
+.fb{font-size:15px;border-radius:12px;padding:10px 12px;margin-top:10px;background:var(--soft)}
+.fb:empty{display:none}
+.fb.good{background:var(--good-soft);color:var(--good-ink)}
+.fb.bad{background:var(--bad-soft);color:#7c2d12}
+.why{display:none;font-size:14px;padding:12px 14px;border-radius:12px;background:var(--soft);margin-top:4px}
+.why.on{display:block}
+.status{font-size:14px;font-weight:600;margin:6px 0 0}.status:empty{display:none}
+.stage{background:var(--soft);border-radius:16px;padding:14px}
+.lab{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px;text-align:center}
+
+
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg button,.chip{font:500 14px Onest,sans-serif;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:12px;min-height:44px;cursor:pointer;-webkit-tap-highlight-color:transparent;padding:6px 8px}
+.seg button[aria-pressed="true"],.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}
+.krow{padding:10px 0;border-top:1px solid var(--line)}.krow:first-child{border-top:0;padding-top:0}
+.krow>span{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chip{border-radius:22px;padding:6px 14px;text-align:left}
+textarea{width:100%;min-height:72px;border:1px solid var(--line);border-radius:14px;padding:12px;font:15px/1.5 Onest,sans-serif;resize:vertical;background:#fff;color:var(--ink)}
+/* bản đồ */
+.terrain{width:100%;height:auto;display:block;border-radius:14px;background:var(--land)}
+.terrain text{font-family:Onest,system-ui,sans-serif}
+.forces{display:grid;gap:8px;margin:10px 0}
+.forces div{background:var(--soft);border-radius:12px;padding:10px 12px;font-size:14px;color:var(--muted)}
+.forces b{display:block;font-size:15px}
+.ngo-t{color:var(--ngo)}.han-t{color:var(--han)}
+.opt.fm{flex-direction:column;align-items:stretch;gap:6px}
+.opt.fm svg{width:100%;max-width:240px;height:auto;align-self:center;border-radius:10px;background:var(--land)}
+.opt.fm::after{margin-left:0;align-self:flex-end}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.timeline{display:flex;align-items:center;gap:10px;margin-top:8px}
+.timeline .btn{width:48px;flex:0 0 48px;justify-content:center;padding:0}
+input[type=range]{flex:1;height:44px;accent-color:var(--ink);touch-action:pan-y}
+.phase{font-size:15px;min-height:96px;margin-top:4px}
+.phase b{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-bottom:2px}
+.guess{display:inline-block;font-size:12px;font-weight:700;background:var(--bad-soft);color:#7c2d12;border-radius:6px;padding:1px 8px;margin-bottom:6px}
+.real{display:inline-block;font-size:12px;font-weight:700;background:var(--good-soft);color:var(--good-ink);border-radius:6px;padding:1px 8px;margin-bottom:6px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:3px;margin-right:5px;vertical-align:0}
+/* xếp thứ tự */
+.mlist{display:grid;gap:8px;margin:10px 0}
+.mi{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;font:14px/1.45 Onest,sans-serif;color:var(--ink);cursor:pointer;text-align:left;width:100%;-webkit-tap-highlight-color:transparent}
+.mi .n{flex:0 0 28px;height:28px;border-radius:14px;border:1px dashed #b9b4a8;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--muted)}
+.mi[aria-pressed="true"]{border-color:var(--ink)}
+.mi[aria-pressed="true"] .n{background:var(--ink);color:#fff;border:0}
+.mi b{display:block;font-size:15px;margin-bottom:2px}
+.idea{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.idea:first-child{border-top:0}
+.idea .k{flex:0 0 28px;height:28px;border-radius:8px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-weight:700}
+.idea p{margin:0;font-size:15px}
+.mine{display:none}.mine.on{display:block}
+.say{font-size:15px;padding:14px;border-radius:14px;background:#fff;border:1px solid var(--line);margin:10px 0}
+.say b{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:600}
+.crit{padding:12px 0;border-top:1px solid var(--line)}.crit:first-child{border-top:0;padding-top:0}
+.crit>b{font-weight:600;display:block;margin-bottom:6px;font-size:15px}
+#sources a{display:inline-block;padding:3px 0;color:var(--ink)}
+#saved{display:none;font-size:14px;padding:12px 14px;border-radius:12px;background:var(--soft);margin-top:12px}
+.split{display:block}
+@media (min-width:600px) and (max-width:899px){#opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}#opts .opt{margin:0}}
+@media (min-width:900px){
+ .wrap{max-width:1000px;padding:0 32px 72px}
+ .split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
+ .split>.stick{position:sticky;top:64px}
+ .narrow{max-width:600px;margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="top"><div class="meta"><span>Chiến tranh buổi 1 · Làm quen</span><span id="cnt">1/7</span></div><div class="bar"><i id="bar"></i></div></div>
+
+ <!-- 0 -->
+ <section class="step on narrow" data-s="0">
+  <h1>Làm chỉ huy trước, đọc sử sau</h1>
+  <p class="muted">Buổi làm quen môn chiến tranh, khoảng 12 phút.</p>
+  <div class="card small">
+   <p><b>Môn này sẽ học thế nào.</b> Mỗi buổi bạn đứng vào chỗ một người chỉ huy có thật, chỉ biết những gì người đó biết lúc ấy, và phải chọn. Chọn xong mới xem chuyện thật đã diễn ra, kéo thời gian trên bản đồ. Trường Thủy quân lục chiến Mỹ dạy lịch sử chiến tranh theo đúng cách này, vì biết kết cục trước thì mọi thứ trông như tất nhiên, và mình không học được gì về cách ra quyết định.</p>
+   <p style="margin:0"><b>Hôm nay:</b> cho mình biết bạn đã biết gì, làm chỉ huy một trận có thật, rồi xếp 10 ý lớn của môn theo thứ bạn muốn học trước. Không có thẻ ôn nào đến hạn hôm nay nên bỏ phần ôn.</p>
+  </div>
+  <button class="btn primary" data-go="1">Bắt đầu</button>
+ </section>
+
+ <!-- 1 bạn và môn này -->
+ <section class="step narrow" data-s="1">
+  <h2>Bạn và môn này</h2>
+  <p class="small muted">Không có đúng sai, mình hỏi để soạn bài vừa sức.</p>
+  <div class="card" id="know">
+   <p class="small" style="margin-bottom:8px"><b>Bạn biết tới đâu?</b></p>
+   <div class="krow"><span id="k1">Các trận đánh của Việt Nam</span><div class="seg" role="group" aria-labelledby="k1" data-k="vn"><button data-v="chưa" aria-pressed="false">Chưa</button><button data-v="nghe qua" aria-pressed="false">Nghe qua</button><button data-v="biết khá" aria-pressed="false">Biết khá</button></div></div>
+   <div class="krow"><span id="k2">Hai cuộc chiến tranh thế giới</span><div class="seg" role="group" aria-labelledby="k2" data-k="ww"><button data-v="chưa" aria-pressed="false">Chưa</button><button data-v="nghe qua" aria-pressed="false">Nghe qua</button><button data-v="biết khá" aria-pressed="false">Biết khá</button></div></div>
+   <div class="krow"><span id="k3">Binh pháp Tôn Tử</span><div class="seg" role="group" aria-labelledby="k3" data-k="suntzu"><button data-v="chưa" aria-pressed="false">Chưa</button><button data-v="nghe qua" aria-pressed="false">Nghe qua</button><button data-v="biết khá" aria-pressed="false">Biết khá</button></div></div>
+   <div class="krow"><span id="k4">Chiến tranh đang diễn ra (Ukraine, Trung Đông)</span><div class="seg" role="group" aria-labelledby="k4" data-k="now"><button data-v="chưa" aria-pressed="false">Chưa</button><button data-v="nghe qua" aria-pressed="false">Nghe qua</button><button data-v="biết khá" aria-pressed="false">Biết khá</button></div></div>
+  </div>
+  <div class="card">
+   <p class="small" style="margin-bottom:8px"><b>Bạn muốn học môn này để làm gì?</b> Chọn bao nhiêu cũng được.</p>
+   <div class="chips" id="goals">
+    <button class="chip" aria-pressed="false">Hiểu lịch sử Việt Nam và thế giới</button>
+    <button class="chip" aria-pressed="false">Hiểu tin tức thời sự</button>
+    <button class="chip" aria-pressed="false">Học cách quyết định khi thiếu thông tin</button>
+    <button class="chip" aria-pressed="false">Học chiến lược để dùng cho việc, đồ án</button>
+    <button class="chip" aria-pressed="false">Vì thích nghe chuyện hay</button>
+   </div>
+   <textarea id="goalTxt" placeholder="Lý do khác, nếu có"></textarea>
+  </div>
+  <button class="btn primary" data-go="2" id="n1" disabled>Tiếp</button>
+ </section>
+
+ <!-- 2 làm chỉ huy -->
+ <section class="step" data-s="2">
+  <div id="ask">
+   <div class="split">
+    <div>
+     <h2>Năm 938, cửa sông Bạch Đằng</h2>
+     <p>Bạn là Ngô Quyền. Vua nước Nam Hán (miền nam Trung Quốc ngày nay) sai con là Lưu Hoằng Tháo đem quân theo đường biển, vào sông Bạch Đằng sang đánh. Bạn nghe tin họ sắp tới. Nhìn bên kia trước đã.</p>
+     <svg class="terrain" id="enemy" viewBox="0 0 340 230" role="img" aria-label="Bản đồ cửa sông Bạch Đằng, đội thuyền Nam Hán đang tới từ biển"></svg>
+     <div class="legend"><span><i style="background:var(--han)"></i>Thuyền Nam Hán</span><span><i style="background:var(--ngo)"></i>Thuyền của bạn</span><span>Sơ đồ minh họa, không đúng vị trí và tỉ lệ thật</span></div>
+    </div>
+    <div>
+     <div class="forces">
+      <div><b class="han-t">Nam Hán</b><span>Mạnh về thuyền chiến. Chính Ngô Quyền nhận xét "bọn chúng có lợi ở chiến thuyền". Vua Nam Hán đem thêm quân tới biên giới để tiếp ứng.</span></div>
+      <div><b class="ngo-t">Bạn</b><span>Có thuyền nhẹ. Đánh trên đất mình, biết nước sông Bạch Đằng lên xuống theo thủy triều. Theo Ngô Quyền, quân Nam Hán từ xa tới nên mỏi mệt.</span></div>
+     </div>
+     <p class="small muted" style="margin:0 0 10px">Mình không tìm được quân số đáng tin trong sử gốc nên không đưa con số. Nguồn của từng chi tiết ở cuối buổi.</p>
+     <p style="font-weight:600;margin:0 0 6px">Họ mạnh hơn hẳn về thuyền chiến. Bạn đánh thế nào?</p>
+     <div id="opts">
+      <button class="opt fm" data-v="A"><svg viewBox="0 0 200 100" aria-hidden="true" data-fm="A"></svg><span><b>A.</b> Đem hết thuyền ra cửa biển chặn thẳng, không cho họ vào sông</span></button>
+      <button class="opt fm" data-v="B"><svg viewBox="0 0 200 100" aria-hidden="true" data-fm="B"></svg><span><b>B.</b> Cắm cọc nhọn dưới lòng sông, dụ họ vào lúc nước lên, đánh lúc nước rút</span></button>
+      <button class="opt fm" data-v="C"><svg viewBox="0 0 200 100" aria-hidden="true" data-fm="C"></svg><span><b>C.</b> Rút về giữ thành, để họ lên bộ rồi mới đánh</span></button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div id="play" class="hide">
+   <div class="split">
+    <div class="stick">
+     <div class="tabs" role="group" aria-label="Xem từng cách đánh"><button class="btn" data-s="A" aria-pressed="false">A. Chặn cửa biển</button><button class="btn" data-s="B" aria-pressed="false">B. Ngô Quyền</button><button class="btn" data-s="C" aria-pressed="false">C. Giữ thành</button></div>
+     <svg class="terrain" id="map" viewBox="0 0 340 230" role="img" aria-label="Bản đồ trận Bạch Đằng theo thời gian"></svg>
+     <div class="timeline"><button class="btn" id="playBtn" aria-label="Chạy">▶</button><input type="range" id="t" min="0" max="300" value="0" aria-label="Thời gian trận đánh"></div>
+     <div class="legend"><span><i style="background:var(--han)"></i>Nam Hán</span><span><i style="background:var(--ngo)"></i>Ngô Quyền</span><span><i style="background:#5b4630;width:4px"></i>Cọc</span><span>Sơ đồ minh họa. Màu hai bên chỉ để dễ phân biệt</span></div>
+    </div>
+    <div>
+     <div class="fb" id="fb2" role="status"></div>
+     <div class="phase" id="phase" role="status"></div>
+     <button class="btn primary" data-go="3" id="n2">Tiếp: vì sao cách đó thắng</button>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <!-- 3 hiểu sau -->
+ <section class="step narrow" data-s="3">
+  <h2>Vì sao cách đó thắng</h2>
+  <p class="small" id="echo3"></p>
+  <div class="card">
+   <div class="idea"><div class="k">1</div><p><b>Địa hình và thời điểm.</b> Ông chọn đúng cửa sông và đúng lúc nước triều rút để đánh. Thủy triều làm việc mà quân ông không tự làm được: kéo thuyền địch xuống đúng chỗ có cọc.</p></div>
+   <div class="idea"><div class="k">2</div><p><b>Không đấu vào chỗ bên kia mạnh.</b> Ông nói thẳng "bọn chúng có lợi ở chiến thuyền, ta không phòng bị trước thì thế được thua chưa biết ra sao". Nên ông không đấu thuyền với thuyền, mà làm cho chính đội thuyền của họ mắc kẹt.</p></div>
+   <div class="idea"><div class="k">3</div><p><b>Lừa địch.</b> Thuyền nhẹ giả thua để dụ đội thuyền vào vùng cắm cọc lúc nước còn cao, khi cọc nằm khuất dưới nước.</p></div>
+  </div>
+  <p class="small">Trận này chấm dứt thời kỳ phương Bắc cai trị kéo dài hơn 1.000 năm; năm 939 Ngô Quyền xưng vương. Năm 1288, nhà Trần lại đánh tan đội thuyền nhà Nguyên trên sông Bạch Đằng, bắt được tướng Ô Mã Nhi và 400 chiến thuyền.</p>
+  <div class="card">
+   <p><b>1.</b> Theo Toàn thư, thuyền Nam Hán bị lật vì sao?</p>
+   <div class="q" data-q="q1" data-a="1"><div class="status" role="status"></div>
+    <button class="opt">Bị thuyền Ngô Quyền đâm vào mạn</button>
+    <button class="opt">Nước triều rút rất gấp, thuyền mắc vào cọc mà lật úp</button>
+    <button class="opt">Gặp bão ở cửa biển</button>
+    <div class="why">Toàn thư chép: "không kịp sửa thuyền mà nước triều rút xuống rất gấp, thuyền đều mắc vào cọc mà lật úp". Sử Trung Quốc (Tư trị thông giám) cũng chép thuyền vướng cọc bịt sắt không lui được.</div>
+   </div>
+  </div>
+  <div class="card">
+   <p><b>2.</b> Nếu chỉ được giữ một điều, điều gì quan trọng nhất cho kế này?</p>
+   <div class="q" data-q="q2" data-a="2"><div class="status" role="status"></div>
+    <button class="opt">Có nhiều quân hơn ở hai bên bờ</button>
+    <button class="opt">Có cọc thật to, thật nhọn</button>
+    <button class="opt">Biết chính xác giờ nước lên, nước rút</button>
+    <div class="why">Cọc mà lộ lúc địch tới thì họ tránh được; cọc mà còn ngập lúc đánh thì vô dụng. Đây là suy luận từ diễn biến sử chép: thuyền vào lúc nước lên, đánh lúc nước rút.</div>
+   </div>
+  </div>
+  <div class="card small" id="sources">
+   <p><b>Nguồn</b></p>
+   <p style="margin:0 0 8px">Diễn biến, lời Ngô Quyền, cọc đóng ngầm, thuyền nhẹ giả thua, nước triều rút, quân chết đuối quá nửa, Hoằng Tháo bị bắt và bị giết: <i>Đại Việt sử ký toàn thư</i>, bản dịch NXB Khoa học xã hội, tập 1, trang 203–204. Đoạn trích được dẫn lại trong sách <a href="https://online.flipbuilder.com/mxoqr/fwqd/files/basic-html/page273.html" target="_blank" rel="noopener">Cẩm Phả đất và người, trang 257</a>.</p>
+   <p style="margin:0 0 8px">Sử Trung Quốc (<i>Tân ngũ đại sử</i>, quyển 65; <i>Tư trị thông giám</i>; <i>Thập quốc xuân thu</i>), qua bản dịch của Châu Hải Đường, trích trong bài <a href="https://nongnghiepmoitruong.vn/chinh-su-trung-quoc-viet-ve-cai-chet-cua-hoang-thao-nhu-the-nao-d227101.html" target="_blank" rel="noopener">"Chính sử Trung Quốc viết về cái chết của Hoằng Tháo như thế nào?"</a> (báo Nông nghiệp Việt Nam, 2018). Các sách này chép Hoằng Tháo chết hoặc chết đuối, không chép bị bắt.</p>
+   <p style="margin:0 0 8px">Năm 939, trận Bạch Đằng 1288, Ô Mã Nhi và 400 chiến thuyền: <a href="https://vi.wikipedia.org/wiki/Tr%E1%BA%ADn_B%E1%BA%A1ch_%C4%90%E1%BA%B1ng_(938)" target="_blank" rel="noopener">Wikipedia tiếng Việt, "Trận Bạch Đằng (938)"</a>, có dẫn Toàn thư.</p>
+   <p style="margin:0">Không lấy từ sử: bản đồ (chỉ là sơ đồ), số thuyền vẽ trên bản đồ, cách A và C (mô phỏng), và phần giải thích "vì sao thắng" (suy luận của Claude).</p>
+  </div>
+  <button class="btn primary" data-go="4" id="n3" disabled>Tiếp: 10 ý lớn của môn</button>
+ </section>
+
+ <!-- 4 bản đồ 10 ý -->
+ <section class="step narrow" data-s="4">
+  <h2>10 ý lớn của môn này</h2>
+  <p class="small muted">Đây là những điều cần biết để nói chuyện được với người học về chiến tranh. Chạm theo thứ tự bạn muốn học trước, ít nhất 3 ý. Chạm lại để bỏ. Hôm nay bạn vừa chạm vào ý 2, 4 và 5.</p>
+  <div class="mlist" id="mlist"></div>
+  <button class="btn ghost" id="mapReset" data-reset>Xếp lại từ đầu</button>
+  <button class="btn primary" data-go="5" id="n4" disabled>Tiếp</button>
+ </section>
+
+ <!-- 5 tự nói lại -->
+ <section class="step narrow" data-s="5">
+  <h2>Tự nói lại</h2>
+  <p>Viết 1–2 câu: vì sao một đội quân ít hơn, thuyền yếu hơn lại thắng ở Bạch Đằng?</p>
+  <textarea id="teach" placeholder="Vì..."></textarea>
+  <button class="btn ghost" id="showMine" disabled>Xem bản của mình</button>
+  <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Ngô Quyền không đấu thuyền với bên mạnh hơn về thuyền. Ông chọn chỗ và giờ đánh để thủy triều làm việc thay mình: cọc ngập lúc dụ địch vào, lộ ra lúc đánh, và chính đội thuyền của họ thành cái bẫy.</div></div>
+  <button class="btn primary" data-go="6" id="n5" disabled>Tiếp</button>
+ </section>
+
+ <!-- 6 góp ý -->
+ <section class="step narrow" data-s="6">
+  <h2>Góp ý buổi này</h2>
+  <div class="card">
+   <div class="crit"><b id="f1">Độ dài</b><div class="seg" role="group" aria-labelledby="f1" data-f="len"><button data-v="ngắn" aria-pressed="false">Ngắn</button><button data-v="vừa" aria-pressed="false">Vừa</button><button data-v="dài" aria-pressed="false">Dài</button></div></div>
+   <div class="crit"><b id="f2">Độ khó</b><div class="seg" role="group" aria-labelledby="f2" data-f="hard"><button data-v="dễ" aria-pressed="false">Dễ</button><button data-v="vừa" aria-pressed="false">Vừa</button><button data-v="khó" aria-pressed="false">Khó</button></div></div>
+   <div class="crit"><b id="f3">Bạn thấy môn này</b><div class="seg" role="group" aria-labelledby="f3" data-f="interest"><button data-v="thích" aria-pressed="false">Thích</button><button data-v="bình thường" aria-pressed="false">Bình thường</button><button data-v="chán" aria-pressed="false">Chán</button></div></div>
+   <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Trận nào bạn muốn học, chỗ nào khó hiểu..."></textarea></div>
+  </div>
+  <button class="btn primary" id="finish">Xong buổi học</button>
+  <div id="saved" role="status"></div>
+  <button class="btn ghost" id="copy" style="display:none">Chép kết quả</button>
+ </section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const R={lesson:'war-1',start:new Date().toISOString(),know:{},goals:[],goalTxt:'',choice:null,viewed:[],quiz:{},map:[],teach:'',feedback:{}};
+const TOTAL=7;
+function go(n){$$('.step').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));$('#cnt').textContent=(n+1)+'/'+TOTAL;$('#bar').style.width=(n/(TOTAL-1)*100)+'%';window.scrollTo(0,0);const h=$('.step.on h1, .step.on h2');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}
+$$('[data-go]').forEach(b=>b.addEventListener('click',()=>go(+b.dataset.go)));
+function setFb(el,t,c){el.textContent=t;el.className='fb'+(c?' '+c:'');}
+function segs(sel,attr,store){$$(sel).forEach(sg=>sg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{store[sg.dataset[attr]]=b.dataset.v;sg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));check();})));}
+
+/* bước 1 */
+segs('#know .seg','k',R.know);
+$$('#goals .chip').forEach(c=>c.addEventListener('click',()=>{const on=c.getAttribute('aria-pressed')!=='true';c.setAttribute('aria-pressed',on?'true':'false');R.goals=$$('#goals .chip').filter(x=>x.getAttribute('aria-pressed')==='true').map(x=>x.textContent);check();}));
+$('#goalTxt').addEventListener('input',e=>{R.goalTxt=e.target.value.trim();check();});
+
+/* bản đồ */
+const NS='http://www.w3.org/2000/svg';
+const mk=(p,n,a={})=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;};
+const tx=(p,x,y,s,o={})=>{const e=mk(p,'text',Object.assign({x,y,'font-size':11,fill:'#5d574a','text-anchor':'middle'},o));e.textContent=s;return e;};
+const RIVER='M-10 34 C 70 44, 110 100, 180 125 S 280 165, 322 192';
+const SEA='M232 230 C 262 196 300 172 340 154 L340 230 Z';
+const lerpC=(a,b,k)=>{const p=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16));const A=p(a),B=p(b);return 'rgb('+A.map((v,i)=>Math.round(v+(B[i]-v)*k)).join(',')+')';};
+const at=(arr,x)=>{const i=Math.min(Math.floor(x),arr.length-2),f=Math.min(1,x-i);return arr[i]+(arr[i+1]-arr[i])*f;};
+const SC={
+ B:{tide:[1,1,.5,0],stakes:true,fleets:[
+  {side:'han',m:5,s:[.97,.6,.58,.64],op:[1,1,1,.3]},
+  {side:'ngo',m:3,s:[.8,.44,.5,.57],op:[1,1,1,1]},
+  {side:'ngo',m:6,s:[.3,.3,.48,.58],op:[0,0,1,1]}],
+  P:['Nước triều lên. Bạn sai thuyền nhẹ ra khiêu chiến. Cọc lớn vạt nhọn, đầu bịt sắt đã được đóng ngầm ở cửa sông, nằm khuất dưới nước.',
+     'Thuyền nhẹ giả thua chạy để dụ. Hoằng Tháo quả nhiên tiến quân vào, đội thuyền đi vào trong vùng cắm cọc.',
+     'Nước triều rút, cọc nhô lên. Bạn tiến quân ra đánh. Thuyền Nam Hán quay trở lại.',
+     'Nước rút rất gấp, thuyền Nam Hán mắc vào cọc mà lật úp, quân chết đuối quá nửa. Hoằng Tháo chết: Toàn thư chép bị bắt rồi bị giết, Tư trị thông giám chỉ chép là chết. Vua Nam Hán thu quân còn lại về nước.']},
+ A:{tide:[1,1,1,1],stakes:false,fleets:[
+  {side:'han',m:5,s:[.97,.92,.86,.74],op:[1,1,1,1]},
+  {side:'ngo',m:6,s:[.86,.87,.8,.64],op:[1,1,.7,.3]}],
+  P:['Bạn đem hết thuyền ra cửa biển. Hai đội thuyền gặp nhau ở chỗ nước rộng.',
+     'Đây là chỗ Nam Hán mạnh nhất: đấu thuyền với thuyền ở chỗ nước rộng.',
+     'Thuyền nhỏ của bạn bị ép lùi dần vào cửa sông, mất nhiều thuyền.',
+     'Suy luận của mình: rất có thể bạn thua trận trên nước, Nam Hán vào sông và đổ bộ. Ở chỗ nước rộng, cái lợi biết thủy triều của bạn không dùng được.']},
+ C:{tide:[1,.7,.4,.7],stakes:false,fleets:[
+  {side:'han',m:5,s:[.97,.62,.32,.22],op:[1,1,1,1]},
+  {side:'ngo',m:6,s:[.42,.16,.04,0],op:[1,1,.6,0]}],
+  P:['Bạn rút quân về giữ thành. Cửa sông bỏ trống.',
+     'Đội thuyền Nam Hán vào sông, không ai cản.',
+     'Họ đổ bộ, lập trại ven sông, chờ vua Nam Hán đem thêm quân từ biên giới sang.',
+     'Suy luận của mình: chiến tranh kéo dài trên đất liền, quân tiếp ứng của vua Nam Hán có thời gian tới. Bạn bỏ lỡ lúc họ mỏi mệt nhất, khi vừa từ xa tới.']}};
+function makeMap(svg,opt={}){svg.innerHTML='';
+ const g={};g.mud=mk(svg,'path',{d:RIVER,fill:'none',stroke:'#cdbf9a','stroke-width':46,'stroke-linecap':'round'});
+ g.water=mk(svg,'path',{d:RIVER,fill:'none',stroke:'#8fb8cf','stroke-width':44,'stroke-linecap':'round'});
+ g.sea=mk(svg,'path',{d:SEA,fill:'#8fb8cf'});
+ const L=g.water.getTotalLength();
+ tx(svg,62,82,'Sông Bạch Đằng',{'font-weight':600,transform:'rotate(20 62 82)'});
+ tx(svg,316,222,'Biển',{'font-weight':600,fill:'#3d5a6b'});
+ g.stakes=mk(svg,'g',{});g.stakeLbl=null;
+ if(opt.stakes){const s=.68*L,p=g.water.getPointAtLength(s),q=g.water.getPointAtLength(s+1),dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy),nx=-dy/d,ny=dx/d;
+  for(let r=0;r<2;r++)for(let k=-3;k<=3;k++){const x=p.x+nx*k*6+dx/d*r*7,y=p.y+ny*k*6+dy/d*r*7;mk(g.stakes,'path',{d:'M'+x+' '+(y+3)+' L'+x+' '+(y-4),stroke:'#5b4630','stroke-width':2.4,'stroke-linecap':'round'});}
+  g.stakeLbl=tx(svg,p.x+30,p.y+40,'Bãi cọc',{'font-weight':600,fill:'#5b4630'});}
+ if(opt.castle){mk(svg,'rect',{x:120,y:150,width:30,height:24,rx:3,fill:'#fff',stroke:'#5d574a','stroke-width':1.5});tx(svg,135,190,'Thành',{'font-weight':600});}
+ g.gauge=tx(svg,330,18,'',{'text-anchor':'end','font-weight':600,fill:'#3d5a6b'});
+ g.ships=[];(opt.fleets||[]).forEach(f=>{for(let i=0;i<f.m;i++){const big=f.side==='han';const e=mk(svg,'rect',{width:big?16:9,height:big?7:4,rx:big?2:2,fill:big?'#2f3e5c':'#b23a2a'});g.ships.push({f,i,e,big});}});
+ g.L=L;return g;}
+function place(g,sc,x){const td=sc?at(sc.tide,x):1;
+ g.water.setAttribute('stroke-width',24+20*td);const col=lerpC('#b9d2df','#8fb8cf',td);g.water.setAttribute('stroke',col);g.sea.setAttribute('fill',col);
+ g.stakes.setAttribute('opacity',(.2+.8*(1-td)).toFixed(2));if(g.stakeLbl)g.stakeLbl.setAttribute('opacity',(.35+.65*(1-td)).toFixed(2));
+ g.gauge.textContent='Mực nước: '+(td>.8?'cao':td>.3?'đang rút':'cạn');
+ for(const sh of g.ships){const f=sh.f,i=sh.i;let s=at(f.s,x)+((i%3)-1)*.035+Math.floor(i/3)*.03;s=Math.max(0,Math.min(.995,s))*g.L;
+  const p=g.water.getPointAtLength(s),q=g.water.getPointAtLength(Math.min(g.L,s+1)),dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy)||1,nx=-dy/d,ny=dx/d;
+  const lat=f.bank?(i%2?1:-1)*(30+(i%3)*4):((i%2?1:-1)*(sh.big?7:5)*(1+(i%3)));const cx=p.x+nx*lat,cy=p.y+ny*lat,w=sh.big?16:9,h=sh.big?7:4,ang=Math.atan2(dy,dx)*180/Math.PI;
+  sh.e.setAttribute('x',cx-w/2);sh.e.setAttribute('y',cy-h/2);sh.e.setAttribute('transform','rotate('+ang.toFixed(1)+' '+cx.toFixed(1)+' '+cy.toFixed(1)+')');sh.e.setAttribute('opacity',at(f.op,x).toFixed(2));}}
+/* trước khi chọn: bản đồ bên kia và hình nhỏ của từng lựa chọn */
+(()=>{const g=makeMap($('#enemy'),{fleets:[{side:'han',m:5,s:[.97,.97],op:[1,1]},{side:'ngo',m:3,s:[.4,.4],op:[1,1]}]});place(g,{tide:[1,1]},0);
+ const fm={A:{sc:'A',x:.6},B:{sc:'B',x:1},C:{sc:'C',x:1.6}};
+ $$('#opts svg').forEach(s=>{s.setAttribute('viewBox','110 60 230 165');const k=s.dataset.fm,c=SC[fm[k].sc];const g=makeMap(s,{stakes:c.stakes,fleets:c.fleets,castle:k==='C'});place(g,c,fm[k].x);g.gauge.textContent='';});})();
+/* sau khi chọn: kéo thời gian */
+(()=>{const svg=$('#map'),t=$('#t'),btn=$('#playBtn'),ph=$('#phase');let cur='B',g=null,raf=null,last=0;
+ function build(k){cur=k;const c=SC[k];g=makeMap(svg,{stakes:c.stakes,fleets:c.fleets,castle:k==='C'});$$('.tabs .btn').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===k?'true':'false'));if(!R.viewed.includes(k))R.viewed.push(k);}
+ function draw(){if(!g)return;const x=+t.value/100;place(g,SC[cur],x);const i=Math.min(3,Math.round(x));ph.innerHTML='<span class="'+(cur==='B'?'real">Chuyện thật, theo sử chép':'guess">Mô phỏng, dựa trên trận Bạch Đằng 938, không có thật')+'</span><b>Giai đoạn '+(i+1)+'/4</b>'+SC[cur].P[i];}
+ function stop(){if(raf){cancelAnimationFrame(raf);raf=null;}btn.textContent='▶';btn.setAttribute('aria-label','Chạy');}
+ function tick(ts){if(!last)last=ts;const dt=ts-last;last=ts;let v=+t.value+dt*.025;if(v>=300){t.value=300;draw();stop();return;}t.value=v;draw();raf=requestAnimationFrame(tick);}
+ btn.addEventListener('click',()=>{if(raf){stop();return;}if(+t.value>=300)t.value=0;last=0;btn.textContent='❚❚';btn.setAttribute('aria-label','Dừng');raf=requestAnimationFrame(tick);});
+ t.addEventListener('input',()=>{stop();draw();});
+ $$('.tabs .btn').forEach(b=>b.addEventListener('click',()=>{stop();t.value=0;build(b.dataset.s);draw();}));
+ const M={A:'Bạn chọn chặn thẳng ở cửa biển. Đó là đánh vào đúng chỗ Nam Hán mạnh nhất: đấu thuyền chiến. Kéo thời gian xem mô phỏng cách của bạn, rồi bấm B để xem Ngô Quyền làm ngược lại.',
+  B:'Bạn chọn giống Ngô Quyền. Bấm ▶ hoặc kéo thời gian để thấy vì sao giờ thủy triều là thứ quyết định, rồi bấm A và C để xem mô phỏng hai cách kia.',
+  C:'Bạn chọn giữ thành. Nghe an toàn, nhưng Ngô Quyền tính khác: quân Nam Hán từ xa tới đang mỏi mệt, đánh ngay lúc đó có lợi hơn để họ nghỉ và chờ quân tiếp ứng. Kéo thời gian xem, rồi bấm B để so.'};
+ $$('#opts .opt').forEach(o=>o.addEventListener('click',()=>{if(R.choice)return;const v=o.dataset.v;R.choice=v;
+  $$('#opts .opt').forEach(x=>{x.disabled=true;if(x.dataset.v==='B')x.classList.add('right');});if(v!=='B')o.classList.add('wrong');
+  setFb($('#fb2'),M[v],v==='B'?'good':'bad');$('#ask').classList.add('hide');$('#play').classList.remove('hide');build(v);t.value=0;draw();
+  const E={A:'Bạn chọn chặn ở cửa biển, tức đấu thuyền với bên mạnh hơn về thuyền.',B:'Bạn chọn đúng cách Ngô Quyền đã làm.',C:'Bạn chọn giữ thành, tức cho bên kia thời gian nghỉ và chờ quân tiếp ứng.'};
+  $('#echo3').textContent=E[v]+' Theo cách mình hiểu, cách của Ngô Quyền dựa trên ba ý, cũng là ba trong 10 ý lớn của môn này. Phần diễn biến lấy từ sử, phần giải thích là suy luận của mình:';window.scrollTo(0,0);}));})();
+
+/* câu hỏi */
+$$('.q[data-q]').forEach(q=>{const id=q.dataset.q,a=+q.dataset.a,os=[...q.querySelectorAll('.opt')],st=q.querySelector('.status'),why=q.querySelector('.why');
+ os.forEach((o,i)=>o.addEventListener('click',()=>{if(R.quiz[id])return;const ok=i===a;R.quiz[id]={pick:i,ok};
+  os.forEach((x,j)=>{x.disabled=true;if(j===a)x.classList.add('right');});if(!ok)o.classList.add('wrong');
+  st.textContent=ok?'Đúng.':'Chưa đúng. Đáp án đúng được đánh dấu "Đúng".';st.style.color=ok?'var(--good-ink)':'var(--bad)';if(why)why.classList.add('on');check();}));});
+
+/* 10 ý lớn */
+const MAP=[['Mục tiêu chính trị','Chiến tranh để đạt điều gì; thắng trận mà không đạt mục tiêu thì vẫn thua'],['Địa hình và thời tiết','Sông, núi, mùa, thủy triều quyết định đánh ở đâu, lúc nào'],['Hậu cần','Lương thực, đạn dược, đường tiếp tế; quân đói thì không đánh được'],['Đánh chỗ yếu, tránh chỗ mạnh','Dùng điểm mạnh của mình vào điểm yếu của bên kia'],['Bất ngờ và lừa địch','Giả thua, giấu quân, đánh lúc không ai ngờ'],['Tinh thần','Quân bỏ chạy thường vì sợ chứ không phải vì hết người'],['Vũ khí và công nghệ','Cung nỏ, thuốc súng, xe tăng, máy bay đổi cách đánh thế nào'],['Ba tầng: chiến lược, chiến dịch, chiến thuật','Cả cuộc chiến, một đợt đánh, một trận'],['Chiến tranh nhân dân và du kích','Bên yếu hơn đánh lâu dài để bên mạnh mệt và bỏ cuộc'],['Thông tin và "sương mù chiến tranh"','Không ai biết hết; ai biết nhiều hơn và nhanh hơn thì có lợi']];
+const pick=[];const box=$('#mlist');
+function renderMap(focus){box.innerHTML=MAP.map((m,i)=>{const p=pick.indexOf(i);return '<button class="mi" data-i="'+i+'" aria-pressed="'+(p>=0)+'"><span class="n">'+(p>=0?p+1:'')+'</span><span><b>'+m[0]+'</b>'+m[1]+'</span></button>';}).join('');
+ $$('#mlist .mi').forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.i,p=pick.indexOf(i);if(p>=0)pick.splice(p,1);else pick.push(i);R.map=pick.map(j=>MAP[j][0]);renderMap(i);check();}));
+ if(focus!==undefined){const f=box.querySelector('[data-i="'+focus+'"]');if(f)f.focus();}}
+renderMap();
+$('#mapReset').addEventListener('click',()=>{pick.length=0;R.map=[];renderMap();check();});
+
+/* tự nói lại, góp ý */
+$('#teach').addEventListener('input',e=>{R.teach=e.target.value.trim();$('#showMine').disabled=R.teach.length<8;});
+$('#showMine').addEventListener('click',()=>{$('#mine').classList.add('on');$('#showMine').classList.add('hide');$('#n5').disabled=false;});
+segs('[data-f]','f',R.feedback);
+$('#note').addEventListener('input',e=>{R.feedback.note=e.target.value.trim();});
+
+function check(){
+ $('#n1').disabled=!(Object.keys(R.know).length===4&&(R.goals.length||R.goalTxt));
+ $('#n3').disabled=!(R.quiz.q1&&R.quiz.q2);
+ $('#n4').disabled=R.map.length<3;}
+function summary(){return 'Chiến tranh buổi 1 (làm quen)\n'+JSON.stringify(R,null,1);}
+document.getElementById('finish').onclick=async()=>{const btn=document.getElementById('finish');btn.disabled=true;R.end=new Date().toISOString();const out=document.getElementById('saved');out.style.display='block';out.textContent='Đang lưu...';let ok=false;try{let dbp=null;try{dbp=window.claude&&window.claude.use?window.claude.use('db'):null;}catch(e){dbp=null;}const db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;if(db){await Promise.race([db.doc('sessions/w1-'+Date.now()).set(R),new Promise((_,j)=>setTimeout(()=>j(new Error('save timeout')),10000))]);ok=true;}}catch(e){ok=false;}
+out.textContent=ok?'Đã lưu kết quả. Bạn chỉ cần nhắn "xong" trong thread.':'Chưa lưu được tự động. Bấm nút dưới để chép kết quả rồi dán vào thread.';if(!ok){document.getElementById('copy').style.display='flex';}};
+document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());document.getElementById('copy').textContent='Đã chép';}catch(e){document.getElementById('saved').textContent=summary();}};
+</script>
+</body>
+</html>
