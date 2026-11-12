@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--soft:#f3f1ec;--accent:#1b1b1a;--accent-ink:#1b1b1a;--accent-soft:#ebe8e1;--good:#2e7d4f;--good-ink:#1f5c39;--good-soft:#e4f2e8;--app:#2563eb;--app-ink:#1d4ed8;--bad:#c2410c;--bad-soft:#fdeee6;--rome:#a8322d;--rome-cav:#dd8f84;--afr:#4b1f57;--gaul:#a77bb5;--carth-cav:#2a1030;--rome-soft:#f3ddd5;--carth:#2f6f9f;--carth-soft:#dbe8f2;--spring:cubic-bezier(.3,1.25,.5,1)}
+:root{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--soft:#f3f1ec;--accent:#1b1b1a;--accent-ink:#1b1b1a;--accent-soft:#ebe8e1;--good:#2e7d4f;--good-ink:#1f5c39;--good-soft:#e4f2e8;--app:#2563eb;--app-ink:#1d4ed8;--bad:#c2410c;--bad-soft:#fdeee6;--rome:#a8322d;--rome-cav:#bd5f50;--afr:#4b1f57;--gaul:#a77bb5;--carth-cav:#2a1030;--rome-soft:#f3ddd5;--carth:#2f6f9f;--carth-soft:#dbe8f2;--spring:cubic-bezier(.3,1.25,.5,1)}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Onest,system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -319,7 +319,7 @@ code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
   <div class="legend"><span><i style="background:var(--rome)"></i>Bộ binh La Mã</span><span><i style="background:var(--rome-cav)"></i>Kỵ binh La Mã</span><span><i style="background:var(--afr)"></i>Bộ binh châu Phi</span><span><i style="background:var(--gaul)"></i>Bộ binh Gaul, Tây Ban Nha</span><span><i style="background:var(--carth-cav);border-radius:50%"></i>Kỵ binh Carthage</span></div>
   <div class="phase" id="p6phase" role="status"></div>
  </div>
- <div class="fb" id="p6fb"></div>
+ <div class="fb" id="p6fb" role="status"></div>
 </div>
 <div class="meta">
  <p><b>Dùng khi</b> học lịch sử, chiến tranh, hay bất cứ chuyện gì diễn ra theo thời gian trên một không gian. Ra quyết định trước rồi mới xem chuyện thật, và tự kéo thời gian để dừng ở lúc mình muốn.</p>
@@ -431,7 +431,7 @@ $('#p5reset').onclick=init;init();})();
 
 /* 6 */
 (()=>{const NS='http://www.w3.org/2000/svg';
-const C={rome:'#a8322d',rcav:'#dd8f84',afr:'#4b1f57',gaul:'#a77bb5',cav:'#2a1030',river:'#cbdde6'};
+const C={rome:'#a8322d',rcav:'#bd5f50',afr:'#4b1f57',gaul:'#a77bb5',cav:'#2a1030',river:'#cbdde6'};
 const mk=(p,n,a={})=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;};
 const tx=(p,x,y,s,o={})=>{const e=mk(p,'text',Object.assign({x,y,'font-size':10,fill:'#4a4740','text-anchor':'middle'},o));e.textContent=s;return e;};
 const box=(p,[x,y,w,h],fill,o={})=>mk(p,'rect',Object.assign({x,y,width:w,height:h,rx:3,fill},o));
@@ -447,7 +447,7 @@ const box=(p,[x,y,w,h],fill,o={})=>mk(p,'rect',Object.assign({x,y,width:w,height
 const FM={A:g=>{box(g,[74,64,52,16],C.afr);box(g,[48,68,26,8],C.gaul);box(g,[126,68,26,8],C.gaul);mk(g,'circle',{cx:34,cy:72,r:5,fill:C.cav});mk(g,'circle',{cx:166,cy:72,r:5,fill:C.cav});},
  B:g=>{mk(g,'path',{d:'M70 72 Q100 50 130 72',fill:'none',stroke:C.gaul,'stroke-width':6,'stroke-linecap':'round'});box(g,[52,64,16,22],C.afr);box(g,[132,64,16,22],C.afr);mk(g,'circle',{cx:36,cy:74,r:5,fill:C.cav});mk(g,'circle',{cx:164,cy:74,r:5,fill:C.cav});},
  C:g=>{box(g,[64,62,72,38],'rgba(0,0,0,.03)',{stroke:'#7a6f5c','stroke-dasharray':'3 2',rx:4});box(g,[80,70,40,12],C.afr);box(g,[76,85,48,6],C.gaul);mk(g,'circle',{cx:86,cy:95,r:3.5,fill:C.cav});mk(g,'circle',{cx:114,cy:95,r:3.5,fill:C.cav});}};
-$$('#p6opts svg').forEach(s=>{const r=mk(s,'g',{opacity:.5});box(r,[70,8,60,28],C.rome);box(r,[42,14,18,12],C.rcav);box(r,[140,14,18,12],C.rcav);
+$$('#p6opts svg').forEach(s=>{const r=mk(s,'g',{opacity:.85});box(r,[70,8,60,28],C.rome);box(r,[42,14,18,12],C.rcav);box(r,[140,14,18,12],C.rcav);
  mk(s,'path',{d:'M0 104 C60 101 120 108 200 103 L200 110 L0 110Z',fill:C.river});FM[s.dataset.fm](mk(s,'g'));});
 /* bản đồ chạy theo thời gian, mỗi lựa chọn một kịch bản */
 const svg=$('#p6svg'),t=$('#p6t'),ph=$('#p6phase'),btn=$('#p6btn'),fb=$('#p6fb'),note=$('#p6note');
