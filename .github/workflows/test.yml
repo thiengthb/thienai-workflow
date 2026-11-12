@@ -20,3 +20,4 @@ jobs:
         with:
           node-version: 20
       - run: node .github/scripts/sync-agents-md.test.mjs
+      - run: node .github/scripts/check-status.test.mjs

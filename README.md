@@ -24,12 +24,13 @@ slides/       Bộ quy tắc làm slide và khung slide web dùng lại
 | | `TUTOR.md` | Cách AI dạy thien ở mọi môn: thử trước, giải thích sau, ghi nhật ký; đứng đúng vai khi làm việc |
 | `templates/` | `AGENTS.template.md` | Mẫu `AGENTS.md` cho mỗi project, đọc được bởi Claude, Codex, Gemini. Mỗi project có thêm `CLAUDE.md` chỉ một dòng `@AGENTS.md` |
 | | `STATUS.template.md` | Mẫu `docs/STATUS.md`: project đang ở đâu, việc tiếp theo, đang chờ ai |
+| | `check-status.mjs` | Script kiểm `docs/STATUS.md` tối đa 40 dòng và tối đa 3 việc chờ thien. Chép vào `scripts/` của project, chạy trong CI |
 | | `DECISION.template.md` | Mẫu ghi quyết định khó sửa lại, trong `docs/decisions/` |
 | | `SETUP-GUIDE.template.md` | Mẫu hướng dẫn cài đặt theo `profile/GUIDES.md` |
 | | `MANUAL-TEST.template.md` | Mẫu hướng dẫn test tay: chuẩn bị, tài khoản test, ca test có mã, bảng kết quả. Chép vào `docs/manual-test/` |
 | | `test-accounts.template.csv` | Mẫu danh sách tài khoản test, chỉ mật khẩu giả |
 | | `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
-| `.github/` | `workflows/test.yml` | Chạy test của script đồng bộ ở mỗi PR, để lỗi bị chặn trước khi merge |
+| `.github/` | `workflows/test.yml` | Chạy test của script đồng bộ và script kiểm STATUS ở mỗi PR, để lỗi bị chặn trước khi merge |
 | | `workflows/sync-agents-md.yml` | Mẫu `AGENTS.md` đổi thì tự mở PR vào từng repo trong `life/tracked-repos.md` để cập nhật phần chung, giữ nguyên phần riêng của project. Cần secret `SYNC_TOKEN` |
 | `skills/` | `start-project/` | Skill hỏi thien có áp quy trình không, rồi chép các file mẫu vào project. `SKILL.md` chỉ trỏ tới `STEPS.md`; sửa các bước thì sửa `STEPS.md` |
 | | `make-slides/` | Skill làm slide: tóm tắt bài, dàn ý, dựng, kiểm, tập dượt, đăng. `SKILL.md` chỉ trỏ tới `STEPS.md` |
