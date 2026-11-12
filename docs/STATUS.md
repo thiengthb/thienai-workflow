@@ -34,7 +34,6 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 ## Đang chờ thien
 - Mở 3 trang (link trong file kế hoạch) trên điện thoại và laptop, và báo đã nhận lần nhắc tối 2026-11-12.
 - Chép dòng Settings mới (README, bước 1) vào từng tài khoản Claude; tải lại 2 file zip skill nếu chưa.
-- Cho biết đang dùng Gemini và Codex thế nào (web, CLI, app GitHub; miễn phí hay trả phí) để sửa dòng 14 của `profile/PROFILE.md`: Gemini CLI bản miễn phí đã ngừng từ 2026-06-18.
 
 ## Đang vướng
 - Từ project này chưa đọc được repo sakubun, nên trang tổng quan chưa có tiến độ của sakubun.
