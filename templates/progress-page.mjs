@@ -8,7 +8,8 @@
 //     node progress-page.mjs --title "Lộ trình học" --roadmap <file.md>=<owner/repo>:<path in repo> > page.html
 //
 // Plan files follow templates/PLAN.template.md; rules in profile/PLANNING.md.
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { readFileSync, readdirSync, existsSync, realpathSync } from 'node:fs';
 import { join, dirname, posix } from 'node:path';
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -309,7 +310,9 @@ function stampNow() {
   return new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Compare real paths, not URL strings: on Windows, or with spaces or Vietnamese letters in the
+// path, `file://${argv[1]}` never equals import.meta.url and the script silently did nothing.
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   const args = process.argv.slice(2);
   let title = 'Tiến độ';
   let roadmapArg = null;

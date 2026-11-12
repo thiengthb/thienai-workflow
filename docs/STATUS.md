@@ -14,6 +14,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
 | [Theo dõi tiến độ và lộ trình học](plans/2026-11-12-progress-tracking.md) | 5/5: nhắc theo lịch | 12/13 |
+| [Sửa công cụ kiểm tra báo thành công khi chưa kiểm gì](plans/2026-11-12-silent-tools-fix.md) | 1–2/2: chờ merge | 0/5 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
@@ -26,7 +27,6 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 - Codex dạy học được qua repo: `AGENTS.md` ở gốc, `learning/codex.md` (PR #36, #37)
 - Bộ khung chung cho trang học: tự lưu chỗ đang học, chế độ tối (PR #33)
 - Môn chiến tranh buổi 1 và 2, luật nguồn cho bài lịch sử (PR #32, #33)
-- Theo dõi kế hoạch, trang tiến độ, lộ trình học (PR #31)
 
 ## Việc tiếp theo
 1. Từ tài khoản đã đăng 3 trang: chạy lại `templates/progress-page.mjs` và đăng lại trang tiến độ, trang lộ trình học (dữ liệu trên trang còn từ trước PR #32, #33). Tài khoản khác không đăng lại được, chỉ sửa file.

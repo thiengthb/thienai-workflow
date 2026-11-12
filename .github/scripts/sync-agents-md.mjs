@@ -41,9 +41,11 @@ async function gh(token, method, path, body) {
   return { status: res.status, data };
 }
 
-async function syncRepo(token, repo, template, sourceSha, dryRun) {
+export async function syncRepo(token, repo, template, sourceSha, dryRun) {
   const meta = await gh(token, 'GET', `/repos/${repo}`);
-  if (meta.status !== 200) return `bỏ qua: không đọc được repo (HTTP ${meta.status})`;
+  // A repo we cannot read is an error, not a skip: with a fine-grained token, 404 or 403 here
+  // usually means the repo was added to tracked-repos.md but not to the token.
+  if (meta.status !== 200) return `lỗi: không đọc được repo (HTTP ${meta.status}). Có thể token workflow-sync chưa có quyền với repo này`;
   const base = meta.data.default_branch;
 
   const file = await gh(token, 'GET', `/repos/${repo}/contents/AGENTS.md?ref=${base}`);
@@ -58,10 +60,12 @@ async function syncRepo(token, repo, template, sourceSha, dryRun) {
 
   // Reset the sync branch to the latest default branch, then commit the new file on it.
   const head = await gh(token, 'GET', `/repos/${repo}/git/ref/heads/${base}`);
+  if (head.status !== 200) return `lỗi: không đọc được nhánh ${base} (HTTP ${head.status})`;
   const sha = head.data.object.sha;
   const created = await gh(token, 'POST', `/repos/${repo}/git/refs`, { ref: `refs/heads/${BRANCH}`, sha });
   if (created.status === 422) {
-    await gh(token, 'PATCH', `/repos/${repo}/git/refs/heads/${BRANCH}`, { sha, force: true });
+    const reset = await gh(token, 'PATCH', `/repos/${repo}/git/refs/heads/${BRANCH}`, { sha, force: true });
+    if (reset.status !== 200) return `lỗi: không đặt lại được nhánh ${BRANCH} (HTTP ${reset.status})`;
   } else if (created.status !== 201) {
     return `lỗi: không tạo được nhánh (HTTP ${created.status})`;
   }
@@ -75,6 +79,7 @@ async function syncRepo(token, repo, template, sourceSha, dryRun) {
 
   const owner = repo.split('/')[0];
   const open = await gh(token, 'GET', `/repos/${repo}/pulls?state=open&head=${owner}:${BRANCH}`);
+  if (open.status !== 200) return `lỗi: không xem được PR đang mở (HTTP ${open.status})`;
   if (open.data && open.data.length) return `đã cập nhật PR có sẵn: ${open.data[0].html_url}`;
   const pr = await gh(token, 'POST', `/repos/${repo}/pulls`, {
     title: 'chore: sync shared AGENTS.md rules from thienai-workflow',
