@@ -14,6 +14,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
 | [Theo dõi tiến độ và lộ trình học](plans/2026-11-12-progress-tracking.md) | 5/5: nhắc theo lịch | 12/13 |
+| [Sửa công cụ kiểm tra báo thành công khi chưa kiểm gì](plans/2026-11-12-silent-tools-fix.md) | 1–2/2: chờ merge | 0/5 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |

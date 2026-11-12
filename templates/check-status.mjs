@@ -4,7 +4,8 @@
 // Limits: whole file at most 40 lines, at most 3 items under "## Đang chờ thien".
 // Also checks every docs/plans/*.md written from PLAN.template.md (has "## Checkpoint") has the sections
 // the progress page reads (rules in profile/PLANNING.md of thienai-workflow).
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { readFileSync, readdirSync, existsSync, realpathSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 
 export const MAX_LINES = 40;
@@ -47,7 +48,9 @@ export function checkPlan(text) {
   return problems;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Compare real paths, not URL strings: on Windows, or with spaces or Vietnamese letters in the
+// path, `file://${argv[1]}` never equals import.meta.url and the script silently did nothing.
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   const file = process.argv[2] ?? 'docs/STATUS.md';
   const problems = checkStatus(readFileSync(file, 'utf8')).map((p) => `${file}: ${p}`);
   const plansDir = join(dirname(file), 'plans');
