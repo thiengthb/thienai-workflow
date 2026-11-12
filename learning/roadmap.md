@@ -63,6 +63,7 @@ Xong khi: có một tính năng capstone đi trọn từ phỏng vấn người 
 ### Bài đã học
 - Bài 1–2: đọc nhanh và làm lại ở [ba/README.md](ba/README.md)
 - Trang buổi 1: [Yêu cầu và nhu cầu](https://claude.ai/artifact/TXQ8HGSbo7dXQ51XVsq1Q9)
+- Trang buổi 2 (làm lại): [Hỏi chuyện người dùng](https://claude.ai/artifact/Tb8UxcbkAzFyGxFZ8t5r2m)
 
 ### Nguồn học
 - [The Mom Test](https://www.momtestbook.com/) của Rob Fitzpatrick: 3 luật hỏi chuyện người dùng (hỏi về đời sống của họ chứ không về ý tưởng của mình, hỏi chuyện cụ thể đã xảy ra, nghe nhiều nói ít). Hợp với buổi BA 2. Đã đọc trang giới thiệu và [một bản tóm tắt](https://readingraphics.com/book-summary-the-mom-test/), chưa đọc sách.

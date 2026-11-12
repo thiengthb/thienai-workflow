@@ -19,7 +19,11 @@ thien quen học bằng trang tương tác như ở Claude. Ngày 2026-11-12 Cod
 
 - **Không hỏi gì trong chat trước khi có trang.** Đọc file rồi dựng trang luôn. Câu trả lời đầu tiên cho thien là đường dẫn trang và cách mở, kèm một dòng nói buổi này học gì.
 - **Trang chứa đủ 7 bước** của khung buổi trong `learning/README.md`: 3 thẻ ôn (không có thẻ đến hạn thì lấy thẻ cũ nhất của môn khác), nhớ lại buổi trước, thử trước, hiểu sau, câu hỏi nhanh, tự nói lại rồi mới xem bản của AI, góp ý. Phần ôn bọc bằng `data-part="review"`. Cuối trang có nút `#finish` và `#copy`.
-- **Dựng từ trang buổi trước của cùng môn** (ví dụ `learning/ba/pages/lesson-01.html`): giữ bố cục, màu, cách chuyển bước, cách gom kết quả; chỉ thay nội dung. Chọn kiểu bài theo `learning/teaching/README.md` và mục "Buổi tiếp theo" của môn.
+- **Giao diện phải giống hệt các trang trước, không tự viết lại.** Ngày 2026-11-12 Codex tự viết trang BA 2 từ đầu: font hệ thống thay vì Onest, không có thanh tiến độ, nút chọn không đổi màu đúng sai, và thien thấy kém hẳn các trang cũ. Vì vậy:
+  - Chép nguyên file trang mới nhất của cùng môn (`cp learning/ba/pages/lesson-02.html learning/ba/pages/lesson-03.html`), rồi chỉ thay chữ, câu hỏi và dữ liệu trong `<script>`. Không viết lại `<head>`, `<style>`, thanh trên cùng, các lớp `.btn`, `.opt`, `.card`, `.chip`. Môn chưa có trang mẫu tốt thì chép trang BA 2.
+  - Cần kiểu bài mới thì chép đúng phần HTML, CSS, JS của kiểu đó từ `learning/teaching/patterns.html`, giữ tên lớp và biến màu.
+  - Trước khi gửi, tự kiểm 5 điều: font Onest; thanh tiến độ có "số bước/tổng"; bấm chọn thì có màu đúng sai và chữ ("Bạn chọn", "Đúng"); mỗi bước có ít nhất một hình hay sơ đồ cho thấy đang ở đâu, không chỉ chữ; khổ điện thoại không tràn ngang. Gu giao diện của thien ở repo thienui, file `docs/taste.md`.
+- Chọn kiểu bài theo `learning/teaching/README.md` và mục "Buổi tiếp theo" của môn.
 - Các bước dựng:
   1. Ghi trang vào `learning/<môn>/pages/lesson-NN.html` (NN là số buổi, hai chữ số).
   2. Gắn bộ khung: `node learning/teaching/kit/apply-kit.mjs learning/<môn>/pages/lesson-NN.html`.
