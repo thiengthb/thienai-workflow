@@ -185,8 +185,9 @@ function repoSection(dir, repo) {
 </section>`;
 }
 
-/** Section id from the full owner/repo, so two repos with the same name never share an anchor. */
-export const repoId = (repo) => repo.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+/** Section id from the full owner/repo, one-to-one so no two repos share an anchor: letters and digits stay,
+ *  "-" becomes "--", any other character becomes "-<hex code>-" ("/" is "-2f-"). */
+export const repoId = (repo) => repo.toLowerCase().replace(/[^a-z0-9]/g, (c) => (c === '-' ? '--' : `-${c.charCodeAt(0).toString(16)}-`));
 
 function overview(repos) {
   if (repos.length < 2) return '';

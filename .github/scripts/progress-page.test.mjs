@@ -21,6 +21,9 @@ assert.match(inline('<script>', ''), /&lt;script&gt;/, 'html is escaped');
 assert.match(blocks(['| A | B |', '|---|---|', '| <x> | <y> |'], ''), /Chưa có/, 'placeholder-only table shows "Chưa có"');
 
 assert.notEqual(repoId('owner-a/app'), repoId('owner-b/app'), 'same repo name under two owners gets two anchors');
+assert.notEqual(repoId('a-b/c'), repoId('a/b-c'), 'hyphen and slash in different places give different anchors');
+assert.notEqual(repoId('a/b.c'), repoId('a/b-c'), 'dot and hyphen give different anchors');
+assert.match(repoId('thiengthb/thienai-workflow'), /^[a-z0-9-]+$/, 'anchor uses only letters, digits and hyphens');
 
 const run = (...args) => execFileSync('node', ['templates/progress-page.mjs', ...args], { encoding: 'utf8' });
 const repoPage = run('--title', 'T', '.=thiengthb/thienai-workflow', 'missing=thiengthb/x:không đọc được');
