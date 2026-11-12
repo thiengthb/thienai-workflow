@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BA buổi 1: Yêu cầu và nhu cầu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--accent:#308E84;--accent-soft:#e3f1ef;--bad:#c2410c;--bad-soft:#fdeee6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Onest,system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:460px;margin:0 auto;padding:16px 16px 48px}
+.top{position:sticky;top:0;background:var(--bg);padding:12px 0 10px;z-index:5}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .25s ease}
+h1{font-size:26px;line-height:1.25;margin:20px 0 8px;font-weight:700;letter-spacing:-.01em}
+h2{font-size:20px;line-height:1.3;margin:8px 0 6px;font-weight:600}
+p{margin:0 0 12px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.step{display:none}.step.on{display:block;animation:in .2s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:26px;border:0;background:var(--ink);color:#fff;font:600 16px Onest,sans-serif;cursor:pointer;margin-top:16px}
+.btn[disabled]{opacity:.3;cursor:default}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);height:44px;font-weight:500}
+.opt{display:block;width:100%;text-align:left;padding:14px 16px;margin:8px 0;border:1px solid var(--line);border-radius:14px;background:#fff;font:15px/1.45 Onest,sans-serif;color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--accent);background:var(--accent-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+.why{display:none;font-size:14px;padding:12px 14px;border-radius:12px;background:#f3f1ec;margin-top:4px}
+.why.on{display:block}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.shot{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.shot img{display:block;width:100%;height:auto}
+.shot .tag{position:absolute;top:6px;left:6px;background:var(--ink);color:#fff;font-size:12px;font-weight:600;padding:2px 8px;border-radius:10px}
+.hl{position:absolute;border:2.5px solid #e11d48;border-radius:12px;box-shadow:0 0 0 999px rgba(0,0,0,.0);display:none}
+.hl.on{display:block}
+.hl.soft{border-style:dashed;border-color:#f59e0b}
+.big{display:block;width:100%;border-radius:14px;border:1px solid var(--line)}
+.tabs{display:flex;gap:8px;margin:8px 0 4px}
+.tab{flex:1;height:40px;border-radius:20px;border:1px solid var(--line);background:#fff;font:600 14px Onest,sans-serif;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.crit{padding:12px 0;border-top:1px solid var(--line)}
+.crit:first-child{border-top:0}
+.crit b{font-weight:600}
+.crit .d{font-size:13px;color:var(--muted);margin:2px 0 8px}
+.scale{display:flex;gap:6px}
+.scale button{flex:1;height:40px;border-radius:12px;border:1px solid var(--line);background:#fff;font:600 15px Onest,sans-serif;cursor:pointer;color:var(--ink)}
+.scale button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ends{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 4px;text-align:center;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+td.you{font-weight:600}
+textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:14px;padding:12px;font:15px/1.5 Onest,sans-serif;resize:vertical;background:#fff;color:var(--ink)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.chip{height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--line);background:#fff;font:500 14px Onest,sans-serif;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip{-webkit-tap-highlight-color:transparent}
+.kw{display:inline-block;background:var(--accent-soft);color:#1d5c55;font-weight:600;padding:0 6px;border-radius:6px}
+.done{font-size:14px;padding:12px 14px;border-radius:12px;background:var(--accent-soft);color:#1d5c55;margin-top:12px;display:none}
+.sort{display:grid;gap:8px;margin:10px 0}
+.sc{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;font:15px/1.45 Onest,sans-serif;color:var(--ink);cursor:pointer;text-align:left;width:100%}
+.sc .tg{flex:0 0 auto;font-size:12px;font-weight:600;padding:3px 10px;border-radius:10px;background:#f3f1ec;color:var(--muted)}
+.sc.need .tg{background:var(--accent-soft);color:#1d5c55}
+.sc.sol .tg{background:#efe9ff;color:#5b3fa8}
+.sc.right{border-color:var(--accent)}
+.sc.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.map{display:grid;gap:8px;margin:10px 0}
+.mi{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;font:14px/1.45 Onest,sans-serif;color:var(--ink);cursor:pointer;text-align:left;width:100%}
+.mi .n{flex:0 0 28px;height:28px;border-radius:14px;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--muted)}
+.mi.on{border-color:var(--ink)}
+.mi.on .n{background:var(--ink);color:#fff;border:0}
+.mi b{display:block;font-size:15px;margin-bottom:2px}
+.say{font-size:15px;padding:14px;border-radius:14px;background:#fff;border:1px solid var(--line);margin:10px 0}
+.say b{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:600}
+.mine{display:none}.mine.on{display:block}
+.kgrid .row{padding:10px 0;border-top:1px solid var(--line)}
+.kgrid .row:first-child{border-top:0}
+.kgrid .row span{display:block;font-size:14px;font-weight:500;margin-bottom:6px}
+.kgrid .chips{margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.kgrid .chip{height:38px;padding:0 6px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>BA buổi 1 · Làm quen</span><span id="cnt">1/8</span></div><div class="bar"><i id="bar"></i></div></div>
+
+  <section class="step on" data-s="0">
+    <h1>Yêu cầu và nhu cầu</h1>
+    <p class="muted">Buổi làm quen môn BA, khoảng 10 phút. BA (business analyst) là người tìm hiểu xem người dùng thật sự cần gì, rồi nói lại cho cả nhóm làm đúng thứ đó.</p>
+    <div class="card small">
+      <p><b>Hôm nay bạn sẽ:</b></p>
+      <p style="margin:0">1. Trả lời 3 câu ôn frontend.<br>2. Cho mình biết bạn đã biết gì về BA và muốn dùng nó làm gì.<br>3. Thử làm BA trong một tình huống nhỏ, rồi mới học ý chính.<br>4. Xếp 10 ý lớn của BA theo thứ bạn muốn học trước.</p>
+    </div>
+    <button class="btn" onclick="go(1)">Bắt đầu</button>
+  </section>
+
+  <section class="step" data-s="1">
+    <h2>Ôn nhanh frontend</h2>
+    <p class="small muted">Trả lời theo trí nhớ, sai cũng không sao. Câu sai sẽ được hỏi lại sớm hơn.</p>
+    <div class="card">
+      <p><b>1.</b> Hai nút cùng cỡ, cùng màu đặt cạnh nhau thì sao?</p>
+      <div class="q" data-q="F1" data-a="1">
+        <button class="opt">Màn cân đối, người dùng dễ chọn</button>
+        <button class="opt">Mắt phải dừng lại để chọn, không nút nào là thứ nhất</button>
+        <button class="opt">Không sao, miễn là chữ trên nút rõ</button>
+        <div class="why">Hai thứ bằng nhau thì không thứ nào là "thứ nhất", điểm nhấn bị chia đôi. Cách sửa là hạ nút phụ xuống, không phải làm nút chính to thêm.</div>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Ngoài cỡ chữ, màu và thứ tự, còn hai cách nào để tạo bậc chữ?</p>
+      <div class="q" data-q="F3" data-a="2">
+        <button class="opt">Font khác nhau và gạch chân</button>
+        <button class="opt">Viết hoa và in nghiêng</button>
+        <button class="opt">Độ đậm và khoảng cách quanh chữ</button>
+        <div class="why">Độ đậm và khoảng cách. Đổi font hay viết hoa cũng tạo khác biệt nhưng dễ làm màn rối, nên ít dùng hơn.</div>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> Trong nhóm các dòng cách nhau 8px. Giữa hai nhóm nên bao nhiêu?</p>
+      <div class="q" data-q="F4" data-a="0">
+        <button class="opt">Khoảng 24px</button>
+        <button class="opt">10px, hơn một chút là đủ</button>
+        <button class="opt">8px, cho đều nhau</button>
+        <div class="why">Khoảng 24px, tức gấp 2 đến 3 lần khoảng trong nhóm. 10px so với 8px thì mắt gần như không thấy khác, nên chưa thấy nhóm.</div>
+      </div>
+    </div>
+    <button class="btn" id="n1" disabled onclick="go(2)">Tiếp</button>
+  </section>
+
+  <section class="step" data-s="2">
+    <h2>Bạn và BA</h2>
+    <p class="small muted">Không có đúng sai, mình hỏi để soạn bài vừa sức bạn.</p>
+    <div class="card kgrid" id="know">
+      <p class="small" style="margin-bottom:6px"><b>Bạn đã gặp những thứ này chưa?</b></p>
+      <div class="row"><span>User story</span><div class="chips" data-k="userStory"><button class="chip">Chưa</button><button class="chip">Nghe qua</button><button class="chip">Đã làm</button></div></div>
+      <div class="row"><span>Use case</span><div class="chips" data-k="useCase"><button class="chip">Chưa</button><button class="chip">Nghe qua</button><button class="chip">Đã làm</button></div></div>
+      <div class="row"><span>Phỏng vấn người dùng</span><div class="chips" data-k="interview"><button class="chip">Chưa</button><button class="chip">Nghe qua</button><button class="chip">Đã làm</button></div></div>
+      <div class="row"><span>Vẽ luồng công việc</span><div class="chips" data-k="flow"><button class="chip">Chưa</button><button class="chip">Nghe qua</button><button class="chip">Đã làm</button></div></div>
+      <div class="row"><span>Xếp ưu tiên yêu cầu</span><div class="chips" data-k="priority"><button class="chip">Chưa</button><button class="chip">Nghe qua</button><button class="chip">Đã làm</button></div></div>
+    </div>
+    <div class="card">
+      <p class="small" style="margin-bottom:6px"><b>Bạn muốn dùng BA để làm gì?</b> Chọn bao nhiêu cũng được.</p>
+      <div class="chips" id="goals">
+        <button class="chip">Làm PO đồ án capstone tốt hơn</button>
+        <button class="chip">Giao việc cho AI rõ hơn</button>
+        <button class="chip">Hiểu người dùng app mình làm</button>
+        <button class="chip">Đi làm BA thật sau này</button>
+        <button class="chip">Hiểu sếp và khách hàng muốn gì</button>
+      </div>
+      <textarea id="goalTxt" placeholder="Lý do khác, nếu có" style="min-height:60px"></textarea>
+    </div>
+    <button class="btn" id="n2" disabled onclick="go(3)">Tiếp</button>
+  </section>
+
+  <section class="step" data-s="3">
+    <h2>Thử làm BA</h2>
+    <div class="card">
+      <p>Trong nhóm capstone, một bạn nhắn:</p>
+      <div class="say"><b>Tin nhắn</b>"Khách hàng muốn thêm nút <b style="display:inline;font-size:15px;color:var(--ink)">xuất Excel</b> ở trang danh sách đơn hàng."</div>
+      <p style="margin-bottom:4px">Bạn là BA. Bạn hỏi lại câu nào <b>đầu tiên</b>?</p>
+      <div class="q" data-q="try" data-a="1">
+        <button class="opt">"File Excel cần những cột nào, để định dạng gì?"</button>
+        <button class="opt">"Khách hàng lấy file đó ra để làm gì?"</button>
+        <button class="opt">"Khi nào khách cần có nút này?"</button>
+        <div class="why">Câu 1 và 3 đều cần hỏi, nhưng là hỏi sau. Hỏi trước "để làm gì" vì "xuất Excel" là <b>cách</b> khách đã tự nghĩ ra, chưa phải <b>điều</b> họ cần. Bấm Tiếp để xem câu trả lời của khách.</div>
+      </div>
+    </div>
+    <button class="btn" id="n3" disabled onclick="go(4)">Tiếp</button>
+  </section>
+
+  <section class="step" data-s="4">
+    <h2>Khách trả lời</h2>
+    <div class="say"><b>Khách hàng</b>"Sáng thứ hai nào chị cũng xuất danh sách ra, ngồi cộng tay khoảng 30 phút xem tuần trước bán được bao nhiêu đơn mỗi chi nhánh, rồi gửi cho sếp."</div>
+    <p class="small">Bấm vào từng thẻ để xếp nó là <span class="kw">nhu cầu</span> (vấn đề thật) hay <span class="kw" style="background:#efe9ff;color:#5b3fa8">giải pháp</span> (một cách để giải). Bấm lần nữa để đổi.</p>
+    <div class="sort" id="sort"></div>
+    <button class="btn ghost" id="chk" disabled>Kiểm tra</button>
+    <div class="why" id="sortWhy">Nhu cầu thật là <b>sếp cần số đơn mỗi tuần theo chi nhánh</b> và <b>chị mất 30 phút cộng tay</b>. Nút xuất Excel chỉ là một cách, mà vẫn để lại 30 phút cộng tay. Một màn thống kê theo tuần, hay email tự gửi cho sếp sáng thứ hai, có thể giải hết. Nếu cứ làm đúng nút Excel như được nhờ, nhóm làm đúng yêu cầu mà khách vẫn khổ.</div>
+    <button class="btn" id="n4" disabled onclick="go(5)">Tiếp</button>
+  </section>
+
+  <section class="step" data-s="5">
+    <h2>Ý chính hôm nay</h2>
+    <div class="card">
+      <p><b>Điều người ta nhờ thường là một giải pháp họ tự nghĩ ra. Việc của BA là tìm vấn đề thật đằng sau nó.</b></p>
+      <p class="small">Cách đơn giản nhất: hỏi "để làm gì" cho tới khi gặp một việc con người đang mất thời gian, tiền hay công sức. Thường chỉ cần hỏi 2–3 lần.</p>
+      <p class="small">Ví dụ vừa rồi: xuất Excel → để cộng số đơn → để báo cáo sếp mỗi tuần. Tới đây mới thấy vấn đề thật: <b>30 phút cộng tay mỗi tuần</b>.</p>
+      <p class="small" style="margin:0">Có vấn đề thật rồi, nhóm mới so được nhiều giải pháp: nút Excel, màn thống kê, email tự gửi. Không có nó, nhóm chỉ còn đúng một giải pháp là thứ được nhờ.</p>
+    </div>
+    <div class="card">
+      <p><b>1.</b> Người dùng app học tiếng Nhật nói: "Cho mình thêm bộ lọc từ vựng theo ngày." Câu nào giúp tìm vấn đề thật?</p>
+      <div class="q" data-q="q1" data-a="2">
+        <button class="opt">"Lọc theo ngày thêm từ hay ngày ôn gần nhất?"</button>
+        <button class="opt">"Bạn muốn bộ lọc nằm trên hay dưới danh sách?"</button>
+        <button class="opt">"Lọc xong bạn định làm gì với các từ đó?"</button>
+        <div class="why">Câu 3 hỏi "để làm gì". Có thể bạn ấy muốn ôn lại các từ học hôm qua, và một nút "Ôn từ hôm qua" sẽ tiện hơn bộ lọc. Hai câu kia đã bàn sâu vào bộ lọc, tức đã chọn giải pháp rồi.</div>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Câu nào là <b>nhu cầu</b>, không phải giải pháp?</p>
+      <div class="q" data-q="q2" data-a="0">
+        <button class="opt">"Mình hay quên ôn bài nếu không ai nhắc"</button>
+        <button class="opt">"Thêm thông báo đẩy lúc 8 giờ tối"</button>
+        <button class="opt">"Thêm huy hiệu khi học đủ 7 ngày liền"</button>
+        <div class="why">"Hay quên ôn bài" là vấn đề. Thông báo và huy hiệu là hai cách giải nó, và có thể còn cách khác tốt hơn.</div>
+      </div>
+    </div>
+    <button class="btn" id="n5" disabled onclick="go(6)">Tiếp</button>
+  </section>
+
+  <section class="step" data-s="6">
+    <h2>Bản đồ 10 ý lớn của BA</h2>
+    <p class="small muted">Đây là những điều người mới cần biết để nói chuyện được với người làm BA, không phải mục lục giáo trình. Bấm theo thứ tự bạn <b>muốn học trước</b>. Chọn ít nhất 3, phần còn lại mình xếp. Bấm lại để bỏ.</p>
+    <div class="map" id="map"></div>
+    <button class="btn ghost" id="mapReset">Xếp lại từ đầu</button>
+    <div class="card" style="margin-top:16px">
+      <p><b>Tự nói lại:</b> ý chính hôm nay là gì? Một hai câu theo lời bạn.</p>
+      <textarea id="teach" placeholder="Viết trước, rồi mới xem bản của mình"></textarea>
+      <button class="btn ghost" id="reveal" disabled>Xem bản của mình</button>
+      <div class="mine why" id="mine">Người ta thường nhờ một giải pháp họ tự nghĩ ra. Hỏi "để làm gì" vài lần để tìm vấn đề thật, rồi mới chọn giải pháp.</div>
+    </div>
+    <button class="btn" id="n6" disabled onclick="go(7)">Tiếp</button>
+  </section>
+
+  <section class="step" data-s="7">
+    <h2>Góp ý</h2>
+    <div class="card">
+      <p class="small"><b>Độ dài</b></p>
+      <div class="chips" data-g="len"><button class="chip">Ngắn quá</button><button class="chip">Vừa</button><button class="chip">Dài quá</button></div>
+      <p class="small"><b>Độ khó</b></p>
+      <div class="chips" data-g="diff"><button class="chip">Dễ quá</button><button class="chip">Vừa</button><button class="chip">Khó quá</button></div>
+      <p class="small"><b>Bạn thấy BA thế nào sau buổi này?</b></p>
+      <div class="chips" data-g="interest"><button class="chip">Muốn học tiếp</button><button class="chip">Bình thường</button><button class="chip">Chưa thấy hứng</button></div>
+      <textarea id="fb" placeholder="Góp ý thêm, nếu có"></textarea>
+    </div>
+    <button class="btn" id="finish">Xong</button>
+    <div class="done" id="saved"></div>
+    <button class="btn ghost" id="copy" style="display:none">Chép kết quả</button>
+  </section>
+</div>
+<script>
+const R={start:new Date().toISOString(),subject:'ba',lesson:1,mode:'lam-quen',review:{},know:{},goals:[],goalTxt:'',quiz:{},sort:{},map:[],teach:'',len:null,diff:null,interest:null,fb:''};
+const TOTAL=8;
+function go(n){document.querySelectorAll('.step').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));document.getElementById('cnt').textContent=(n+1)+'/'+TOTAL;document.getElementById('bar').style.width=(n/(TOTAL-1)*100)+'%';window.scrollTo({top:0,behavior:'smooth'});}
+
+function bindQ(q){const opts=[...q.querySelectorAll('.opt')];opts.forEach((o,i)=>o.onclick=()=>{const a=+q.dataset.a;opts.forEach((x,j)=>{x.disabled=true;if(j===a)x.classList.add('right');});if(i!==a)o.classList.add('wrong');q.querySelector('.why').classList.add('on');const k=q.dataset.q;if(/^F\d/.test(k))R.review[k]=i===a;else R.quiz[k]={pick:i,right:i===a};check();});}
+document.querySelectorAll('.q[data-q]').forEach(bindQ);
+
+document.querySelectorAll('.chips[data-k]').forEach(c=>{c.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{c.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');R.know[c.dataset.k]=b.textContent;check();});});
+document.querySelectorAll('#goals .chip').forEach(b=>b.onclick=()=>{b.classList.toggle('on');R.goals=[...document.querySelectorAll('#goals .chip.on')].map(x=>x.textContent);check();});
+document.getElementById('goalTxt').oninput=e=>{R.goalTxt=e.target.value.trim();check();};
+document.querySelectorAll('.chips[data-g]').forEach(c=>{c.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{c.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');R[c.dataset.g]=b.textContent;});});
+
+// sort cards
+const CARDS=[{t:'Thêm nút xuất Excel',k:'sol'},{t:'Sếp cần biết số đơn mỗi tuần, theo từng chi nhánh',k:'need'},{t:'Làm một màn thống kê đơn theo tuần',k:'sol'},{t:'Chị mất khoảng 30 phút mỗi sáng thứ hai để cộng tay',k:'need'},{t:'Tự gửi email báo cáo cho sếp mỗi sáng thứ hai',k:'sol'}];
+const ord=[0,1,2,3,4].sort(()=>Math.random()-.5);const st={};let sortDone=false;
+const sortBox=document.getElementById('sort');
+function renderSort(){sortBox.innerHTML=ord.map(i=>{const v=st[i];return '<button class="sc'+(v?' '+v:'')+'" data-i="'+i+'"><span>'+CARDS[i].t+'</span><span class="tg">'+(v==='need'?'Nhu cầu':v==='sol'?'Giải pháp':'Chưa xếp')+'</span></button>';}).join('');
+ [...sortBox.children].forEach(b=>b.onclick=()=>{if(sortDone)return;const i=+b.dataset.i;st[i]=st[i]==='need'?'sol':'need';renderSort();document.getElementById('chk').disabled=Object.keys(st).length<CARDS.length;});}
+renderSort();
+document.getElementById('chk').onclick=()=>{sortDone=true;let right=0;[...sortBox.children].forEach(b=>{const i=+b.dataset.i;const ok=st[i]===CARDS[i].k;if(ok)right++;b.classList.add(ok?'right':'wrong');if(!ok){b.querySelector('.tg').textContent+=' → '+(CARDS[i].k==='need'?'Nhu cầu':'Giải pháp');}});R.sort={right:right,total:CARDS.length,picks:Object.fromEntries(Object.entries(st).map(([i,v])=>[CARDS[i].t,v]))};document.getElementById('chk').disabled=true;document.getElementById('sortWhy').classList.add('on');document.getElementById('n4').disabled=false;};
+
+// map
+const MAP=[
+ ['Yêu cầu và nhu cầu','Tìm vấn đề thật đằng sau điều người ta nhờ (hôm nay)'],
+ ['Các bên liên quan','Ai dùng, ai trả tiền, ai quyết định, ai bị ảnh hưởng'],
+ ['Hỏi chuyện người dùng','Hỏi sao cho họ kể chuyện thật, không nói điều họ nghĩ bạn muốn nghe'],
+ ['User story','Viết một nhu cầu thành câu "Là…, tôi muốn…, để…"'],
+ ['Điều kiện hoàn thành','Thế nào thì coi là xong, để không ai cãi nhau lúc nghiệm thu'],
+ ['Vẽ luồng công việc','Các bước người dùng đi qua, chỗ nào hay tắc'],
+ ['Use case','Ai làm gì với hệ thống, kể cả khi có lỗi'],
+ ['Xếp ưu tiên','Không đủ thời gian thì làm gì trước, bỏ gì'],
+ ['Yêu cầu không ai nói ra','Nhanh, an toàn, dễ dùng: người dùng không nhờ nhưng sẽ phàn nàn'],
+ ['Dữ liệu nhìn từ nghiệp vụ','Các "thứ" trong hệ thống và quan hệ giữa chúng']];
+const pick=[];const mapBox=document.getElementById('map');
+function renderMap(){mapBox.innerHTML=MAP.map((m,i)=>{const p=pick.indexOf(i);return '<button class="mi'+(p>=0?' on':'')+'" data-i="'+i+'"><span class="n">'+(p>=0?p+1:'')+'</span><span><b>'+m[0]+'</b>'+m[1]+'</span></button>';}).join('');
+ [...mapBox.children].forEach(b=>b.onclick=()=>{const i=+b.dataset.i;const p=pick.indexOf(i);if(p>=0)pick.splice(p,1);else pick.push(i);R.map=pick.map(j=>MAP[j][0]);renderMap();check();});}
+renderMap();
+document.getElementById('mapReset').onclick=()=>{pick.length=0;R.map=[];renderMap();check();};
+const teach=document.getElementById('teach');teach.oninput=()=>{R.teach=teach.value.trim();document.getElementById('reveal').disabled=R.teach.length<8;};
+document.getElementById('reveal').onclick=()=>{document.getElementById('mine').classList.add('on');R.revealed=true;check();};
+document.getElementById('fb').oninput=e=>{R.fb=e.target.value.trim();};
+
+function check(){
+ document.getElementById('n1').disabled=Object.keys(R.review).length<3;
+ document.getElementById('n2').disabled=!(Object.keys(R.know).length===5&&(R.goals.length||R.goalTxt));
+ document.getElementById('n3').disabled=!R.quiz.try;
+ document.getElementById('n5').disabled=!(R.quiz.q1&&R.quiz.q2);
+ document.getElementById('n6').disabled=!(R.map.length>=3&&R.revealed);}
+
+function summary(){return 'BA buổi 1 (làm quen)\nÔn frontend: '+JSON.stringify(R.review)+'\nĐã biết: '+JSON.stringify(R.know)+'\nMuốn dùng BA để: '+R.goals.join('; ')+(R.goalTxt?' / '+R.goalTxt:'')+'\nThử trước: '+(R.quiz.try&&R.quiz.try.right?'đúng':'khác')+', xếp thẻ: '+(R.sort.right||0)+'/5\nCâu hỏi: '+['q1','q2'].filter(k=>R.quiz[k]&&R.quiz[k].right).length+'/2\nThứ tự muốn học: '+R.map.join(' > ')+'\nNói lại: '+R.teach+'\nĐộ dài: '+R.len+', độ khó: '+R.diff+', hứng thú: '+R.interest+'\nGóp ý: '+R.fb;}
+document.getElementById('finish').onclick=async()=>{const btn=document.getElementById('finish');btn.disabled=true;R.end=new Date().toISOString();const out=document.getElementById('saved');out.style.display='block';out.textContent='Đang lưu...';let ok=false;try{let dbp=null;try{dbp=window.claude&&window.claude.use?window.claude.use('db'):null;}catch(e){dbp=null;}const db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;if(db){await db.doc('sessions/ba1-'+Date.now()).set(R);ok=true;}}catch(e){ok=false;}
+out.textContent=ok?'Đã lưu kết quả. Bạn chỉ cần nhắn "xong" trong thread.':'Chưa lưu được tự động. Bấm nút dưới để chép kết quả rồi dán vào thread.';if(!ok){document.getElementById('copy').style.display='flex';}};
+document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());document.getElementById('copy').textContent='Đã chép';}catch(e){document.getElementById('saved').textContent=summary();}};
+const syncPressed=()=>document.querySelectorAll('.chip,.sc,.mi').forEach(b=>{const v=(b.classList.contains('on')||b.classList.contains('need')||b.classList.contains('sol'))?'true':'false';if(b.getAttribute('aria-pressed')!==v)b.setAttribute('aria-pressed',v);});
+new MutationObserver(syncPressed).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+go(0);syncPressed();
+</script>
+</body>
+</html>
