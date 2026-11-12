@@ -62,5 +62,5 @@ Tìm hiểu ngày 2026-11-12, trước buổi làm quen.
 - Buổi 5: ý 3 "Địa hình và thời tiết" (thien xếp thứ 3, mới chạm ở buổi 1). Gợi ý một trận có thật mà địa hình hay mùa quyết định kết cục, ưu tiên trận Việt Nam chưa dùng. Kiểm nguồn theo luật 10, gọi tên theo luật 12.
 - Phần thử trước trộn ý cũ: một câu về tầng (một đợt đánh hay một trận) và một câu về hậu cần.
 - Câu nhớ lại (đặt trong `data-part="review"`): khi đổi sang "đánh chắc tiến chắc", vì sao đạn tăng mạnh hơn gạo.
-- Còn lại của chặng 1 sau buổi 5: ý 7 tinh thần, 8 vũ khí và công nghệ, 9 sương mù chiến tranh, 10 chiến tranh nhân dân và du kích (ý 5, 6 đã chạm ở buổi 1, xen vào khi hợp). Xong chặng 1 thì sang chặng 2 theo hướng thien chọn (xem `roadmap.md`).
+- Còn lại của chặng 1 sau buổi 5: ý 7 tinh thần, 8 vũ khí và công nghệ, 9 sương mù chiến tranh, 10 chiến tranh nhân dân và du kích (ý 5, 6 đã chạm ở buổi 1, xen vào khi hợp). Xong chặng 1 thì sang chặng 2: đi sâu một chiến dịch từ đầu đến cuối (thien chọn 2026-11-12, xem `roadmap.md`).
 - Không xếp quá 2 buổi một ngày: hôm 2026-11-12 thien học 4 buổi chiến tranh cộng BA 2 và tự nói là không theo kịp.

@@ -82,9 +82,9 @@ Xong khi: thien xếp xong 10 ý lớn và học được vài ý đầu qua cá
 - [ ] Ý 3, địa hình và thời tiết (đã chạm ở buổi 1)
 - [ ] Ý 7 tinh thần, ý 8 vũ khí và công nghệ, ý 9 sương mù chiến tranh, ý 10 chiến tranh nhân dân và du kích (ý 5, 6 đã chạm ở buổi 1)
 
-### Chặng 2: Đi sâu (phác, thien chọn hướng)
+### Chặng 2: Đi sâu một chiến dịch (thien chọn hướng 1 ngày 2026-11-12)
 Bắt đầu khi: xong 10 ý ở chặng 1, khoảng 5 buổi nữa. Quyết định ở mốc 2026-12-13: đi sâu, giữ ở mức ôn, hay cho môn nghỉ. Bốn hướng, đều lấy từ mục "Mục tiêu" trong `war.md`:
-1. Đi sâu một chiến dịch từ đầu đến cuối (ví dụ Điện Biên Phủ): dàn binh bố trận, hậu cần, từng đợt đánh. Claude đề xuất hướng này vì đúng điều thien muốn nhất.
+1. Đi sâu một chiến dịch từ đầu đến cuối (ví dụ Điện Biên Phủ): dàn binh bố trận, hậu cần, từng đợt đánh. **thien đã chọn hướng này.** Chiến dịch cụ thể chốt khi gần xong chặng 1; ứng viên đầu là Điện Biên Phủ vì đã học buổi 3 và 4.
 2. Ngồi ghế người lãnh đạo: mỗi buổi một quyết định lớn có thật, cả Á lẫn Âu.
 3. So học thuyết Đông và Tây: Tôn Tử, Clausewitz, chiến tranh nhân dân, mỗi học thuyết thử trên một trận thật.
 4. Hiểu thời sự: dùng 10 ý để đọc các cuộc chiến đang diễn ra.
