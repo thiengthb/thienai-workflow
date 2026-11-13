@@ -25,11 +25,11 @@ html[data-board="on"] #board { display: flex; }
 .st-note { position: absolute; left: 8px; bottom: 8px; pointer-events: none; }
 .st-tl { padding: 8px 12px 12px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
 .st-row { display: flex; align-items: center; gap: 10px; }
-.st-play { width: 36px; padding: 0; flex: none; }
+.st-play { width: 44px; min-height: 44px; padding: 0; flex: none; }
 .st-keys { --fill: 0; flex: 1; display: flex; justify-content: space-between; position: relative; min-width: 0; }
 .st-keys::before, .st-keys::after { content: ""; position: absolute; left: 14px; right: 14px; top: 12px; height: 4px; border-radius: 99px; background: var(--soft); }
 .st-keys::after { right: auto; width: calc((100% - 28px) * var(--fill)); background: var(--accent); }
-.st-key { position: relative; z-index: 1; background: none; border: 0; padding: 4px 0 2px; min-width: 28px; min-height: 36px; display: grid; justify-items: center; gap: 3px;
+.st-key { position: relative; z-index: 1; background: none; border: 0; padding: 4px 0 2px; min-width: 40px; min-height: 44px; display: grid; justify-items: center; gap: 3px;
   font: 500 11px/1.1 var(--font); color: var(--muted); cursor: pointer; white-space: nowrap; }
 .st-key i { width: 12px; height: 12px; border-radius: 99px; background: var(--card); border: 2px solid var(--line); margin-top: 2px; }
 .st-key.done i { background: var(--accent); border-color: var(--accent); }

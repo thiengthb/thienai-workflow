@@ -65,6 +65,8 @@ async function elev(lat, lon) {
 const kmLat = 110.57, kmLon = 111.32 * Math.cos((S + N) / 2 * Math.PI / 180);
 const widthKm = (E - W) * kmLon, heightKm = (N - S) * kmLat;
 const ROWS = Math.round(COLS * heightKm / widthKm);
+// Lưới hỏng (ví dụ --cols thiếu số) thì dừng trước khi tải hay ghi đè file trận.
+if (![COLS, ROWS, Z].every(Number.isInteger) || COLS < 2 || ROWS < 2) { console.error(`Lưới không hợp lệ: cols ${COLS}, rows ${ROWS}, zoom ${Z}. Dùng số nguyên, cols từ 2 trở lên.`); process.exit(1); }
 const grid = new Float32Array(COLS * ROWS);
 // Lấy trung bình 3×3 điểm quanh mỗi ô lưới để bớt nhiễu của dữ liệu gốc.
 for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {

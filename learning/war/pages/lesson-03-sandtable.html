@@ -199,11 +199,11 @@ html[data-board="on"] #board { display: flex; }
 .st-note { position: absolute; left: 8px; bottom: 8px; pointer-events: none; }
 .st-tl { padding: 8px 12px 12px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
 .st-row { display: flex; align-items: center; gap: 10px; }
-.st-play { width: 36px; padding: 0; flex: none; }
+.st-play { width: 44px; min-height: 44px; padding: 0; flex: none; }
 .st-keys { --fill: 0; flex: 1; display: flex; justify-content: space-between; position: relative; min-width: 0; }
 .st-keys::before, .st-keys::after { content: ""; position: absolute; left: 14px; right: 14px; top: 12px; height: 4px; border-radius: 99px; background: var(--soft); }
 .st-keys::after { right: auto; width: calc((100% - 28px) * var(--fill)); background: var(--accent); }
-.st-key { position: relative; z-index: 1; background: none; border: 0; padding: 4px 0 2px; min-width: 28px; min-height: 36px; display: grid; justify-items: center; gap: 3px;
+.st-key { position: relative; z-index: 1; background: none; border: 0; padding: 4px 0 2px; min-width: 40px; min-height: 44px; display: grid; justify-items: center; gap: 3px;
   font: 500 11px/1.1 var(--font); color: var(--muted); cursor: pointer; white-space: nowrap; }
 .st-key i { width: 12px; height: 12px; border-radius: 99px; background: var(--card); border: 2px solid var(--line); margin-top: 2px; }
 .st-key.done i { background: var(--accent); border-color: var(--accent); }
@@ -807,7 +807,7 @@ html[data-board="on"] #board { display: flex; }
     function flatProj(x, z) { const W = flat.w, H = flat.h, s = Math.min(W / G.wk, H / G.hk) * 1.0 / Math.max(.4, cam.dist); const [tx, , tz] = cam.target; return [W / 2 + (x - tx) * s, H / 2 + (z - tz) * s]; }
     function drawFlat(S) {
       const { c, ctx } = flat, W = c.clientWidth, H = c.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
-      if (c.width !== W * dpr) { c.width = W * dpr; c.height = H * dpr; }
+      if (c.width !== W * dpr || c.height !== H * dpr) { c.width = W * dpr; c.height = H * dpr; }
       flat.w = W; flat.h = H; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.fillStyle = '#a9b68f'; ctx.fillRect(0, 0, W, H);
       const { t } = G, cw = G.wk / t.cols, ch = G.hk / t.rows, relMax = (t.max - t.min) / 1000 * G.ex;
       for (let r = 0; r < t.rows; r += 1) for (let cc = 0; cc < t.cols; cc += 1) {
@@ -819,7 +819,15 @@ html[data-board="on"] #board { display: flex; }
       }
       const path = (pts, color, w, dash) => { ctx.beginPath(); pts.map(G.xz).forEach(([x, z], i) => { const [px, pz] = flatProj(x, z); i ? ctx.lineTo(px, pz) : ctx.moveTo(px, pz); }); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.setLineDash(dash || []); ctx.stroke(); ctx.setLineDash([]); };
       b.features.forEach((f) => path(f.pts, COLORS[f.kind] || '#888', f.kind === 'airfield' ? 5 : f.kind === 'river' ? 3 : 2, f.kind === 'road' ? [6, 4] : null));
-      S.lines.forEach((l) => path(l.pts, l.kind === 'retreat' ? COLORS.retreat : (b.sides.vn || {}).color || '#b23a2a', l.kind === 'trench' ? 2 : 3, l.kind === 'trench' ? [4, 3] : null));
+      S.lines.forEach((l) => {
+        const color = l.kind === 'retreat' ? COLORS.retreat : (b.sides.vn || {}).color || '#b23a2a';
+        path(l.pts, color, l.kind === 'trench' ? 2 : 3, l.kind === 'trench' ? [4, 3] : null);
+        if (l.kind !== 'attack' && l.kind !== 'retreat') return;
+        const [a, e] = l.pts.slice(-2).map(G.xz).map(([x, z]) => flatProj(x, z)), ang = Math.atan2(e[1] - a[1], e[0] - a[0]);
+        ctx.beginPath(); ctx.moveTo(e[0], e[1]);
+        ctx.lineTo(e[0] - 10 * Math.cos(ang - .45), e[1] - 10 * Math.sin(ang - .45)); ctx.lineTo(e[0] - 10 * Math.cos(ang + .45), e[1] - 10 * Math.sin(ang + .45));
+        ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+      });
       b.units.forEach((u) => { if (!S.show.has(u.id)) return; const [x, z] = G.xz(u.at), [px, pz] = flatProj(x, z);
         ctx.globalAlpha = S.dim.has(u.id) ? .35 : 1; ctx.fillStyle = S.hit.has(u.id) ? COLORS.hit : S.lose.has(u.id) ? COLORS.lost : (b.sides[u.side] || {}).color || '#888';
         ctx.beginPath(); if (u.kind === 'gun') { ctx.moveTo(px, pz - 7); ctx.lineTo(px + 7, pz + 5); ctx.lineTo(px - 7, pz + 5); } else ctx.rect(px - 6, pz - 6, 12, 12); ctx.fill(); ctx.globalAlpha = 1; });
@@ -1019,6 +1027,8 @@ html[data-board="on"] #board { display: flex; }
     st.show(track, lock == null ? { at: 0 } : { at: +lock, upto: +lock });
   }
   new MutationObserver(sync).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+  // Đồng bộ ngay sau mỗi lần bấm (kể cả lúc phần tự lưu bấm lại liên tục), không đợi MutationObserver: nút mốc phải mở khóa trước lần bấm kế.
+  document.addEventListener('click', sync);
   sync();
 
   // Điện thoại: sa bàn nằm trên các bước, bấm xem thì cuộn lên cho thấy.

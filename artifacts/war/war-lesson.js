@@ -47,6 +47,8 @@
     st.show(track, lock == null ? { at: 0 } : { at: +lock, upto: +lock });
   }
   new MutationObserver(sync).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+  // Đồng bộ ngay sau mỗi lần bấm (kể cả lúc phần tự lưu bấm lại liên tục), không đợi MutationObserver: nút mốc phải mở khóa trước lần bấm kế.
+  document.addEventListener('click', sync);
   sync();
 
   // Điện thoại: sa bàn nằm trên các bước, bấm xem thì cuộn lên cho thấy.

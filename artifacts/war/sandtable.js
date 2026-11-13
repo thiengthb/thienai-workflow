@@ -170,7 +170,7 @@
     function flatProj(x, z) { const W = flat.w, H = flat.h, s = Math.min(W / G.wk, H / G.hk) * 1.0 / Math.max(.4, cam.dist); const [tx, , tz] = cam.target; return [W / 2 + (x - tx) * s, H / 2 + (z - tz) * s]; }
     function drawFlat(S) {
       const { c, ctx } = flat, W = c.clientWidth, H = c.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
-      if (c.width !== W * dpr) { c.width = W * dpr; c.height = H * dpr; }
+      if (c.width !== W * dpr || c.height !== H * dpr) { c.width = W * dpr; c.height = H * dpr; }
       flat.w = W; flat.h = H; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.fillStyle = '#a9b68f'; ctx.fillRect(0, 0, W, H);
       const { t } = G, cw = G.wk / t.cols, ch = G.hk / t.rows, relMax = (t.max - t.min) / 1000 * G.ex;
       for (let r = 0; r < t.rows; r += 1) for (let cc = 0; cc < t.cols; cc += 1) {
@@ -182,7 +182,15 @@
       }
       const path = (pts, color, w, dash) => { ctx.beginPath(); pts.map(G.xz).forEach(([x, z], i) => { const [px, pz] = flatProj(x, z); i ? ctx.lineTo(px, pz) : ctx.moveTo(px, pz); }); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.setLineDash(dash || []); ctx.stroke(); ctx.setLineDash([]); };
       b.features.forEach((f) => path(f.pts, COLORS[f.kind] || '#888', f.kind === 'airfield' ? 5 : f.kind === 'river' ? 3 : 2, f.kind === 'road' ? [6, 4] : null));
-      S.lines.forEach((l) => path(l.pts, l.kind === 'retreat' ? COLORS.retreat : (b.sides.vn || {}).color || '#b23a2a', l.kind === 'trench' ? 2 : 3, l.kind === 'trench' ? [4, 3] : null));
+      S.lines.forEach((l) => {
+        const color = l.kind === 'retreat' ? COLORS.retreat : (b.sides.vn || {}).color || '#b23a2a';
+        path(l.pts, color, l.kind === 'trench' ? 2 : 3, l.kind === 'trench' ? [4, 3] : null);
+        if (l.kind !== 'attack' && l.kind !== 'retreat') return;
+        const [a, e] = l.pts.slice(-2).map(G.xz).map(([x, z]) => flatProj(x, z)), ang = Math.atan2(e[1] - a[1], e[0] - a[0]);
+        ctx.beginPath(); ctx.moveTo(e[0], e[1]);
+        ctx.lineTo(e[0] - 10 * Math.cos(ang - .45), e[1] - 10 * Math.sin(ang - .45)); ctx.lineTo(e[0] - 10 * Math.cos(ang + .45), e[1] - 10 * Math.sin(ang + .45));
+        ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+      });
       b.units.forEach((u) => { if (!S.show.has(u.id)) return; const [x, z] = G.xz(u.at), [px, pz] = flatProj(x, z);
         ctx.globalAlpha = S.dim.has(u.id) ? .35 : 1; ctx.fillStyle = S.hit.has(u.id) ? COLORS.hit : S.lose.has(u.id) ? COLORS.lost : (b.sides[u.side] || {}).color || '#888';
         ctx.beginPath(); if (u.kind === 'gun') { ctx.moveTo(px, pz - 7); ctx.lineTo(px + 7, pz + 5); ctx.lineTo(px - 7, pz + 5); } else ctx.rect(px - 6, pz - 6, 12, 12); ctx.fill(); ctx.globalAlpha = 1; });
