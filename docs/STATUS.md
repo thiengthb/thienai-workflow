@@ -20,7 +20,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
 |---|---|---|---|
 | Cài dòng Settings mới cho từng tài khoản Claude | README, bước 1 | 2026-11-12 | thien tự làm, AI không kiểm được |
-| Bộ khung artifact: lõi chung + mẫu so sánh giao diện | `feat/artifact-kit-compare` | 2026-11-13 | PR #46: thien xem bản tổng quan mới (bản C của vòng 2, thêm thanh bước) rồi merge |
+| Bộ khung artifact: lõi chung + mẫu so sánh giao diện | `feat/artifact-kit-compare` | 2026-11-13 | PR #46: thien xem bản tổng quan mới (chia tab, thẻ repo kiểu dòng thời gian có thanh bước) rồi merge |
 
 ## Vừa xong
 - BA 2: học với Codex, rồi Claude làm lại trang theo góp ý về giao diện và luồng (PR #39)
