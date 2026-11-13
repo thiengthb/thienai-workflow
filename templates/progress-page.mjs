@@ -150,6 +150,96 @@ function planCard(p) {
 </article>`;
 }
 
+/** Top-level bullet lines (with their indented continuations) of the "Đang chờ thien" section; placeholders skipped. */
+export function waitingLines(lines) {
+  // A bullet that is only a <placeholder> is skipped; a bullet that is only a <https://...> link is a real item.
+  const out = [];
+  let keep = false;
+  for (const l of lines) {
+    if (/^\s*([-*]|\d+\.)\s+\S/.test(l) && !/^\s/.test(l)) { keep = !/^([-*]|\d+\.)\s+<(?![a-z][a-z0-9+.-]*:)[^<>]*>\s*$/i.test(l); if (keep) out.push(l); }
+    else if (keep && /^\s+\S/.test(l)) out.push(l);
+    else if (!l.trim()) keep = false;
+  }
+  return out;
+}
+
+/** The same items, one string each. */
+export const waitingItems = (lines) => waitingLines(lines).reduce((a, l) => {
+  if (/^\s/.test(l)) a[a.length - 1] += ' ' + l.trim(); else a.push(l.replace(/^\s*([-*]|\d+\.)\s+/, ''));
+  return a;
+}, []);
+
+/** Plain text of inline markdown, cut at a sentence end near `max` characters. */
+export function plain(md, max = 220) {
+  const t = md.replace(/`([^`]+)`/g, '$1').replace(/\*\*([^*]+)\*\*/g, '$1').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max);
+  const end = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf('; '));
+  return (end > max * 0.5 ? cut.slice(0, end + 1) : cut.replace(/\s+\S*$/, '') + '…');
+}
+
+/** Top-level list items of a section, continuation lines joined. */
+export const listItems = (lines) => lines.reduce((a, l) => {
+  const m = /^(?:[-*]|\d+\.)\s+(.*)$/.exec(l);
+  if (m) a.push(m[1]); else if (a.length && /^\s+\S/.test(l)) a[a.length - 1] += ' ' + l.trim();
+  return a;
+}, []);
+
+/** A plan as steps (its checkpoints) for the stepper; `cur` is the first unfinished step, -1 when all are done. */
+export function planSteps(p) {
+  const steps = p.checkpoints.map((c) => { const t = ticks(c.lines); return { label: plain(c.title.replace(/^\d+\.\s*/, ''), 40), done: t.total > 0 && t.done === t.total }; });
+  const wait = plain((p.where.find((l) => /Còn thiếu:/.test(l)) ?? '').replace(/^\s*[-*]\s*Còn thiếu:\s*/, ''), 90);
+  const cur = steps.findIndex((x) => !x.done);
+  return { title: plain(p.title, 70), link: p.linkBase, steps, cur, note: cur < 0 && wait ? 'Xong hết bước, ' + wait.charAt(0).toLowerCase() + wait.slice(1) : wait };
+}
+
+/** A STATUS table row of an old free-form plan ("U0, U1 / U0–U8") as steps, when its ticks column names a range. */
+export function statusSteps(p) {
+  const t = plain(p.ticks, 80), m = /\/\s*([A-Z]+)(\d+)\s*[–-]\s*(?:\1)?(\d+)/.exec(t);
+  const done = new Set(t.split('/')[0].match(/[A-Z]+\d+/g) || []);
+  const steps = m && +m[3] >= +m[2] && +m[3] - +m[2] < 30
+    ? Array.from({ length: +m[3] - +m[2] + 1 }, (_, k) => { const id = m[1] + (+m[2] + k); return { label: id, done: done.has(id) }; }) : [];
+  return { title: plain(p.title, 70), steps, cur: steps.findIndex((x) => !x.done), note: plain(p.at, 90) };
+}
+
+/** Everything the overview needs about one repo. */
+export function repoData(dir, repo) {
+  const id = repoId(repo), name = repo.split('/')[1];
+  const statusFile = join(dir, 'docs/STATUS.md');
+  if (!existsSync(statusFile)) return { id, name, repo, noStatus: true, tasks: [], plans: [], steps: [], done: [], next: [], blocked: [], open: 0, where: '', head: '', status: 'running', upd: '' };
+  const md = readFileSync(statusFile, 'utf8');
+  const st = sections(md);
+  const pick = (n) => st.sections.find((x) => x.title.startsWith(n));
+  const base = `${repo}:docs/STATUS.md`;
+  const whereLines = pick('Đang ở đâu')?.lines ?? [];
+  const para = [];
+  for (const l of whereLines) { if (!l.trim()) { if (para.length) break; continue; } para.push(l.trim()); }
+  const plansDir = join(dir, 'docs/plans');
+  const plans = (existsSync(plansDir) ? readdirSync(plansDir).filter((f) => f.endsWith('.md')).sort().reverse() : [])
+    .map((f) => [f, readFileSync(join(plansDir, f), 'utf8')]).filter(([, m]) => /^## Checkpoint/m.test(m))
+    .map(([f, m]) => parsePlan(m, `${repo}:docs/plans/${f}`)).filter((p) => !/^(xong|bỏ)/.test(p.meta['Trạng thái'] || ''));
+  // Plans written before the template have no checkpoints: fall back to the STATUS table row.
+  const statusPlans = tableRows(pick('Kế hoạch đang chạy')?.lines ?? []).map((r) => ({ title: r[0], at: r[1] || '', ticks: r[2] || '' }));
+  const flat = plain(para.join(' '), 2000);
+  let head = (flat.match(/^.*?[.!?](\s|$)/) || [flat])[0].trim();
+  if (head.length > 110) head = plain(head.split(/[:(]/)[0].trim(), 110).replace(/[,;]$/, '') + '.';
+  const list = (name, max) => listItems(pick(name)?.lines ?? []).map((t) => plain(t, max));
+  const tasks = waitingItems(pick('Đang chờ thien')?.lines ?? []);
+  return {
+    head, status: /tạm dừng|đang dừng/i.test(flat) ? 'paused' : tasks.length ? 'waiting' : 'running',
+    done: list('Vừa xong', 120), next: list('Việc tiếp theo', 140),
+    blocked: list('Đang vướng', 140).filter((t) => !/^Không( có)?[.,]/.test(t)),
+    steps: plans.length ? plans.map(planSteps) : statusPlans.map(statusSteps),
+    id, name, repo, base,
+    upd: /Cập nhật lần cuối:\s*([0-9-]+)/.exec(md)?.[1] ?? '',
+    where: plain(para.join(' ')),
+    tasks,
+    open: tableRows(pick('Việc dở')?.lines ?? []).length,
+    plans: plans.length ? plans.map((p) => ({ title: p.title, link: p.linkBase, all: p.all, at: plain((p.where.find((l) => /Đang ở:/.test(l)) ?? '').replace(/^\s*[-*]\s*Đang ở:\s*/, ''), 90) }))
+      : statusPlans.map((p) => ({ title: plain(p.title, 80), at: plain(p.at, 90), all: null, note: plain(p.ticks, 40) })),
+  };
+}
+
 function repoSection(dir, repo) {
   const statusFile = join(dir, 'docs/STATUS.md');
   const status = existsSync(statusFile) ? sections(readFileSync(statusFile, 'utf8')) : null;
@@ -163,21 +253,10 @@ function repoSection(dir, repo) {
   const legacy = files.length - plans.length;
   const updated = status ? (status.intro.find((l) => /^Cập nhật/.test(l)) ?? '').split('·').slice(0, 2).join('·').trim() : '';
   const running = plans.filter((p) => !/^(xong|bỏ)/.test(p.meta['Trạng thái'] || ''));
-  const waiting = pick('Đang chờ thien');
-  const waitingItems = [];
-  let keep = false;
-  for (const l of waiting?.lines ?? []) {
-    if (/^\s*([-*]|\d+\.)\s+\S/.test(l) && !/^\s/.test(l)) { keep = !/<.*>/.test(l); if (keep) waitingItems.push(l); }
-    else if (keep && /^\s+\S/.test(l)) waitingItems.push(l);
-    else if (!l.trim()) keep = false;
-  }
   const unfinished = pick('Việc dở');
-  const id = repoId(repo);
-  return `<section class="repo" id="${esc(id)}">
-  <h2><a href="https://github.com/${esc(repo)}">${esc(repo.split('/')[1])}</a></h2>
-  ${updated ? `<p class="meta">${inline(updated, base('docs/STATUS.md'))}</p>` : ''}
+  return `<section class="repo">
+  <p class="meta"><a href="https://github.com/${esc(repo)}">${esc(repo)}</a>${updated ? ` · ${inline(updated, base('docs/STATUS.md'))}` : ''}</p>
   ${status ? `<div class="now-box"><h3 class="label">Đang ở đâu</h3>${blocks(pick('Đang ở đâu')?.lines ?? [], base('docs/STATUS.md'))}</div>` : '<p class="muted">Repo này chưa có <code>docs/STATUS.md</code>.</p>'}
-  ${waitingItems.length ? `<div class="ask"><h3 class="label">Cần thien làm</h3>${blocks(waitingItems, base('docs/STATUS.md'))}</div>` : ''}
   ${unfinished && tableRows(unfinished.lines).length ? `<div><h3 class="label">Việc dở</h3>${blocks(unfinished.lines.filter((l) => /^\s*\|/.test(l)), base('docs/STATUS.md'))}</div>` : ''}
   <h3 class="label">Kế hoạch đang chạy</h3>
   ${running.length ? running.map(planCard).join('\n') : '<p class="muted">Không có kế hoạch nào đang chạy.</p>'}
@@ -190,9 +269,89 @@ function repoSection(dir, repo) {
  *  "-" becomes "--", any other character becomes "-<hex code>-" ("/" is "-2f-"). */
 export const repoId = (repo) => repo.toLowerCase().replace(/[^a-z0-9]/g, (c) => (c === '-' ? '--' : `-${c.charCodeAt(0).toString(16)}-`));
 
-function overview(repos) {
-  if (repos.length < 2) return '';
-  return `<nav class="overview" aria-label="Các repo">${repos.map((r) => `<a href="#${esc(r.id)}" class="tile${r.missing ? ' missing' : ''}"><strong>${esc(r.name)}</strong>${r.upd ? `<span>Cập nhật ${esc(r.upd)}</span>` : ''}<span>${esc(r.line)}</span></a>`).join('')}</nav>`;
+const ICONS = {
+  check: '<path d="m5 12.5 4.5 4.5L19 7"/>', dot: '<circle cx="12" cy="12" r="4"/>', next: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  warn: '<path d="M12 4 2.5 20h19L12 4z"/><path d="M12 10v4M12 17.5v.5"/>', chev: '<path d="m6 9 6 6 6-6"/>',
+};
+const icon = (n, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]}</svg>`;
+const shortDate = (d) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || ''); return m ? `${+m[3]}/${+m[2]}` : d || ''; };
+/** Stable key for a task, so a tick survives a republish while the task text is unchanged. */
+export const taskKey = (repo, text) => { let h = 5381; for (const c of repo + '|' + text) h = ((h * 33) ^ c.codePointAt(0)) >>> 0; return 't' + h.toString(36); };
+
+/** Overview body, sized for the claude.ai artifact panel: on a wide panel two columns (tasks waiting for thien,
+ *  grouped by repo and tickable | one card per repo, detail folded); one column when narrow. Every block uses the
+ *  same card, row and type sizes so the two columns line up. */
+export function overviewBody(repos, details) {
+  const waiting = repos.filter((r) => r.tasks.length);
+  const total = waiting.reduce((a, r) => a + r.tasks.length, 0);
+  const running = repos.reduce((a, r) => a + (r.plans ? r.plans.length : 0), 0);
+  const lead = `<p class="lead">${total ? `<b>${total} việc</b> đang chờ bạn ở ${waiting.length} repo` : 'Không có việc nào đang chờ bạn'} · ${running} kế hoạch đang chạy.</p>`;
+  // A task shows in the overview tab and in its repo's tab: same data-key (one tick), different element ids.
+  const task = (r, t, sfx) => {
+    const key = taskKey(r.repo, t), id = key + sfx;
+    return `<li class="task" data-key="${key}"><label class="tick"><input type="checkbox" id="${id}" disabled aria-labelledby="${id}-t"><span class="box" aria-hidden="true"></span></label><p id="${id}-t">${inline(t, r.base)}</p></li>`;
+  };
+  const group = (r, sfx) => `<div class="grp"><div class="grp-head"><b>${esc(r.name)}</b><span>${r.tasks.length} việc${r.upd ? ` · từ ${esc(shortDate(r.upd))}` : ''}</span></div><ul class="tasks">${r.tasks.map((t) => task(r, t, sfx)).join('')}</ul></div>`;
+  // Repo card: a short timeline (Vừa xong · Bây giờ · Vướng · Tiếp theo); "Bây giờ" carries each running plan as a
+  // row of checkpoint steps, the current one ringed. The full STATUS stays folded under "Xem chi tiết".
+  const ST = { running: ['Đang chạy', 'run'], waiting: ['Chờ bạn', 'wait'], paused: ['Tạm dừng', 'pause'] };
+  const badge = (r) => `<span class="st ${ST[r.status][1]}"><i aria-hidden="true"></i>${ST[r.status][0]}${r.status === 'waiting' ? ` ${r.tasks.length} việc` : ''}</span>`;
+  const head = (r, sub) => `<div class="rc-head"><b>${esc(r.name)}</b>${sub}<span class="upd">${esc(r.missing ? 'chưa đọc được' : shortDate(r.upd))}</span></div>`;
+  const stepper = (p) => {
+    const d = p.steps.filter((x) => x.done).length, n = p.steps.length, short = p.steps.every((x) => x.label.length <= 4);
+    const count = d === n ? `${icon('check', 'ok')}xong` : `${d}/${n}`;
+    const dots = p.steps.map((x, k) => `<li class="${x.done ? 'd' : k === p.cur ? 'c' : ''}" title="${esc(x.label)}"><span></span>${short ? `<em>${esc(x.label)}</em>` : ''}</li>`).join('');
+    const at = p.cur >= 0 && !short ? `<b>Bước ${p.cur + 1}:</b> ${esc(p.steps[p.cur].label)}${p.note ? ' · ' : ''}` : '';
+    return `<div class="pst"><div class="pst-top"><span>${esc(p.title)}</span><span class="pn">${count}</span></div>${n ? `<ol class="steps" aria-label="${d} trên ${n} bước đã xong">${dots}</ol>` : ''}${at || p.note ? `<p class="note">${at}${esc(p.note || '')}</p>` : ''}</div>`;
+  };
+  const node = (cls, ic, label, body) => `<li class="${cls}"><span class="node" aria-hidden="true">${icon(ic)}</span><div><span class="k">${label}</span>${body}</div></li>`;
+  const timeline = (r) => {
+    const rows = [];
+    if (r.done[0]) rows.push(node('done', 'check', 'Vừa xong', `<p>${esc(r.done[0])}</p>`));
+    rows.push(node('now', 'dot', 'Bây giờ', `<p class="hl">${esc(r.head || r.where)}</p>${r.steps.map(stepper).join('')}`));
+    if (r.blocked[0]) rows.push(node('warn', 'warn', 'Vướng', `<p>${esc(r.blocked[0])}</p>`));
+    if (r.next[0]) rows.push(node('next', 'next', 'Tiếp theo', `<p>${esc(r.next[0])}</p>`));
+    return `<ol class="tl">${rows.join('')}</ol>`;
+  };
+  const tickNote = '<p class="muted small tick-note">Tick là bạn báo đã làm. Claude kiểm lại và bỏ việc khỏi STATUS ở lần cập nhật sau.</p>';
+  const plain1 = (r) => r.missing || r.noStatus;
+  const reason = (r) => `<p class="rc-where">${esc(r.missing ? r.why : 'Repo này chưa có docs/STATUS.md.')}</p>`;
+  // Overview tab: one compact row per repo (name, status, "Bây giờ", plan steps); the row opens that repo's tab.
+  const miniSteps = (p) => {
+    const d = p.steps.filter((x) => x.done).length, n = p.steps.length;
+    return `<div class="mini"><span class="mini-t">${esc(p.title)}</span>${n ? `<ol class="steps sm" aria-label="${d} trên ${n} bước đã xong">${p.steps.map((x, k) => `<li class="${x.done ? 'd' : k === p.cur ? 'c' : ''}"><span></span></li>`).join('')}</ol>` : '<span></span>'}<span class="pn">${n && d === n ? `${icon('check', 'ok')}xong` : n ? `${d}/${n}` : ''}</span></div>`;
+  };
+  const row = (r) => `<a class="rc rrow" href="#${esc(r.id)}" data-tab="${esc(r.id)}">${head(r, plain1(r) ? '' : badge(r))}${plain1(r) ? reason(r) : `<p class="hl">${esc(r.head || r.where)}</p>${r.steps.length ? `<div class="minis">${r.steps.map(miniSteps).join('')}</div>` : ''}`}<span class="open">Mở tab ${esc(r.name)}${icon('next')}</span></a>`;
+  const allPanel = `${lead}<div class="cols"><section class="col" aria-labelledby="h-wait"><h2 class="label" id="h-wait">Đang chờ bạn</h2>
+${total ? `${waiting.map((r) => group(r, '')).join('')}${tickNote}` : '<p class="card empty muted">Không có việc nào đang chờ bạn.</p>'}</section>
+<section class="col" aria-labelledby="h-repos"><h2 class="label" id="h-repos">Các repo</h2>${repos.map(row).join('')}</section></div>`;
+  // Repo tab: the full timeline and this repo's waiting tasks | the whole STATUS, already open.
+  const repoPanel = (r) => plain1(r) ? `<div class="rc rc-static">${head(r, '')}${reason(r)}</div>`
+    : `<div class="cols"><div class="col"><h2 class="label">Tiến độ</h2><div class="rc rc-static">${head(r, badge(r))}${timeline(r)}</div>
+${r.tasks.length ? `<h2 class="label gap">Đang chờ bạn</h2>${group(r, '-r')}${tickNote}` : ''}</div>
+<div class="col"><h2 class="label">Chi tiết</h2><div class="rc rc-full">${details[r.id] || ''}</div></div></div>`;
+  const tab = (id, label, n, on) => `<button type="button" role="tab" id="tab-${esc(id)}" aria-controls="p-${esc(id)}" aria-selected="${on}" tabindex="${on ? 0 : -1}" data-tab="${esc(id)}">${esc(label)}${n ? `<span class="cnt" aria-label="${n} việc chờ bạn">${n}</span>` : ''}</button>`;
+  const panel = (id, html, on) => `<section class="panel" role="tabpanel" id="p-${esc(id)}" aria-labelledby="tab-${esc(id)}"${on ? '' : ' hidden'}>${html}</section>`;
+  return `<nav class="tabs" role="tablist" aria-label="Xem theo repo">${tab('all', 'Tổng quan', 0, true)}${repos.map((r) => tab(r.id, r.name, r.tasks.length, false)).join('')}</nav>
+${panel('all', allPanel, true)}${repos.map((r) => panel(r.id, repoPanel(r), false)).join('')}
+<script>
+/* Tabs: the hash names the open repo (#<repo id>), so a link or a reload lands on the same tab. */
+(() => {
+  const tabs = [...document.querySelectorAll('[role=tab]')], ids = tabs.map((t) => t.dataset.tab);
+  const show = (id, focus) => {
+    if (!ids.includes(id)) id = 'all';
+    for (const t of tabs) { const on = t.dataset.tab === id; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; document.getElementById('p-' + t.dataset.tab).hidden = !on; if (on && focus) t.focus(); }
+    try { history.replaceState(null, '', id === 'all' ? location.pathname + location.search : '#' + id); } catch (e) { /* sandboxed frame: the tab still switches */ }
+    window.scrollTo(0, 0);
+  };
+  tabs.forEach((t, k) => {
+    t.addEventListener('click', () => show(t.dataset.tab));
+    t.addEventListener('keydown', (e) => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (d) { e.preventDefault(); show(ids[(k + d + ids.length) % ids.length], true); } });
+  });
+  document.querySelectorAll('a.rrow').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); show(a.dataset.tab); }));
+  show(location.hash.slice(1));
+})();
+</script>`;
 }
 
 function roadmap(file, linkBase) {
@@ -220,7 +379,17 @@ function roadmap(file, linkBase) {
   return { title: doc.title, html: out.join('\n') };
 }
 
-export function page(title, body, stamp) {
+// The shared kit lives in artifacts/kit/. When this script runs on its own (copied elsewhere), fall back to the bare tokens.
+const KIT_FALLBACK_CSS = `:root{--bg:#faf8f3;--card:#fff;--soft:#f3f1ec;--line:#e7e3da;--ink:#1b1b1a;--muted:#6b6862;--accent:#308e84;--accent-soft:#e3f1ef;--accent-ink:#1f6b63;--good:#2f8a57;--good-soft:#e6f3eb;--bad:#c2410c;--bad-soft:#fdeee6;--font:"Onest",system-ui,sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--card:#1f1f1d;--soft:#262523;--line:#34322e;--ink:#ecebe7;--muted:#a19e97;--accent:#4fb3a6;--accent-soft:#1c3330;--accent-ink:#8fd9c9;--good:#4fb07a;--good-soft:#1c3125;--bad:#f0763f;--bad-soft:#3b2219;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161615;--card:#1f1f1d;--soft:#262523;--line:#34322e;--ink:#ecebe7;--muted:#a19e97;--accent:#4fb3a6;--accent-soft:#1c3330;--accent-ink:#8fd9c9;--good:#4fb07a;--good-soft:#1c3125;--bad:#f0763f;--bad-soft:#3b2219;color-scheme:dark}
+.chip{font:600 12px/1 var(--font);padding:4px 8px;border-radius:8px;background:var(--soft);color:var(--muted)}.chip.accent{background:var(--accent-soft);color:var(--accent-ink)}.label{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}`;
+const kitFile = (f) => {
+  const p = join(dirname(fileURLToPath(import.meta.url)), '../artifacts/kit', f);
+  return existsSync(p) ? readFileSync(p, 'utf8') : f.endsWith('.css') ? KIT_FALLBACK_CSS : '';
+};
+
+export function page(title, body, stamp, opts = {}) {
   return `<!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -229,48 +398,151 @@ export function page(title, body, stamp) {
 <title>${esc(title)}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>${kitFile('kit.css')}</style>
 <style>
-:root {
-  /* One column on phones, wider column on laptops; state shown by pills and bars, not decoration. */
-  --bg: #f7f7f5; --card: #ffffff; --ink: #18181b; --muted: #6b6b70; --line: #e4e4e0;
-  --ok: #15803d; --ok-soft: #e7f5ec; --wait: #b45309; --wait-soft: #fdf3e2; --err: #b91c1c;
-  --font: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #121214; --card: #1b1b1e; --ink: #ededee; --muted: #a0a0a6; --line: #2c2c31;
-  --ok: #4ade80; --ok-soft: #173322; --wait: #fbbf24; --wait-soft: #33280f; --err: #f87171; color-scheme: dark; } }
-:root[data-theme="dark"] {
-  --bg: #121214; --card: #1b1b1e; --ink: #ededee; --muted: #a0a0a6; --line: #2c2c31;
-  --ok: #4ade80; --ok-soft: #173322; --wait: #fbbf24; --wait-soft: #33280f; --err: #f87171; color-scheme: dark; }
+/* Overview: what waits for thien first (cards), then one row per repo with detail folded; one column on phones.
+   Colours come from the shared kit (artifacts/kit/kit.css). */
+:root { --r: 8px; --ok: var(--good); --ok-soft: var(--good-soft); --err: var(--bad); }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--font); }
-main { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; display: grid; gap: 20px; }
-h1 { font-size: 26px; line-height: 1.25; margin: 0; text-wrap: balance; }
+.lead { margin: 0; color: var(--muted); font-size: 14.5px; } .lead b { color: var(--ink); font-weight: 600; }
+.small, .muted.small { font-size: 12.5px; }
+main > header { display: grid; gap: 2px; }
+main > header .stamp { font-size: 13px; margin: 0; }
+.cols { display: grid; gap: 20px; align-items: start; }
+@media (min-width: 880px) { .cols { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); } }
+.col { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.col > .label { margin: 0; }
+.grp, .rc { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+.grp-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.grp-head span { color: var(--muted); font-size: 12.5px; }
+.tasks { list-style: none; margin: 0; padding: 0; }
+.task { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px 14px; }
+.task + .task { border-top: 1px solid var(--line); }
+.task p { margin: 0; font-size: 14.5px; line-height: 1.5; overflow-wrap: break-word; }
+.task code { font-size: .86em; white-space: normal; overflow-wrap: anywhere; }
+.tick { position: relative; width: 22px; height: 22px; margin-top: 0; cursor: pointer; }
+.tick input { position: absolute; inset: -10px; opacity: 0; cursor: pointer; margin: 0; }
+.tick input:disabled { cursor: progress; }
+.tick .box { pointer-events: none; position: absolute; inset: 1px; border: 2px solid var(--muted); border-radius: 5px; background: var(--card); }
+.tick input:focus-visible + .box { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tick input:checked + .box { background: var(--accent); border-color: var(--accent); }
+.tick input:checked + .box::after { content: ""; position: absolute; left: 5px; top: 1px; width: 6px; height: 11px; border: solid #fff; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); }
+.task.done p { color: var(--muted); text-decoration: line-through; }
+details.rc { padding: 0; }
+details.rc + details.rc { margin-top: 0; }
+.rc-static { display: grid; gap: 8px; padding: 12px 14px; }
+details.rc > summary { display: grid; gap: 10px; padding: 12px 14px 0; min-height: 0; font-weight: 400; align-items: start; }
+details.rc > summary::before { content: none; }
+.rc-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 15px; }
+.rc-head b { font-weight: 600; }
+.rc-head .upd { margin-left: auto; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.rc-where { margin: 0; font-size: 14px; color: var(--muted); }
+.st { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 500; padding: 2px 8px; border-radius: var(--r); background: var(--soft); color: var(--muted); }
+.st i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.st.run { color: var(--good); background: var(--good-soft); }
+.st.wait { color: var(--accent-ink); background: var(--accent-soft); }
+.ic { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* Timeline */
+.tl { list-style: none; margin: 0; padding: 0; display: grid; }
+.tl > li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; position: relative; padding-bottom: 12px; }
+.tl > li:last-child { padding-bottom: 2px; }
+.tl > li::before { content: ""; position: absolute; left: 10px; top: 24px; bottom: 2px; width: 2px; background: var(--line); }
+.tl > li:last-child::before { content: none; }
+.tl .node { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--soft); color: var(--muted); }
+.tl .node .ic { width: 13px; height: 13px; stroke-width: 2.5; }
+.tl li.now .node { background: var(--accent); color: #fff; } .tl li.now .node .ic { fill: currentColor; }
+.tl li.warn .node { background: var(--bad-soft); color: var(--bad); }
+.tl li.next .node { background: var(--accent-soft); color: var(--accent-ink); }
+.tl .k { display: block; font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .02em; line-height: 22px; }
+.tl li.warn .k { color: var(--bad); }
+.tl li > div { min-width: 0; display: grid; gap: 8px; align-content: start; }
+.tl li > div > .k { margin-bottom: -6px; }
+.tl p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+.tl li.done p { color: var(--muted); }
+.tl .hl { font-size: 14.5px; font-weight: 600; }
+/* Plan steps inside "Bây giờ" */
+.pst { display: grid; gap: 6px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r); }
+.pst-top { display: flex; justify-content: space-between; gap: 8px; font-size: 13.5px; }
+.pn { display: inline-flex; align-items: center; gap: 3px; flex: none; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.pn .ok { width: 14px; height: 14px; color: var(--good); }
+.steps { list-style: none; margin: 0; padding: 0; display: flex; }
+.steps li { flex: 1; position: relative; display: grid; justify-items: center; gap: 4px; min-width: 0; }
+.steps li::before { content: ""; position: absolute; top: 6px; left: -50%; width: 100%; height: 2px; background: var(--line); }
+.steps li:first-child::before { content: none; }
+.steps li.d::before, .steps li.c::before { background: var(--accent); }
+.steps li span { position: relative; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--line); background: var(--card); }
+.steps li.d span { background: var(--accent); border-color: var(--accent); }
+.steps li.c span { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.steps em { font-style: normal; font-size: 11.5px; color: var(--muted); line-height: 1.3; }
+.steps li.c em { color: var(--ink); font-weight: 600; }
+.pst .note { font-size: 12.5px; color: var(--muted); } .pst .note b { color: var(--ink); font-weight: 600; }
+/* Footer button */
+.more { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 -14px; padding: 9px 14px; border-top: 1px solid var(--line); font-size: 13px; font-weight: 500; color: var(--muted); }
+details.rc > summary:hover .more { color: var(--ink); background: var(--soft); border-radius: 0 0 var(--r) var(--r); }
+details.rc[open] > summary:hover .more { border-radius: 0; }
+.more .chev { width: 15px; height: 15px; transition: transform .15s; }
+details.rc[open] .more .chev { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .more .chev { transition: none; } }
+/* Tabs */
+.tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--line); margin: 0 -2px; padding: 0 2px; scrollbar-width: none; }
+.tabs button { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 12px; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; color: var(--muted); font: 500 14px/1 var(--font); cursor: pointer; border-radius: var(--r) var(--r) 0 0; }
+.tabs button:hover { color: var(--ink); background: var(--soft); }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+.tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.tabs .cnt { min-width: 20px; padding: 1px 6px; border-radius: var(--r); background: var(--accent-soft); color: var(--accent-ink); font-size: 12px; font-weight: 600; text-align: center; }
+.panel { display: grid; gap: 16px; }
+.panel[hidden] { display: none; }
+/* Overview rows */
+a.rrow { display: grid; gap: 8px; padding: 12px 14px 0; color: inherit; text-decoration: none; overflow: hidden; }
+a.rrow .hl { margin: 0; font-size: 14.5px; font-weight: 600; line-height: 1.5; }
+a.rrow:hover .open { color: var(--ink); background: var(--soft); }
+a.rrow:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.minis { display: grid; gap: 6px; }
+.mini { display: grid; grid-template-columns: minmax(0, 1fr) minmax(90px, 160px) 44px; gap: 10px; align-items: center; font-size: 13px; }
+.mini-t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--muted); }
+.mini .pn { justify-content: flex-end; }
+.steps.sm li::before { top: 4px; } .steps.sm li span { width: 10px; height: 10px; border-width: 2px; }
+.steps.sm li.c span { box-shadow: 0 0 0 2px var(--accent-soft); }
+.open { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 -14px; padding: 9px 14px; border-top: 1px solid var(--line); font-size: 13px; font-weight: 500; color: var(--muted); }
+.open .ic { width: 15px; height: 15px; }
+.rc-full { padding: 0 14px 14px; }
+.rc-full .repo { border: 0; padding: 10px 0 0; background: transparent; gap: 12px; }
+.rc-full p, .rc-full li, .rc-full td, .rc-full th { font-size: 13.5px; }
+.rc-full .now-box p, .rc-full .now-box li { font-size: 14px; }
+.rc-full .plan > .progress { display: none; }
+.rc-full details summary { min-height: 36px; font-size: 13.5px; }
+.col > .label.gap { margin-top: 8px; }
+.rc-detail { padding: 4px 14px 14px; border-top: 1px solid var(--line); font-size: 14px; }
+details.rc[open] .more { border-bottom: 0; }
+.rc-detail .repo { border: 0; padding: 10px 0 0; background: transparent; gap: 12px; }
+.empty { padding: 14px; margin: 0; }
+main { max-width: 1180px; margin: 0 auto; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 16px; }
+h1 { font-size: 24px; line-height: 1.25; margin: 0; text-wrap: balance; }
 h2 { font-size: 20px; margin: 0; } h2 a { color: inherit; text-decoration: none; }
 h3, h4 { font-size: 17px; margin: 0; text-wrap: balance; }
 .label { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 6px; }
 p { margin: 0 0 8px; } a { color: inherit; text-underline-offset: 3px; }
 a:focus-visible, summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 6px; }
-code { font-size: .9em; background: var(--line); padding: 1px 5px; border-radius: 5px; overflow-wrap: anywhere; }
+code { font-size: .9em; background: var(--line); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
 .stamp, .muted, .meta { color: var(--muted); font-size: 14px; }
-.repo, .subject { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: grid; gap: 14px; }
+.repo, .subject { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: grid; gap: 14px; }
 .now-box p, .now-box li { font-size: 16px; }
-.ask { background: var(--wait-soft); border-radius: 12px; padding: 12px 14px; }
+.ask { background: var(--wait-soft); border-radius: var(--r); padding: 12px 14px; }
 .ask .label { color: var(--wait); }
 .plan { border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 8px; }
 .plan header { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
 .progress { display: flex; align-items: center; gap: 10px; }
 .bar { flex: 1; height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
-.bar span { display: block; height: 100%; background: var(--ok); border-radius: 99px; }
+.bar span { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
 .count, .ck-count { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
-.pill { font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 99px; white-space: nowrap; }
+.pill { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: var(--r); white-space: nowrap; }
 .pill.state { background: var(--line); }
 .pill.now { background: var(--ink); color: var(--card); }
 .pill.ok { background: var(--ok-soft); color: var(--ok); }
-details { border: 1px solid var(--line); border-radius: 12px; padding: 0 12px; }
+details { border: 1px solid var(--line); border-radius: var(--r); padding: 0 12px; }
 details + details { margin-top: 8px; }
 summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 8px; font-weight: 600; list-style: none; }
 summary::-webkit-details-marker { display: none; }
@@ -282,7 +554,7 @@ details > :last-child { margin-bottom: 12px; }
 ul, ol { margin: 0 0 8px; padding-left: 20px; }
 ul.checks { list-style: none; padding: 0; display: grid; gap: 6px; }
 li.check { display: flex; gap: 10px; align-items: flex-start; }
-.box { flex: none; width: 20px; height: 20px; margin-top: 2px; border: 1.5px solid var(--muted); border-radius: 6px; display: grid; place-items: center; font-size: 13px; font-weight: 700; }
+.box { flex: none; width: 20px; height: 20px; margin-top: 2px; border: 1.5px solid var(--muted); border-radius: 5px; display: grid; place-items: center; font-size: 13px; font-weight: 700; }
 li.done .box { background: var(--ok); border-color: var(--ok); color: var(--card); }
 li.done > span:last-child { color: var(--muted); }
 .log.errors summary { color: var(--err); }
@@ -291,16 +563,49 @@ table { border-collapse: collapse; width: 100%; font-size: 14px; }
 th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-bottom: 1px solid var(--line); }
 th { color: var(--muted); font-weight: 600; }
 .overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
-.tile { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 4px; text-decoration: none; }
+.tile { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; display: grid; gap: 4px; text-decoration: none; }
 .tile span { color: var(--muted); font-size: 14px; }
 .tile.missing { border-style: dashed; }
+.small, .muted.small { font-size: 12.5px; }
+/* Folded repo detail: same sizes as the cards; the card already shows the plan bars. */
+.rc-detail .plan > .progress { display: none; }
+.rc-detail p, .rc-detail li, .rc-detail td, .rc-detail th { font-size: 13.5px; }
+.rc-detail .meta { font-size: 12.5px; }
+.rc-detail h4 { font-size: 14.5px; }
+.rc-detail .plan { padding-top: 10px; gap: 6px; }
+.rc-detail details summary { min-height: 36px; font-size: 13.5px; }
+.rc-detail .label { margin: 4px 0 2px; }
 </style>
 </head>
 <body>
 <main>
-<header><h1>${esc(title)}</h1><p class="stamp">Dữ liệu lấy từ repo lúc ${esc(stamp)}. Trang không tự cập nhật: AI đăng lại sau mỗi phiên có sửa tiến độ.</p></header>
+<header><h1>${esc(title)}</h1><p class="stamp">Lấy từ repo lúc ${esc(stamp)}. Trang không tự cập nhật: Claude đăng lại sau mỗi phiên có sửa tiến độ.</p></header>
 ${body}
 </main>
+${opts.ticks ? `<script>${kitFile('kit.js')}</script>
+<script>
+/* Ticks: thien marks a task done; saved on this device and in the page's db (ticks/overview) for Claude to read. */
+(async () => {
+  if (!window.Kit) { document.querySelectorAll('.task input').forEach((b) => { b.disabled = false; }); return; }
+  const st = Kit.store('overview-ticks', 'ticks/overview');
+  const cards = [...document.querySelectorAll('.task')];
+  const S = (await st.load()) || { done: {} };
+  S.done = S.done || {};
+  const paint = (c) => c.classList.toggle('done', !!S.done[c.dataset.key]);
+  for (const c of cards) {
+    const box = c.querySelector('input');
+    box.checked = !!S.done[c.dataset.key]; paint(c);
+    box.disabled = false;   // enabled only after the saved ticks are in, so a click can't be lost or overwritten
+    box.addEventListener('change', () => {
+      if (box.checked) S.done[c.dataset.key] = { at: new Date().toISOString(), text: c.querySelector('p').textContent.slice(0, 300) };
+      else delete S.done[c.dataset.key];
+      for (const o of cards) if (o.dataset.key === c.dataset.key) { o.querySelector('input').checked = box.checked; paint(o); }
+      st.save(S);
+      Kit.toast(box.checked ? 'Đã đánh dấu. Claude kiểm lại ở lần cập nhật sau.' : 'Đã bỏ đánh dấu.');
+    });
+  }
+})();
+</script>` : ''}
 </body>
 </html>
 `;
@@ -327,19 +632,17 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     const r = roadmap(file, linkBase);
     process.stdout.write(page(title, r.html, stampNow()));
   } else {
+    const details = {};
     const parsed = repos.map((a) => {
       if (a.startsWith('missing=')) {
         const [repo, ...why] = a.slice(8).split(':');
-        const id = repoId(repo), name = repo.split('/')[1];
-        return { id, name, missing: true, line: 'Chưa đọc được', html: `<section class="repo" id="${esc(id)}"><h2>${esc(name)}</h2><p class="muted">${esc(why.join(':'))}</p></section>` };
+        return { id: repoId(repo), name: repo.split('/')[1], repo, missing: true, why: why.join(':'), tasks: [], plans: [], open: 0 };
       }
       const [dir, repo] = a.split('=');
-      const id = repoId(repo), name = repo.split('/')[1];
-      const st = join(dir, 'docs/STATUS.md');
-      const where = existsSync(st) ? (sections(readFileSync(st, 'utf8')).sections.find((s) => s.title.startsWith('Đang ở đâu'))?.lines.find((l) => l.trim()) ?? '') : 'Chưa có STATUS';
-      const upd = existsSync(st) ? (/Cập nhật lần cuối:\s*([0-9-]+)/.exec(readFileSync(st, 'utf8'))?.[1] ?? '') : '';
-      return { id, name, upd, line: where.replace(/[*`[\]]/g, '').replace(/\(([^)]*)\)/g, '').slice(0, 90), html: repoSection(dir, repo) };
+      const d = repoData(dir, repo);
+      details[d.id] = repoSection(dir, repo);
+      return d;
     });
-    process.stdout.write(page(title, overview(parsed) + parsed.map((r) => r.html).join('\n'), stampNow()));
+    process.stdout.write(page(title, overviewBody(parsed, details), stampNow(), { ticks: true }));
   }
 }

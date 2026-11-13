@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { parsePlan, blocks, inline, repoId } from '../../templates/progress-page.mjs';
+import { parsePlan, blocks, inline, repoId, waitingLines, planSteps, statusSteps, listItems } from '../../templates/progress-page.mjs';
 
 const plan = parsePlan([
   '# Kế hoạch thử', '', 'Trạng thái: đang chạy · Duyệt: 2026-01-01 · Cập nhật: 2026-01-02', '',
@@ -26,11 +26,36 @@ assert.notEqual(repoId('a/b.c'), repoId('a/b-c'), 'dot and hyphen give different
 assert.match(repoId('thiengthb/thienai-workflow'), /^[a-z0-9-]+$/, 'anchor uses only letters, digits and hyphens');
 
 const run = (...args) => execFileSync('node', ['templates/progress-page.mjs', ...args], { encoding: 'utf8' });
-const repoPage = run('--title', 'T', '.=thiengthb/thienai-workflow', 'missing=thiengthb/x:không đọc được');
+const repoPage = run('--title', 'T', '.=thiengthb/thienai-workflow', 'missing=thiengthb/x:không đọc được', 'missing=thiengthb/y:' + 'lý do dài '.repeat(40));
 assert.match(repoPage, /^<!DOCTYPE html>/);
 assert.match(repoPage, /Kế hoạch đang chạy/);
+// An unreadable repo is a plain card: its reason stays in view, with no empty detail to unfold.
+assert.match(repoPage, /<div class="rc rc-static"><div class="rc-head"><b>x<\/b>.*?<p class="rc-where">không đọc được<\/p><\/div>/);
+assert.ok(repoPage.includes('lý do dài '.repeat(40).trim()), 'a long reason is shown whole');
+assert.doesNotMatch(repoPage, /\.rc-where \{[^}]*line-clamp/, 'the reason is never clamped: the plain card cannot unfold');
 const road = run('--title', 'L', '--roadmap', 'learning/roadmap.md=thiengthb/thienai-workflow:learning/roadmap.md');
 assert.match(road, /đang ở đây/, 'roadmap marks the current stage');
 assert.ok(readFileSync('learning/roadmap.md', 'utf8').includes('## Lộ trình đã đổi'), 'roadmap keeps its change log');
+
+// "Đang chờ thien": a bullet that is only a <placeholder> is skipped; links in angle brackets are real items.
+assert.deepEqual(waitingLines(['- <tối đa 3 việc>', '- <https://example.com>', '- Kiểm tra <https://example.com>.', '1. <x>']),
+  ['- <https://example.com>', '- Kiểm tra <https://example.com>.']);
+
+// Repo card timeline: plan checkpoints become steps, the first unfinished one is current.
+const ps = planSteps(plan);
+assert.deepEqual(ps.steps.map((x) => [x.label, x.done]), [['A', true], ['B', false]]);
+assert.equal(ps.cur, 1);
+// Old free-form plans: the STATUS ticks column "U0, U1 / U0–U8" becomes nine steps, two done.
+const ss = statusSteps({ title: 'UI v2', at: 'U2', ticks: 'U0, U1 / U0–U8' });
+assert.equal(ss.steps.length, 9); assert.equal(ss.cur, 2); assert.equal(ss.steps[1].done, true);
+assert.deepEqual(statusSteps({ title: 'x', at: '', ticks: '3/5' }).steps, [], 'no range, no steps');
+assert.deepEqual(listItems(['1. a', '   b', '- c', '', 'đoạn']), ['a b', 'c']);
+assert.match(repoPage, /<ol class="tl">.*<span class="k">Bây giờ<\/span>/s, 'repo card shows the timeline');
+assert.match(repoPage, /<nav class="tabs" role="tablist"[^>]*><button[^>]*data-tab="all">Tổng quan</, 'the overview tab comes first');
+assert.match(repoPage, /<section class="panel" role="tabpanel" id="p-all"[^>]*>/, 'overview panel shown by default');
+assert.match(repoPage, /<a class="rc rrow" href="#[^"]+" data-tab="[^"]+">/, 'each repo row opens its tab');
+// A waiting task shows in both tabs with one tick key and distinct element ids.
+const keys = [...repoPage.matchAll(/<li class="task" data-key="([^"]+)"><label class="tick"><input type="checkbox" id="([^"]+)"/g)];
+assert.ok(keys.length && new Set(keys.map((m) => m[2])).size === keys.length, 'checkbox ids are unique');
 
 console.log('ok progress-page');

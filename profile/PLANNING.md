@@ -30,5 +30,5 @@
 
 ## Trang tiến độ
 
-- Mỗi repo có một trang tiến độ, và có một trang tổng quan cho các repo trong `life/tracked-repos.md`. Trang sinh ra từ `docs/STATUS.md` và `docs/plans/` bằng `templates/progress-page.mjs`, AI đăng thành artifact. Link trang ghi ở dòng đầu `docs/STATUS.md`.
+- Mỗi repo có một trang tiến độ, và có một trang tổng quan cho các repo trong `life/tracked-repos.md`. Trang sinh ra từ `docs/STATUS.md` và `docs/plans/` bằng `templates/progress-page.mjs`, AI đăng thành artifact. Link trang ghi ở dòng đầu `docs/STATUS.md`. Trang tổng quan đăng kèm `capabilities: {"db": {}}` để ô tick của thien lưu được; trước khi sửa STATUS, AI đọc db `ticks/overview` của trang đó (việc thien đã tick), kiểm lại rồi bỏ việc đã xong.
 - Sửa STATUS hay file kế hoạch thì cuối phiên chạy lại script và đăng lại trang. Tài khoản khác hoặc Codex không đăng lại được thì thôi, chỉ cần sửa file; trang có ghi giờ lấy dữ liệu để thien biết trang cũ tới đâu.
