@@ -155,7 +155,7 @@ export function waitingLines(lines) {
   const out = [];
   let keep = false;
   for (const l of lines) {
-    if (/^\s*([-*]|\d+\.)\s+\S/.test(l) && !/^\s/.test(l)) { keep = !/<.*>/.test(l); if (keep) out.push(l); }
+    if (/^\s*([-*]|\d+\.)\s+\S/.test(l) && !/^\s/.test(l)) { keep = !/^([-*]|\d+\.)\s+<[^<>]*>\s*$/.test(l); if (keep) out.push(l); }
     else if (keep && /^\s+\S/.test(l)) out.push(l);
     else if (!l.trim()) keep = false;
   }
@@ -246,7 +246,7 @@ export function overviewBody(repos, details) {
   const lead = tasks.length ? `${tasks.length} việc đang chờ bạn ở ${n} repo.` : 'Không có việc nào đang chờ bạn.';
   const card = ({ r, t }) => {
     const key = taskKey(r.repo, t);
-    return `<li class="task" data-key="${key}"><label class="tick"><input type="checkbox" id="${key}" aria-label="Đánh dấu đã làm"><span class="box" aria-hidden="true"></span></label>
+    return `<li class="task" data-key="${key}"><label class="tick"><input type="checkbox" id="${key}" disabled aria-label="Đánh dấu đã làm"><span class="box" aria-hidden="true"></span></label>
 <div class="task-body"><div class="task-meta"><span class="chip">${esc(r.name)}</span>${r.upd ? `<span>từ ${esc(shortDate(r.upd))}</span>` : ''}</div><p>${inline(t, r.base)}</p></div></li>`;
   };
   const planCell = (r) => r.noStatus ? '<span class="muted">Chưa có STATUS</span>' : r.plans.length ? r.plans.map((p) => `<div class="pl"><div class="pl-top"><span>${p.link ? `<a href="${esc(resolveLink(posix.basename(p.link.split(':')[1]), p.link))}">${inline(p.title, '')}</a>` : esc(p.title)}</span>${p.all ? `<span class="num">${p.all.done}/${p.all.total}</span>` : ''}</div>${p.all ? `<div class="bar" role="img" aria-label="${p.all.done} trên ${p.all.total} việc đã xong"><span style="width:${p.all.total ? Math.round((p.all.done / p.all.total) * 100) : 0}%"></span></div>` : ''}${p.at ? `<span class="muted small">${esc(p.at)}</span>` : ''}</div>`).join('') : '<span class="muted">Không có kế hoạch đang chạy</span>';
@@ -326,6 +326,7 @@ body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--font); }
 .task-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 12.5px; color: var(--muted); }
 .tick { position: relative; width: 24px; height: 24px; cursor: pointer; }
 .tick input { position: absolute; inset: -10px; opacity: 0; cursor: pointer; margin: 0; }
+.tick input:disabled { cursor: progress; }
 .tick .box { pointer-events: none; position: absolute; inset: 2px; border: 2px solid var(--line); border-radius: 6px; background: var(--card); }
 .tick input:focus-visible + .box { outline: 2px solid var(--accent); outline-offset: 2px; }
 .tick input:checked + .box { background: var(--accent); border-color: var(--accent); }
@@ -410,7 +411,7 @@ ${opts.ticks ? `<script>${kitFile('kit.js')}</script>
 <script>
 /* Ticks: thien marks a task done; saved on this device and in the page's db (ticks/overview) for Claude to read. */
 (async () => {
-  if (!window.Kit) return;
+  if (!window.Kit) { document.querySelectorAll('.task input').forEach((b) => { b.disabled = false; }); return; }
   const st = Kit.store('overview-ticks', 'ticks/overview');
   const cards = [...document.querySelectorAll('.task')];
   const S = (await st.load()) || { done: {} };
@@ -419,6 +420,7 @@ ${opts.ticks ? `<script>${kitFile('kit.js')}</script>
   for (const c of cards) {
     const box = c.querySelector('input');
     box.checked = !!S.done[c.dataset.key]; paint(c);
+    box.disabled = false;   // enabled only after the saved ticks are in, so a click can't be lost or overwritten
     box.addEventListener('change', () => {
       if (box.checked) S.done[c.dataset.key] = { at: new Date().toISOString(), text: c.querySelector('p').textContent.slice(0, 300) };
       else delete S.done[c.dataset.key];

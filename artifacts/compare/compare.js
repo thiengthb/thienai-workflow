@@ -31,8 +31,8 @@
     return [sideOf(i, l), sideOf(i, r)];
   }
   const narrow = () => window.matchMedia('(max-width: 860px)').matches;
-  let touched = false;   // the viewer changed something before the saved state arrived
-  const save = (now) => { touched = true; return store.save(JSON.parse(JSON.stringify(S)), now); };
+  let loaded = false;   // saves wait until the saved state has been merged in, so an early click never overwrites it
+  const save = (now) => loaded ? store.save(JSON.parse(JSON.stringify(S)), now) : Promise.resolve(false);
 
   // ---------- list, header, tools ----------
   function renderList() {
@@ -418,8 +418,9 @@
     $('general').addEventListener('input', () => { S.general = $('general').value; save(); });
     $('copy').onclick = () => { save(true); Kit.copy(results()); };
     $('send').onclick = async () => {
-      await save(true);
+      const stored = await save(true);
       const full = results(), long = full.length > 3800;
+      if (long && !stored) { await Kit.copy(full); Kit.toast('Kết quả dài mà chưa lưu được vào trang, nên chưa gửi. Đã chép bản đầy đủ: dán vào chat cho Claude.', 8000); return; }
       const text = long ? full.slice(0, 3600) + '\n\n(Kết quả dài, bản đầy đủ nằm trong db của trang: reviews/' + R.id + ')' : full;
       const ok = await Kit.sendToClaude(text, $('top'));
       if (ok && long) { await Kit.copy(full); Kit.toast('Đã gửi bản rút gọn cho Claude; bản đầy đủ đã lưu và đã chép.', 6000); }
@@ -449,14 +450,22 @@
     if (!items.length) { $('stage').append(Object.assign(document.createElement('p'), { className: 'empty muted', textContent: 'Vòng này chưa có cặp ảnh nào.' })); return; }
     S.mode = narrow() && Math.max(...items[0].sides.map((s) => s.w)) > 700 ? 'blink' : 'side';
     bind(); renderList(); renderTools(); renderStage();
+    const before = JSON.stringify(S);
+    const first = JSON.parse(before);   // state before loading, to tell which fields the viewer changed meanwhile
     const saved = await store.load();
-    if (saved && !touched) {
-      for (const k of ['ratings', 'prefer', 'general', 'pins', 'pairs', 'split', 'fade', 'zoom']) if (saved[k] != null) S[k] = saved[k];
-      if (MODES.includes(saved.mode)) S.mode = saved.mode;
+    if (saved) {
+      const mine = (k) => JSON.stringify(S[k]) !== JSON.stringify(first[k]);
+      // Maps: saved entries, with the viewer's early edits on top. Pins: saved ones plus any new ones.
+      for (const k of ['ratings', 'prefer', 'pairs']) if (saved[k]) S[k] = Object.assign({}, saved[k], S[k]);
+      if (Array.isArray(saved.pins)) S.pins = saved.pins.concat(S.pins);
+      for (const k of ['general', 'split', 'fade', 'zoom']) if (saved[k] != null && !mine(k)) S[k] = saved[k];
+      if (MODES.includes(saved.mode) && !mine('mode')) S.mode = saved.mode;
       if (!ZOOMS.includes(S.zoom)) S.zoom = 0;
-      if (saved.cur >= 0 && saved.cur < items.length) S.cur = saved.cur;
+      if (saved.cur >= 0 && saved.cur < items.length && !mine('cur')) S.cur = saved.cur;
       $('general').value = S.general || '';
     }
+    loaded = true;
+    if (JSON.stringify(S) !== before) save();
     const h = location.hash.slice(1), hi = items.findIndex((x) => x.id === h);
     if (hi >= 0) S.cur = hi;
     renderList(); renderTools(); renderStage();
