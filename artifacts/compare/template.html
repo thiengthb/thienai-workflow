@@ -5,144 +5,236 @@
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>/*KIT_CSS*/</style>
 <style>
-/* Bố cục: cột trái là danh sách màn (dính khi cuộn), cột phải là thanh công cụ dính và vùng ảnh.
-   Điện thoại: danh sách thành dải ngang ở trên, ảnh chiếm hết bề rộng. */
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
-.top { padding: 18px max(16px, env(safe-area-inset-right, 0px)) 14px max(16px, env(safe-area-inset-left, 0px)); border-bottom: 2px solid var(--line); background: var(--card); }
-.top-in { max-width: 1680px; margin: 0 auto; display: flex; gap: 16px 28px; align-items: center; flex-wrap: wrap; }
-.ttl { flex: 1 1 320px; min-width: 0; display: grid; gap: 4px; }
-.ttl h1 { font-size: 21px; font-weight: 700; }
-.ttl p { font-size: 14px; max-width: 70ch; }
-.prog { display: grid; gap: 6px; width: 180px; font-size: 13px; font-variant-numeric: tabular-nums; }
-.acts { display: flex; gap: 8px; flex-wrap: wrap; }
-.wrap { max-width: 1680px; margin: 0 auto; padding: 16px max(16px, env(safe-area-inset-right, 0px)) 64px max(16px, env(safe-area-inset-left, 0px));
-  display: grid; grid-template-columns: 248px minmax(0, 1fr); gap: 20px; align-items: start; }
-aside { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); max-height: calc(100vh - 24px); overflow: auto; display: grid; gap: 14px; padding-bottom: 8px; }
-.side-block { display: grid; gap: 8px; }
-.scen { margin: 0; padding-left: 18px; font-size: 13px; color: var(--muted); display: grid; gap: 2px; }
-details.box > summary { cursor: pointer; font-weight: 600; font-size: 14px; list-style: none; display: flex; align-items: center; gap: 6px; min-height: 32px; }
-details.box > summary::-webkit-details-marker { display: none; }
-details.box > summary::before { content: "›"; color: var(--muted); transition: transform .15s; }
-details.box[open] > summary::before { transform: rotate(90deg); }
-.items { display: grid; gap: 6px; }
-.grp { font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
-.item { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 10px; align-items: center; text-align: left; width: 100%;
-  background: transparent; border: 2px solid transparent; border-radius: var(--r); padding: 5px; cursor: pointer; color: var(--ink); font: inherit; }
+/* Bố cục thien chọn ở vòng compare-redesign-r2 (bản C, 2026-11-13): không có thanh đầu trang; cột trái chứa tên vòng,
+   thanh tiến độ chia ô (mỗi ô một màn), danh sách màn, ghi chú chung, rồi hai hàng nút icon (cách xem, phán xét).
+   Bên phải chỉ có ảnh; ở cỡ Vừa ảnh khít cả bề ngang lẫn bề cao. Nút chỉ có icon, rê chuột thì hiện tên.
+   Mỗi bản có nút ngón cái (thích) trên ảnh, thích bản này thì bản kia tự bỏ. "Chép kết quả" và "Gửi cho Claude" chỉ hiện ở màn cuối. */
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { overflow: hidden; }
+.app { height: 100vh; height: 100dvh; display: grid; column-gap: 16px; max-width: 1680px; margin: 0 auto;
+  padding: 0 max(12px, env(safe-area-inset-right, 0px)) 0 max(12px, env(safe-area-inset-left, 0px));
+  grid-template-columns: 236px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto auto;
+  grid-template-areas: "rail view" "tools view" "verdict view"; }
+
+/* Nút icon: vuông 30px trên laptop, 36px trên điện thoại; tên hiện khi rê chuột (data-tip) và đọc được bằng aria-label. */
+.i { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.app .btn { min-height: 30px; font-size: 13px; padding: 0 10px; border-width: 1px; border-bottom-width: 2px; }
+.app .ib { width: 30px; padding: 0; }
+.app .seg { padding: 2px; }
+.app .seg button { min-height: 26px; padding: 0 8px; }
+.app .seg.icons button { width: 28px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+@media (pointer: coarse) {
+  .app .btn { min-height: 36px; } .app .ib { width: 36px; }
+  .app .seg button { min-height: 32px; } .app .seg.icons button { width: 34px; }
+}
+[data-tip] { position: relative; }
+@media (hover: hover) {
+  [data-tip]:hover::after { content: attr(data-tip); position: absolute; left: 0; bottom: calc(100% + 6px); z-index: 20; pointer-events: none;
+    font: 500 12px/1.3 var(--font); white-space: nowrap; padding: 4px 8px; border-radius: var(--r); background: var(--ink); color: var(--bg); }
+  .tip-below[data-tip]:hover::after, .tip-below [data-tip]:hover::after { bottom: auto; top: calc(100% + 6px); }
+  .tip-end[data-tip]:hover::after { left: auto; right: 0; }
+  .more[open] > summary::after { display: none; }
+}
+
+.rail { grid-area: rail; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 12px; padding: 12px 4px 10px 0; }
+.tools, .verdict { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; min-width: 0; border-top: 1px solid var(--line); padding: 8px 4px 8px 0; }
+.tools { grid-area: tools; }
+.verdict { grid-area: verdict; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
+.view { grid-area: view; min-height: 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 12px 0; }
+.grow { flex: 1 1 auto; }
+
+.head { display: grid; gap: 8px; }
+.head h1 { font-size: 15px; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
+.sub { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.link { font: 600 12.5px var(--font); color: var(--accent-ink); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+/* Thanh tiến độ chia ô: mỗi ô một màn, màu theo phán xét, ô đang xem viền đậm; bấm ô để đến màn đó. */
+.steps { display: flex; gap: 3px; padding: 0 4px; }   /* room for the ring of the first and last cell */
+.steps button { flex: 1 1 0; min-width: 4px; height: 18px; padding: 6px 0; border: 0; background: none; cursor: pointer; }
+.steps button::before { content: ""; display: block; height: 6px; border-radius: 99px; background: var(--line); }
+.steps button.ok::before { background: var(--good); }
+.steps button.fix::before { background: var(--bad); }
+.steps button[aria-current="true"]::before { height: 6px; box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--ink); }
+#about { display: grid; gap: 8px; font-size: 13px; padding: 10px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+.scen { margin: 0; padding-left: 18px; color: var(--muted); display: grid; gap: 2px; }
+.items { display: grid; gap: 1px; }
+.grp { font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin: 6px 0 2px; }
+.item { display: flex; gap: 8px; align-items: center; text-align: left; width: 100%; min-height: 30px;
+  background: transparent; border: 0; border-radius: var(--r); padding: 5px 8px; cursor: pointer; color: var(--ink); font: 500 13px/1.3 var(--font); }
 .item:hover { background: var(--soft); }
-.item[aria-current="true"] { background: var(--card); border-color: var(--line); }
-.item .th { width: 56px; height: 42px; border-radius: 3px; overflow: hidden; background: var(--soft); border: 1px solid var(--line); }
-.item .th img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
-.item .nm { font-size: 13.5px; font-weight: 500; line-height: 1.3; overflow-wrap: anywhere; }
-.item .st { margin-top: 3px; display: flex; gap: 4px; }
-main { min-width: 0; display: grid; gap: 12px; }
-.tools { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 6; background: var(--bg); padding: 10px 0; display: grid; gap: 10px; border-bottom: 2px solid var(--line); }
-.row { display: flex; gap: 8px 12px; align-items: center; flex-wrap: wrap; }
-.row .grow { flex: 1 1 auto; min-width: 0; }
-.cur-name { font-weight: 700; font-size: 17px; overflow-wrap: anywhere; }
-.cur-note { font-size: 13.5px; }
-.pos { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.picker { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
-select { font: 500 13px var(--font); color: var(--ink); background: var(--card); border: 2px solid var(--line); border-radius: var(--r); min-height: 34px; padding: 0 8px; }
+.item[aria-current="true"] { background: var(--soft); font-weight: 600; }
+.item .nm { min-width: 0; overflow-wrap: anywhere; }
+.item .pf { margin-left: auto; display: inline-flex; align-items: center; gap: 3px; font-size: 11px; color: var(--accent-ink); white-space: nowrap; }
+.item .pf .i { width: 11px; height: 11px; fill: currentColor; }
+.sdot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.sdot.ok { background: var(--good); } .sdot.fix { background: var(--bad); }
+.gen { display: grid; gap: 6px; margin-top: auto; }
+.gen:empty { display: none; }
+.gen textarea { min-height: 56px; resize: vertical; font-size: 13px; padding: 6px 8px; border-width: 1px; }
+
+.more { position: relative; }
+.more > summary { list-style: none; cursor: pointer; }
+.more > summary::-webkit-details-marker { display: none; }
+.more[data-on="true"] > summary { border-color: var(--accent); color: var(--accent-ink); }
+.menu { position: absolute; left: 0; bottom: calc(100% + 4px); z-index: 9; display: grid; gap: 2px; padding: 4px; min-width: 190px; box-shadow: var(--shadow); }
+.menu > button { text-align: left; justify-content: space-between; gap: 16px; border: 0; background: transparent; }
+/* Phím tắt ở mép phải, trông như một phím bấm, để biết gõ số đó là bật kiểu xem đó. */
+.menu kbd { font: 600 11px/1 var(--mono); color: var(--muted); min-width: 20px; height: 20px; padding: 0 5px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; background: var(--card); }
+.menu > button[aria-pressed="true"] kbd { color: var(--ink); border-color: var(--muted); }
+@media (pointer: coarse) { .menu kbd { display: none; } }
+.menu > button:hover { background: var(--soft); }
+.menu > button[aria-pressed="true"] { background: var(--soft); font-weight: 600; }
+.zoom-box { display: grid; gap: 4px; border-top: 1px solid var(--line); margin-top: 4px; padding: 8px 4px 2px; }
+.zoom-box .seg { display: flex; }
+.zoom-box .seg button { flex: 1 1 0; }
+.phone-only { display: none !important; }
+.picker { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); flex-basis: 100%; }
+select { font: 500 13px var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: var(--r); min-height: 28px; padding: 0 4px; min-width: 0; flex: 1; }
 #pin[aria-pressed="true"] { background: var(--accent); border-color: color-mix(in srgb, var(--accent) 75%, #000); color: #fff; }
-.hint { font-size: 13px; color: var(--muted); }
+.verdict .nm { flex-basis: 100%; display: flex; gap: 8px; align-items: baseline; font-weight: 600; font-size: 13px; min-width: 0; margin-bottom: 2px; }
+.verdict .nm > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.verdict .pos { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
+#ok[aria-pressed="true"] { background: var(--good); border-color: var(--good); color: #fff; }
+#fix[aria-pressed="true"] { background: var(--bad); border-color: var(--bad); color: #fff; }
+
+.hint, .cur-note { font-size: 13px; color: var(--muted); }
+.hint:empty, .cur-note:empty { display: none; }
 .hint b { color: var(--ink); font-weight: 600; }
-#stage { position: relative; }
-.scroll { overflow-x: auto; }
-.sbs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+#stage { position: relative; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.scroll { flex: 1 1 auto; min-height: 0; overflow: auto; }
+.sbs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
 .sbs.zoomed { grid-template-columns: max-content max-content; }
-.col { display: grid; gap: 6px; min-width: 0; }
-.cap { display: flex; gap: 8px; align-items: center; font-size: 13px; font-weight: 600; }
-.cap .dim { font-family: var(--mono); font-size: 11.5px; color: var(--muted); font-weight: 500; }
+.col { display: grid; gap: 4px; min-width: 0; grid-template-columns: max-content; justify-content: safe center; }
+.one { display: grid; gap: 6px; grid-template-columns: max-content; justify-content: safe center; }
+.cap { display: flex; gap: 8px; align-items: center; font-size: 12.5px; font-weight: 600; height: 22px; }
+.cap .dim { font-family: var(--mono); font-size: 11px; color: var(--muted); font-weight: 500; }
+.cap .like { margin-left: auto; }
+.one > .cap { height: auto; }
+/* Nút thích (ngón cái): viền khi chưa thích, tô đầy màu nhấn khi thích. */
+.like { display: inline-flex; align-items: center; gap: 4px; height: 22px; min-width: 22px; padding: 0 3px; border: 0; border-radius: var(--r); background: transparent;
+  color: var(--muted); font: 600 12px var(--font); cursor: pointer; }
+.like:hover { background: var(--soft); color: var(--ink); }
+.like[aria-pressed="true"] { color: var(--accent); }
+.like[aria-pressed="true"] .i { fill: currentColor; }
+@media (pointer: coarse) { .like { height: 32px; min-width: 32px; } .cap { height: 32px; } }
 .shot { position: relative; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--card); line-height: 0; }
 .shot img, .shot canvas { display: block; max-width: none; }
-.ov { position: relative; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--card); }
+.ov { position: relative; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--card); margin: 0 auto; }
 .ov img, .ov canvas { position: absolute; left: 0; top: 0; max-width: none; display: block; }
 .knob { position: absolute; top: 0; bottom: 0; width: 0; z-index: 3; }
 .knob::before { content: ""; position: absolute; top: 0; bottom: 0; left: -1px; width: 2px; background: var(--accent); }
-.knob button { position: sticky; top: 45vh; margin-left: -18px; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--accent); background: var(--card);
+.knob button { position: sticky; top: 45%; margin-left: -18px; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--accent); background: var(--card);
   color: var(--accent-ink); font: 700 14px var(--font); cursor: ew-resize; touch-action: none; }
 .tag { position: absolute; top: 8px; z-index: 2; font: 600 12px var(--font); padding: 3px 8px; border-radius: var(--r); background: var(--ink); color: var(--bg); line-height: 1.4; }
 .tag.l { left: 8px; } .tag.r { right: 8px; }
-.ctl { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
-.ctl input[type="range"] { width: min(280px, 50vw); accent-color: var(--accent); }
-.note-diff { font-size: 13px; }
+/* Kiểu xem 3 đến 6: tên kiểu, nút điều khiển, cách dùng và nút thích nằm trên đúng một dòng; chữ dài thì cắt bằng dấu ba chấm. */
+.ctl { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); height: 34px; flex: none; flex-wrap: nowrap; min-width: 0; white-space: nowrap; }
+.ctl > b { color: var(--ink); font-weight: 600; flex: none; }
+.ctl .say { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ctl .say.kb { margin-left: -10px; }   /* keyboard tip continues the sentence before it */
+.ctl > #flip + .say.kb { margin-left: 0; }
+@media (pointer: coarse) { .ctl .say.kb { display: none; } }
+.ctl > input, .ctl > .btn { flex: none; }
+.ctl #flip { min-height: 26px; padding: 0 8px; }
+.ctl .likes { display: inline-flex; gap: 4px; margin-left: auto; flex: none; }
+.ctl input[type="range"] { width: min(200px, 30vw); accent-color: var(--accent); }
 .commenting .shot, .commenting .ov { cursor: crosshair; }
 #area { position: absolute; z-index: 4; border: 2px dashed var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); pointer-events: none; }
 .dot { position: absolute; z-index: 5; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50% 50% 50% 4px; background: var(--accent); color: #fff;
   border: 2px solid var(--card); font: 700 12px/22px var(--font); text-align: center; cursor: pointer; box-shadow: var(--shadow); padding: 0; }
 #pop { position: absolute; z-index: 7; width: min(300px, calc(100vw - 32px)); padding: 10px; display: grid; gap: 8px; box-shadow: var(--shadow); }
-#pop .row { justify-content: flex-end; }
-.gen textarea { min-height: 88px; resize: vertical; }
+#pop .row { display: flex; gap: 8px; justify-content: flex-end; }
 .empty { padding: 40px 16px; text-align: center; }
-@media (max-width: 860px) {
-  .wrap { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-  .tools { position: static; }
-  aside { position: static; max-height: none; overflow: visible; }
-  .items { display: flex; overflow-x: auto; gap: 6px; padding-bottom: 4px; }
-  .grp { display: none; }
-  .item { grid-template-columns: 40px auto; width: auto; flex: 0 0 auto; max-width: 220px; }
-  .item .th { width: 40px; height: 32px; }
-  .prog { width: 100%; }
-  .sbs { gap: 8px; }
+
+/* Điện thoại: trên cùng là tên màn và thanh tiến độ chia ô (thay danh sách màn), giữa là ảnh, dưới cùng một hàng nút icon.
+   Ghi chú chung dời vào nút "Về vòng này"; Trượt và Chép kết quả vào menu Thêm. */
+@media (max-width: 760px) {
+  .app { grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: "rail rail" "view view" "tools verdict"; column-gap: 8px; }
+  .rail { overflow: visible; padding: 8px 0 0; gap: 4px; }
+  .head { gap: 2px; }
+  #cur-name-m { color: var(--ink); font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #cur-name-m::after { content: " ·"; color: var(--muted); font-weight: 400; }
+  .sub { flex-wrap: nowrap; white-space: nowrap; }
+  .head h1, .items, .rail > .gen { display: none; }
+  .phone-only:not([hidden]) { display: revert !important; }
+  .menu > .phone-only:not([hidden]) { display: inline-flex !important; }
+  .desk-only, #zoom-box, .picker { display: none !important; }
+  .tools, .verdict { border-top: 1px solid var(--line); padding: 6px 0 calc(6px + env(safe-area-inset-bottom, 0px)); flex-wrap: nowrap; }
+  .verdict { justify-content: flex-end; }
+  .verdict .nm { display: none; }
+  .view { padding: 4px 0 6px; }
+  .menu { min-width: 200px; }
 }
-@media (prefers-reduced-motion: reduce) { details.box > summary::before { transition: none; } }
 </style>
 
-<header class="top" id="top">
-  <div class="top-in">
-    <div class="ttl"><h1 id="title"></h1><p class="muted" id="intro"></p></div>
-    <div class="prog"><span id="prog-text">Đã duyệt 0/0</span><div class="bar"><span id="prog-bar" style="width:0"></span></div></div>
-    <div class="acts">
-      <button class="btn" id="copy" type="button">Chép kết quả</button>
-      <button class="btn primary" id="send" type="button">Gửi cho Claude</button>
+<div class="app" id="app">
+  <aside class="rail">
+    <div class="head" id="top">
+      <h1 id="title"></h1>
+      <div class="sub"><span class="phone-only" id="cur-name-m"></span><span id="prog-text">0/0</span><span aria-hidden="true">·</span><button class="link" id="about-btn" type="button" aria-expanded="false" aria-controls="about">Về vòng này</button></div>
+      <div class="steps tip-below" id="steps" aria-label="Các màn, theo thứ tự"></div>
     </div>
-  </div>
-</header>
-
-<div class="wrap">
-  <aside>
-    <details class="box side-block" id="scen-box" open><summary>Kịch bản trong vòng này</summary><ol class="scen" id="scen"></ol></details>
-    <div class="side-block"><span class="label">Các màn</span><div class="items" id="items"></div></div>
-    <div class="side-block gen">
+    <div id="about" hidden>
+      <p class="muted" id="intro"></p>
+      <ol class="scen" id="scen"></ol>
+      <div class="gen" id="gen-narrow-slot"></div>
+    </div>
+    <div class="items" id="items" aria-label="Các màn"></div>
+    <div class="gen">
       <label class="label" for="general">Ghi chú chung</label>
-      <textarea id="general" maxlength="3000" placeholder="Điều muốn nói cho cả vòng, ví dụ: tổng thể bản mới thoáng hơn nhưng chữ nhỏ quá."></textarea>
+      <textarea id="general" maxlength="3000" placeholder="Điều muốn nói cho cả vòng, ví dụ: bản mới thoáng hơn nhưng chữ nhỏ quá."></textarea>
     </div>
   </aside>
 
-  <main>
-    <div class="tools">
-      <div class="row">
-        <button class="btn" id="prev" type="button" aria-label="Màn trước">‹</button>
-        <div class="grow"><div class="cur-name" id="cur-name"></div><div class="cur-note muted" id="cur-note"></div></div>
-        <span class="pos" id="pos"></span>
-        <button class="btn good" id="ok" type="button" aria-pressed="false">OK</button>
-        <button class="btn bad" id="fix" type="button" aria-pressed="false">Cần sửa</button>
-        <button class="btn" id="next" type="button" aria-label="Màn sau">›</button>
-      </div>
-      <div class="row">
-        <div class="seg" id="modes" role="group" aria-label="Kiểu xem">
-          <button type="button" data-mode="side" aria-pressed="false">Cạnh nhau</button>
-          <button type="button" data-mode="slide" aria-pressed="false">Trượt</button>
-          <button type="button" data-mode="onion" aria-pressed="false">Chồng</button>
-          <button type="button" data-mode="blink" aria-pressed="false">Nháy</button>
-          <button type="button" data-mode="diff" aria-pressed="false">Khác biệt</button>
-        </div>
-        <div class="seg" id="zooms" role="group" aria-label="Cỡ ảnh">
-          <button type="button" data-zoom="0" aria-pressed="false">Vừa</button>
-          <button type="button" data-zoom="1" aria-pressed="false">100%</button>
-          <button type="button" data-zoom="2" aria-pressed="false">200%</button>
-        </div>
-        <span class="picker" id="pickers" hidden>
-          <label for="left-side">Trái</label><select id="left-side"></select>
-          <label for="right-side">Phải</label><select id="right-side"></select>
-        </span>
-        <span class="picker" id="prefer-box" hidden><span>Thích bản</span><span class="seg" id="prefer" role="group" aria-label="Thích bản nào"></span></span>
-        <button class="btn" id="pin" type="button" aria-pressed="false">Ghim</button>
-      </div>
-      <p class="hint" id="hint"></p>
+  <div class="tools">
+    <div class="seg icons" id="modes" role="group" aria-label="Kiểu xem">
+      <button type="button" data-mode="side" aria-pressed="false" aria-label="Cạnh nhau" data-tip="Cạnh nhau (1)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="7.5" height="16" rx="1.5"/><rect x="13.5" y="4" width="7.5" height="16" rx="1.5"/></svg></button>
+      <button type="button" data-mode="one" aria-pressed="false" aria-label="Từng bản" data-tip="Từng bản (2)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1.5"/></svg></button>
+      <button class="desk-only" type="button" data-mode="slide" aria-pressed="false" aria-label="Trượt" data-tip="Trượt (3)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M12 4v16M8.5 10l-2 2 2 2M15.5 10l2 2-2 2"/></svg></button>
     </div>
+    <details class="more" id="more"><summary class="btn ib" aria-label="Thêm cách xem và cỡ ảnh" data-tip="Thêm cách xem, cỡ ảnh"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></summary>
+      <div class="menu card" role="group" aria-label="Cách xem khác">
+        <button class="btn phone-only" type="button" data-mode="slide" aria-pressed="false"><span>Trượt</span></button>
+        <button class="btn" type="button" data-mode="onion" aria-pressed="false" aria-keyshortcuts="4"><span>Chồng mờ</span><kbd>4</kbd></button>
+        <button class="btn" type="button" data-mode="blink" aria-pressed="false" aria-keyshortcuts="5"><span>Nháy qua lại</span><kbd>5</kbd></button>
+        <button class="btn" type="button" data-mode="diff" aria-pressed="false" aria-keyshortcuts="6"><span>Tô chỗ khác nhau</span><kbd>6</kbd></button>
+        <button class="btn phone-only" id="copy-m" type="button" hidden>Chép kết quả</button>
+        <div class="zoom-box" id="zoom-box">
+          <span class="label">Cỡ ảnh</span>
+          <div class="seg" id="zooms" role="group" aria-label="Cỡ ảnh">
+            <button type="button" data-zoom="0" aria-pressed="false">Vừa</button>
+            <button type="button" data-zoom="1" aria-pressed="false">100%</button>
+            <button type="button" data-zoom="2" aria-pressed="false">200%</button>
+          </div>
+        </div>
+      </div>
+    </details>
+    <span class="grow desk-only"></span>
+    <button class="btn ib tip-end" id="pin" type="button" aria-pressed="false" aria-label="Ghim ghi chú lên ảnh" data-tip="Ghim ghi chú lên ảnh"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.3-6-11a6 6 0 0 1 12 0c0 5.7-6 11-6 11z"/><circle cx="12" cy="10" r="2"/></svg></button>
+    <span class="picker" id="pickers" hidden>
+      <label for="left-side">Trái</label><select id="left-side"></select>
+      <label for="right-side">Phải</label><select id="right-side"></select>
+    </span>
+  </div>
+
+  <section class="view" aria-label="Ảnh">
+    <p class="cur-note" id="cur-note"></p>
+    <p class="hint" id="hint"></p>
     <div id="stage"></div>
-  </main>
+  </section>
+
+  <div class="verdict">
+    <div class="nm"><span id="cur-name"></span><span class="pos" id="pos"></span></div>
+    <button class="btn ib" id="ok" type="button" aria-pressed="false" aria-label="OK" data-tip="OK"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+    <button class="btn ib" id="fix" type="button" aria-pressed="false" aria-label="Cần sửa" data-tip="Cần sửa"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button>
+    <span class="grow"></span>
+    <button class="btn ib tip-end" id="prev" type="button" aria-label="Màn trước" data-tip="Màn trước (←)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="btn ib tip-end" id="next" type="button" aria-label="Màn sau" data-tip="Màn sau (→)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    <button class="btn ib tip-end desk-only" id="copy" type="button" aria-label="Chép kết quả" data-tip="Chép kết quả" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></svg></button>
+    <button class="btn ib primary tip-end" id="send" type="button" aria-label="Gửi cho Claude" data-tip="Gửi cho Claude" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/></svg></button>
+  </div>
 </div>
 
 <script type="application/json" id="round">__ROUND__</script>

@@ -7,10 +7,12 @@
   const $ = (id) => document.getElementById(id);
   const items = R.items || [];
   const sideOf = (it, key) => it.sides.find((s) => s.key === key);
-  const MODES = ['side', 'slide', 'onion', 'blink', 'diff'];
+  const MODES = ['side', 'one', 'slide', 'onion', 'blink', 'diff'];
+  const MORE = ['onion', 'blink', 'diff'];   // modes kept in the "Thêm" menu
   const ZOOMS = [0, 1, 2];
 
-  const S = { ratings: {}, prefer: {}, general: '', pins: [], cur: 0, mode: null, zoom: 0, pairs: {}, split: 50, fade: 50 };
+  // modes: the view the viewer picked per kind of screen (see kindOf); S.mode is the view of the current screen.
+  const S = { ratings: {}, prefer: {}, general: '', pins: [], cur: 0, mode: 'side', modes: {}, zoom: 0, pairs: {}, split: 50, fade: 50 };
   const DB_PATH = 'reviews/' + String(R.id).replace(/[^a-z0-9-]/gi, '-');
   const store = Kit.store('compare:' + R.id, DB_PATH);
 
@@ -19,9 +21,12 @@
   let commentMode = false;  // the shell's comment mode is on
   let armed = false;        // the page's own "Ghim" button is on
   let blinkLeft = false;    // blink mode currently shows the left image
+  let oneKey = null;        // side shown in "Từng bản" (null: the last side, usually the new one)
   let scale = 1;
   const diffCache = new Map();
 
+  // Thumbs-up drawn after Lucide's thumbs-up (ISC licence): outline when not liked, filled when liked.
+  const THUMB = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10v11"/><path d="M15 5.9 14 10h5.8a2 2 0 0 1 1.9 2.6l-2.3 7A2 2 0 0 1 17.5 21H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h2.8a2 2 0 0 0 1.8-1.1L12 2a3 3 0 0 1 3 3.9Z"/></svg>';
   const it = () => items[S.cur];
   function pair(i = it()) {
     const p = S.pairs[i.id] || {};
@@ -31,13 +36,23 @@
     if (r === l) r = keys.find((k) => k !== l) || l;
     return [sideOf(i, l), sideOf(i, r)];
   }
-  const narrow = () => window.matchMedia('(max-width: 860px)').matches;
+  const narrow = () => window.matchMedia('(max-width: 760px)').matches;   // same breakpoint as template.html
+  // "Vừa": as big as the box allows in width and height, never above 100%. A very long shot (a full page) would turn
+  // tiny when fitted to the height, so when the height fit keeps under half of the width fit, only the width is fitted
+  // and the shot scrolls.
+  const fit = (w, h, boxW, boxH) => { const fw = Math.min(1, boxW / w), fh = boxH > 0 ? Math.min(1, boxH / h) : fw; return fh >= fw * 0.5 ? Math.min(fw, fh) : fw; };
+  // Kind of screen, so a view picked once fits every screen like it. "pair": two shots side by side keep at least 60% of
+  // their size (phone shots on a laptop); "big": they would not (laptop shots, or anything on a phone). Default view:
+  // side by side for "pair", one at a time for "big", so the shot stays big (thien, round compare-redesign-r1).
+  const kindOf = (i) => { const col = (($('stage').clientWidth || window.innerWidth - 32) - 16) / 2; return col / Math.max(...i.sides.map((x) => x.w)) >= 0.6 ? 'pair' : 'big'; };
+  const modeFor = (i) => { const m = S.modes[kindOf(i)]; return MODES.includes(m) ? m : kindOf(i) === 'pair' ? 'side' : 'one'; };
+  const shownKey = (i = it()) => (oneKey && sideOf(i, oneKey) ? oneKey : i.sides[i.sides.length - 1].key);
   // Until the saved state is merged in, nothing is written. Each change made meanwhile is recorded (which field, and for
   // ratings/prefer/pairs which screen, deletions included) so the merge keeps exactly what the viewer did.
   let loaded = false, snap = null, markReady;
   const ready = new Promise((r) => { markReady = r; });   // send and copy wait for this, so a result never comes from unrestored state
-  const MAPS = ['ratings', 'prefer', 'pairs'], FIELDS = ['general', 'split', 'fade', 'zoom', 'mode', 'cur'];
-  const edited = { fields: new Set(), ratings: new Set(), prefer: new Set(), pairs: new Set() };
+  const MAPS = ['ratings', 'prefer', 'pairs', 'modes'], FIELDS = ['general', 'split', 'fade', 'zoom', 'cur'];
+  const edited = { fields: new Set(), ratings: new Set(), prefer: new Set(), pairs: new Set(), modes: new Set() };
   const note = () => {
     if (!snap) return;
     for (const k of FIELDS) if (JSON.stringify(S[k]) !== JSON.stringify(snap[k])) edited.fields.add(k);
@@ -55,88 +70,127 @@
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'item'; b.dataset.i = i;
       b.setAttribute('aria-current', String(i === S.cur));
-      const th = document.createElement('span'); th.className = 'th';
-      const last = x.sides[x.sides.length - 1];
-      th.append(Object.assign(document.createElement('img'), { src: last.src, alt: '', loading: 'lazy' }));
-      const tx = document.createElement('span');
-      const nm = Object.assign(document.createElement('div'), { className: 'nm', textContent: x.label });
-      const st = document.createElement('div'); st.className = 'st';
-      const r = S.ratings[x.id];
-      st.append(Object.assign(document.createElement('span'), { className: 'chip' + (r === 'ok' ? ' good' : r === 'fix' ? ' bad' : ''), textContent: r === 'ok' ? 'OK' : r === 'fix' ? 'Cần sửa' : 'Chưa xem' }));
-      if (S.prefer[x.id]) st.append(Object.assign(document.createElement('span'), { className: 'chip accent', textContent: 'Thích ' + (sideOf(x, S.prefer[x.id]) || {}).name }));
-      tx.append(nm, st); b.append(th, tx); box.append(b);
+      const r = S.ratings[x.id], state = r === 'ok' ? 'OK' : r === 'fix' ? 'Cần sửa' : 'Chưa duyệt';
+      b.setAttribute('aria-label', `${x.label}, ${state}`);
+      b.append(Object.assign(document.createElement('span'), { className: 'sdot' + (r ? ' ' + r : '') }),
+        Object.assign(document.createElement('span'), { className: 'nm', textContent: x.label }));
+      if (S.prefer[x.id]) { const pf = Object.assign(document.createElement('span'), { className: 'pf', innerHTML: THUMB }); pf.append((sideOf(x, S.prefer[x.id]) || {}).name || ''); b.append(pf); }
+      box.append(b);
     });
     const done = items.filter((x) => S.ratings[x.id]).length;
     $('prog-text').textContent = `Đã duyệt ${done}/${items.length}`;
-    $('prog-bar').style.width = (items.length ? (done / items.length) * 100 : 0) + '%';
+    // Progress strip: one cell per screen, coloured by verdict, the current one ringed; a cell jumps to its screen.
+    const steps = $('steps'); steps.textContent = '';
+    items.forEach((x, i) => {
+      const r = S.ratings[x.id], b = document.createElement('button');
+      b.type = 'button'; b.dataset.i = i; if (r) b.className = r;
+      b.setAttribute('aria-current', String(i === S.cur));
+      const tip = `${i + 1}. ${x.label}` + (r === 'ok' ? ' · OK' : r === 'fix' ? ' · Cần sửa' : '');
+      b.setAttribute('aria-label', tip); b.dataset.tip = tip;
+      if (i >= items.length / 2) b.classList.add('tip-end');   // keeps the tooltip inside the column
+      steps.append(b);
+    });
   }
 
   function renderTools() {
     const x = it();
-    $('cur-name').textContent = x.label;
+    $('cur-name').textContent = x.label; $('cur-name-m').textContent = x.label;
     $('cur-note').textContent = x.note || '';
     $('pos').textContent = `${S.cur + 1}/${items.length}`;
-    $('prev').disabled = S.cur === 0; $('next').disabled = S.cur === items.length - 1;
+    $('prev').disabled = S.cur === 0;
+    // The last screen swaps "Màn sau" for the two ways to hand the result back.
+    const last = S.cur === items.length - 1;
+    $('next').hidden = last; $('copy').hidden = !last; $('copy-m').hidden = !last; $('send').hidden = !last;
     $('ok').setAttribute('aria-pressed', String(S.ratings[x.id] === 'ok'));
     $('fix').setAttribute('aria-pressed', String(S.ratings[x.id] === 'fix'));
-    document.querySelectorAll('#modes button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === S.mode)));
+    document.querySelectorAll('.tools [data-mode]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === S.mode)));
+    // The "more" button is an icon: it turns accent while a view or size from its menu is on, and its tooltip names it.
+    const more = $('more'), inMore = MORE.includes(S.mode) || (narrow() && S.mode === 'slide');
+    more.dataset.on = String(inMore || !!S.zoom);
+    const on = [inMore ? more.querySelector(`.menu [data-mode="${S.mode}"] span`).textContent : '', S.zoom ? `${S.zoom * 100}%` : ''].filter(Boolean).join(', ');
+    const sum = more.querySelector('summary'), tip = on ? `Đang dùng: ${on}` : 'Thêm cách xem, cỡ ảnh';
+    sum.dataset.tip = tip; sum.setAttribute('aria-label', tip);
     document.querySelectorAll('#zooms button').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.zoom === S.zoom)));
     const many = x.sides.length > 2;
-    $('pickers').hidden = !many; $('prefer-box').hidden = !many;
-    if (many) {
+    $('pickers').hidden = !many || S.mode === 'one';
+    {
       const [l, r] = pair();
       for (const [sel, cur] of [[$('left-side'), l], [$('right-side'), r]]) {
         sel.textContent = '';
         x.sides.forEach((s) => sel.append(new Option(s.name, s.key, false, s.key === cur.key)));
       }
-      const pf = $('prefer'); pf.textContent = '';
-      x.sides.forEach((s) => {
-        const b = Object.assign(document.createElement('button'), { type: 'button', textContent: s.name });
-        b.dataset.key = s.key; b.setAttribute('aria-pressed', String(S.prefer[x.id] === s.key)); pf.append(b);
-      });
     }
     $('pin').setAttribute('aria-pressed', String(armed || commentMode));
+    // One short line, only when there is something to know: how the current view works, or how to pin while pinning.
     const h = $('hint');
-    if (S.mode === 'blink') h.innerHTML = '<b>Nháy:</b> giữ phím Space, hoặc bấm vào ảnh, để đổi qua lại hai bản.';
-    else if (S.mode === 'slide') h.innerHTML = '<b>Trượt:</b> kéo nút tròn, hoặc dùng phím mũi tên khi nút đang chọn.';
-    else if (S.mode === 'diff') h.innerHTML = '<b>Khác biệt:</b> chỗ tô đỏ là điểm ảnh khác nhau giữa hai bản.';
-    else h.textContent = '';
-    const how = ca ? 'Bấm <b>Ghim</b> (hoặc nút comment của claude.ai) rồi bấm vào ảnh để comment đúng chỗ; kéo để khoanh một vùng.'
-      : 'Bấm <b>Ghim</b> rồi bấm vào ảnh để ghi chú đúng chỗ; ghi chú đi kèm kết quả.';
-    h.innerHTML = (h.innerHTML ? h.innerHTML + ' ' : '') + how;
+    if (armed || commentMode) h.innerHTML = ca ? 'Bấm vào ảnh để comment đúng chỗ; kéo để khoanh một vùng. Bấm <b>Ghim</b> lần nữa để thôi.' : 'Bấm vào ảnh để ghi chú đúng chỗ; ghi chú đi kèm kết quả.';
+    else h.textContent = '';   // the special views explain themselves in their own control row (see renderStage)
   }
 
   // ---------- stage ----------
   function img(s, w) { const e = new Image(); e.src = s.src; e.alt = s.name; e.width = Math.round(w); e.draggable = false; return e; }
+  /** Like (thumbs-up) for one side: liking it unlikes the others (one preferred side per screen). named: show the side's name too. */
+  function like(s, named) {
+    const on = S.prefer[it().id] === s.key, b = Object.assign(document.createElement('button'), { type: 'button', className: 'like', innerHTML: THUMB });
+    b.dataset.key = s.key; b.setAttribute('aria-pressed', String(on));
+    const tip = on ? `Bỏ thích bản ${s.name}` : `Thích bản ${s.name}`;
+    b.setAttribute('aria-label', tip); b.dataset.tip = tip;
+    if (named) b.append(s.name);
+    return b;
+  }
   function caption(s) {
-    const c = document.createElement('div'); c.className = 'cap';
-    c.append(Object.assign(document.createElement('span'), { textContent: s.name }), Object.assign(document.createElement('span'), { className: 'dim', textContent: `${s.w}×${s.h}` }));
+    const c = document.createElement('div'); c.className = 'cap tip-below';
+    c.append(Object.assign(document.createElement('span'), { textContent: s.name }), Object.assign(document.createElement('span'), { className: 'dim', textContent: `${s.w}×${s.h}` }), like(s));
     return c;
   }
 
   function renderStage() {
     const st = $('stage'); st.textContent = '';
     const [l, r] = pair();
-    const avail = st.clientWidth || 800;
+    const avail = st.clientWidth || 800, availH = st.clientHeight;
+    // Height taken by what sits above the shot in each view: caption with the heart, tabs, or the control row.
+    const coarse = matchMedia('(pointer: coarse)').matches, capH = coarse ? 32 : 22, tabH = coarse ? 36 : 30;
     const scroll = document.createElement('div'); scroll.className = 'scroll';
     scroll.addEventListener('scroll', report, { passive: true });
     if (S.mode === 'side') {
       const g = document.createElement('div'); g.className = 'sbs' + (S.zoom ? ' zoomed' : '');
       const colW = (avail - (narrow() ? 8 : 14)) / 2;
-      scale = S.zoom || Math.min(1, colW / Math.max(l.w, r.w));
+      scale = S.zoom || Math.min(fit(l.w, l.h, colW, availH - capH - 6), fit(r.w, r.h, colW, availH - capH - 6));
       for (const s of [l, r]) {
         const col = document.createElement('div'); col.className = 'col';
         const sh = document.createElement('div'); sh.className = 'shot'; sh.dataset.side = s.key;
         sh.append(img(s, s.w * scale)); col.append(caption(s), sh); g.append(col);
       }
       scroll.append(g); st.append(scroll);
+    } else if (S.mode === 'one') {
+      // One shot at a time, as big as the column allows; tabs switch between every side of the screen.
+      const x = it(), s = sideOf(x, shownKey(x));
+      scale = S.zoom || fit(s.w, s.h, avail - 2, availH - Math.max(tabH, capH) - 8);
+      const box = document.createElement('div'); box.className = 'one';
+      const tabs = document.createElement('div'); tabs.className = 'seg'; tabs.setAttribute('role', 'group'); tabs.setAttribute('aria-label', 'Bản đang xem');
+      x.sides.forEach((v) => {
+        const b = Object.assign(document.createElement('button'), { type: 'button', textContent: v.name });
+        b.setAttribute('aria-pressed', String(v.key === s.key));
+        b.addEventListener('click', () => { oneKey = v.key; closePop(); renderStage(); });
+        tabs.append(b);
+      });
+      const sh = document.createElement('div'); sh.className = 'shot'; sh.dataset.side = s.key;
+      sh.append(img(s, s.w * scale));
+      const cap = document.createElement('div'); cap.className = 'cap tip-below';
+      cap.append(tabs, like(s));
+      box.append(cap, sh); scroll.append(box); st.append(scroll);
     } else {
-      scale = S.zoom || Math.min(1, avail / Math.max(l.w, r.w));
+      scale = S.zoom || fit(Math.max(l.w, r.w), Math.max(l.h, r.h), avail - 2, availH - Math.max(34, tabH) - 8);
       const ov = document.createElement('div'); ov.className = 'ov'; ov.id = 'ov';
       ov.style.width = Math.round(Math.max(l.w, r.w) * scale) + 'px';
       ov.style.height = Math.round(Math.max(l.h, r.h) * scale) + 'px';
+      // One row above the shot: view name, its control and a short how-to, then the likes on the right.
       const top = document.createElement('div'); top.className = 'ctl';
+      const say = (t) => Object.assign(document.createElement('span'), { className: 'say', textContent: t });
+      top.append(Object.assign(document.createElement('b'), { textContent: { slide: 'Trượt', onion: 'Chồng mờ', blink: 'Nháy qua lại', diff: 'Tô chỗ khác nhau' }[S.mode] }));
       if (S.mode === 'slide') {
+        const kb2 = say(', hoặc phím mũi tên khi nút đang chọn'); kb2.classList.add('kb');
+        top.append(say('kéo nút tròn'), kb2);
         const a = img(l, l.w * scale), b = img(r, r.w * scale);
         b.id = 'top-img'; b.style.clipPath = clipFor(r.w * scale, Math.max(l.w, r.w) * scale);
         const k = document.createElement('div'); k.className = 'knob'; k.id = 'knob'; k.style.left = S.split + '%';
@@ -151,26 +205,31 @@
         b.style.opacity = S.fade / 100;
         const range = Object.assign(document.createElement('input'), { type: 'range', min: 0, max: 100, value: S.fade, id: 'fade' });
         range.addEventListener('input', () => { S.fade = +range.value; b.style.opacity = S.fade / 100; lab.textContent = `${l.name} ← → ${r.name} (${S.fade}%)`; save(); });
-        const lab = Object.assign(document.createElement('span'), { textContent: `${l.name} ← → ${r.name} (${S.fade}%)` });
-        top.append(Object.assign(document.createElement('label'), { htmlFor: 'fade', textContent: 'Độ hiện của bản phải' }), range, lab);
+        const lab = Object.assign(document.createElement('span'), { className: 'say', textContent: `${l.name} ← → ${r.name} (${S.fade}%)` });
+        range.setAttribute('aria-label', `Độ hiện của bản ${r.name}`);
+        top.append(range, lab);
         ov.append(a, b);
       } else if (S.mode === 'blink') {
         const s = blinkLeft ? l : r;
         ov.append(img(s, s.w * scale), tag(s.name, blinkLeft ? 'l' : 'r'));
-        const b = Object.assign(document.createElement('button'), { type: 'button', className: 'btn', id: 'flip', textContent: `Đang xem: ${s.name}. Đổi sang ${(blinkLeft ? r : l).name}` });
+        const b = Object.assign(document.createElement('button'), { type: 'button', className: 'btn', id: 'flip', textContent: `Đang xem ${s.name} · đổi` });
         b.addEventListener('click', () => { blinkLeft = !blinkLeft; renderStage(); });
-        top.append(b);
+        const kb3 = say('hoặc giữ Space, bấm vào ảnh'); kb3.classList.add('kb');
+        top.append(b, kb3);
       } else if (S.mode === 'diff') {
-        const note = Object.assign(document.createElement('span'), { className: 'note-diff', textContent: 'Đang so từng điểm ảnh…' });
+        const note = say('đang so từng điểm ảnh…');
         top.append(note);
         diff(l, r).then((d) => {
           const c = d.canvas; c.style.width = Math.round(d.w * scale) + 'px'; c.style.height = Math.round(d.h * scale) + 'px';
           ov.append(c, tag(`${r.name}, đỏ là chỗ khác ${l.name}`, 'r'));
-          note.textContent = (d.pct < 0.05 ? 'Phần chung của hai bản gần như giống hệt.' : `Khác nhau ở khoảng ${d.pct.toFixed(1)}% diện tích chung.`) + (l.h !== r.h || l.w !== r.w ? ` Hai ảnh khác cỡ (${l.w}×${l.h} và ${r.w}×${r.h}); phần thừa không so.` : '');
+          note.textContent = (d.pct < 0.05 ? 'phần chung gần như giống hệt' : `đỏ là chỗ khác, khoảng ${d.pct.toFixed(1)}% diện tích chung`) + (l.h !== r.h || l.w !== r.w ? `; hai ảnh khác cỡ, phần thừa không so` : '');
+          note.title = note.textContent;
           report();
         }).catch(() => { note.textContent = 'Không so được hai ảnh này.'; });
       }
-      if (top.childNodes.length) st.append(top);
+      const likes = document.createElement('span'); likes.className = 'likes tip-below';
+      likes.append(like(l, true), like(r, true)); top.append(likes);
+      st.append(top);
       scroll.append(ov); st.append(scroll);
     }
     const area = document.createElement('div'); area.id = 'area'; area.hidden = true; st.append(area);
@@ -235,7 +294,7 @@
     const rc = (box.classList.contains('ov') ? box : box.querySelector('img') || box).getBoundingClientRect();
     const x = (clientX - rc.left) / scale, y = (clientY - rc.top) / scale;
     let side;
-    if (box.classList.contains('shot')) side = box.dataset.side === l.key ? l : r;
+    if (box.classList.contains('shot')) side = sideOf(it(), box.dataset.side) || r;
     else if (S.mode === 'slide') side = (clientX - rc.left) / rc.width * 100 < S.split ? l : r;
     else if (S.mode === 'onion') side = S.fade >= 50 ? r : l;
     else if (S.mode === 'blink') side = blinkLeft ? l : r;
@@ -252,12 +311,19 @@
   function pagePoint(sideKey, x, y) {
     const [l, r] = pair();
     let box = null;
-    if (S.mode === 'side') box = document.querySelector(`#stage .shot[data-side="${CSS.escape(sideKey)}"] img`);
+    if (S.mode === 'side' || S.mode === 'one') box = document.querySelector(`#stage .shot[data-side="${CSS.escape(sideKey)}"] img`);
     else if (S.mode === 'blink') box = (blinkLeft ? l : r).key === sideKey ? $('ov') : null;
     else box = sideKey === l.key || sideKey === r.key ? $('ov') : null;
     if (!box) return null;
     const rc = box.getBoundingClientRect();
     return { x: rc.left + window.scrollX + x * scale, y: rc.top + window.scrollY + y * scale };
+  }
+  /** The point, or null when the image box has scrolled it out of sight (a pin must not float over the buttons). */
+  function visible(p) {
+    const sc = document.querySelector('#stage .scroll');
+    if (!p || !sc) return p;
+    const r = sc.getBoundingClientRect(), x = p.x - window.scrollX, y = p.y - window.scrollY;
+    return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom ? p : null;
   }
   function labelOf(side, x, y, w) { return `${it().label} · ${side.name} · ${w ? 'vùng ' : ''}${x}, ${y} px`; }
 
@@ -269,7 +335,7 @@
     for (const t of threads) {
       const a = parseAnchor(t.anchor);
       if (!a || a.item !== it().id) continue;
-      map[t.id] = pagePoint(a.side, a.w ? a.x + a.w / 2 : a.x, a.w ? a.y + a.h / 2 : a.y);
+      map[t.id] = visible(pagePoint(a.side, a.w ? a.x + a.w / 2 : a.x, a.w ? a.y + a.h / 2 : a.y));
     }
     try { ca.placed(map); } catch (e) { /* shell went away */ }
   }
@@ -287,11 +353,13 @@
           if (i < 0) return;
           if (i !== S.cur) go(i, true);
           const [l, r] = pair();
-          if (a.side !== l.key && a.side !== r.key) { S.pairs[it().id] = { l: l.key, r: a.side }; blinkLeft = false; renderTools(); renderStage(); }
+          if (S.mode === 'one') { if (shownKey() !== a.side) { oneKey = a.side; renderStage(); } }
+          else if (a.side !== l.key && a.side !== r.key) { S.pairs[it().id] = { l: l.key, r: a.side }; blinkLeft = false; renderTools(); renderStage(); }
           else if (S.mode === 'blink' && (blinkLeft ? l : r).key !== a.side) { blinkLeft = !blinkLeft; renderStage(); }
           requestAnimationFrame(() => {
             const p = pagePoint(a.side, a.x, a.y);
-            if (p) window.scrollTo({ top: Math.max(0, p.y - window.innerHeight / 2), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+            const sc = document.querySelector('#stage .scroll');
+            if (p && sc) { const r0 = sc.getBoundingClientRect(); sc.scrollBy({ top: p.y - window.scrollY - r0.top - r0.height / 2, left: p.x - window.scrollX - r0.left - r0.width / 2, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }
             report();
           });
         },
@@ -357,7 +425,7 @@
     const so = st.getBoundingClientRect();
     S.pins.forEach((p, n) => {
       if (p.item !== it().id) return;
-      const pt = pagePoint(p.side, p.w ? p.x + p.w / 2 : p.x, p.w ? p.y + p.h / 2 : p.y);
+      const pt = visible(pagePoint(p.side, p.w ? p.x + p.w / 2 : p.x, p.w ? p.y + p.h / 2 : p.y));
       if (!pt) return;
       const d = Object.assign(document.createElement('button'), { type: 'button', className: 'dot', textContent: String(n + 1), title: p.text });
       d.style.left = pt.x - window.scrollX - so.left + 'px'; d.style.top = pt.y - window.scrollY - so.top + 'px';
@@ -406,7 +474,8 @@
 
   // ---------- navigation and events ----------
   function go(i, quiet) {
-    S.cur = Math.max(0, Math.min(items.length - 1, i)); blinkLeft = false; closePop();
+    S.cur = Math.max(0, Math.min(items.length - 1, i)); blinkLeft = false; oneKey = null; closePop();
+    S.mode = modeFor(it());
     renderList(); renderTools(); renderStage(); save();
     if (!quiet) { const b = document.querySelector(`.item[data-i="${S.cur}"]`); if (b) b.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
   }
@@ -417,11 +486,19 @@
     $('items').addEventListener('click', (e) => { const b = e.target.closest('.item'); if (b) go(+b.dataset.i, true); });
     $('prev').onclick = () => go(S.cur - 1); $('next').onclick = () => go(S.cur + 1);
     $('ok').onclick = () => rate('ok'); $('fix').onclick = () => rate('fix');
-    $('modes').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { S.mode = b.dataset.mode; closePop(); renderTools(); renderStage(); save(); } });
-    $('zooms').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { S.zoom = +b.dataset.zoom; closePop(); renderTools(); renderStage(); save(); } });
+    const setMode = (m) => { S.mode = m; S.modes = { ...S.modes, [kindOf(it())]: m }; $('more').open = false; closePop(); renderTools(); renderStage(); save(); };
+    document.querySelector('.tools').addEventListener('click', (e) => { const b = e.target.closest('button[data-mode]'); if (b) setMode(b.dataset.mode); });
+    document.addEventListener('click', (e) => { if (!e.target.closest('#more')) $('more').open = false; });
+    $('about-btn').onclick = () => { const a = $('about'), open = a.hidden; a.hidden = !open; $('about-btn').setAttribute('aria-expanded', String(open)); };
+    $('zooms').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { S.zoom = +b.dataset.zoom; $('more').open = false; closePop(); renderTools(); renderStage(); save(); } });
     const pick = () => { S.pairs[it().id] = { l: $('left-side').value, r: $('right-side').value }; renderTools(); renderStage(); save(); };
     $('left-side').onchange = pick; $('right-side').onchange = pick;
-    $('prefer').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; const id = it().id; if (S.prefer[id] === b.dataset.key) unset('prefer', id); else S.prefer[id] = b.dataset.key; renderList(); renderTools(); save(); });
+    $('stage').addEventListener('click', (e) => {
+      const b = e.target.closest('.like'); if (!b) return;
+      const id = it().id; if (S.prefer[id] === b.dataset.key) unset('prefer', id); else S.prefer[id] = b.dataset.key;
+      renderList(); renderTools(); renderStage(); save();
+    });
+    $('steps').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) go(+b.dataset.i); });
     $('pin').onclick = () => {
       if (ca && commentMode) { ca.exitMode(); armed = false; }
       else armed = !armed;
@@ -429,7 +506,7 @@
       if (armed) Kit.toast(ca ? 'Bấm vào chỗ muốn comment trên ảnh. Kéo để khoanh một vùng.' : 'Bấm vào chỗ muốn ghi chú trên ảnh.');
     };
     $('general').addEventListener('input', () => { S.general = $('general').value; save(); });
-    $('copy').onclick = async () => { if (!loaded) Kit.toast('Đang tải bản đã lưu…'); await ready; const snap = JSON.parse(JSON.stringify(S)); save(true, snap); Kit.copy(results(snap)); };
+    $('copy').onclick = $('copy-m').onclick = async () => { if (!loaded) Kit.toast('Đang tải bản đã lưu…'); await ready; const snap = JSON.parse(JSON.stringify(S)); save(true, snap); Kit.copy(results(snap)); };
     $('send').onclick = async () => {
       if (!loaded) Kit.toast('Đang tải bản đã lưu…');
       await ready;
@@ -452,22 +529,37 @@
     document.addEventListener('keydown', (e) => {
       if (e.target.closest('textarea, input, select')) return;
       if (e.key === 'ArrowLeft') go(S.cur - 1); else if (e.key === 'ArrowRight') go(S.cur + 1);
-      else if (/^[1-5]$/.test(e.key)) { S.mode = MODES[+e.key - 1]; renderTools(); renderStage(); save(); }
+      else if (/^[1-6]$/.test(e.key)) setMode(MODES[+e.key - 1]);
       else if (e.key === ' ' && S.mode === 'blink') { e.preventDefault(); if (!e.repeat && !blinkLeft) { blinkLeft = true; renderStage(); } }
       else if (e.key === 'Escape') { closePop(); if (armed) { armed = false; document.body.classList.remove('commenting'); renderTools(); } }
     });
     document.addEventListener('keyup', (e) => { if (e.key === ' ' && S.mode === 'blink' && blinkLeft) { blinkLeft = false; renderStage(); } });
-    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { closePop(); renderStage(); }, 120); });
+    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { closePop(); fitIfNoZoom(); placeNote(); S.mode = modeFor(it()); renderTools(); renderStage(); }, 120); });
+  }
+
+  // Phones hide the size buttons, so a zoom picked on a wider window must not stay stuck there.
+  function fitIfNoZoom() { if (S.zoom && narrow()) { S.zoom = 0; save(); } }
+
+  // Phones: the general note moves into "Về vòng này", so that button stays even when the round has no intro.
+  // Runs on start and on every resize, so crossing the breakpoint moves the note back and forth.
+  function placeNote() {
+    const rail = document.querySelector('.rail > .gen'), slot = $('gen-narrow-slot'), btn = $('about-btn');
+    const bare = !R.intro && !(R.scenarios || []).length;
+    if (narrow()) slot.append(...rail.childNodes); else rail.append(...slot.childNodes);
+    btn.hidden = bare && !narrow();
+    btn.textContent = bare ? 'Ghi chú chung' : 'Về vòng này';
+    if (btn.hidden) { $('about').hidden = true; btn.setAttribute('aria-expanded', 'false'); }
   }
 
   async function start() {
     $('title').textContent = R.title; $('intro').textContent = R.intro || '';
     const sc = $('scen');
     (R.scenarios || []).forEach((t) => sc.append(Object.assign(document.createElement('li'), { textContent: t })));
-    $('scen-box').hidden = !(R.scenarios || []).length;
-    if (narrow()) { $('scen-box').open = false; document.querySelector('main').append(document.querySelector('.gen')); }
+    sc.hidden = !(R.scenarios || []).length;
+    $('intro').hidden = !R.intro;
+    placeNote();
     if (!items.length) { $('stage').append(Object.assign(document.createElement('p'), { className: 'empty muted', textContent: 'Vòng này chưa có cặp ảnh nào.' })); return; }
-    S.mode = narrow() && Math.max(...items[0].sides.map((s) => s.w)) > 700 ? 'blink' : 'side';
+    S.mode = modeFor(items[0]);
     bind(); renderList(); renderTools(); renderStage();
     snap = JSON.parse(JSON.stringify(S));
     const saved = await store.load();
@@ -482,7 +574,7 @@
       }
       if (Array.isArray(saved.pins)) S.pins = saved.pins.concat(S.pins);
       const ok = { general: (v) => typeof v === 'string', split: (v) => typeof v === 'number', fade: (v) => typeof v === 'number',
-        zoom: (v) => ZOOMS.includes(v), mode: (v) => MODES.includes(v), cur: (v) => v >= 0 && v < items.length };
+        zoom: (v) => ZOOMS.includes(v), cur: (v) => v >= 0 && v < items.length };
       for (const k of FIELDS) if (!edited.fields.has(k) && ok[k](saved[k])) S[k] = saved[k];
       $('general').value = S.general || '';
     }
@@ -490,6 +582,7 @@
     if (early) save();
     const h = location.hash.slice(1), hi = items.findIndex((x) => x.id === h);
     if (hi >= 0) S.cur = hi;
+    fitIfNoZoom(); S.mode = modeFor(it());
     renderList(); renderTools(); renderStage();
     initComments();
   }

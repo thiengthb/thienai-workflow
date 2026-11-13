@@ -1,5 +1,5 @@
 // Builds a tiny round from two generated PNGs and checks the page carries the kit and the round data.
-import { mkdtempSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { deflateSync } from 'node:zlib';
@@ -37,3 +37,32 @@ assert.throws(() => build({ id: 'r2', title: 't', items: [
   { id: 'Home 1440', label: 'a', sides: [{ key: 'old', name: 'Cũ', file: 'a.png' }] },
   { id: 'home-1440', label: 'b', sides: [{ key: 'old', name: 'Cũ', file: 'b.png' }] }] }, dir, join(dir, 'out2')), /trùng/);
 console.log('make-round: duplicate ids rejected');
+
+// Folder mode: images named <screen>-<width>__<side>@2x.png need no round.json; publish.json carries the Artifact params.
+import { specFromDir, CAPABILITIES } from '../../artifacts/compare/make-round.mjs';
+import { writePublish } from '../../artifacts/kit/publish.mjs';
+const shots = join(dir, 'shots-in');
+mkdirSync(shots, { recursive: true });
+writeFileSync(join(shots, 'history-1180__new@2x.png'), png(80, 60));
+writeFileSync(join(shots, 'history-1180__old@2x.png'), png(80, 60));
+writeFileSync(join(shots, 'history-390__a.png'), png(20, 40));
+writeFileSync(join(shots, 'history-390__old.png'), png(20, 40));
+writeFileSync(join(shots, 'notes.txt'), 'not an image');
+const spec = specFromDir(shots, { title: 'Thư mục' });
+assert.equal(spec.title, 'Thư mục');
+assert.equal(spec.items.length, 2);
+const wide = spec.items.find((i) => i.id === 'history-1180'), phone = spec.items.find((i) => i.id === 'history-390');
+assert.deepEqual(wide.sides.map((s) => [s.key, s.name, s.scale]), [['old', 'Cũ', 2], ['new', 'Mới', 2]], 'old first, new last, @2x read');
+assert.deepEqual(phone.sides.map((s) => s.name), ['Cũ', 'Phác A']);
+assert.match(phone.group, /Điện thoại/);
+const out3 = join(dir, 'out3');
+const built = build(spec, shots, out3);
+assert.deepEqual(built.round.items.find((i) => i.id === 'history-1180').sides[0].w, 40, '@2x halves the CSS width');
+writePublish(out3, { files: built.files, capabilities: CAPABILITIES, icon: 'compare', description: spec.title });
+const pub = JSON.parse(readFileSync(join(out3, 'publish.json'), 'utf8'));
+assert.equal(pub.file_path, join(out3, 'index.html'));
+assert.equal(Object.keys(pub.files).length, 4);
+assert.ok(pub.capabilities.comments.customAnchors && pub.capabilities.db);
+mkdirSync(join(dir, 'empty'));
+assert.throws(() => specFromDir(join(dir, 'empty')), /Không thấy/);
+console.log('make-round: folder mode and publish.json');
