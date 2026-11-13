@@ -24,10 +24,12 @@ function say(msg,withReset){bar.innerHTML='<span></span>'+(withReset?'<button ty
  bar.firstChild.textContent=msg;bar.classList.add('on');clearTimeout(say.t);say.t=setTimeout(()=>bar.classList.remove('on'),9000);}
 bar.addEventListener('click',e=>{const k=e.target.dataset.k;if(k==='x')bar.classList.remove('on');if(k==='reset'){S.log=[];S.finished=false;S.ts=Date.now();flush(true).then(()=>location.reload());}});
 function local(){try{return JSON.parse(localStorage.getItem(LK)||'null');}catch(e){return null;}}
-function flush(now){clearTimeout(timer);try{localStorage.setItem(LK,JSON.stringify(S));}catch(e){}
+function flush(now){clearTimeout(timer);timer=null;try{localStorage.setItem(LK,JSON.stringify(S));}catch(e){}
  if(!db)return Promise.resolve();if(writing){again=true;return Promise.resolve();}writing=true;
  return Promise.race([db.doc(DOC).set(S),new Promise(r=>setTimeout(r,8000))]).catch(()=>{}).then(()=>{writing=false;if(again){again=false;flush();}});}
 function save(){clearTimeout(timer);timer=setTimeout(flush,700);}
+/* tắt màn, chuyển app hay tải lại trong lúc đang chờ lưu: ghi ngay, đừng để mất lần bấm cuối */
+addEventListener('pagehide',()=>{if(timer)flush();});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&timer)flush();});
 function rec(a){if(replaying)return;acted=true;S.log.push(a);S.ts=Date.now();save();}
 document.addEventListener('click',e=>{if(!e.isTrusted)return;const b=e.target.closest('button');if(!b||b.closest('#kit-bar')||b.id==='copy')return;
  if(b.id==='finish'){acted=true;S.finished=true;S.everDone=true;S.doneAt=new Date().toISOString();S.ts=Date.now();flush(true);return;}

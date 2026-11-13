@@ -52,7 +52,7 @@ Hai phần ôn này chỉ dành cho lần học đầu: trong trang, bọc chún
 6. **Tự nói lại ý chính** rồi mới xem bản của AI.
 7. **Góp ý** độ dài và độ khó.
 
-Sau buổi: ghi nhật ký vào `learning/<môn>.md`, lưu bài vào `learning/<môn>/`, thêm 2–3 thẻ vào `cards.md`, cập nhật bảng "Trạng thái" ở trên, và tick chặng trong [roadmap.md](roadmap.md) kèm link bài. Buổi học ngoài Claude thì ghi tên công cụ vào nhật ký, ví dụ "(Codex)". Xong thì mở PR để thien merge. Luật dạy chung ở `profile/TUTOR.md`.
+Trang dựng từ mẫu `artifacts/lesson/`: bấm "Xong buổi học" là kết quả được lưu và gửi cho Claude. Sau buổi: ghi nhật ký vào `learning/<môn>.md`, lưu bài vào `learning/<môn>/`, thêm 2–3 thẻ vào `cards.md`, cập nhật bảng "Trạng thái" ở trên, và tick chặng trong [roadmap.md](roadmap.md) kèm link bài. Buổi học ngoài Claude thì ghi tên công cụ vào nhật ký, ví dụ "(Codex)". Xong thì mở PR để thien merge. Luật dạy chung ở `profile/TUTOR.md`.
 
 ## Bắt đầu một môn mới
 

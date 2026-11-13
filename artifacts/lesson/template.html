@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style id="kit-css"></style>
+<style id="lesson-css"></style>
+<style>
+/* Phần riêng của bài viết ở đây. Màu trong bài lấy từ chính nội dung (learning/teaching/README.md). */
+</style>
+</head>
+<body>
+<!-- Mẫu buổi học (artifacts/lesson/README.md). Chép file này sang learning/<môn>/pages/lesson-NN.html, thay mọi chỗ __…__
+     và nội dung mẫu, rồi chạy: node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html -->
+<script type="application/json" id="lesson">{ "id": "__ID__", "subject": "__SUBJECT__", "title": "__TITLE__" }</script>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>__SUBJECT__ · __TITLE__</span><span id="cnt">1/8</span></div><div class="bar"><span id="bar"></span></div></div>
+
+  <!-- 0. Mở bài: một câu khiến tò mò, và buổi này làm gì -->
+  <section class="step on" data-s="0">
+    <h1>__HEADLINE__</h1>
+    <p class="muted">Khoảng 15 phút. Bạn sẽ thử trước, rồi mới đọc ý chính.</p>
+    <div class="card small"><p>1. Ba câu ôn nhanh.<br>2. Một câu nhớ lại buổi trước.<br>3. Thử một việc, chưa có lý thuyết.<br>4. Đọc ý chính, có số cụ thể.<br>5. Câu hỏi nhanh, tự nói lại, góp ý.</p></div>
+    <button class="btn primary next" type="button" data-go="1">Bắt đầu</button>
+  </section>
+
+  <!-- 1. Ôn trộn: 3 thẻ đến hạn trong learning/cards.md. Chỉ lần học đầu (data-part="review"). -->
+  <section class="step" data-s="1" data-part="review">
+    <h2>Ôn nhanh</h2>
+    <p class="small muted">Trả lời theo trí nhớ. Câu sai sẽ được hỏi lại sớm hơn.</p>
+    <div class="card">
+      <p><b>1.</b> Muốn nút chính nổi hơn mà không thêm màu mới thì làm gì?</p>
+      <div class="q" data-q="C1" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Làm nút chính to hơn và thêm bóng đổ</button>
+        <button class="opt" type="button">Hạ nút phụ xuống: nút viền nhạt hoặc một dòng chữ</button>
+        <button class="opt" type="button">Đổi chữ trên nút chính thành chữ in hoa</button>
+        <p class="why">Hạ những thứ khác xuống thì nút chính tự nổi lên.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Chữ phụ dưới tiêu đề nên khác tiêu đề ở điểm nào trước tiên?</p>
+      <div class="q" data-q="C2" data-a="0" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Nhỏ hơn và màu xám hơn</button>
+        <button class="opt" type="button">Một font khác hẳn</button>
+        <button class="opt" type="button">Gạch chân cho dễ thấy</button>
+        <p class="why">Cỡ chữ và độ đậm nhạt đủ tạo thứ bậc. Thêm font mới chỉ làm trang rối.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> Nút cao bao nhiêu thì ngón tay bấm trên điện thoại không trượt?</p>
+      <div class="q" data-q="C3" data-a="2" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Khoảng 24px</button>
+        <button class="opt" type="button">Khoảng 30px</button>
+        <button class="opt" type="button">Từ 36px trở lên, dòng đáp án 44px</button>
+        <p class="why">Đầu ngón tay rộng cỡ 40px. Nút thấp hơn thì dễ bấm nhầm sang nút bên cạnh.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="2" data-need="C1 C2 C3" disabled>Tiếp</button>
+  </section>
+
+  <!-- 2. Nhớ lại buổi trước của môn này: một hình, một câu. -->
+  <section class="step" data-s="2" data-part="review">
+    <h2>Nhớ lại buổi trước</h2>
+    <div class="card">
+      <p>Các dòng trong một nhóm cách nhau 8px. Khoảng giữa hai nhóm nên là bao nhiêu?</p>
+      <div class="q" data-q="recall" data-a="2" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">8px, cho đều</button>
+        <button class="opt" type="button">10px</button>
+        <button class="opt" type="button">24px trở lên, gấp vài lần khoảng trong nhóm</button>
+        <p class="why">Khoảng giữa nhóm phải khác hẳn khoảng trong nhóm thì mắt mới thấy hai nhóm.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="3" data-need="recall" disabled>Tiếp</button>
+  </section>
+
+  <!-- 3. Thử trước: một kiểu bài trong learning/teaching/patterns.html. Câu đoán có trước mọi lời giải thích. -->
+  <section class="step" data-s="3">
+    <h2>Thử trước</h2>
+    <p>Màn này có hai nút đặc cùng màu: "Thanh toán" và "Thêm mã giảm giá". Bạn đoán người dùng nhìn vào đâu trước?</p>
+    <div class="card">
+      <div class="q" data-q="guess" data-a="2"><p class="status" role="status"></p>
+        <button class="opt" type="button">Nút "Thanh toán", vì nó ở dưới cùng</button>
+        <button class="opt" type="button">Nút "Thêm mã giảm giá", vì chữ dài hơn</button>
+        <button class="opt" type="button">Không rõ: hai khối đặc cùng màu giành mắt nhau</button>
+        <p class="why">Hai khối cùng màu đặc thì mắt không biết khối nào là việc chính.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="4" data-need="guess" disabled>Tiếp</button>
+  </section>
+
+  <!-- 4. Hiểu sau: nhắc đúng lựa chọn người học vừa làm (điền vào #echo bằng code của bài). -->
+  <section class="step" data-s="4">
+    <h2>Ý chính</h2>
+    <p class="fb" id="echo"></p>
+    <div class="card"><p>Mỗi màn chỉ một chỗ màu đặc: việc chính. Mọi thứ khác dùng đen, trắng, xám, hoặc viền nhạt.</p></div>
+    <button class="btn primary next" type="button" data-go="5">Tiếp</button>
+  </section>
+
+  <!-- 5. Câu hỏi nhanh -->
+  <section class="step" data-s="5">
+    <h2>Câu hỏi nhanh</h2>
+    <div class="card">
+      <p>Màn đặt lịch có nút "Đặt lịch" xanh đặc và trái tim đỏ đặc. Sửa thế nào?</p>
+      <div class="q" data-q="q1" data-a="0"><p class="status" role="status"></p>
+        <button class="opt" type="button">Để tim thành viền, chỉ tô khi đã bấm</button>
+        <button class="opt" type="button">Đổi tim sang màu xanh cho đồng bộ</button>
+        <button class="opt" type="button">Làm nút "Đặt lịch" to gấp đôi</button>
+        <p class="why">Tim là việc phụ. Viền nhạt giữ được nghĩa mà không giành mắt.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="6" data-need="q1" disabled>Tiếp</button>
+  </section>
+
+  <!-- 6. Tự nói lại rồi mới xem bản của Claude -->
+  <section class="step" data-s="6">
+    <h2>Tự nói lại</h2>
+    <p>Viết 1–2 câu: chọn màu cho một màn thế nào? Viết như đang nói với bạn cùng nhóm.</p>
+    <textarea data-key="teach" data-min="5" placeholder="Mình sẽ..."></textarea>
+    <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Chọn một màu nhấn và chỉ để nó thành khối đặc ở việc chính của màn. Màu khác chỉ khi mang nghĩa, như lỗi hay cảnh báo, và luôn có chữ đi kèm.</div></div>
+    <button class="btn primary next" type="button" data-go="7" data-need="teach" disabled>Tiếp</button>
+  </section>
+
+  <!-- 7. Góp ý, xong buổi -->
+  <section class="step" data-s="7">
+    <h2>Góp ý buổi này</h2>
+    <div class="card">
+      <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
+      <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Cách học so với các buổi trước</b><div class="seg full" data-f="method"><button type="button" data-v="thích hơn" aria-pressed="false">Thích hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="kém hơn" aria-pressed="false">Kém hơn</button></div></div>
+      <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+    </div>
+    <button class="btn primary next" type="button" id="finish">Xong buổi học</button>
+    <p class="done-msg" id="done-msg" role="status"></p>
+    <button class="btn next hide" type="button" id="copy">Chép kết quả</button>
+  </section>
+</div>
+
+<script id="kit-js"></script>
+<script id="lesson-js"></script>
+<script>
+/* Phần riêng của bài: ghi thêm vào R, gọi Lesson.done('<khóa>') khi một việc xong. Ví dụ: nhắc lại lựa chọn ở bước thử. */
+document.querySelectorAll('[data-q="guess"] .opt').forEach((o, i) => o.addEventListener('click', () => {
+  const picks = ['nút "Thanh toán"', 'nút "Thêm mã giảm giá"', 'không rõ nhìn vào đâu'];
+  document.getElementById('echo').textContent = 'Bạn đoán: ' + picks[i] + '. ' + (i === 2 ? 'Đúng vậy, và đây là lý do.' : 'Thật ra mắt bị kéo qua lại giữa hai khối.');
+}));
+</script>
+<script id="lesson-kit"></script>
+</body>
+</html>
