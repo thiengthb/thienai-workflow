@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="lesson-id" content="war-04">
+<title>Chiến tranh buổi 4: Hậu cần</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--soft:#f3f1ec;--accent:#1b1b1a;--accent-soft:#ebe8e1;--good:#2e7d4f;--good-ink:#1f5c39;--good-soft:#e4f2e8;--bad:#c2410c;--bad-soft:#fdeee6;--spring:cubic-bezier(.3,1.25,.5,1);
+ --ngo:#b23a2a;--han:#2f3e5c;--land:#e6e0cc;--mud:#cdbf9a;--water:#8fb8cf;--water-low:#b9d2df}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Onest,system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:480px;margin:0 auto;padding:0 16px 56px}
+.top{position:sticky;top:0;background:var(--bg);padding:12px 0 10px;z-index:5}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .25s ease}
+h1{font-size:26px;line-height:1.25;margin:20px 0 8px;font-weight:700;letter-spacing:-.01em}
+h2{font-size:20px;line-height:1.3;margin:8px 0 6px;font-weight:600;letter-spacing:-.01em}
+p{margin:0 0 12px}
+.muted{color:var(--muted)}.small{font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.step{display:none}.step.on{display:block;animation:in .2s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hide{display:none!important}
+/* nút chung: trạng thái chọn phải nhìn thấy được, không chỉ dựa vào màu */
+.btn,.opt{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:14px;min-height:48px;padding:12px 14px;cursor:pointer;text-align:left;width:100%;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background-color .15s,transform .2s var(--spring)}
+.btn:active,.opt:active{transform:scale(.98)}
+.btn:focus-visible,.opt:focus-visible,.hot:focus-visible,.seg button:focus-visible,textarea:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.opt{margin:8px 0;font-size:15px;line-height:1.45}
+.opt[aria-pressed="true"]{border-color:var(--ink);background:var(--accent-soft)}
+.opt[aria-pressed="true"]::after{content:"Đã chọn";margin-left:auto;font-size:12px;font-weight:600;flex:0 0 auto}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.right::after{content:"Đúng";margin-left:auto;font-size:12px;font-weight:700;color:var(--good-ink);flex:0 0 auto}
+.opt.wrong::after{content:"Bạn chọn";margin-left:auto;font-size:12px;font-weight:700;color:var(--bad);flex:0 0 auto}
+.opt[disabled]{cursor:default;color:var(--ink)}
+.primary{background:var(--ink);color:#fff;border-color:var(--ink);justify-content:center;font-weight:600;margin-top:16px;height:52px;border-radius:26px}
+.primary[disabled]{background:#cfcbc2;border-color:#cfcbc2;color:#fff;cursor:default}
+.ghost{justify-content:center;margin-top:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row .btn{width:auto;flex:1 1 0;justify-content:center;text-align:center}
+.fb{font-size:15px;border-radius:12px;padding:10px 12px;margin-top:10px;background:var(--soft)}
+.fb:empty{display:none}
+.fb.good{background:var(--good-soft);color:var(--good-ink)}
+.fb.bad{background:var(--bad-soft);color:#7c2d12}
+.why{display:none;font-size:14px;padding:12px 14px;border-radius:12px;background:var(--soft);margin-top:4px}
+.why.on{display:block}
+.status{font-size:14px;font-weight:600;margin:6px 0 0}.status:empty{display:none}
+.stage{background:var(--soft);border-radius:16px;padding:14px}
+.lab{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px;text-align:center}
+
+
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg button,.chip{font:500 14px Onest,sans-serif;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:12px;min-height:44px;cursor:pointer;-webkit-tap-highlight-color:transparent;padding:6px 8px}
+.seg button[aria-pressed="true"],.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}
+.krow{padding:10px 0;border-top:1px solid var(--line)}.krow:first-child{border-top:0;padding-top:0}
+.krow>span{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chip{border-radius:22px;padding:6px 14px;text-align:left}
+textarea{width:100%;min-height:72px;border:1px solid var(--line);border-radius:14px;padding:12px;font:15px/1.5 Onest,sans-serif;resize:vertical;background:#fff;color:var(--ink)}
+/* bản đồ */
+.terrain{width:100%;height:auto;display:block;border-radius:14px;background:var(--land)}
+.terrain text{font-family:Onest,system-ui,sans-serif}
+.forces{display:grid;gap:8px;margin:10px 0}
+.forces div{background:var(--soft);border-radius:12px;padding:10px 12px;font-size:14px;color:var(--muted)}
+.forces b{display:block;font-size:15px}
+.ngo-t{color:var(--ngo)}.han-t{color:var(--han)}
+.opt.fm{flex-direction:column;align-items:stretch;gap:6px}
+.opt.fm svg{width:100%;max-width:240px;height:auto;align-self:center;border-radius:10px;background:var(--land)}
+.opt.fm::after{margin-left:0;align-self:flex-end}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.timeline{display:flex;align-items:center;gap:10px;margin-top:8px}
+.timeline .btn{width:48px;flex:0 0 48px;justify-content:center;padding:0}
+input[type=range]{flex:1;height:44px;accent-color:var(--ink);touch-action:pan-y}
+.phase{font-size:15px;min-height:96px;margin-top:4px}
+.phase b{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-bottom:2px}
+.guess{display:inline-block;font-size:12px;font-weight:700;background:var(--bad-soft);color:#7c2d12;border-radius:6px;padding:1px 8px;margin-bottom:6px}
+.real{display:inline-block;font-size:12px;font-weight:700;background:var(--good-soft);color:var(--good-ink);border-radius:6px;padding:1px 8px;margin-bottom:6px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:3px;margin-right:5px;vertical-align:0}
+/* xếp thứ tự */
+.mlist{display:grid;gap:8px;margin:10px 0}
+.mi{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;font:14px/1.45 Onest,sans-serif;color:var(--ink);cursor:pointer;text-align:left;width:100%;-webkit-tap-highlight-color:transparent}
+.mi .n{flex:0 0 28px;height:28px;border-radius:14px;border:1px dashed #b9b4a8;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--muted)}
+.mi[aria-pressed="true"]{border-color:var(--ink)}
+.mi[aria-pressed="true"] .n{background:var(--ink);color:#fff;border:0}
+.mi b{display:block;font-size:15px;margin-bottom:2px}
+.idea{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.idea:first-child{border-top:0}
+.idea .k{flex:0 0 28px;height:28px;border-radius:8px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-weight:700}
+.idea p{margin:0;font-size:15px}
+.mine{display:none}.mine.on{display:block}
+.say{font-size:15px;padding:14px;border-radius:14px;background:#fff;border:1px solid var(--line);margin:10px 0}
+.say b{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:600}
+.crit{padding:12px 0;border-top:1px solid var(--line)}.crit:first-child{border-top:0;padding-top:0}
+.crit>b{font-weight:600;display:block;margin-bottom:6px;font-size:15px}
+#sources a{display:inline-block;padding:3px 0;color:var(--ink)}
+#saved{display:none;font-size:14px;padding:12px 14px;border-radius:12px;background:var(--soft);margin-top:12px}
+.split{display:block}
+@media (min-width:600px) and (max-width:899px){.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.opts .opt{margin:0}}
+@media (min-width:900px){
+ .wrap{max-width:1000px;padding:0 32px 72px}
+ .split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
+ .split>.stick{position:sticky;top:64px}
+ .narrow{max-width:600px;margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+.opt.histo{border-color:var(--ink);background:var(--accent-soft)}
+.opt.histo::after{content:"Chuyện thật";margin-left:0;align-self:flex-end;font-size:12px;font-weight:700;flex:0 0 auto}
+.opt.mine{border-color:#b9b4a8;border-style:dashed}
+.opt.mine::after{content:"Bạn chọn";margin-left:0;align-self:flex-end;font-size:12px;font-weight:700;color:var(--muted);flex:0 0 auto}
+.crit{font-size:14px}
+</style>
+
+<style>
+/* bài 3: xếp tầng */
+.tiers3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.tiers3 button{font:500 13px/1.3 Onest,sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;min-height:44px;padding:6px 4px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tiers3 button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg);font-weight:600}
+.tiers3 button.right{border-color:var(--good);background:var(--good-soft);color:var(--good-ink);font-weight:700}
+.tiers3 button.wrong{border-color:var(--bad);background:var(--bad-soft);color:var(--bad);font-weight:700}
+.tiers3 button[disabled]{cursor:default}
+.scard{padding:12px 0;border-top:1px solid var(--line)}.scard:first-child{border-top:0;padding-top:0}
+.scard p{margin:0;font-size:15px}
+.scard .note{display:none;font-size:13px;color:var(--muted);margin-top:6px}
+.scard .note.on{display:block}
+.zoom{display:grid;gap:8px;margin:10px 0}
+.zoom div{border-radius:12px;padding:10px 12px;background:var(--soft);font-size:14px}
+.zoom div b{display:block;font-size:15px;margin-bottom:2px}
+.zoom .z1{border-left:5px solid var(--ink)}
+.zoom .z2{border-left:5px solid #8a8476;margin-left:14px}
+.zoom .z3{border-left:5px solid #c9c3b6;margin-left:28px}
+</style>
+<style>
+/* bài 4: đoán con số, bao gạo */
+.guess4{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}
+.guess4 button{font:500 15px/1.3 Onest,sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;min-height:48px;padding:8px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.guess4 button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg);font-weight:600}
+.guess4 button.right{border-color:var(--good);background:var(--good-soft);color:var(--good-ink);font-weight:700}
+.guess4 button.wrong{border-color:var(--bad);background:var(--bad-soft);color:var(--bad);font-weight:700}
+.guess4 button[disabled]{cursor:default}
+.bags{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 4px}
+.bags i{width:18px;height:22px;border-radius:5px 5px 7px 7px;background:#cdbf9a;border:1px solid #a8996f;opacity:0;transform:scale(.6);transition:opacity .25s,transform .25s var(--spring)}
+.bags i.on{opacity:1;transform:none}
+.bags i.keep{background:var(--good);border-color:var(--good-ink)}
+.bagrow{font-size:14px;color:var(--muted);margin-top:8px}
+.bagrow b{color:var(--ink)}
+.reveal{display:none}.reveal.on{display:block}
+</style>
+<style id="lesson-kit-css">
+/* Bộ khung chung cho trang học. Sửa ở đây rồi chạy apply-kit.mjs, đừng sửa bản chép trong từng trang. */
+@media (prefers-color-scheme:dark){
+ :root:root{--bg:#161615;--card:#1f1f1d;--ink:#ecebe7;--muted:#a19e97;--line:#34322e;--soft:#262523;--accent:#4fb3a6;--accent-soft:#1c3330;--accent-ink:#8fd9c9;
+  --good:#4fb07a;--good-ink:#8fd9ab;--good-soft:#1c3125;--bad:#f0763f;--bad-soft:#3b2219;--bad-ink:#f6b796}
+ body{background:var(--bg);color:var(--ink)}
+ .primary{color:var(--bg)!important}
+ .seg button,.chip,textarea,.mi,.say,.btn,.opt{background:var(--card);color:var(--ink)}
+ .primary{background:var(--ink)!important;border-color:var(--ink)!important}
+ .primary[disabled]{background:var(--line)!important;border-color:var(--line)!important;color:var(--muted)!important}
+ .seg button[aria-pressed="true"],.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+ .fb.bad,.guess{color:var(--bad-ink)!important}
+ /* bản đồ, ảnh chụp màn hình và khung mô phỏng giữ màu gốc, chỉ dịu bớt độ sáng */
+ svg.terrain,.opt svg,img,.keep-light,.mock,.phone{filter:brightness(.9)}
+ a{color:var(--ink)}
+ /* các lớp hay dùng trong trang cũ có màu trắng viết cứng: đưa về biến màu */
+ .card,.sc,.tab,.scale button,.pick button,.ln,.trap,.note,.rc{background:var(--card);color:var(--ink)}
+ .btn:not(.ghost):not(.primary){background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)}
+ .btn.ghost{background:transparent!important;color:var(--ink)!important}
+ .btn[disabled]{opacity:.35}
+ .tab.on,.scale button.on,.pick button.on,.chip.on,.mi.on .n,.mi[aria-pressed="true"] .n{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important}
+ .why,.mine{background:var(--soft)!important;color:var(--ink)!important}
+ .kw,.purpose,.done{background:var(--accent-soft)!important;color:var(--accent-ink)!important}
+ .sc .tg,.mi .n{background:var(--soft);color:var(--muted)}
+ .sc.need .tg{background:var(--accent-soft);color:var(--accent-ink)}.sc.sol .tg{background:#2b2540;color:#c4b5fd}
+ .opt.right,.sc.right{background:var(--accent-soft)!important;border-color:var(--accent)!important}
+ .opt.wrong,.sc.wrong{background:var(--bad-soft)!important;border-color:var(--bad)!important}
+ /* màn mô phỏng giao diện (điện thoại, ảnh dựng lại) là nội dung bài: giữ nguyên màu sáng */
+ .mock,.phone,.shot,.sw,.keep-light{--bg:#FAF8F3;--card:#fff;--ink:#1b1b1a;--muted:#6b6862;--line:#e7e3da;--soft:#f3f1ec;color:#1b1b1a}
+ .han-t{color:#9fb3d6!important}.ngo-t{color:#ec8a78!important}
+}
+h1:focus,h2:focus{outline:none}
+#kit-bar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:50;display:none;align-items:center;gap:10px;max-width:calc(100% - 24px);
+ background:var(--ink);color:var(--bg);border-radius:22px;padding:8px 8px 8px 16px;font:500 14px/1.35 Onest,system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+#kit-bar.on{display:flex}
+#kit-bar span{flex:1 1 auto;min-width:0}
+#kit-bar{width:min(460px,calc(100% - 24px))}
+#kit-bar button{font:600 13px Onest,system-ui,sans-serif;border:0;border-radius:16px;min-height:36px;padding:6px 12px;cursor:pointer;background:var(--bg);color:var(--ink);flex:0 0 auto;width:auto}
+#kit-bar button.x{background:transparent;color:var(--bg);padding:6px 8px}
+.kit-review-off [data-part~="review"]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="top"><div class="meta"><span>Chiến tranh buổi 4 · Hậu cần</span><span id="cnt">1/6</span></div><div class="bar"><i id="bar"></i></div></div>
+
+ <!-- 0 mở đầu + nhớ lại -->
+ <section class="step on narrow" data-s="0">
+  <h1>Nuôi một chiến dịch giữa núi rừng</h1>
+  <p class="muted">Khoảng 20 phút. Vẫn ở Điện Biên Phủ năm 1954, nhưng hôm nay bạn không cầm quân. Bạn lo gạo, đạn và đường đi cho cả chiến dịch.</p>
+  <div class="card" data-part="review">
+   <p class="small" style="margin-bottom:8px"><b>Nhớ lại buổi 3.</b> Vì sao Đại tướng Võ Nguyên Giáp hoãn trận đánh ngày 26/1/1954, và lý do đó nằm ở tầng nào?</p>
+   <div class="q" data-q="r1" data-a="1"><div class="status" role="status"></div>
+    <button class="opt">Vì giờ nổ súng bị lộ. Lý do ở tầng một trận</button>
+    <button class="opt">Vì không ai bảo đảm được chắc thắng, mà thua là mất chủ lực của cả cuộc kháng chiến. Lý do ở tầng cả cuộc chiến</button>
+    <button class="opt">Vì hết gạo. Lý do ở tầng một đợt đánh</button>
+    <div class="why">"Chỉ được thắng không được bại, vì bại thì hết vốn!" Vốn là bộ đội chủ lực, chuyện của tầng chiến lược. Giờ nổ súng bị lộ chỉ làm hoãn 24 tiếng. Hôm nay bạn xem cái giá của quyết định đó rơi vào ai: những người lo hậu cần, vì đánh lâu hơn thì phải nuôi quân lâu hơn.</div>
+   </div>
+  </div>
+  <button class="btn primary" data-go="1" id="n0" data-review-gate disabled>Bắt đầu</button>
+ </section>
+
+ <!-- 1 thử trước: đoán con số + xếp tầng -->
+ <section class="step narrow" data-s="1">
+  <h2>Đoán trước một con số</h2>
+  <p>Một người gánh gạo đi bộ hàng trăm cây số qua núi. Dọc đường người đó cũng phải ăn. Theo bạn, để <b>1 kg gạo</b> tới được mặt trận, dọc đường đã ăn mất bao nhiêu?</p>
+  <div class="guess4" id="guess" role="group" aria-label="Đoán số gạo ăn dọc đường">
+   <button data-g="0" aria-pressed="false">Dưới 1 kg</button>
+   <button data-g="1" aria-pressed="false">1 đến 3 kg</button>
+   <button data-g="2" aria-pressed="false">4 đến 10 kg</button>
+   <button data-g="3" aria-pressed="false">Hơn 10 kg</button>
+  </div>
+  <div class="reveal card" id="bagBox">
+   <p class="small" style="margin:0"><b>24 kg.</b> Đó là kinh nghiệm tổng kết từ chiến dịch Tây Bắc năm 1952: gánh bộ đường xa, muốn 1 kg gạo tới nơi thì phải có 24 kg ăn dọc đường.</p>
+   <div class="bags" id="bags" aria-hidden="true"></div>
+   <div class="bagrow"><b>Xanh:</b> 1 kg tới mặt trận. <b>Vàng:</b> 24 kg ăn dọc đường.</div>
+  </div>
+  <div class="fb" id="guessFb" role="status"></div>
+
+  <div id="sortWrap" class="hide">
+   <h2 style="margin-top:22px">Mỗi việc nằm ở tầng nào?</h2>
+   <p class="small">Ôn lại ba tầng từ buổi 3. Có hai việc của hậu cần, và hai việc để tách "một đợt đánh" với "một trận".</p>
+   <div class="card" id="sortCards">
+    <div class="scard" data-k="1"><p>Trung ương chỉ thị dồn toàn lực chi viện cho mặt trận, huy động người và của từ nhiều liên khu</p><div class="tiers3"><button data-t="1">Cả cuộc chiến</button><button data-t="2">Đợt đánh</button><button data-t="3">Một trận</button></div><div class="note">Cả nước dồn sức cho một mục tiêu: tầng chiến lược. Hậu cần cũng có tầng cao nhất.</div></div>
+    <div class="scard" data-k="2"><p>Từ 13/3 đến 7/5/1954, đánh lần lượt từng cụm cứ điểm cho tới khi tập đoàn cứ điểm bị chiếm</p><div class="tiers3"><button data-t="1">Cả cuộc chiến</button><button data-t="2">Đợt đánh</button><button data-t="3">Một trận</button></div><div class="note">Gần hai tháng, nhiều trận nối nhau, cùng một mục tiêu: đây là tầng chiến dịch. "Đánh từng cứ điểm một" là cách đánh của cả chiến dịch, không phải của một trận.</div></div>
+    <div class="scard" data-k="3"><p>Đánh chiếm một cứ điểm trên một quả đồi, trong một đêm</p><div class="tiers3"><button data-t="1">Cả cuộc chiến</button><button data-t="2">Đợt đánh</button><button data-t="3">Một trận</button></div><div class="note">Một chỗ, vài giờ: một trận. Mẹo tách hai tầng dưới: hỏi "có mấy chỗ, kéo dài bao lâu".</div></div>
+    <div class="scard" data-k="2"><p>Lập tuyến hậu cần dài hơn 350 km, chia thành các binh trạm có kho, xe và quân y</p><div class="tiers3"><button data-t="1">Cả cuộc chiến</button><button data-t="2">Đợt đánh</button><button data-t="3">Một trận</button></div><div class="note">Phục vụ cả chiến dịch suốt nhiều tháng: tầng chiến dịch.</div></div>
+   </div>
+   <button class="btn primary" id="sortCheck" disabled>Xem cách dân trong nghề xếp</button>
+   <div class="fb" id="sortFb" role="status"></div>
+   <button class="btn primary hide" data-go="2" id="n1">Tiếp: làm người lo hậu cần</button>
+  </div>
+ </section>
+
+ <!-- 2 quyết định: chở bằng gì -->
+ <section class="step" data-s="2">
+  <div id="ask1">
+   <div class="split">
+    <div>
+     <h2>Cuối tháng 1/1954, sau lệnh lui quân</h2>
+     <p>Bạn lo vận tải cho chiến dịch. Kế hoạch vừa đổi sang "đánh chắc tiến chắc": quân đông hơn, đánh lâu hơn, nên cần nhiều gạo, đạn hơn hẳn. Nhìn bên kia trước.</p>
+     <svg class="terrain" id="enemy1" viewBox="0 0 340 230" role="img" aria-label="Sơ đồ: đường từ hậu phương qua Sơn La, Tuần Giáo tới lòng chảo Điện Biên Phủ; máy bay Pháp tiếp tế cho lòng chảo"></svg>
+     <div class="legend"><span><i style="background:var(--han)"></i>Quân Pháp</span><span><i style="background:var(--ngo)"></i>Bên ta (bạn)</span><span>Sơ đồ minh họa, không đúng vị trí và tỉ lệ thật</span></div>
+    </div>
+    <div>
+     <div class="forces">
+      <div><b class="han-t">Quân Pháp</b><span>Tiếp tế bằng máy bay xuống lòng chảo. Chỉ huy Pháp tin rằng bên ta không thể nuôi nổi một chiến dịch lớn, dài ngày ở vùng núi như thế.</span></div>
+      <div><b class="ngo-t">Đường của bạn</b><span>Mặt trận cách hậu phương 500 đến 700 km, đèo dốc, máy bay Pháp thường xuyên đánh phá. Đoạn Tuần Giáo đến Điện Biên Phủ dài 82 km, trước kia chỉ rộng 1 m.</span></div>
+      <div><b class="ngo-t">Trong tay bạn</b><span>534 ô tô của Tổng cục Cung cấp. Rất nhiều người sẵn sàng đi dân công. Và con số bạn vừa thấy: gánh bộ đường xa, 1 kg tới nơi thì 24 kg ăn dọc đường.</span></div>
+     </div>
+     <p class="small muted" style="margin:0 0 10px">Lấy từ báo Quân đội nhân dân và Học viện Quốc phòng. Nguồn ở cuối buổi.</p>
+     <p style="font-weight:600;margin:0 0 6px">Bạn dồn sức vào cách chở nào?</p>
+     <div class="opts" id="opts1">
+      <button class="opt fm" data-v="A"><svg viewBox="0 0 340 230" aria-hidden="true" data-fm="A"></svg><span><b>A.</b> Dồn hết vào ô tô: chở nhanh, chở nhiều, không ai phải ăn dọc đường</span></button>
+      <button class="opt fm" data-v="B"><svg viewBox="0 0 340 230" aria-hidden="true" data-fm="B"></svg><span><b>B.</b> Dồn vào sức người: thật đông dân công gánh bộ, đi được cả chỗ xe không vào</span></button>
+      <button class="opt fm" data-v="C"><svg viewBox="0 0 340 230" aria-hidden="true" data-fm="C"></svg><span><b>C.</b> Ô tô làm chính trên đường lớn, đoạn khó dùng mọi cách khác, và lấy thêm lương thực ngay tại Tây Bắc</span></button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div id="play1" class="hide">
+   <div class="split">
+    <div class="stick">
+     <div class="tabs" role="group" aria-label="Xem từng lựa chọn"><button class="btn" data-s="A" aria-pressed="false">A. Ô tô</button><button class="btn" data-s="B" aria-pressed="false">B. Gánh bộ</button><button class="btn" data-s="C" aria-pressed="false">C. Chuyện thật</button></div>
+     <svg class="terrain" id="map1" viewBox="0 0 340 230" role="img" aria-label="Sơ đồ diễn biến theo thời gian"></svg>
+     <div class="timeline"><button class="btn" id="play1Btn" aria-label="Chạy">▶</button><input type="range" id="t1" min="0" max="300" value="0" aria-label="Thời gian"></div>
+     <div class="legend"><span><i style="background:var(--han)"></i>Pháp</span><span><i style="background:var(--ngo)"></i>Ta</span><span>Màu hai bên chỉ để dễ phân biệt</span></div>
+    </div>
+    <div>
+     <div class="fb" id="fb1" role="status"></div>
+     <div class="phase" id="phase1" role="status"></div>
+     <button class="btn primary" data-go="3">Tiếp: vì sao lại như vậy</button>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <!-- 3 hiểu sau -->
+ <section class="step narrow" data-s="3">
+  <h2>Hậu cần là phép trừ trên đường đi</h2>
+  <p class="small" id="echo3"></p>
+  <div class="card">
+   <div class="idea"><div class="k">1</div><p><b>Cái tới nơi bằng cái gửi đi trừ cái mất dọc đường.</b> Mất vì người chở phải ăn, vì máy bay đánh, vì đường không đi được. Mỗi cách chở mạnh ở một đoạn: ô tô ở đường lớn, xe đạp thồ và ngựa ở đường hẹp, bè mảng theo sông. Ghép đúng cách vào đúng đoạn thì phép trừ nhỏ lại. (Cách nói này là suy luận của mình, từ các con số ở dưới.)</p></div>
+   <div class="idea"><div class="k">2</div><p><b>Pháp tính sai đúng ở chỗ này.</b> Chỉ huy Pháp cho rằng bên ta không thể nuôi nổi một chiến dịch lớn, dài ngày ở vùng núi. Xe đạp thồ, chở 200 đến 300 kg mỗi xe, gấp hơn 10 lần một người gánh, là một bất ngờ ngoài tính toán của họ. Còn hàng của chính họ thả từ máy bay: ngày 1/4/1954, hơn một nửa rơi ngoài vị trí.</p></div>
+   <div class="idea"><div class="k">3</div><p><b>Hậu cần có ở cả ba tầng.</b> Cả cuộc chiến: Trung ương huy động người, của từ nhiều liên khu. Một đợt đánh: tuyến hậu cần hơn 350 km với các binh trạm. Một trận: bếp Hoàng Cầm và giếng nước đào ngay tại trận địa. Và một quyết định ở tầng trên, như đổi sang "đánh chắc tiến chắc", làm cả hệ thống ở dưới phải tính lại.</p></div>
+  </div>
+  <div class="card">
+   <p><b>1.</b> Xe đạp thồ giải bài toán "24 kg" như thế nào?</p>
+   <div class="q" data-q="q1" data-a="2"><div class="status" role="status"></div>
+    <button class="opt">Xe đạp đi nhanh hơn ô tô trên đường lớn</button>
+    <button class="opt">Máy bay Pháp không nhìn thấy được xe đạp</button>
+    <button class="opt">Một người đẩy xe chở gấp hơn 10 lần một người gánh, nên số gạo ăn dọc đường cho mỗi kg tới nơi giảm hẳn</button>
+    <div class="why">Người đẩy xe vẫn phải ăn như người gánh, nhưng chở được 200 đến 300 kg thay vì vài chục kg. Phần ăn dọc đường chia cho nhiều gạo hơn, nên phép trừ nhỏ đi nhiều.</div>
+   </div>
+  </div>
+  <div class="card">
+   <p><b>2.</b> Ngày 25/1/1954, việc chuẩn bị hậu cần cho "đánh nhanh thắng nhanh" đã căn bản xong. Rồi Đại tướng đổi sang "đánh chắc tiến chắc". Hậu cần phải làm gì?</p>
+   <div class="q" data-q="q2" data-a="0"><div class="status" role="status"></div>
+    <button class="opt">Tính lại từ đầu: quân đông hơn, đánh lâu hơn nên cần nhiều hơn hẳn; huy động thêm tại chỗ ở Tây Bắc và từ hậu phương</button>
+    <button class="opt">Không đổi gì, vì gạo đạn đã chuẩn bị xong</button>
+    <button class="opt">Giảm bớt, vì đánh chậm thì mỗi ngày tốn ít hơn</button>
+    <div class="why">Đúng câu Chủ nhiệm cung cấp lo ở buổi 3: "không đánh ngay thì sau càng không đánh được". Ngành hậu cần đã phải dồn sức chuẩn bị lại theo yêu cầu mới, và đã làm được.</div>
+   </div>
+  </div>
+  <div class="card small" id="sources">
+   <p><b>Nguồn</b></p>
+   <p style="margin:0 0 8px">Trung tướng Trần Duy Giang, Chủ nhiệm Tổng cục Hậu cần, <a href="https://www.qdnd.vn/quoc-phong-an-ninh/chien-thang-dien-bien-phu-moc-son-lich-su/chuyen-o-chien-truong/suc-manh-hau-can-trong-chien-dich-dien-bien-phu-774381" target="_blank" rel="noopener">"Sức mạnh hậu cần trong Chiến dịch Điện Biên Phủ"</a>, báo Quân đội nhân dân, 26/4/2024. Từ đây: mặt trận cách hậu phương 500 đến 700 km; đổi phương châm làm nhu cầu tăng và hậu cần đã căn bản xong ngày 25/1; Trung ương chỉ thị dồn toàn lực; tuyến hậu cần chiến dịch hơn 350 km với các binh trạm; phương châm "lấy vận tải cơ giới là chủ yếu… đồng thời tranh thủ mọi phương tiện thô sơ"; 16 đại đội, 534 ô tô; 11.600 bè mảng; hơn 20.000 xe đạp thồ; 1.700 tấn gạo theo sông Nậm Na; Đại đoàn 308 lấy tại chỗ 52 tấn củ mài, 32 tấn rau rừng, 32 tấn cá; hơn 261.000 dân công; hơn 20.000 tấn vật chất cho hơn 87.000 người; bếp Hoàng Cầm và giếng tại trận địa.</p>
+   <p style="margin:0 0 8px">Học viện Quốc phòng, <a href="https://nda.edu.vn/tin-tuc/cac-chien-le/chien-dich-dien-bien-phu-1954-960.html" target="_blank" rel="noopener">"Chiến dịch Điện Biên Phủ 1954"</a>. Từ đây: con số 24 kg (kinh nghiệm chiến dịch Tây Bắc 1952); xe đạp thồ chở 200 đến 300 kg, kỷ lục 352 kg, gấp hơn 10 lần gánh bộ, và là bất ngờ với chỉ huy Pháp vốn tin bên ta không nuôi nổi chiến dịch lớn; đường Tuần Giáo đến Điện Biên Phủ 82 km, trước rộng 1 m; đường kéo pháo mới rộng 3 m, ngụy trang; ngày 1/4 hơn một nửa hàng thả rơi ngoài vị trí, ngày 18/4 hơn 30 tấn rơi sang trận địa ta.</p>
+   <p style="margin:0 0 8px">Chỗ các nguồn ghi khác nhau: báo Quân đội nhân dân ghi 11.600 bè mảng, hơn 20.000 xe đạp thồ và 12 triệu ngày công (tuyến chiến dịch 3 triệu); <a href="https://thongke.quangngai.gov.vn/tin-tuc/thong-tin-qua-cac-bao/chien-dich-dien-bien-phu-chuyen-ke-tu-nhung-con-so-thong-ke.html" target="_blank" rel="noopener">Cục Thống kê Quảng Ngãi</a> ghi 11.800 bè mảng, 20.991 xe đạp thồ, 261.453 dân công với 3 triệu ngày công. Trang này dùng số tròn.</p>
+   <p style="margin:0 0 8px">Đánh từ 13/3 đến 7/5/1954: như buổi 3 (<a href="https://vnexpress.net/quyet-dinh-kho-nhat-doi-cam-quan-cua-dai-tuong-vo-nguyen-giap-4735429.html" target="_blank" rel="noopener">VnExpress</a>, <a href="https://www.britannica.com/event/Battle-of-Dien-Bien-Phu" target="_blank" rel="noopener">Britannica</a>). Câu "bại thì hết vốn" và lời Chủ nhiệm cung cấp: hồi ký của Đại tướng Võ Nguyên Giáp, <a href="https://www.qdnd.vn/ho-so-su-kien/dai-tuong-vo-nguyen-giap/quyet-dinh-kho-khan-nhat-260847" target="_blank" rel="noopener">"Quyết định khó khăn nhất"</a>.</p>
+   <p style="margin:0">Không lấy từ sử: sơ đồ, hai lựa chọn A và B (mô phỏng), việc "đánh một cứ điểm trong một đêm" (ví dụ chung, không phải một trận cụ thể), cách xếp tầng và phần giải thích (suy luận của Claude).</p>
+  </div>
+  <button class="btn primary" data-go="4" id="n3" disabled>Tiếp</button>
+ </section>
+
+ <!-- 4 tự nói lại -->
+ <section class="step narrow" data-s="4">
+  <h2>Tự nói lại</h2>
+  <p>Viết 1–2 câu: vì sao chỉ thêm thật nhiều người gánh thì không giải được bài toán gạo, và bên ta đã giải bằng gì?</p>
+  <textarea id="teach" placeholder="Vì..."></textarea>
+  <button class="btn ghost" id="showMine" disabled>Xem bản của mình</button>
+  <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Người gánh đường xa ăn gần hết phần mình chở: 1 kg tới nơi thì 24 kg mất dọc đường, thêm người là thêm miệng ăn. Bên ta cho mỗi cách chở chạy đúng đoạn của nó: ô tô là chính trên đường lớn, xe đạp thồ chở gấp hơn 10 lần một người ở đường hẹp, bè mảng theo sông, lấy thêm lương thực tại chỗ, và mở rộng đường để xe vào sâu hơn.</div></div>
+  <button class="btn primary" data-go="5" id="n4" disabled>Tiếp</button>
+ </section>
+
+ <!-- 5 góp ý -->
+ <section class="step narrow" data-s="5">
+  <h2>Góp ý buổi này</h2>
+  <div class="card">
+   <div class="crit"><b id="f1">Độ dài</b><div class="seg" role="group" aria-labelledby="f1" data-f="len"><button data-v="ngắn" aria-pressed="false">Ngắn</button><button data-v="vừa" aria-pressed="false">Vừa</button><button data-v="dài" aria-pressed="false">Dài</button></div></div>
+   <div class="crit"><b id="f2">Độ khó</b><div class="seg" role="group" aria-labelledby="f2" data-f="hard"><button data-v="dễ" aria-pressed="false">Dễ</button><button data-v="vừa" aria-pressed="false">Vừa</button><button data-v="khó" aria-pressed="false">Khó</button></div></div>
+   <div class="crit"><b id="f3">Đoán con số trước khi xem</b><div class="seg" role="group" aria-labelledby="f3" data-f="guess"><button data-v="hay" aria-pressed="false">Hay</button><button data-v="bình thường" aria-pressed="false">Bình thường</button><button data-v="thừa" aria-pressed="false">Thừa</button></div></div>
+   <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, muốn học gì tiếp..."></textarea></div>
+  </div>
+  <button class="btn primary" id="finish">Xong buổi học</button>
+  <div id="saved" role="status"></div>
+  <button class="btn ghost" id="copy" style="display:none">Chép kết quả</button>
+ </section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const R={lesson:'war-4',mode:'lan-dau',start:new Date().toISOString(),recall:null,guess:null,sort:[],sortRight:0,c1:null,viewed1:[],quiz:{},teach:'',feedback:{}};
+const TOTAL=6,REAL='C';
+function go(n){$$('.step').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));$('#cnt').textContent=(n+1)+'/'+TOTAL;$('#bar').style.width=(n/(TOTAL-1)*100)+'%';window.scrollTo(0,0);const h=$('.step.on h1, .step.on h2');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}
+$$('[data-go]').forEach(b=>b.addEventListener('click',()=>go(+b.dataset.go)));
+function setFb(el,t){el.textContent=t;el.className='fb';}
+
+/* đoán con số */
+const GMSG=['Thấp hơn nhiều so với thật.','Thấp hơn nhiều so với thật.','Vẫn thấp hơn thật hơn hai lần.','Đúng khoảng. Con số thật còn lớn hơn bạn nghĩ không?'];
+$$('#guess button').forEach(b=>b.addEventListener('click',()=>{if(R.guess!==null)return;const g=+b.dataset.g;R.guess=g;
+ $$('#guess button').forEach(x=>{x.disabled=true;x.setAttribute('aria-pressed',x===b?'true':'false');if(+x.dataset.g===3)x.classList.add('right');else if(x===b)x.classList.add('wrong');});
+ $('#bagBox').classList.add('on');const box=$('#bags');box.innerHTML='';for(let i=0;i<25;i++){const e=document.createElement('i');if(i===24)e.className='keep';box.appendChild(e);}
+ [...box.children].forEach((e,i)=>setTimeout(()=>e.classList.add('on'),matchMedia('(prefers-reduced-motion:reduce)').matches?0:40*i));
+ setFb($('#guessFb'),GMSG[g]+' Gánh xa thì người gánh ăn gần hết phần mình gánh. Giữ con số này trong đầu cho phần sau.');
+ $('#sortWrap').classList.remove('hide');}));
+
+/* xếp tầng */
+const SC_=$$('#sortCards .scard');
+SC_.forEach((c,i)=>c.querySelectorAll('.tiers3 button').forEach(b=>{b.setAttribute('aria-pressed','false');b.addEventListener('click',()=>{if(R.sortDone)return;R.sort[i]=+b.dataset.t;c.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));$('#sortCheck').disabled=R.sort.filter(Boolean).length<SC_.length;});}));
+$('#sortCheck').addEventListener('click',()=>{if(R.sortDone)return;R.sortDone=true;let ok=0;
+ SC_.forEach((c,i)=>{const k=+c.dataset.k,p=R.sort[i];if(p===k)ok++;c.querySelectorAll('button').forEach(x=>{x.disabled=true;const t=+x.dataset.t;if(t===k)x.classList.add('right');else if(t===p)x.classList.add('wrong');});c.querySelector('.note').classList.add('on');});
+ R.sortRight=ok;setFb($('#sortFb'),'Bạn xếp giống dân trong nghề '+ok+'/4 việc. Ô xanh là cách họ hay xếp, ô cam là chỗ bạn chọn khác. Để ý hai việc hậu cần nằm ở hai tầng khác nhau.');
+ $('#sortCheck').classList.add('hide');$('#n1').classList.remove('hide');});
+
+/* sơ đồ đường tiếp tế */
+const NS='http://www.w3.org/2000/svg';let UID=0;
+const mk=(p,n,a={})=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;};
+const tx=(p,x,y,s,o={})=>{const e=mk(p,'text',Object.assign({x,y,'font-size':11,fill:'#5d574a','text-anchor':'middle'},o));e.textContent=s;return e;};
+const COL={ngo:'#b23a2a',han:'#2f3e5c'};
+const MAIN='M18 200 C56 186 88 162 118 148 C150 132 180 108 212 92';
+const LAST='M212 92 C240 96 262 108 284 122';
+const RIVER='M228 0 C236 30 250 52 262 70 C272 86 278 100 282 112';
+const BAS={x:292,y:128};
+const SC={
+ 1:{
+  base:[{a:'plane',x:316,y:50,p:0},{a:'chute',x:292,y:100,p:0},{a:'chute',x:308,y:112,p:0},
+   {a:'truck',x:70,y:178,p:0},{a:'porter',x:150,y:126,n:3,p:0},{a:'porter',x:240,y:98,n:2,p:0},
+   {a:'note',x:22,y:168,t:'500–700 km',s:'ngo',p:0,anchor:'start'},{a:'note',x:248,y:84,t:'rộng 1 m',s:'ngo',p:0}],
+  A:{items:[{a:'truck',x:56,y:186,p:0},{a:'truck',x:96,y:160,p:0},{a:'truck',x:146,y:134,p:0},
+   {a:'pile',x:206,y:104,p:1},{a:'note',x:240,y:142,t:'rộng 1 m: xe không qua',s:'ngo',p:1},
+   {a:'plane',x:150,y:60,s:'han',p:2},{a:'blast',x:132,y:142,p:2},{a:'note',x:96,y:120,t:'đường bị đánh, xe nằm chờ',s:'han',p:2},
+   {a:'note',x:170,y:222,t:'hàng ùn giữa đường?',s:'ngo',p:3}],
+   P:['Bạn dồn hết sức vào 534 ô tô. Trên đường lớn, xe chở nhanh và nhiều, người lái không phải ăn hết phần hàng mình chở.',
+      'Chuyện thật: đoạn Tuần Giáo đến Điện Biên Phủ dài 82 km, trước kia chỉ rộng 1 m. Nếu không làm lại đường và không có cách chở khác, hàng phải dừng ở đây.',
+      'Chuyện thật: máy bay Pháp thường xuyên đánh phá đường. Mỗi đoạn hỏng là cả đoàn xe phải chờ. Suy luận của mình: xe còn cần xăng, mà xăng cũng phải chở từ xa.',
+      'Suy luận của mình: hàng ùn ở giữa đường, còn đoạn cuối, chỗ bộ đội cần nhất, lại thiếu. Ô tô mạnh nhất ở đường lớn, yếu nhất ở đoạn cuối.']},
+  B:{items:[{a:'porter',x:60,y:184,n:4,p:0},{a:'porter',x:120,y:146,n:4,p:0},{a:'porter',x:190,y:104,n:4,p:0},
+   {a:'note',x:80,y:104,t:'1 kg tới nơi = 24 kg ăn dọc đường',s:'ngo',p:1},
+   {a:'porter',x:84,y:170,n:4,p:2},{a:'porter',x:160,y:122,n:4,p:2},{a:'porter',x:244,y:100,n:3,p:2},{a:'note',x:250,y:212,t:'gạo cho người gánh cũng phải gánh',s:'ngo',p:2},
+   {a:'note',x:170,y:30,t:'phần lớn gạo ăn hết trên đường?',s:'ngo',p:3}],
+   P:['Bạn huy động thật đông người gánh bộ. Không cần đường lớn, đi được cả chỗ xe không vào.',
+      'Chuyện thật, kinh nghiệm chiến dịch Tây Bắc 1952: gánh bộ đường xa, muốn 1 kg gạo tới nơi thì phải có 24 kg ăn dọc đường.',
+      'Suy luận của mình: thêm người gánh là thêm miệng ăn trên đường, và gạo cho chính những người gánh cũng phải có người gánh.',
+      'Suy luận của mình: phần lớn gạo bị ăn hết trước khi tới mặt trận. Mà "đánh chắc tiến chắc" thì đánh lâu hơn, nên con số này còn phình ra.']},
+  C:{items:[{a:'truck',x:56,y:186,p:0},{a:'truck',x:96,y:160,p:0},{a:'truck',x:146,y:134,p:0},
+   {a:'road',p:1},{a:'truck',x:236,y:100,p:1},{a:'note',x:236,y:140,t:'82 km mở rộng',s:'ngo',p:1},
+   {a:'bike',x:258,y:110,p:2},{a:'bike',x:226,y:94,p:2},{a:'boat',x:252,y:56,p:2},{a:'boat',x:266,y:76,p:2},{a:'note',x:212,y:44,t:'bè mảng',s:'ngo',p:2,anchor:'end'},{a:'note',x:236,y:153,t:'xe đạp thồ',s:'ngo',p:2},{a:'pile',x:110,y:196,p:2},{a:'note',x:126,y:220,t:'lấy tại chỗ',s:'ngo',p:2},
+   {a:'plane',x:316,y:50,p:3},{a:'chute',x:292,y:104,p:3},{a:'chute',x:330,y:84,p:3},{a:'chute',x:206,y:190,p:3},{a:'note',x:326,y:200,t:'hàng thả rơi lệch',s:'han',p:3,anchor:'end'}],
+   P:['Phương châm của Tổng cục Cung cấp: "Lấy vận tải cơ giới là chủ yếu, triệt để phát huy cơ giới, đồng thời tranh thủ mọi phương tiện thô sơ". Cả 16 đại đội, 534 ô tô được dùng. Tuyến hậu cần chiến dịch dài hơn 350 km, chia thành các binh trạm.',
+      'Từ tháng 12/1953 làm và sửa đường. Đoạn Tuần Giáo đến Điện Biên Phủ, 82 km, trước rộng 1 m, được mở rộng cho xe kéo pháo. Đường kéo pháo mới rộng 3 m, ngụy trang để máy bay Pháp khó phát hiện.',
+      'Hơn 20.000 xe đạp thồ, mỗi xe chở 200 đến 300 kg, có xe tới 352 kg. Thêm 11.600 bè mảng và ngựa thồ; thuyền mảng theo sông Nậm Na đưa 1.700 tấn gạo. Các đại đoàn lấy thêm tại chỗ: Đại đoàn 308 lấy được 52 tấn củ mài, 32 tấn rau rừng, 32 tấn cá.',
+      'Tổng cộng hơn 261.000 dân công và hơn 20.000 tấn vật chất, nuôi hơn 87.000 người trong chiến dịch. Bên kia, Pháp tiếp tế bằng máy bay thả hàng: ngày 1/4/1954, hơn một nửa số hàng rơi ngoài vị trí; ngày 18/4, hơn 30 tấn rơi sang trận địa của ta.']},
+  M:{A:'Bạn chọn ô tô. Nghe hợp lý: xe chở nhiều mà không ăn gạo. Kéo thời gian xem mô phỏng, rồi bấm C xem chuyện thật.',
+     B:'Bạn chọn sức người. Nhớ con số 24 kg vừa đoán. Kéo thời gian xem mô phỏng, rồi bấm C xem chuyện thật.',
+     C:'Bạn chọn gần với chuyện thật. Để ý: ô tô vẫn là chính, cách khác chỉ lấp chỗ ô tô không làm được. Kéo thời gian xem, rồi bấm A và B.'},
+  E:{A:'Bạn chọn ô tô. Đó cũng là phần chính của chuyện thật: chỉ là ô tô không đi được đoạn cuối, nên phải ghép thêm cách khác.',B:'Bạn chọn sức người. Sức người là thật và rất lớn, nhưng phải đi kèm xe đạp thồ, bè mảng, ô tô thì phép trừ dọc đường mới nhỏ lại.',C:'Bạn chọn ghép nhiều cách chở, gần với chuyện thật.'}}};
+
+function makeMap(svg){svg.innerHTML='';const id='m'+(UID++);
+ mk(svg,'rect',{x:0,y:0,width:340,height:230,fill:'#c9cfa6'});
+ mk(svg,'path',{d:'M150 0 L340 0 L340 230 L190 230 C210 180 170 150 150 0 Z',fill:'#9db58a'});
+ mk(svg,'ellipse',{cx:BAS.x,cy:BAS.y,rx:40,ry:32,fill:'#e6dfba'});
+ mk(svg,'path',{d:RIVER,fill:'none',stroke:'#8fb8cf','stroke-width':4,'stroke-linecap':'round'});
+ mk(svg,'path',{d:MAIN,fill:'none',stroke:'#7a6f4e','stroke-width':4,'stroke-linecap':'round'});
+ const last=mk(svg,'path',{d:LAST,fill:'none',stroke:'#7a6f4e','stroke-width':1.5,'stroke-dasharray':'3 3','stroke-linecap':'round'});
+ tx(svg,8,14,'HẬU PHƯƠNG',{'font-weight':700,'font-size':9,'letter-spacing':'.06em','text-anchor':'start',fill:'#4d5233'});
+ tx(svg,332,14,'ĐỒI NÚI, RỪNG',{'font-weight':700,'font-size':9,'letter-spacing':'.06em','text-anchor':'end',fill:'#3f5233'});
+ tx(svg,142,166,'Sơn La',{'font-size':10,'font-weight':600,fill:'#4d4630'});
+ tx(svg,206,82,'Tuần Giáo',{'font-size':10,'font-weight':600,fill:'#4d4630','text-anchor':'end'});
+ tx(svg,BAS.x,BAS.y+46,'Điện Biên Phủ',{'font-size':10,'font-weight':700,fill:'#2f3e5c'});
+ tx(svg,252,38,'Nậm Na',{'font-size':10,'font-weight':600,fill:'#3d5a6b','text-anchor':'start'});
+ mk(svg,'rect',{x:BAS.x-6,y:BAS.y-6,width:12,height:12,rx:2,fill:COL.han});
+ const g={svg,id,last,under:mk(svg,'g',{}),layer:null,items:[]};
+ g.layer=mk(svg,'g',{});return g;}
+function build(g,items){g.layer.innerHTML='';g.under.innerHTML='';g.items=items.map(it=>{let e;
+ if(it.a==='truck'){e=mk(g.layer,'g',{});mk(e,'rect',{x:it.x-9,y:it.y-6,width:13,height:8,rx:1.5,fill:COL.ngo});mk(e,'rect',{x:it.x+4,y:it.y-3,width:5,height:5,rx:1,fill:COL.ngo});mk(e,'circle',{cx:it.x-5,cy:it.y+3,r:2,fill:'#1b1b1a'});mk(e,'circle',{cx:it.x+5,cy:it.y+3,r:2,fill:'#1b1b1a'});}
+ else if(it.a==='porter'){e=mk(g.layer,'g',{});for(let i=0;i<it.n;i++){const x=it.x+i*7,y=it.y+(i%2)*3;mk(e,'circle',{cx:x,cy:y-5,r:2,fill:COL.ngo});mk(e,'line',{x1:x,y1:y-3,x2:x,y2:y+3,stroke:COL.ngo,'stroke-width':1.6});mk(e,'line',{x1:x-4,y1:y-4,x2:x+4,y2:y-4,stroke:'#5d574a','stroke-width':1});}}
+ else if(it.a==='bike'){e=mk(g.layer,'g',{});mk(e,'circle',{cx:it.x-5,cy:it.y,r:3.2,fill:'none',stroke:COL.ngo,'stroke-width':1.6});mk(e,'circle',{cx:it.x+5,cy:it.y,r:3.2,fill:'none',stroke:COL.ngo,'stroke-width':1.6});mk(e,'rect',{x:it.x-5,y:it.y-9,width:10,height:6,rx:1.5,fill:'#cdbf9a',stroke:'#7a6f4e','stroke-width':.8});}
+ else if(it.a==='boat'){e=mk(g.layer,'path',{d:`M${it.x-9} ${it.y-2} L${it.x+9} ${it.y-2} L${it.x+6} ${it.y+3} L${it.x-6} ${it.y+3} Z`,fill:COL.ngo});}
+ else if(it.a==='plane'){e=mk(g.layer,'g',{});mk(e,'path',{d:`M${it.x-12} ${it.y} L${it.x+12} ${it.y} M${it.x} ${it.y-7} L${it.x+2} ${it.y+7} M${it.x-11} ${it.y-4} L${it.x-11} ${it.y+4}`,stroke:COL.han,'stroke-width':2.4,'stroke-linecap':'round',fill:'none'});}
+ else if(it.a==='chute'){e=mk(g.layer,'g',{});mk(e,'path',{d:`M${it.x-7} ${it.y-8} Q${it.x} ${it.y-17} ${it.x+7} ${it.y-8} Z`,fill:'#fff',stroke:COL.han,'stroke-width':1});mk(e,'line',{x1:it.x-6,y1:it.y-8,x2:it.x,y2:it.y,stroke:COL.han,'stroke-width':.8});mk(e,'line',{x1:it.x+6,y1:it.y-8,x2:it.x,y2:it.y,stroke:COL.han,'stroke-width':.8});mk(e,'rect',{x:it.x-3,y:it.y,width:6,height:5,fill:COL.han});}
+ else if(it.a==='pile'){e=mk(g.layer,'g',{});[[0,0],[7,0],[3.5,-6]].forEach(([dx,dy])=>mk(e,'rect',{x:it.x-7+dx,y:it.y-3+dy,width:7,height:6,rx:1.5,fill:'#cdbf9a',stroke:'#7a6f4e','stroke-width':.8}));}
+ else if(it.a==='blast'){e=mk(g.layer,'g',{});mk(e,'circle',{cx:it.x,cy:it.y,r:10,fill:'#f2a33a','fill-opacity':.55});mk(e,'circle',{cx:it.x,cy:it.y,r:4.5,fill:'#e0562b'});}
+ else if(it.a==='road'){e=mk(g.under,'path',{d:LAST,fill:'none',stroke:'#7a6f4e','stroke-width':4,'stroke-linecap':'round'});}
+ else if(it.a==='note'){e=tx(g.layer,it.x,it.y,it.t,{'font-size':10,'font-weight':600,fill:COL[it.s],'text-anchor':it.anchor||'middle'});}
+ return {it,e};});}
+function vis(it,x){const f=it.p;if(f===0)return 1;return Math.max(0,Math.min(1,(x-(f-.7))/.7));}
+function place(g,x){for(const {it,e} of g.items)e.setAttribute('opacity',vis(it,x).toFixed(2));}
+
+function decision(n){const S=SC[n];
+ const g0=makeMap($('#enemy'+n));build(g0,S.base);place(g0,0);
+ $$('#opts'+n+' svg').forEach(s=>{const k=s.dataset.fm;const g=makeMap(s);build(g,S[k].items);place(g,2.2);});
+ const svg=$('#map'+n),t=$('#t'+n),btn=$('#play'+n+'Btn'),ph=$('#phase'+n),key='viewed'+n;let cur=REAL,g=null,raf=null,last=0;
+ function open(k){cur=k;g=makeMap(svg);build(g,S[k].items);$$('#play'+n+' .tabs .btn').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===k?'true':'false'));if(!R[key].includes(k))R[key].push(k);}
+ function draw(){if(!g)return;const x=+t.value/100;place(g,x);const i=Math.min(3,Math.round(x));ph.innerHTML='<span class="'+(cur===REAL?'real">Chuyện thật, theo báo Quân đội nhân dân và Học viện Quốc phòng':'guess">Mô phỏng, dựa trên tình hình hậu cần Điện Biên Phủ đầu năm 1954, không có thật')+'</span><b>Giai đoạn '+(i+1)+'/4</b>'+S[cur].P[i];}
+ function stop(){if(raf){cancelAnimationFrame(raf);raf=null;}btn.textContent='▶';btn.setAttribute('aria-label','Chạy');}
+ function tick(ts){if(!last)last=ts;const dt=ts-last;last=ts;let v=+t.value+dt*.02;if(v>=300){t.value=300;draw();stop();return;}t.value=v;draw();raf=requestAnimationFrame(tick);}
+ btn.addEventListener('click',()=>{if(raf){stop();return;}if(+t.value>=300)t.value=0;last=0;btn.textContent='❚❚';btn.setAttribute('aria-label','Dừng');raf=requestAnimationFrame(tick);});
+ t.addEventListener('input',()=>{stop();draw();});
+ $$('#play'+n+' .tabs .btn').forEach(b=>b.addEventListener('click',()=>{stop();t.value=0;open(b.dataset.s);draw();}));
+ $$('#opts'+n+' .opt').forEach(o=>o.addEventListener('click',()=>{const c='c'+n;if(R[c])return;const v=o.dataset.v;R[c]=v;
+  $$('#opts'+n+' .opt').forEach(x=>{x.disabled=true;if(x.dataset.v===REAL)x.classList.add('histo');});if(v!==REAL)o.classList.add('mine');
+  setFb($('#fb'+n),S.M[v]);$('#ask'+n).classList.add('hide');$('#play'+n).classList.remove('hide');open(v);t.value=0;draw();
+  $('#echo3').textContent=S.E[v]+' A và B là mô phỏng: không ai thử thật hai cách đó ở Điện Biên Phủ. Điều đáng hỏi là mỗi cách mất bao nhiêu trên đường đi.';
+  window.scrollTo(0,0);}));}
+decision(1);
+
+/* câu hỏi */
+$$('.q[data-q]').forEach(q=>{const id=q.dataset.q,a=+q.dataset.a,os=[...q.querySelectorAll('.opt')],st=q.querySelector('.status'),why=q.querySelector('.why');
+ os.forEach((o,i)=>o.addEventListener('click',()=>{if(id==='r1'?R.recall:R.quiz[id])return;const ok=i===a;if(id==='r1')R.recall={pick:i,ok};else R.quiz[id]={pick:i,ok};
+  os.forEach((x,j)=>{x.disabled=true;if(j===a)x.classList.add('right');});if(!ok)o.classList.add('wrong');
+  st.textContent=ok?'Đúng.':'Chưa đúng. Đáp án đúng được đánh dấu "Đúng".';st.style.color=ok?'var(--good-ink)':'var(--bad)';if(why)why.classList.add('on');check();}));});
+
+/* tự nói lại, góp ý */
+$('#teach').addEventListener('input',e=>{R.teach=e.target.value.trim();$('#showMine').disabled=R.teach.length<8;});
+$('#showMine').addEventListener('click',()=>{$('#mine').classList.add('on');$('#showMine').classList.add('hide');$('#n4').disabled=false;});
+$$('[data-f]').forEach(sg=>sg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{R.feedback[sg.dataset.f]=b.dataset.v;sg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));})));
+$('#note').addEventListener('input',e=>{R.feedback.note=e.target.value.trim();});
+
+function check(){if(R.mode!=='hoc-lai')$('#n0').disabled=!R.recall;$('#n3').disabled=!(R.quiz.q1&&R.quiz.q2);}
+function summary(){return 'Chiến tranh buổi 4 (hậu cần)\n'+JSON.stringify(R,null,1);}
+document.getElementById('finish').onclick=async()=>{const btn=document.getElementById('finish');btn.disabled=true;R.end=new Date().toISOString();const out=document.getElementById('saved');out.style.display='block';out.textContent='Đang lưu...';let ok=false;try{let dbp=null;try{dbp=window.claude&&window.claude.use?window.claude.use('db'):null;}catch(e){dbp=null;}const db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;if(db){await Promise.race([db.doc('sessions/w4-'+Date.now()).set(R),new Promise((_,j)=>setTimeout(()=>j(new Error('save timeout')),10000))]);ok=true;}}catch(e){ok=false;}
+out.textContent=ok?'Đã lưu kết quả. Bạn chỉ cần nhắn "xong" trong thread.':'Chưa lưu được tự động. Bấm nút dưới để chép kết quả rồi dán vào thread.';if(!ok){document.getElementById('copy').style.display='flex';}};
+document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());document.getElementById('copy').textContent='Đã chép';}catch(e){document.getElementById('saved').textContent=summary();}};
+</script>
+<script id="lesson-kit">
+/* Bộ khung chung cho trang học (xem learning/teaching/README.md, mục "Bộ khung chung").
+   1. Tự lưu chỗ đang học: ghi lại từng lần bấm và chữ đã gõ, lưu vào máy (localStorage) và vào db của trang (drafts/<id>).
+      Mở lại, tải lại, hay trang được đăng bản sửa: bấm lại đúng thứ tự để về chỗ cũ.
+   2. Học lại: sau khi bấm "Xong buổi học", lần mở sau ẩn phần [data-part~="review"] (ôn đầu buổi) và mở khóa nút [data-review-gate].
+   Không cần sửa gì trong trang, chỉ cần các id chuẩn: #finish, #copy. */
+(()=>{
+const ID=(document.querySelector('meta[name="lesson-id"]')||{}).content||document.title;
+const LK='lesson-kit:'+ID, DOC='drafts/'+ID.replace(/[^a-z0-9-]/gi,'-');
+const btns=()=>[...document.querySelectorAll('button:not(#kit-bar button)')], tas=()=>[...document.querySelectorAll('textarea')];
+const FP=btns().length+'b'+tas().length+'t';
+const lab=b=>(b.textContent||'').replace(/\s+/g,' ').trim().slice(0,60); /* chữ trên nút, để khi bấm lại biết đúng nút cũ */
+const ctx=b=>{ /* chỗ của nút: đi lên tới khối đầu tiên có chữ ngoài các nút (câu hỏi, tên dòng), kèm id hay data-* trên đường đi.
+   Nhờ vậy hai nút "Chưa" ở dòng "User story" và dòng "Use case" không bị nhầm với nhau. */
+ const sq=t=>(t||'').replace(/\s+/g,' ').trim();let tag='';
+ for(let p=b.parentElement;p&&p!==document.body;p=p.parentElement){
+  tag+=(p.id?'#'+p.id:'')+[...p.attributes].filter(a=>a.name.startsWith('data-')&&a.name!=='data-part').map(a=>'['+a.name+'='+a.value+']').join('');
+  let rest=p.textContent||'';for(const x of p.querySelectorAll('button'))rest=rest.split(x.textContent||'').join('');
+  if(sq(rest))return (tag+'|'+sq(p.textContent)).slice(0,160);}
+ return tag;};
+let S={fp:FP,log:[],finished:false,everDone:false,doneAt:null,start:new Date().toISOString(),ts:0};
+let replaying=false,acted=false,timer=null,writing=false,again=false,db=null;
+const bar=document.createElement('div');bar.id='kit-bar';bar.setAttribute('role','status');document.body.appendChild(bar);
+function say(msg,withReset){bar.innerHTML='<span></span>'+(withReset?'<button type="button" data-k="reset">Học lại từ đầu</button>':'')+'<button type="button" class="x" data-k="x" aria-label="Đóng">✕</button>';
+ bar.firstChild.textContent=msg;bar.classList.add('on');clearTimeout(say.t);say.t=setTimeout(()=>bar.classList.remove('on'),9000);}
+bar.addEventListener('click',e=>{const k=e.target.dataset.k;if(k==='x')bar.classList.remove('on');if(k==='reset'){S.log=[];S.finished=false;S.ts=Date.now();flush(true).then(()=>location.reload());}});
+function local(){try{return JSON.parse(localStorage.getItem(LK)||'null');}catch(e){return null;}}
+function flush(now){clearTimeout(timer);try{localStorage.setItem(LK,JSON.stringify(S));}catch(e){}
+ if(!db)return Promise.resolve();if(writing){again=true;return Promise.resolve();}writing=true;
+ return Promise.race([db.doc(DOC).set(S),new Promise(r=>setTimeout(r,8000))]).catch(()=>{}).then(()=>{writing=false;if(again){again=false;flush();}});}
+function save(){clearTimeout(timer);timer=setTimeout(flush,700);}
+function rec(a){if(replaying)return;acted=true;S.log.push(a);S.ts=Date.now();save();}
+document.addEventListener('click',e=>{if(!e.isTrusted)return;const b=e.target.closest('button');if(!b||b.closest('#kit-bar')||b.id==='copy')return;
+ if(b.id==='finish'){acted=true;S.finished=true;S.everDone=true;S.doneAt=new Date().toISOString();S.ts=Date.now();flush(true);return;}
+ const i=btns().indexOf(b);if(i>=0)rec({c:i,x:lab(b),y:ctx(b)});},true);
+document.addEventListener('input',e=>{if(replaying||!e.isTrusted||e.target.tagName!=='TEXTAREA')return;const i=tas().indexOf(e.target),last=S.log[S.log.length-1];
+ if(last&&last.t===i)last.v=e.target.value;else rec({t:i,v:e.target.value,p:e.target.placeholder});acted=true;S.ts=Date.now();save();},true);
+function reviewOff(){document.documentElement.classList.add('kit-review-off');document.querySelectorAll('[data-review-gate]').forEach(b=>b.disabled=false);
+ if(typeof R!=='undefined'&&R)R.mode='hoc-lai';}
+/* trả lại chữ đã gõ theo ô (tìm bằng placeholder), kể cả khi đã xóa trống, rồi ghi lại vào S.log để tải lại không mất */
+function keepText(log){const last=new Map();for(const a of log)if('t' in a&&typeof a.v==='string'){const t=tas().find(x=>x.placeholder===a.p);if(t)last.set(t,a.v);}
+ for(const [t,v] of last){t.value=v;t.dispatchEvent(new Event('input',{bubbles:true}));S.log.push({t:tas().indexOf(t),v,p:t.placeholder});}}
+function apply(d){if(!d)return false;S.everDone=!!d.everDone;S.doneAt=d.doneAt||null;if(S.everDone)reviewOff();
+ if(d.finished||!d.log||!d.log.length){return false;}
+ if(d.fp!==FP){ /* trang đã đổi số nút: chỉ trả lại chữ đã gõ */
+  S.log=[];keepText(d.log);S.start=d.start||S.start;S.ts=Date.now();save();
+  say('Trang vừa được sửa nên mình chỉ giữ lại được chữ bạn đã gõ.',false);return true;}
+ replaying=true;let n=0,cut=false;try{for(const a of d.log){if('c' in a){const b=btns()[a.c];
+   if((a.x!==undefined&&(!b||lab(b)!==a.x))||(a.y!==undefined&&(!b||ctx(b)!==a.y))){cut=true;break;} /* nút ở chỗ đó đã khác (trang đổi thứ tự, hay xáo đáp án): dừng, không bấm nhầm */
+   if(b&&!b.disabled)b.click();}else{const t=tas()[a.t];if(t){t.value=a.v;t.dispatchEvent(new Event('input',{bubbles:true}));}}n++;}}catch(e){}
+ replaying=false;
+ if(cut){S.log=d.log.slice(0,n);keepText(d.log.slice(n));S.start=d.start||S.start;S.ts=Date.now();save();
+  say('Trang đã đổi nên mình chỉ mở lại được tới chỗ còn khớp, kèm chữ bạn đã gõ.',true);return true;}
+ S.log=d.log;S.start=d.start||S.start;S.ts=d.ts||Date.now();
+ if(typeof R!=='undefined'&&R&&d.start)R.start=d.start;
+ say('Đã mở lại đúng chỗ bạn đang học.',true);return true;}
+const L=local();const usedL=apply(L);
+(async()=>{try{const dbp=window.claude&&window.claude.use?window.claude.use('db'):null;db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;}catch(e){db=null;}
+ if(!db)return;let d=null;try{const snap=await Promise.race([db.doc(DOC).get(),new Promise(r=>setTimeout(()=>r(null),8000))]);d=snap&&(typeof snap.data==='function'?snap.data():snap.data!==undefined?snap.data:snap);}catch(e){d=null;}
+ if(d&&!acted&&(!L||(d.ts||0)>(L.ts||0))){ /* bản trên db mới hơn: nếu đã bấm lại bản trong máy thì nạp lại trang từ bản db, để không bấm chồng hai lần */
+  if(usedL){try{localStorage.setItem(LK,JSON.stringify(d));location.reload();}catch(e){say('Có bản lưu mới hơn ở máy khác nhưng chưa mở được. Trang giữ chỗ bạn đang học trên máy này.',false);}return;}apply(d);}else if(d&&d.everDone&&!S.everDone){S.everDone=true;S.doneAt=d.doneAt;reviewOff();}
+ if(acted)save();})();
+})();
+</script>
+</body>
+</html>
