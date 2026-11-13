@@ -13,8 +13,8 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
-| [Theo dõi tiến độ và lộ trình học](plans/2026-11-12-progress-tracking.md) | 5/5: nhắc theo lịch | 12/13 |
-| [Sửa công cụ kiểm tra báo thành công khi chưa kiểm gì](plans/2026-11-12-silent-tools-fix.md) | 1–2/2: chờ merge | 0/5 |
+| [Theo dõi tiến độ và lộ trình học](plans/2026-11-12-progress-tracking.md) | 5/5: chờ thien mở thử 3 trang | 13/13 |
+| [Sửa công cụ kiểm tra báo thành công khi chưa kiểm gì](plans/2026-11-12-silent-tools-fix.md) | 1/2: chờ thien chạy thử trên laptop | 5/5 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
@@ -29,12 +29,11 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 - Môn chiến tranh buổi 1 và 2, luật nguồn cho bài lịch sử (PR #32, #33)
 
 ## Việc tiếp theo
-1. Từ tài khoản đã đăng 3 trang: chạy lại `templates/progress-page.mjs` và đăng lại trang tiến độ, trang lộ trình học (dữ liệu trên trang còn từ trước PR #32, #33). Tài khoản khác không đăng lại được, chỉ sửa file.
-2. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), theo `learning/README.md`.
+1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), theo `learning/README.md`.
 
 ## Đang chờ thien
-- Mở 3 trang (link trong file kế hoạch) trên điện thoại và laptop, và báo đã nhận lần nhắc tối 2026-11-12.
+- Mở 3 trang (link trong file kế hoạch) trên điện thoại và laptop; trên laptop chạy `node templates/check-status.mjs docs/STATUS.md`, thấy "ổn" là xong.
 - Chép dòng Settings mới (README, bước 1) vào từng tài khoản Claude; tải lại 2 file zip skill nếu chưa.
 
 ## Đang vướng
-- Từ project này chưa đọc được repo sakubun, nên trang tổng quan chưa có tiến độ của sakubun.
+- Không có. Trang tổng quan đọc sakubun bằng bản clone công khai.
