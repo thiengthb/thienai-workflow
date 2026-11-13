@@ -178,11 +178,35 @@ export function plain(md, max = 220) {
   return (end > max * 0.5 ? cut.slice(0, end + 1) : cut.replace(/\s+\S*$/, '') + '…');
 }
 
+/** Top-level list items of a section, continuation lines joined. */
+export const listItems = (lines) => lines.reduce((a, l) => {
+  const m = /^(?:[-*]|\d+\.)\s+(.*)$/.exec(l);
+  if (m) a.push(m[1]); else if (a.length && /^\s+\S/.test(l)) a[a.length - 1] += ' ' + l.trim();
+  return a;
+}, []);
+
+/** A plan as steps (its checkpoints) for the stepper; `cur` is the first unfinished step, -1 when all are done. */
+export function planSteps(p) {
+  const steps = p.checkpoints.map((c) => { const t = ticks(c.lines); return { label: plain(c.title.replace(/^\d+\.\s*/, ''), 40), done: t.total > 0 && t.done === t.total }; });
+  const wait = plain((p.where.find((l) => /Còn thiếu:/.test(l)) ?? '').replace(/^\s*[-*]\s*Còn thiếu:\s*/, ''), 90);
+  const cur = steps.findIndex((x) => !x.done);
+  return { title: plain(p.title, 70), link: p.linkBase, steps, cur, note: cur < 0 && wait ? 'Xong hết bước, ' + wait.charAt(0).toLowerCase() + wait.slice(1) : wait };
+}
+
+/** A STATUS table row of an old free-form plan ("U0, U1 / U0–U8") as steps, when its ticks column names a range. */
+export function statusSteps(p) {
+  const t = plain(p.ticks, 80), m = /\/\s*([A-Z]+)(\d+)\s*[–-]\s*(?:\1)?(\d+)/.exec(t);
+  const done = new Set(t.split('/')[0].match(/[A-Z]+\d+/g) || []);
+  const steps = m && +m[3] >= +m[2] && +m[3] - +m[2] < 30
+    ? Array.from({ length: +m[3] - +m[2] + 1 }, (_, k) => { const id = m[1] + (+m[2] + k); return { label: id, done: done.has(id) }; }) : [];
+  return { title: plain(p.title, 70), steps, cur: steps.findIndex((x) => !x.done), note: plain(p.at, 90) };
+}
+
 /** Everything the overview needs about one repo. */
 export function repoData(dir, repo) {
   const id = repoId(repo), name = repo.split('/')[1];
   const statusFile = join(dir, 'docs/STATUS.md');
-  if (!existsSync(statusFile)) return { id, name, repo, noStatus: true, tasks: [], plans: [], open: 0, where: '', upd: '' };
+  if (!existsSync(statusFile)) return { id, name, repo, noStatus: true, tasks: [], plans: [], steps: [], done: [], next: [], blocked: [], open: 0, where: '', head: '', status: 'running', upd: '' };
   const md = readFileSync(statusFile, 'utf8');
   const st = sections(md);
   const pick = (n) => st.sections.find((x) => x.title.startsWith(n));
@@ -196,11 +220,20 @@ export function repoData(dir, repo) {
     .map(([f, m]) => parsePlan(m, `${repo}:docs/plans/${f}`)).filter((p) => !/^(xong|bỏ)/.test(p.meta['Trạng thái'] || ''));
   // Plans written before the template have no checkpoints: fall back to the STATUS table row.
   const statusPlans = tableRows(pick('Kế hoạch đang chạy')?.lines ?? []).map((r) => ({ title: r[0], at: r[1] || '', ticks: r[2] || '' }));
+  const flat = plain(para.join(' '), 2000);
+  let head = (flat.match(/^.*?[.!?](\s|$)/) || [flat])[0].trim();
+  if (head.length > 110) head = plain(head.split(/[:(]/)[0].trim(), 110).replace(/[,;]$/, '') + '.';
+  const list = (name, max) => listItems(pick(name)?.lines ?? []).map((t) => plain(t, max));
+  const tasks = waitingItems(pick('Đang chờ thien')?.lines ?? []);
   return {
+    head, status: /tạm dừng|đang dừng/i.test(flat) ? 'paused' : tasks.length ? 'waiting' : 'running',
+    done: list('Vừa xong', 120), next: list('Việc tiếp theo', 140),
+    blocked: list('Đang vướng', 140).filter((t) => !/^Không( có)?[.,]/.test(t)),
+    steps: plans.length ? plans.map(planSteps) : statusPlans.map(statusSteps),
     id, name, repo, base,
     upd: /Cập nhật lần cuối:\s*([0-9-]+)/.exec(md)?.[1] ?? '',
     where: plain(para.join(' ')),
-    tasks: waitingItems(pick('Đang chờ thien')?.lines ?? []),
+    tasks,
     open: tableRows(pick('Việc dở')?.lines ?? []).length,
     plans: plans.length ? plans.map((p) => ({ title: p.title, link: p.linkBase, all: p.all, at: plain((p.where.find((l) => /Đang ở:/.test(l)) ?? '').replace(/^\s*[-*]\s*Đang ở:\s*/, ''), 90) }))
       : statusPlans.map((p) => ({ title: plain(p.title, 80), at: plain(p.at, 90), all: null, note: plain(p.ticks, 40) })),
@@ -236,6 +269,11 @@ function repoSection(dir, repo) {
  *  "-" becomes "--", any other character becomes "-<hex code>-" ("/" is "-2f-"). */
 export const repoId = (repo) => repo.toLowerCase().replace(/[^a-z0-9]/g, (c) => (c === '-' ? '--' : `-${c.charCodeAt(0).toString(16)}-`));
 
+const ICONS = {
+  check: '<path d="m5 12.5 4.5 4.5L19 7"/>', dot: '<circle cx="12" cy="12" r="4"/>', next: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  warn: '<path d="M12 4 2.5 20h19L12 4z"/><path d="M12 10v4M12 17.5v.5"/>', chev: '<path d="m6 9 6 6 6-6"/>',
+};
+const icon = (n, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]}</svg>`;
 const shortDate = (d) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || ''); return m ? `${+m[3]}/${+m[2]}` : d || ''; };
 /** Stable key for a task, so a tick survives a republish while the task text is unchanged. */
 export const taskKey = (repo, text) => { let h = 5381; for (const c of repo + '|' + text) h = ((h * 33) ^ c.codePointAt(0)) >>> 0; return 't' + h.toString(36); };
@@ -253,15 +291,31 @@ export function overviewBody(repos, details) {
     return `<li class="task" data-key="${key}"><label class="tick"><input type="checkbox" id="${key}" disabled aria-labelledby="${key}-t"><span class="box" aria-hidden="true"></span></label><p id="${key}-t">${inline(t, r.base)}</p></li>`;
   };
   const group = (r) => `<div class="grp"><div class="grp-head"><b>${esc(r.name)}</b><span>${r.tasks.length} việc${r.upd ? ` · từ ${esc(shortDate(r.upd))}` : ''}</span></div><ul class="tasks">${r.tasks.map((t) => task(r, t)).join('')}</ul></div>`;
-  const plan = (p) => `<div class="pl"><div class="pl-top"><span>${p.link ? `<a href="${esc(resolveLink(posix.basename(p.link.split(':')[1]), p.link))}">${inline(p.title, '')}</a>` : esc(p.title)}</span>${p.all ? `<span class="num">${p.all.done}/${p.all.total}</span>` : ''}</div>${p.all ? `<div class="bar" role="img" aria-label="${p.all.done} trên ${p.all.total} việc đã xong"><span style="width:${p.all.total ? Math.round((p.all.done / p.all.total) * 100) : 0}%"></span></div>` : ''}${p.at ? `<span class="muted small">${esc(p.at)}</span>` : ''}</div>`;
-  const plans = (r) => r.noStatus ? '' : r.plans.length ? `<div class="rc-plans">${r.plans.map(plan).join('')}</div>` : '<p class="muted small">Không có kế hoạch đang chạy.</p>';
-  // A repo that could not be read has no detail to unfold: a plain card keeps its reason in view.
-  const card = (r) => r.missing ? `<div class="rc rc-static" id="${esc(r.id)}"><div class="rc-head"><b>${esc(r.name)}</b><span class="muted small">chưa đọc được</span></div><p class="rc-where">${esc(r.why)}</p></div>`
-    : `<details class="rc" id="${esc(r.id)}"><summary>
-<div class="rc-head"><b>${esc(r.name)}</b><span class="muted small">${r.missing ? 'chưa đọc được' : r.upd ? `cập nhật ${esc(shortDate(r.upd))}` : ''}</span><span class="rc-chips">${r.open ? `<span class="chip">${r.open} việc dở</span>` : ''}${r.tasks.length ? `<span class="chip accent">${r.tasks.length} chờ bạn</span>` : ''}</span></div>
-<p class="rc-where">${esc(r.missing ? r.why : r.noStatus ? 'Repo này chưa có docs/STATUS.md.' : r.where)}</p>
-${r.missing ? '' : plans(r)}<span class="more">Chi tiết</span>
-</summary><div class="rc-detail">${details[r.id] || ''}</div></details>`;
+  // Repo card: a short timeline (Vừa xong · Bây giờ · Vướng · Tiếp theo); "Bây giờ" carries each running plan as a
+  // row of checkpoint steps, the current one ringed. The full STATUS stays folded under "Xem chi tiết".
+  const ST = { running: ['Đang chạy', 'run'], waiting: ['Chờ bạn', 'wait'], paused: ['Tạm dừng', 'pause'] };
+  const badge = (r) => `<span class="st ${ST[r.status][1]}"><i aria-hidden="true"></i>${ST[r.status][0]}${r.status === 'waiting' ? ` ${r.tasks.length} việc` : ''}</span>`;
+  const head = (r, sub) => `<div class="rc-head"><b>${esc(r.name)}</b>${sub}<span class="upd">${esc(r.missing ? 'chưa đọc được' : shortDate(r.upd))}</span></div>`;
+  const stepper = (p) => {
+    const d = p.steps.filter((x) => x.done).length, n = p.steps.length, short = p.steps.every((x) => x.label.length <= 4);
+    const count = d === n ? `${icon('check', 'ok')}xong` : `${d}/${n}`;
+    const dots = p.steps.map((x, k) => `<li class="${x.done ? 'd' : k === p.cur ? 'c' : ''}" title="${esc(x.label)}"><span></span>${short ? `<em>${esc(x.label)}</em>` : ''}</li>`).join('');
+    const at = p.cur >= 0 && !short ? `<b>Bước ${p.cur + 1}:</b> ${esc(p.steps[p.cur].label)}${p.note ? ' · ' : ''}` : '';
+    return `<div class="pst"><div class="pst-top"><span>${esc(p.title)}</span><span class="pn">${count}</span></div>${n ? `<ol class="steps" aria-label="${d} trên ${n} bước đã xong">${dots}</ol>` : ''}${at || p.note ? `<p class="note">${at}${esc(p.note || '')}</p>` : ''}</div>`;
+  };
+  const node = (cls, ic, label, body) => `<li class="${cls}"><span class="node" aria-hidden="true">${icon(ic)}</span><div><span class="k">${label}</span>${body}</div></li>`;
+  const timeline = (r) => {
+    const rows = [];
+    if (r.done[0]) rows.push(node('done', 'check', 'Vừa xong', `<p>${esc(r.done[0])}</p>`));
+    rows.push(node('now', 'dot', 'Bây giờ', `<p class="hl">${esc(r.head || r.where)}</p>${r.steps.map(stepper).join('')}`));
+    if (r.blocked[0]) rows.push(node('warn', 'warn', 'Vướng', `<p>${esc(r.blocked[0])}</p>`));
+    if (r.next[0]) rows.push(node('next', 'next', 'Tiếp theo', `<p>${esc(r.next[0])}</p>`));
+    return `<ol class="tl">${rows.join('')}</ol>`;
+  };
+  // A repo that could not be read, or has no STATUS yet, has no detail to unfold: a plain card keeps its reason in view.
+  const card = (r) => r.missing || r.noStatus
+    ? `<div class="rc rc-static" id="${esc(r.id)}">${head(r, '')}<p class="rc-where">${esc(r.missing ? r.why : 'Repo này chưa có docs/STATUS.md.')}</p></div>`
+    : `<details class="rc" id="${esc(r.id)}"><summary>${head(r, badge(r))}${timeline(r)}<span class="more">Xem chi tiết${icon('chev', 'chev')}</span></summary><div class="rc-detail">${details[r.id] || ''}</div></details>`;
   const tasksCol = `<section class="col" aria-labelledby="h-wait"><h2 class="label" id="h-wait">Đang chờ bạn</h2>
 ${total ? `${waiting.map(group).join('')}<p class="muted small" id="tick-note">Tick là bạn báo đã làm. Claude kiểm lại và bỏ việc khỏi STATUS ở lần cập nhật sau.</p>` : '<p class="card empty muted">Không có việc nào đang chờ bạn.</p>'}</section>`;
   const reposCol = `<section class="col" aria-labelledby="h-repos"><h2 class="label" id="h-repos">Các repo</h2>${repos.map(card).join('')}</section>`;
@@ -348,23 +402,60 @@ main > header .stamp { font-size: 13px; margin: 0; }
 details.rc { padding: 0; }
 details.rc + details.rc { margin-top: 0; }
 .rc-static { display: grid; gap: 8px; padding: 12px 14px; }
-details.rc > summary { display: grid; gap: 8px; padding: 12px 14px; min-height: 0; font-weight: 400; align-items: start; }
+details.rc > summary { display: grid; gap: 10px; padding: 12px 14px 0; min-height: 0; font-weight: 400; align-items: start; }
 details.rc > summary::before { content: none; }
-details.rc > summary:hover { background: var(--soft); border-radius: var(--r); }
-.rc-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; font-size: 14.5px; }
+.rc-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 15px; }
 .rc-head b { font-weight: 600; }
-.rc-chips { display: flex; gap: 6px; margin-left: auto; }
-.rc-where { margin: 0; font-size: 14px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-details.rc[open] .rc-where { display: none; }   /* the detail below shows the full "Đang ở đâu" */
-.rc-plans { display: grid; gap: 10px; }
-.pl { display: grid; gap: 4px; font-size: 13.5px; }
-.pl-top { display: flex; justify-content: space-between; gap: 8px; }
-.pl .bar { height: 6px; }
-.num { font-family: var(--mono); font-size: 12px; color: var(--muted); }
-.more { font-size: 13px; color: var(--accent); }
-.more::after { content: " ›"; }
-details.rc[open] .more::after { content: " ⌄"; }
-.rc-detail { padding: 4px 14px 14px; border-top: 1px dashed var(--line); font-size: 14px; }
+.rc-head .upd { margin-left: auto; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.rc-where { margin: 0; font-size: 14px; color: var(--muted); }
+.st { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 500; padding: 2px 8px; border-radius: var(--r); background: var(--soft); color: var(--muted); }
+.st i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.st.run { color: var(--good); background: var(--good-soft); }
+.st.wait { color: var(--accent-ink); background: var(--accent-soft); }
+.ic { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* Timeline */
+.tl { list-style: none; margin: 0; padding: 0; display: grid; }
+.tl > li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; position: relative; padding-bottom: 12px; }
+.tl > li:last-child { padding-bottom: 2px; }
+.tl > li::before { content: ""; position: absolute; left: 10px; top: 24px; bottom: 2px; width: 2px; background: var(--line); }
+.tl > li:last-child::before { content: none; }
+.tl .node { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--soft); color: var(--muted); }
+.tl .node .ic { width: 13px; height: 13px; stroke-width: 2.5; }
+.tl li.now .node { background: var(--accent); color: #fff; } .tl li.now .node .ic { fill: currentColor; }
+.tl li.warn .node { background: var(--bad-soft); color: var(--bad); }
+.tl li.next .node { background: var(--accent-soft); color: var(--accent-ink); }
+.tl .k { display: block; font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .02em; line-height: 22px; }
+.tl li.warn .k { color: var(--bad); }
+.tl li > div { min-width: 0; display: grid; gap: 8px; align-content: start; }
+.tl li > div > .k { margin-bottom: -6px; }
+.tl p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+.tl li.done p { color: var(--muted); }
+.tl .hl { font-size: 14.5px; font-weight: 600; }
+/* Plan steps inside "Bây giờ" */
+.pst { display: grid; gap: 6px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r); }
+.pst-top { display: flex; justify-content: space-between; gap: 8px; font-size: 13.5px; }
+.pn { display: inline-flex; align-items: center; gap: 3px; flex: none; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.pn .ok { width: 14px; height: 14px; color: var(--good); }
+.steps { list-style: none; margin: 0; padding: 0; display: flex; }
+.steps li { flex: 1; position: relative; display: grid; justify-items: center; gap: 4px; min-width: 0; }
+.steps li::before { content: ""; position: absolute; top: 6px; left: -50%; width: 100%; height: 2px; background: var(--line); }
+.steps li:first-child::before { content: none; }
+.steps li.d::before, .steps li.c::before { background: var(--accent); }
+.steps li span { position: relative; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--line); background: var(--card); }
+.steps li.d span { background: var(--accent); border-color: var(--accent); }
+.steps li.c span { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.steps em { font-style: normal; font-size: 11.5px; color: var(--muted); line-height: 1.3; }
+.steps li.c em { color: var(--ink); font-weight: 600; }
+.pst .note { font-size: 12.5px; color: var(--muted); } .pst .note b { color: var(--ink); font-weight: 600; }
+/* Footer button */
+.more { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 -14px; padding: 9px 14px; border-top: 1px solid var(--line); font-size: 13px; font-weight: 500; color: var(--muted); }
+details.rc > summary:hover .more { color: var(--ink); background: var(--soft); border-radius: 0 0 var(--r) var(--r); }
+details.rc[open] > summary:hover .more { border-radius: 0; }
+.more .chev { width: 15px; height: 15px; transition: transform .15s; }
+details.rc[open] .more .chev { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .more .chev { transition: none; } }
+.rc-detail { padding: 4px 14px 14px; border-top: 1px solid var(--line); font-size: 14px; }
+details.rc[open] .more { border-bottom: 0; }
 .rc-detail .repo { border: 0; padding: 10px 0 0; background: transparent; gap: 12px; }
 .empty { padding: 14px; margin: 0; }
 main { max-width: 1180px; margin: 0 auto; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 16px; }

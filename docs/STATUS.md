@@ -6,7 +6,7 @@ File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tu�
 Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
 
 ## Đang ở đâu
-Bộ quy trình chung đã dùng được: luật, mẫu, skill start-project, học nhiều môn xoay vòng (frontend 5 buổi, BA 2, chiến tranh 3), theo dõi kế hoạch và lộ trình học (PR #31 đã merge). Bản tin sáng qua mail đã bỏ (PR #24).
+Đang làm bộ khung artifact và trang tổng quan mới, chờ thien xem rồi merge PR #46. Bộ quy trình chung đã dùng được: luật, mẫu, skill start-project, học nhiều môn xoay vòng (frontend 5 buổi, BA 2, chiến tranh 3), theo dõi kế hoạch và lộ trình học (PR #31 đã merge). Bản tin sáng qua mail đã bỏ (PR #24).
 
 ## Kế hoạch đang chạy
 Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
@@ -20,7 +20,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
 |---|---|---|---|
 | Cài dòng Settings mới cho từng tài khoản Claude | README, bước 1 | 2026-11-12 | thien tự làm, AI không kiểm được |
-| Bộ khung artifact: lõi chung + mẫu so sánh giao diện | `feat/artifact-kit-compare` | 2026-11-13 | thien duyệt vòng tổng quan đầu tiên, rồi làm tổng quan mới theo bản thien chọn |
+| Bộ khung artifact: lõi chung + mẫu so sánh giao diện | `feat/artifact-kit-compare` | 2026-11-13 | PR #46: thien xem bản tổng quan mới (bản C của vòng 2, thêm thanh bước) rồi merge |
 
 ## Vừa xong
 - BA 2: học với Codex, rồi Claude làm lại trang theo góp ý về giao diện và luồng (PR #39)
@@ -28,13 +28,13 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 - Codex dạy học được qua repo: `AGENTS.md` ở gốc, `learning/codex.md` (PR #36, #37)
 
 ## Việc tiếp theo
-1. Làm lại trang tổng quan theo bản thien chọn ở vòng duyệt đầu tiên (kế hoạch: [Bộ khung artifact](https://claude.ai/artifact/L8JZzcaU2ZXKiweA4KFJNd)).
+1. Sau khi merge PR #46: làm mẫu trang quyết định, rồi đưa trang học lên lõi chung (kế hoạch: [Bộ khung artifact](https://claude.ai/artifact/L8JZzcaU2ZXKiweA4KFJNd)).
 2. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), theo `learning/README.md`.
 
 ## Đang chờ thien
 - Mở 3 trang (link trong file kế hoạch) trên điện thoại và laptop; trên laptop chạy `node templates/check-status.mjs docs/STATUS.md`, thấy "ổn" là xong.
 - Chép dòng Settings mới (README, bước 1) vào từng tài khoản Claude; tải lại 2 file zip skill nếu chưa.
-- Duyệt [vòng tổng quan đầu tiên](https://claude.ai/artifact/GAnvPfZmqdCNpHtjArHyny): chọn bản thích, ghim comment, bấm "Gửi cho Claude".
+- Xem [bản tổng quan mới](https://claude.ai/artifact/1MXtcXLeyvzYHNnyMfu3RW) trong khung claude.ai; ổn thì merge [PR #46](https://github.com/thiengthb/thienai-workflow/pull/46).
 
 ## Đang vướng
 - Không có. Trang tổng quan đọc sakubun bằng bản clone công khai.

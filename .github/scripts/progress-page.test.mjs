@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { parsePlan, blocks, inline, repoId, waitingLines } from '../../templates/progress-page.mjs';
+import { parsePlan, blocks, inline, repoId, waitingLines, planSteps, statusSteps, listItems } from '../../templates/progress-page.mjs';
 
 const plan = parsePlan([
   '# Kế hoạch thử', '', 'Trạng thái: đang chạy · Duyệt: 2026-01-01 · Cập nhật: 2026-01-02', '',
@@ -39,5 +39,17 @@ assert.ok(readFileSync('learning/roadmap.md', 'utf8').includes('## Lộ trình �
 // "Đang chờ thien": a bullet that is only a <placeholder> is skipped; links in angle brackets are real items.
 assert.deepEqual(waitingLines(['- <tối đa 3 việc>', '- <https://example.com>', '- Kiểm tra <https://example.com>.', '1. <x>']),
   ['- <https://example.com>', '- Kiểm tra <https://example.com>.']);
+
+// Repo card timeline: plan checkpoints become steps, the first unfinished one is current.
+const ps = planSteps(plan);
+assert.deepEqual(ps.steps.map((x) => [x.label, x.done]), [['A', true], ['B', false]]);
+assert.equal(ps.cur, 1);
+// Old free-form plans: the STATUS ticks column "U0, U1 / U0–U8" becomes nine steps, two done.
+const ss = statusSteps({ title: 'UI v2', at: 'U2', ticks: 'U0, U1 / U0–U8' });
+assert.equal(ss.steps.length, 9); assert.equal(ss.cur, 2); assert.equal(ss.steps[1].done, true);
+assert.deepEqual(statusSteps({ title: 'x', at: '', ticks: '3/5' }).steps, [], 'no range, no steps');
+assert.deepEqual(listItems(['1. a', '   b', '- c', '', 'đoạn']), ['a b', 'c']);
+assert.match(repoPage, /<ol class="tl">.*<span class="k">Bây giờ<\/span>/s, 'repo card shows the timeline');
+assert.match(repoPage, /<span class="more">Xem chi tiết<svg/, 'repo card ends with the detail button');
 
 console.log('ok progress-page');
