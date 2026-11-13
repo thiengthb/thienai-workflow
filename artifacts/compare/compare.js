@@ -44,7 +44,7 @@
     for (const k of MAPS) for (const id of new Set([...Object.keys(S[k]), ...Object.keys(snap[k])])) if (JSON.stringify(S[k][id]) !== JSON.stringify(snap[k][id])) edited[k].add(id);
     snap = JSON.parse(JSON.stringify(S));
   };
-  const save = (now) => { if (!loaded) { note(); return Promise.resolve(false); } return store.save(JSON.parse(JSON.stringify(S)), now); };
+  const save = (now, st) => { if (!loaded) { note(); return Promise.resolve(false); } return store.save(st || JSON.parse(JSON.stringify(S)), now); };
 
   // ---------- list, header, tools ----------
   function renderList() {
@@ -388,7 +388,7 @@
   function closePop() { const p = $('pop'); if (p) p.remove(); $('area').hidden = true; }
 
   // ---------- results ----------
-  function results() {
+  function results(S) { // S: one snapshot, so the report matches what was saved with it
     const L = [`# Kết quả duyệt: ${R.title}`, '', `Vòng: ${R.id} · Đã duyệt ${items.filter((x) => S.ratings[x.id]).length}/${items.length}`, ''];
     L.push('| Màn | Kết quả | Thích bản |', '|---|---|---|');
     for (const x of items) {
@@ -429,12 +429,13 @@
       if (armed) Kit.toast(ca ? 'Bấm vào chỗ muốn comment trên ảnh. Kéo để khoanh một vùng.' : 'Bấm vào chỗ muốn ghi chú trên ảnh.');
     };
     $('general').addEventListener('input', () => { S.general = $('general').value; save(); });
-    $('copy').onclick = async () => { if (!loaded) Kit.toast('Đang tải bản đã lưu…'); await ready; save(true); Kit.copy(results()); };
+    $('copy').onclick = async () => { if (!loaded) Kit.toast('Đang tải bản đã lưu…'); await ready; const snap = JSON.parse(JSON.stringify(S)); save(true, snap); Kit.copy(results(snap)); };
     $('send').onclick = async () => {
       if (!loaded) Kit.toast('Đang tải bản đã lưu…');
       await ready;
-      const stored = await save(true);
-      const full = results(), long = full.length > 3800;
+      const snap = JSON.parse(JSON.stringify(S)); // taken before the await: edits made while db writes don't leak into this report
+      const stored = await save(true, snap);
+      const full = results(snap), long = full.length > 3800;
       if (long && !stored) { if (await Kit.copy(full)) Kit.toast('Kết quả dài mà chưa lưu được vào trang, nên chưa gửi. Đã chép bản đầy đủ: dán vào chat cho Claude.', 8000); return; }
       const text = long ? full.slice(0, 3600) + '\n\n(Kết quả dài, bản đầy đủ nằm trong db của trang: ' + DB_PATH + ')' : full;
       const ok = await Kit.sendToClaude(text, $('top'));
