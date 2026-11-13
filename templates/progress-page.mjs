@@ -286,11 +286,12 @@ export function overviewBody(repos, details) {
   const total = waiting.reduce((a, r) => a + r.tasks.length, 0);
   const running = repos.reduce((a, r) => a + (r.plans ? r.plans.length : 0), 0);
   const lead = `<p class="lead">${total ? `<b>${total} việc</b> đang chờ bạn ở ${waiting.length} repo` : 'Không có việc nào đang chờ bạn'} · ${running} kế hoạch đang chạy.</p>`;
-  const task = (r, t) => {
-    const key = taskKey(r.repo, t);
-    return `<li class="task" data-key="${key}"><label class="tick"><input type="checkbox" id="${key}" disabled aria-labelledby="${key}-t"><span class="box" aria-hidden="true"></span></label><p id="${key}-t">${inline(t, r.base)}</p></li>`;
+  // A task shows in the overview tab and in its repo's tab: same data-key (one tick), different element ids.
+  const task = (r, t, sfx) => {
+    const key = taskKey(r.repo, t), id = key + sfx;
+    return `<li class="task" data-key="${key}"><label class="tick"><input type="checkbox" id="${id}" disabled aria-labelledby="${id}-t"><span class="box" aria-hidden="true"></span></label><p id="${id}-t">${inline(t, r.base)}</p></li>`;
   };
-  const group = (r) => `<div class="grp"><div class="grp-head"><b>${esc(r.name)}</b><span>${r.tasks.length} việc${r.upd ? ` · từ ${esc(shortDate(r.upd))}` : ''}</span></div><ul class="tasks">${r.tasks.map((t) => task(r, t)).join('')}</ul></div>`;
+  const group = (r, sfx) => `<div class="grp"><div class="grp-head"><b>${esc(r.name)}</b><span>${r.tasks.length} việc${r.upd ? ` · từ ${esc(shortDate(r.upd))}` : ''}</span></div><ul class="tasks">${r.tasks.map((t) => task(r, t, sfx)).join('')}</ul></div>`;
   // Repo card: a short timeline (Vừa xong · Bây giờ · Vướng · Tiếp theo); "Bây giờ" carries each running plan as a
   // row of checkpoint steps, the current one ringed. The full STATUS stays folded under "Xem chi tiết".
   const ST = { running: ['Đang chạy', 'run'], waiting: ['Chờ bạn', 'wait'], paused: ['Tạm dừng', 'pause'] };
@@ -312,14 +313,45 @@ export function overviewBody(repos, details) {
     if (r.next[0]) rows.push(node('next', 'next', 'Tiếp theo', `<p>${esc(r.next[0])}</p>`));
     return `<ol class="tl">${rows.join('')}</ol>`;
   };
-  // A repo that could not be read, or has no STATUS yet, has no detail to unfold: a plain card keeps its reason in view.
-  const card = (r) => r.missing || r.noStatus
-    ? `<div class="rc rc-static" id="${esc(r.id)}">${head(r, '')}<p class="rc-where">${esc(r.missing ? r.why : 'Repo này chưa có docs/STATUS.md.')}</p></div>`
-    : `<details class="rc" id="${esc(r.id)}"><summary>${head(r, badge(r))}${timeline(r)}<span class="more">Xem chi tiết${icon('chev', 'chev')}</span></summary><div class="rc-detail">${details[r.id] || ''}</div></details>`;
-  const tasksCol = `<section class="col" aria-labelledby="h-wait"><h2 class="label" id="h-wait">Đang chờ bạn</h2>
-${total ? `${waiting.map(group).join('')}<p class="muted small" id="tick-note">Tick là bạn báo đã làm. Claude kiểm lại và bỏ việc khỏi STATUS ở lần cập nhật sau.</p>` : '<p class="card empty muted">Không có việc nào đang chờ bạn.</p>'}</section>`;
-  const reposCol = `<section class="col" aria-labelledby="h-repos"><h2 class="label" id="h-repos">Các repo</h2>${repos.map(card).join('')}</section>`;
-  return `${lead}<div class="cols">${tasksCol}${reposCol}</div>`;
+  const tickNote = '<p class="muted small tick-note">Tick là bạn báo đã làm. Claude kiểm lại và bỏ việc khỏi STATUS ở lần cập nhật sau.</p>';
+  const plain1 = (r) => r.missing || r.noStatus;
+  const reason = (r) => `<p class="rc-where">${esc(r.missing ? r.why : 'Repo này chưa có docs/STATUS.md.')}</p>`;
+  // Overview tab: one compact row per repo (name, status, "Bây giờ", plan steps); the row opens that repo's tab.
+  const miniSteps = (p) => {
+    const d = p.steps.filter((x) => x.done).length, n = p.steps.length;
+    return `<div class="mini"><span class="mini-t">${esc(p.title)}</span>${n ? `<ol class="steps sm" aria-label="${d} trên ${n} bước đã xong">${p.steps.map((x, k) => `<li class="${x.done ? 'd' : k === p.cur ? 'c' : ''}"><span></span></li>`).join('')}</ol>` : '<span></span>'}<span class="pn">${n && d === n ? `${icon('check', 'ok')}xong` : n ? `${d}/${n}` : ''}</span></div>`;
+  };
+  const row = (r) => `<a class="rc rrow" href="#${esc(r.id)}" data-tab="${esc(r.id)}">${head(r, plain1(r) ? '' : badge(r))}${plain1(r) ? reason(r) : `<p class="hl">${esc(r.head || r.where)}</p>${r.steps.length ? `<div class="minis">${r.steps.map(miniSteps).join('')}</div>` : ''}`}<span class="open">Mở tab ${esc(r.name)}${icon('next')}</span></a>`;
+  const allPanel = `${lead}<div class="cols"><section class="col" aria-labelledby="h-wait"><h2 class="label" id="h-wait">Đang chờ bạn</h2>
+${total ? `${waiting.map((r) => group(r, '')).join('')}${tickNote}` : '<p class="card empty muted">Không có việc nào đang chờ bạn.</p>'}</section>
+<section class="col" aria-labelledby="h-repos"><h2 class="label" id="h-repos">Các repo</h2>${repos.map(row).join('')}</section></div>`;
+  // Repo tab: the full timeline and this repo's waiting tasks | the whole STATUS, already open.
+  const repoPanel = (r) => plain1(r) ? `<div class="rc rc-static">${head(r, '')}${reason(r)}</div>`
+    : `<div class="cols"><div class="col"><h2 class="label">Tiến độ</h2><div class="rc rc-static">${head(r, badge(r))}${timeline(r)}</div>
+${r.tasks.length ? `<h2 class="label gap">Đang chờ bạn</h2>${group(r, '-r')}${tickNote}` : ''}</div>
+<div class="col"><h2 class="label">Chi tiết</h2><div class="rc rc-full">${details[r.id] || ''}</div></div></div>`;
+  const tab = (id, label, n, on) => `<button type="button" role="tab" id="tab-${esc(id)}" aria-controls="p-${esc(id)}" aria-selected="${on}" tabindex="${on ? 0 : -1}" data-tab="${esc(id)}">${esc(label)}${n ? `<span class="cnt" aria-label="${n} việc chờ bạn">${n}</span>` : ''}</button>`;
+  const panel = (id, html, on) => `<section class="panel" role="tabpanel" id="p-${esc(id)}" aria-labelledby="tab-${esc(id)}"${on ? '' : ' hidden'}>${html}</section>`;
+  return `<nav class="tabs" role="tablist" aria-label="Xem theo repo">${tab('all', 'Tổng quan', 0, true)}${repos.map((r) => tab(r.id, r.name, r.tasks.length, false)).join('')}</nav>
+${panel('all', allPanel, true)}${repos.map((r) => panel(r.id, repoPanel(r), false)).join('')}
+<script>
+/* Tabs: the hash names the open repo (#<repo id>), so a link or a reload lands on the same tab. */
+(() => {
+  const tabs = [...document.querySelectorAll('[role=tab]')], ids = tabs.map((t) => t.dataset.tab);
+  const show = (id, focus) => {
+    if (!ids.includes(id)) id = 'all';
+    for (const t of tabs) { const on = t.dataset.tab === id; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; document.getElementById('p-' + t.dataset.tab).hidden = !on; if (on && focus) t.focus(); }
+    try { history.replaceState(null, '', id === 'all' ? location.pathname + location.search : '#' + id); } catch (e) { /* sandboxed frame: the tab still switches */ }
+    window.scrollTo(0, 0);
+  };
+  tabs.forEach((t, k) => {
+    t.addEventListener('click', () => show(t.dataset.tab));
+    t.addEventListener('keydown', (e) => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (d) { e.preventDefault(); show(ids[(k + d + ids.length) % ids.length], true); } });
+  });
+  document.querySelectorAll('a.rrow').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); show(a.dataset.tab); }));
+  show(location.hash.slice(1));
+})();
+</script>`;
 }
 
 function roadmap(file, linkBase) {
@@ -454,6 +486,35 @@ details.rc[open] > summary:hover .more { border-radius: 0; }
 .more .chev { width: 15px; height: 15px; transition: transform .15s; }
 details.rc[open] .more .chev { transform: rotate(180deg); }
 @media (prefers-reduced-motion: reduce) { .more .chev { transition: none; } }
+/* Tabs */
+.tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--line); margin: 0 -2px; padding: 0 2px; scrollbar-width: none; }
+.tabs button { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 12px; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; color: var(--muted); font: 500 14px/1 var(--font); cursor: pointer; border-radius: var(--r) var(--r) 0 0; }
+.tabs button:hover { color: var(--ink); background: var(--soft); }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+.tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.tabs .cnt { min-width: 20px; padding: 1px 6px; border-radius: var(--r); background: var(--accent-soft); color: var(--accent-ink); font-size: 12px; font-weight: 600; text-align: center; }
+.panel { display: grid; gap: 16px; }
+.panel[hidden] { display: none; }
+/* Overview rows */
+a.rrow { display: grid; gap: 8px; padding: 12px 14px 0; color: inherit; text-decoration: none; overflow: hidden; }
+a.rrow .hl { margin: 0; font-size: 14.5px; font-weight: 600; line-height: 1.5; }
+a.rrow:hover .open { color: var(--ink); background: var(--soft); }
+a.rrow:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.minis { display: grid; gap: 6px; }
+.mini { display: grid; grid-template-columns: minmax(0, 1fr) minmax(90px, 160px) 44px; gap: 10px; align-items: center; font-size: 13px; }
+.mini-t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--muted); }
+.mini .pn { justify-content: flex-end; }
+.steps.sm li::before { top: 4px; } .steps.sm li span { width: 10px; height: 10px; border-width: 2px; }
+.steps.sm li.c span { box-shadow: 0 0 0 2px var(--accent-soft); }
+.open { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 -14px; padding: 9px 14px; border-top: 1px solid var(--line); font-size: 13px; font-weight: 500; color: var(--muted); }
+.open .ic { width: 15px; height: 15px; }
+.rc-full { padding: 0 14px 14px; }
+.rc-full .repo { border: 0; padding: 10px 0 0; background: transparent; gap: 12px; }
+.rc-full p, .rc-full li, .rc-full td, .rc-full th { font-size: 13.5px; }
+.rc-full .now-box p, .rc-full .now-box li { font-size: 14px; }
+.rc-full .plan > .progress { display: none; }
+.rc-full details summary { min-height: 36px; font-size: 13.5px; }
+.col > .label.gap { margin-top: 8px; }
 .rc-detail { padding: 4px 14px 14px; border-top: 1px solid var(--line); font-size: 14px; }
 details.rc[open] .more { border-bottom: 0; }
 .rc-detail .repo { border: 0; padding: 10px 0 0; background: transparent; gap: 12px; }
@@ -538,7 +599,8 @@ ${opts.ticks ? `<script>${kitFile('kit.js')}</script>
     box.addEventListener('change', () => {
       if (box.checked) S.done[c.dataset.key] = { at: new Date().toISOString(), text: c.querySelector('p').textContent.slice(0, 300) };
       else delete S.done[c.dataset.key];
-      paint(c); st.save(S);
+      for (const o of cards) if (o.dataset.key === c.dataset.key) { o.querySelector('input').checked = box.checked; paint(o); }
+      st.save(S);
       Kit.toast(box.checked ? 'Đã đánh dấu. Claude kiểm lại ở lần cập nhật sau.' : 'Đã bỏ đánh dấu.');
     });
   }

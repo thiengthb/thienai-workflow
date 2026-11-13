@@ -30,8 +30,7 @@ const repoPage = run('--title', 'T', '.=thiengthb/thienai-workflow', 'missing=th
 assert.match(repoPage, /^<!DOCTYPE html>/);
 assert.match(repoPage, /Kế hoạch đang chạy/);
 // An unreadable repo is a plain card: its reason stays in view, with no empty detail to unfold.
-assert.match(repoPage, /<div class="rc rc-static" id="[^"]+"><div class="rc-head"><b>x<\/b>.*<p class="rc-where">không đọc được<\/p><\/div>/);
-assert.doesNotMatch(repoPage, /<details class="rc" id="[^"]*x"/);
+assert.match(repoPage, /<div class="rc rc-static"><div class="rc-head"><b>x<\/b>.*?<p class="rc-where">không đọc được<\/p><\/div>/);
 assert.ok(repoPage.includes('lý do dài '.repeat(40).trim()), 'a long reason is shown whole');
 assert.doesNotMatch(repoPage, /\.rc-where \{[^}]*line-clamp/, 'the reason is never clamped: the plain card cannot unfold');
 const road = run('--title', 'L', '--roadmap', 'learning/roadmap.md=thiengthb/thienai-workflow:learning/roadmap.md');
@@ -52,6 +51,11 @@ assert.equal(ss.steps.length, 9); assert.equal(ss.cur, 2); assert.equal(ss.steps
 assert.deepEqual(statusSteps({ title: 'x', at: '', ticks: '3/5' }).steps, [], 'no range, no steps');
 assert.deepEqual(listItems(['1. a', '   b', '- c', '', 'đoạn']), ['a b', 'c']);
 assert.match(repoPage, /<ol class="tl">.*<span class="k">Bây giờ<\/span>/s, 'repo card shows the timeline');
-assert.match(repoPage, /<span class="more">Xem chi tiết<svg/, 'repo card ends with the detail button');
+assert.match(repoPage, /<nav class="tabs" role="tablist"[^>]*><button[^>]*data-tab="all">Tổng quan</, 'the overview tab comes first');
+assert.match(repoPage, /<section class="panel" role="tabpanel" id="p-all"[^>]*>/, 'overview panel shown by default');
+assert.match(repoPage, /<a class="rc rrow" href="#[^"]+" data-tab="[^"]+">/, 'each repo row opens its tab');
+// A waiting task shows in both tabs with one tick key and distinct element ids.
+const keys = [...repoPage.matchAll(/<li class="task" data-key="([^"]+)"><label class="tick"><input type="checkbox" id="([^"]+)"/g)];
+assert.ok(keys.length && new Set(keys.map((m) => m[2])).size === keys.length, 'checkbox ids are unique');
 
 console.log('ok progress-page');
