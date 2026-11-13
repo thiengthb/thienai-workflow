@@ -20,7 +20,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
 |---|---|---|---|
 | Cài dòng Settings mới cho từng tài khoản Claude | README, bước 1 | 2026-11-12 | thien tự làm, AI không kiểm được |
-| Làm gọn mẫu so sánh theo bản A, ảnh rộng tự xem từng bản | `feat/compare-tidy` | 2026-11-14 | thien xem thử rồi merge PR |
+| Làm gọn mẫu so sánh: bản C, nút icon, tim cho từng bản, ảnh khít chiều cao | `feat/compare-tidy` | 2026-11-14 | thien xem thử rồi merge PR |
 
 ## Vừa xong
 - Mẫu buổi học `artifacts/lesson/` và luật dùng mẫu ở mọi project (PR #48); luật luôn trả lời tiếng Việt (PR #49)
