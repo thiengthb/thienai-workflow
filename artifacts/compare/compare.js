@@ -398,7 +398,9 @@
     renderList(); renderTools(); renderStage(); save();
     if (!quiet) { const b = document.querySelector(`.item[data-i="${S.cur}"]`); if (b) b.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
   }
-  function rate(v) { const id = it().id; S.ratings[id] = S.ratings[id] === v ? undefined : v; if (!S.ratings[id]) delete S.ratings[id]; renderList(); renderTools(); save(); }
+  const cleared = { ratings: new Set(), prefer: new Set() };   // choices the viewer took back before the saved state arrived
+  const unset = (k, id) => { delete S[k][id]; if (!loaded) cleared[k].add(id); };
+  function rate(v) { const id = it().id; if (S.ratings[id] === v) unset('ratings', id); else S.ratings[id] = v; renderList(); renderTools(); save(); }
 
   function bind() {
     $('items').addEventListener('click', (e) => { const b = e.target.closest('.item'); if (b) go(+b.dataset.i, true); });
@@ -408,7 +410,7 @@
     $('zooms').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { S.zoom = +b.dataset.zoom; closePop(); renderTools(); renderStage(); save(); } });
     const pick = () => { S.pairs[it().id] = { l: $('left-side').value, r: $('right-side').value }; renderTools(); renderStage(); save(); };
     $('left-side').onchange = pick; $('right-side').onchange = pick;
-    $('prefer').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; const id = it().id; S.prefer[id] = S.prefer[id] === b.dataset.key ? undefined : b.dataset.key; if (!S.prefer[id]) delete S.prefer[id]; renderList(); renderTools(); save(); });
+    $('prefer').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; const id = it().id; if (S.prefer[id] === b.dataset.key) unset('prefer', id); else S.prefer[id] = b.dataset.key; renderList(); renderTools(); save(); });
     $('pin').onclick = () => {
       if (ca && commentMode) { ca.exitMode(); armed = false; }
       else armed = !armed;
@@ -456,7 +458,12 @@
     if (saved) {
       const mine = (k) => JSON.stringify(S[k]) !== JSON.stringify(first[k]);
       // Maps: saved entries, with the viewer's early edits on top. Pins: saved ones plus any new ones.
-      for (const k of ['ratings', 'prefer', 'pairs']) if (saved[k]) S[k] = Object.assign({}, saved[k], S[k]);
+      for (const k of ['ratings', 'prefer', 'pairs']) {
+        if (!saved[k]) continue;
+        const taken = [...(cleared[k] || [])].filter((id) => !(id in S[k]));   // still taken back, so the saved choice must not return
+        S[k] = Object.assign({}, saved[k], S[k]);
+        taken.forEach((id) => delete S[k][id]);
+      }
       if (Array.isArray(saved.pins)) S.pins = saved.pins.concat(S.pins);
       for (const k of ['general', 'split', 'fade', 'zoom']) if (saved[k] != null && !mine(k)) S[k] = saved[k];
       if (MODES.includes(saved.mode) && !mine('mode')) S.mode = saved.mode;
