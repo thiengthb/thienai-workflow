@@ -30,6 +30,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 ## Việc tiếp theo
 1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), buổi đầu dựng từ mẫu `artifacts/lesson/`.
 2. Sau khi merge: Action mở PR cập nhật AGENTS.md vào sakubun và tiktok; nhắc thien merge.
+3. Làm lại mẫu so sánh `artifacts/compare/` cho gọn hơn (thien thấy nhiều chỗ cần sửa, 2026-11-14): gom góp ý của thien, phác 2–3 bản, duyệt rồi mới sửa.
 
 ## Đang chờ thien
 - Mở 3 trang (link trong file kế hoạch) trên điện thoại và laptop; trên laptop chạy `node templates/check-status.mjs docs/STATUS.md`, thấy "ổn" là xong.
