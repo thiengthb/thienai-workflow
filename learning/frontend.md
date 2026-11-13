@@ -11,7 +11,7 @@ File này để tài khoản nào, model nào cũng dạy tiếp được cho th
 - Học song song với BA và chiến tranh theo vòng Frontend → BA → Frontend → Chiến tranh.
 
 ## Cách một buổi chạy
-- Dựng trang từ mẫu `artifacts/lesson-page.html`, làm trên điện thoại.
+- Dựng trang từ mẫu `artifacts/lesson/` (xem README ở đó), làm trên điện thoại.
 - 7 bước: mở đầu, nhớ lại 1 câu, chấm 2 màn cùng loại (chưa biết là app nào) theo 5 tiêu chí + điểm chung, so điểm với AI và học một ý, 3 câu kiến thức + 1 câu về gu (không đúng sai), tự nói lại ý chính rồi mới xem bản của AI, góp ý độ dài và độ khó.
 - Màn hình: kiểu 1 và 3 chụp trang thật ở cỡ điện thoại bằng Firecrawl (`mobile: true`, `formats: ["screenshot"]`), mỗi buổi đổi loại màn và phong cách.
 - Kết quả: trang lưu vào db của artifact, collection `sessions`; AI đọc lại bằng công cụ đọc db. Lưu không được (hay học ở Codex, xem `codex.md`) thì thien bấm "Chép kết quả" rồi dán vào chat.

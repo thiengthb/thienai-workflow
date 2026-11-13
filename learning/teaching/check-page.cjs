@@ -5,7 +5,7 @@
 // Kiểm 6 thứ:
 //  0a. Không còn chữ giữ chỗ của mẫu, kiểu __A__ hay __IMG_A__ (quên thay khi dựng từ mẫu).
 //  0b. Lưu kết quả (db.doc(...).set(...)) phải có giới hạn thời gian, để nút không treo mãi
-//      mà không hiện nút chép kết quả. Cách viết đúng: xem nút finish trong artifacts/lesson-page.html.
+//      mà không hiện nút chép kết quả. Cách viết đúng: dùng Kit.put như artifacts/lesson/lesson.js.
 //  1. Không có lỗi JavaScript.
 //  2. Không tràn ngang (không phải cuộn sang phải).
 //  3. Vùng bấm không nhỏ hơn 24px (luật tối thiểu WCAG 2.2), cảnh báo nếu dưới 44px.
@@ -44,7 +44,9 @@ const SIZES = [
   const src = fs.readFileSync(path.resolve(file), 'utf8');
   const holders = [...new Set(src.match(/__[A-Z][A-Z0-9_]*__/g) || [])];
   if (holders.length) { fails++; console.log(`LỖI còn chữ giữ chỗ của mẫu: ${holders.join(', ')}`); }
-  if (/await\s+db\.doc\([^;]*?\)\.set\(/.test(src)) { fails++; console.log('LỖI lưu kết quả không có giới hạn thời gian: bọc db.doc(...).set(...) trong Promise.race với setTimeout'); }
+  // lõi chung (artifacts/kit/kit.js) tự giới hạn thời gian cho hàng đợi lưu của nó: không kiểm phần đó
+  const own = src.replace(/<script id="kit-js">[\s\S]*?<\/script>/, '');
+  if (/await\s+db\.doc\([^;]*?\)\.set\(/.test(own)) { fails++; console.log('LỖI lưu kết quả không có giới hạn thời gian: bọc db.doc(...).set(...) trong Promise.race với setTimeout'); }
   const browser = await chromium.launch();
   for (const size of SIZES) {
     const ctx = await browser.newContext(size.opts);

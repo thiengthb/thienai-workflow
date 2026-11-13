@@ -104,7 +104,7 @@ Lệnh này chép `kit.css` và `kit.js` vào trang (chạy lại thì thay bả
 
 **Học lại.** Bấm "Xong buổi học" thì bộ khung đánh dấu bài đã học. Lần mở sau trang ẩn mọi phần có `data-part="review"` (ôn thẻ, nhớ lại buổi trước) và mở khóa nút có `data-review-gate`; kết quả gửi đi có `mode: "hoc-lai"`. Trang chỉ còn nội dung và câu hỏi của chính bài.
 
-**Khi soạn trang mới:** dùng id `#finish` cho nút xong, `#copy` cho nút chép kết quả; bọc phần ôn bằng `data-part="review"`; gắn bộ khung trước khi chạy `check-page.cjs` (công cụ kiểm tự xóa bản lưu trước mỗi lần tải để không bị lẫn).
+**Khi soạn trang mới:** chép mẫu ở [`artifacts/lesson/`](../../artifacts/lesson/README.md) và gắn khung bằng `node artifacts/lesson/make-lesson.mjs <trang>`: lệnh này chép cả lõi chung lẫn phần tự lưu ở đây, và cuối buổi trang tự gửi kết quả cho Claude. `apply-kit.mjs` chỉ còn dùng cho trang cũ. Bọc phần ôn bằng `data-part="review"`; gắn khung trước khi chạy `check-page.cjs` (công cụ kiểm tự xóa bản lưu trước mỗi lần tải để không bị lẫn).
 
 ## Chưa chắc, cần xem lại
 
