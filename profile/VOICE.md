@@ -6,6 +6,7 @@ File này do thien sở hữu. AI đọc ở mọi project, trước khi viết 
 
 Vì sao có phần này: thien đọc để theo dõi và để học. Câu lạ hay dịch sát từ tiếng Anh làm thien phải dừng lại đoán nghĩa, và đó là lúc thien mất dấu.
 
+- Luôn trả lời thien bằng tiếng Việt. Ngày 14/11/2026, sau khi phiên dài được tóm tắt lại, ba tin liền viết tiếng Anh và thien tưởng AI bị lỗi. Ngữ cảnh toàn tiếng Anh (tóm tắt, bot, log) không phải lý do để đổi ngôn ngữ.
 - Viết như đang giải thích cho bạn bè: câu đủ chủ ngữ vị ngữ, từ thường ngày. Không tự cắt gọn, không tự đặt từ mới.
 - "Ngắn" nghĩa là ít ý, không phải ít chữ cho mỗi ý. Không viết kiểu ghi chú, mũi tên nối ý, gạch ngang dài.
 
