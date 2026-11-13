@@ -1,15 +1,21 @@
 #!/usr/bin/env node
 // Gắn lõi chung và khung buổi học vào một trang học (xem README.md trong thư mục này). Chạy lại được: thay bản cũ.
 //
-//   node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html [lesson-id]
+//   node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html [lesson-id] [--out <thư-mục>] [--no-check]
 //
+// Trang chưa có: chép mẫu ra rồi dừng. Trang đã có: gắn khung, chạy learning/teaching/check-page.cjs,
+// qua thì ghi <out>/publish.json (mặc định thư mục tạm lesson-<id>) để đăng bằng một lần gọi Artifact.
 // Trang phải có các thẻ rỗng (hoặc bản cũ) với id: kit-css, lesson-css (style), kit-js, lesson-js, lesson-kit (script).
 // lesson-id: tham số, hoặc "id" trong <script id="lesson">, hoặc đoán từ đường dẫn (frontend-06).
-import { readFileSync, writeFileSync, realpathSync } from 'node:fs';
-import { dirname, join, basename } from 'node:path';
+import { readFileSync, writeFileSync, realpathSync, existsSync, mkdirSync, copyFileSync } from 'node:fs';
+import { dirname, join, basename, resolve } from 'node:path';
+import { tmpdir } from 'node:os';
+import { spawnSync } from 'node:child_process';
+import { writePublish } from '../kit/publish.mjs';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
+export const CAPABILITIES = { db: {}, comments: {} };
 const read = (p) => readFileSync(join(here, p), 'utf8');
 const PARTS = {
   'kit-css': ['style', '../kit/kit.css'],
@@ -49,11 +55,31 @@ export function fill(html, id) {
 }
 
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
-  const [file, id] = process.argv.slice(2);
-  if (!file) { console.error('Cách dùng: node artifacts/lesson/make-lesson.mjs <trang.html> [lesson-id]'); process.exit(1); }
+  const args = process.argv.slice(2);
+  const flag = (n) => { const i = args.indexOf('--' + n); return i >= 0 ? args.splice(i, 2)[1] : undefined; };
+  const bool = (n) => { const i = args.indexOf('--' + n); return i >= 0 ? (args.splice(i, 1), true) : false; };
+  const outArg = flag('out'), noCheck = bool('no-check');
+  const [file, id] = args;
+  if (!file) { console.error('Cách dùng: node artifacts/lesson/make-lesson.mjs <trang.html> [lesson-id] [--out <thư-mục>] [--no-check]'); process.exit(1); }
+  // Lần đầu: trang chưa có thì chép mẫu ra, để AI điền nội dung rồi chạy lại đúng lệnh này.
+  if (!existsSync(file)) {
+    mkdirSync(dirname(resolve(file)), { recursive: true });
+    copyFileSync(join(here, 'template.html'), file);
+    console.log(`Đã chép mẫu ra ${file}. Thay mọi chỗ __…__ và nội dung mẫu, rồi chạy lại đúng lệnh này.`);
+    process.exit(0);
+  }
   const html = readFileSync(file, 'utf8');
-  let lid = id;
-  if (!lid) { const m = html.match(/<script type="application\/json" id="lesson">([\s\S]*?)<\/script>/); try { lid = m && JSON.parse(m[1]).id; } catch (e) { lid = ''; } if (!lid || /^__/.test(lid)) lid = guessId(file); }
+  const conf = (() => { const m = html.match(/<script type="application\/json" id="lesson">([\s\S]*?)<\/script>/); try { return m ? JSON.parse(m[1]) : {}; } catch (e) { return {}; } })();
+  let lid = id || conf.id;
+  if (!lid || /^__/.test(lid)) lid = guessId(file);
   writeFileSync(file, fill(html, lid));
-  console.log(`Đã gắn bộ khung vào ${file} (id ${lid}). Đăng trang với capabilities {"db": {}, "comments": {}}.`);
+  console.log(`Đã gắn bộ khung vào ${file} (id ${lid}).`);
+  const out = resolve(outArg || join(tmpdir(), `lesson-${lid}`));
+  if (!noCheck) {
+    // Kiểm luôn trên điện thoại và laptop (chữ giữ chỗ, lỗi JS, tràn ngang, vùng bấm, nút bấm không đổi gì).
+    const r = spawnSync(process.execPath, [join(here, '../../learning/teaching/check-page.cjs'), file, join(out, 'check')], { stdio: 'inherit' });
+    if (r.status !== 0) { console.error('Trang chưa qua bài kiểm, sửa rồi chạy lại. Chưa ghi publish.json.'); process.exit(1); }
+  }
+  const title = conf.title && !/^__/.test(conf.title) ? conf.title : lid;
+  for (const l of writePublish(out, { file_path: resolve(file), capabilities: CAPABILITIES, icon: 'book', description: title })) console.log(l);
 }

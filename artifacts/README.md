@@ -12,14 +12,15 @@ Các trang artifact thien đã dùng và khen. Ở project nào, tài khoản n�
 
 ## Dùng nhanh
 
-Mỗi mẫu là một lệnh dựng và một lần đăng. Script ghi sẵn `publish.json` (trang, ảnh, capabilities), AI chỉ việc gọi Artifact với đúng file đó, không tự gõ lại tham số. Kết quả thien gửi về là comment có sẵn bảng markdown, chép thẳng vào PR.
+Mỗi mẫu là một lệnh dựng và một lần đăng. Script tự chụp ảnh khi cần, tự kiểm, rồi ghi sẵn `publish.json` (trang, ảnh, capabilities, link trang cũ nếu là đăng đè), AI chỉ việc gọi Artifact với đúng file đó, không viết script chụp riêng, không tự gõ lại tham số. Kết quả thien gửi về là comment có sẵn bảng markdown, chép thẳng vào PR.
 
 | Việc | Lệnh | Đăng |
 |---|---|---|
 | Duyệt giao diện cũ và mới | `node artifacts/compare/shoot.mjs /tmp/round --old <url> --new <url> --pages /,/x --title "..."` | `publish.json` |
 | Duyệt từ ảnh có sẵn | `node artifacts/compare/make-round.mjs <thư-mục-ảnh> /tmp/round --title "..."` | `publish.json` |
-| Cho thien chọn phương án | viết `decision.json` rồi `node artifacts/decide/make-decision.mjs decision.json /tmp/dec` | `publish.json` |
-| Buổi học | chép `artifacts/lesson/template.html` sang `learning/<môn>/pages/lesson-NN.html`, điền nội dung, `node artifacts/lesson/make-lesson.mjs <trang.html>` | capabilities in ra |
+| Cho thien chọn phương án | viết `decision.json` (mỗi phương án một `image`, hoặc `shot` là link hay file html để script tự chụp) rồi `node artifacts/decide/make-decision.mjs decision.json /tmp/dec` | `publish.json` |
+| Buổi học | `node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html`: lần đầu chép mẫu ra; điền nội dung rồi chạy lại, script gắn khung và tự kiểm trang | `publish.json` |
+| Trang tiến độ, tổng quan, lộ trình học | `node templates/publish-progress.mjs overview` (hoặc `repo`, `roadmap`): tự clone các repo trong danh sách, lấy link trang cũ trong repo | `publish.json`, đăng đè trang cũ |
 
 Chi tiết từng mẫu ở README trong thư mục của mẫu.
 

@@ -2,7 +2,7 @@
 
 Mỗi môn đi từ người mới đến khá qua vài chặng. Mỗi chặng ghi học xong thì biết gì, làm được gì, và thế nào là xong. Chặng đang học thì chi tiết; chặng sau chỉ phác, sẽ rõ dần khi tới gần. Lộ trình được đổi, nhưng mỗi lần đổi đều ghi ở bảng cuối file kèm lý do.
 
-Cách cập nhật: sau mỗi buổi học, AI tick việc đã xong trong chặng và thêm link bài vào mục "Bài đã học" của môn đó, trong cùng PR ghi nhật ký buổi. Vòng xoay và buổi tới học gì ở [README.md](README.md); trạng thái chi tiết từng môn ở file của môn. Nguồn học ghi rõ đã đọc hay chưa, theo `profile/RESEARCH.md`. Trang để xem trên điện thoại: https://claude.ai/artifact/Vubbj6ghT9L7eKYegTfT9n, AI đăng lại bằng `templates/progress-page.mjs --roadmap` sau mỗi lần sửa file này.
+Cách cập nhật: sau mỗi buổi học, AI tick việc đã xong trong chặng và thêm link bài vào mục "Bài đã học" của môn đó, trong cùng PR ghi nhật ký buổi. Vòng xoay và buổi tới học gì ở [README.md](README.md); trạng thái chi tiết từng môn ở file của môn. Nguồn học ghi rõ đã đọc hay chưa, theo `profile/RESEARCH.md`. Trang để xem trên điện thoại: https://claude.ai/artifact/Vubbj6ghT9L7eKYegTfT9n, AI đăng lại bằng `node templates/publish-progress.mjs roadmap` sau mỗi lần sửa file này.
 
 ## Frontend
 Môn chính, một nửa số buổi. Đích sau 6 tháng: nhìn một màn bất kỳ, chỉ ra được chỗ cấn mắt ở mức cả màn, sửa được và nói được vì sao; viết được luật cho thienui từ những gì đã học. Chi tiết ở [frontend.md](frontend.md).

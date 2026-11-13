@@ -1,0 +1,24 @@
+// publish-progress finds the old page links in the repo files and writes publish.json as an update in place.
+import assert from 'node:assert/strict';
+import { mkdtempSync, readFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { linkAfter, trackedRepos } from '../../templates/publish-progress.mjs';
+import { writePublish } from '../../artifacts/kit/publish.mjs';
+
+const root = new URL('../../', import.meta.url);
+const tracked = readFileSync(new URL('life/tracked-repos.md', root), 'utf8');
+assert.ok(trackedRepos(tracked).includes('thiengthb/sakubun'), 'reads repo names from the table');
+assert.match(linkAfter(tracked, 'Trang tổng quan'), /^https:\/\/claude\.ai\/artifact\/\w+$/, 'overview link must stay findable');
+assert.match(linkAfter(readFileSync(new URL('learning/roadmap.md', root), 'utf8'), 'Trang để xem trên điện thoại:'), /^https:\/\/claude\.ai\/artifact\/\w+$/, 'roadmap link must stay findable');
+assert.match(linkAfter(readFileSync(new URL('docs/STATUS.md', root), 'utf8'), 'Trang tiến độ:'), /^https:\/\/claude\.ai\/artifact\/\w+$/, 'STATUS page link must stay findable');
+assert.equal(linkAfter('a https://claude.ai/artifact/X1 · Trang tiến độ: https://claude.ai/artifact/Y2', 'Trang tiến độ:'), 'https://claude.ai/artifact/Y2', 'the link after the marker, not the first on the line');
+assert.equal(linkAfter('nothing', 'Trang'), '');
+
+const out = mkdtempSync(join(tmpdir(), 'pub-'));
+writePublish(out, { file_path: join(out, 'index.html'), url: 'https://claude.ai/artifact/Z', capabilities: { db: {} }, icon: 'chart', description: 'd' });
+const pub = JSON.parse(readFileSync(join(out, 'publish.json'), 'utf8'));
+assert.equal(pub.url, 'https://claude.ai/artifact/Z');
+assert.equal(pub.icon, undefined, 'an update keeps the old icon');
+assert.equal(pub.files, undefined, 'no empty files map');
+console.log('publish-progress: ok');
