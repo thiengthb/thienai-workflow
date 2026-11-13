@@ -47,11 +47,26 @@
   function store(key, path) {
     const lk = 'kit:' + key;
     let timer = null, pending = null, running = null;
+    // The db copy could not be read at load: until a later read shows it is not newer than what this page
+    // started from (`base`), never write over it. A newer copy blocks db writes for this page view.
+    let unread = false, base = 0, blocked = false;
+    const wait = (p, ms) => Promise.race([p, new Promise((_, j) => setTimeout(() => j(new Error('timeout')), ms))]);
+    async function mayWrite(db) {
+      if (blocked) return false;
+      if (!unread) return true;
+      try {
+        const s = await wait(db.doc(path).get(), 8000), r = s.exists ? s.data() : null;
+        if (!r || (r.ts || 0) <= base) { unread = false; return true; }
+        blocked = true;
+        toast('Trang có bản lưu mới hơn từ lần mở khác. Tải lại trang để xem; thay đổi ở đây tạm chỉ lưu trên máy này.', 9000);
+      } catch (e) { /* still unreadable: try again on the next save */ }
+      return false;
+    }
     const readLocal = () => { try { return JSON.parse(localStorage.getItem(lk) || 'null'); } catch (e) { return null; } };
     /** Writes the newest object; writes queued while one runs collapse into one. Resolves true once db holds it. */
     async function push(obj) {
       const db = await cap('db');
-      if (!db || !path) return false;
+      if (!db || !path || !(await mayWrite(db))) return false;
       pending = obj;
       if (!running) running = (async () => {
         let ok = true;
@@ -68,8 +83,8 @@
         let remote = null;
         const db = await cap('db');
         if (db && path) {
-          try { const s = await Promise.race([db.doc(path).get(), new Promise((_, j) => setTimeout(() => j(new Error('timeout')), 8000))]); remote = s.exists ? s.data() : null; }
-          catch (e) { remote = null; }
+          try { const s = await wait(db.doc(path).get(), 8000); remote = s.exists ? s.data() : null; }
+          catch (e) { remote = null; unread = true; base = (local && local.ts) || 0; }
         }
         if (local && remote) return (local.ts || 0) >= (remote.ts || 0) ? local : remote;
         return local || remote;

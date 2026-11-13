@@ -29,6 +29,9 @@ const run = (...args) => execFileSync('node', ['templates/progress-page.mjs', ..
 const repoPage = run('--title', 'T', '.=thiengthb/thienai-workflow', 'missing=thiengthb/x:không đọc được');
 assert.match(repoPage, /^<!DOCTYPE html>/);
 assert.match(repoPage, /Kế hoạch đang chạy/);
+// An unreadable repo is a plain card: its reason stays in view, with no empty detail to unfold.
+assert.match(repoPage, /<div class="rc rc-static" id="[^"]+"><div class="rc-head"><b>x<\/b>.*<p class="rc-where">không đọc được<\/p><\/div>/);
+assert.doesNotMatch(repoPage, /<details class="rc" id="[^"]*x"/);
 const road = run('--title', 'L', '--roadmap', 'learning/roadmap.md=thiengthb/thienai-workflow:learning/roadmap.md');
 assert.match(road, /đang ở đây/, 'roadmap marks the current stage');
 assert.ok(readFileSync('learning/roadmap.md', 'utf8').includes('## Lộ trình đã đổi'), 'roadmap keeps its change log');

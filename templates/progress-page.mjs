@@ -255,7 +255,9 @@ export function overviewBody(repos, details) {
   const group = (r) => `<div class="grp"><div class="grp-head"><b>${esc(r.name)}</b><span>${r.tasks.length} việc${r.upd ? ` · từ ${esc(shortDate(r.upd))}` : ''}</span></div><ul class="tasks">${r.tasks.map((t) => task(r, t)).join('')}</ul></div>`;
   const plan = (p) => `<div class="pl"><div class="pl-top"><span>${p.link ? `<a href="${esc(resolveLink(posix.basename(p.link.split(':')[1]), p.link))}">${inline(p.title, '')}</a>` : esc(p.title)}</span>${p.all ? `<span class="num">${p.all.done}/${p.all.total}</span>` : ''}</div>${p.all ? `<div class="bar" role="img" aria-label="${p.all.done} trên ${p.all.total} việc đã xong"><span style="width:${p.all.total ? Math.round((p.all.done / p.all.total) * 100) : 0}%"></span></div>` : ''}${p.at ? `<span class="muted small">${esc(p.at)}</span>` : ''}</div>`;
   const plans = (r) => r.noStatus ? '' : r.plans.length ? `<div class="rc-plans">${r.plans.map(plan).join('')}</div>` : '<p class="muted small">Không có kế hoạch đang chạy.</p>';
-  const card = (r) => `<details class="rc" id="${esc(r.id)}"><summary>
+  // A repo that could not be read has no detail to unfold: a plain card keeps its reason in view.
+  const card = (r) => r.missing ? `<div class="rc rc-static" id="${esc(r.id)}"><div class="rc-head"><b>${esc(r.name)}</b><span class="muted small">chưa đọc được</span></div><p class="rc-where">${esc(r.why)}</p></div>`
+    : `<details class="rc" id="${esc(r.id)}"><summary>
 <div class="rc-head"><b>${esc(r.name)}</b><span class="muted small">${r.missing ? 'chưa đọc được' : r.upd ? `cập nhật ${esc(shortDate(r.upd))}` : ''}</span><span class="rc-chips">${r.open ? `<span class="chip">${r.open} việc dở</span>` : ''}${r.tasks.length ? `<span class="chip accent">${r.tasks.length} chờ bạn</span>` : ''}</span></div>
 <p class="rc-where">${esc(r.missing ? r.why : r.noStatus ? 'Repo này chưa có docs/STATUS.md.' : r.where)}</p>
 ${r.missing ? '' : plans(r)}<span class="more">Chi tiết</span>
@@ -345,6 +347,7 @@ main > header .stamp { font-size: 13px; margin: 0; }
 .task.done p { color: var(--muted); text-decoration: line-through; }
 details.rc { padding: 0; }
 details.rc + details.rc { margin-top: 0; }
+.rc-static { display: grid; gap: 8px; padding: 12px 14px; }
 details.rc > summary { display: grid; gap: 8px; padding: 12px 14px; min-height: 0; font-weight: 400; align-items: start; }
 details.rc > summary::before { content: none; }
 details.rc > summary:hover { background: var(--soft); border-radius: var(--r); }
