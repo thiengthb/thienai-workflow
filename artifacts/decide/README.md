@@ -27,7 +27,7 @@ Trang dùng mỗi khi AI cần thien chọn 1 trong 2–4 cách có hình: bố 
    ```
    Chữ "tốt" tự có màu xanh, "kém" màu đỏ, chữ khác màu trung tính; muốn khác thì ghi `{ "text", "tone": "good" | "bad" }`.
 3. `node artifacts/decide/make-decision.mjs decision.json out` dựng `out/index.html` (đã gộp kit), `out/img/*` và `out/preview.html` để mở thử.
-4. Đăng `out/index.html` thành artifact mới, `files` là danh sách script in ra, `capabilities`: `{"comments": {}, "db": {}}`. Kiểm ở cỡ khung claude.ai (khoảng 1180×760) và điện thoại trước khi gửi link.
+4. Gọi Artifact với đúng tham số trong `out/publish.json` (script ghi sẵn file, ảnh và capabilities). Kiểm ở cỡ khung claude.ai (khoảng 1180×760) và điện thoại trước khi gửi link.
 5. Khi thien gửi: đọc comment (ArtifactComments) và `decisions/<id>` (ArtifactData), chép quyết định vào PR hoặc file kế hoạch, trả lời comment, rồi làm theo bản thien chọn.
 
 ## File

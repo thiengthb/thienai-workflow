@@ -10,6 +10,19 @@ Các trang artifact thien đã dùng và khen. Ở project nào, tài khoản n�
 | [`decide/`](decide/README.md) | Cần thien chọn 1 trong 2–4 cách có hình (bố cục, kiến trúc, công cụ); đề xuất của AI ẩn tới khi thien chọn | Bố cục do thien chọn 2026-11-14: bảng so sánh trên khung rộng, thẻ trên điện thoại |
 | [`lesson/`](lesson/README.md) | Một buổi học khoảng 15 phút theo khung 7 bước; xong buổi tự lưu và gửi kết quả cho Claude | Kiểu trang học "rất thích" từ buổi frontend 1 (2026-11-07): đủ dài, độ khó vừa, làm trọn trên điện thoại. Chuyển lên lõi chung 2026-11-14 |
 
+## Dùng nhanh
+
+Mỗi mẫu là một lệnh dựng và một lần đăng. Script ghi sẵn `publish.json` (trang, ảnh, capabilities), AI chỉ việc gọi Artifact với đúng file đó, không tự gõ lại tham số. Kết quả thien gửi về là comment có sẵn bảng markdown, chép thẳng vào PR.
+
+| Việc | Lệnh | Đăng |
+|---|---|---|
+| Duyệt giao diện cũ và mới | `node artifacts/compare/shoot.mjs /tmp/round --old <url> --new <url> --pages /,/x --title "..."` | `publish.json` |
+| Duyệt từ ảnh có sẵn | `node artifacts/compare/make-round.mjs <thư-mục-ảnh> /tmp/round --title "..."` | `publish.json` |
+| Cho thien chọn phương án | viết `decision.json` rồi `node artifacts/decide/make-decision.mjs decision.json /tmp/dec` | `publish.json` |
+| Buổi học | chép `artifacts/lesson/template.html` sang `learning/<môn>/pages/lesson-NN.html`, điền nội dung, `node artifacts/lesson/make-lesson.mjs <trang.html>` | capabilities in ra |
+
+Chi tiết từng mẫu ở README trong thư mục của mẫu.
+
 ## Lõi chung
 
 `kit/kit.css` và `kit/kit.js` là phần dùng chung cho mọi mẫu mới: màu và chữ theo gu ở dưới, nút, thanh tiến độ, thông báo, lưu nháp vào máy và db, chép kết quả, gửi cho Claude. Mẫu mới dựng trên lõi này; sửa lõi một lần là mọi mẫu đổi theo. Trang học mới dựng từ `lesson/` (đã trên lõi chung, kèm phần tự lưu của `learning/teaching/kit/`); trang học cũ giữ nguyên như lúc học.

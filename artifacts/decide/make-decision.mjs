@@ -12,6 +12,7 @@ import { readFileSync, writeFileSync, mkdirSync, copyFileSync, realpathSync } fr
 import { dirname, join, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { imageSize } from '../compare/make-round.mjs';
+import { writePublish } from '../kit/publish.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const safe = (s) => String(s).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-|-$/g, '');
@@ -80,6 +81,5 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const spec = JSON.parse(readFileSync(specPath, 'utf8'));
   const { decision, files } = build(spec, dirname(resolve(specPath)), resolve(out));
   console.log(`Đã dựng ${decision.options.length} phương án vào ${resolve(out)}/index.html`);
-  console.log('File đăng kèm trang (tham số files của Artifact):');
-  console.log(JSON.stringify(files, null, 2));
+  for (const l of writePublish(resolve(out), { files, capabilities: { comments: {}, db: {} }, icon: 'choice', description: decision.question })) console.log(l);
 }

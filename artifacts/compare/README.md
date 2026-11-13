@@ -20,18 +20,31 @@ Một trang dùng chung cho mọi vòng duyệt giao diện (sakubun, thienui, b
 
 ## Cách AI dựng một vòng
 
-1. Chụp ảnh từng màn ở 1440 và 390 (Playwright, `fullPage: true`). Ảnh chụp ở `deviceScaleFactor: 2` thì ghi `"scale": 2`.
-2. Viết `round.json` cạnh thư mục ảnh:
-   ```json
-   { "id": "sakubun-history-r2", "title": "Duyệt Lịch sử, vòng 2", "intro": "...",
-     "scenarios": ["Rỗng", "Rất nhiều dòng", "Chữ rất dài"],
-     "items": [{ "id": "history-1440", "group": "Laptop", "label": "Lịch sử · 1440", "note": "...",
-                 "sides": [{ "key": "old", "name": "Trước", "file": "shots/old-1440.png" },
-                           { "key": "new", "name": "Sau", "file": "shots/new-1440.png" }] }] }
-   ```
-3. `node artifacts/compare/make-round.mjs round.json out` dựng `out/index.html` (đã gộp kit), `out/shots/*` và `out/preview.html` để mở thử trên máy (kiểu khác biệt cần mở qua `python3 -m http.server`, mở thẳng file thì trình duyệt chặn đọc ảnh).
-4. Đăng `out/index.html` thành artifact mới, `files` là danh sách script in ra, `capabilities`: `{"comments": {"customAnchors": true}, "db": {}, "downloads": true}`. **Mỗi vòng một artifact mới.**
-5. Khi thien xong: đọc comment (công cụ ArtifactComments), đọc `reviews/<id vòng>` (ArtifactData), chép kết quả vào PR, trả lời từng comment bằng việc đã sửa, rồi đóng comment.
+**Cách nhanh (đa số vòng): một lệnh.** Chạy hai bản cũ và mới (ví dụ `main` ở cổng 3789, nhánh đang làm ở cổng 3790), rồi:
+
+```sh
+node artifacts/compare/shoot.mjs /tmp/round --old http://localhost:3789 --new http://localhost:3790 \
+  --pages /,/history --title "Duyệt Lịch sử, vòng 2"
+```
+
+Lệnh chụp mỗi trang ở 1180×760 và 390×844 (`--sizes` để đổi, `--full` để chụp cả trang dài, `--side a=<url>` để thêm phác), dựng trang và ghi `publish.json`. Sau đó:
+
+1. Gọi Artifact với đúng tham số trong `publish.json`. **Mỗi vòng một artifact mới.**
+2. Gửi link cho thien. Khi thien bấm "Gửi cho Claude", comment đến phiên đang theo dõi đã chứa sẵn bảng kết quả markdown: chép thẳng vào PR. Comment ghim đọc bằng ArtifactComments, trả lời bằng việc đã sửa rồi đóng.
+
+**Đã có ảnh sẵn**: đặt tên `<màn>-<rộng>__<bản>@2x.png` (ví dụ `history-1180__old@2x.png`, `history-390__new@2x.png`) vào một thư mục rồi `node artifacts/compare/make-round.mjs <thư-mục> /tmp/round --title "..."`. `@2x` là ảnh chụp ở deviceScaleFactor 2; bản `old`, `new` hiện là Cũ, Mới, bản `a`, `b` hiện là Phác A, Phác B; đuôi `-<rộng>` xếp màn vào nhóm điện thoại hay khung rộng.
+
+**Cần giới thiệu, kịch bản, ghi chú từng màn** thì viết `round.json` rồi `node artifacts/compare/make-round.mjs round.json /tmp/round`:
+
+```json
+{ "id": "sakubun-history-r2", "title": "Duyệt Lịch sử, vòng 2", "intro": "...",
+  "scenarios": ["Rỗng", "Rất nhiều dòng", "Chữ rất dài"],
+  "items": [{ "id": "history-1440", "group": "Laptop", "label": "Lịch sử · 1440", "note": "...",
+              "sides": [{ "key": "old", "name": "Trước", "file": "shots/old-1440.png", "scale": 2 },
+                        { "key": "new", "name": "Sau", "file": "shots/new-1440.png", "scale": 2 }] }] }
+```
+
+Mở thử trên máy: `preview.html` trong thư mục ra (kiểu Tô chỗ khác nhau cần mở qua `python3 -m http.server`, mở thẳng file thì trình duyệt chặn đọc ảnh). Kết quả còn nằm trong db của trang ở `reviews/<id vòng>` (ArtifactData) nếu cần đọc lại.
 
 ## File
 
@@ -39,5 +52,6 @@ Một trang dùng chung cho mọi vòng duyệt giao diện (sakubun, thienui, b
 |---|---|
 | `template.html` | Khung trang; make-round thay `__TITLE__`, `__ROUND__` và chép kit vào |
 | `compare.js` | Toàn bộ hành vi của trang |
-| `make-round.mjs` | Dựng một vòng từ `round.json` |
+| `shoot.mjs` | Một lệnh: chụp hai bản rồi dựng vòng |
+| `make-round.mjs` | Dựng một vòng từ thư mục ảnh hoặc `round.json`, ghi `publish.json` |
 | `../kit/kit.css`, `../kit/kit.js` | Lõi chung cho mọi mẫu: màu, chữ, nút, lưu, chép, gửi cho Claude |
