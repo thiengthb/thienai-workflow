@@ -1,0 +1,150 @@
+<title>__TITLE__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>/*KIT_CSS*/</style>
+<style>
+/* Bố cục: cột trái là danh sách màn (dính khi cuộn), cột phải là thanh công cụ dính và vùng ảnh.
+   Điện thoại: danh sách thành dải ngang ở trên, ảnh chiếm hết bề rộng. */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.top { padding: 18px max(16px, env(safe-area-inset-right, 0px)) 14px max(16px, env(safe-area-inset-left, 0px)); border-bottom: 2px solid var(--line); background: var(--card); }
+.top-in { max-width: 1680px; margin: 0 auto; display: flex; gap: 16px 28px; align-items: center; flex-wrap: wrap; }
+.ttl { flex: 1 1 320px; min-width: 0; display: grid; gap: 4px; }
+.ttl h1 { font-size: 21px; font-weight: 700; }
+.ttl p { font-size: 14px; max-width: 70ch; }
+.prog { display: grid; gap: 6px; width: 180px; font-size: 13px; font-variant-numeric: tabular-nums; }
+.acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.wrap { max-width: 1680px; margin: 0 auto; padding: 16px max(16px, env(safe-area-inset-right, 0px)) 64px max(16px, env(safe-area-inset-left, 0px));
+  display: grid; grid-template-columns: 248px minmax(0, 1fr); gap: 20px; align-items: start; }
+aside { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); max-height: calc(100vh - 24px); overflow: auto; display: grid; gap: 14px; padding-bottom: 8px; }
+.side-block { display: grid; gap: 8px; }
+.scen { margin: 0; padding-left: 18px; font-size: 13px; color: var(--muted); display: grid; gap: 2px; }
+details.box > summary { cursor: pointer; font-weight: 600; font-size: 14px; list-style: none; display: flex; align-items: center; gap: 6px; min-height: 32px; }
+details.box > summary::-webkit-details-marker { display: none; }
+details.box > summary::before { content: "›"; color: var(--muted); transition: transform .15s; }
+details.box[open] > summary::before { transform: rotate(90deg); }
+.items { display: grid; gap: 6px; }
+.grp { font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+.item { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 10px; align-items: center; text-align: left; width: 100%;
+  background: transparent; border: 2px solid transparent; border-radius: 10px; padding: 5px; cursor: pointer; color: var(--ink); font: inherit; }
+.item:hover { background: var(--soft); }
+.item[aria-current="true"] { background: var(--card); border-color: var(--line); }
+.item .th { width: 56px; height: 42px; border-radius: 6px; overflow: hidden; background: var(--soft); border: 1px solid var(--line); }
+.item .th img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+.item .nm { font-size: 13.5px; font-weight: 500; line-height: 1.3; overflow-wrap: anywhere; }
+.item .st { margin-top: 3px; display: flex; gap: 4px; }
+main { min-width: 0; display: grid; gap: 12px; }
+.tools { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 6; background: var(--bg); padding: 10px 0; display: grid; gap: 10px; border-bottom: 2px solid var(--line); }
+.row { display: flex; gap: 8px 12px; align-items: center; flex-wrap: wrap; }
+.row .grow { flex: 1 1 auto; min-width: 0; }
+.cur-name { font-weight: 700; font-size: 17px; overflow-wrap: anywhere; }
+.cur-note { font-size: 13.5px; }
+.pos { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.picker { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+select { font: 500 13px var(--font); color: var(--ink); background: var(--card); border: 2px solid var(--line); border-radius: 8px; min-height: 34px; padding: 0 8px; }
+#pin[aria-pressed="true"] { background: var(--accent); border-color: color-mix(in srgb, var(--accent) 75%, #000); color: #fff; }
+.hint { font-size: 13px; color: var(--muted); }
+.hint b { color: var(--ink); font-weight: 600; }
+#stage { position: relative; }
+.scroll { overflow-x: auto; }
+.sbs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+.sbs.zoomed { grid-template-columns: max-content max-content; }
+.col { display: grid; gap: 6px; min-width: 0; }
+.cap { display: flex; gap: 8px; align-items: center; font-size: 13px; font-weight: 600; }
+.cap .dim { font-family: var(--mono); font-size: 11.5px; color: var(--muted); font-weight: 500; }
+.shot { position: relative; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--card); line-height: 0; }
+.shot img, .shot canvas { display: block; max-width: none; }
+.ov { position: relative; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--card); }
+.ov img, .ov canvas { position: absolute; left: 0; top: 0; max-width: none; display: block; }
+.knob { position: absolute; top: 0; bottom: 0; width: 0; z-index: 3; }
+.knob::before { content: ""; position: absolute; top: 0; bottom: 0; left: -1px; width: 2px; background: var(--accent); }
+.knob button { position: sticky; top: 45vh; margin-left: -18px; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--accent); background: var(--card);
+  color: var(--accent-ink); font: 700 14px var(--font); cursor: ew-resize; touch-action: none; }
+.tag { position: absolute; top: 8px; z-index: 2; font: 600 12px var(--font); padding: 3px 8px; border-radius: 6px; background: var(--ink); color: var(--bg); line-height: 1.4; }
+.tag.l { left: 8px; } .tag.r { right: 8px; }
+.ctl { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+.ctl input[type="range"] { width: min(280px, 50vw); accent-color: var(--accent); }
+.note-diff { font-size: 13px; }
+.commenting .shot, .commenting .ov { cursor: crosshair; }
+#area { position: absolute; z-index: 4; border: 2px dashed var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); pointer-events: none; }
+.dot { position: absolute; z-index: 5; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50% 50% 50% 4px; background: var(--accent); color: #fff;
+  border: 2px solid var(--card); font: 700 12px/22px var(--font); text-align: center; cursor: pointer; box-shadow: var(--shadow); padding: 0; }
+#pop { position: absolute; z-index: 7; width: min(300px, calc(100vw - 32px)); padding: 10px; display: grid; gap: 8px; box-shadow: var(--shadow); }
+#pop .row { justify-content: flex-end; }
+.gen textarea { min-height: 88px; resize: vertical; }
+.empty { padding: 40px 16px; text-align: center; }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .tools { position: static; }
+  aside { position: static; max-height: none; overflow: visible; }
+  .items { display: flex; overflow-x: auto; gap: 6px; padding-bottom: 4px; }
+  .grp { display: none; }
+  .item { grid-template-columns: 40px auto; width: auto; flex: 0 0 auto; max-width: 220px; }
+  .item .th { width: 40px; height: 32px; }
+  .prog { width: 100%; }
+  .sbs { gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { details.box > summary::before { transition: none; } }
+</style>
+
+<header class="top" id="top">
+  <div class="top-in">
+    <div class="ttl"><h1 id="title"></h1><p class="muted" id="intro"></p></div>
+    <div class="prog"><span id="prog-text">Đã duyệt 0/0</span><div class="bar"><span id="prog-bar" style="width:0"></span></div></div>
+    <div class="acts">
+      <button class="btn" id="copy" type="button">Chép kết quả</button>
+      <button class="btn primary" id="send" type="button">Gửi cho Claude</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside>
+    <details class="box side-block" id="scen-box" open><summary>Kịch bản trong vòng này</summary><ol class="scen" id="scen"></ol></details>
+    <div class="side-block"><span class="label">Các màn</span><div class="items" id="items"></div></div>
+    <div class="side-block gen">
+      <label class="label" for="general">Ghi chú chung</label>
+      <textarea id="general" maxlength="3000" placeholder="Điều muốn nói cho cả vòng, ví dụ: tổng thể bản mới thoáng hơn nhưng chữ nhỏ quá."></textarea>
+    </div>
+  </aside>
+
+  <main>
+    <div class="tools">
+      <div class="row">
+        <button class="btn" id="prev" type="button" aria-label="Màn trước">‹</button>
+        <div class="grow"><div class="cur-name" id="cur-name"></div><div class="cur-note muted" id="cur-note"></div></div>
+        <span class="pos" id="pos"></span>
+        <button class="btn good" id="ok" type="button" aria-pressed="false">OK</button>
+        <button class="btn bad" id="fix" type="button" aria-pressed="false">Cần sửa</button>
+        <button class="btn" id="next" type="button" aria-label="Màn sau">›</button>
+      </div>
+      <div class="row">
+        <div class="seg" id="modes" role="group" aria-label="Kiểu xem">
+          <button type="button" data-mode="side" aria-pressed="false">Cạnh nhau</button>
+          <button type="button" data-mode="slide" aria-pressed="false">Trượt</button>
+          <button type="button" data-mode="onion" aria-pressed="false">Chồng</button>
+          <button type="button" data-mode="blink" aria-pressed="false">Nháy</button>
+          <button type="button" data-mode="diff" aria-pressed="false">Khác biệt</button>
+        </div>
+        <div class="seg" id="zooms" role="group" aria-label="Cỡ ảnh">
+          <button type="button" data-zoom="0" aria-pressed="false">Vừa</button>
+          <button type="button" data-zoom="1" aria-pressed="false">100%</button>
+          <button type="button" data-zoom="2" aria-pressed="false">200%</button>
+        </div>
+        <span class="picker" id="pickers" hidden>
+          <label for="left-side">Trái</label><select id="left-side"></select>
+          <label for="right-side">Phải</label><select id="right-side"></select>
+        </span>
+        <span class="picker" id="prefer-box" hidden><span>Thích bản</span><span class="seg" id="prefer" role="group" aria-label="Thích bản nào"></span></span>
+        <button class="btn" id="pin" type="button" aria-pressed="false">Ghim</button>
+      </div>
+      <p class="hint" id="hint"></p>
+    </div>
+    <div id="stage"></div>
+  </main>
+</div>
+
+<script type="application/json" id="round">__ROUND__</script>
+<script>/*KIT_JS*/</script>
+<script>/*COMPARE_JS*/</script>

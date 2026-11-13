@@ -1,6 +1,6 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-12 (sau PR #36) · Claude (project Claude, tài khoản khác với tài khoản đăng trang) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
+Cập nhật lần cuối: 2026-11-13 · Claude (project Claude, thread "Xây bộ khung artifact so sánh giao diện") · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu.
 Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
@@ -20,20 +20,21 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
 |---|---|---|---|
 | Cài dòng Settings mới cho từng tài khoản Claude | README, bước 1 | 2026-11-12 | thien tự làm, AI không kiểm được |
+| Bộ khung artifact: lõi chung + mẫu so sánh giao diện | `feat/artifact-kit-compare` | 2026-11-13 | thien duyệt vòng tổng quan đầu tiên, rồi làm tổng quan mới theo bản thien chọn |
 
 ## Vừa xong
 - BA 2: học với Codex, rồi Claude làm lại trang theo góp ý về giao diện và luồng (PR #39)
 - Môn chiến tranh buổi 3 (ba tầng, Điện Biên Phủ), luật gọi tên người cho đúng văn hóa (PR #38)
 - Codex dạy học được qua repo: `AGENTS.md` ở gốc, `learning/codex.md` (PR #36, #37)
-- Bộ khung chung cho trang học: tự lưu chỗ đang học, chế độ tối (PR #33)
-- Môn chiến tranh buổi 1 và 2, luật nguồn cho bài lịch sử (PR #32, #33)
 
 ## Việc tiếp theo
-1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), theo `learning/README.md`.
+1. Làm lại trang tổng quan theo bản thien chọn ở vòng duyệt đầu tiên (kế hoạch: [Bộ khung artifact](https://claude.ai/artifact/L8JZzcaU2ZXKiweA4KFJNd)).
+2. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), theo `learning/README.md`.
 
 ## Đang chờ thien
 - Mở 3 trang (link trong file kế hoạch) trên điện thoại và laptop; trên laptop chạy `node templates/check-status.mjs docs/STATUS.md`, thấy "ổn" là xong.
 - Chép dòng Settings mới (README, bước 1) vào từng tài khoản Claude; tải lại 2 file zip skill nếu chưa.
+- Duyệt [vòng tổng quan đầu tiên](https://claude.ai/artifact/GAnvPfZmqdCNpHtjArHyny): chọn bản thích, ghim comment, bấm "Gửi cho Claude".
 
 ## Đang vướng
 - Không có. Trang tổng quan đọc sakubun bằng bản clone công khai.
