@@ -615,10 +615,8 @@ function stampNow() {
   return new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
-// Compare real paths, not URL strings: on Windows, or with spaces or Vietnamese letters in the
-// path, `file://${argv[1]}` never equals import.meta.url and the script silently did nothing.
-if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
-  const args = process.argv.slice(2);
+/** The whole page for CLI-style args (--title, --roadmap, <dir>=<repo>, missing=<repo>:<why>). */
+export function buildPage(args) {
   let title = 'Tiến độ';
   let roadmapArg = null;
   const repos = [];
@@ -629,20 +627,24 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   }
   if (roadmapArg) {
     const [file, linkBase] = roadmapArg.split('=');
-    const r = roadmap(file, linkBase);
-    process.stdout.write(page(title, r.html, stampNow()));
-  } else {
-    const details = {};
-    const parsed = repos.map((a) => {
-      if (a.startsWith('missing=')) {
-        const [repo, ...why] = a.slice(8).split(':');
-        return { id: repoId(repo), name: repo.split('/')[1], repo, missing: true, why: why.join(':'), tasks: [], plans: [], open: 0 };
-      }
-      const [dir, repo] = a.split('=');
-      const d = repoData(dir, repo);
-      details[d.id] = repoSection(dir, repo);
-      return d;
-    });
-    process.stdout.write(page(title, overviewBody(parsed, details), stampNow(), { ticks: true }));
+    return page(title, roadmap(file, linkBase).html, stampNow());
   }
+  const details = {};
+  const parsed = repos.map((a) => {
+    if (a.startsWith('missing=')) {
+      const [repo, ...why] = a.slice(8).split(':');
+      return { id: repoId(repo), name: repo.split('/')[1], repo, missing: true, why: why.join(':'), tasks: [], plans: [], open: 0 };
+    }
+    const [dir, repo] = a.split('=');
+    const d = repoData(dir, repo);
+    details[d.id] = repoSection(dir, repo);
+    return d;
+  });
+  return page(title, overviewBody(parsed, details), stampNow(), { ticks: true });
+}
+
+// Compare real paths, not URL strings: on Windows, or with spaces or Vietnamese letters in the
+// path, `file://${argv[1]}` never equals import.meta.url and the script silently did nothing.
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
+  process.stdout.write(buildPage(process.argv.slice(2)));
 }

@@ -4,7 +4,8 @@
 //   node artifacts/decide/make-decision.mjs <decision.json> <out-dir>
 //
 // decision.json: { id, question, context?, title?,
-//   options: [{ key, name, short?, summary?, image?, scale?, pros?: [..], cons?: [..] }],   (2–4 phương án; image tương đối với file json)
+//   options: [{ key, name, short?, summary?, image?, scale?, shot?, pros?: [..], cons?: [..] }],   (2–4 phương án; image tương đối với file json)
+//   shotSize?: "1180x760",                    shot: link hoặc file html của phương án; script tự chụp @2x ở shotSize thay cho image
 //   criteria?: [{ name, values: { <key>: "tốt" | "vừa" | "kém" | { text, tone: "good"|"bad"|"" } } }],
 //   recommend?: { key, why } }                                                                (ẩn trên màn tới khi thien chọn)
 // Ra: <out-dir>/index.html (trang để đăng, đã gộp kit), <out-dir>/img/*, <out-dir>/preview.html, và in danh sách file cần đăng.
@@ -13,6 +14,7 @@ import { dirname, join, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { imageSize } from '../compare/make-round.mjs';
 import { writePublish } from '../kit/publish.mjs';
+import { shoot, toUrl, parseSizes } from '../kit/shoot.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const safe = (s) => String(s).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-|-$/g, '');
@@ -75,11 +77,28 @@ export function build(spec, specDir, out) {
   return { decision, files };
 }
 
+/** Options with "shot" (a link or html file) and no image get screenshotted @2x into <out>/src; image and scale are set in place. */
+export async function shootOptions(spec, specDir, out, shootFn = shoot) {
+  const todo = (spec.options || []).filter((o) => o.shot && !o.image);
+  if (!todo.length) return;
+  const [size] = parseSizes(spec.shotSize || '1180x760');
+  if (!size) throw new Error(`shotSize không đúng dạng rộngxcao: ${spec.shotSize}`);
+  mkdirSync(join(out, 'src'), { recursive: true });
+  const shots = todo.map((o) => {
+    const target = /^[a-z]+:/i.test(o.shot) ? o.shot : resolve(specDir, o.shot);
+    return { o, url: toUrl(target), path: join(out, 'src', `${safe(o.key)}@2x.png`) };
+  });
+  await shootFn([size], () => shots, { wait: spec.shotWait ?? 600 });
+  for (const { o, path } of shots) Object.assign(o, { image: path, scale: 2 });
+}
+
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   const [specPath, out] = process.argv.slice(2);
   if (!specPath || !out) { console.error('Cách dùng: node make-decision.mjs <decision.json> <out-dir>'); process.exit(1); }
   const spec = JSON.parse(readFileSync(specPath, 'utf8'));
-  const { decision, files } = build(spec, dirname(resolve(specPath)), resolve(out));
+  const specDir = dirname(resolve(specPath));
+  await shootOptions(spec, specDir, resolve(out)).catch((e) => { console.error(e.message); process.exit(1); });
+  const { decision, files } = build(spec, specDir, resolve(out));
   console.log(`Đã dựng ${decision.options.length} phương án vào ${resolve(out)}/index.html`);
   for (const l of writePublish(resolve(out), { files, capabilities: { comments: {}, db: {} }, icon: 'choice', description: decision.question })) console.log(l);
 }

@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { deflateSync } from 'node:zlib';
 import assert from 'node:assert/strict';
-import { build, rating } from '../../artifacts/decide/make-decision.mjs';
+import { build, rating, shootOptions } from '../../artifacts/decide/make-decision.mjs';
 
 function png(w, h) {
   const crc = (b) => { let c = ~0; for (const x of b) { c ^= x; for (let k = 0; k < 8; k++) c = (c >>> 1) ^ (0xedb88320 & -(c & 1)); } return ~c >>> 0; };
@@ -44,4 +44,14 @@ bad({ options: [spec.options[0]] }, /2 đến 4/);
 bad({ options: [spec.options[0], { key: 'a ', name: 'x' }] }, /trùng/);
 bad({ recommend: { key: 'z' } }, /Đề xuất/);
 bad({ criteria: [{ name: 't', values: { z: 'tốt' } }] }, /không có/);
+// Options given as a link or html file get screenshotted @2x into <out>/src and then built like any image.
+writeFileSync(join(dir, 'b.html'), '<p>b</p>');
+const shotSpec = { id: 's', question: 'q', shotSize: '600x400', options: [{ key: 'a', name: 'A', shot: 'https://example.com/a' }, { key: 'b', name: 'B', shot: 'b.html' }, { key: 'c', name: 'C', image: 'a.png' }] };
+let asked;
+await shootOptions(shotSpec, dir, join(dir, 'outs'), async (sizes, shotsFor) => { asked = { sizes, shots: shotsFor() }; for (const s of asked.shots) writeFileSync(s.path, png(1200, 800)); });
+assert.deepEqual(asked.sizes, [[600, 400]]);
+assert.deepEqual(asked.shots.map((s) => s.url.replace(/^file:\/\/.*\//, 'file:')), ['https://example.com/a', 'file:b.html'], 'only options without an image are shot');
+const shotBuilt = build(shotSpec, dir, join(dir, 'outs'));
+assert.deepEqual(shotBuilt.decision.options[0].image, { src: 'img/a.png', w: 600, h: 400 }, '@2x shot halves to CSS size');
+await assert.rejects(shootOptions({ options: [{ key: 'x', shot: 'nope.html' }] }, dir, join(dir, 'o2'), async () => {}), /Không có trang/);
 console.log('make-decision: ok');

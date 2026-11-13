@@ -25,9 +25,9 @@ thien quen học bằng trang tương tác như ở Claude. Ngày 2026-11-12 Cod
   - Trước khi gửi, tự kiểm 5 điều: font Onest; thanh tiến độ có "số bước/tổng"; bấm chọn thì có màu đúng sai và chữ ("Bạn chọn", "Đúng"); mỗi bước có ít nhất một hình hay sơ đồ cho thấy đang ở đâu, không chỉ chữ; khổ điện thoại không tràn ngang; bật chế độ tối của máy rồi xem lại, không chỗ nào chữ trùng màu nền (trong `<style>` của trang dùng biến `var(--card)`, `var(--ink)`, đừng viết cứng `#fff`). Gu giao diện của thien ở repo thienui, file `docs/taste.md`.
 - Chọn kiểu bài theo `learning/teaching/README.md` và mục "Buổi tiếp theo" của môn.
 - Các bước dựng:
-  1. Ghi trang vào `learning/<môn>/pages/lesson-NN.html` (NN là số buổi, hai chữ số).
-  2. Gắn bộ khung: `node learning/teaching/kit/apply-kit.mjs learning/<môn>/pages/lesson-NN.html`.
-  3. Nếu máy có Playwright: `node learning/teaching/check-page.cjs learning/<môn>/pages/lesson-NN.html`, sửa hết lỗi. Không có thì ghi "chưa kiểm khổ điện thoại".
+  1. `node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html` (NN là số buổi, hai chữ số) chép mẫu buổi học ra đó. Điền nội dung theo `artifacts/lesson/README.md`.
+  2. Chạy lại đúng lệnh đó: script gắn bộ khung và tự kiểm trang bằng Playwright, sửa hết lỗi nó báo.
+  3. Máy không có Playwright thì thêm `--no-check` và ghi "chưa kiểm khổ điện thoại".
   4. Gửi thien đường dẫn đầy đủ của file trên máy và cách mở: mở thư mục đó rồi bấm đúp vào file, hoặc kéo file vào Chrome.
 - **Codex chạy trên cloud** (chatgpt.com/codex) thì thien không mở được file. Nói thẳng điều đó, khuyên mở Codex trên laptop, không tự chuyển sang dạy bằng chat.
 - **Chỉ dạy bằng chat khi thien tự xin** ("học bằng chat"). Khi đó vẫn giữ nhịp thử trước, hiểu sau, mỗi lần một câu, và ghi "học bằng chat" vào nhật ký.

@@ -15,7 +15,7 @@ Trang dùng mỗi khi AI cần thien chọn 1 trong 2–4 cách có hình: bố 
 
 ## Cách AI dựng một trang
 
-1. Chụp ảnh từng phương án (Playwright). Ảnh chụp ở `deviceScaleFactor: 2` thì ghi `"scale": 2`.
+1. Mỗi phương án cần một hình. Có sẵn trang (link chạy được hoặc file html phác) thì ghi `"shot": "<link hoặc file>"`, script tự chụp @2x ở `"shotSize"` (mặc định `1180x760`); có ảnh rồi thì ghi `"image"`, ảnh chụp ở `deviceScaleFactor: 2` thì thêm `"scale": 2`.
 2. Viết `decision.json` cạnh ảnh:
    ```json
    { "id": "sakubun-review-layout", "question": "Buổi ôn nên bố cục thế nào?", "context": "Một câu vì sao phải chọn.",
@@ -26,7 +26,7 @@ Trang dùng mỗi khi AI cần thien chọn 1 trong 2–4 cách có hình: bố 
      "recommend": { "key": "a", "why": "Một hai câu lý do." } }
    ```
    Chữ "tốt" tự có màu xanh, "kém" màu đỏ, chữ khác màu trung tính; muốn khác thì ghi `{ "text", "tone": "good" | "bad" }`.
-3. `node artifacts/decide/make-decision.mjs decision.json out` dựng `out/index.html` (đã gộp kit), `out/img/*` và `out/preview.html` để mở thử.
+3. `node artifacts/decide/make-decision.mjs decision.json out` chụp các `shot` (cần Playwright), dựng `out/index.html` (đã gộp kit), `out/img/*` và `out/preview.html` để mở thử.
 4. Gọi Artifact với đúng tham số trong `out/publish.json` (script ghi sẵn file, ảnh và capabilities). Kiểm ở cỡ khung claude.ai (khoảng 1180×760) và điện thoại trước khi gửi link.
 5. Khi thien gửi: đọc comment (ArtifactComments) và `decisions/<id>` (ArtifactData), chép quyết định vào PR hoặc file kế hoạch, trả lời comment, rồi làm theo bản thien chọn.
 
