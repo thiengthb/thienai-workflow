@@ -11,7 +11,7 @@
   const ZOOMS = [0, 1, 2];
 
   const S = { ratings: {}, prefer: {}, general: '', pins: [], cur: 0, mode: null, zoom: 0, pairs: {}, split: 50, fade: 50 };
-  const DB_PATH = 'reviews/' + String(R.id).replace(/[^a-z0-9-]/gi, '-');   // also the path named to Claude for a long result
+  const DB_PATH = 'reviews/' + String(R.id).replace(/[^a-z0-9-]/gi, '-');
   const store = Kit.store('compare:' + R.id, DB_PATH);
 
   let ca = null;            // customAnchors handle when claude.ai comments work here
@@ -434,10 +434,13 @@
       if (!loaded) Kit.toast('Đang tải bản đã lưu…');
       await ready;
       const snap = JSON.parse(JSON.stringify(S)); // taken before the await: edits made while db writes don't leak into this report
-      const stored = await save(true, snap);
+      save(true, snap);
       const full = results(snap), long = full.length > 3800;
+      // A long report is cut, so its full text gets its own frozen document: later edits queued on DB_PATH can't change it.
+      const sentPath = 'sent/' + DB_PATH.slice(8) + '-' + Date.now();
+      const stored = long && await Kit.put(sentPath, { report: full, state: snap, ts: Date.now() });
       if (long && !stored) { if (await Kit.copy(full)) Kit.toast('Kết quả dài mà chưa lưu được vào trang, nên chưa gửi. Đã chép bản đầy đủ: dán vào chat cho Claude.', 8000); return; }
-      const text = long ? full.slice(0, 3600) + '\n\n(Kết quả dài, bản đầy đủ nằm trong db của trang: ' + DB_PATH + ')' : full;
+      const text = long ? full.slice(0, 3600) + '\n\n(Kết quả dài, bản đầy đủ nằm trong db của trang: ' + sentPath + ', trường report)' : full;
       const ok = await Kit.sendToClaude(text, $('top'));
       if (ok && long) { const copied = await Kit.copy(full); Kit.toast(copied ? 'Đã gửi bản rút gọn cho Claude; bản đầy đủ đã lưu và đã chép.' : 'Đã gửi bản rút gọn cho Claude; bản đầy đủ đã lưu trong trang.', 6000); }
       else if (ok) Kit.toast('Đã gửi cho Claude. Claude trả lời trong comment.', 5000);

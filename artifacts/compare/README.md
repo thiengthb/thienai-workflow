@@ -9,7 +9,7 @@ Một trang dùng chung cho mọi vòng duyệt giao diện (sakubun, thienui, b
 - Mỗi màn: OK / Cần sửa, và "Thích bản" khi có hơn 2 bản. Ghi chú chung cho cả vòng.
 - **Ghim comment đúng chỗ**: bấm Ghim (hoặc nút comment của claude.ai) rồi bấm vào ảnh; kéo để khoanh một vùng. Comment nằm trong hệ comment có sẵn của claude.ai, anchor dạng `<màn>/<bản>@x,y` hoặc `@x,y,w,h` theo px của ảnh ở cỡ 100%.
 - Không có comment của claude.ai (mở bằng nick không phải chủ trang): ghim lưu trong trang và đi kèm kết quả.
-- Kết quả lưu vào máy và vào db của trang ở `reviews/<id vòng>`. "Chép kết quả" ra markdown để dán vào PR. "Gửi cho Claude" gửi tóm tắt vào comment cho phiên Claude đang theo dõi; không gửi được thì tự chép.
+- Kết quả lưu vào máy và vào db của trang ở `reviews/<id vòng>`. "Chép kết quả" ra markdown để dán vào PR. "Gửi cho Claude" gửi tóm tắt vào comment cho phiên Claude đang theo dõi; không gửi được thì tự chép. Kết quả dài quá giới hạn comment thì bản đầy đủ được ghi riêng ở `sent/<id vòng>-<thời điểm>` (trường `report`), comment ghi rõ đường dẫn đó.
 - Phím: ← → đổi màn, 1–5 đổi kiểu xem, Space trong kiểu nháy, Esc tắt ghim.
 
 ## Cách AI dựng một vòng

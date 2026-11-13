@@ -4,6 +4,7 @@
    Kit.copy(text)        chép vào clipboard; không chép được thì hiện ô chữ để tự chọn.
    Kit.saveFile(n, text) đưa file cho người xem lưu (khả năng downloads); không có thì chép.
    Kit.store(key, path)  nháp trong máy (localStorage) + bản trong db của trang ở `path`, để Claude đọc lại.
+   Kit.put(path, obj)    ghi một document một lần (không qua hàng đợi), ví dụ bản chụp của lần gửi.
    Kit.sendToClaude(text, el)  gửi một comment cho Claude (người sửa được trang); trả về true nếu đã gửi. */
 (() => {
   const caps = {};
@@ -112,5 +113,13 @@
     } catch (e) { return false; }
   }
 
-  window.Kit = { cap, toast, copy, saveFile, store, sendToClaude };
+  /** Writes one document once (no queue), e.g. a frozen copy of what was sent. True once db holds it. */
+  async function put(path, obj, ms = 8000) {
+    const db = await cap('db');
+    if (!db || !path) return false;
+    try { await Promise.race([db.doc(path).set(obj), new Promise((_, j) => setTimeout(() => j(new Error('timeout')), ms))]); return true; }
+    catch (e) { return false; }
+  }
+
+  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude };
 })();
