@@ -24,4 +24,5 @@ jobs:
       - run: node .github/scripts/progress-page.test.mjs
       - run: node .github/scripts/cli-paths.test.mjs
       - run: node .github/scripts/make-round.test.mjs
+      - run: node .github/scripts/make-decision.test.mjs
       - run: node templates/check-status.mjs docs/STATUS.md

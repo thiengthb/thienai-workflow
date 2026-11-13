@@ -7,6 +7,7 @@ Các trang artifact thien đã dùng và khen. Ở project nào, tài khoản n�
 | Mẫu | Dùng khi | thien khen gì |
 |---|---|---|
 | [`compare/`](compare/README.md) | Mọi vòng duyệt giao diện: so cũ và mới (hoặc nhiều phác), ghim comment đúng chỗ, OK / Cần sửa | Mới, thử lần đầu 2026-11-13 với trang tổng quan |
+| [`decide/`](decide/README.md) | Cần thien chọn 1 trong 2–4 cách có hình (bố cục, kiến trúc, công cụ); đề xuất của AI ẩn tới khi thien chọn | Bố cục do thien chọn 2026-11-14: bảng so sánh trên khung rộng, thẻ trên điện thoại |
 | [`lesson-page.html`](lesson-page.html) | Một buổi học ngắn khoảng 15 phút: nhớ lại, chấm hoặc quan sát, học một ý, câu hỏi nhanh, tự nói lại, góp ý | "Rất thích" (2026-11-07, buổi học frontend 1). Đủ dài, độ khó vừa, làm trọn trên điện thoại |
 
 ## Lõi chung

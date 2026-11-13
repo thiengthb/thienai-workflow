@@ -1,0 +1,100 @@
+<title>__TITLE__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>/*KIT_CSS*/</style>
+<style>
+/* Bố cục (thien chọn ở vòng decide-layout-r1): khung rộng là bảng so sánh, mỗi phương án một cột;
+   khung hẹp (điện thoại) là thẻ xếp dọc. Cùng một dữ liệu, cùng một lựa chọn. */
+body { font-size: 14.5px; }
+main { max-width: 1180px; margin: 0 auto; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 16px; }
+.head { display: grid; gap: 4px; }
+.head h1 { font-size: 22px; }
+.head .why { color: var(--muted); max-width: 80ch; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+.shot { display: block; width: 100%; padding: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--soft); overflow: hidden; cursor: zoom-in; position: relative; }
+.shot img { display: block; width: 100%; object-fit: cover; object-position: top; }
+.shot .zoom-hint { position: absolute; right: 6px; bottom: 6px; font: 600 11.5px/1 var(--font); padding: 4px 6px; border-radius: var(--r); background: color-mix(in srgb, var(--card) 88%, transparent); color: var(--muted); }
+.pc { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 13.5px; }
+.pc li { display: grid; grid-template-columns: 14px 1fr; gap: 6px; }
+.pc li::before { font-weight: 700; }
+.pc .p::before { content: "+"; color: var(--good); }
+.pc .c::before { content: "−"; color: var(--bad); }
+.pick[aria-pressed="true"] { background: var(--accent); border-color: color-mix(in srgb, var(--accent) 75%, #000); color: #fff; }
+.chosen { box-shadow: inset 0 0 0 2px var(--accent); }
+
+/* Bảng so sánh (khung rộng) */
+.tbl { overflow-x: auto; }
+.tbl table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 600px; }
+.tbl col:first-child { width: 150px; }
+.tbl th, .tbl td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.tbl thead th { font-weight: 400; }
+.tbl thead th:first-child, .tbl tbody th { width: 150px; color: var(--muted); font-weight: 500; font-size: 13px; }
+.tbl thead .shot img { height: 150px; }
+.tbl thead b { display: block; font-size: 15px; margin: 8px 0 2px; }
+.tbl thead .sum { font-size: 13px; color: var(--muted); }
+.tbl tr.picks td, .tbl tr.picks th { border-bottom: 0; }
+.tbl tr.picks .btn { width: 100%; }
+.tbl col.chosen-col { background: var(--accent-soft); }
+
+/* Thẻ (khung hẹp) */
+.cards { display: grid; gap: 12px; }
+.opt { display: grid; }
+.opt .shot { border-width: 0 0 1px; border-radius: var(--r) var(--r) 0 0; }
+.opt .shot img { height: 220px; }
+.opt .ob { display: grid; gap: 8px; padding: 12px 14px; }
+.opt h2 { font-size: 16px; }
+.opt .crit { display: flex; flex-wrap: wrap; gap: 6px; }
+.opt .crit span { font-size: 12.5px; color: var(--muted); }
+.opt .of { padding: 10px 14px; border-top: 1px solid var(--line); }
+.opt .of .btn { width: 100%; }
+.opt.chosen { border-color: var(--accent); box-shadow: none; }
+
+.view-cards { display: none; }
+@media (max-width: 759px) { .view-table { display: none; } .view-cards { display: grid; } }
+
+/* Đề xuất của Claude, ẩn tới khi chọn */
+.rec { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border: 1px dashed var(--line); border-radius: var(--r); color: var(--muted); font-size: 13.5px; }
+.rec .ic { flex: none; width: 16px; height: 16px; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.rec.open { border-style: solid; background: var(--card); color: var(--ink); }
+.rec.open b { font-weight: 600; }
+.rec .same { color: var(--good); font-weight: 600; }
+
+.ask { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 10px; align-items: end; padding: 12px 14px; }
+.ask .label { grid-column: 1 / -1; }
+.ask textarea { width: 100%; min-height: 44px; resize: vertical; }
+.ask .acts { display: flex; gap: 8px; }
+@media (max-width: 640px) { .ask { grid-template-columns: 1fr; } .ask .acts .btn { flex: 1; } }
+.status { font-size: 13px; color: var(--muted); }
+
+dialog#zoom { width: min(1100px, calc(100vw - 32px)); max-height: calc(100vh - 32px); padding: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); color: var(--ink); }
+dialog#zoom::backdrop { background: rgba(0, 0, 0, .55); }
+dialog#zoom .zh { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 12px; background: var(--card); border-bottom: 1px solid var(--line); }
+dialog#zoom img { display: block; width: 100%; height: auto; }
+</style>
+
+<main>
+  <header class="head">
+    <span class="label" id="count"></span>
+    <h1 id="q"></h1>
+    <p class="why" id="why"></p>
+  </header>
+  <section class="view-table card tbl" id="table" aria-label="Bảng so sánh"></section>
+  <section class="view-cards cards" id="cards" aria-label="Các phương án"></section>
+  <div class="rec" id="rec" role="status" aria-live="polite"></div>
+  <div class="card ask">
+    <label class="label" for="note">Ghi chú (không bắt buộc)</label>
+    <textarea id="note" maxlength="3000" disabled placeholder="Ví dụ: lấy C nhưng thêm phần thanh bước của B"></textarea>
+    <div class="acts">
+      <button class="btn" id="copy" type="button" disabled>Chép kết quả</button>
+      <button class="btn accent" id="send" type="button" disabled>Gửi cho Claude</button>
+    </div>
+    <p class="status" id="status"></p>
+  </div>
+</main>
+<dialog id="zoom" aria-labelledby="zoom-t"><div class="zh"><b id="zoom-t"></b><button class="btn" id="zoom-x" type="button">Đóng</button></div><img id="zoom-img" alt=""></dialog>
+
+<script type="application/json" id="decision">__DECISION__</script>
+<script>/*KIT_JS*/</script>
+<script>/*DECIDE_JS*/</script>
