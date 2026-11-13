@@ -25,6 +25,8 @@ Tối đa 3 môn cùng lúc. Thêm một môn thì phải cho một môn nghỉ.
 
 Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakubun nên không nằm trong vòng.
 
+**TikTok học ở project riêng, không nằm trong vòng.** Bài học TikTok chỉ do repo [tiktok](https://github.com/thiengthb/tiktok) soạn (xem `learning/README.md` bên đó). Ở đây không soạn bài TikTok, không tính TikTok vào giới hạn 3 môn. Khi thien nhắn "học", AI ở đây mở `learning/README.md` của repo tiktok, xem bảng "Trạng thái": nếu tuần này chưa đủ số buổi TikTok ghi ở đó, nhắc thien một dòng "Đến lịch học TikTok, mở project Tiktok để học", rồi vẫn mở buổi kế tiếp của vòng như thường (thien chốt 2026-11-12).
+
 ## Vòng xoay
 
 **Frontend → BA → Frontend → Chiến tranh → lặp lại**
