@@ -4,13 +4,15 @@ Một trang dùng chung cho mọi vòng duyệt giao diện (sakubun, thienui, b
 
 ## Trang làm được gì
 
-- Danh sách màn bên trái, mỗi màn có 2 bản trở lên (ví dụ Cũ, Phác A, Phác B). Chọn bản trái và bản phải khi có hơn 2 bản.
-- 5 kiểu xem: cạnh nhau, trượt (kéo nút tròn), chồng mờ, nháy (giữ Space), khác biệt (tô đỏ điểm ảnh khác nhau). Cỡ Vừa, 100%, 200%.
-- Mỗi màn: OK / Cần sửa, và "Thích bản" khi có hơn 2 bản. Ghi chú chung cho cả vòng.
+- Bố cục do thien chọn ở vòng `compare-redesign-r1` (2026-11-14, bản A "Gọn lại"): đầu trang một dòng, giới thiệu và kịch bản gập vào nút "Về vòng này", danh sách màn bên trái có chấm trạng thái (xanh OK, đỏ Cần sửa), một hàng công cụ, rồi thanh phán xét dính ở đáy: OK, Cần sửa, Thích bản, Màn trước, Màn sau.
+- Mỗi màn có 2 bản trở lên (ví dụ Cũ, Phác A, Phác B). Chọn bản trái và bản phải khi có hơn 2 bản.
+- Kiểu xem: Cạnh nhau, Từng bản (một ảnh to, tab đổi bản), Trượt; nút "Thêm cách xem" có Chồng mờ, Nháy qua lại, Tô chỗ khác nhau. Cỡ Vừa, 100%, 200%.
+- **Tự chọn kiểu xem theo ảnh**: hai ảnh đặt cạnh nhau mà mỗi ảnh còn ít nhất 60% cỡ thật (ảnh điện thoại trên laptop) thì để Cạnh nhau; không thì (ảnh laptop, hay mở trên điện thoại) để Từng bản cho ảnh to. Đổi kiểu xem thì trang nhớ cho mọi màn cùng loại.
+- Ghi chú chung cho cả vòng.
 - **Ghim comment đúng chỗ**: bấm Ghim (hoặc nút comment của claude.ai) rồi bấm vào ảnh; kéo để khoanh một vùng. Comment nằm trong hệ comment có sẵn của claude.ai, anchor dạng `<màn>/<bản>@x,y` hoặc `@x,y,w,h` theo px của ảnh ở cỡ 100%.
 - Không có comment của claude.ai (mở bằng nick không phải chủ trang): ghim lưu trong trang và đi kèm kết quả.
 - Kết quả lưu vào máy và vào db của trang ở `reviews/<id vòng>`. "Chép kết quả" ra markdown để dán vào PR. "Gửi cho Claude" gửi tóm tắt vào comment cho phiên Claude đang theo dõi; không gửi được thì tự chép. Kết quả dài quá giới hạn comment thì bản đầy đủ được ghi riêng ở `sent/<id vòng>-<thời điểm>` (trường `report`), comment ghi rõ đường dẫn đó.
-- Phím: ← → đổi màn, 1–5 đổi kiểu xem, Space trong kiểu nháy, Esc tắt ghim.
+- Phím: ← → đổi màn, 1–6 đổi kiểu xem, Space trong kiểu nháy, Esc tắt ghim.
 
 ## Cách AI dựng một vòng
 

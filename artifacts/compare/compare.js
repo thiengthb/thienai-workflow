@@ -7,10 +7,12 @@
   const $ = (id) => document.getElementById(id);
   const items = R.items || [];
   const sideOf = (it, key) => it.sides.find((s) => s.key === key);
-  const MODES = ['side', 'slide', 'onion', 'blink', 'diff'];
+  const MODES = ['side', 'one', 'slide', 'onion', 'blink', 'diff'];
+  const MORE = ['onion', 'blink', 'diff'];   // modes kept in the "Thêm cách xem" menu
   const ZOOMS = [0, 1, 2];
 
-  const S = { ratings: {}, prefer: {}, general: '', pins: [], cur: 0, mode: null, zoom: 0, pairs: {}, split: 50, fade: 50 };
+  // modes: the view the viewer picked per kind of screen (see kindOf); S.mode is the view of the current screen.
+  const S = { ratings: {}, prefer: {}, general: '', pins: [], cur: 0, mode: 'side', modes: {}, zoom: 0, pairs: {}, split: 50, fade: 50 };
   const DB_PATH = 'reviews/' + String(R.id).replace(/[^a-z0-9-]/gi, '-');
   const store = Kit.store('compare:' + R.id, DB_PATH);
 
@@ -19,6 +21,7 @@
   let commentMode = false;  // the shell's comment mode is on
   let armed = false;        // the page's own "Ghim" button is on
   let blinkLeft = false;    // blink mode currently shows the left image
+  let oneKey = null;        // side shown in "Từng bản" (null: the last side, usually the new one)
   let scale = 1;
   const diffCache = new Map();
 
@@ -32,11 +35,17 @@
     return [sideOf(i, l), sideOf(i, r)];
   }
   const narrow = () => window.matchMedia('(max-width: 860px)').matches;
+  // Kind of screen, so a view picked once fits every screen like it. "pair": two shots side by side keep at least 60% of
+  // their size (phone shots on a laptop); "big": they would not (laptop shots, or anything on a phone). Default view:
+  // side by side for "pair", one at a time for "big", so the shot stays big (thien, round compare-redesign-r1).
+  const kindOf = (i) => { const col = (($('stage').clientWidth || window.innerWidth - 32) - 16) / 2; return col / Math.max(...i.sides.map((x) => x.w)) >= 0.6 ? 'pair' : 'big'; };
+  const modeFor = (i) => { const m = S.modes[kindOf(i)]; return MODES.includes(m) ? m : kindOf(i) === 'pair' ? 'side' : 'one'; };
+  const shownKey = (i = it()) => (oneKey && sideOf(i, oneKey) ? oneKey : i.sides[i.sides.length - 1].key);
   // Until the saved state is merged in, nothing is written. Each change made meanwhile is recorded (which field, and for
   // ratings/prefer/pairs which screen, deletions included) so the merge keeps exactly what the viewer did.
   let loaded = false, snap = null, markReady;
   const ready = new Promise((r) => { markReady = r; });   // send and copy wait for this, so a result never comes from unrestored state
-  const MAPS = ['ratings', 'prefer', 'pairs'], FIELDS = ['general', 'split', 'fade', 'zoom', 'mode', 'cur'];
+  const MAPS = ['ratings', 'prefer', 'pairs'], FIELDS = ['general', 'split', 'fade', 'zoom', 'modes', 'cur'];
   const edited = { fields: new Set(), ratings: new Set(), prefer: new Set(), pairs: new Set() };
   const note = () => {
     if (!snap) return;
@@ -55,19 +64,16 @@
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'item'; b.dataset.i = i;
       b.setAttribute('aria-current', String(i === S.cur));
-      const th = document.createElement('span'); th.className = 'th';
-      const last = x.sides[x.sides.length - 1];
-      th.append(Object.assign(document.createElement('img'), { src: last.src, alt: '', loading: 'lazy' }));
-      const tx = document.createElement('span');
-      const nm = Object.assign(document.createElement('div'), { className: 'nm', textContent: x.label });
-      const st = document.createElement('div'); st.className = 'st';
-      const r = S.ratings[x.id];
-      st.append(Object.assign(document.createElement('span'), { className: 'chip' + (r === 'ok' ? ' good' : r === 'fix' ? ' bad' : ''), textContent: r === 'ok' ? 'OK' : r === 'fix' ? 'Cần sửa' : 'Chưa xem' }));
-      if (S.prefer[x.id]) st.append(Object.assign(document.createElement('span'), { className: 'chip accent', textContent: 'Thích ' + (sideOf(x, S.prefer[x.id]) || {}).name }));
-      tx.append(nm, st); b.append(th, tx); box.append(b);
+      const r = S.ratings[x.id], state = r === 'ok' ? 'OK' : r === 'fix' ? 'Cần sửa' : 'Chưa duyệt';
+      b.setAttribute('aria-label', `${x.label}, ${state}`);
+      b.append(Object.assign(document.createElement('span'), { className: 'sdot' + (r ? ' ' + r : '') }),
+        Object.assign(document.createElement('span'), { className: 'nm', textContent: x.label }));
+      if (S.prefer[x.id]) b.append(Object.assign(document.createElement('span'), { className: 'pf', textContent: (sideOf(x, S.prefer[x.id]) || {}).name }));
+      box.append(b);
     });
     const done = items.filter((x) => S.ratings[x.id]).length;
     $('prog-text').textContent = `Đã duyệt ${done}/${items.length}`;
+    $('prog-text').parentElement.title = `Đã duyệt ${done} trên ${items.length} màn`;
     $('prog-bar').style.width = (items.length ? (done / items.length) * 100 : 0) + '%';
   }
 
@@ -79,11 +85,14 @@
     $('prev').disabled = S.cur === 0; $('next').disabled = S.cur === items.length - 1;
     $('ok').setAttribute('aria-pressed', String(S.ratings[x.id] === 'ok'));
     $('fix').setAttribute('aria-pressed', String(S.ratings[x.id] === 'fix'));
-    document.querySelectorAll('#modes button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === S.mode)));
+    document.querySelectorAll('.tools [data-mode]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === S.mode)));
+    const more = $('more'), inMore = MORE.includes(S.mode);
+    more.dataset.on = String(inMore);
+    more.querySelector('summary').textContent = inMore ? more.querySelector(`[data-mode="${S.mode}"]`).textContent + ' ▾' : 'Thêm cách xem ▾';
     document.querySelectorAll('#zooms button').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.zoom === S.zoom)));
     const many = x.sides.length > 2;
-    $('pickers').hidden = !many; $('prefer-box').hidden = !many;
-    if (many) {
+    $('pickers').hidden = !many || S.mode === 'one'; $('prefer-box').hidden = x.sides.length < 2;
+    {
       const [l, r] = pair();
       for (const [sel, cur] of [[$('left-side'), l], [$('right-side'), r]]) {
         sel.textContent = '';
@@ -96,14 +105,13 @@
       });
     }
     $('pin').setAttribute('aria-pressed', String(armed || commentMode));
+    // One short line, only when there is something to know: how the current view works, or how to pin while pinning.
     const h = $('hint');
-    if (S.mode === 'blink') h.innerHTML = '<b>Nháy:</b> giữ phím Space, hoặc bấm vào ảnh, để đổi qua lại hai bản.';
+    if (armed || commentMode) h.innerHTML = ca ? 'Bấm vào ảnh để comment đúng chỗ; kéo để khoanh một vùng. Bấm <b>Ghim</b> lần nữa để thôi.' : 'Bấm vào ảnh để ghi chú đúng chỗ; ghi chú đi kèm kết quả.';
+    else if (S.mode === 'blink') h.innerHTML = '<b>Nháy:</b> giữ phím Space, hoặc bấm vào ảnh, để đổi qua lại hai bản.';
     else if (S.mode === 'slide') h.innerHTML = '<b>Trượt:</b> kéo nút tròn, hoặc dùng phím mũi tên khi nút đang chọn.';
-    else if (S.mode === 'diff') h.innerHTML = '<b>Khác biệt:</b> chỗ tô đỏ là điểm ảnh khác nhau giữa hai bản.';
+    else if (S.mode === 'diff') h.innerHTML = '<b>Tô chỗ khác nhau:</b> chỗ tô đỏ là điểm ảnh khác nhau giữa hai bản.';
     else h.textContent = '';
-    const how = ca ? 'Bấm <b>Ghim</b> (hoặc nút comment của claude.ai) rồi bấm vào ảnh để comment đúng chỗ; kéo để khoanh một vùng.'
-      : 'Bấm <b>Ghim</b> rồi bấm vào ảnh để ghi chú đúng chỗ; ghi chú đi kèm kết quả.';
-    h.innerHTML = (h.innerHTML ? h.innerHTML + ' ' : '') + how;
   }
 
   // ---------- stage ----------
@@ -130,6 +138,21 @@
         sh.append(img(s, s.w * scale)); col.append(caption(s), sh); g.append(col);
       }
       scroll.append(g); st.append(scroll);
+    } else if (S.mode === 'one') {
+      // One shot at a time, as big as the column allows; tabs switch between every side of the screen.
+      const x = it(), s = sideOf(x, shownKey(x));
+      scale = S.zoom || Math.min(1, avail / s.w);
+      const box = document.createElement('div'); box.className = 'one';
+      const tabs = document.createElement('div'); tabs.className = 'seg'; tabs.setAttribute('role', 'group'); tabs.setAttribute('aria-label', 'Bản đang xem');
+      x.sides.forEach((v) => {
+        const b = Object.assign(document.createElement('button'), { type: 'button', textContent: v.name });
+        b.setAttribute('aria-pressed', String(v.key === s.key));
+        b.addEventListener('click', () => { oneKey = v.key; closePop(); renderStage(); });
+        tabs.append(b);
+      });
+      const sh = document.createElement('div'); sh.className = 'shot'; sh.dataset.side = s.key;
+      sh.append(img(s, s.w * scale));
+      box.append(tabs, sh); scroll.append(box); st.append(scroll);
     } else {
       scale = S.zoom || Math.min(1, avail / Math.max(l.w, r.w));
       const ov = document.createElement('div'); ov.className = 'ov'; ov.id = 'ov';
@@ -235,7 +258,7 @@
     const rc = (box.classList.contains('ov') ? box : box.querySelector('img') || box).getBoundingClientRect();
     const x = (clientX - rc.left) / scale, y = (clientY - rc.top) / scale;
     let side;
-    if (box.classList.contains('shot')) side = box.dataset.side === l.key ? l : r;
+    if (box.classList.contains('shot')) side = sideOf(it(), box.dataset.side) || r;
     else if (S.mode === 'slide') side = (clientX - rc.left) / rc.width * 100 < S.split ? l : r;
     else if (S.mode === 'onion') side = S.fade >= 50 ? r : l;
     else if (S.mode === 'blink') side = blinkLeft ? l : r;
@@ -252,7 +275,7 @@
   function pagePoint(sideKey, x, y) {
     const [l, r] = pair();
     let box = null;
-    if (S.mode === 'side') box = document.querySelector(`#stage .shot[data-side="${CSS.escape(sideKey)}"] img`);
+    if (S.mode === 'side' || S.mode === 'one') box = document.querySelector(`#stage .shot[data-side="${CSS.escape(sideKey)}"] img`);
     else if (S.mode === 'blink') box = (blinkLeft ? l : r).key === sideKey ? $('ov') : null;
     else box = sideKey === l.key || sideKey === r.key ? $('ov') : null;
     if (!box) return null;
@@ -287,7 +310,8 @@
           if (i < 0) return;
           if (i !== S.cur) go(i, true);
           const [l, r] = pair();
-          if (a.side !== l.key && a.side !== r.key) { S.pairs[it().id] = { l: l.key, r: a.side }; blinkLeft = false; renderTools(); renderStage(); }
+          if (S.mode === 'one') { if (shownKey() !== a.side) { oneKey = a.side; renderStage(); } }
+          else if (a.side !== l.key && a.side !== r.key) { S.pairs[it().id] = { l: l.key, r: a.side }; blinkLeft = false; renderTools(); renderStage(); }
           else if (S.mode === 'blink' && (blinkLeft ? l : r).key !== a.side) { blinkLeft = !blinkLeft; renderStage(); }
           requestAnimationFrame(() => {
             const p = pagePoint(a.side, a.x, a.y);
@@ -406,7 +430,8 @@
 
   // ---------- navigation and events ----------
   function go(i, quiet) {
-    S.cur = Math.max(0, Math.min(items.length - 1, i)); blinkLeft = false; closePop();
+    S.cur = Math.max(0, Math.min(items.length - 1, i)); blinkLeft = false; oneKey = null; closePop();
+    S.mode = modeFor(it());
     renderList(); renderTools(); renderStage(); save();
     if (!quiet) { const b = document.querySelector(`.item[data-i="${S.cur}"]`); if (b) b.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
   }
@@ -417,7 +442,10 @@
     $('items').addEventListener('click', (e) => { const b = e.target.closest('.item'); if (b) go(+b.dataset.i, true); });
     $('prev').onclick = () => go(S.cur - 1); $('next').onclick = () => go(S.cur + 1);
     $('ok').onclick = () => rate('ok'); $('fix').onclick = () => rate('fix');
-    $('modes').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { S.mode = b.dataset.mode; closePop(); renderTools(); renderStage(); save(); } });
+    const setMode = (m) => { S.mode = m; S.modes = { ...S.modes, [kindOf(it())]: m }; $('more').open = false; closePop(); renderTools(); renderStage(); save(); };
+    document.querySelector('.tools').addEventListener('click', (e) => { const b = e.target.closest('button[data-mode]'); if (b) setMode(b.dataset.mode); });
+    document.addEventListener('click', (e) => { if (!e.target.closest('#more')) $('more').open = false; });
+    $('about-btn').onclick = () => { const a = $('about'), open = a.hidden; a.hidden = !open; $('about-btn').setAttribute('aria-expanded', String(open)); };
     $('zooms').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { S.zoom = +b.dataset.zoom; closePop(); renderTools(); renderStage(); save(); } });
     const pick = () => { S.pairs[it().id] = { l: $('left-side').value, r: $('right-side').value }; renderTools(); renderStage(); save(); };
     $('left-side').onchange = pick; $('right-side').onchange = pick;
@@ -429,7 +457,7 @@
       if (armed) Kit.toast(ca ? 'Bấm vào chỗ muốn comment trên ảnh. Kéo để khoanh một vùng.' : 'Bấm vào chỗ muốn ghi chú trên ảnh.');
     };
     $('general').addEventListener('input', () => { S.general = $('general').value; save(); });
-    $('copy').onclick = async () => { if (!loaded) Kit.toast('Đang tải bản đã lưu…'); await ready; const snap = JSON.parse(JSON.stringify(S)); save(true, snap); Kit.copy(results(snap)); };
+    $('copy').onclick = $('copy2').onclick = async () => { if (!loaded) Kit.toast('Đang tải bản đã lưu…'); await ready; const snap = JSON.parse(JSON.stringify(S)); save(true, snap); Kit.copy(results(snap)); };
     $('send').onclick = async () => {
       if (!loaded) Kit.toast('Đang tải bản đã lưu…');
       await ready;
@@ -452,22 +480,23 @@
     document.addEventListener('keydown', (e) => {
       if (e.target.closest('textarea, input, select')) return;
       if (e.key === 'ArrowLeft') go(S.cur - 1); else if (e.key === 'ArrowRight') go(S.cur + 1);
-      else if (/^[1-5]$/.test(e.key)) { S.mode = MODES[+e.key - 1]; renderTools(); renderStage(); save(); }
+      else if (/^[1-6]$/.test(e.key)) setMode(MODES[+e.key - 1]);
       else if (e.key === ' ' && S.mode === 'blink') { e.preventDefault(); if (!e.repeat && !blinkLeft) { blinkLeft = true; renderStage(); } }
       else if (e.key === 'Escape') { closePop(); if (armed) { armed = false; document.body.classList.remove('commenting'); renderTools(); } }
     });
     document.addEventListener('keyup', (e) => { if (e.key === ' ' && S.mode === 'blink' && blinkLeft) { blinkLeft = false; renderStage(); } });
-    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { closePop(); renderStage(); }, 120); });
+    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { closePop(); S.mode = modeFor(it()); renderTools(); renderStage(); }, 120); });
   }
 
   async function start() {
     $('title').textContent = R.title; $('intro').textContent = R.intro || '';
     const sc = $('scen');
     (R.scenarios || []).forEach((t) => sc.append(Object.assign(document.createElement('li'), { textContent: t })));
-    $('scen-box').hidden = !(R.scenarios || []).length;
-    if (narrow()) { $('scen-box').open = false; document.querySelector('main').append(document.querySelector('.gen')); }
+    sc.hidden = !(R.scenarios || []).length;
+    if (!R.intro && !(R.scenarios || []).length) $('about-btn').hidden = true;
+    if (narrow()) document.querySelector('main').append(document.querySelector('.gen'));
     if (!items.length) { $('stage').append(Object.assign(document.createElement('p'), { className: 'empty muted', textContent: 'Vòng này chưa có cặp ảnh nào.' })); return; }
-    S.mode = narrow() && Math.max(...items[0].sides.map((s) => s.w)) > 700 ? 'blink' : 'side';
+    S.mode = modeFor(items[0]);
     bind(); renderList(); renderTools(); renderStage();
     snap = JSON.parse(JSON.stringify(S));
     const saved = await store.load();
@@ -482,7 +511,7 @@
       }
       if (Array.isArray(saved.pins)) S.pins = saved.pins.concat(S.pins);
       const ok = { general: (v) => typeof v === 'string', split: (v) => typeof v === 'number', fade: (v) => typeof v === 'number',
-        zoom: (v) => ZOOMS.includes(v), mode: (v) => MODES.includes(v), cur: (v) => v >= 0 && v < items.length };
+        zoom: (v) => ZOOMS.includes(v), modes: (v) => !!v && typeof v === 'object' && !Array.isArray(v), cur: (v) => v >= 0 && v < items.length };
       for (const k of FIELDS) if (!edited.fields.has(k) && ok[k](saved[k])) S[k] = saved[k];
       $('general').value = S.general || '';
     }
@@ -490,6 +519,7 @@
     if (early) save();
     const h = location.hash.slice(1), hi = items.findIndex((x) => x.id === h);
     if (hi >= 0) S.cur = hi;
+    S.mode = modeFor(it());
     renderList(); renderTools(); renderStage();
     initComments();
   }
