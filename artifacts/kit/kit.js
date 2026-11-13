@@ -46,16 +46,20 @@
 
   function store(key, path) {
     const lk = 'kit:' + key;
-    let timer = null, busy = false, again = null;
+    let timer = null, pending = null, running = null;
     const readLocal = () => { try { return JSON.parse(localStorage.getItem(lk) || 'null'); } catch (e) { return null; } };
+    /** Writes the newest object; writes queued while one runs collapse into one. Resolves true once db holds it. */
     async function push(obj) {
       const db = await cap('db');
       if (!db || !path) return false;
-      if (busy) { again = obj; return true; }
-      busy = true;
-      try { await Promise.race([db.doc(path).set(obj), new Promise((_, j) => setTimeout(() => j(new Error('timeout')), 8000))]); return true; }
-      catch (e) { return false; }
-      finally { busy = false; if (again) { const a = again; again = null; push(a); } }
+      pending = obj;
+      if (!running) running = (async () => {
+        let ok = true;
+        while (pending) { const o = pending; pending = null; try { await db.doc(path).set(o); ok = true; } catch (e) { ok = false; } }
+        running = null;
+        return ok;
+      })();
+      return Promise.race([running, new Promise((r) => setTimeout(() => r(false), 8000))]);
     }
     return {
       /** The newer of the local draft and the db copy (by `ts`). */

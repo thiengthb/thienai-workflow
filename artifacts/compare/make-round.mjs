@@ -43,7 +43,7 @@ export function build(spec, specDir, out) {
         const buf = readFileSync(src);
         const { w, h } = imageSize(buf);
         const k = s.scale || 1;
-        const name = `shots/${safe(it.id)}-${safe(s.key)}${extname(src).toLowerCase()}`;
+        const name = `shots/${safe(it.id)}__${safe(s.key)}${extname(src).toLowerCase()}`; // "__" cannot appear in a safe id, so names never collide
         copyFileSync(src, join(out, name));
         files[name] = join(out, name);
         return { key: safe(s.key), name: s.name, src: name, w: Math.round(w / k), h: Math.round(h / k) };

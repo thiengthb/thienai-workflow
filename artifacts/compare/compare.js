@@ -31,7 +31,8 @@
     return [sideOf(i, l), sideOf(i, r)];
   }
   const narrow = () => window.matchMedia('(max-width: 860px)').matches;
-  const save = (now) => store.save(JSON.parse(JSON.stringify(S)), now);
+  let touched = false;   // the viewer changed something before the saved state arrived
+  const save = (now) => { touched = true; return store.save(JSON.parse(JSON.stringify(S)), now); };
 
   // ---------- list, header, tools ----------
   function renderList() {
@@ -125,7 +126,7 @@
       const top = document.createElement('div'); top.className = 'ctl';
       if (S.mode === 'slide') {
         const a = img(l, l.w * scale), b = img(r, r.w * scale);
-        b.id = 'top-img'; b.style.clipPath = `inset(0 0 0 ${S.split}%)`;
+        b.id = 'top-img'; b.style.clipPath = clipFor(r.w * scale, Math.max(l.w, r.w) * scale);
         const k = document.createElement('div'); k.className = 'knob'; k.id = 'knob'; k.style.left = S.split + '%';
         const kb = Object.assign(document.createElement('button'), { type: 'button', textContent: '↔' });
         kb.setAttribute('role', 'slider'); kb.setAttribute('aria-label', 'Vị trí thanh trượt'); kb.setAttribute('aria-valuemin', '0'); kb.setAttribute('aria-valuemax', '100');
@@ -153,7 +154,7 @@
         diff(l, r).then((d) => {
           const c = d.canvas; c.style.width = Math.round(d.w * scale) + 'px'; c.style.height = Math.round(d.h * scale) + 'px';
           ov.append(c, tag(`${r.name}, đỏ là chỗ khác ${l.name}`, 'r'));
-          note.textContent = d.pct < 0.05 ? 'Hai bản gần như giống hệt.' : `Khác nhau ở khoảng ${d.pct.toFixed(1)}% diện tích chung.` + (l.h !== r.h || l.w !== r.w ? ` Hai ảnh khác cỡ (${l.w}×${l.h} và ${r.w}×${r.h}); phần thừa không so.` : '');
+          note.textContent = (d.pct < 0.05 ? 'Phần chung của hai bản gần như giống hệt.' : `Khác nhau ở khoảng ${d.pct.toFixed(1)}% diện tích chung.`) + (l.h !== r.h || l.w !== r.w ? ` Hai ảnh khác cỡ (${l.w}×${l.h} và ${r.w}×${r.h}); phần thừa không so.` : '');
           report();
         }).catch(() => { note.textContent = 'Không so được hai ảnh này.'; });
       }
@@ -164,12 +165,15 @@
     renderOwnPins();
     requestAnimationFrame(report);
   }
+  /** Clip of the right image so its visible part starts at the knob, whatever its own width. */
+  function clipFor(imgW, boxW) { return `inset(0 0 0 ${Math.max(0, Math.min(imgW, (S.split / 100) * boxW))}px)`; }
   function tag(t, cls) { return Object.assign(document.createElement('span'), { className: 'tag ' + cls, textContent: t }); }
 
   function bindKnob(kb, ov) {
     const set = (pct) => {
       S.split = Math.max(0, Math.min(100, pct));
-      $('knob').style.left = S.split + '%'; $('top-img').style.clipPath = `inset(0 0 0 ${S.split}%)`;
+      const top = $('top-img');
+      $('knob').style.left = S.split + '%'; top.style.clipPath = clipFor(top.getBoundingClientRect().width, ov.getBoundingClientRect().width);
       kb.setAttribute('aria-valuenow', String(Math.round(S.split)));
     };
     kb.addEventListener('pointerdown', (e) => {
@@ -199,7 +203,7 @@
     const od = xo.getImageData(0, 0, cw, ch), o = od.data;
     let n = 0;
     for (let p = 0; p < da.length; p += 4) {
-      const d = Math.abs(da[p] - db[p]) + Math.abs(da[p + 1] - db[p + 1]) + Math.abs(da[p + 2] - db[p + 2]);
+      const d = Math.abs(da[p] - db[p]) + Math.abs(da[p + 1] - db[p + 1]) + Math.abs(da[p + 2] - db[p + 2]) + Math.abs(da[p + 3] - db[p + 3]);
       if (d > 40) { n++; o[p] = 225; o[p + 1] = 29; o[p + 2] = 72; o[p + 3] = 255; }
     }
     xo.putImageData(od, 0, 0);
@@ -271,7 +275,7 @@
           if (i < 0) return;
           if (i !== S.cur) go(i, true);
           const [l, r] = pair();
-          if (a.side !== l.key && a.side !== r.key) { S.pairs[it().id] = { l: l.key, r: a.side }; renderTools(); renderStage(); }
+          if (a.side !== l.key && a.side !== r.key) { S.pairs[it().id] = { l: l.key, r: a.side }; blinkLeft = false; renderTools(); renderStage(); }
           else if (S.mode === 'blink' && (blinkLeft ? l : r).key !== a.side) { blinkLeft = !blinkLeft; renderStage(); }
           requestAnimationFrame(() => {
             const p = pagePoint(a.side, a.x, a.y);
@@ -315,7 +319,8 @@
     if (d.moved && !(ca && !ca.areas)) {
       const end = hit(e.clientX, e.clientY);
       const ex = end && end.side === side ? end.x : Math.round(x + (e.clientX - d.cx) / scale), ey = end && end.side === side ? end.y : Math.round(y + (e.clientY - d.cy) / scale);
-      w = Math.abs(ex - x); h = Math.abs(ey - y); x = Math.min(x, ex); y = Math.min(y, ey);
+      const cx = Math.max(0, Math.min(side.w, ex)), cy = Math.max(0, Math.min(side.h, ey));
+      w = Math.abs(cx - x); h = Math.abs(cy - y); x = Math.min(x, cx); y = Math.min(y, cy);
       if (w < 6 || h < 6) { w = 0; h = 0; }
     }
     if (!w) $('area').hidden = true;
@@ -414,8 +419,11 @@
     $('copy').onclick = () => { save(true); Kit.copy(results()); };
     $('send').onclick = async () => {
       await save(true);
-      const ok = await Kit.sendToClaude(results(), $('top'));
-      if (ok) Kit.toast('Đã gửi cho Claude. Claude trả lời trong comment.', 5000);
+      const full = results(), long = full.length > 3800;
+      const text = long ? full.slice(0, 3600) + '\n\n(Kết quả dài, bản đầy đủ nằm trong db của trang: reviews/' + R.id + ')' : full;
+      const ok = await Kit.sendToClaude(text, $('top'));
+      if (ok && long) { await Kit.copy(full); Kit.toast('Đã gửi bản rút gọn cho Claude; bản đầy đủ đã lưu và đã chép.', 6000); }
+      else if (ok) Kit.toast('Đã gửi cho Claude. Claude trả lời trong comment.', 5000);
       else { await Kit.copy(results()); Kit.toast('Chưa gửi thẳng được. Kết quả đã lưu và đã chép: nhắn "xong" hoặc dán vào chat.', 7000); }
     };
     const st = $('stage');
@@ -442,7 +450,7 @@
     S.mode = narrow() && Math.max(...items[0].sides.map((s) => s.w)) > 700 ? 'blink' : 'side';
     bind(); renderList(); renderTools(); renderStage();
     const saved = await store.load();
-    if (saved) {
+    if (saved && !touched) {
       for (const k of ['ratings', 'prefer', 'general', 'pins', 'pairs', 'split', 'fade', 'zoom']) if (saved[k] != null) S[k] = saved[k];
       if (MODES.includes(saved.mode)) S.mode = saved.mode;
       if (!ZOOMS.includes(S.zoom)) S.zoom = 0;
