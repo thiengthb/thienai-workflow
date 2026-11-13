@@ -353,7 +353,7 @@
           requestAnimationFrame(() => {
             const p = pagePoint(a.side, a.x, a.y);
             const sc = document.querySelector('#stage .scroll');
-            if (p && sc) { const r0 = sc.getBoundingClientRect(); sc.scrollBy({ top: p.y - window.scrollY - r0.top - r0.height / 2, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }
+            if (p && sc) { const r0 = sc.getBoundingClientRect(); sc.scrollBy({ top: p.y - window.scrollY - r0.top - r0.height / 2, left: p.x - window.scrollX - r0.left - r0.width / 2, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }
             report();
           });
         },
@@ -528,11 +528,22 @@
       else if (e.key === 'Escape') { closePop(); if (armed) { armed = false; document.body.classList.remove('commenting'); renderTools(); } }
     });
     document.addEventListener('keyup', (e) => { if (e.key === ' ' && S.mode === 'blink' && blinkLeft) { blinkLeft = false; renderStage(); } });
-    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { closePop(); fitIfNoZoom(); S.mode = modeFor(it()); renderTools(); renderStage(); }, 120); });
+    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { closePop(); fitIfNoZoom(); placeNote(); S.mode = modeFor(it()); renderTools(); renderStage(); }, 120); });
   }
 
   // Phones hide the size buttons, so a zoom picked on a wider window must not stay stuck there.
   function fitIfNoZoom() { if (S.zoom && narrow()) { S.zoom = 0; save(); } }
+
+  // Phones: the general note moves into "Về vòng này", so that button stays even when the round has no intro.
+  // Runs on start and on every resize, so crossing the breakpoint moves the note back and forth.
+  function placeNote() {
+    const rail = document.querySelector('.rail > .gen'), slot = $('gen-narrow-slot'), btn = $('about-btn');
+    const bare = !R.intro && !(R.scenarios || []).length;
+    if (narrow()) slot.append(...rail.childNodes); else rail.append(...slot.childNodes);
+    btn.hidden = bare && !narrow();
+    btn.textContent = bare ? 'Ghi chú chung' : 'Về vòng này';
+    if (btn.hidden) { $('about').hidden = true; btn.setAttribute('aria-expanded', 'false'); }
+  }
 
   async function start() {
     $('title').textContent = R.title; $('intro').textContent = R.intro || '';
@@ -540,9 +551,7 @@
     (R.scenarios || []).forEach((t) => sc.append(Object.assign(document.createElement('li'), { textContent: t })));
     sc.hidden = !(R.scenarios || []).length;
     $('intro').hidden = !R.intro;
-    // Phones: the general note moves into "Về vòng này", so that button stays even when the round has no intro.
-    if (narrow()) { $('gen-narrow-slot').append(...document.querySelector('.rail > .gen').childNodes); if (!R.intro && !(R.scenarios || []).length) $('about-btn').textContent = 'Ghi chú chung'; }
-    else if (!R.intro && !(R.scenarios || []).length) $('about-btn').hidden = true;
+    placeNote();
     if (!items.length) { $('stage').append(Object.assign(document.createElement('p'), { className: 'empty muted', textContent: 'Vòng này chưa có cặp ảnh nào.' })); return; }
     S.mode = modeFor(items[0]);
     bind(); renderList(); renderTools(); renderStage();

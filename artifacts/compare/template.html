@@ -98,8 +98,8 @@ select { font: 500 13px var(--font); color: var(--ink); background: var(--card);
 .scroll { flex: 1 1 auto; min-height: 0; overflow: auto; }
 .sbs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
 .sbs.zoomed { grid-template-columns: max-content max-content; }
-.col { display: grid; gap: 4px; min-width: 0; grid-template-columns: max-content; justify-content: center; }
-.one { display: grid; gap: 6px; grid-template-columns: max-content; justify-content: center; }
+.col { display: grid; gap: 4px; min-width: 0; grid-template-columns: max-content; justify-content: safe center; }
+.one { display: grid; gap: 6px; grid-template-columns: max-content; justify-content: safe center; }
 .cap { display: flex; gap: 8px; align-items: center; font-size: 12.5px; font-weight: 600; height: 22px; }
 .cap .dim { font-family: var(--mono); font-size: 11px; color: var(--muted); font-weight: 500; }
 .cap .like { margin-left: auto; }
