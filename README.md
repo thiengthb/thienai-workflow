@@ -31,6 +31,7 @@ docs/         Tiến độ và kế hoạch đang chạy của chính repo này
 | | `check-status.mjs` | Script kiểm `docs/STATUS.md` tối đa 40 dòng và tối đa 3 việc chờ thien. Chép vào `scripts/` của project, chạy trong CI |
 | | `PLAN.template.md` | Mẫu ghi kế hoạch đã duyệt vào `docs/plans/`: đang ở đâu, checkpoint có tick, bước đã đổi, lỗi gặp. Luật ở `profile/PLANNING.md` |
 | | `progress-page.mjs` | Sinh trang tiến độ (một repo, hoặc tổng quan nhiều repo) và trang lộ trình học, để AI đăng thành artifact |
+| | `publish-progress.mjs` | Một lệnh dựng lại trang tổng quan, tiến độ repo hay lộ trình học, ghi `publish.json` để đăng đè trang cũ |
 | | `DECISION.template.md` | Mẫu ghi quyết định khó sửa lại, trong `docs/decisions/` |
 | | `SETUP-GUIDE.template.md` | Mẫu hướng dẫn cài đặt theo `profile/GUIDES.md` |
 | | `MANUAL-TEST.template.md` | Mẫu hướng dẫn test tay: chuẩn bị, tài khoản test, ca test có mã, bảng kết quả. Chép vào `docs/manual-test/` |

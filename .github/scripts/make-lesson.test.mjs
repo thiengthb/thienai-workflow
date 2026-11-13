@@ -18,4 +18,26 @@ assert.throws(() => fill(tpl), /lesson-id/);
 assert.throws(() => fill(page.replace('<script id="lesson-js"></script>', '')), /lesson-js/);
 assert.equal(guessId('learning/frontend/pages/lesson-6.html'), 'frontend-06');
 assert.ok(!/__[A-Z]+__/.test(once.replace(/__TITLE__|__SUBJECT__|__HEADLINE__/g, '')), 'không còn chỗ giữ chỗ nào khác');
+// CLI: a missing page is copied from the template; a filled page gets publish.json (check skipped here: no browser in CI).
+{
+  const { mkdtempSync, existsSync, readFileSync: rd, writeFileSync: wr } = await import('node:fs');
+  const { spawnSync } = await import('node:child_process');
+  const { join } = await import('node:path');
+  const { tmpdir } = await import('node:os');
+  const d = mkdtempSync(join(tmpdir(), 'lesson-cli-'));
+  const cli = new URL('../../artifacts/lesson/make-lesson.mjs', import.meta.url).pathname;
+  const pagePath = join(d, 'learning/demo/pages/lesson-02.html');
+  let r = spawnSync(process.execPath, [cli, pagePath], { encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout, /chép mẫu/);
+  assert.ok(existsSync(pagePath));
+  wr(pagePath, rd(pagePath, 'utf8').replace(/"title": *"__[A-Z]+__"/, '"title": "Buổi thử"'));
+  r = spawnSync(process.execPath, [cli, pagePath, '--no-check', '--out', join(d, 'out')], { encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  const pub = JSON.parse(rd(join(d, 'out/publish.json'), 'utf8'));
+  assert.equal(pub.file_path, pagePath);
+  assert.deepEqual(pub.capabilities, { db: {}, comments: {} });
+  assert.equal(pub.description, 'Buổi thử');
+  assert.match(rd(pagePath, 'utf8'), /<meta name="lesson-id" content="demo-02">/, 'id guessed from the path');
+}
 console.log('make-lesson: ok');

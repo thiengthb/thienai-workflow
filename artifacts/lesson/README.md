@@ -14,10 +14,10 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 
 ## Cách AI soạn một buổi
 
-1. Chép `template.html` sang `learning/<môn>/pages/lesson-NN.html`.
+1. `node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html`: trang chưa có thì script chép `template.html` ra đó rồi dừng.
 2. Thay mọi chỗ `__…__` (id dạng `frontend-06`, tên môn, tên buổi, tiêu đề) và nội dung mẫu. Phần riêng của bài (sơ đồ, mô phỏng) viết trong `<style>` và `<script>` cuối trang; ghi kết quả vào `R`, gọi `Lesson.done('<khóa>')` khi một việc xong. Chỉ đổi `R` và gọi `Lesson.done` trong lúc bấm nút hay gõ chữ: phần tự lưu chỉ ghi lại lần bấm và chữ đã gõ, tải lại thì bấm lại đúng thứ tự, nên thứ gì sinh ra từ đó đều tự về. Kéo thả hay hẹn giờ thì không về được, cần thì đổi thành nút.
-3. `node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html` chép lõi chung và khung vào trang (chạy lại được, thay bản cũ).
-4. `node learning/teaching/check-page.cjs learning/<môn>/pages/lesson-NN.html` rồi đăng trang thành artifact, `capabilities`: `{"db": {}, "comments": {}}`.
+3. Chạy lại đúng lệnh ở bước 1. Script chép lõi chung và khung vào trang (chạy lại được, thay bản cũ), tự chạy `learning/teaching/check-page.cjs` trên điện thoại và laptop, qua thì ghi `publish.json` vào thư mục tạm `lesson-<id>` (hoặc `--out <thư-mục>`). Chưa qua thì sửa rồi chạy lại.
+4. Gọi Artifact với đúng tham số trong `publish.json` (trang, `capabilities` `{"db": {}, "comments": {}}`).
 5. Khi thien gửi: đọc comment (ArtifactComments) và `sessions/` (ArtifactData), ghi nhật ký như mục "Sau buổi" trong `learning/README.md`.
 
 ## Quy ước trong trang
@@ -39,4 +39,4 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 |---|---|
 | `template.html` | Buổi mẫu đủ 8 màn, chép ra làm buổi mới |
 | `lesson.css`, `lesson.js` | Khung: bước, câu hỏi, góp ý, kết thúc |
-| `make-lesson.mjs` | Chép `../kit/kit.css`, `../kit/kit.js`, khung và phần tự lưu vào trang |
+| `make-lesson.mjs` | Chép mẫu ra trang mới; chép `../kit/kit.css`, `../kit/kit.js`, khung và phần tự lưu vào trang, kiểm trang, ghi `publish.json` |
