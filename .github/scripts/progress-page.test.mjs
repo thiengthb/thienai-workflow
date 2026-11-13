@@ -26,12 +26,14 @@ assert.notEqual(repoId('a/b.c'), repoId('a/b-c'), 'dot and hyphen give different
 assert.match(repoId('thiengthb/thienai-workflow'), /^[a-z0-9-]+$/, 'anchor uses only letters, digits and hyphens');
 
 const run = (...args) => execFileSync('node', ['templates/progress-page.mjs', ...args], { encoding: 'utf8' });
-const repoPage = run('--title', 'T', '.=thiengthb/thienai-workflow', 'missing=thiengthb/x:không đọc được');
+const repoPage = run('--title', 'T', '.=thiengthb/thienai-workflow', 'missing=thiengthb/x:không đọc được', 'missing=thiengthb/y:' + 'lý do dài '.repeat(40));
 assert.match(repoPage, /^<!DOCTYPE html>/);
 assert.match(repoPage, /Kế hoạch đang chạy/);
 // An unreadable repo is a plain card: its reason stays in view, with no empty detail to unfold.
 assert.match(repoPage, /<div class="rc rc-static" id="[^"]+"><div class="rc-head"><b>x<\/b>.*<p class="rc-where">không đọc được<\/p><\/div>/);
 assert.doesNotMatch(repoPage, /<details class="rc" id="[^"]*x"/);
+assert.ok(repoPage.includes('lý do dài '.repeat(40).trim()), 'a long reason is shown whole');
+assert.doesNotMatch(repoPage, /\.rc-where \{[^}]*line-clamp/, 'the reason is never clamped: the plain card cannot unfold');
 const road = run('--title', 'L', '--roadmap', 'learning/roadmap.md=thiengthb/thienai-workflow:learning/roadmap.md');
 assert.match(road, /đang ở đây/, 'roadmap marks the current stage');
 assert.ok(readFileSync('learning/roadmap.md', 'utf8').includes('## Lộ trình đã đổi'), 'roadmap keeps its change log');

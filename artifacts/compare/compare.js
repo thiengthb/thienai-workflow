@@ -439,12 +439,12 @@
       // A long report is cut, so its full text gets its own frozen document: later edits queued on DB_PATH can't change it.
       const sentPath = 'sent/' + DB_PATH.slice(8) + '-' + Date.now();
       const stored = long && await Kit.put(sentPath, { report: full, state: snap, ts: Date.now() });
-      if (long && !stored) { if (await Kit.copy(full)) Kit.toast('Kết quả dài mà chưa lưu được vào trang, nên chưa gửi. Đã chép bản đầy đủ: dán vào chat cho Claude.', 8000); return; }
+      if (long && !stored) { Kit.toast(await Kit.copy(full) ? 'Kết quả dài mà chưa lưu được vào trang, nên chưa gửi. Đã chép bản đầy đủ: dán vào chat cho Claude.' : 'Kết quả dài mà chưa lưu được vào trang, nên chưa gửi. Chép bản đầy đủ trong ô bên dưới rồi dán vào chat cho Claude.', 9000); return; }
       const text = long ? full.slice(0, 3600) + '\n\n(Kết quả dài, bản đầy đủ nằm trong db của trang: ' + sentPath + ', trường report)' : full;
       const ok = await Kit.sendToClaude(text, $('top'));
       if (ok && long) { const copied = await Kit.copy(full); Kit.toast(copied ? 'Đã gửi bản rút gọn cho Claude; bản đầy đủ đã lưu và đã chép.' : 'Đã gửi bản rút gọn cho Claude; bản đầy đủ đã lưu trong trang.', 6000); }
       else if (ok) Kit.toast('Đã gửi cho Claude. Claude trả lời trong comment.', 5000);
-      else if (await Kit.copy(full)) Kit.toast('Chưa gửi thẳng được. Kết quả đã chép: dán vào chat cho Claude.', 7000);
+      else Kit.toast(await Kit.copy(full) ? 'Chưa gửi thẳng được. Kết quả đã chép: dán vào chat cho Claude.' : 'Chưa gửi thẳng được. Chép kết quả trong ô bên dưới rồi dán vào chat cho Claude.', 9000);
     };
     const st = $('stage');
     st.addEventListener('pointerdown', onDown); window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp);
