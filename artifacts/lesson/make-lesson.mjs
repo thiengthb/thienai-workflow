@@ -38,6 +38,11 @@ export function fill(html, id) {
   if (conf) { try { jsonId = JSON.parse(conf[1]).id || ''; } catch (e) { throw new Error('<script id="lesson"> không phải JSON hợp lệ'); } }
   const lid = id || (jsonId && !/^__.*__$/.test(jsonId) ? jsonId : '');
   if (!lid) throw new Error('Thiếu lesson-id: ghi "id" trong <script id="lesson"> hoặc truyền làm tham số');
+  // Ghi cùng một id vào cấu hình của bài, để lesson.js (sessions/<id>) và phần tự lưu (drafts/<id>) không lệch nhau.
+  if (conf) {
+    const obj = Object.assign(JSON.parse(conf[1]), { id: lid });
+    html = html.replace(conf[0], () => `<script type="application/json" id="lesson">${JSON.stringify(obj).replace(/</g, '\\u003c')}</script>`);
+  }
   html = html.replace(/<meta name="lesson-id"[^>]*>\n?/, '');
   html = html.replace(/<meta name="viewport"[^>]*>/, (m) => `${m}\n<meta name="lesson-id" content="${lid.replace(/"/g, '')}">`);
   return html;

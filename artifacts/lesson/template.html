@@ -41,7 +41,25 @@
         <p class="why">Hạ những thứ khác xuống thì nút chính tự nổi lên.</p>
       </div>
     </div>
-    <button class="btn primary next" type="button" data-go="2" data-need="C1" disabled>Tiếp</button>
+    <div class="card">
+      <p><b>2.</b> Chữ phụ dưới tiêu đề nên khác tiêu đề ở điểm nào trước tiên?</p>
+      <div class="q" data-q="C2" data-a="0" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Nhỏ hơn và màu xám hơn</button>
+        <button class="opt" type="button">Một font khác hẳn</button>
+        <button class="opt" type="button">Gạch chân cho dễ thấy</button>
+        <p class="why">Cỡ chữ và độ đậm nhạt đủ tạo thứ bậc. Thêm font mới chỉ làm trang rối.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> Nút cao bao nhiêu thì ngón tay bấm trên điện thoại không trượt?</p>
+      <div class="q" data-q="C3" data-a="2" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Khoảng 24px</button>
+        <button class="opt" type="button">Khoảng 30px</button>
+        <button class="opt" type="button">Từ 36px trở lên, dòng đáp án 44px</button>
+        <p class="why">Đầu ngón tay rộng cỡ 40px. Nút thấp hơn thì dễ bấm nhầm sang nút bên cạnh.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="2" data-need="C1 C2 C3" disabled>Tiếp</button>
   </section>
 
   <!-- 2. Nhớ lại buổi trước của môn này: một hình, một câu. -->
@@ -113,6 +131,7 @@
     <div class="card">
       <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
       <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Cách học so với các buổi trước</b><div class="seg full" data-f="method"><button type="button" data-v="thích hơn" aria-pressed="false">Thích hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="kém hơn" aria-pressed="false">Kém hơn</button></div></div>
       <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
     </div>
     <button class="btn primary next" type="button" id="finish">Xong buổi học</button>

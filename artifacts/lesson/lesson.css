@@ -54,10 +54,13 @@ body { font-size: 16px; line-height: 1.55; -webkit-text-size-adjust: 100%; }
 textarea { min-height: 88px; resize: vertical; }
 
 /* Góp ý cuối buổi. */
-.crit { display: grid; gap: 6px; }
+.crit { display: grid; gap: 8px; }
+.crit + .crit { border-top: 1px solid var(--line); padding-top: 14px; }
 .crit b { font-size: 14px; }
-.seg.full { display: flex; width: 100%; }
-.seg.full button { flex: 1; }
+/* Góp ý: nút rời có viền, nút đã chọn tô đặc màu chữ (đen) cho dễ nhìn, như trang học cũ. */
+.seg.full { display: flex; width: 100%; gap: 8px; background: none; padding: 0; }
+.seg.full button { flex: 1; min-height: 44px; font-size: 15px; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: var(--r); box-shadow: none; }
+.seg.full button[aria-pressed="true"] { background: var(--ink); color: var(--card); border-color: var(--ink); box-shadow: none; }
 .done-msg { font-size: 14px; color: var(--muted); }
 .done-msg:empty { display: none; }
 

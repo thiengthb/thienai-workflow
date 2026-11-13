@@ -5,7 +5,8 @@
 (() => {
   const $ = (s) => document.querySelector(s), $$ = (s) => [...document.querySelectorAll(s)];
   const C = JSON.parse(($('#lesson') || {}).textContent || '{}');
-  const ID = C.id || (document.querySelector('meta[name="lesson-id"]') || {}).content || document.title;
+  // Cùng một id với phần tự lưu (drafts/<id>): meta lesson-id trước, rồi mới tới cấu hình của bài.
+  const ID = (document.querySelector('meta[name="lesson-id"]') || {}).content || C.id || document.title;
   const R = window.R = Object.assign({ lesson: ID, start: new Date().toISOString(), review: {}, quiz: {}, teach: '', feedback: {} }, window.R || {});
   const steps = $$('.step');
   const done = new Set();
@@ -66,6 +67,9 @@
   }));
 
   // Góp ý: <div class="seg" data-f="len"><button data-v="vừa">…; ô #note.
+  // Tên tiêu chí lấy từ <b> trong cùng .crit, để tóm tắt ghi "Độ dài: vừa" thay vì "len vừa".
+  const fLabel = {};
+  $$('[data-f]').forEach((sg) => { const c = sg.closest('.crit'), b = c && c.querySelector('b'); fLabel[sg.dataset.f] = b ? b.textContent.trim() : sg.dataset.f; });
   $$('[data-f]').forEach((sg) => sg.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
     R.feedback[sg.dataset.f] = b.dataset.v;
     sg.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
@@ -80,7 +84,7 @@
     if (n(R.review).length) L.push(`Ôn: đúng ${right(R.review)}/${n(R.review).length}`);
     if (n(R.quiz).length) L.push(`Câu hỏi nhanh: đúng ${right(R.quiz)}/${n(R.quiz).length}`);
     if ((R.teach || '').trim()) L.push('', 'Tự nói lại: ' + R.teach.trim());
-    const fb = Object.entries(R.feedback).filter(([k]) => k !== 'note').map(([k, v]) => k + ' ' + v).join(', ');
+    const fb = Object.entries(R.feedback).filter(([k]) => k !== 'note').map(([k, v]) => (fLabel[k] || k) + ': ' + v).join('; ');
     if (fb) L.push('', 'Góp ý: ' + fb);
     if ((R.feedback.note || '').trim()) L.push('Ghi thêm: ' + R.feedback.note.trim());
     L.push('', doc ? `Kết quả đầy đủ trong db của trang: ${doc}` : 'Chưa lưu được vào db: kết quả đầy đủ ở dưới.', '');
@@ -96,10 +100,12 @@
     const saved = window.Kit ? await Kit.put(doc, R) : false;
     const text = summary(saved ? doc : '');
     const sent = window.Kit ? await Kit.sendToClaude(text, $('.top')) : false;
-    if (msg) msg.textContent = sent ? 'Đã lưu và gửi cho Claude. Claude trả lời trong thread.'
-      : saved ? 'Đã lưu kết quả. Bạn nhắn "xong" trong thread là Claude đọc được.'
-        : 'Chưa lưu được tự động. Bấm "Chép kết quả" rồi dán vào thread.';
-    if (copyBtn && !sent) { copyBtn.classList.remove('hide'); copyBtn.onclick = () => (window.Kit ? Kit.copy(text) : navigator.clipboard.writeText(text)); }
+    // Chỉ báo xong hẳn khi vừa lưu được vào db vừa gửi được cho Claude; thiếu một trong hai thì hiện nút chép.
+    if (msg) msg.textContent = saved && sent ? 'Đã lưu và gửi cho Claude. Claude trả lời trong thread.'
+      : sent ? 'Đã gửi tóm tắt cho Claude nhưng chưa lưu được vào db. Bấm "Chép kết quả" rồi dán vào thread cho chắc.'
+        : saved ? 'Đã lưu kết quả. Bạn nhắn "xong" trong thread là Claude đọc được.'
+          : 'Chưa lưu được tự động. Bấm "Chép kết quả" rồi dán vào thread.';
+    if (copyBtn && !(saved && sent)) { copyBtn.classList.remove('hide'); copyBtn.onclick = () => (window.Kit ? Kit.copy(text) : navigator.clipboard.writeText(text)); }
   });
 
   window.Lesson = { go, done: mark, R, summary };
