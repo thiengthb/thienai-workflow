@@ -25,7 +25,8 @@
   let scale = 1;
   const diffCache = new Map();
 
-  const HEART = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
+  // Thumbs-up drawn after Lucide's thumbs-up (ISC licence): outline when not liked, filled when liked.
+  const THUMB = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10v11"/><path d="M15 5.9 14 10h5.8a2 2 0 0 1 1.9 2.6l-2.3 7A2 2 0 0 1 17.5 21H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h2.8a2 2 0 0 0 1.8-1.1L12 2a3 3 0 0 1 3 3.9Z"/></svg>';
   const it = () => items[S.cur];
   function pair(i = it()) {
     const p = S.pairs[i.id] || {};
@@ -73,7 +74,7 @@
       b.setAttribute('aria-label', `${x.label}, ${state}`);
       b.append(Object.assign(document.createElement('span'), { className: 'sdot' + (r ? ' ' + r : '') }),
         Object.assign(document.createElement('span'), { className: 'nm', textContent: x.label }));
-      if (S.prefer[x.id]) { const pf = Object.assign(document.createElement('span'), { className: 'pf', innerHTML: HEART }); pf.append((sideOf(x, S.prefer[x.id]) || {}).name || ''); b.append(pf); }
+      if (S.prefer[x.id]) { const pf = Object.assign(document.createElement('span'), { className: 'pf', innerHTML: THUMB }); pf.append((sideOf(x, S.prefer[x.id]) || {}).name || ''); b.append(pf); }
       box.append(b);
     });
     const done = items.filter((x) => S.ratings[x.id]).length;
@@ -123,17 +124,14 @@
     // One short line, only when there is something to know: how the current view works, or how to pin while pinning.
     const h = $('hint');
     if (armed || commentMode) h.innerHTML = ca ? 'Bấm vào ảnh để comment đúng chỗ; kéo để khoanh một vùng. Bấm <b>Ghim</b> lần nữa để thôi.' : 'Bấm vào ảnh để ghi chú đúng chỗ; ghi chú đi kèm kết quả.';
-    else if (S.mode === 'blink') h.innerHTML = '<b>Nháy:</b> giữ phím Space, hoặc bấm vào ảnh, để đổi qua lại hai bản.';
-    else if (S.mode === 'slide') h.innerHTML = '<b>Trượt:</b> kéo nút tròn, hoặc dùng phím mũi tên khi nút đang chọn.';
-    else if (S.mode === 'diff') h.innerHTML = '<b>Tô chỗ khác nhau:</b> chỗ tô đỏ là điểm ảnh khác nhau giữa hai bản.';
-    else h.textContent = '';
+    else h.textContent = '';   // the special views explain themselves in their own control row (see renderStage)
   }
 
   // ---------- stage ----------
   function img(s, w) { const e = new Image(); e.src = s.src; e.alt = s.name; e.width = Math.round(w); e.draggable = false; return e; }
-  /** Heart for one side: liking it unlikes the others (one preferred side per screen). named: show the side's name too. */
+  /** Like (thumbs-up) for one side: liking it unlikes the others (one preferred side per screen). named: show the side's name too. */
   function like(s, named) {
-    const on = S.prefer[it().id] === s.key, b = Object.assign(document.createElement('button'), { type: 'button', className: 'like', innerHTML: HEART });
+    const on = S.prefer[it().id] === s.key, b = Object.assign(document.createElement('button'), { type: 'button', className: 'like', innerHTML: THUMB });
     b.dataset.key = s.key; b.setAttribute('aria-pressed', String(on));
     const tip = on ? `Bỏ thích bản ${s.name}` : `Thích bản ${s.name}`;
     b.setAttribute('aria-label', tip); b.dataset.tip = tip;
@@ -186,8 +184,13 @@
       const ov = document.createElement('div'); ov.className = 'ov'; ov.id = 'ov';
       ov.style.width = Math.round(Math.max(l.w, r.w) * scale) + 'px';
       ov.style.height = Math.round(Math.max(l.h, r.h) * scale) + 'px';
+      // One row above the shot: view name, its control and a short how-to, then the likes on the right.
       const top = document.createElement('div'); top.className = 'ctl';
+      const say = (t) => Object.assign(document.createElement('span'), { className: 'say', textContent: t });
+      top.append(Object.assign(document.createElement('b'), { textContent: { slide: 'Trượt', onion: 'Chồng mờ', blink: 'Nháy qua lại', diff: 'Tô chỗ khác nhau' }[S.mode] }));
       if (S.mode === 'slide') {
+        const kb2 = say(', hoặc phím mũi tên khi nút đang chọn'); kb2.classList.add('kb');
+        top.append(say('kéo nút tròn'), kb2);
         const a = img(l, l.w * scale), b = img(r, r.w * scale);
         b.id = 'top-img'; b.style.clipPath = clipFor(r.w * scale, Math.max(l.w, r.w) * scale);
         const k = document.createElement('div'); k.className = 'knob'; k.id = 'knob'; k.style.left = S.split + '%';
@@ -202,22 +205,25 @@
         b.style.opacity = S.fade / 100;
         const range = Object.assign(document.createElement('input'), { type: 'range', min: 0, max: 100, value: S.fade, id: 'fade' });
         range.addEventListener('input', () => { S.fade = +range.value; b.style.opacity = S.fade / 100; lab.textContent = `${l.name} ← → ${r.name} (${S.fade}%)`; save(); });
-        const lab = Object.assign(document.createElement('span'), { textContent: `${l.name} ← → ${r.name} (${S.fade}%)` });
-        top.append(Object.assign(document.createElement('label'), { htmlFor: 'fade', textContent: 'Độ hiện của bản phải' }), range, lab);
+        const lab = Object.assign(document.createElement('span'), { className: 'say', textContent: `${l.name} ← → ${r.name} (${S.fade}%)` });
+        range.setAttribute('aria-label', `Độ hiện của bản ${r.name}`);
+        top.append(range, lab);
         ov.append(a, b);
       } else if (S.mode === 'blink') {
         const s = blinkLeft ? l : r;
         ov.append(img(s, s.w * scale), tag(s.name, blinkLeft ? 'l' : 'r'));
-        const b = Object.assign(document.createElement('button'), { type: 'button', className: 'btn', id: 'flip', textContent: `Đang xem: ${s.name}. Đổi sang ${(blinkLeft ? r : l).name}` });
+        const b = Object.assign(document.createElement('button'), { type: 'button', className: 'btn', id: 'flip', textContent: `Đang xem ${s.name} · đổi` });
         b.addEventListener('click', () => { blinkLeft = !blinkLeft; renderStage(); });
-        top.append(b);
+        const kb3 = say('hoặc giữ Space, bấm vào ảnh'); kb3.classList.add('kb');
+        top.append(b, kb3);
       } else if (S.mode === 'diff') {
-        const note = Object.assign(document.createElement('span'), { className: 'note-diff', textContent: 'Đang so từng điểm ảnh…' });
+        const note = say('đang so từng điểm ảnh…');
         top.append(note);
         diff(l, r).then((d) => {
           const c = d.canvas; c.style.width = Math.round(d.w * scale) + 'px'; c.style.height = Math.round(d.h * scale) + 'px';
           ov.append(c, tag(`${r.name}, đỏ là chỗ khác ${l.name}`, 'r'));
-          note.textContent = (d.pct < 0.05 ? 'Phần chung của hai bản gần như giống hệt.' : `Khác nhau ở khoảng ${d.pct.toFixed(1)}% diện tích chung.`) + (l.h !== r.h || l.w !== r.w ? ` Hai ảnh khác cỡ (${l.w}×${l.h} và ${r.w}×${r.h}); phần thừa không so.` : '');
+          note.textContent = (d.pct < 0.05 ? 'phần chung gần như giống hệt' : `đỏ là chỗ khác, khoảng ${d.pct.toFixed(1)}% diện tích chung`) + (l.h !== r.h || l.w !== r.w ? `; hai ảnh khác cỡ, phần thừa không so` : '');
+          note.title = note.textContent;
           report();
         }).catch(() => { note.textContent = 'Không so được hai ảnh này.'; });
       }

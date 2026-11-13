@@ -8,7 +8,7 @@
 /* Bố cục thien chọn ở vòng compare-redesign-r2 (bản C, 2026-11-13): không có thanh đầu trang; cột trái chứa tên vòng,
    thanh tiến độ chia ô (mỗi ô một màn), danh sách màn, ghi chú chung, rồi hai hàng nút icon (cách xem, phán xét).
    Bên phải chỉ có ảnh; ở cỡ Vừa ảnh khít cả bề ngang lẫn bề cao. Nút chỉ có icon, rê chuột thì hiện tên.
-   Mỗi bản có nút tim trên ảnh, thích bản này thì bản kia tự bỏ. "Chép kết quả" và "Gửi cho Claude" chỉ hiện ở màn cuối. */
+   Mỗi bản có nút ngón cái (thích) trên ảnh, thích bản này thì bản kia tự bỏ. "Chép kết quả" và "Gửi cho Claude" chỉ hiện ở màn cuối. */
 [hidden] { display: none !important; }
 html, body { height: 100%; }
 body { overflow: hidden; }
@@ -111,7 +111,7 @@ select { font: 500 13px var(--font); color: var(--ink); background: var(--card);
 .cap .dim { font-family: var(--mono); font-size: 11px; color: var(--muted); font-weight: 500; }
 .cap .like { margin-left: auto; }
 .one > .cap { height: auto; }
-/* Tim: viền khi chưa thích, tô đầy màu nhấn khi thích. */
+/* Nút thích (ngón cái): viền khi chưa thích, tô đầy màu nhấn khi thích. */
 .like { display: inline-flex; align-items: center; gap: 4px; height: 22px; min-width: 22px; padding: 0 3px; border: 0; border-radius: var(--r); background: transparent;
   color: var(--muted); font: 600 12px var(--font); cursor: pointer; }
 .like:hover { background: var(--soft); color: var(--ink); }
@@ -128,10 +128,17 @@ select { font: 500 13px var(--font); color: var(--ink); background: var(--card);
   color: var(--accent-ink); font: 700 14px var(--font); cursor: ew-resize; touch-action: none; }
 .tag { position: absolute; top: 8px; z-index: 2; font: 600 12px var(--font); padding: 3px 8px; border-radius: var(--r); background: var(--ink); color: var(--bg); line-height: 1.4; }
 .tag.l { left: 8px; } .tag.r { right: 8px; }
-.ctl { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); min-height: 34px; flex: none; flex-wrap: wrap; }
-.ctl .likes { display: inline-flex; gap: 4px; margin-left: auto; }
-.ctl input[type="range"] { width: min(240px, 40vw); accent-color: var(--accent); }
-.note-diff { font-size: 13px; }
+/* Kiểu xem 3 đến 6: tên kiểu, nút điều khiển, cách dùng và nút thích nằm trên đúng một dòng; chữ dài thì cắt bằng dấu ba chấm. */
+.ctl { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); height: 34px; flex: none; flex-wrap: nowrap; min-width: 0; white-space: nowrap; }
+.ctl > b { color: var(--ink); font-weight: 600; flex: none; }
+.ctl .say { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ctl .say.kb { margin-left: -10px; }   /* keyboard tip continues the sentence before it */
+.ctl > #flip + .say.kb { margin-left: 0; }
+@media (pointer: coarse) { .ctl .say.kb { display: none; } }
+.ctl > input, .ctl > .btn { flex: none; }
+.ctl #flip { min-height: 26px; padding: 0 8px; }
+.ctl .likes { display: inline-flex; gap: 4px; margin-left: auto; flex: none; }
+.ctl input[type="range"] { width: min(200px, 30vw); accent-color: var(--accent); }
 .commenting .shot, .commenting .ov { cursor: crosshair; }
 #area { position: absolute; z-index: 4; border: 2px dashed var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); pointer-events: none; }
 .dot { position: absolute; z-index: 5; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50% 50% 50% 4px; background: var(--accent); color: #fff;

@@ -6,7 +6,8 @@ Một trang dùng chung cho mọi vòng duyệt giao diện (sakubun, thienui, b
 
 - Bố cục do thien chọn ở vòng `compare-redesign-r2` (2026-11-13, bản C "Nút vào cột trái", kèm góp ý): không có thanh đầu trang. Cột trái có tên vòng, số màn đã duyệt, nút "Về vòng này" (giới thiệu, kịch bản), thanh tiến độ chia ô (mỗi ô một màn, xanh OK, đỏ Cần sửa, ô đang xem viền đậm, bấm ô để đến màn đó), danh sách màn, ghi chú chung, rồi hai hàng nút. Bên phải chỉ có ảnh, trang cao vừa một màn hình, chỉ vùng ảnh và cột trái tự cuộn.
 - Nút chỉ có icon, rê chuột trên laptop thì hiện tên và phím tắt. Hàng trên: Cạnh nhau, Từng bản, Trượt, Thêm (Chồng mờ, Nháy qua lại, Tô chỗ khác nhau, cỡ Vừa, 100%, 200%), Ghim. Hàng dưới: tên màn, OK, Cần sửa, Màn trước, Màn sau. Ở màn cuối, Màn sau đổi thành Chép kết quả và Gửi cho Claude.
-- **Thích bản nào**: mỗi bản có nút tim ngay trên ảnh; thích bản này thì bản kia tự bỏ. Danh sách màn hiện tim và tên bản đã thích.
+- **Thích bản nào**: mỗi bản có nút ngón cái ngay trên ảnh; thích bản này thì bản kia tự bỏ. Danh sách màn hiện ngón cái và tên bản đã thích.
+- Kiểu Trượt, Chồng mờ, Nháy qua lại, Tô chỗ khác nhau: tên kiểu, nút điều khiển, cách dùng và hai nút thích nằm trên một dòng ngay trên ảnh.
 - **Cỡ Vừa khít cả bề ngang lẫn bề cao** vùng ảnh nên không phải cuộn, không phóng quá 100%. Ảnh rất dài (chụp cả trang) mà ép khít bề cao còn chưa tới nửa cỡ khít bề ngang thì chỉ khít bề ngang và cuộn dọc.
 - Mỗi màn có 2 bản trở lên (ví dụ Cũ, Phác A, Phác B). Chọn bản trái và bản phải khi có hơn 2 bản.
 - **Tự chọn kiểu xem theo ảnh**: hai ảnh đặt cạnh nhau mà mỗi ảnh còn ít nhất 60% cỡ thật (ảnh điện thoại trên laptop) thì để Cạnh nhau; không thì (ảnh laptop, hay mở trên điện thoại) để Từng bản cho ảnh to. Đổi kiểu xem thì trang nhớ cho mọi màn cùng loại.
