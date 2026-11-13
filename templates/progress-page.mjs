@@ -247,8 +247,7 @@ export function overviewBody(repos, details) {
   const waiting = repos.filter((r) => r.tasks.length);
   const total = waiting.reduce((a, r) => a + r.tasks.length, 0);
   const running = repos.reduce((a, r) => a + (r.plans ? r.plans.length : 0), 0);
-  const stat = (n, label, accent) => `<div class="stat${accent ? ' accent' : ''}"><b>${n}</b><span>${label}</span></div>`;
-  const stats = `<div class="stats">${stat(total, 'việc chờ bạn', total > 0)}${stat(repos.length, 'repo')}${stat(running, 'kế hoạch đang chạy')}</div>`;
+  const lead = `<p class="lead">${total ? `<b>${total} việc</b> đang chờ bạn ở ${waiting.length} repo` : 'Không có việc nào đang chờ bạn'} · ${running} kế hoạch đang chạy.</p>`;
   const task = (r, t) => {
     const key = taskKey(r.repo, t);
     return `<li class="task" data-key="${key}"><label class="tick"><input type="checkbox" id="${key}" disabled aria-label="Đánh dấu đã làm"><span class="box" aria-hidden="true"></span></label><p>${inline(t, r.base)}</p></li>`;
@@ -264,7 +263,7 @@ ${r.missing ? '' : plans(r)}<span class="more">Chi tiết</span>
   const tasksCol = `<section class="col" aria-labelledby="h-wait"><h2 class="label" id="h-wait">Đang chờ bạn</h2>
 ${total ? `${waiting.map(group).join('')}<p class="muted small" id="tick-note">Tick là bạn báo đã làm. Claude kiểm lại và bỏ việc khỏi STATUS ở lần cập nhật sau.</p>` : '<p class="card empty muted">Không có việc nào đang chờ bạn.</p>'}</section>`;
   const reposCol = `<section class="col" aria-labelledby="h-repos"><h2 class="label" id="h-repos">Các repo</h2>${repos.map(card).join('')}</section>`;
-  return `${stats}<div class="cols">${tasksCol}${reposCol}</div>`;
+  return `${lead}<div class="cols">${tasksCol}${reposCol}</div>`;
 }
 
 function roadmap(file, linkBase) {
@@ -296,7 +295,7 @@ function roadmap(file, linkBase) {
 const KIT_FALLBACK_CSS = `:root{--bg:#faf8f3;--card:#fff;--soft:#f3f1ec;--line:#e7e3da;--ink:#1b1b1a;--muted:#6b6862;--accent:#308e84;--accent-soft:#e3f1ef;--accent-ink:#1f6b63;--good:#2f8a57;--good-soft:#e6f3eb;--bad:#c2410c;--bad-soft:#fdeee6;--font:"Onest",system-ui,sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--card:#1f1f1d;--soft:#262523;--line:#34322e;--ink:#ecebe7;--muted:#a19e97;--accent:#4fb3a6;--accent-soft:#1c3330;--accent-ink:#8fd9c9;--good:#4fb07a;--good-soft:#1c3125;--bad:#f0763f;--bad-soft:#3b2219;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#161615;--card:#1f1f1d;--soft:#262523;--line:#34322e;--ink:#ecebe7;--muted:#a19e97;--accent:#4fb3a6;--accent-soft:#1c3330;--accent-ink:#8fd9c9;--good:#4fb07a;--good-soft:#1c3125;--bad:#f0763f;--bad-soft:#3b2219;color-scheme:dark}
-.chip{font:600 12px/1 var(--font);padding:4px 8px;border-radius:99px;background:var(--soft);color:var(--muted)}.chip.accent{background:var(--accent-soft);color:var(--accent-ink)}.label{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}`;
+.chip{font:600 12px/1 var(--font);padding:4px 8px;border-radius:8px;background:var(--soft);color:var(--muted)}.chip.accent{background:var(--accent-soft);color:var(--accent-ink)}.label{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}`;
 const kitFile = (f) => {
   const p = join(dirname(fileURLToPath(import.meta.url)), '../artifacts/kit', f);
   return existsSync(p) ? readFileSync(p, 'utf8') : f.endsWith('.css') ? KIT_FALLBACK_CSS : '';
@@ -316,22 +315,19 @@ export function page(title, body, stamp, opts = {}) {
 <style>
 /* Overview: what waits for thien first (cards), then one row per repo with detail folded; one column on phones.
    Colours come from the shared kit (artifacts/kit/kit.css). */
-:root { --ok: var(--good); --ok-soft: var(--good-soft); --err: var(--bad); }
+:root { --r: 8px; --ok: var(--good); --ok-soft: var(--good-soft); --err: var(--bad); }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--font); }
+.lead { margin: 0; color: var(--muted); font-size: 14.5px; } .lead b { color: var(--ink); font-weight: 600; }
 .small, .muted.small { font-size: 12.5px; }
 main > header { display: grid; gap: 2px; }
 main > header .stamp { font-size: 13px; margin: 0; }
-.stats { display: flex; gap: 8px; flex-wrap: wrap; }
-.stat { display: flex; align-items: baseline; gap: 6px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 6px 12px; font-size: 13.5px; color: var(--muted); }
-.stat b { font-size: 17px; color: var(--ink); font-variant-numeric: tabular-nums; }
-.stat.accent { border-color: var(--accent); } .stat.accent b { color: var(--accent); }
 .cols { display: grid; gap: 20px; align-items: start; }
 @media (min-width: 880px) { .cols { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); } }
 .col { display: grid; gap: 10px; align-content: start; min-width: 0; }
 .col > .label { margin: 0; }
-.grp, .rc { background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
+.grp, .rc { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
 .grp-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 14px; }
 .grp-head span { color: var(--muted); font-size: 12.5px; }
 .tasks { list-style: none; margin: 0; padding: 0; }
@@ -342,7 +338,7 @@ main > header .stamp { font-size: 13px; margin: 0; }
 .tick { position: relative; width: 22px; height: 22px; margin-top: 0; cursor: pointer; }
 .tick input { position: absolute; inset: -10px; opacity: 0; cursor: pointer; margin: 0; }
 .tick input:disabled { cursor: progress; }
-.tick .box { pointer-events: none; position: absolute; inset: 1px; border: 2px solid var(--muted); border-radius: 6px; background: var(--card); }
+.tick .box { pointer-events: none; position: absolute; inset: 1px; border: 2px solid var(--muted); border-radius: 5px; background: var(--card); }
 .tick input:focus-visible + .box { outline: 2px solid var(--accent); outline-offset: 2px; }
 .tick input:checked + .box { background: var(--accent); border-color: var(--accent); }
 .tick input:checked + .box::after { content: ""; position: absolute; left: 5px; top: 1px; width: 6px; height: 11px; border: solid #fff; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); }
@@ -351,7 +347,7 @@ details.rc { padding: 0; }
 details.rc + details.rc { margin-top: 0; }
 details.rc > summary { display: grid; gap: 8px; padding: 12px 14px; min-height: 0; font-weight: 400; align-items: start; }
 details.rc > summary::before { content: none; }
-details.rc > summary:hover { background: var(--soft); border-radius: 12px; }
+details.rc > summary:hover { background: var(--soft); border-radius: var(--r); }
 .rc-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; font-size: 14.5px; }
 .rc-head b { font-weight: 600; }
 .rc-chips { display: flex; gap: 6px; margin-left: auto; }
@@ -375,11 +371,11 @@ h3, h4 { font-size: 17px; margin: 0; text-wrap: balance; }
 .label { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 6px; }
 p { margin: 0 0 8px; } a { color: inherit; text-underline-offset: 3px; }
 a:focus-visible, summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 6px; }
-code { font-size: .9em; background: var(--line); padding: 1px 5px; border-radius: 5px; overflow-wrap: anywhere; }
+code { font-size: .9em; background: var(--line); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
 .stamp, .muted, .meta { color: var(--muted); font-size: 14px; }
-.repo, .subject { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: grid; gap: 14px; }
+.repo, .subject { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: grid; gap: 14px; }
 .now-box p, .now-box li { font-size: 16px; }
-.ask { background: var(--wait-soft); border-radius: 12px; padding: 12px 14px; }
+.ask { background: var(--wait-soft); border-radius: var(--r); padding: 12px 14px; }
 .ask .label { color: var(--wait); }
 .plan { border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 8px; }
 .plan header { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
@@ -387,11 +383,11 @@ code { font-size: .9em; background: var(--line); padding: 1px 5px; border-radius
 .bar { flex: 1; height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
 .bar span { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
 .count, .ck-count { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
-.pill { font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 99px; white-space: nowrap; }
+.pill { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: var(--r); white-space: nowrap; }
 .pill.state { background: var(--line); }
 .pill.now { background: var(--ink); color: var(--card); }
 .pill.ok { background: var(--ok-soft); color: var(--ok); }
-details { border: 1px solid var(--line); border-radius: 12px; padding: 0 12px; }
+details { border: 1px solid var(--line); border-radius: var(--r); padding: 0 12px; }
 details + details { margin-top: 8px; }
 summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 8px; font-weight: 600; list-style: none; }
 summary::-webkit-details-marker { display: none; }
@@ -403,7 +399,7 @@ details > :last-child { margin-bottom: 12px; }
 ul, ol { margin: 0 0 8px; padding-left: 20px; }
 ul.checks { list-style: none; padding: 0; display: grid; gap: 6px; }
 li.check { display: flex; gap: 10px; align-items: flex-start; }
-.box { flex: none; width: 20px; height: 20px; margin-top: 2px; border: 1.5px solid var(--muted); border-radius: 6px; display: grid; place-items: center; font-size: 13px; font-weight: 700; }
+.box { flex: none; width: 20px; height: 20px; margin-top: 2px; border: 1.5px solid var(--muted); border-radius: 5px; display: grid; place-items: center; font-size: 13px; font-weight: 700; }
 li.done .box { background: var(--ok); border-color: var(--ok); color: var(--card); }
 li.done > span:last-child { color: var(--muted); }
 .log.errors summary { color: var(--err); }
@@ -412,7 +408,7 @@ table { border-collapse: collapse; width: 100%; font-size: 14px; }
 th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-bottom: 1px solid var(--line); }
 th { color: var(--muted); font-weight: 600; }
 .overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
-.tile { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 4px; text-decoration: none; }
+.tile { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; display: grid; gap: 4px; text-decoration: none; }
 .tile span { color: var(--muted); font-size: 14px; }
 .tile.missing { border-style: dashed; }
 .small, .muted.small { font-size: 12.5px; }
