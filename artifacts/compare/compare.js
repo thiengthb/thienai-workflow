@@ -106,7 +106,7 @@
     // The "more" button is an icon: it turns accent while a view or size from its menu is on, and its tooltip names it.
     const more = $('more'), inMore = MORE.includes(S.mode) || (narrow() && S.mode === 'slide');
     more.dataset.on = String(inMore || !!S.zoom);
-    const on = [inMore ? more.querySelector(`.menu [data-mode="${S.mode}"]`).textContent.replace(/\s*\(\d\)$/, '') : '', S.zoom ? `${S.zoom * 100}%` : ''].filter(Boolean).join(', ');
+    const on = [inMore ? more.querySelector(`.menu [data-mode="${S.mode}"] span`).textContent : '', S.zoom ? `${S.zoom * 100}%` : ''].filter(Boolean).join(', ');
     const sum = more.querySelector('summary'), tip = on ? `Đang dùng: ${on}` : 'Thêm cách xem, cỡ ảnh';
     sum.dataset.tip = tip; sum.setAttribute('aria-label', tip);
     document.querySelectorAll('#zooms button').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.zoom === S.zoom)));

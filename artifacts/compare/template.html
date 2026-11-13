@@ -49,7 +49,7 @@ body { overflow: hidden; }
 .sub { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .link { font: 600 12.5px var(--font); color: var(--accent-ink); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
 /* Thanh tiến độ chia ô: mỗi ô một màn, màu theo phán xét, ô đang xem viền đậm; bấm ô để đến màn đó. */
-.steps { display: flex; gap: 3px; }
+.steps { display: flex; gap: 3px; padding: 0 4px; }   /* room for the ring of the first and last cell */
 .steps button { flex: 1 1 0; min-width: 4px; height: 18px; padding: 6px 0; border: 0; background: none; cursor: pointer; }
 .steps button::before { content: ""; display: block; height: 6px; border-radius: 99px; background: var(--line); }
 .steps button.ok::before { background: var(--good); }
@@ -77,10 +77,17 @@ body { overflow: hidden; }
 .more > summary::-webkit-details-marker { display: none; }
 .more[data-on="true"] > summary { border-color: var(--accent); color: var(--accent-ink); }
 .menu { position: absolute; left: 0; bottom: calc(100% + 4px); z-index: 9; display: grid; gap: 2px; padding: 4px; min-width: 190px; box-shadow: var(--shadow); }
-.menu > button { text-align: left; justify-content: flex-start; border: 0; background: transparent; }
+.menu > button { text-align: left; justify-content: space-between; gap: 16px; border: 0; background: transparent; }
+/* Phím tắt ở mép phải, trông như một phím bấm, để biết gõ số đó là bật kiểu xem đó. */
+.menu kbd { font: 600 11px/1 var(--mono); color: var(--muted); min-width: 20px; height: 20px; padding: 0 5px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; background: var(--card); }
+.menu > button[aria-pressed="true"] kbd { color: var(--ink); border-color: var(--muted); }
+@media (pointer: coarse) { .menu kbd { display: none; } }
 .menu > button:hover { background: var(--soft); }
 .menu > button[aria-pressed="true"] { background: var(--soft); font-weight: 600; }
 .zoom-box { display: grid; gap: 4px; border-top: 1px solid var(--line); margin-top: 4px; padding: 8px 4px 2px; }
+.zoom-box .seg { display: flex; }
+.zoom-box .seg button { flex: 1 1 0; }
 .phone-only { display: none !important; }
 .picker { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); flex-basis: 100%; }
 select { font: 500 13px var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: var(--r); min-height: 28px; padding: 0 4px; min-width: 0; flex: 1; }
@@ -182,10 +189,10 @@ select { font: 500 13px var(--font); color: var(--ink); background: var(--card);
     </div>
     <details class="more" id="more"><summary class="btn ib" aria-label="Thêm cách xem và cỡ ảnh" data-tip="Thêm cách xem, cỡ ảnh"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></summary>
       <div class="menu card" role="group" aria-label="Cách xem khác">
-        <button class="btn phone-only" type="button" data-mode="slide" aria-pressed="false">Trượt</button>
-        <button class="btn" type="button" data-mode="onion" aria-pressed="false">Chồng mờ (4)</button>
-        <button class="btn" type="button" data-mode="blink" aria-pressed="false">Nháy qua lại (5)</button>
-        <button class="btn" type="button" data-mode="diff" aria-pressed="false">Tô chỗ khác nhau (6)</button>
+        <button class="btn phone-only" type="button" data-mode="slide" aria-pressed="false"><span>Trượt</span></button>
+        <button class="btn" type="button" data-mode="onion" aria-pressed="false" aria-keyshortcuts="4"><span>Chồng mờ</span><kbd>4</kbd></button>
+        <button class="btn" type="button" data-mode="blink" aria-pressed="false" aria-keyshortcuts="5"><span>Nháy qua lại</span><kbd>5</kbd></button>
+        <button class="btn" type="button" data-mode="diff" aria-pressed="false" aria-keyshortcuts="6"><span>Tô chỗ khác nhau</span><kbd>6</kbd></button>
         <button class="btn phone-only" id="copy-m" type="button" hidden>Chép kết quả</button>
         <div class="zoom-box" id="zoom-box">
           <span class="label">Cỡ ảnh</span>
