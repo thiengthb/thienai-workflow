@@ -45,8 +45,8 @@
   // ratings/prefer/pairs which screen, deletions included) so the merge keeps exactly what the viewer did.
   let loaded = false, snap = null, markReady;
   const ready = new Promise((r) => { markReady = r; });   // send and copy wait for this, so a result never comes from unrestored state
-  const MAPS = ['ratings', 'prefer', 'pairs'], FIELDS = ['general', 'split', 'fade', 'zoom', 'modes', 'cur'];
-  const edited = { fields: new Set(), ratings: new Set(), prefer: new Set(), pairs: new Set() };
+  const MAPS = ['ratings', 'prefer', 'pairs', 'modes'], FIELDS = ['general', 'split', 'fade', 'zoom', 'cur'];
+  const edited = { fields: new Set(), ratings: new Set(), prefer: new Set(), pairs: new Set(), modes: new Set() };
   const note = () => {
     if (!snap) return;
     for (const k of FIELDS) if (JSON.stringify(S[k]) !== JSON.stringify(snap[k])) edited.fields.add(k);
@@ -485,8 +485,11 @@
       else if (e.key === 'Escape') { closePop(); if (armed) { armed = false; document.body.classList.remove('commenting'); renderTools(); } }
     });
     document.addEventListener('keyup', (e) => { if (e.key === ' ' && S.mode === 'blink' && blinkLeft) { blinkLeft = false; renderStage(); } });
-    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { closePop(); S.mode = modeFor(it()); renderTools(); renderStage(); }, 120); });
+    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { closePop(); fitIfNoZoom(); S.mode = modeFor(it()); renderTools(); renderStage(); }, 120); });
   }
+
+  // Phones hide the size buttons, so a zoom picked on a wider window must not stay stuck there.
+  function fitIfNoZoom() { if (S.zoom && $('zooms').offsetParent === null) { S.zoom = 0; save(); } }
 
   async function start() {
     $('title').textContent = R.title; $('intro').textContent = R.intro || '';
@@ -511,7 +514,7 @@
       }
       if (Array.isArray(saved.pins)) S.pins = saved.pins.concat(S.pins);
       const ok = { general: (v) => typeof v === 'string', split: (v) => typeof v === 'number', fade: (v) => typeof v === 'number',
-        zoom: (v) => ZOOMS.includes(v), modes: (v) => !!v && typeof v === 'object' && !Array.isArray(v), cur: (v) => v >= 0 && v < items.length };
+        zoom: (v) => ZOOMS.includes(v), cur: (v) => v >= 0 && v < items.length };
       for (const k of FIELDS) if (!edited.fields.has(k) && ok[k](saved[k])) S[k] = saved[k];
       $('general').value = S.general || '';
     }
@@ -519,7 +522,7 @@
     if (early) save();
     const h = location.hash.slice(1), hi = items.findIndex((x) => x.id === h);
     if (hi >= 0) S.cur = hi;
-    S.mode = modeFor(it());
+    fitIfNoZoom(); S.mode = modeFor(it());
     renderList(); renderTools(); renderStage();
     initComments();
   }
