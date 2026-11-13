@@ -5,8 +5,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>/*KIT_CSS*/</style>
 <style>
-/* Bố cục (thien chọn ở vòng decide-layout-r1): khung rộng là bảng so sánh, mỗi phương án một cột;
-   khung hẹp (điện thoại) là thẻ xếp dọc. Cùng một dữ liệu, cùng một lựa chọn. */
+/* Bố cục (thien chọn ở vòng decide-layout-r1 và decide-image-r1): khung rộng là một ảnh lớn mỗi lần (tab để
+   chuyển bản) và bảng so sánh gọn bên dưới; khung hẹp (điện thoại) là thẻ xếp dọc, ảnh đủ tỉ lệ.
+   Cùng một dữ liệu, cùng một lựa chọn. */
 body { font-size: 14.5px; }
 main { max-width: 1180px; margin: 0 auto; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 16px; }
 .head { display: grid; gap: 4px; }
@@ -14,7 +15,7 @@ main { max-width: 1180px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
 .head .why { color: var(--muted); max-width: 80ch; }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
 .shot { display: block; width: 100%; padding: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--soft); overflow: hidden; cursor: zoom-in; position: relative; }
-.shot img { display: block; width: 100%; object-fit: cover; object-position: top; }
+.shot img { display: block; width: 100%; height: auto; object-fit: cover; object-position: top; }
 .shot .zoom-hint { position: absolute; right: 6px; bottom: 6px; font: 600 11.5px/1 var(--font); padding: 4px 6px; border-radius: var(--r); background: color-mix(in srgb, var(--card) 88%, transparent); color: var(--muted); }
 .pc { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 13.5px; }
 .pc li { display: grid; grid-template-columns: 14px 1fr; gap: 6px; }
@@ -24,16 +25,33 @@ main { max-width: 1180px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
 .pick[aria-pressed="true"] { background: var(--accent); border-color: color-mix(in srgb, var(--accent) 75%, #000); color: #fff; }
 .chosen { box-shadow: inset 0 0 0 2px var(--accent); }
 
-/* Bảng so sánh (khung rộng) */
+/* Xem từng bản (khung rộng): tab, ảnh lớn bên trái, ưu nhược và nút chọn bên phải */
+.stage { overflow: hidden; }
+.stage .tabs { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+.stage .tabs button { display: inline-flex; align-items: center; gap: 6px; font: 500 13.5px/1.2 var(--font); padding: 6px 12px; border-radius: var(--r); border: 1px solid transparent; background: none; color: var(--muted); cursor: pointer; }
+.stage .tabs button:hover { color: var(--ink); }
+.stage .tabs button[aria-selected="true"] { background: var(--soft); border-color: var(--line); color: var(--ink); }
+.stage .tabs .mk { font-size: 11.5px; font-weight: 600; color: var(--accent); }
+.stage .pane { display: grid; grid-template-columns: minmax(0, 1fr) 300px; }
+.stage .pane[hidden] { display: none; }
+.stage .im { display: grid; place-items: center; padding: 12px; background: var(--soft); border-right: 1px solid var(--line); min-height: 240px; }
+.stage .im .shot { width: auto; max-width: 100%; }
+.stage .im .shot img { width: auto; max-width: 100%; max-height: min(64vh, 520px); }
+.stage .im .none { color: var(--muted); font-size: 13px; }
+.stage .side { display: grid; gap: 10px; align-content: start; padding: 14px; }
+.stage .side h2 { font-size: 16px; }
+.stage .side .btn { width: 100%; }
+.stage .nav { display: flex; gap: 8px; }
+@media (max-width: 999px) { .stage .pane { grid-template-columns: minmax(0, 1fr) 260px; } }
+
+/* Bảng so sánh (khung rộng, dưới phần xem từng bản) */
 .tbl { overflow-x: auto; }
 .tbl table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 600px; }
 .tbl col:first-child { width: 150px; }
 .tbl th, .tbl td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
 .tbl thead th { font-weight: 400; }
 .tbl thead th:first-child, .tbl tbody th { width: 150px; color: var(--muted); font-weight: 500; font-size: 13px; }
-.tbl thead .shot img { height: 150px; }
-.tbl thead b { display: block; font-size: 15px; margin: 8px 0 2px; }
-.tbl thead .sum { font-size: 13px; color: var(--muted); }
+.tbl thead b { display: block; font-size: 15px; }
 .tbl tr.picks td, .tbl tr.picks th { border-bottom: 0; }
 .tbl tr.picks .btn { width: 100%; }
 .tbl col.chosen-col { background: var(--accent-soft); }
@@ -42,7 +60,7 @@ main { max-width: 1180px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
 .cards { display: grid; gap: 12px; }
 .opt { display: grid; }
 .opt .shot { border-width: 0 0 1px; border-radius: var(--r) var(--r) 0 0; }
-.opt .shot img { height: 220px; }
+.opt .shot img { max-height: 72vh; }
 .opt .ob { display: grid; gap: 8px; padding: 12px 14px; }
 .opt h2 { font-size: 16px; }
 .opt .crit { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -80,8 +98,9 @@ dialog#zoom img { display: block; width: 100%; height: auto; }
     <h1 id="q"></h1>
     <p class="why" id="why"></p>
   </header>
-  <section class="view-table card tbl" id="table" aria-label="Bảng so sánh"></section>
-  <section class="view-cards cards" id="cards" aria-label="Các phương án"></section>
+  <section class="view-table card stage" id="stage" data-area="stage" aria-label="Xem từng phương án"></section>
+  <section class="view-table card tbl" id="table" data-area="table" aria-label="Bảng so sánh"></section>
+  <section class="view-cards cards" id="cards" data-area="cards" aria-label="Các phương án"></section>
   <div class="rec" id="rec" role="status" aria-live="polite"></div>
   <div class="card ask">
     <label class="label" for="note">Ghi chú (không bắt buộc)</label>
