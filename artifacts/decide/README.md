@@ -19,7 +19,8 @@ Trang dùng mỗi khi AI cần thien chọn 1 trong 2–4 cách có hình: bố 
    ```json
    { "id": "sakubun-review-layout", "question": "Buổi ôn nên bố cục thế nào?", "context": "Một câu vì sao phải chọn.",
      "options": [{ "key": "a", "name": "A · Toàn màn", "summary": "...", "image": "a.png", "scale": 2,
-                   "pros": ["..."], "cons": ["..."] }],
+                   "pros": ["..."], "cons": ["..."] },
+                 { "key": "b", "name": "B · Hai cột", "summary": "...", "image": "b.png", "scale": 2 }],
      "criteria": [{ "name": "Dễ dùng trên điện thoại", "values": { "a": "tốt", "b": { "text": "thấp", "tone": "good" } } }],
      "recommend": { "key": "a", "why": "Một hai câu lý do." } }
    ```

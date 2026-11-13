@@ -84,8 +84,9 @@
     S.pick = S.pick === key ? '' : key;   // bấm lại bản đang chọn là bỏ chọn
     S.at = new Date().toISOString();
     render(); store.save({ ...S });
-    const b = document.querySelector(`.pick[data-key="${CSS.escape(key)}"]:not([hidden])`);
-    if (b && b.offsetParent) b.focus();
+    // the table and the cards both hold a button per option; focus the one on screen
+    const b = [...document.querySelectorAll(`.pick[data-key="${CSS.escape(key)}"]`)].find((x) => x.offsetParent);
+    if (b) b.focus();
   }
 
   function zoom(o) {
