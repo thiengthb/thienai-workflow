@@ -34,7 +34,8 @@
   const narrow = () => window.matchMedia('(max-width: 860px)').matches;
   // Until the saved state is merged in, nothing is written. Each change made meanwhile is recorded (which field, and for
   // ratings/prefer/pairs which screen, deletions included) so the merge keeps exactly what the viewer did.
-  let loaded = false, snap = null;
+  let loaded = false, snap = null, markReady;
+  const ready = new Promise((r) => { markReady = r; });   // send and copy wait for this, so a result never comes from unrestored state
   const MAPS = ['ratings', 'prefer', 'pairs'], FIELDS = ['general', 'split', 'fade', 'zoom', 'mode', 'cur'];
   const edited = { fields: new Set(), ratings: new Set(), prefer: new Set(), pairs: new Set() };
   const note = () => {
@@ -428,8 +429,10 @@
       if (armed) Kit.toast(ca ? 'Bấm vào chỗ muốn comment trên ảnh. Kéo để khoanh một vùng.' : 'Bấm vào chỗ muốn ghi chú trên ảnh.');
     };
     $('general').addEventListener('input', () => { S.general = $('general').value; save(); });
-    $('copy').onclick = () => { save(true); Kit.copy(results()); };
+    $('copy').onclick = async () => { if (!loaded) Kit.toast('Đang tải bản đã lưu…'); await ready; save(true); Kit.copy(results()); };
     $('send').onclick = async () => {
+      if (!loaded) Kit.toast('Đang tải bản đã lưu…');
+      await ready;
       const stored = await save(true);
       const full = results(), long = full.length > 3800;
       if (long && !stored) { if (await Kit.copy(full)) Kit.toast('Kết quả dài mà chưa lưu được vào trang, nên chưa gửi. Đã chép bản đầy đủ: dán vào chat cho Claude.', 8000); return; }
@@ -479,7 +482,7 @@
       for (const k of FIELDS) if (!edited.fields.has(k) && ok[k](saved[k])) S[k] = saved[k];
       $('general').value = S.general || '';
     }
-    loaded = true;
+    loaded = true; markReady();
     if (early) save();
     const h = location.hash.slice(1), hi = items.findIndex((x) => x.id === h);
     if (hi >= 0) S.cur = hi;

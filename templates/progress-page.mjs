@@ -250,7 +250,7 @@ export function overviewBody(repos, details) {
   const lead = `<p class="lead">${total ? `<b>${total} việc</b> đang chờ bạn ở ${waiting.length} repo` : 'Không có việc nào đang chờ bạn'} · ${running} kế hoạch đang chạy.</p>`;
   const task = (r, t) => {
     const key = taskKey(r.repo, t);
-    return `<li class="task" data-key="${key}"><label class="tick"><input type="checkbox" id="${key}" disabled aria-label="Đánh dấu đã làm"><span class="box" aria-hidden="true"></span></label><p>${inline(t, r.base)}</p></li>`;
+    return `<li class="task" data-key="${key}"><label class="tick"><input type="checkbox" id="${key}" disabled aria-labelledby="${key}-t"><span class="box" aria-hidden="true"></span></label><p id="${key}-t">${inline(t, r.base)}</p></li>`;
   };
   const group = (r) => `<div class="grp"><div class="grp-head"><b>${esc(r.name)}</b><span>${r.tasks.length} việc${r.upd ? ` · từ ${esc(shortDate(r.upd))}` : ''}</span></div><ul class="tasks">${r.tasks.map((t) => task(r, t)).join('')}</ul></div>`;
   const plan = (p) => `<div class="pl"><div class="pl-top"><span>${p.link ? `<a href="${esc(resolveLink(posix.basename(p.link.split(':')[1]), p.link))}">${inline(p.title, '')}</a>` : esc(p.title)}</span>${p.all ? `<span class="num">${p.all.done}/${p.all.total}</span>` : ''}</div>${p.all ? `<div class="bar" role="img" aria-label="${p.all.done} trên ${p.all.total} việc đã xong"><span style="width:${p.all.total ? Math.round((p.all.done / p.all.total) * 100) : 0}%"></span></div>` : ''}${p.at ? `<span class="muted small">${esc(p.at)}</span>` : ''}</div>`;
@@ -352,7 +352,7 @@ details.rc > summary:hover { background: var(--soft); border-radius: var(--r); }
 .rc-head b { font-weight: 600; }
 .rc-chips { display: flex; gap: 6px; margin-left: auto; }
 .rc-where { margin: 0; font-size: 14px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-details.rc[open] .rc-where { display: block; }
+details.rc[open] .rc-where { display: none; }   /* the detail below shows the full "Đang ở đâu" */
 .rc-plans { display: grid; gap: 10px; }
 .pl { display: grid; gap: 4px; font-size: 13.5px; }
 .pl-top { display: flex; justify-content: space-between; gap: 8px; }
@@ -412,8 +412,8 @@ th { color: var(--muted); font-weight: 600; }
 .tile span { color: var(--muted); font-size: 14px; }
 .tile.missing { border-style: dashed; }
 .small, .muted.small { font-size: 12.5px; }
-/* Folded repo detail: same sizes as the cards; the card already shows "Đang ở đâu" and the plan bars. */
-.rc-detail .now-box, .rc-detail .plan > .progress { display: none; }
+/* Folded repo detail: same sizes as the cards; the card already shows the plan bars. */
+.rc-detail .plan > .progress { display: none; }
 .rc-detail p, .rc-detail li, .rc-detail td, .rc-detail th { font-size: 13.5px; }
 .rc-detail .meta { font-size: 12.5px; }
 .rc-detail h4 { font-size: 14.5px; }
