@@ -48,20 +48,22 @@
   function store(key, path) {
     const lk = 'kit:' + key;
     let timer = null, pending = null, running = null;
-    // The db copy could not be read at load: until a later read shows it is not newer than what this page
-    // started from (`base`), never write over it. A newer copy blocks db writes for this page view.
+    // The db copy could not be read at load: until a later read shows it is not newer than what this draft
+    // started from (`base`), never write over it. A newer copy blocks db writes. `base` is kept on the device
+    // (key lk + ':base') so a reload does not forget that the local draft was never merged with db.
+    const gk = lk + ':base';
     let unread = false, base = 0, blocked = false;
     const wait = (p, ms) => Promise.race([p, new Promise((_, j) => setTimeout(() => j(new Error('timeout')), ms))]);
+    const keepBase = (v) => { try { if (v === null) localStorage.removeItem(gk); else localStorage.setItem(gk, String(v)); } catch (e) { /* in memory only */ } };
+    const readBase = () => { try { const v = localStorage.getItem(gk); return v === null ? null : +v || 0; } catch (e) { return null; } };
+    const conflict = () => { blocked = true; toast('Trang có bản lưu mới hơn từ lần mở khác. Thay đổi ở đây tạm chỉ lưu trên máy này, chưa ghi đè bản trên trang.', 9000); };
+    /** A db copy `r` is safe to write over when it is missing or not newer than `base`. */
+    const settle = (r) => { if (!r || (r.ts || 0) <= base) { unread = false; keepBase(null); return true; } conflict(); return false; };
     async function mayWrite(db) {
       if (blocked) return false;
       if (!unread) return true;
-      try {
-        const s = await wait(db.doc(path).get(), 8000), r = s.exists ? s.data() : null;
-        if (!r || (r.ts || 0) <= base) { unread = false; return true; }
-        blocked = true;
-        toast('Trang có bản lưu mới hơn từ lần mở khác. Tải lại trang để xem; thay đổi ở đây tạm chỉ lưu trên máy này.', 9000);
-      } catch (e) { /* still unreadable: try again on the next save */ }
-      return false;
+      try { const s = await wait(db.doc(path).get(), 8000); return settle(s.exists ? s.data() : null); }
+      catch (e) { return false; /* still unreadable: try again on the next save */ }
     }
     const readLocal = () => { try { return JSON.parse(localStorage.getItem(lk) || 'null'); } catch (e) { return null; } };
     /** Writes the newest object; writes queued while one runs collapse into one. Resolves true once db holds it. */
@@ -81,11 +83,16 @@
       /** The newer of the local draft and the db copy (by `ts`). */
       async load() {
         const local = readLocal();
+        const kept = local ? readBase() : null;   // set by an earlier view whose db read failed
         let remote = null;
         const db = await cap('db');
         if (db && path) {
-          try { const s = await wait(db.doc(path).get(), 8000); remote = s.exists ? s.data() : null; }
-          catch (e) { remote = null; unread = true; base = (local && local.ts) || 0; }
+          try {
+            const s = await wait(db.doc(path).get(), 8000); remote = s.exists ? s.data() : null;
+            if (kept !== null) { unread = true; base = kept; if (!settle(remote)) return local; }
+          } catch (e) {
+            remote = null; unread = true; base = kept !== null ? kept : (local && local.ts) || 0; keepBase(base);
+          }
         }
         if (local && remote) return (local.ts || 0) >= (remote.ts || 0) ? local : remote;
         return local || remote;
