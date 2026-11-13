@@ -25,7 +25,6 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 ## Vừa xong
 - Mẫu chọn phương án `artifacts/decide/`: một ảnh lớn mỗi lần trên khung rộng, thẻ trên điện thoại (PR #47)
 - Bộ khung artifact: lõi chung `artifacts/kit/`, mẫu so sánh `artifacts/compare/`, trang tổng quan chia tab (PR #46)
-- BA 2: học với Codex, rồi Claude làm lại trang theo góp ý về giao diện và luồng (PR #39)
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), buổi đầu dựng từ mẫu `artifacts/lesson/`.
