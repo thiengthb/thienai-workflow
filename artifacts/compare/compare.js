@@ -11,7 +11,8 @@
   const ZOOMS = [0, 1, 2];
 
   const S = { ratings: {}, prefer: {}, general: '', pins: [], cur: 0, mode: null, zoom: 0, pairs: {}, split: 50, fade: 50 };
-  const store = Kit.store('compare:' + R.id, 'reviews/' + String(R.id).replace(/[^a-z0-9-]/gi, '-'));
+  const DB_PATH = 'reviews/' + String(R.id).replace(/[^a-z0-9-]/gi, '-');   // also the path named to Claude for a long result
+  const store = Kit.store('compare:' + R.id, DB_PATH);
 
   let ca = null;            // customAnchors handle when claude.ai comments work here
   let threads = [];         // threads the shell lists for this page
@@ -31,8 +32,18 @@
     return [sideOf(i, l), sideOf(i, r)];
   }
   const narrow = () => window.matchMedia('(max-width: 860px)').matches;
-  let loaded = false;   // saves wait until the saved state has been merged in, so an early click never overwrites it
-  const save = (now) => loaded ? store.save(JSON.parse(JSON.stringify(S)), now) : Promise.resolve(false);
+  // Until the saved state is merged in, nothing is written. Each change made meanwhile is recorded (which field, and for
+  // ratings/prefer/pairs which screen, deletions included) so the merge keeps exactly what the viewer did.
+  let loaded = false, snap = null;
+  const MAPS = ['ratings', 'prefer', 'pairs'], FIELDS = ['general', 'split', 'fade', 'zoom', 'mode', 'cur'];
+  const edited = { fields: new Set(), ratings: new Set(), prefer: new Set(), pairs: new Set() };
+  const note = () => {
+    if (!snap) return;
+    for (const k of FIELDS) if (JSON.stringify(S[k]) !== JSON.stringify(snap[k])) edited.fields.add(k);
+    for (const k of MAPS) for (const id of new Set([...Object.keys(S[k]), ...Object.keys(snap[k])])) if (JSON.stringify(S[k][id]) !== JSON.stringify(snap[k][id])) edited[k].add(id);
+    snap = JSON.parse(JSON.stringify(S));
+  };
+  const save = (now) => { if (!loaded) { note(); return Promise.resolve(false); } return store.save(JSON.parse(JSON.stringify(S)), now); };
 
   // ---------- list, header, tools ----------
   function renderList() {
@@ -398,8 +409,7 @@
     renderList(); renderTools(); renderStage(); save();
     if (!quiet) { const b = document.querySelector(`.item[data-i="${S.cur}"]`); if (b) b.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
   }
-  const cleared = { ratings: new Set(), prefer: new Set() };   // choices the viewer took back before the saved state arrived
-  const unset = (k, id) => { delete S[k][id]; if (!loaded) cleared[k].add(id); };
+  const unset = (k, id) => { delete S[k][id]; };
   function rate(v) { const id = it().id; if (S.ratings[id] === v) unset('ratings', id); else S.ratings[id] = v; renderList(); renderTools(); save(); }
 
   function bind() {
@@ -422,12 +432,12 @@
     $('send').onclick = async () => {
       const stored = await save(true);
       const full = results(), long = full.length > 3800;
-      if (long && !stored) { await Kit.copy(full); Kit.toast('Kết quả dài mà chưa lưu được vào trang, nên chưa gửi. Đã chép bản đầy đủ: dán vào chat cho Claude.', 8000); return; }
-      const text = long ? full.slice(0, 3600) + '\n\n(Kết quả dài, bản đầy đủ nằm trong db của trang: reviews/' + R.id + ')' : full;
+      if (long && !stored) { if (await Kit.copy(full)) Kit.toast('Kết quả dài mà chưa lưu được vào trang, nên chưa gửi. Đã chép bản đầy đủ: dán vào chat cho Claude.', 8000); return; }
+      const text = long ? full.slice(0, 3600) + '\n\n(Kết quả dài, bản đầy đủ nằm trong db của trang: ' + DB_PATH + ')' : full;
       const ok = await Kit.sendToClaude(text, $('top'));
-      if (ok && long) { await Kit.copy(full); Kit.toast('Đã gửi bản rút gọn cho Claude; bản đầy đủ đã lưu và đã chép.', 6000); }
+      if (ok && long) { const copied = await Kit.copy(full); Kit.toast(copied ? 'Đã gửi bản rút gọn cho Claude; bản đầy đủ đã lưu và đã chép.' : 'Đã gửi bản rút gọn cho Claude; bản đầy đủ đã lưu trong trang.', 6000); }
       else if (ok) Kit.toast('Đã gửi cho Claude. Claude trả lời trong comment.', 5000);
-      else { await Kit.copy(results()); Kit.toast('Chưa gửi thẳng được. Kết quả đã lưu và đã chép: nhắn "xong" hoặc dán vào chat.', 7000); }
+      else if (await Kit.copy(full)) Kit.toast('Chưa gửi thẳng được. Kết quả đã chép: dán vào chat cho Claude.', 7000);
     };
     const st = $('stage');
     st.addEventListener('pointerdown', onDown); window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp);
@@ -452,27 +462,25 @@
     if (!items.length) { $('stage').append(Object.assign(document.createElement('p'), { className: 'empty muted', textContent: 'Vòng này chưa có cặp ảnh nào.' })); return; }
     S.mode = narrow() && Math.max(...items[0].sides.map((s) => s.w)) > 700 ? 'blink' : 'side';
     bind(); renderList(); renderTools(); renderStage();
-    const before = JSON.stringify(S);
-    const first = JSON.parse(before);   // state before loading, to tell which fields the viewer changed meanwhile
+    snap = JSON.parse(JSON.stringify(S));
     const saved = await store.load();
+    note();   // catches a change whose save() has not run yet (the note box saves on every keystroke, so this is rare)
+    const early = edited.fields.size + MAPS.reduce((a, k) => a + edited[k].size, 0) + S.pins.length > 0;
     if (saved) {
-      const mine = (k) => JSON.stringify(S[k]) !== JSON.stringify(first[k]);
-      // Maps: saved entries, with the viewer's early edits on top. Pins: saved ones plus any new ones.
-      for (const k of ['ratings', 'prefer', 'pairs']) {
-        if (!saved[k]) continue;
-        const taken = [...(cleared[k] || [])].filter((id) => !(id in S[k]));   // still taken back, so the saved choice must not return
-        S[k] = Object.assign({}, saved[k], S[k]);
-        taken.forEach((id) => delete S[k][id]);
+      // Maps: the saved entries, then every screen the viewer touched takes the viewer's value (or stays removed).
+      for (const k of MAPS) {
+        const mine = S[k];
+        S[k] = Object.assign({}, saved[k] || {});
+        for (const id of edited[k]) { if (id in mine) S[k][id] = mine[id]; else delete S[k][id]; }
       }
       if (Array.isArray(saved.pins)) S.pins = saved.pins.concat(S.pins);
-      for (const k of ['general', 'split', 'fade', 'zoom']) if (saved[k] != null && !mine(k)) S[k] = saved[k];
-      if (MODES.includes(saved.mode) && !mine('mode')) S.mode = saved.mode;
-      if (!ZOOMS.includes(S.zoom)) S.zoom = 0;
-      if (saved.cur >= 0 && saved.cur < items.length && !mine('cur')) S.cur = saved.cur;
+      const ok = { general: (v) => typeof v === 'string', split: (v) => typeof v === 'number', fade: (v) => typeof v === 'number',
+        zoom: (v) => ZOOMS.includes(v), mode: (v) => MODES.includes(v), cur: (v) => v >= 0 && v < items.length };
+      for (const k of FIELDS) if (!edited.fields.has(k) && ok[k](saved[k])) S[k] = saved[k];
       $('general').value = S.general || '';
     }
     loaded = true;
-    if (JSON.stringify(S) !== before) save();
+    if (early) save();
     const h = location.hash.slice(1), hi = items.findIndex((x) => x.id === h);
     if (hi >= 0) S.cur = hi;
     renderList(); renderTools(); renderStage();

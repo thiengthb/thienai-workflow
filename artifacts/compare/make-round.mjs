@@ -34,16 +34,19 @@ const safe = (s) => String(s).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace
 export function build(spec, specDir, out) {
   mkdirSync(join(out, 'shots'), { recursive: true });
   const files = {};
+  const seen = new Set();
+  const once = (what, key) => { if (seen.has(key)) throw new Error(`${what} trùng sau khi chuẩn hóa tên: ${key}`); seen.add(key); };
   const round = {
     id: spec.id, title: spec.title, intro: spec.intro || '', scenarios: spec.scenarios || [],
-    items: spec.items.map((it) => ({
+    items: spec.items.map((it) => (once('Màn', 'item:' + safe(it.id)), {
       id: safe(it.id), label: it.label, group: it.group || '', note: it.note || '',
       sides: it.sides.map((s) => {
         const src = resolve(specDir, s.file);
         const buf = readFileSync(src);
         const { w, h } = imageSize(buf);
         const k = s.scale || 1;
-        const name = `shots/${safe(it.id)}__${safe(s.key)}${extname(src).toLowerCase()}`; // "__" cannot appear in a safe id, so names never collide
+        once(`Bản của màn ${it.id}`, `side:${safe(it.id)}:${safe(s.key)}`);
+        const name = `shots/${safe(it.id)}__${safe(s.key)}${extname(src).toLowerCase()}`; // "__" cannot appear in a safe id, and ids are unique above
         copyFileSync(src, join(out, name));
         files[name] = join(out, name);
         return { key: safe(s.key), name: s.name, src: name, w: Math.round(w / k), h: Math.round(h / k) };

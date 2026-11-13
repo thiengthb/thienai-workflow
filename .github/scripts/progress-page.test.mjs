@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { parsePlan, blocks, inline, repoId } from '../../templates/progress-page.mjs';
+import { parsePlan, blocks, inline, repoId, waitingLines } from '../../templates/progress-page.mjs';
 
 const plan = parsePlan([
   '# Kế hoạch thử', '', 'Trạng thái: đang chạy · Duyệt: 2026-01-01 · Cập nhật: 2026-01-02', '',
@@ -32,5 +32,9 @@ assert.match(repoPage, /Kế hoạch đang chạy/);
 const road = run('--title', 'L', '--roadmap', 'learning/roadmap.md=thiengthb/thienai-workflow:learning/roadmap.md');
 assert.match(road, /đang ở đây/, 'roadmap marks the current stage');
 assert.ok(readFileSync('learning/roadmap.md', 'utf8').includes('## Lộ trình đã đổi'), 'roadmap keeps its change log');
+
+// "Đang chờ thien": a bullet that is only a <placeholder> is skipped; links in angle brackets are real items.
+assert.deepEqual(waitingLines(['- <tối đa 3 việc>', '- <https://example.com>', '- Kiểm tra <https://example.com>.', '1. <x>']),
+  ['- <https://example.com>', '- Kiểm tra <https://example.com>.']);
 
 console.log('ok progress-page');

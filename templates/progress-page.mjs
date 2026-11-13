@@ -152,10 +152,11 @@ function planCard(p) {
 
 /** Top-level bullet lines (with their indented continuations) of the "Đang chờ thien" section; placeholders skipped. */
 export function waitingLines(lines) {
+  // A bullet that is only a <placeholder> is skipped; a bullet that is only a <https://...> link is a real item.
   const out = [];
   let keep = false;
   for (const l of lines) {
-    if (/^\s*([-*]|\d+\.)\s+\S/.test(l) && !/^\s/.test(l)) { keep = !/^([-*]|\d+\.)\s+<[^<>]*>\s*$/.test(l); if (keep) out.push(l); }
+    if (/^\s*([-*]|\d+\.)\s+\S/.test(l) && !/^\s/.test(l)) { keep = !/^([-*]|\d+\.)\s+<(?![a-z][a-z0-9+.-]*:)[^<>]*>\s*$/i.test(l); if (keep) out.push(l); }
     else if (keep && /^\s+\S/.test(l)) out.push(l);
     else if (!l.trim()) keep = false;
   }

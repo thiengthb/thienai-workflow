@@ -31,3 +31,9 @@ assert.ok(!/<doctype|<html/i.test(html.slice(0, 200)), 'artifact page has no ske
 assert.ok(!html.includes('Thử </script>'), 'title and data are escaped');
 assert.ok(existsSync(join(out, 'preview.html')));
 console.log('make-round: ok');
+
+// Two ids that become the same after normalising must not overwrite each other's image.
+assert.throws(() => build({ id: 'r2', title: 't', items: [
+  { id: 'Home 1440', label: 'a', sides: [{ key: 'old', name: 'Cũ', file: 'a.png' }] },
+  { id: 'home-1440', label: 'b', sides: [{ key: 'old', name: 'Cũ', file: 'b.png' }] }] }, dir, join(dir, 'out2')), /trùng/);
+console.log('make-round: duplicate ids rejected');
