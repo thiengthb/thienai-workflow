@@ -1,0 +1,75 @@
+/* Sa bàn và bố cục bài chiến tranh, trên lõi chung (kit.css) và khung buổi học (lesson.css).
+   Khung rộng (từ 900px): sa bàn bên trái đứng yên, các bước bên phải. Điện thoại: sa bàn trên, bước dưới.
+   Bước không ghi data-board thì ẩn sa bàn, trang về một cột hẹp như bài thường. Một bo góc 8px. */
+#board { display: none; }
+html[data-board="on"] #board { display: flex; }
+.st { flex-direction: column; background: var(--card); border: 2px solid var(--line); border-radius: var(--r); overflow: hidden; margin: 4px 0 12px; }
+.st-stage { position: relative; flex: 1; min-height: 0; background: var(--soft); overflow: hidden; }
+.st-canvas, .st-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+.st-canvas:active canvas { cursor: grabbing; }
+.st-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.st-lbl { position: absolute; left: 0; top: 0; font: 600 12px/1 var(--font); padding: 4px 6px; border-radius: 6px; background: var(--card); color: var(--ink);
+  border: 2px solid currentColor; white-space: nowrap; will-change: transform; }
+.st-lbl.fr { color: #2f5f96; } .st-lbl.vn { color: #b23a2a; }
+.st-lbl.hit { background: #e0533d; border-color: #e0533d; color: #fff; }
+.st-lbl.lost { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+.st-lbl.dim { opacity: .5; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .st-lbl.fr { color: #8db4e6; } :root:not([data-theme="light"]) .st-lbl.vn { color: #f08a78; } }
+:root[data-theme="dark"] .st-lbl.fr { color: #8db4e6; } :root[data-theme="dark"] .st-lbl.vn { color: #f08a78; }
+.st-legend { position: absolute; left: 8px; top: 8px; display: flex; flex-wrap: wrap; gap: 4px; max-width: 60%; pointer-events: none; }
+.st-legend .chip, .st-note { background: color-mix(in srgb, var(--card) 90%, transparent); color: var(--ink); font-weight: 500; }
+.st-ico { display: inline-block; width: 9px; height: 9px; margin-right: 5px; vertical-align: -1px; }
+.st-ico.tri { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.st-ico.ln { height: 3px; width: 14px; vertical-align: 2px; border-radius: 2px; }
+.st-views { position: absolute; right: 8px; top: 8px; background: color-mix(in srgb, var(--soft) 92%, transparent); }
+.st-note { position: absolute; left: 8px; bottom: 8px; pointer-events: none; }
+.st-tl { padding: 8px 12px 12px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+.st-row { display: flex; align-items: center; gap: 10px; }
+.st-play { width: 36px; padding: 0; flex: none; }
+.st-keys { --fill: 0; flex: 1; display: flex; justify-content: space-between; position: relative; min-width: 0; }
+.st-keys::before, .st-keys::after { content: ""; position: absolute; left: 14px; right: 14px; top: 12px; height: 4px; border-radius: 99px; background: var(--soft); }
+.st-keys::after { right: auto; width: calc((100% - 28px) * var(--fill)); background: var(--accent); }
+.st-key { position: relative; z-index: 1; background: none; border: 0; padding: 4px 0 2px; min-width: 28px; min-height: 36px; display: grid; justify-items: center; gap: 3px;
+  font: 500 11px/1.1 var(--font); color: var(--muted); cursor: pointer; white-space: nowrap; }
+.st-key i { width: 12px; height: 12px; border-radius: 99px; background: var(--card); border: 2px solid var(--line); margin-top: 2px; }
+.st-key.done i { background: var(--accent); border-color: var(--accent); }
+.st-key.now { color: var(--ink); font-weight: 700; }
+.st-key.now i { width: 16px; height: 16px; margin-top: 0; border: 3px solid var(--accent); }
+.st-key[disabled] { opacity: .35; cursor: default; }
+.st-cap { display: flex; gap: 8px; align-items: baseline; font-size: 14px; line-height: 1.45; }
+.st-cap .chip { flex: none; }
+.chip.sim { background: #f6ecd6; color: #8a5a12; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .chip.sim { background: #3a2f1a; color: #e9c27a; } }
+:root[data-theme="dark"] .chip.sim { background: #3a2f1a; color: #e9c27a; }
+/* Trước khi chọn: chưa cho kéo thời gian. */
+.st.locked .st-row { display: none; }
+
+/* Bố cục: điện thoại và cột hẹp, sa bàn ở trên các bước. */
+#board { height: 50vh; min-height: 300px; max-height: 520px; }
+@media (max-width: 899px) { #board { height: 62vh; scroll-margin-top: 52px; } .st-cap { font-size: 13px; } .st-legend { display: none; } }
+@media (pointer: coarse), (max-width: 899px) { .st-views button { min-height: 36px; } }
+/* Link trong chữ (nguồn): đủ cao để bấm trên điện thoại. */
+.step a { display: inline-block; min-height: 24px; line-height: 24px; }
+/* Khung rộng: hai cột, sa bàn đứng yên bên trái, cao vừa khung xem. */
+@media (min-width: 900px) {
+  html[data-board="on"] .wrap { max-width: 1240px; display: grid; grid-template-columns: minmax(0, 1fr) 400px; column-gap: 16px; align-items: start; }
+  html[data-board="on"] .top { grid-column: 1 / -1; }
+  html[data-board="on"] #board { grid-column: 1; grid-row: 2 / span 40; position: sticky; top: 52px; height: calc(100vh - 68px); max-height: none; margin: 0; }
+  html[data-board="on"] .step { grid-column: 2; }
+}
+
+/* Chọn nước đi: không có đúng sai, chỉ "Bạn chọn" và "Chuyện thật". */
+.choose { display: grid; gap: 8px; }
+.choose .row { display: flex; gap: 6px; align-items: stretch; }
+.choose .row .opt { flex: 1; }
+.choose [data-plan] { flex: none; min-height: 44px; font-size: 13px; }
+.opt.picked { border-color: var(--ink); background: var(--soft); }
+.opt.picked::after { content: "Bạn chọn"; }
+.opt.real { border-color: var(--good); background: var(--good-soft); }
+.opt.real::after { content: "Chuyện thật"; color: var(--good); }
+.opt.picked.real::after { content: "Bạn chọn · chuyện thật"; }
+.fb.note { background: var(--accent-soft); }
+.know { margin: 0; padding-left: 18px; font-size: 14.5px; display: grid; gap: 4px; }
+.tracks { display: flex; gap: 6px; flex-wrap: wrap; }
+.tracks .btn { flex: 1; min-height: 40px; }
+.st-key[hidden] { display: none; }

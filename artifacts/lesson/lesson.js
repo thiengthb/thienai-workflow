@@ -83,6 +83,8 @@
     const L = [`# Xong buổi: ${C.subject ? C.subject + ' · ' : ''}${C.title || ID}`, ''];
     if (n(R.review).length) L.push(`Ôn: đúng ${right(R.review)}/${n(R.review).length}`);
     if (n(R.quiz).length) L.push(`Câu hỏi nhanh: đúng ${right(R.quiz)}/${n(R.quiz).length}`);
+    // Phần thêm của từng loại bài (ví dụ sa bàn chiến tranh) thêm dòng vào tóm tắt qua Lesson.extras.
+    extras.forEach((f) => { try { const x = f(R); if (x) L.push('', x); } catch (e) {} });
     if ((R.teach || '').trim()) L.push('', 'Tự nói lại: ' + R.teach.trim());
     const fb = Object.entries(R.feedback).filter(([k]) => k !== 'note').map(([k, v]) => (fLabel[k] || k) + ': ' + v).join('; ');
     if (fb) L.push('', 'Góp ý: ' + fb);
@@ -92,6 +94,7 @@
     return L.join('\n');
   }
 
+  const extras = [];
   const fin = $('#finish'), copyBtn = $('#copy'), msg = $('#done-msg');
   if (fin) fin.addEventListener('click', async () => {
     fin.disabled = true; R.end = new Date().toISOString();
@@ -108,7 +111,7 @@
     if (copyBtn && !(saved && sent)) { copyBtn.classList.remove('hide'); copyBtn.onclick = () => (window.Kit ? Kit.copy(text) : navigator.clipboard.writeText(text)); }
   });
 
-  window.Lesson = { go, done: mark, R, summary };
+  window.Lesson = { go, done: mark, R, summary, extras };
   const start = steps.find((s) => s.classList.contains('on')) || steps[0];
   if (start) go(start.dataset.s);
   gate();

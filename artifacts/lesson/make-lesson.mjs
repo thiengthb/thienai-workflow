@@ -24,6 +24,13 @@ const PARTS = {
   'lesson-js': ['script', 'lesson.js'],
   'lesson-kit': ['script', '../../learning/teaching/kit/kit.js'],   // tự lưu chỗ đang học, chế độ học lại
 };
+// Phần thêm, chỉ gắn khi trang có thẻ đó: sa bàn cho bài chiến tranh (artifacts/war/README.md).
+const OPTIONAL = {
+  'war-css': ['style', '../war/war.css'],
+  'war-js': ['script', '../war/sandtable.js', '../war/war-lesson.js'],
+};
+// Mẫu riêng theo môn khi chép trang mới: bài chiến tranh có sẵn sa bàn.
+const TEMPLATES = { war: '../war/template.html' };
 
 export function guessId(file) {
   const m = file.replace(/\\/g, '/').match(/learning\/([^/]+)\/pages\/lesson-(\d+)/);
@@ -31,14 +38,24 @@ export function guessId(file) {
 }
 
 /** Returns the page with every kit part filled in and the lesson-id meta set. */
-export function fill(html, id) {
-  for (const [part, [tag, src]] of Object.entries(PARTS)) {
+export function fill(html, id, file = '') {
+  const all = [...Object.entries(PARTS), ...Object.entries(OPTIONAL).filter(([part, [tag]]) => new RegExp(`<${tag} id="${part}">`).test(html))];
+  for (const [part, [tag, ...srcs]] of all) {
     const re = new RegExp(`<${tag} id="${part}">[\\s\\S]*?</${tag}>`);
     if (!re.test(html)) throw new Error(`Thiếu <${tag} id="${part}"> trong trang`);
-    const body = read(src);
+    const src = srcs.join(', '), body = srcs.map(read).join('\n');
     if (body.includes(`</${tag}`)) throw new Error(`${src} chứa </${tag}>`);
     html = html.replace(re, () => `<${tag} id="${part}">\n${body}</${tag}>`);
   }
+  // Dữ liệu trận: <script type="application/json" id="battle" data-src="../battles/<trận>.json">, đường dẫn tính từ trang.
+  html = html.replace(/<script type="application\/json" id="battle" data-src="([^"]+)">[\s\S]*?<\/script>/, (m, src) => {
+    const p = resolve(dirname(resolve(file || '.')), src);
+    if (!existsSync(p)) throw new Error(`Không thấy file trận ${src} (tính từ trang)`);
+    const b = JSON.parse(readFileSync(p, 'utf8'));
+    if (!b.terrain) throw new Error(`File trận ${src} chưa có địa hình: chạy node artifacts/war/fetch-terrain.mjs ${p}`);
+    delete b.raw; (b.units || []).forEach((u) => delete u.raw); (b.features || []).forEach((f) => delete f.raw);
+    return `<script type="application/json" id="battle" data-src="${src}">${JSON.stringify(b).replace(/</g, '\\u003c')}</script>`;
+  });
   const conf = html.match(/<script type="application\/json" id="lesson">([\s\S]*?)<\/script>/);
   let jsonId = '';
   if (conf) { try { jsonId = JSON.parse(conf[1]).id || ''; } catch (e) { throw new Error('<script id="lesson"> không phải JSON hợp lệ'); } }
@@ -64,7 +81,8 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   // Lần đầu: trang chưa có thì chép mẫu ra, để AI điền nội dung rồi chạy lại đúng lệnh này.
   if (!existsSync(file)) {
     mkdirSync(dirname(resolve(file)), { recursive: true });
-    copyFileSync(join(here, 'template.html'), file);
+    const subj = (file.replace(/\\/g, '/').match(/learning\/([^/]+)\/pages\//) || [])[1];
+    copyFileSync(join(here, TEMPLATES[subj] || 'template.html'), file);
     console.log(`Đã chép mẫu ra ${file}. Thay mọi chỗ __…__ và nội dung mẫu, rồi chạy lại đúng lệnh này.`);
     process.exit(0);
   }
@@ -72,7 +90,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const conf = (() => { const m = html.match(/<script type="application\/json" id="lesson">([\s\S]*?)<\/script>/); try { return m ? JSON.parse(m[1]) : {}; } catch (e) { return {}; } })();
   let lid = id || conf.id;
   if (!lid || /^__/.test(lid)) lid = guessId(file);
-  writeFileSync(file, fill(html, lid));
+  writeFileSync(file, fill(html, lid, file));
   console.log(`Đã gắn bộ khung vào ${file} (id ${lid}).`);
   const out = resolve(outArg || join(tmpdir(), `lesson-${lid}`));
   if (!noCheck) {
