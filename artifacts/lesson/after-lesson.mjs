@@ -111,7 +111,8 @@ export function draft({ R, html = '', subject, lessonFile = '', cards = '', toda
   ].filter(Boolean);
   const logRow = `| ${lid.n} | ${date} | <ý chính> (${lessonFile ? `[bài](${lessonFile})` : 'bài'}) | ${[mins != null ? `${mins} phút` : '', fbText, list(R.quiz).length ? `đúng ${right(R.quiz)}/${list(R.quiz).length}` : ''].filter(Boolean).join(', ')}. <tự nói lại có gì, thiếu gì; chỗ vướng; góp ý> |`;
   const usage = {
-    'Ngày': date, 'Trang': R.lesson, 'Phút': mins ?? '-', 'Hỏi Claude': asks.length, 'Claude giải thích câu sai': whys.length,
+    // Giờ bắt đầu (giờ Việt Nam) nằm trong cột Trang: học lại cùng bài trong một ngày là một dòng riêng, không ghi đè.
+    'Ngày': date, 'Trang': R.start ? `${R.lesson} lúc ${new Date(R.start).toLocaleTimeString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit' })}` : R.lesson, 'Phút': mins ?? '-', 'Hỏi Claude': asks.length, 'Claude giải thích câu sai': whys.length,
     'Claude nhận xét, chấm': teachAi.length, 'Nói thay gõ': R.spoke || 0, 'Ghi chú': R.sawMineBeforeWriting ? 'xem bản mẫu trước khi viết' : '-',
   };
   return { date, n: lid.n, facts, stuck, cardRows, logRow, usage, statusRow: `| ${subject?.name || '?'} ${lid.n} (<tên buổi>) | ${date} | ${subject?.name || '?'} | **<buổi kế tiếp theo vòng xoay>** |` };

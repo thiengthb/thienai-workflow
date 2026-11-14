@@ -12,7 +12,8 @@ export const COLUMNS = ['Ngày', 'Trang', 'Phút', 'Hỏi Claude', 'Claude giả
 const FEATURES = COLUMNS.slice(3, 7);
 const cell = (v) => String(v ?? '-').replace(/\|/g, '/').replace(/\s+/g, ' ').trim() || '-';
 
-/** Thêm (hoặc thay, nếu đã có cùng ngày và cùng trang) một dòng vào bảng của learning/usage.md. */
+/** Thêm (hoặc thay, nếu đã có cùng ngày và cùng trang) một dòng vào bảng của learning/usage.md.
+    Cột Trang của buổi học có giờ bắt đầu ("frontend-06 lúc 19:05"), nên chỉ đúng phiên đó mới bị thay. */
 export function addUsage(text, row) {
   const line = '| ' + COLUMNS.map((c) => cell(row[c])).join(' | ') + ' |';
   const lines = text.replace(/\n+$/, '').split('\n');
