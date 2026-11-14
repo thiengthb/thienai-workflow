@@ -47,7 +47,7 @@ Mình hay hết usage giữa tuần, phiên sau quay lại thì quên việc đa
 - Slide thuyết trình: theo `slides/RULES.md` và skill `make-slides` của repo thienai-workflow.
 
 ## Gu UI
-- Mọi thứ về giao diện nằm ở repo `thiengthb/thienui`: gu chi tiết (`docs/taste.md`), token, luật, component, block và skill. Mỗi project có giao diện dùng thienui trước khi tự làm component; thứ dùng lại được thì gom về thienui (`docs/harvest.md`).
+- Mọi thứ về giao diện nằm ở repo `thiengthb/thienui` (riêng tư, không đưa nội dung ra chỗ công khai; cách chuyển ở `docs/plans/2026-11-14-thienui-private.md`): gu chi tiết (`docs/taste.md`), token, luật, component, block và skill. Mỗi project có giao diện dùng thienui trước khi tự làm component; thứ dùng lại được thì gom về thienui (`docs/harvest.md`).
 - Khi làm màn hình: AI đưa 2 đến 3 bố cục trong gu của mình, mình chọn trước, rồi AI giải thích vì sao bố cục đó hợp (người dùng nào, xu hướng nào). Mục đích là để mình học.
 - Gốc: đồng bộ trước, đẹp sau, nhưng luật chỉ giữ chi tiết đồng bộ. Trước khi nói xong một màn, AI chụp cả màn ở đúng cỡ thiết bị và tự chê bố cục (skill `new-screen` của thienui).
 

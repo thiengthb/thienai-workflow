@@ -29,7 +29,7 @@ thien dùng 3 nick Claude (tên ngắn và việc của từng nick ở [`ACCOUN
 | Đang ở nick nào | Chỉ qua chữ `nick: tntXXX` ở dòng đầu project instructions. AI không tự biết, nên mỗi nick phải ghi đúng tên của mình |
 
 ## Một lần cho mỗi nick
-1. Nối GitHub: Settings > Connectors > GitHub, cho phép các repo `thienai-workflow`, `sakubun`, `tiktok`.
+1. Nối GitHub: Settings > Connectors > GitHub, cho phép các repo `thienai-workflow`, `sakubun`, `tiktok`, `thienui`. thienui là repo riêng tư (từ 2026-11-14), nên thiếu bước này thì AI không đọc được gu giao diện. Kiểm cả ở https://github.com/settings/installations > **Claude** > **Configure**: mục **Repository access** phải có `thienui` (hoặc chọn **All repositories**).
 2. Skill: Settings bật "Code execution and file creation", rồi Customize > Skills tải lên từng file zip, tải ở [start-project.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/start-project.zip) và [make-slides.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/make-slides.zip). Link luôn là bản mới nhất, xem README bước 3.
 3. (Chỉ cho chat thường, ngoài project) Settings > Your Claude: đoạn ở README, mục "Cài cho một tài khoản Claude".
 
