@@ -222,10 +222,12 @@
     // data-noreplay: phần tự lưu không đếm các nút này. Số nút cố định theo dữ liệu trận.
     const unitList = $el('div', 'st-units'); unitList.setAttribute('aria-label', 'Các đơn vị trên sa bàn');
     b.units.forEach((u) => { const bt = $el('button', '', esc(u.name)); bt.type = 'button'; bt.dataset.noreplay = '';
-      bt.addEventListener('click', () => { if (!S || !S.show.has(u.id)) { info.hidden = false; info.innerHTML = `<b>${esc(u.name)}</b><span>Chưa có trên sa bàn ở mốc này</span>`; info.style.transform = 'translate(8px, 48px)'; delete info.dataset.u; return; }
-        if (!lastHits.some((o) => o.u === u)) { info.hidden = false; info.innerHTML = `<b>${esc(S.rename[u.id] || u.name)}</b><span>${esc(unitFacts(u, S))}</span><span>Ngoài khung nhìn: thử nút "Từ trên"</span>`; info.style.transform = 'translate(8px, 48px)'; delete info.dataset.u; return; }
+      bt.addEventListener('click', () => { if (!S || !S.show.has(u.id)) { kbInfo(`<b>${esc(u.name)}</b><span>Chưa có trên sa bàn ở mốc này</span>`); return; }
+        if (!lastHits.some((o) => o.u === u)) { kbInfo(`<b>${esc(S.rename[u.id] || u.name)}</b><span>${esc(unitFacts(u, S))}</span><span>Ngoài khung nhìn: thử nút "Từ trên"</span>`); return; }
         showInfo(u, S); });
       unitList.appendChild(bt); });
+    const listBottom = () => unitList.offsetTop + unitList.offsetHeight + 6;
+    function kbInfo(html) { info.hidden = false; info.innerHTML = html; delete info.dataset.u; info.style.transform = `translate(8px, ${listBottom()}px)`; }
     stage.appendChild(unitList);
     const zoneLbls = b.units.map(() => { const s = $el('span', 'st-lbl zone'); s.hidden = true; labels.appendChild(s); return s; }); // vùng chạm của từng ký hiệu và nhãn ở lần vẽ gần nhất
     function screenAt(x, z) {
@@ -351,7 +353,9 @@
       info.innerHTML = `<b>${esc(S.rename[u.id] || u.name)}</b><span>${esc(unitFacts(u, S))}</span>`;
       info.dataset.u = u.id; info.hidden = false;
       const W = stage.clientWidth, w = info.offsetWidth, h = info.offsetHeight, [l, t, r, btm] = hit.box;
-      const x = Math.max(4, Math.min(W - w - 4, (l + r) / 2 - w / 2)), y = t - h - 6 > 4 ? t - h - 6 : btm + 6;
+      // Hàng nút bàn phím đang hiện (có thể xuống nhiều dòng trên điện thoại): khung thông tin nằm dưới hàng nút, không bị che.
+      const top = unitList.matches(':focus-within') ? listBottom() : 4;
+      const x = Math.max(4, Math.min(W - w - 4, (l + r) / 2 - w / 2)), y = Math.max(top, t - h - 6 > top ? t - h - 6 : btm + 6);
       info.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
     }
 
