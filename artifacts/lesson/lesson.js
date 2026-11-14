@@ -34,6 +34,7 @@
       if (reviewOff() && b.hasAttribute('data-review-gate')) { b.disabled = false; return; }
       b.disabled = !b.dataset.need.split(/\s+/).filter(Boolean).every((k) => done.has(k));
     });
+    $$('.demo-open:not([data-need])').forEach((b) => { b.disabled = demoBusy; });   // demo buttons with no step gate: only the lesson-wide lock
   }
   function mark(key) { done.add(key); gate(); }
 
@@ -298,14 +299,15 @@
     if (askBox) askBox.before(box); else if (next) next.before(box); else step.append(box);
     // changed: Claude has moved the stage since the learner's own state. run: the current demo run; taking the stage back ends it,
     // so tool calls still on their way from that run stop before they touch the stage.
-    let saved = null, cur = null, changed = false, run = 0;
-    const takeBack = () => { run++; if (cur && cur.restore && changed) cur.restore(saved); saved = null; changed = false; undo.hidden = true; if (demoShown === takeBack) demoShown = null; };
+    // took: a snapshot of the learner's stage was taken (save() may return null and still change the stage, e.g. the board's demo mode).
+    let saved = null, took = false, cur = null, changed = false, run = 0;
+    const takeBack = () => { run++; if (cur && cur.restore && took) cur.restore(saved); saved = null; took = false; changed = false; undo.hidden = true; if (demoShown === takeBack) demoShown = null; };
     open.addEventListener('click', async () => {
       if (demoBusy) return;
       if (demoShown && demoShown !== takeBack) demoShown();   // một bản làm mẫu khác còn hiện: trả lại trước khi chụp cách của người học
       cur = p.match(step); if (!cur) return;
       demoBusy = true; open.disabled = true; open.dataset.running = '1'; undo.hidden = true; log.innerHTML = ''; gate();
-      if (saved == null && cur.save) saved = cur.save();
+      if (!took && cur.save) { saved = cur.save(); took = true; }
       let moves = 0; const mine = ++run;
       demoShown = takeBack;   // từ giờ, lần bấm của người học ngoài khung dừng lượt này và trả sân khấu về
       const tools = cur.tools.map((t) => ({ name: t.name, description: t.description, inputSchema: t.inputSchema,
@@ -332,7 +334,7 @@
       let a = '';
       try { a = await Kit.ask(prompt, out, { tools }); } finally {
         undo.hidden = !(changed && cur.restore);
-        if (!(changed && cur.restore) && demoShown === takeBack) demoShown = null;
+        if (!changed && mine === run) takeBack();   // Claude moved nothing: leave the demo mode, the learner's stage as it was
         demoBusy = false; delete open.dataset.running; open.disabled = false; open.textContent = 'Xem Claude làm lại'; gate();
       }
       R.ai.push({ kind: 'demo', step: h, moves, a: a || '' });

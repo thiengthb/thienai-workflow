@@ -117,6 +117,13 @@ const finish = (p, keys) => p.evaluate((ks) => ks.forEach((k) => Lesson.done(k))
   await step.getByRole('button', { name: 'Trả lại cách của mình' }).click();
   assert.ok(!(await p.locator('[data-pane="who"]').evaluate((e) => e.classList.contains('demo'))));
   assert.equal(await p.evaluate(() => Stage.boards.who.demo), null);
+  // Claude không làm thao tác nào: bảng ra khỏi chế độ làm mẫu ngay, thẻ về chỗ người học đã xếp.
+  await p.evaluate(() => { window.__moves = () => []; });
+  await step.getByRole('button', { name: 'Xem Claude làm lại' }).click();
+  await p.waitForFunction(() => !document.querySelector('.step[data-s="3"] .demo-open').disabled);
+  assert.ok(!(await p.locator('[data-pane="who"]').evaluate((e) => e.classList.contains('demo'))), 'không thao tác nào thì không kẹt ở chế độ làm mẫu');
+  assert.equal(await p.evaluate(() => Stage.boards.who.demo), null);
+  assert.ok(await step.getByRole('button', { name: 'Trả lại cách của mình' }).isHidden());
   // Bước chỉ nghe (who@listen) không có làm mẫu.
   assert.equal(await p.locator('.step[data-s="0"] .demo').count(), 0);
   assert.deepEqual(p.errors, []);
