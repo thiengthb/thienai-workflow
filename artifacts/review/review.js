@@ -118,25 +118,9 @@
     $('send').disabled = false;
   });
 
-  // Nói thay gõ (khả năng dictation): chỉ có ở Chrome và app Claude trên máy tính; nơi khác nút mic tự ẩn.
-  let dict = null, listening = false;
-  Kit.cap('dictation').then((d) => {
-    if (!d) return;
-    dict = d; $('mic').hidden = false;
-    d.onPartial(({ text }) => { $('partial').textContent = text; });
-    d.onFinal(({ text }) => {
-      const t = $('mine'); t.value = (t.value.trim() ? t.value.trim() + ' ' : '') + text.trim();
-      t.dispatchEvent(new Event('input', { bubbles: true })); $('partial').textContent = '';
-    });
-    d.onState(({ state }) => { listening = state === 'listening'; $('mic').setAttribute('aria-pressed', String(listening)); if (!listening) $('partial').textContent = ''; });
-  });
-  $('mic').addEventListener('click', () => {
-    if (!dict) return;
-    if (listening) { dict.stop().catch(() => {}); return; }
-    dict.start().catch((e) => {
-      if (e && e.code === 'not_granted') { $('mic').hidden = true; Kit.toast('Chưa được phép dùng mic. Bạn vẫn gõ được như thường.'); }
-    });
-  });
+  // Nói thay gõ (khả năng dictation, Kit.dictate): chỉ có ở Chrome và app Claude trên máy tính; nơi khác nút mic tự ẩn.
+  // Đếm số lần nói vào S.spoke để biết tính năng này có thật sự được dùng (learning/usage.md).
+  Kit.dictate($('mic'), $('mine'), $('partial'), () => { S.spoke = (S.spoke || 0) + 1; save(); });
 
   show();
   store.load().then((saved) => { if (saved && saved.today === D.today) { S = { ...S, ...saved }; show(); } });

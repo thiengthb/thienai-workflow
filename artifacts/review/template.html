@@ -15,13 +15,7 @@ main { max-width: 720px; margin: 0 auto; padding: 20px max(16px, env(safe-area-i
 .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 12px; }
 .tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 .q { font-size: 19px; font-weight: 600; line-height: 1.4; text-wrap: pretty; }
-.answer-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
 textarea { min-height: 84px; resize: vertical; }
-.mic { width: 40px; padding: 0; }
-.mic svg { width: 18px; height: 18px; }
-.mic[aria-pressed="true"] { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
-.partial { font-size: 13.5px; color: var(--muted); min-height: 0; }
-.partial:empty { display: none; }
 .acts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .reveal { background: var(--soft); border-radius: var(--r); padding: 12px; display: grid; gap: 6px; }
 .reveal .src { font-size: 13px; color: var(--muted); }
@@ -45,13 +39,13 @@ textarea { min-height: 84px; resize: vertical; }
   <section class="card" id="card" aria-live="polite">
     <div class="tags"><span class="chip" id="subj"></span><span class="chip" id="box"></span></div>
     <p class="q" id="q"></p>
-    <div class="answer-row">
+    <div class="mic-row">
       <textarea id="mine" maxlength="1500" placeholder="Bạn nhớ gì? Gõ vài chữ, chưa cần đúng." aria-label="Câu trả lời của bạn"></textarea>
       <button class="btn mic" id="mic" type="button" hidden aria-pressed="false" aria-label="Nói thay gõ" title="Nói thay gõ">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v5"/></svg>
       </button>
     </div>
-    <p class="partial" id="partial" aria-live="polite"></p>
+    <p class="mic-partial" id="partial" aria-live="polite"></p>
     <div class="acts"><button class="btn primary" id="show" type="button">Xem đáp án</button></div>
     <div class="reveal" id="reveal" hidden>
       <span class="label">Đáp án</span>

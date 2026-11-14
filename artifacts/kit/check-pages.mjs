@@ -48,7 +48,9 @@ export async function buildFixtures(dir, browser) {
     // file trận của bài chiến tranh tính đường dẫn từ chỗ trang nằm trong learning/<môn>/pages/
     const file = join(dirname(join(here, tpl)), name === 'war' ? '../../learning/war/pages/fixture.html' : 'fixture.html');
     const page = join(dir, `${name}.html`);
-    writeFileSync(page, fill(html, `demo-${name}`, file));
+    // Bài thường kèm hai chỗ còn vướng cố định, để lời dặn có phần này được kiểm (ask-prompts).
+    const stuck = name === 'lesson' ? ['2026-11-12, buổi 5: chưa bắt được chữ màu và biểu tượng nhỏ giành mắt', '2026-11-12, buổi 5: hỏi Claude ở bước "Thử trước": "màu trạng thái có tính là màu nhấn không?"'] : undefined;
+    writeFileSync(page, fill(html, `demo-${name}`, file, { stuck }));
     out.push({ name, file: page });
   }
   // Ảnh giả cho trang chọn phương án và trang so sánh: chụp một khối màu có chữ.

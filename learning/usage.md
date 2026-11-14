@@ -1,0 +1,8 @@
+# Tính năng nào thật sự được dùng
+
+Mỗi buổi học và mỗi lượt ôn thẻ thêm một dòng, do script ghi (`artifacts/lesson/after-lesson.mjs --write` và `artifacts/review/apply-review.mjs`), không gõ tay. Số là số lần dùng trong buổi đó; "-" là trang không có tính năng đó.
+
+Dùng ở mốc 2026-12-13 (xem "Mốc kiểm tra" trong [README.md](README.md)): chạy `node artifacts/kit/usage.mjs learning/usage.md` để xem mỗi tính năng dùng ở bao nhiêu buổi. Tính năng gần như không ai bấm thì bỏ khỏi trang cho gọn, tính năng dùng nhiều thì làm tốt thêm.
+
+| Ngày | Trang | Phút | Hỏi Claude | Claude giải thích câu sai | Claude nhận xét, chấm | Nói thay gõ | Ghi chú |
+|---|---|---|---|---|---|---|---|

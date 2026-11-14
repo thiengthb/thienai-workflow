@@ -140,6 +140,9 @@
   const VOICE = 'Viết tiếng Việt tự nhiên, ngắn gọn, như người kèm học thân thiện nói chuyện trực tiếp. Gọi người học là "bạn". '
     + 'Chỉ chữ thường: không Markdown, không dấu *, không gạch đầu dòng, không tiêu đề. Không khen sáo rỗng, không mở đầu bằng "Câu hỏi hay".';
   const head = () => `Đây là một trang học tương tác. Bài: ${C.subject ? C.subject + ' · ' : ''}${C.title || ID}.`;
+  // Chỗ còn vướng ở các buổi trước của môn (make-lesson.mjs lấy từ learning/<môn>.md, đề xuất T4).
+  const stuck = () => (Array.isArray(C.stuck) && C.stuck.length ? ['Những chỗ người học còn vướng ở các buổi trước của môn này: '
+    + C.stuck.map((x) => clip(x, 300)).join(' | ') + '. Chỉ nối vào khi liên quan tới điều đang hỏi, một câu là đủ, đừng giảng lại bài cũ.'] : []);
   const clip = (s, n = 1800) => String(s || '').replace(/\s+/g, ' ').trim().slice(0, n);
   const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
   const aiBtn = (text, cls = 'btn ghost') => { const b = el('button', { type: 'button', className: cls + ' kit-ask', textContent: text }); b.dataset.noreplay = ''; return b; };
@@ -177,13 +180,15 @@
       if (a) { R.ai.push({ kind: 'why', q: q.dataset.q, a }); b.remove(); } else b.disabled = false;
     });
   }
-  // 1. Ô tự nói lại
+  // 1. Ô tự nói lại. Nói thay gõ (Kit.micRow, khả năng dictation): nút mic cạnh ô, ẩn nơi không có mic.
+  // R.spoke đếm số lần nói, để biết tính năng có thật sự được dùng (learning/usage.md).
   const teach = $('textarea[data-key="teach"]');
+  const teachEnd = teach && window.Kit && Kit.micRow ? Kit.micRow(teach, () => { R.spoke = (R.spoke || 0) + 1; }) : teach;
   if (teach && canAsk()) {
     const b = aiBtn('Claude nhận xét bài của mình', 'ai-open'), out = el('p', { className: 'ai-out kit-ask' });
     out.setAttribute('role', 'status');
     b.disabled = true;
-    teach.after(b, out);
+    teachEnd.after(b, out);
     teach.addEventListener('input', () => { b.disabled = teach.value.trim().length < +(teach.dataset.min || 5); });
     b.addEventListener('click', async () => {
       b.disabled = true;
@@ -191,7 +196,7 @@
       const prompt = [head(), '',
         `Đề bài người học đang làm: ${visibleText(step, 300)}`,
         mine ? `Ý chính của bài (bản mẫu, người học ${mine.classList.contains('on') ? 'đã' : 'chưa'} xem): ${clip(mine.textContent, 800)}` : '',
-        `Người học tự viết: "${clip(teach.value, 1500)}"`, '',
+        `Người học tự viết: "${clip(teach.value, 1500)}"`, ...stuck(), '',
         'Nhận xét bài viết của người học trong tối đa 3 câu. Câu 1: một điều họ đã nắm đúng, dẫn lại ý của chính họ. '
         + 'Câu 2: một điều còn thiếu hay chưa chính xác so với ý chính (nếu đủ ý rồi thì nói vậy). '
         + 'Câu 3: một câu hỏi ngắn giúp họ tự nghĩ tiếp, không kèm đáp án. ' + VOICE].join('\n');
@@ -229,6 +234,7 @@
         pending.length ? `Câu hỏi trên bước mà người học CHƯA trả lời: ${pending.join(' | ')}. Nếu người học hỏi thẳng đáp án của câu này, đừng nói đáp án: chỉ gợi một hướng nghĩ hay một chỗ trên màn để nhìn lại.` : '',
         turns.length ? 'Những câu đã hỏi trước đó ở bước này: ' + turns.map((t) => `Hỏi: ${t.q} / Đáp: ${clip(t.a, 300)}`).join(' || ') : '',
         step.querySelector('.next[disabled]') ? 'Người học CHƯA làm xong bước này (còn việc phải tự làm: chọn, xếp, vặn, trả lời). Đừng làm hộ và đừng nói đáp án hay cách xếp đúng; chỉ gợi một hướng nghĩ, hay một chỗ trên màn để nhìn lại.' : '',
+        ...stuck(),
         `Người học hỏi: "${qtext}"`, '',
         'Trả lời trong tối đa 4 câu, bám vào nội dung bước và ví dụ đang có trên màn. Nếu câu hỏi ra ngoài bài, trả lời ngắn rồi kéo về bài. ' + VOICE].join('\n');
       const a = await Kit.ask(prompt, out, { cache: false });

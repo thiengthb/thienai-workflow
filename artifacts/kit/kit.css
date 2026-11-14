@@ -82,6 +82,14 @@ textarea:focus, input[type="text"]:focus { border-color: var(--accent); outline:
 #kit-toast.on { opacity: 1; transform: translateX(-50%); pointer-events: auto; }
 @media (prefers-reduced-motion: reduce) { #kit-toast, .bar > span { transition: none; } }
 
+/* Nói thay gõ (Kit.dictate, Kit.micRow): nút mic cạnh ô chữ, ẩn nơi không có mic. */
+.mic-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
+.btn.mic { width: 44px; min-width: 44px; padding: 0; }
+.btn.mic svg { width: 18px; height: 18px; }
+.btn.mic[aria-pressed="true"] { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+.mic-partial { font-size: 13.5px; color: var(--muted); margin: 0; }
+.mic-partial:empty { display: none; }
+
 /* Hỏi Claude trên trang (Kit.ask): chỉ hiện khi trang hỏi được (html.kit-ask-on). Câu trả lời là chữ thường, giữ xuống dòng. */
 html:not(.kit-ask-on) .kit-ask { display: none !important; }
 .ai-out { white-space: pre-wrap; font-size: 14.5px; line-height: 1.55; padding: 10px 12px; border-radius: var(--r);

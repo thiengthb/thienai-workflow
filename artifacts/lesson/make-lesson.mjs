@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 // sample: trang tự hỏi Claude (nhận xét bài tự nói lại, giải thích chỗ chọn sai, hỏi về một bước), xem lesson.js.
-export const CAPABILITIES = { db: {}, comments: {}, sample: {} };
+export const CAPABILITIES = { db: {}, comments: {}, sample: {}, dictation: {} };
 const read = (p) => readFileSync(join(here, p), 'utf8');
 const PARTS = {
   'kit-css': ['style', '../kit/kit.css'],
@@ -36,13 +36,28 @@ const OPTIONAL = {
 // Mẫu riêng theo môn khi chép trang mới: bài chiến tranh có sẵn sa bàn, frontend có bàn thử, BA có bảng dán.
 const TEMPLATES = { war: '../war/template.html', frontend: '../it/template-frontend.html', ba: '../it/template-ba.html' };
 
+// Chỗ còn vướng (đề xuất T4): các dòng "- ..." trong mục này của learning/<môn>.md được ghi vào cấu hình bài ("stuck"),
+// để Claude trong trang biết thien còn vướng gì ở các buổi trước khi thien hỏi hay nhờ nhận xét.
+export const STUCK = 'Chỗ còn vướng';
+/** Các dòng "- ..." trong mục "## Chỗ còn vướng" của file môn, giữ max dòng mới nhất (ở cuối). */
+export function stuckPoints(md, max = 6) {
+  const m = md.match(new RegExp(`^## ${STUCK}\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'm'));
+  if (!m) return [];
+  return m[1].split('\n').filter((l) => /^- /.test(l)).map((l) => l.slice(2).trim()).slice(-max);
+}
+/** File môn của một trang learning/<môn>/pages/x.html là learning/<môn>.md. */
+export function subjectFile(file) {
+  const m = resolve(file).replace(/\\/g, '/').match(/^(.*\/learning)\/([^/]+)\/pages\/[^/]+$/);
+  return m ? `${m[1]}/${m[2]}.md` : null;
+}
+
 export function guessId(file) {
   const m = file.replace(/\\/g, '/').match(/learning\/([^/]+)\/pages\/lesson-(\d+)/);
   return m ? `${m[1]}-${m[2].padStart(2, '0')}` : basename(file, '.html');
 }
 
 /** Returns the page with every kit part filled in and the lesson-id meta set. */
-export function fill(html, id, file = '') {
+export function fill(html, id, file = '', { stuck } = {}) {
   const all = [...Object.entries(PARTS), ...Object.entries(OPTIONAL).filter(([part, [tag]]) => new RegExp(`<${tag} id="${part}">`).test(html))];
   for (const [part, [tag, ...srcs]] of all) {
     const re = new RegExp(`<${tag} id="${part}">[\\s\\S]*?</${tag}>`);
@@ -68,6 +83,7 @@ export function fill(html, id, file = '') {
   // Ghi cùng một id vào cấu hình của bài, để lesson.js (sessions/<id>) và phần tự lưu (drafts/<id>) không lệch nhau.
   if (conf) {
     const obj = Object.assign(JSON.parse(conf[1]), { id: lid });
+    if (Array.isArray(stuck)) { if (stuck.length) obj.stuck = stuck; else delete obj.stuck; }
     html = html.replace(conf[0], () => `<script type="application/json" id="lesson">${JSON.stringify(obj).replace(/</g, '\\u003c')}</script>`);
   }
   html = html.replace(/<meta name="lesson-id"[^>]*>\n?/, '');
@@ -94,8 +110,9 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const conf = (() => { const m = html.match(/<script type="application\/json" id="lesson">([\s\S]*?)<\/script>/); try { return m ? JSON.parse(m[1]) : {}; } catch (e) { return {}; } })();
   let lid = id || conf.id;
   if (!lid || /^__/.test(lid)) lid = guessId(file);
-  writeFileSync(file, fill(html, lid, file));
-  console.log(`Đã gắn bộ khung vào ${file} (id ${lid}).`);
+  const sf = subjectFile(file), stuck = sf && existsSync(sf) ? stuckPoints(readFileSync(sf, 'utf8')) : [];
+  writeFileSync(file, fill(html, lid, file, { stuck }));
+  console.log(`Đã gắn bộ khung vào ${file} (id ${lid})${stuck.length ? `, kèm ${stuck.length} chỗ còn vướng từ ${sf}` : ''}.`);
   const out = resolve(outArg || join(tmpdir(), `lesson-${lid}`));
   if (!noCheck) {
     // Kiểm luôn trên điện thoại và laptop (chữ giữ chỗ, lỗi JS, tràn ngang, vùng bấm, nút bấm không đổi gì).

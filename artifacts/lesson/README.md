@@ -11,6 +11,8 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 - **Xong buổi học**: lưu toàn bộ kết quả vào db của trang ở `sessions/<id>-<thời điểm>`, rồi gửi tóm tắt cho Claude bằng comment (Claude đang theo dõi trang thì tự thức dậy, thien không cần nhắn "xong"). Gửi không được thì hiện nút "Chép kết quả".
 - Tự lưu chỗ đang học (`learning/teaching/kit/kit.js`): tải lại, tắt màn, mở trên máy khác đều về đúng chỗ. Học lại thì bỏ phần ôn.
 - **Hỏi Claude ngay trong bài** (khả năng `sample`, xem `../README.md`): nhận xét bài tự nói lại, giải thích chỗ chọn sai, ô "Hỏi Claude về bước này". lesson.js tự gắn vào mọi bài, không cần sửa trang. Nút hỏi có `data-noreplay`, ô hỏi là `<input>`: phần tự lưu không bấm lại nên tải lại không tốn lượt hỏi.
+- **Claude biết chỗ còn vướng của các buổi trước**: `make-lesson.mjs` đọc mục "Chỗ còn vướng" của `learning/<môn>.md` (6 dòng mới nhất) vào cấu hình bài (`"stuck"`); lời dặn khi hỏi về một bước và khi nhận xét bài tự nói lại có thêm phần này, dặn chỉ nối vào khi liên quan. Sửa mục đó rồi dựng lại trang là trang có bản mới.
+- **Nói thay gõ** ở ô tự nói lại (khả năng `dictation`, `Kit.micRow` trong lõi chung): nút mic cạnh ô, chỉ có ở Chrome và app Claude trên máy tính, nơi khác tự ẩn. Số lần nói ghi vào `R.spoke`.
 - Chế độ tối theo máy, theo màu của lõi chung. Một bo góc 8px, nút và dòng đáp án cao 44px (thienui `docs/taste.md`).
 
 ## Cách AI soạn một buổi
@@ -18,8 +20,8 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 1. `node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html`: trang chưa có thì script chép `template.html` ra đó rồi dừng.
 2. Thay mọi chỗ `__…__` (id dạng `frontend-06`, tên môn, tên buổi, tiêu đề) và nội dung mẫu. Phần riêng của bài (sơ đồ, mô phỏng) viết trong `<style>` và `<script>` cuối trang; ghi kết quả vào `R`, gọi `Lesson.done('<khóa>')` khi một việc xong. Chỉ đổi `R` và gọi `Lesson.done` trong lúc bấm nút hay gõ chữ: phần tự lưu chỉ ghi lại lần bấm và chữ đã gõ, tải lại thì bấm lại đúng thứ tự, nên thứ gì sinh ra từ đó đều tự về. Kéo thả hay hẹn giờ thì không về được, cần thì đổi thành nút.
 3. Chạy lại đúng lệnh ở bước 1. Script chép lõi chung và khung vào trang (chạy lại được, thay bản cũ), tự chạy `learning/teaching/check-page.cjs` trên điện thoại và laptop, qua thì ghi `publish.json` vào thư mục tạm `lesson-<id>` (hoặc `--out <thư-mục>`). Chưa qua thì sửa rồi chạy lại.
-4. Gọi Artifact với đúng tham số trong `publish.json` (trang, `capabilities` `{"db": {}, "comments": {}}`).
-5. Khi thien gửi: đọc comment (ArtifactComments) và `sessions/` (ArtifactData), ghi nhật ký như mục "Sau buổi" trong `learning/README.md`.
+4. Gọi Artifact với đúng tham số trong `publish.json` (trang, `capabilities` `{"db": {}, "comments": {}, "sample": {}, "dictation": {}}`).
+5. Khi thien gửi: đọc comment (ArtifactComments) và `sessions/` (ArtifactData), lưu bản đó ra file JSON, rồi làm đúng mục "Sau buổi" trong `learning/README.md`: `node artifacts/lesson/after-lesson.mjs <file.json> --write` soạn nháp và ghi chỗ còn vướng, `--check <lesson-id>` kiểm đã ghi đủ.
 
 ## Quy ước trong trang
 
@@ -40,4 +42,5 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 |---|---|
 | `template.html` | Buổi mẫu đủ 8 màn, chép ra làm buổi mới |
 | `lesson.css`, `lesson.js` | Khung: bước, câu hỏi, góp ý, kết thúc |
-| `make-lesson.mjs` | Chép mẫu ra trang mới; chép `../kit/kit.css`, `../kit/kit.js`, khung và phần tự lưu vào trang, kiểm trang, ghi `publish.json` |
+| `make-lesson.mjs` | Chép mẫu ra trang mới; chép `../kit/kit.css`, `../kit/kit.js`, khung và phần tự lưu vào trang, đưa chỗ còn vướng vào cấu hình, kiểm trang, ghi `publish.json` |
+| `after-lesson.mjs` | Sau buổi: soạn nháp nhật ký, chỗ còn vướng, thẻ, dòng "Trạng thái" từ bản lưu của trang; `--write` ghi chỗ còn vướng và dòng `learning/usage.md`; `--check` kiểm đã ghi đủ. Test: `.github/scripts/after-lesson.test.mjs` |

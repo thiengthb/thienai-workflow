@@ -6,7 +6,7 @@ File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tu�
 Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
 
 ## Đang ở đâu
-Bộ khung artifact đủ 4 mẫu: so sánh, tổng quan, chọn phương án, buổi học (PR #47, #48, #50); mẫu nào cũng dựng bằng một lệnh (PR #52). Bài học có thêm sa bàn chiến tranh (PR #53), sân khấu IT cho frontend và BA (PR #54), và tự hỏi Claude ngay trên trang (PR #55). Đang làm các đề xuất nâng cấp: đợt 1 CI mở từng trang trong trình duyệt (PR #56), đợt 2 trang ôn thẻ (https://claude.ai/artifact/L612hHx2vHUokcPBgH7RPu). Luật dùng mẫu đã vào AGENTS chung để mọi project tự dùng. Bộ quy trình chung đã dùng được: luật, mẫu, skill start-project, học nhiều môn xoay vòng (frontend 5 buổi, BA 2, chiến tranh 3), theo dõi kế hoạch và lộ trình học (PR #31 đã merge). Bản tin sáng qua mail đã bỏ (PR #24).
+Bộ khung artifact đủ 4 mẫu: so sánh, tổng quan, chọn phương án, buổi học (PR #47, #48, #50); mẫu nào cũng dựng bằng một lệnh (PR #52). Bài học có thêm sa bàn chiến tranh (PR #53), sân khấu IT cho frontend và BA (PR #54), và tự hỏi Claude ngay trên trang (PR #55). Đang làm các đề xuất nâng cấp: đợt 1 CI mở từng trang trong trình duyệt (PR #56), đợt 2 trang ôn thẻ (https://claude.ai/artifact/L612hHx2vHUokcPBgH7RPu, PR #57), đợt 3 việc sau buổi học bằng một lệnh, chỗ còn vướng mang sang buổi sau, ghi tính năng được dùng. Luật dùng mẫu đã vào AGENTS chung để mọi project tự dùng. Bộ quy trình chung đã dùng được: luật, mẫu, skill start-project, học nhiều môn xoay vòng (frontend 5 buổi, BA 2, chiến tranh 3), theo dõi kế hoạch và lộ trình học (PR #31 đã merge). Bản tin sáng qua mail đã bỏ (PR #24).
 
 ## Kế hoạch đang chạy
 Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
@@ -21,11 +21,11 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 |---|---|---|---|
 | Cài dòng Settings mới cho từng tài khoản Claude | README, bước 1 | 2026-11-12 | thien tự làm, AI không kiểm được |
 | Bài chiến tranh 4 (hậu cần) | PR #44 | 2026-11-12 | Dựng trên khung cũ, chưa có sa bàn; dựng lại khi tới buổi |
-| Các đề xuất nâng cấp, đợt 3 đến 5 | [tài liệu đề xuất](https://claude.ai/artifact/FrUscTcs6BWMVBJGzJTYqF) | 2026-11-14 | Làm lần lượt sau đợt 1 |
+| Các đề xuất nâng cấp, đợt 4 và 5 | [tài liệu đề xuất](https://claude.ai/artifact/FrUscTcs6BWMVBJGzJTYqF) | 2026-11-14 | Làm sau khi đợt 1 đến 3 merge |
 
 ## Vừa xong
-- Bài frontend và BA có sân khấu như sa bàn chiến tranh: bàn thử (núm vặn, soi, dòng CSS sáng lên) và bảng dán (xếp thẻ, nghe người nói), mẫu ở `artifacts/it/` (PR này)
-- Mỗi mẫu artifact dùng lại bằng một lệnh và một lần đăng (`publish.json`): so sánh `shoot.mjs`, chọn phương án tự chụp, buổi học tự kiểm, trang tiến độ `publish-progress.mjs` (PR #52)
+- Sau buổi học: `artifacts/lesson/after-lesson.mjs` soạn nháp nhật ký, thẻ, chỗ còn vướng và kiểm đã ghi đủ; mục "Chỗ còn vướng" ở mỗi file môn được đưa vào trang buổi sau; `learning/usage.md` ghi tính năng nào thật sự được dùng (PR này)
+- Bài frontend và BA có sân khấu như sa bàn chiến tranh: bàn thử (núm vặn, soi, dòng CSS sáng lên) và bảng dán (xếp thẻ, nghe người nói), mẫu ở `artifacts/it/` (PR #54)
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), dựng từ mẫu bàn thử `artifacts/it/` (bài mẫu trong đó chính là nháp buổi 6).
