@@ -17,7 +17,8 @@
  "colorNote": "Màu hai bên chỉ để dễ phân biệt.",
  "features": [
   {
-   "id": "river", "short": "sông Nậm Rốm",
+   "id": "river",
+   "short": "sông Nậm Rốm",
    "kind": "river",
    "name": "sông Nậm Rốm",
    "snap": "low",
@@ -26,13 +27,15 @@
    "raw": [[21.475,103.036],[21.455,103.028],[21.435,103.022],[21.415,103.018],[21.398,103.016],[21.385,103.015],[21.37,103.012],[21.355,103.008],[21.34,103.004],[21.32,102.998],[21.302,102.992]]
   },
   {
-   "id": "road41", "short": "đường 41 → Tuần Giáo",
+   "id": "road41",
+   "short": "đường 41 → Tuần Giáo",
    "kind": "road",
    "name": "đường 41 về Tuần Giáo, hậu phương",
    "pts": [[21.387,103.017],[21.398,103.025],[21.409,103.033],[21.425,103.047],[21.445,103.068],[21.465,103.088],[21.478,103.099]]
   },
   {
-   "id": "air", "short": "sân bay Mường Thanh",
+   "id": "air",
+   "short": "sân bay Mường Thanh",
    "kind": "airfield",
    "name": "sân bay Mường Thanh",
    "pts": [[21.405,103.006],[21.39,103.01]]
@@ -138,7 +141,13 @@
   }
  ],
  "views": {
-  "tilt": {"label": "Nghiêng", "yaw": -0.45, "pitch": 0.82, "dist": 0.62, "target": [21.392,103.017]},
+  "tilt": {
+   "label": "Nghiêng",
+   "yaw": -0.45,
+   "pitch": 0.82,
+   "dist": 0.62,
+   "target": [21.392,103.017]
+  },
   "top": {
    "label": "Từ trên",
    "yaw": 0,
@@ -146,7 +155,11 @@
    "dist": 1.05,
    "target": [21.392,103.017]
   },
-  "hill": {"label": "Từ đồi phía đông", "from": [21.384,103.072,0.28], "target": [21.392,103.012]}
+  "hill": {
+   "label": "Từ đồi phía đông",
+   "from": [21.384,103.072,0.28],
+   "target": [21.392,103.012]
+  }
  },
  "tracks": {
   "real": {
@@ -235,7 +248,18 @@
        "kind": "trench",
        "pts": [[21.445,103.015],[21.437,103.018],[21.434,103.018]]
       }
-     ]
+     ],
+     "fog": {
+      "who": "Mắt quân Pháp",
+      "hide": [
+       "gE",
+       "gNE",
+       "gN",
+       "gW"
+      ],
+      "text": "Máy bay Pháp thấy hào đang đào, nhưng không tìm ra từng khẩu pháo trong hầm. Pháo binh Pháp vẫn tính rằng sẽ dập được pháo đối phương.",
+      "src": "Wikipedia, Battle of Dien Bien Phu (dẫn lời một sĩ quan Pháp)"
+     }
     },
     {
      "date": "13/3",
@@ -252,7 +276,18 @@
        "kind": "attack",
        "pts": [[21.415,103.045],[21.4095,103.0355]]
       }
-     ]
+     ],
+     "fog": {
+      "who": "Mắt quân Pháp",
+      "hide": [
+       "gE",
+       "gNE",
+       "gN",
+       "gW"
+      ],
+      "text": "Pháo bắn tới từ những chỗ Pháp không nhìn thấy. Từng khẩu nằm trong hầm kiên cố, bắn thẳng qua lỗ châu mai, nên phản pháo của Pháp gần như vô ích.",
+      "src": "Wikipedia, Battle of Dien Bien Phu (dẫn lời một sĩ quan Pháp)"
+     }
     },
     {
      "date": "15–17/3",
@@ -264,7 +299,18 @@
       "doclap",
       "bankeo"
      ],
-     "keepLines": true
+     "keepLines": true,
+     "fog": {
+      "who": "Mắt quân Pháp",
+      "hide": [
+       "gE",
+       "gNE",
+       "gN",
+       "gW"
+      ],
+      "text": "Ngày 15/3, đại tá Charles Piroth, chỉ huy pháo binh Pháp, tự sát vì không dập được những khẩu pháo ngụy trang kỹ của đối phương.",
+      "src": "Wikipedia, Battle of Dien Bien Phu (dẫn lời một sĩ quan Pháp)"
+     }
     },
     {
      "date": "30/3",

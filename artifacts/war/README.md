@@ -45,7 +45,8 @@ Vì sao hợp cách học đã chọn (`learning/war.md`, mục "Cách dạy mô
   "views": { "tilt": { "label", "yaw", "pitch", "dist", "target" }, "top": { … }, "hill": { "label", "from": [lat, lon, km trên mặt đất], "target" } },
   "tracks": { "real": { "label": "Chuyện thật", "tag": "real", "keys": [ { "date", "title", "text", "src",
       "show" | "add" | "remove": [id], "lose": [id] (giữ tới cuối), "hit" | "dim": [id] (chỉ mốc đó), "rename": { id: "tên mới" },
-      "lines": [{ "kind": "attack" | "retreat" | "trench", "pts" }], "keepLines": true, "focus": [lat, lon] } ] },
+      "lines": [{ "kind": "attack" | "retreat" | "trench", "pts" }], "keepLines": true, "focus": [lat, lon],
+      "fog": { "who": "Mắt quân Pháp", "hide": [id], "text", "src" } } ] },
     "A": { "label": "Nếu đánh ngay", "tag": "sim", "preview": 1, "keys": [{ "same": "real:0" }, …] } },
   "terrain": "fetch-terrain.mjs tự ghi" }
 ```
@@ -53,6 +54,9 @@ Vì sao hợp cách học đã chọn (`learning/war.md`, mục "Cách dạy mô
 - Track `tag: "sim"` hiện nhãn "Mô phỏng". Mọi đoạn kể của mô phỏng ghi rõ "Phỏng đoán", và `src` ghi dựa trên nguồn nào (luật 10 trong `profile/TUTOR.md`).
 - `preview`: mốc hiện khi bấm "Xem" ở bước chọn (mặc định 1, là kế hoạch, chưa phải kết cục).
 - `exaggerate`: phóng độ cao cho dễ thấy đồi; trang tự ghi "độ cao ×2" ở góc sa bàn.
+- `fog`: mốc nào có thì sa bàn hiện nút mang tên `who`. Bấm vào, các ký hiệu trong `hide` biến thành vùng nghi ngờ rộng, kèm đoạn `text` và nguồn. Dùng để người học thấy bên kia biết gì lúc đó; chỉ ghi điều có nguồn.
+- `short` của sông, đường, sân bay hiện thành tên nằm trên địa hình.
+- Người học chạm vào đất trống thì sa bàn tính vùng nhìn thấy từ điểm đó (mắt cao 15 m, theo độ cao thật); chạm vào ký hiệu thì hiện tên đầy đủ và tình trạng ở mốc đó. Không cần ghi gì trong dữ liệu.
 - Vị trí quân, hào, mũi tên là ước lượng để minh họa; chỉ địa hình là số liệu thật. Trang luôn ghi "vị trí ước lượng".
 
 ## File

@@ -69,7 +69,9 @@
     // La bàn và thước tỉ lệ ở góc dưới phải; khung thông tin hiện khi chạm vào một ký hiệu.
     const compass = $el('div', 'st-compass', '<i class="st-north" aria-hidden="true"><b></b></i><span class="st-scale"><i></i><em></em></span>');
     const info = $el('div', 'st-info'); info.hidden = true; info.setAttribute('role', 'status');
-    stage.append(cv, labels, legend, tools, note, compass, info);
+    // Nút "Bỏ" không ghi vào phần tự lưu (data-noreplay): chỗ đứng nhìn không được lưu lại.
+    const vsBox = $el('div', 'chip st-vs', '<span></span><button type="button" data-noreplay>Bỏ</button>'); vsBox.hidden = true; vsBox.setAttribute('role', 'status');
+    stage.append(cv, labels, legend, tools, note, compass, info, vsBox);
     const tl = $el('div', 'st-tl'), row = $el('div', 'st-row'), play = $el('button', 'btn st-play', '▶');
     play.type = 'button'; play.setAttribute('aria-label', 'Chạy từng mốc');
     // Hàng mốc cuộn ngang khi màn hình hẹp, để mỗi mốc vẫn đủ 44px cho ngón tay.
@@ -91,7 +93,7 @@
     let curView = 'tilt';
 
     // ---------- 3D ----------
-    let THREE = window.THREE, scene, camera, unitGroup, lineGroup, meshes = {};
+    let THREE = window.THREE, scene, camera, unitGroup, lineGroup, zoneGroup, meshes = {}, ground = null, eyeMark = null;
     function init3d() {
       if (!THREE) return false;
       try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false }); } catch (e) { return false; }
@@ -120,7 +122,14 @@
         col[i * 3] = tmp.r; col[i * 3 + 1] = tmp.g; col[i * 3 + 2] = tmp.b;
       }
       g.setAttribute('color', new THREE.BufferAttribute(col, 3)); g.computeVertexNormals();
-      scene.add(new THREE.Mesh(g, new THREE.MeshLambertMaterial({ vertexColors: true })));
+      ground = { mesh: new THREE.Mesh(g, new THREE.MeshLambertMaterial({ vertexColors: true })), base: col.slice() };
+      scene.add(ground.mesh);
+      // Chỗ đứng nhìn: một cột mảnh có vòng ở chân, ẩn cho tới khi chạm vào đồi.
+      eyeMark = new THREE.Group();
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, .5, 8), new THREE.MeshLambertMaterial({ color: '#1d1d1b' })); pole.position.y = .25;
+      const ring = new THREE.Mesh(new THREE.RingGeometry(.07, .1, 24), new THREE.MeshBasicMaterial({ color: '#1d1d1b', side: THREE.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.position.y = .01;
+      eyeMark.add(pole, ring); eyeMark.visible = false; scene.add(eyeMark);
+      zoneGroup = new THREE.Group(); scene.add(zoneGroup);
       // Sông, đường, sân bay: cố định cho cả trận.
       b.features.forEach((f) => {
         if (f.kind === 'airfield') {
@@ -181,11 +190,15 @@
         const x = -G.wk / 2 + (cc + .5) * cw, z = -G.hk / 2 + (r + .5) * ch, h = G.hAt(x, z), sh = (G.hAt(x - cw, z - ch) - G.hAt(x + cw, z + ch)) * 6;
         const k = h / relMax, light = Math.max(-.3, Math.min(.3, sh));
         const base = k < .04 ? [230, 220, 177] : k < .4 ? [180, 192, 143] : [108, 129, 82];
-        ctx.fillStyle = `rgb(${base.map((v) => Math.round(v * (1 + light))).join(',')})`;
+        const dark = vs && !vs.vis[r * t.cols + cc] ? .48 : 1;
+        ctx.fillStyle = `rgb(${base.map((v) => Math.round(v * (1 + light) * dark)).join(',')})`;
         const [px, pz] = flatProj(x - cw / 2, z - ch / 2), [qx, qz] = flatProj(x + cw / 2, z + ch / 2); ctx.fillRect(px, pz, qx - px + .6, qz - pz + .6);
       }
       const path = (pts, color, w, dash) => { ctx.beginPath(); pts.map(G.xz).forEach(([x, z], i) => { const [px, pz] = flatProj(x, z); i ? ctx.lineTo(px, pz) : ctx.moveTo(px, pz); }); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.setLineDash(dash || []); ctx.stroke(); ctx.setLineDash([]); };
       b.features.forEach((f) => path(f.pts, COLORS[f.kind] || '#888', f.kind === 'airfield' ? 5 : f.kind === 'river' ? 3 : 2, f.kind === 'road' ? [6, 4] : null));
+      (S.zones || []).forEach((zn) => { const [px, pz] = flatProj(zn.x, zn.z), [qx] = flatProj(zn.x + zn.r, zn.z); ctx.beginPath(); ctx.arc(px, pz, qx - px, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(178,58,42,.16)'; ctx.fill(); ctx.setLineDash([5, 4]); ctx.strokeStyle = 'rgba(178,58,42,.7)'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.setLineDash([]); });
+      if (vs) { const [px, pz] = flatProj(vs.x, vs.z); ctx.beginPath(); ctx.arc(px, pz, 6, 0, Math.PI * 2); ctx.fillStyle = '#1d1d1b'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); }
       S.lines.forEach((l) => {
         const color = l.kind === 'retreat' ? COLORS.retreat : (b.sides.vn || {}).color || '#b23a2a';
         path(l.pts, color, l.kind === 'trench' ? 2 : 3, l.kind === 'trench' ? [4, 3] : null);
@@ -204,7 +217,8 @@
     const labelEls = {};
     b.units.forEach((u) => { const s = $el('span', 'st-lbl ' + u.side); labels.appendChild(s); labelEls[u.id] = s; });
     const featLbls = b.features.filter((f) => f.short || f.name).map((f) => { const s = $el('span', 'st-lbl feat ' + f.kind); s.textContent = f.short || f.name; labels.appendChild(s); return { f, e: s }; });
-    let lastHits = []; // vùng chạm của từng ký hiệu và nhãn ở lần vẽ gần nhất
+    let lastHits = [];
+    const zoneLbls = b.units.map(() => { const s = $el('span', 'st-lbl zone'); s.hidden = true; labels.appendChild(s); return s; }); // vùng chạm của từng ký hiệu và nhãn ở lần vẽ gần nhất
     function screenAt(x, z) {
       if (flat) { const [px, pz] = flatProj(x, z); return [px, pz]; }
       const v = new THREE.Vector3(x, G.hAt(x, z), z).project(camera);
@@ -226,6 +240,7 @@
       legend.style.maxWidth = Math.max(0, room) + 'px';
       legend.style.visibility = room < 150 ? 'hidden' : '';
       note.style.maxWidth = Math.max(80, stage.clientWidth - compass.offsetWidth - 28) + 'px';
+      vsBox.style.maxWidth = Math.max(140, stage.clientWidth - compass.offsetWidth - 28) + 'px';
     }
     function project(u) { return projectAt(u.at); }
     function projectAt(at) {
@@ -239,7 +254,7 @@
     function placeLabels(S) {
       fitLegend(); updateCompass();
       const W = stage.clientWidth, H = stage.clientHeight, sr = stage.getBoundingClientRect();
-      const ui = [legend, tools, note, compass].filter((x) => x.style.visibility !== 'hidden').filter((x) => x.offsetParent && x.offsetWidth).map((x) => { const r = x.getBoundingClientRect(); return [r.left - sr.left - 4, r.top - sr.top - 4, r.right - sr.left + 4, r.bottom - sr.top + 4]; });
+      const ui = [legend, tools, note, compass, vsBox].filter((x) => x.style.visibility !== 'hidden').filter((x) => x.offsetParent && x.offsetWidth).map((x) => { const r = x.getBoundingClientRect(); return [r.left - sr.left - 4, r.top - sr.top - 4, r.right - sr.left + 4, r.bottom - sr.top + 4]; });
       const list = b.units.filter((u) => S.show.has(u.id)).map((u) => ({ u, pri: (S.hit.has(u.id) ? 10 : 0) + (u.rank || 1), p: project(u) }));
       list.sort((a, c) => c.pri - a.pri);
       // Vùng của ký hiệu trên màn hình: 3D thì chiếu tám góc khối thật (to ra khi phóng gần), bản phẳng thì ô cố định.
@@ -304,6 +319,13 @@
         }
         e.hidden = true;
       });
+      (S.zones || []).forEach((zn, i) => {
+        const e = zoneLbls[i]; if (!e) return; const [x, y] = screenAt(zn.x, zn.z);
+        e.textContent = (units[zn.id].side === 'vn' ? 'Pháo Việt Minh ở đâu?' : 'Không rõ'); e.hidden = false;
+        const w = e.offsetWidth, h = e.offsetHeight, bx = [x - w / 2, y - h / 2, x + w / 2, y + h / 2];
+        if (bx[0] < 2 || bx[1] < 2 || bx[2] > W - 2 || bx[3] > H - 2 || hitAny(bx, taken)) { e.hidden = true; return; }
+        taken.push(bx); e.style.transform = `translate(${Math.round(bx[0])}px, ${Math.round(bx[1])}px)`;
+      });
       if (!info.hidden && info.dataset.u) showInfo(units[info.dataset.u], S);
     }
     // Chạm vào ký hiệu (hay nhãn của nó): hiện tên đầy đủ, bên nào và đang ra sao ở mốc này. Chạm chỗ trống thì đóng.
@@ -317,6 +339,47 @@
       const W = stage.clientWidth, w = info.offsetWidth, h = info.offsetHeight, [l, t, r, btm] = hit.box;
       const x = Math.max(4, Math.min(W - w - 4, (l + r) / 2 - w / 2)), y = t - h - 6 > 4 ? t - h - 6 : btm + 6;
       info.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
+    }
+
+    // ---------- Nhìn từ một điểm ----------
+    // Chạm vào đất: đứng ở đó (mắt cao 15 m), mỗi ô lưới được dò theo đường thẳng tới mắt; có núi chắn thì ô đó tối.
+    let vs = null;
+    const EYE = .015;
+    function viewshed(x0, z0) {
+      const { t } = G, cw = G.wk / t.cols, ch = G.hk / t.rows, y0 = G.hAt(x0, z0) + EYE * G.ex, vis = new Uint8Array(t.cols * t.rows), step = Math.min(cw, ch) * 1.2;
+      for (let r = 0; r < t.rows; r++) for (let c = 0; c < t.cols; c++) {
+        const x1 = -G.wk / 2 + (c + .5) * cw, z1 = -G.hk / 2 + (r + .5) * ch, y1 = G.hAt(x1, z1) + .004 * G.ex;
+        const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, z1 - z0) / step)); let ok = 1;
+        for (let k = 1; k < n; k++) { const f = k / n; if (G.hAt(x0 + (x1 - x0) * f, z0 + (z1 - z0) * f) > y0 + (y1 - y0) * f) { ok = 0; break; } }
+        vis[r * t.cols + c] = ok;
+      }
+      return vis;
+    }
+    function setViewpoint(x, z) {
+      if (x == null) { vs = null; vsBox.hidden = true; note.style.visibility = ''; }
+      else {
+        vs = { x, z, vis: viewshed(x, z) };
+        const m = Math.round(G.hAt(x, z) / G.ex * 1000 + G.t.min), seen = vs.vis.reduce((a, v) => a + v, 0) / vs.vis.length;
+        vsBox.firstChild.textContent = `Đứng ở độ cao ${m.toLocaleString('vi-VN')} m: thấy ${Math.round(seen * 100)}% sa bàn, vùng tối bị núi che`;
+        vsBox.hidden = false; note.style.visibility = 'hidden';
+      }
+      if (ground) {
+        const c = ground.mesh.geometry.attributes.color, a = c.array, base = ground.base;
+        for (let i = 0; i < a.length / 3; i++) {
+          const hid = vs && !vs.vis[i];
+          a[i * 3] = hid ? base[i * 3] * .42 + .05 : base[i * 3]; a[i * 3 + 1] = hid ? base[i * 3 + 1] * .42 + .06 : base[i * 3 + 1]; a[i * 3 + 2] = hid ? base[i * 3 + 2] * .42 + .1 : base[i * 3 + 2];
+        }
+        c.needsUpdate = true;
+        eyeMark.visible = !!vs; if (vs) eyeMark.position.set(x, G.hAt(x, z), z);
+      }
+      need();
+    }
+    vsBox.lastChild.addEventListener('click', () => setViewpoint(null));
+    // Từ chỗ chạm trên màn hình ra toạ độ trên đất.
+    function groundAt(sx, sy) {
+      if (flat) { const s = Math.min(flat.w / G.wk, flat.h / G.hk) / Math.max(.4, cam.dist), [tx, , tz] = cam.target; return [tx + (sx - flat.w / 2) / s, tz + (sy - flat.h / 2) / s]; }
+      const rc = new THREE.Raycaster(); rc.setFromCamera(new THREE.Vector2(sx / stage.clientWidth * 2 - 1, -(sy / stage.clientHeight) * 2 + 1), camera);
+      const hit = rc.intersectObject(ground.mesh)[0]; return hit ? [hit.point.x, hit.point.z] : null;
     }
 
     // ---------- Máy quay ----------
@@ -337,6 +400,14 @@
       bt.addEventListener('click', () => view(k)); tools.appendChild(bt); viewBtns[k] = bt;
     });
     tools.className = 'seg st-views';
+    // Mắt bên kia: ở mốc có "fog", bấm để chỉ thấy những gì bên đó biết lúc ấy. Nút luôn có trong trang (số nút không đổi), mốc không có thì ẩn.
+    const fogWho = Object.values(b.tracks).flatMap((t) => t.keys).map((k) => k.fog && k.fog.who).find(Boolean);
+    let fogOn = false, fogBtn = null;
+    if (fogWho) {
+      fogBtn = $el('button', 'st-fog', esc(fogWho)); fogBtn.type = 'button'; fogBtn.setAttribute('aria-pressed', 'false'); fogBtn.hidden = true;
+      fogBtn.addEventListener('click', () => { fogOn = !fogOn; fogBtn.setAttribute('aria-pressed', String(fogOn)); paint(); });
+      tools.appendChild(fogBtn);
+    }
     function view(name) { curView = name; Object.entries(viewBtns).forEach(([k, bt]) => bt.setAttribute('aria-pressed', String(k === name))); Object.assign(goal, viewGoal(name)); need(); }
     function applyCam() {
       const [tx, ty, tz] = cam.target, d = cam.dist * G.span, cp = Math.cos(cam.pitch);
@@ -381,7 +452,9 @@
         const r = stage.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
         const near = lastHits.filter((o) => x >= o.box[0] - 4 && x <= o.box[2] + 4 && y >= o.box[1] - 4 && y <= o.box[3] + 4);
         const u = near.length ? near[0].u : null;
-        showInfo(u && info.dataset.u !== u.id ? u : null, S);
+        if (u) showInfo(info.dataset.u !== u.id ? u : null, S);
+        else if (!info.hidden) showInfo(null, S);
+        else { const g = groundAt(x, y); if (g && Math.abs(g[0]) <= G.wk / 2 && Math.abs(g[1]) <= G.hk / 2) setViewpoint(g[0], g[1]); }
       }
       tap = null; ptrs.delete(e.pointerId); pinch = 0;
     };
@@ -408,12 +481,27 @@
       cap.innerHTML = `<span class="chip ${sim ? 'sim' : 'good'}">${sim ? 'Mô phỏng · ' + esc(b.tracks[track].label) : esc(b.tracks[track].label || 'Chuyện thật')}</span>`
         + `<span class="st-text"><b>${esc(k.date)}. ${esc(k.title || '')}.</b> ${esc(k.text || '')}${k.src ? ` <span class="muted">Nguồn: ${esc(k.src)}.</span>` : ''}</span>`;
       S = stateAt(b, track, at);
+      const fk = k.fog;
+      if (fogBtn) fogBtn.hidden = !fk;
+      if (fogOn && fk) {
+        // Chỉ bỏ ký hiệu khỏi mắt bên kia; thay bằng một vùng nghi ngờ rộng, lệch khỏi chỗ thật cho đúng là "không biết chính xác".
+        const hide = new Set(fk.hide || []);
+        S = { ...S, show: new Set([...S.show].filter((id) => !hide.has(id))), zones: [...hide].filter((id) => units[id] && S.show.has(id)).map((id, i) => {
+          const [x, z] = G.xz(units[id].at), a = (i * 2.4 + id.length) % (Math.PI * 2); return { id, x: x + Math.cos(a) * .45, z: z + Math.sin(a) * .45, r: 1 + (i % 2) * .25 }; }) };
+        cap.innerHTML += `<span class="st-text st-fogtext"><b>${esc(fk.who)}:</b> ${esc(fk.text || '')}${fk.src ? ` <span class="muted">Nguồn: ${esc(fk.src)}.</span>` : ''}</span>`;
+      }
       if (renderer) {
+        while (zoneGroup.children.length) { const c = zoneGroup.children.pop(); c.geometry.dispose(); c.material.dispose(); }
+        (S.zones || []).forEach((zn) => {
+          const m = new THREE.Mesh(new THREE.CircleGeometry(zn.r, 40), new THREE.MeshBasicMaterial({ color: '#b23a2a', transparent: true, opacity: .16, depthWrite: false }));
+          m.rotation.x = -Math.PI / 2; m.position.set(zn.x, G.hAt(zn.x, zn.z) + .12, zn.z); zoneGroup.add(m);
+        });
         b.units.forEach((u) => { const m = meshes[u.id]; m.visible = S.show.has(u.id);
           m.material.color.set(S.hit.has(u.id) ? COLORS.hit : S.lose.has(u.id) ? COLORS.lost : (b.sides[u.side] || {}).color || '#888');
           m.material.opacity = S.dim.has(u.id) ? .35 : 1; });
         drawLines3d(S.lines);
       }
+      zoneLbls.forEach((e) => { e.hidden = true; });
       if (S.focus && curView !== 'hill') { const [x, z] = G.xz(S.focus); goal.target = [x, G.hAt(x, z), z]; }
       need();
     }
