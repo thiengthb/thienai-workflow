@@ -28,4 +28,5 @@ assert.equal(checkSplit(['artifacts/war/sandtable.js'], 'Sửa sa bàn'), '', 'c
 assert.match(checkSplit(['learning/war/pages/lesson-05.html', 'artifacts/war/sandtable.js'], 'Bài chiến tranh 5'), /Tách phần kit/);
 assert.equal(checkSplit(['learning/war/pages/lesson-05.html', 'artifacts/war/sandtable.js'], 'kit: sa bàn có mốc mùa mưa'), '', 'tiêu đề có "kit": đạt');
 assert.equal(checkSplit(['learning/cards.md', 'learning/war.md', 'artifacts/lesson/after-lesson.mjs'], 'Sau buổi'), '', 'file chung của môn không tính là bài');
+assert.equal(checkSplit(['learning/war/pages/lesson-05.html', 'artifacts/war/README.md'], 'Bài chiến tranh 5'), '', 'sửa README của kit kèm bài: đạt');
 console.log('check-lesson-sources: ok');

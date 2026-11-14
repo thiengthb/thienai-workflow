@@ -7,7 +7,7 @@
 // Báo LỖI khi:
 //   1. Trang bài trong repo còn mang kit đã điền hay dữ liệu trận chép lần hai. Trang trong repo là nguồn;
 //      bản đầy đủ do make-lesson.mjs dựng ra thư mục tạm. Sửa: chạy make-lesson.mjs trên trang đó, script tự làm gọn.
-//   2. (--pr) Một PR vừa đổi bài học (learning/<môn>/pages, battles, lessons) vừa đổi kit (artifacts/), mà tiêu đề
+//   2. (--pr) Một PR vừa đổi bài học (learning/<môn>/pages, battles, lessons) vừa đổi code kit (artifacts/, trừ file .md), mà tiêu đề
 //      không có chữ "kit". Bài cần khả năng mới của sa bàn hay sân khấu thì mở PR kit riêng, có test, rồi bài mới dùng.
 // Cảnh báo khi phần riêng của một trang (nguồn) quá 60 KB: có thể đó là thứ nên vào kit dùng chung.
 // Trang khung cũ (trước 2026-11-14, không có thẻ kit-js) đã đóng băng: không kiểm.
@@ -43,7 +43,7 @@ export function checkSources(files, base = root) {
 const LESSON = /^learning\/[^/]+\/(pages|battles|lessons)\//;
 /** Luật 2: danh sách file đổi trong PR và tiêu đề PR. Trả về dòng lỗi, hoặc '' khi đạt. */
 export function checkSplit(changed, title = '') {
-  const lesson = changed.filter((f) => LESSON.test(f)), kit = changed.filter((f) => f.startsWith('artifacts/'));
+  const lesson = changed.filter((f) => LESSON.test(f)), kit = changed.filter((f) => f.startsWith('artifacts/') && !f.endsWith('.md'));
   if (!lesson.length || !kit.length || /\bkit\b/i.test(title)) return '';
   return `PR vừa đổi bài (${lesson.slice(0, 3).join(', ')}${lesson.length > 3 ? '…' : ''}) vừa đổi kit (${kit.slice(0, 3).join(', ')}${kit.length > 3 ? '…' : ''}). `
     + 'Tách phần kit sang một PR riêng có test, hoặc nếu PR này chủ yếu là sửa kit thì thêm chữ "kit" vào tiêu đề.';
