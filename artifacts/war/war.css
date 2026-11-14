@@ -54,7 +54,7 @@ html[data-board="on"] #board { display: flex; }
 .st-fogtext { flex-basis: 100%; padding: 6px 10px; border-left: 3px solid #b23a2a; background: var(--soft); border-radius: var(--r); }
 .st-tl { padding: 8px 12px 12px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
 .st-row { display: flex; align-items: center; gap: 10px; }
-.st-play { width: 44px; min-height: 44px; padding: 0; flex: none; }
+.st-play { min-width: 64px; min-height: 44px; padding: 0 12px; flex: none; white-space: nowrap; }
 .st-scroll { flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
 .st-scroll::-webkit-scrollbar { display: none; }
 .st-keys { --fill: 0; display: flex; justify-content: space-between; gap: 2px; position: relative; width: max-content; min-width: 100%; }

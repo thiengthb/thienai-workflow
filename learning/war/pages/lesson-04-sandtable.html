@@ -266,7 +266,7 @@ html[data-board="on"] #board { display: flex; }
 .st-fogtext { flex-basis: 100%; padding: 6px 10px; border-left: 3px solid #b23a2a; background: var(--soft); border-radius: var(--r); }
 .st-tl { padding: 8px 12px 12px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
 .st-row { display: flex; align-items: center; gap: 10px; }
-.st-play { width: 44px; min-height: 44px; padding: 0; flex: none; }
+.st-play { min-width: 64px; min-height: 44px; padding: 0 12px; flex: none; white-space: nowrap; }
 .st-scroll { flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
 .st-scroll::-webkit-scrollbar { display: none; }
 .st-keys { --fill: 0; display: flex; justify-content: space-between; gap: 2px; position: relative; width: max-content; min-width: 100%; }
@@ -1050,8 +1050,9 @@ html[data-board="on"] #board { display: flex; }
     // Nút "Bỏ" không ghi vào phần tự lưu (data-noreplay): chỗ đứng nhìn không được lưu lại.
     const vsBox = $el('div', 'chip st-vs', '<span></span><button type="button" data-noreplay>Bỏ</button>'); vsBox.hidden = true; vsBox.setAttribute('role', 'status');
     stage.append(cv, labels, legend, tools, note, compass, info, vsBox);
-    const tl = $el('div', 'st-tl'), row = $el('div', 'st-row'), play = $el('button', 'btn st-play', '▶');
-    play.type = 'button'; play.setAttribute('aria-label', 'Chạy từng mốc');
+    // Không tự chạy: mỗi lần bấm "Tiếp" sang đúng một mốc, để thien đọc xong mới đi tiếp (2026-11-14: nút ▶ tự nhảy mốc khi chưa đọc kịp).
+    const tl = $el('div', 'st-tl'), row = $el('div', 'st-row'), play = $el('button', 'btn st-play', 'Tiếp ›');
+    play.type = 'button'; play.setAttribute('aria-label', 'Sang mốc sau');
     // Hàng mốc cuộn ngang khi màn hình hẹp, để mỗi mốc vẫn đủ 44px cho ngón tay.
     const scroller = $el('div', 'st-scroll'), keysBox = $el('div', 'st-keys'), cap = $el('div', 'st-cap');
     cap.setAttribute('role', 'status');
@@ -1072,7 +1073,7 @@ html[data-board="on"] #board { display: flex; }
       + (Object.values(b.tracks).some((tr) => tr.keys.some((k) => (k.lose || []).length)) ? `<span class="chip"><i class="st-ico flag" style="--fc:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Cắm cờ: đã mất</span>` : '');
     legend.title = b.colorNote || '';
 
-    let track = Object.keys(b.tracks)[0], at = 0, upto = null, timer = null, renderer = null, flat = null;
+    let track = Object.keys(b.tracks)[0], at = 0, upto = null, renderer = null, flat = null;
     const cam = { target: [0, 0, 0], yaw: -.5, pitch: .8, dist: 1 }, goal = { ...cam, target: [0, 0, 0] };
     let curView = 'tilt';
 
@@ -1549,16 +1550,9 @@ html[data-board="on"] #board { display: flex; }
       at = Math.max(0, Math.min(lim, i)); paint();
       if (opts.onKey) opts.onKey(track, at, at === keys.length - 1);
     }
-    play.addEventListener('click', () => {
-      clearInterval(timer);
-      const lim = upto == null ? b.tracks[track].keys.length - 1 : upto;
-      if (at >= lim) return;
-      go(at + 1);
-      timer = setInterval(() => { if (at >= lim) return clearInterval(timer); go(at + 1); }, 2600);
-    });
+    play.addEventListener('click', () => go(at + 1));
     function show(t, o = {}) {
       if (!b.tracks[t]) return;
-      clearInterval(timer);
       const changed = t !== track; track = t; upto = o.upto == null ? null : o.upto;
       if (changed || !keyBtns[0].lastChild.textContent) buildKeys();
       go(o.at == null ? (changed ? 0 : at) : o.at);

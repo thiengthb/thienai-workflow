@@ -6,7 +6,7 @@ Phần thêm cho mẫu buổi học (`../lesson/`), chỉ dành cho bài chiến
 
 - Khung rộng (từ 900px): sa bàn bên trái đứng yên, các bước bên phải. Điện thoại: sa bàn ở trên, bước ở dưới. Bước không cần sa bàn (ôn, câu hỏi, góp ý) thì sa bàn ẩn, trang về một cột như bài thường.
 - Kéo để xoay, chụm hai ngón hoặc lăn chuột để phóng. Nút góc nhìn ở góc trên: Nghiêng, Từ trên (đọc như bản đồ), và góc riêng của trận (ví dụ "Từ đồi phía đông").
-- Thanh thời gian dưới sa bàn: bấm từng mốc hoặc ▶. Mỗi mốc có nhãn **Chuyện thật** hay **Mô phỏng**, một đoạn kể ngắn và nguồn.
+- Thanh thời gian dưới sa bàn: bấm từng mốc hoặc nút **Tiếp ›** để sang mốc sau. Sa bàn không tự chạy: người học đọc xong mốc nào mới bấm sang mốc kế. Mỗi mốc có nhãn **Chuyện thật** hay **Mô phỏng**, một đoạn kể ngắn và nguồn.
 - Chọn nước đi: mỗi lựa chọn có nút "Xem" để thấy cách đó trên sa bàn trước khi chọn. Chọn xong không có đúng sai, chỉ có "Bạn chọn" và "Chuyện thật", rồi mới mở thanh thời gian.
 - Nhãn luôn đứng thẳng, nhãn đè nhau thì ẩn bớt cái kém quan trọng. Chỉ vẽ lại khi có gì đổi, không chạy liên tục, để đỡ pin.
 - Máy không vẽ được 3D thì tự chuyển sang bản đồ phẳng tô bóng đồi, cùng dữ liệu, cùng nút.
