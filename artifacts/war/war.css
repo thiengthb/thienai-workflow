@@ -103,3 +103,7 @@ html[data-board="on"] #board { display: flex; }
 .tracks { display: flex; gap: 6px; flex-wrap: wrap; }
 .tracks .btn { flex: 1; min-height: 40px; }
 .st-key[hidden] { display: none; }
+/* Danh sách đơn vị cho bàn phím: ẩn khỏi mắt, hiện thành một hàng nút khi được Tab tới. */
+.st-units { position: absolute; left: 8px; top: 8px; display: flex; flex-wrap: wrap; gap: 4px; max-width: calc(100% - 16px); z-index: 4; opacity: 0; pointer-events: none; }
+.st-units:focus-within { opacity: 1; pointer-events: auto; }
+.st-units button { min-height: 32px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); color: var(--ink); font: 500 12px/1 var(--font); cursor: pointer; }

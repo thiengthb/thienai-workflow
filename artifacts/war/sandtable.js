@@ -218,15 +218,26 @@
     b.units.forEach((u) => { const s = $el('span', 'st-lbl ' + u.side); labels.appendChild(s); labelEls[u.id] = s; });
     const featLbls = b.features.filter((f) => f.short || f.name).map((f) => { const s = $el('span', 'st-lbl feat ' + f.kind); s.textContent = f.short || f.name; labels.appendChild(s); return { f, e: s }; });
     let lastHits = [];
+    // Bàn phím: mỗi đơn vị một nút (ẩn, hiện ra khi được Tab tới), bấm thì mở cùng khung thông tin như khi chạm.
+    // data-noreplay: phần tự lưu không đếm các nút này. Số nút cố định theo dữ liệu trận.
+    const unitList = $el('div', 'st-units'); unitList.setAttribute('aria-label', 'Các đơn vị trên sa bàn');
+    b.units.forEach((u) => { const bt = $el('button', '', esc(u.name)); bt.type = 'button'; bt.dataset.noreplay = '';
+      bt.addEventListener('click', () => { if (!S || !S.show.has(u.id)) { info.hidden = false; info.innerHTML = `<b>${esc(u.name)}</b><span>Chưa có trên sa bàn ở mốc này</span>`; info.style.transform = 'translate(8px, 48px)'; delete info.dataset.u; return; }
+        if (!lastHits.some((o) => o.u === u)) { info.hidden = false; info.innerHTML = `<b>${esc(S.rename[u.id] || u.name)}</b><span>Ngoài khung nhìn: thử nút "Từ trên"</span>`; info.style.transform = 'translate(8px, 48px)'; delete info.dataset.u; return; }
+        showInfo(u, S); });
+      unitList.appendChild(bt); });
+    stage.appendChild(unitList);
     const zoneLbls = b.units.map(() => { const s = $el('span', 'st-lbl zone'); s.hidden = true; labels.appendChild(s); return s; }); // vùng chạm của từng ký hiệu và nhãn ở lần vẽ gần nhất
     function screenAt(x, z) {
-      if (flat) { const [px, pz] = flatProj(x, z); return [px, pz]; }
+      if (flat) { const [px, pz] = flatProj(x, z); return [px, pz, true]; }
       const v = new THREE.Vector3(x, G.hAt(x, z), z).project(camera);
-      return [(v.x + 1) / 2 * stage.clientWidth, (1 - v.y) / 2 * stage.clientHeight];
+      return [(v.x + 1) / 2 * stage.clientWidth, (1 - v.y) / 2 * stage.clientHeight, v.z < 1]; // v.z >= 1: sau máy quay
     }
     // Hướng bắc và thước tỉ lệ đo tại điểm đang nhìn, nên khi xoay hay phóng to vẫn đúng.
     function updateCompass() {
-      const [tx, , tz] = cam.target, p0 = screenAt(tx, tz), pn = screenAt(tx, tz - .5), pe = screenAt(tx + .5, tz);
+      // Thước đo theo hướng ngang của màn hình: 3D lấy đoạn vuông góc với hướng nhìn, bản phẳng lấy hướng đông.
+      const [tx, , tz] = cam.target, rx = flat ? 1 : Math.cos(cam.yaw), rz = flat ? 0 : -Math.sin(cam.yaw);
+      const p0 = screenAt(tx, tz), pn = screenAt(tx, tz - .5), pe = screenAt(tx + .5 * rx, tz + .5 * rz);
       const ang = Math.atan2(pn[0] - p0[0], -(pn[1] - p0[1])) * 180 / Math.PI;
       compass.querySelector('.st-north').style.transform = `rotate(${ang.toFixed(1)}deg)`;
       const perKm = Math.hypot(pe[0] - p0[0], pe[1] - p0[1]) * 2;
@@ -306,7 +317,7 @@
       // Tên sông, đường, sân bay: ưu tiên thấp nhất, đặt ở điểm của đường gần giữa khung nhìn, không chen vào đâu thì ẩn.
       featLbls.forEach(({ f, e }) => {
         e.hidden = true;
-        const pts = f.pts.map((pt) => { const [x, z] = G.xz(pt); return screenAt(x, z); }).filter(([x, y]) => x > 0 && y > 0 && x < W && y < H);
+        const pts = f.pts.map((pt) => { const [x, z] = G.xz(pt); return screenAt(x, z); }).filter(([x, y, front]) => front && x > 0 && y > 0 && x < W && y < H);
         if (!pts.length) return;
         pts.sort((a, c) => Math.hypot(a[0] - W / 2, a[1] - H * .45) - Math.hypot(c[0] - W / 2, c[1] - H * .45));
         e.hidden = false; const w = e.offsetWidth, h = e.offsetHeight;
@@ -320,7 +331,7 @@
         e.hidden = true;
       });
       (S.zones || []).forEach((zn, i) => {
-        const e = zoneLbls[i]; if (!e) return; const [x, y] = screenAt(zn.x, zn.z);
+        const e = zoneLbls[i]; if (!e) return; const [x, y, front] = screenAt(zn.x, zn.z); if (!front) { e.hidden = true; return; }
         e.textContent = (units[zn.id].side === 'vn' ? 'Pháo Việt Minh ở đâu?' : 'Không rõ'); e.hidden = false;
         const w = e.offsetWidth, h = e.offsetHeight, bx = [x - w / 2, y - h / 2, x + w / 2, y + h / 2];
         if (bx[0] < 2 || bx[1] < 2 || bx[2] > W - 2 || bx[3] > H - 2 || hitAny(bx, taken)) { e.hidden = true; return; }
