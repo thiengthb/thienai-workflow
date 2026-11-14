@@ -20,6 +20,6 @@ Luật cho mọi AI làm việc trong repo thienai-workflow (Claude, Codex, côn
 
 ## Sửa repo
 - Mọi thay đổi qua nhánh và PR, thien merge. Tên nhánh, tên file, thư mục, commit viết tiếng Anh; nội dung cho thien đọc viết tiếng Việt tự nhiên theo `profile/VOICE.md`.
-- PR mở ở dạng nháp trong lúc làm. Xong và test như CI qua thì chuyển sẵn sàng, comment `@coderabbitai review`, chờ đúng một lượt, sửa hay trả lời từng ý rồi mới báo thien. Sửa lớn (đổi logic khác chỗ bot chỉ, thêm file hay hàm mới) thì gọi review lại; sửa nhỏ thì không. Lý do: `docs/decisions/002-coderabbit-one-review.md`.
+- PR mở ở dạng nháp trong lúc làm. Xong và test như CI qua thì chuyển sẵn sàng (CodeRabbit tự review; chỉ khi 2 phút sau chưa thấy check CodeRabbit chạy thì comment `@coderabbitai review`), chờ đúng một lượt, sửa hay trả lời từng ý rồi mới báo thien. Sửa lớn (đổi logic khác chỗ bot chỉ, thêm file hay hàm mới) thì gọi review lại; sửa nhỏ thì không. Lý do: `docs/decisions/002-coderabbit-one-review.md`.
 - Chạy được thì chạy test như CI (`.github/workflows/test.yml`), nhất là `node templates/check-status.mjs docs/STATUS.md` khi sửa STATUS.
 - Giữ file này ngắn, dưới 40 dòng. Chi tiết để ở file riêng rồi trỏ tới.

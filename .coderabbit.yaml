@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 # CodeRabbit cho repo thienai-workflow. Cách dùng và lý do: docs/decisions/002-coderabbit-one-review.md
-# Tóm tắt: PR mở ở dạng nháp trong lúc làm (CodeRabbit bỏ qua), xong và test qua mới chuyển sẵn sàng rồi gọi
-# "@coderabbitai review" một lần. Không review lại sau mỗi lần đẩy; bản sửa lớn thì gọi lại bằng tay.
+# Tóm tắt: PR mở ở dạng nháp trong lúc làm (CodeRabbit bỏ qua), xong và test qua mới chuyển sẵn sàng: lúc đó CodeRabbit
+# tự review một lần. Không review lại sau mỗi lần đẩy; bản sửa lớn thì comment "@coderabbitai review".
 reviews:
   profile: chill
   auto_review:
