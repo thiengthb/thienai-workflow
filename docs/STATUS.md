@@ -25,7 +25,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 ## Vừa xong
 - Tự lưu nhớ nút theo tên nên AI sửa trang đang học dở vẫn mở lại đúng chỗ; bộ khung cũ gộp vào `artifacts/kit/`; mọi màu là tên trong `kit.css`, có `check-tokens.mjs`; trang mẫu thành phần; CI kiểm truy cập bằng axe-core (PR #61)
-- Sổ bàn giao giữa các nick Claude: ghi việc dở sau mỗi bước lên nhánh `handoff` của từng repo, nói "tiếp tục" ở nick khác là làm tiếp (`profile/HANDOFF.md`, `templates/handoff.mjs`, quyết định 001; PR này)
+- Sổ bàn giao giữa các nick Claude: ghi việc dở sau mỗi bước lên nhánh `handoff` của từng repo, nói "tiếp tục" ở nick khác là làm tiếp (`profile/HANDOFF.md`, `templates/handoff.mjs`, quyết định 001), và chuẩn setup chung cho 3 nick có số phiên bản, AI tự kiểm đầu phiên (`profile/SETUP.md`, `templates/setup-check.mjs`); PR #62
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), dựng từ mẫu bàn thử `artifacts/it/` (bài mẫu trong đó chính là nháp buổi 6).
@@ -33,7 +33,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 ## Đang chờ thien
 - Mở 3 trang (link trong file kế hoạch) trên điện thoại và laptop; trên laptop chạy `node templates/check-status.mjs docs/STATUS.md`, thấy "ổn" là xong.
-- Chép dòng Settings mới (README, bước 1, có thêm dòng "tiếp tục") vào từng tài khoản Claude; tải lại 2 file zip skill nếu chưa.
+- Ở từng nick: dán project instructions và gắn repo cho project Claude và sakubun theo `profile/SETUP.md` (phiên đầu ở mỗi project sẽ nhắc nếu quên).
 - Merge sakubun PR #301 (luật AGENTS mới).
 
 ## Đang vướng
