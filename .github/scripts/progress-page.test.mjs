@@ -82,7 +82,7 @@ assert.equal(order.find((p) => p.number === 1).closeAfter, 7, '#7 includes #1: c
 assert.deepEqual(prOrder([pr(1, 'a', { body: 'merge after #2' }), pr(2, 'b', { body: 'depends on #1' })]).map((p) => p.number), [1, 2], 'a cycle still lists every PR');
 assert.deepEqual(prOrder([pr(1, 'a', { body: 'merge sau #9' })])[0].after, [], 'a closed PR is no dependency');
 // A fork's branch named like a branch of the repo is a different branch: #12 is stacked on #10, not on the fork's #11.
-const fork = prOrder([pr(12, 'c', { base: 'feature', baseRepo: 'o/r' }), pr(11, 'b', { head: 'feature', headRepo: 'f/r' }), pr(10, 'a', { head: 'feature', headRepo: 'o/r' })]);
+const fork = prOrder([pr(12, 'c', { base: 'feature', baseRepo: 'o/r' }), pr(10, 'a', { head: 'feature', headRepo: 'o/r' }), pr(11, 'b', { head: 'feature', headRepo: 'f/r' })]);   // fork last: matching by name alone would pick #11
 assert.deepEqual(fork.find((p) => p.number === 12).after, [10]);
 
 // A STATUS item about a PR still open becomes a note on it, in the repo it names; one whose PR is gone is marked.
