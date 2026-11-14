@@ -1,33 +1,29 @@
 # 003. Claude làm người review PR
 
-Ngày: 2026-11-14 · Trạng thái: Đã chọn · Người quyết: thien
+Ngày: 2026-11-14 · Trạng thái: Bỏ (cùng ngày) · Người quyết: thien
 
 ## Cần quyết gì
-CodeRabbit hết dùng thử ngày 2026-11-24; gói Free của nó không review code trên PR ([002](002-coderabbit-one-review.md)). Gemini Code Assist bản miễn phí trên GitHub đã tắt từ 2026-07-17. Từ tháng 12 thien chỉ dùng Claude (nick Codex hết hạn), không muốn trả thêm tiền, và chấp nhận tốn usage Claude của chính mình. Cần một cách review lâu dài bằng Claude.
+CodeRabbit hết dùng thử ngày 2026-11-24; gói Free của nó không review code trên PR ([002](002-coderabbit-one-review.md)). Gemini Code Assist bản miễn phí trên GitHub đã tắt từ 2026-07-17. Từ tháng 12 thien chỉ dùng Claude. Có nên để Claude review mọi PR không?
 
 ## Các phương án đã xét
 | Phương án | Lúc nào nó là lựa chọn tốt | Lý do mạnh nhất để không chọn |
 |---|---|---|
-| A. Review trong phiên: agent mới review trước khi PR sẵn sàng, CI báo đỏ PR thiếu mục `## Review` | Gần như mọi PR do Claude mở trong phiên | Cùng một nick vừa làm vừa review: nick sắp hết usage thì lượt review có thể bị cắt; agent mới cùng phiên ít độc lập hơn bot ở môi trường khác; PR thien tự mở không có ai review |
-| B. Claude GitHub Action tự review khi PR chuyển sẵn sàng, chạy bằng token gói Claude | Muốn tự động hoàn toàn như CodeRabbit, review cả PR thien tự mở | Tốn phút GitHub Actions ở repo riêng tư (thienai-workflow tuần 7–14/11 đã có 168 lượt CI, khoảng 300 phút chạy, có thể gần giới hạn 2.000 phút mỗi tháng của gói Free [suy luận]); token gắn với một nick, nick đó hết usage thì review lỗi; phải cài một lần trên laptop |
-| C. Kết hợp: A mặc định, Action chỉ chạy khi có người comment `@claude` | Muốn A, cộng một lối review độc lập cho PR thien tự mở hay lượt review lại sau sửa lớn | Vẫn phải cài như B, hai chỗ cấu hình |
-| Bỏ review | PR toàn tài liệu | Số liệu ở 002: review bắt được lỗi thật mà test không bắt, ví dụ `reset --hard` ở #62 |
+| A. Review trong phiên: agent mới review trước khi PR sẵn sàng, CI báo đỏ PR thiếu mục `## Review` | Gần như mọi PR do Claude mở trong phiên | Mỗi lượt khoảng 120 nghìn token (đo bên dưới), gần như không phụ thuộc diff to hay nhỏ |
+| B. Claude GitHub Action tự review khi PR chuyển sẵn sàng | Muốn tự động như CodeRabbit | Tốn token như A, cộng phút GitHub Actions ở repo riêng tư |
+| C. A, cộng gọi Claude trên GitHub bằng `@claude` khi cần | Muốn thêm một lối review độc lập | Tốn như A, cộng một lần cài |
+| D. Không review trong lúc làm; review và tối ưu theo giai đoạn khi thien nhờ | Đang cần dồn usage cho phát triển và học | Lỗi nằm trên main lâu hơn, tới lần review giai đoạn |
+
+## Đã thử (2026-11-14, trên PR #66 và sakubun#316)
+thien chọn C, AI chọn A; đã dựng xong rồi chạy thử. Ba lượt agent review: khoảng 126, 123 và 118 nghìn token, mỗi lượt 2,6 đến 4,2 phút. Phần lớn token đi vào đọc luật và chạy thử, không phải đọc diff. Các lượt này bắt được lỗi thật (10, 10 và 7 ý, không có ý nặng), nhưng chính các PR đó là công cụ review.
 
 ## thien chọn
-C, trong chat ngày 2026-11-14, không ghi lý do.
+D, ngày 2026-11-14: "review liên tục thế này sẽ rất tốn token và không đủ lượng cho mình phát triển". Dùng CodeRabbit tới khi hết dùng thử, sau đó gói Free khi nào được thì dùng. Hết một giai đoạn thì thien nhờ Claude review và tối ưu, lúc đó dựng một quy trình review và sửa sẵn.
 
 ## AI chọn
-A. Từ tháng 12 gần như mọi PR do Claude mở trong phiên, nên A phủ hầu hết; phần Action của C thêm một lần cài và một token gắn với một nick cho một tính năng chắc ít dùng. AI đã đánh giá thấp hai chỗ C hơn A: PR thien tự mở không có phiên nào review, và lượt review lại sau sửa lớn nên thật độc lập với nick vừa làm.
+Trước khi thien chọn D, AI đề xuất chia ba mức (không review giao diện thuần và tài liệu; review nhẹ bằng model rẻ hơn; review đầy đủ cho luật dùng chung, script đụng git, dữ liệu và đăng nhập). D rẻ hơn hẳn. Chỗ cần nhớ khi review theo giai đoạn: soi trước những vùng hỏng thì đắt (sakubun: `userDb`, `recordReviews`, migration, đăng nhập; thienai-workflow: script đụng git và sổ bàn giao).
 
 ## Kết luận
-Làm C:
-- Cách làm: [`profile/REVIEW.md`](../../profile/REVIEW.md). Agent mới (không kèm lịch sử phiên) review diff theo luật của repo; AI sửa hay trả lời từng ý rồi ghi mục `## Review` vào mô tả PR.
-- CI: `templates/check-review.mjs` chạy trong `.github/workflows/review-check.yml` (vài giây, chỉ chạy bước này), báo đỏ PR không còn nháp mà mục `## Review` thiếu hay chưa điền. Repo riêng tư trên gói GitHub Free không bắt buộc check được (API bảo vệ nhánh trả 403, agent review PR #66 kiểm ngày 2026-11-14), nên luật là không ai merge khi check đỏ.
-- `@claude`: `.github/workflows/claude.yml` chỉ chạy khi có comment chứa `@claude` của người có quyền ghi. thien cài một lần: app Claude trên GitHub và secret `CLAUDE_CODE_OAUTH_TOKEN` (tạo bằng `claude setup-token` trên laptop, nick nào cũng được).
-- CodeRabbit vẫn chạy theo 002 tới 2026-11-24. Ngày đó: thien gỡ app CodeRabbit, AI xoá `.coderabbit.yaml` ở thienai-workflow và sakubun (không xoá thì luật "chờ thêm một lượt CodeRabbit" sẽ chờ một lượt không bao giờ tới). Áp ở thienai-workflow và sakubun (thiengthb/sakubun#316).
-
-## Xem lại khi
-- 2026-12-14 (một tháng chỉ dùng Claude): đếm lỗi lọt qua review trong phiên và số lần gọi `@claude`. Hầu như không gọi `@claude` thì bỏ phần Action; lọt nhiều lỗi thì cân nhắc B.
+Không review PR bằng Claude trong lúc làm. Đã gỡ `profile/REVIEW.md`, `check-review.mjs`, `review-check.yml`, `claude.yml` khỏi PR #66 và sakubun#316 trước khi merge. Bản đã dựng còn trong lịch sử git của hai PR đó (thienai-workflow commit 299bdaa, sakubun d26efac) nếu sau này cần lấy lại.
 
 ## Tóm tắt bằng lời của thien
 <thien tự viết, hoặc "bỏ qua">
