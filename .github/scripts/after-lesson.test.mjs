@@ -1,7 +1,7 @@
 // Kiểm after-lesson.mjs (việc sau buổi học), usage.mjs (tính năng được dùng) và phần "chỗ còn vướng" của make-lesson.mjs.
 import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync, mkdtempSync, mkdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { subjects, lessonOf, pageQuestions, stuckPoints, addStuck, draft, checkAfter, checkAll } from '../../artifacts/lesson/after-lesson.mjs';
@@ -84,7 +84,7 @@ const conf = (h) => JSON.parse(h.match(/<script type="application\/json" id="les
 const tplFilled = tpl.replace(/__[A-Z][A-Z0-9_]*__/g, 'Mẫu');
 assert.deepEqual(conf(fill(tplFilled, 'frontend-06', '', { stuck: ['a', 'b'] })).stuck, ['a', 'b']);
 assert.equal(conf(fill(tplFilled, 'frontend-06', '')).stuck, undefined);
-assert.equal(subjectFile('/x/learning/frontend/pages/lesson-06.html'), '/x/learning/frontend.md');
+assert.equal(subjectFile('/x/learning/frontend/pages/lesson-06.html'), resolve('/x/learning/frontend.md').replace(/\\/g, '/')); // D:/x/... on Windows
 assert.equal(subjectFile('/x/other/lesson.html'), null);
 
 // Repo thật: bài nào cũng có nhật ký, thẻ, roadmap

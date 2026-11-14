@@ -24,11 +24,12 @@ jobs:
       - name: Script tests (no browser)
         shell: bash
         run: |
-          set -e
+          fail=0
           for t in .github/scripts/*.test.mjs; do
             case "$t" in *ask-prompts*|*autosave*|*lesson-claude*) continue;; esac   # need Playwright, run on Linux
-            echo "== $t"; node "$t"
+            echo "== $t"; node "$t" || { echo "::error::$t failed"; fail=1; }
           done
-          node artifacts/lesson/after-lesson.mjs --check-all
-          node templates/check-status.mjs docs/STATUS.md
-          node .github/scripts/check-links.mjs
+          node artifacts/lesson/after-lesson.mjs --check-all || fail=1
+          node templates/check-status.mjs docs/STATUS.md || fail=1
+          node .github/scripts/check-links.mjs || fail=1
+          exit $fail

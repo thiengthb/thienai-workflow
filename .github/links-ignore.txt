@@ -21,7 +21,9 @@ slides/lab3/deck.html
 slides/final/deck.html
 # Removed on purpose, named in docs/decisions/003-claude-as-reviewer.md
 profile/REVIEW.md
-# Branch name used as an example in learning/codex.md
+# Branch name used as an example in learning/codex.md (more branch names at the end)
 learning/ba-02
 # Placeholder link in an example sentence (profile/GUIDES.md)
 link
+# Branch names written in backticks (STATUS, examples)
+docs/cross-account-handoff
