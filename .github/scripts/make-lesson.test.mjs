@@ -63,4 +63,25 @@ assert.ok(!/__[A-Z]+__/.test(once.replace(/__TITLE__|__SUBJECT__|__HEADLINE__/g,
   assert.ok(battle.terrain && battle.terrain.h, 'battle data with terrain filled in');
   assert.ok(!battle.units.some((u) => u.raw), 'raw snap points dropped');
 }
+// Frontend and BA pages: copied from the IT templates (bench, board), with the stage parts filled in.
+{
+  const { mkdtempSync, readFileSync: rd } = await import('node:fs');
+  const { spawnSync } = await import('node:child_process');
+  const { join } = await import('node:path');
+  const { tmpdir } = await import('node:os');
+  const d = mkdtempSync(join(tmpdir(), 'it-cli-'));
+  const cli = new URL('../../artifacts/lesson/make-lesson.mjs', import.meta.url).pathname;
+  for (const [subj, mark] of [['frontend', 'class="pane bench"'], ['ba', 'class="pane board"']]) {
+    const pagePath = join(d, `learning/${subj}/pages/lesson-07.html`);
+    let r = spawnSync(process.execPath, [cli, pagePath], { encoding: 'utf8' });
+    assert.equal(r.status, 0, r.stderr);
+    assert.ok(rd(pagePath, 'utf8').includes(mark), `${subj} template copied`);
+    r = spawnSync(process.execPath, [cli, pagePath, '--no-check', '--out', join(d, 'out-' + subj)], { encoding: 'utf8' });
+    assert.equal(r.status, 0, r.stderr);
+    const html = rd(pagePath, 'utf8');
+    assert.match(html, /window\.Stage = /, `it-stage.js filled in (${subj})`);
+    assert.match(html, /\.bench \{/, `it.css filled in (${subj})`);
+    assert.ok(html.includes(`<meta name="lesson-id" content="${subj}-07">`), `lesson id guessed from path (${subj})`);
+  }
+}
 console.log('make-lesson: ok');
