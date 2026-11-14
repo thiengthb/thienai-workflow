@@ -1,12 +1,12 @@
 // Tests for templates/handoff.mjs, run in CI by .github/workflows/test.yml.
 // Uses a local bare repo as the remote, so nothing touches GitHub.
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync, readFileSync, existsSync, rmSync } from 'node:fs';
-import { join } from 'node:path';
+import { mkdtempSync, writeFileSync, readFileSync, existsSync, rmSync, mkdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { skeleton, checkTask, summarize, section } from '../../templates/handoff.mjs';
+import { skeleton, checkTask, summarize, section, stripBase, baseOf } from '../../templates/handoff.mjs';
 
 const fresh = skeleton('thiengthb/sakubun', 'review-page', 'Trang ôn thẻ', new Date('2026-11-14T10:00:00Z'));
 assert.ok(checkTask(fresh).some(p => p.includes('Bước tiếp theo')), 'an unfilled skeleton must fail on the next step');
@@ -44,7 +44,19 @@ assert.ok(r.stdout.indexOf('Sổ bàn giao') >= 0 && r.stdout.indexOf('Sổ bàn
 assert.match(r.stdout, /Đang chờ thien: - Trang: https:\/\/claude.ai\/artifact\/x/);
 assert.match(r.stdout, /Không đọc được: .*missing\.git/, 'unreadable repo is reported, not silently skipped');
 r = run('list', '--remotes', flow); assert.ok(!r.stdout.includes('Trang ôn thẻ'), 'sakubun task is not in the thienai-workflow book');
-r = run('show', 'thiengthb/sakubun', 'review-page', '--remote', saku); assert.equal(r.stdout, waiting);
+r = run('show', 'thiengthb/sakubun', 'review-page', '--remote', saku); assert.equal(stripBase(r.stdout), waiting); assert.ok(baseOf(r.stdout), 'show adds the base line');
+
+// Lost update: accounts A and B both read V0; A saves; B saves an edit based on V0 -> refused, A's edit kept.
+const a0 = join(root, 'A', 'review-page.md'), b0 = join(root, 'B', 'review-page.md');
+for (const f of [a0, b0]) { mkdirSync(dirname(f), { recursive: true }); writeFileSync(f, run('show', 'thiengthb/sakubun', 'review-page', '--remote', saku).stdout); }
+writeFileSync(a0, readFileSync(a0, 'utf8').replace('- <điều nick sau dễ làm sai>', '- ghi chú của A'));
+r = run('save', a0, '--remote', saku); assert.equal(r.status, 0, r.stderr);
+r = run('save', a0, '--remote', saku); assert.equal(r.status, 0, 'saving again from the same copy works: ' + r.stderr);
+writeFileSync(b0, readFileSync(b0, 'utf8').replace('- <điều nick sau dễ làm sai>', '- ghi chú của B'));
+r = run('save', b0, '--remote', saku); assert.notEqual(r.status, 0, 'stale edit refused'); assert.match(r.stderr, /đã được sửa từ lúc bạn đọc/);
+assert.match(run('show', 'thiengthb/sakubun', 'review-page', '--remote', saku).stdout, /ghi chú của A/);
+// A file without a base line may not overwrite an existing task either (two accounts picked the same name).
+r = run('save', f1, '--remote', saku); assert.notEqual(r.status, 0, 'new copy cannot clobber an existing task');
 r = run('done', 'thiengthb/sakubun', 'review-page', '--remote', saku); assert.equal(r.status, 0, r.stderr);
 r = run('list', '--remotes', `${saku},${flow}`); assert.ok(!r.stdout.includes('Trang ôn thẻ') && r.stdout.includes('Sổ bàn giao'));
 assert.ok(!r.stdout.includes('Không đọc được'), 'a book emptied by done is empty, not unreadable');

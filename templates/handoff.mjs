@@ -18,6 +18,7 @@ import { join, dirname, basename } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 
 export const BRANCH = 'handoff';
 export const REQUIRED = ['## thien muốn gì', '## Đã xong', '## Bước tiếp theo', '## Đang chờ thien'];
@@ -88,6 +89,14 @@ function git(args, cwd, quiet = true) {
   if (r.status !== 0 && !quiet) process.stderr.write(r.stderr);
   return r;
 }
+
+// Lost-update guard: a local copy carries "<!-- handoff-base: <hash> -->", the hash of the book's version it was
+// based on (written by `show` and after each `save`). `save` refuses when the book changed since then.
+const BASE = /\n?<!-- handoff-base: ([0-9a-f]+) -->\n?$/;
+export const stripBase = (text) => text.replace(BASE, '\n').replace(/\n+$/, '\n');
+export const baseOf = (text) => (text.match(BASE) || [])[1];
+export const hashOf = (text) => createHash('sha1').update(stripBase(text)).digest('hex').slice(0, 12);
+export const withBase = (text) => stripBase(text) + `<!-- handoff-base: ${hashOf(text)} -->\n`;
 
 export const repoOf = (text) => (text.match(/^Repo: ([\w.-]+\/[\w.-]+)/m) || [])[1];
 const urlOf = (repo) => `https://github.com/${repo}`;
@@ -178,8 +187,18 @@ function main(argv) {
     if (cmd === 'check') return console.log('ổn');
     const repo = repoOf(text);
     const dir = checkout(remoteOpt || urlOf(repo));
-    writeFileSync(join(dir, 'tasks', basename(a)), text);
-    console.log(commitPush(dir, `handoff: update ${basename(a, '.md')}`) + `: ${repo}, nhánh ${BRANCH}, tasks/${basename(a)}`);
+    const target = join(dir, 'tasks', basename(a));
+    if (existsSync(target)) {
+      const current = readFileSync(target, 'utf8');
+      if (hashOf(current) !== hashOf(text) && baseOf(text) !== hashOf(current)) {
+        fail(`Trong sổ, việc ${basename(a, '.md')} đã được sửa từ lúc bạn đọc (có thể bởi nick khác). Chưa ghi gì. ` +
+          `Chạy \`show ${repo} ${basename(a, '.md')} > ${basename(a)}\` để lấy bản mới, gộp phần của mình vào rồi \`save\` lại.`);
+      }
+    }
+    writeFileSync(target, stripBase(text));
+    const out = commitPush(dir, `handoff: update ${basename(a, '.md')}`);
+    writeFileSync(a, withBase(text)); // the next save from this copy is based on what was just written
+    console.log(out + `: ${repo}, nhánh ${BRANCH}, tasks/${basename(a)}`);
     return;
   }
   if (cmd === 'list') {
@@ -207,7 +226,7 @@ function main(argv) {
     const name = b.endsWith('.md') ? b : b + '.md';
     const dir = cmd === 'show' ? readOnly(remoteOpt || urlOf(a)) : checkout(remoteOpt || urlOf(a));
     if (!dir || dir === 'none' || !existsSync(join(dir, 'tasks', name))) fail(`không có việc ${b} trong sổ của ${a}`);
-    if (cmd === 'show') return process.stdout.write(readFileSync(join(dir, 'tasks', name), 'utf8'));
+    if (cmd === 'show') return process.stdout.write(withBase(readFileSync(join(dir, 'tasks', name), 'utf8')));
     rmSync(join(dir, 'tasks', name));
     console.log(commitPush(dir, `handoff: done ${basename(name, '.md')}`) + `: đã xoá tasks/${name} ở ${a}`);
     return;
