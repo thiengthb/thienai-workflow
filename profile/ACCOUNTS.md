@@ -23,7 +23,7 @@ Claude có hai kiểu project, và một nick chỉ có một kiểu. Bản mớ
 | Nick | Kiểu project | Biết từ đâu |
 |---|---|---|
 | tnt024 | beta: một chat điều phối mở nhiều thread | PR của nick này đến từ thread (nhánh `claude/project-thread-...`) |
-| tnt628 | chưa rõ | thien xác nhận khi mở project ở nick đó |
+| tnt628 | beta: một chat điều phối mở nhiều thread | thien nói 2026-11-15 |
 | tnt697 | cũ: mỗi chat riêng, không có thread | thien nói 2026-11-15; chat trong project vẫn chạy lệnh, đẩy nhánh, mở PR được |
 
 | Bản cũ | Bản beta |
