@@ -88,9 +88,9 @@ export async function buildFixtures(dir, browser) {
 
 // Chạy trong trang: tìm khung rỗng và chữ mờ. Trả về { empty: [...], contrast: [...] }.
 function inspect() {
-  // Trong suốt (opacity gần 0, tính dồn cả các lớp cha) cũng là không thấy.
+  // Trong suốt (opacity gần 0, tính dồn cả các lớp cha, kể cả khung đang xét) cũng là không thấy.
   const faded = (e, stop) => { let o = 1; for (let n = e; n && n.nodeType === 1 && n !== stop; n = n.parentElement) o *= Number(getComputedStyle(n).opacity); return o <= 0.05; };
-  const shown = (e) => { const cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility === 'hidden' || faded(e, e.parentElement)) return false; const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+  const shown = (e) => { const cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility === 'hidden' || faded(e, null)) return false; const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
   const rendered = (e) => { for (let n = e; n && n.nodeType === 1; n = n.parentElement) { const cs = getComputedStyle(n); if (cs.display === 'none' || cs.visibility === 'hidden') return false; } if (faded(e, null)) return false; const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
   const name = (e) => e.tagName.toLowerCase() + (e.id ? '#' + e.id : '') + [...e.classList].map((c) => '.' + c).join('');
   const where = (e) => { const s = e.closest('[data-s]'); return (s ? `bước ${s.dataset.s} ` : '') + name(e); };
