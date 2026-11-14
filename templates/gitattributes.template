@@ -2,6 +2,9 @@
 # Lý do: thienai-workflow PR #69; git trên Windows (core.autocrlf=true) đổi file thành CRLF và script đọc Markdown hỏng.
 
 * text=auto eol=lf
+# Windows batch files need CRLF (cmd.exe reads labels wrong with LF): exceptions come after the default.
+*.bat text eol=crlf
+*.cmd text eol=crlf
 
 # Binary files: never touch their bytes.
 *.png binary

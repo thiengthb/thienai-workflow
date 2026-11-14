@@ -30,7 +30,10 @@ export function parseMap(md) {
   for (const line of part('Tầng 2').split('\n')) {
     const cells = line.split('|').map((c) => c.trim());
     if (cells.length < 4 || /^-+$/.test(cells[1]) || cells[1] === 'thien nói hay việc là') continue;
-    tasks.push({ task: cells[1].replace(/`/g, ''), files: paths(cells[2]) });
+    // "`a.md` hay `b.md`": the AI reads one of the two, so only the larger one counts (worst case, no double count).
+    const alts = [...cells[2].matchAll(/`([^`\s]+\.md)` hay `([^`\s]+\.md)`/g)].map((m) => [m[1], m[2]]);
+    const files = paths(cells[2]).filter((p) => !alts.some(([, second]) => second === p));
+    tasks.push({ task: cells[1].replace(/`/g, ''), files, alts: alts.map(([x, y]) => [x, y]) });
   }
   return { tier1, tasks };
 }
@@ -53,8 +56,9 @@ export function measure(root) {
   const baseBytes = base.reduce((n, f) => n + f.bytes, 0);
   return {
     tier1: { files: base, bytes: baseBytes },
-    tasks: tasks.map(({ task, files }) => {
-      const own = [...new Set(files)].filter((p) => !tier1.includes(p)).map((p) => size(root, p));
+    tasks: tasks.map(({ task, files, alts }) => {
+      const pick = (p) => { const alt = (alts || []).find(([x]) => x === p); if (!alt) return size(root, p); const [x, y] = alt.map((q) => size(root, q)); return x.bytes >= y.bytes ? x : y; };
+      const own = [...new Set(files)].filter((p) => !tier1.includes(p)).map(pick);
       const bytes = baseBytes + own.reduce((n, f) => n + f.bytes, 0);
       return { task, files: own, bytes, biggest: [...own].sort((a, b) => b.bytes - a.bytes)[0] };
     }),

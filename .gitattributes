@@ -2,6 +2,9 @@
 # files out with CRLF, and the scripts that read Markdown (handoff, setup-check, after-lesson, make-lesson) miss
 # headings and blocks they look for with "\n". The scripts also accept CRLF now; this keeps the files clean anyway.
 * text=auto eol=lf
+# Windows batch files need CRLF (cmd.exe reads labels wrong with LF): exceptions come after the default.
+*.bat text eol=crlf
+*.cmd text eol=crlf
 
 # Binary files: never touch their bytes.
 *.png binary

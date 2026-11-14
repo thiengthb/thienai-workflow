@@ -14,7 +14,7 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 | "tiếp tục" | `profile/HANDOFF.md`, `profile/ACCOUNTS.md` khi việc do nick khác ghi | `templates/handoff.mjs list`, `show`, rồi `git log` nhánh làm việc | sổ bàn giao sau mỗi bước |
 | "học" | `learning/README.md` (mục "Trạng thái", "Khung một buổi"), `learning/<môn>.md` (mục "Cách dạy môn này", "Chỗ còn vướng", "Buổi tiếp theo"), `learning/cards.md`, `profile/TUTOR.md`, `artifacts/lesson/README.md`; không phải Claude thì thêm `learning/codex.md` | `artifacts/lesson/make-lesson.mjs`, `artifacts/review/make-review.mjs` | mục "Sau buổi" của `learning/README.md` (`after-lesson.mjs`), rồi PR |
 | Dạy hay giải thích để thien học | `profile/TUTOR.md` | | |
-| Duyệt giao diện, chọn phương án có hình | `artifacts/README.md` rồi README của đúng mẫu (`compare/`, `decide/`) | `artifacts/compare/make-round.mjs`, `artifacts/decide/make-decision.mjs` | kết quả nguyên văn vào PR hay kế hoạch |
+| Duyệt giao diện, chọn phương án có hình | `artifacts/README.md` rồi README của đúng mẫu: `artifacts/compare/README.md` hay `artifacts/decide/README.md` | `artifacts/compare/make-round.mjs`, `artifacts/decide/make-decision.mjs` | kết quả nguyên văn vào PR hay kế hoạch |
 | Quyết định khó sửa lại | mục "Ai quyết" trong `templates/AGENTS.template.md`, `templates/DECISION.template.md` | `artifacts/decide/make-decision.mjs` nếu có hình | `docs/decisions/` (repo project) |
 | Lập hay theo dõi kế hoạch | `profile/PLANNING.md`, `templates/PLAN.template.md` | `templates/publish-progress.mjs` | `docs/plans/` và STATUS (repo project) |
 | Hướng dẫn cài đặt, test tay | `profile/GUIDES.md`, `life/names.md` | | `docs/manual-test/` (repo project) |
