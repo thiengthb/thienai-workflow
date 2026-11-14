@@ -72,5 +72,5 @@ AI ghi sau mỗi buổi (nháp từ `artifacts/lesson/after-lesson.mjs`), xóa d
 - Câu nhớ lại (đặt trong `data-part="review"`): vì sao xe đạp thồ làm giảm gạo ăn dọc đường (chở gấp hơn 10 lần một người gánh), không chỉ vì đi được đường hẹp.
 - Hai tầng dưới vẫn lệch sau hai buổi (W7 sai lần nữa): phần thử trước đặt hai việc cạnh nhau để so, kèm mẹo "có mấy chỗ, kéo dài bao lâu", thay vì chỉ hỏi lại.
 - Dựng bằng sa bàn 3D (thien thích hơn sơ đồ phẳng). Câu "để ý thấy gì" phải chỉ rõ nhìn vào đâu.
-- Còn lại của chặng 1 sau buổi 5: ý 7 tinh thần, 8 vũ khí và công nghệ, 9 sương mù chiến tranh, 10 chiến tranh nhân dân và du kích (ý 5, 6 đã chạm ở buổi 1, xen vào khi hợp). Xong chặng 1 thì sang chặng 2: đi sâu một chiến dịch từ đầu đến cuối (thien chọn 2026-11-12, xem `roadmap.md`).
+- Còn lại của chặng 1 sau buổi 5: ý 5 đánh chỗ yếu, ý 6 bất ngờ và lừa địch (mỗi ý một buổi riêng, thien chọn 2026-11-14), ý 7 tinh thần, 8 vũ khí và công nghệ, 9 sương mù chiến tranh, 10 chiến tranh nhân dân và du kích. Xong chặng 1 thì sang chặng 2: đi sâu một chiến dịch từ đầu đến cuối (thien chọn 2026-11-12, xem `roadmap.md`).
 - Không xếp quá 2 buổi một ngày: hôm 2026-11-12 thien học 4 buổi chiến tranh cộng BA 2 và tự nói là không theo kịp.
