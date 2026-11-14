@@ -91,12 +91,12 @@ body { overflow: hidden; }
 .phone-only { display: none !important; }
 .picker { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); flex-basis: 100%; }
 select { font: 500 13px var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: var(--r); min-height: 28px; padding: 0 4px; min-width: 0; flex: 1; }
-#pin[aria-pressed="true"] { background: var(--accent); border-color: color-mix(in srgb, var(--accent) 75%, #000); color: #fff; }
+#pin[aria-pressed="true"] { background: var(--accent-fill); border-color: var(--accent-edge); color: var(--on-accent); }
 .verdict .nm { flex-basis: 100%; display: flex; gap: 8px; align-items: baseline; font-weight: 600; font-size: 13px; min-width: 0; margin-bottom: 2px; }
 .verdict .nm > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .verdict .pos { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
-#ok[aria-pressed="true"] { background: var(--good); border-color: var(--good); color: #fff; }
-#fix[aria-pressed="true"] { background: var(--bad); border-color: var(--bad); color: #fff; }
+#ok[aria-pressed="true"] { background: var(--good); border-color: var(--good); color: var(--on-accent); }
+#fix[aria-pressed="true"] { background: var(--bad); border-color: var(--bad); color: var(--on-accent); }
 
 .hint, .cur-note { font-size: 13px; color: var(--muted); }
 .hint:empty, .cur-note:empty { display: none; }
@@ -115,7 +115,7 @@ select { font: 500 13px var(--font); color: var(--ink); background: var(--card);
 .like { display: inline-flex; align-items: center; gap: 4px; height: 22px; min-width: 22px; padding: 0 3px; border: 0; border-radius: var(--r); background: transparent;
   color: var(--muted); font: 600 12px var(--font); cursor: pointer; }
 .like:hover { background: var(--soft); color: var(--ink); }
-.like[aria-pressed="true"] { color: var(--accent); }
+.like[aria-pressed="true"] { color: var(--accent-ink); }
 .like[aria-pressed="true"] .i { fill: currentColor; }
 @media (pointer: coarse) { .like { height: 32px; min-width: 32px; } .cap { height: 32px; } }
 .shot { position: relative; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--card); line-height: 0; }
@@ -141,7 +141,7 @@ select { font: 500 13px var(--font); color: var(--ink); background: var(--card);
 .ctl input[type="range"] { width: min(200px, 30vw); accent-color: var(--accent); }
 .commenting .shot, .commenting .ov { cursor: crosshair; }
 #area { position: absolute; z-index: 4; border: 2px dashed var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); pointer-events: none; }
-.dot { position: absolute; z-index: 5; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50% 50% 50% 4px; background: var(--accent); color: #fff;
+.dot { position: absolute; z-index: 5; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50% 50% 50% 4px; background: var(--accent); color: var(--on-fill);
   border: 2px solid var(--card); font: 700 12px/22px var(--font); text-align: center; cursor: pointer; box-shadow: var(--shadow); padding: 0; }
 #pop { position: absolute; z-index: 7; width: min(300px, calc(100vw - 32px)); padding: 10px; display: grid; gap: 8px; box-shadow: var(--shadow); }
 #pop .row { display: flex; gap: 8px; justify-content: flex-end; }

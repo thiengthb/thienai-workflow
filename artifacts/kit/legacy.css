@@ -1,4 +1,5 @@
-/* Bộ khung chung cho trang học. Sửa ở đây rồi chạy apply-kit.mjs, đừng sửa bản chép trong từng trang. */
+/* Lớp chế độ tối và thanh thông báo tự lưu cho các trang học CŨ (dựng tay trước artifacts/lesson/). Gắn bằng apply-kit.mjs.
+   Trang mới lấy màu từ kit.css; đừng thêm gì vào đây cho trang mới. */
 @media (prefers-color-scheme:dark){
  :root:root{--bg:#161615;--card:#1f1f1d;--ink:#ecebe7;--muted:#a19e97;--line:#34322e;--soft:#262523;--accent:#4fb3a6;--accent-soft:#1c3330;--accent-ink:#8fd9c9;
   --good:#4fb07a;--good-ink:#8fd9ab;--good-soft:#1c3125;--bad:#f0763f;--bad-soft:#3b2219;--bad-ink:#f6b796}
