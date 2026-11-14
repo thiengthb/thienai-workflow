@@ -709,7 +709,6 @@ html[data-board="on"] #board { display: flex; }
       if (m <= h1) { const f = (m - h0) / (h1 - h0); return c0.map((v, k) => v + (c1[k] - v) * f); } }
     return LANDRGB[LANDRGB.length - 1][1].slice();
   }
-  const KIND_LABEL = { fort: 'Cứ điểm', gun: 'Pháo', hq: 'Sở chỉ huy', troop: 'Quân' };
 
   function decodeHeights(t) {
     const bin = atob(t.h), u8 = new Uint8Array(bin.length);
@@ -904,14 +903,21 @@ html[data-board="on"] #board { display: flex; }
       const { c, ctx } = flat, W = c.clientWidth, H = c.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
       if (c.width !== W * dpr || c.height !== H * dpr) { c.width = W * dpr; c.height = H * dpr; }
       flat.w = W; flat.h = H; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.fillStyle = '#b9c48f'; ctx.fillRect(0, 0, W, H);
-      const { t } = G, cw = G.wk / t.cols, ch = G.hk / t.rows;
-      for (let r = 0; r < t.rows; r += 1) for (let cc = 0; cc < t.cols; cc += 1) {
-        const x = -G.wk / 2 + (cc + .5) * cw, z = -G.hk / 2 + (r + .5) * ch, h = G.hAt(x, z), sh = (G.hAt(x - cw, z - ch) - G.hAt(x + cw, z + ch)) * 6;
-        const m = h / G.ex * 1000, light = Math.max(-.3, Math.min(.3, sh)), base = landAt(m).map((v) => v * 255);
-        const dark = vs && !vs.vis[r * t.cols + cc] ? .48 : 1;
-        ctx.fillStyle = `rgb(${base.map((v) => Math.round(v * (1 + light) * dark)).join(',')})`;
-        const [px, pz] = flatProj(x - cw / 2, z - ch / 2), [qx, qz] = flatProj(x + cw / 2, z + ch / 2); ctx.fillRect(px, pz, qx - px + .6, qz - pz + .6);
+      // Đất chỉ tô một lần vào ảnh nhỏ (mỗi ô lưới một điểm ảnh), tô lại khi đổi chỗ đứng nhìn; mỗi lần vẽ chỉ phóng ảnh đó ra, mịn và nhanh.
+      const { t } = G;
+      if (!flat.img || flat.imgVs !== vs) {
+        const cw = G.wk / t.cols, ch = G.hk / t.rows, img = flat.img || Object.assign(document.createElement('canvas'), { width: t.cols, height: t.rows });
+        const ic = img.getContext('2d'), data = ic.createImageData(t.cols, t.rows), d = data.data;
+        for (let r = 0; r < t.rows; r++) for (let cc = 0; cc < t.cols; cc++) {
+          const x = -G.wk / 2 + (cc + .5) * cw, z = -G.hk / 2 + (r + .5) * ch, h = G.hAt(x, z), sh = (G.hAt(x - cw, z - ch) - G.hAt(x + cw, z + ch)) * 6;
+          const light = 1 + Math.max(-.3, Math.min(.3, sh)), dark = vs && !vs.vis[r * t.cols + cc] ? .48 : 1, base = landAt(h / G.ex * 1000), o = (r * t.cols + cc) * 4;
+          for (let k = 0; k < 3; k++) d[o + k] = Math.round(Math.min(255, base[k] * 255 * light * dark));
+          d[o + 3] = 255;
+        }
+        ic.putImageData(data, 0, 0); flat.img = img; flat.imgVs = vs;
       }
+      const [px0, pz0] = flatProj(-G.wk / 2, -G.hk / 2), [px1, pz1] = flatProj(G.wk / 2, G.hk / 2);
+      ctx.imageSmoothingEnabled = true; ctx.drawImage(flat.img, px0, pz0, px1 - px0, pz1 - pz0);
       const path = (pts, color, w, dash) => { ctx.beginPath(); pts.map(G.xz).forEach(([x, z], i) => { const [px, pz] = flatProj(x, z); i ? ctx.lineTo(px, pz) : ctx.moveTo(px, pz); }); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.setLineDash(dash || []); ctx.stroke(); ctx.setLineDash([]); };
       b.features.forEach((f) => path(f.pts, COLORS[f.kind] || '#888', f.kind === 'airfield' ? 5 : f.kind === 'river' ? 3 : 2, f.kind === 'road' ? [6, 4] : null));
       (S.zones || []).forEach((zn) => { const [px, pz] = flatProj(zn.x, zn.z), [qx] = flatProj(zn.x + zn.r, zn.z); ctx.beginPath(); ctx.arc(px, pz, qx - px, 0, Math.PI * 2);
