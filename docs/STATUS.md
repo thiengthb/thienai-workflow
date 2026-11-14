@@ -26,7 +26,6 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 - Trang tổng quan: mục "Đang chờ bạn" gom theo loại, PR đang mở xếp theo thứ tự merge; bảng học tuần (`artifacts/lesson/learning-week.mjs`); bộ màu thienui thành trang Design System (`artifacts/design-system/`) (PR #64)
 - Trang học: "Xem Claude làm" sau khi tự làm xong bước (Claude vặn núm, xếp thẻ, dẫn sa bàn kèm lý do), "Cho mình một tình huống" ở cuối bài frontend và BA, nút "Nghe" đọc to phần giải thích (PR #63)
 - Sổ bàn giao giữa các nick Claude: ghi việc dở sau mỗi bước lên nhánh `handoff` của từng repo, nói "tiếp tục" ở nick khác là làm tiếp (`profile/HANDOFF.md`, `templates/handoff.mjs`, quyết định 001), và chuẩn setup chung cho 3 nick có số phiên bản, AI tự kiểm đầu phiên (`profile/SETUP.md`, `templates/setup-check.mjs`); PR #62
-- CodeRabbit review một lần mỗi PR (PR nháp tới khi xong, không review lại mỗi lần đẩy) tới khi hết dùng thử 24/11 (quyết định 002, PR #66); bỏ review PR bằng Claude trong lúc làm vì mỗi lượt tốn khoảng 120 nghìn token, thien nhờ review theo giai đoạn (quyết định 003); sổ bàn giao thêm cách để ảnh và nguồn trang, lấy từ PR #60
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), dựng từ mẫu bàn thử `artifacts/it/` (bài mẫu trong đó chính là nháp buổi 6).
