@@ -29,7 +29,7 @@ export function skeleton(repo, slug, title, now = new Date()) {
   return `# ${title}
 
 Repo: ${repo} · Nhánh: <nhánh làm việc> · PR: chưa có
-Ghi bởi: Claude, <link thread> · Cập nhật: ${now.toISOString().slice(0, 16)}Z
+Ghi bởi: Claude <nick>, <link thread> · Cập nhật: ${now.toISOString().slice(0, 16)}Z
 
 ## thien muốn gì
 <một hai câu bằng lời của thien, kèm link tin nhắn hay quyết định nếu có>
@@ -43,7 +43,7 @@ Ghi bởi: Claude, <link thread> · Cập nhật: ${now.toISOString().slice(0, 1
 ## Đang chờ thien
 Không.
 <!-- Hoặc, khi dừng ở bước chọn trên trang:
-- Trang: <link cũ, chỉ mở được ở nick cũ> · Hỏi gì: <câu hỏi>
+- Trang: <link> (mở ở nick <nick>) · Hỏi gì: <câu hỏi>
 - Đăng lại: \`<lệnh dựng trang>\` rồi gọi Artifact với publish.json; nguồn trang nằm ở <đường dẫn trong nhánh làm việc>
 -->
 
@@ -59,6 +59,7 @@ export function checkTask(text, name = '') {
   if (!/^# \S/m.test(text)) out.push('thiếu dòng tiêu đề "# <tên việc>"');
   if (!/^Repo: [\w.-]+\/[\w.-]+/m.test(text)) out.push('thiếu dòng "Repo: <owner/repo> · ..."');
   if (!/Cập nhật: \d{4}-\d{2}-\d{2}/.test(text)) out.push('thiếu "Cập nhật: YYYY-MM-DD..."');
+  if (/Ghi bởi: Claude <nick>/.test(text)) out.push('dòng "Ghi bởi" chưa điền tên nick (lấy ở dòng "nick:" của project instructions, ví dụ tnt024)');
   for (const h of REQUIRED) if (!text.includes(h + '\n')) out.push(`thiếu mục "${h}"`);
   const next = section(text, '## Bước tiếp theo');
   if (!next || /^\s*1\.\s*<[^>]*>\s*$/m.test(next) || !next.replace(/<!--[\s\S]*?-->/g, '').trim()) out.push('mục "Bước tiếp theo" còn trống');
@@ -79,9 +80,10 @@ export function summarize(name, text) {
   const title = (text.match(/^# (.+)$/m) || [])[1] || name;
   const repo = (text.match(/^Repo: ([^·\n]+)/m) || [])[1]?.trim() || '?';
   const updated = (text.match(/Cập nhật: ([0-9T:-]+Z?)/) || [])[1] || '';
+  const nick = (text.match(/^Ghi bởi: Claude (tnt\d+)/m) || [])[1] || '';
   const next = (section(text, '## Bước tiếp theo').split('\n').find(l => l.trim() && !l.startsWith('<!--')) || '').replace(/^\d+\.\s*/, '');
   const waiting = section(text, '## Đang chờ thien').replace(/<!--[\s\S]*?-->/g, '').trim();
-  return { name, title, repo, updated, next, waiting: waiting && !/^Không\.?$/i.test(waiting) ? waiting : '' };
+  return { name, title, repo, updated, nick, next, waiting: waiting && !/^Không\.?$/i.test(waiting) ? waiting : '' };
 }
 
 function git(args, cwd, quiet = true) {
@@ -218,7 +220,7 @@ function main(argv) {
     rows.sort((x, y) => y.updated.localeCompare(x.updated));
     if (!rows.length) console.log('Không có việc dở nào trong sổ bàn giao.');
     for (const r of rows) {
-      console.log(`- ${r.title} (${r.repo}, cập nhật ${r.updated || '?'}) · show ${r.repo} ${r.name.replace(/\.md$/, '')}`);
+      console.log(`- ${r.title} (${r.repo}, nick ${r.nick || '?'}, cập nhật ${r.updated || '?'}) · show ${r.repo} ${r.name.replace(/\.md$/, '')}`);
       console.log(`  Tiếp theo: ${r.next || '?'}`);
       if (r.waiting) console.log(`  Đang chờ thien: ${r.waiting.split('\n')[0]}`);
     }

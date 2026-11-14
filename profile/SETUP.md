@@ -1,12 +1,15 @@
 # Chuẩn setup cho mọi nick và project Claude
 
-Phiên bản chuẩn: **1**
+Phiên bản chuẩn: **2**
 
-thien dùng 3 nick Claude, nick nào cũng có các project giống nhau (project "Claude" gắn repo thienai-workflow, project "sakubun" gắn repo sakubun), cộng vài project riêng. Setting của nick và của project không tự đồng bộ giữa các nick: mỗi nick, mỗi project phải được cài tay. File này là chuẩn chung, và AI tự kiểm theo nó ở đầu mỗi phiên, nên đổi chuẩn ở đây một lần là mọi nick tự nhắc thien cập nhật ở lần mở tiếp theo.
+thien dùng 3 nick Claude (tên ngắn và việc của từng nick ở [`ACCOUNTS.md`](ACCOUNTS.md)), nick nào cũng có các project giống nhau (project "Claude" gắn repo thienai-workflow, project "sakubun" gắn repo sakubun), cộng vài project riêng. Setting của nick và của project không tự đồng bộ giữa các nick: mỗi nick, mỗi project phải được cài tay. File này là chuẩn chung, và AI tự kiểm theo nó ở đầu mỗi phiên, nên đổi chuẩn ở đây một lần là mọi nick tự nhắc thien cập nhật ở lần mở tiếp theo.
 
 ## AI kiểm gì, lúc nào
 - Đầu phiên đầu tiên của một thread, trước khi làm việc thien giao. Chạy:
-  `node templates/setup-check.mjs --project "<tên project>" --instructions <file chứa project instructions thấy được, hoặc none> --repos <các repo đang gắn, cách nhau bằng dấu phẩy> --skills <các skill thấy được>`
+  `node templates/setup-check.mjs --project "<tên project>" --instructions <file chứa project instructions thấy được, hoặc none> --repos <các repo đang gắn, cách nhau bằng dấu phẩy> --skills <các skill thấy được, dạng tên@số bản>`
+- Số bản của skill là `(bản N)` ở cuối phần mô tả skill trong danh sách skill của phiên. Không có số thì ghi tên trơn: lệnh coi đó là bản cũ.
+- Project chưa có instructions, chưa gắn repo vẫn phải kiểm: gắn repo thienai-workflow vào phiên rồi chạy. Lỗi đã gặp 2026-11-14: project "Claude" ở nick tnt024 chưa có instructions và chưa gắn repo, nên luật kiểm (nằm trong instructions và AGENTS.md) không bao giờ chạy, AI không nhắc gì cả.
+- Dòng `nhắc: AI tự làm: ...` là việc của AI (thêm dòng vào sổ nick), không phải việc của thien.
 - Thiếu gì thì nói với thien **trước khi làm việc**, kèm đúng đoạn cần dán và chỗ bấm. thien làm xong (hay nói "bỏ qua") thì làm tiếp. Đủ rồi thì không nói gì.
 - Project chưa có trong bảng dưới: hỏi thien có thêm vào chuẩn không (qua PR sửa bảng này).
 
@@ -16,9 +19,9 @@ thien dùng 3 nick Claude, nick nào cũng có các project giống nhau (projec
 | Project instructions của project đang mở | Được: AI đọc được, so số phiên bản với dòng "Phiên bản chuẩn" ở trên |
 | Repo đang gắn vào project | Được |
 | Quyền đọc các repo trên GitHub | Được (lệnh kiểm thử đọc từng repo) |
-| Skill đã tải lên nick | Được: skill hiện trong danh sách skill của phiên |
+| Skill đã tải lên nick, và bản nào | Được: skill hiện trong danh sách skill của phiên, số `(bản N)` ở cuối mô tả so với `skills/<tên>/SKILL.md` |
 | Ô hướng dẫn ở Settings > Your Claude | **Không**: phiên trong project không thấy ô này. Vì vậy mọi luật quan trọng nằm ở project instructions và AGENTS.md, không chỉ ở ô này |
-| Đang ở nick nào | **Không**. Mỗi project tự kiểm chính nó, nên không cần biết |
+| Đang ở nick nào | Chỉ qua chữ `nick: tntXXX` ở dòng đầu project instructions. AI không tự biết, nên mỗi nick phải ghi đúng tên của mình |
 
 ## Một lần cho mỗi nick
 1. Nối GitHub: Settings > Connectors > GitHub, cho phép các repo `thienai-workflow`, `sakubun`, `tiktok`.
@@ -33,13 +36,14 @@ thien dùng 3 nick Claude, nick nào cũng có các project giống nhau (projec
 
 Gắn repo: mở project > Project settings > Repositories > thêm từng repo trong bảng.
 
-Project instructions: Project settings > Instructions, xoá bản cũ rồi dán đoạn dưới, thay `<tên project>` bằng tên ở cột đầu bảng trên:
+Project instructions: Project settings > Instructions, xoá bản cũ rồi dán đoạn dưới, thay `<tên project>` bằng tên ở cột đầu bảng trên và `<tên nick>` bằng tên nick đang dùng trong [`ACCOUNTS.md`](ACCOUNTS.md) (ví dụ `tnt024`):
 
 ```text
-chuẩn setup v1 · project: <tên project>
+chuẩn setup v2 · project: <tên project> · nick: <tên nick>
 Mình là thien. Repo là nguồn sự thật duy nhất. Mình có 3 nick Claude dùng chung các repo, nhưng không dùng chung chat, thread hay memory, nên chuyện gì quan trọng đều phải ghi vào repo.
 Đầu mỗi phiên: đọc AGENTS.md của repo project, rồi kiểm setup theo profile/SETUP.md của repo thienai-workflow. Thiếu gì thì nhắc mình làm trước, kèm đoạn cần dán và chỗ bấm.
 Khi mình nói "tiếp tục": làm theo profile/HANDOFF.md của repo thienai-workflow.
+Mọi commit, PR, sổ bàn giao và link trang đều ghi tên nick ở dòng đầu, theo profile/ACCOUNTS.md.
 Khi mình giao việc mới: nhắc việc còn dở trước, theo mục "Nhắc việc dở" trong profile/PROFILE.md.
 Trả lời bằng tiếng Việt tự nhiên.
 ```
@@ -49,4 +53,5 @@ Trả lời bằng tiếng Việt tự nhiên.
 - Không cần nhớ đã sửa ở nick nào: ở mỗi nick, phiên đầu tiên sau khi merge sẽ thấy project instructions còn số cũ và nhắc thien dán bản mới.
 
 ## Lịch sử
+- v2 (2026-11-14): thêm tên nick vào dòng đầu (`nick: tntXXX`) và luật ghi nick vào commit, PR, sổ bàn giao; skill có số bản để biết khi nào phải tải lại; sổ nick `profile/ACCOUNTS.md`.
 - v1 (2026-11-14): chuẩn đầu tiên có kiểm tự động. Thêm luật "tiếp tục" (sổ bàn giao) và repo thienai-workflow cho project sakubun.
