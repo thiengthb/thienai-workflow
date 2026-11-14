@@ -25,7 +25,7 @@ AI sửa sổ này khi lần kiểm setup báo (`nhắc: AI tự làm: ...`), ho
 - Memory và chat của project nằm ở nick đã làm. Chỉ để ở đó chuyện ngắn hạn; điều gì cần nhớ lâu phải ghi vào repo, vì nick khác không đọc được memory.
 
 ## Nhiều nick làm cùng một repo
-- Giữ chỗ: trước khi làm tiếp một việc trong sổ bàn giao mà dòng "Ghi bởi" là nick khác và cập nhật trong 24 giờ qua, hỏi thien trước (có thể nick kia còn đang làm). thien nói "tiếp tục" là đồng ý cho nick này nhận việc; ghi lại dòng "Ghi bởi" bằng nick mới.
+- Giữ chỗ: trước khi làm tiếp một việc trong sổ bàn giao mà dòng "Ghi bởi" là nick khác (hay "nick chưa rõ", coi như nick khác) và cập nhật trong 24 giờ qua, hỏi thien trước (có thể nick kia còn đang làm). thien nói "tiếp tục" là đồng ý cho nick này nhận việc; ghi lại dòng "Ghi bởi" bằng nick mới.
 - Một việc, một nhánh, một nick tại một lúc. Hai nick không cùng đẩy lên một nhánh; cần thì mở nhánh mới từ nhánh kia.
 - Đổi chuẩn ([`SETUP.md`](SETUP.md)) hay luật chung: mỗi nick tự nhận ra ở phiên đầu tiên sau đó, nhờ số phiên bản. Không cần nhớ đã sửa ở nick nào.
 

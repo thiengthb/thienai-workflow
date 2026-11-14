@@ -4,11 +4,9 @@ Phiên bản chuẩn: **2**
 
 thien dùng 3 nick Claude (tên ngắn và việc của từng nick ở [`ACCOUNTS.md`](ACCOUNTS.md)), nick nào cũng có các project giống nhau (project "Claude" gắn repo thienai-workflow, project "sakubun" gắn repo sakubun), cộng vài project riêng. Setting của nick và của project không tự đồng bộ giữa các nick: mỗi nick, mỗi project phải được cài tay. File này là chuẩn chung, và AI tự kiểm theo nó ở đầu mỗi phiên, nên đổi chuẩn ở đây một lần là mọi nick tự nhắc thien cập nhật ở lần mở tiếp theo.
 
-## Vì sao chuẩn này tới được mọi project, cũ và mới
-- Không có cách nào tự đẩy cài đặt vào project trên claude.ai (không có API cho project instructions). Thứ duy nhất tự có mặt ở **mọi** project của một nick, kể cả project cũ chưa có gì, là skill đã tải lên nick đó. Nên luật "kiểm setup đầu phiên" nằm trong skill `check-setup`: tải một lần mỗi nick, từ đó mọi project của nick tự kiểm.
-- Skill chỉ trỏ về file này, nên đổi chuẩn ở đây là mọi nick, mọi project nhận ngay ở phiên kế tiếp. Chỉ khi sửa chính `SKILL.md` (tăng `(bản N)`) mới phải tải lại, và lần kiểm sẽ tự báo.
-- Repo có `AGENTS.md` theo mẫu chung thì luật này còn tới qua Action đồng bộ AGENTS (`life/tracked-repos.md`), lớp thứ hai.
-- Phần thien vẫn phải làm tay: dán instructions và gắn repo. AI không làm thay được, chỉ nhắc đúng chỗ.
+## Chuẩn này tới mọi project bằng cách nào
+- Project đã setup (có instructions, gắn repo): `AGENTS.md` tự được nạp và có luật kiểm setup. Đổi chuẩn ở file này là phiên sau tự nhắc. Repo trong `life/tracked-repos.md` nhận `AGENTS.md` mới qua Action đồng bộ.
+- Project chưa setup (quên gắn repo, chưa dán instructions, kể cả project cũ): `AGENTS.md` không được đọc, nên skill `start-project` (đã tải lên mỗi nick, có mặt ở mọi project của nick) là cổng bắt nó. Không có API để tự đẩy instructions vào project trên claude.ai, nên dán instructions và gắn repo vẫn là thien làm tay; AI chỉ nhắc đúng chỗ.
 
 ## AI kiểm gì, lúc nào
 - Đầu phiên đầu tiên của một thread, trước khi làm việc thien giao. Chạy:
@@ -32,7 +30,7 @@ thien dùng 3 nick Claude (tên ngắn và việc của từng nick ở [`ACCOUN
 
 ## Một lần cho mỗi nick
 1. Nối GitHub: Settings > Connectors > GitHub, cho phép các repo `thienai-workflow`, `sakubun`, `tiktok`.
-2. Skill: Settings bật "Code execution and file creation", rồi Customize > Skills tải lên từng file zip, tải ở [check-setup.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/check-setup.zip), [start-project.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/start-project.zip) và [make-slides.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/make-slides.zip). Link luôn là bản mới nhất, xem README bước 3.
+2. Skill: Settings bật "Code execution and file creation", rồi Customize > Skills tải lên từng file zip, tải ở [start-project.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/start-project.zip) và [make-slides.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/make-slides.zip). Link luôn là bản mới nhất, xem README bước 3.
 3. (Chỉ cho chat thường, ngoài project) Settings > Your Claude: đoạn ở README, mục "Cài cho một tài khoản Claude".
 
 ## Mỗi project, ở mỗi nick
@@ -86,5 +84,5 @@ Repo khác (sakubun) cũng vậy: tích tài liệu và luật, bỏ ảnh, buil
 
 ## Lịch sử
 - 2026-11-14, vẫn v2: thêm mục "Đồng bộ repo vào knowledge"; `setup-check.mjs` so từng dòng instructions và có `--instructions unseen`, `--sync`.
-- v2 (2026-11-14): thêm tên nick vào dòng đầu (`nick: tntXXX`) và luật ghi nick vào commit, PR, sổ bàn giao; skill có số bản để biết khi nào phải tải lại; skill `check-setup` để mọi project cũ và mới của một nick tự kiểm; sổ nick `profile/ACCOUNTS.md`.
+- v2 (2026-11-14): thêm tên nick vào dòng đầu (`nick: tntXXX`) và luật ghi nick vào commit, PR, sổ bàn giao; skill có số bản để biết khi nào phải tải lại; skill `start-project` bắt cả project cũ chưa setup; sổ nick `profile/ACCOUNTS.md`.
 - v1 (2026-11-14): chuẩn đầu tiên có kiểm tự động. Thêm luật "tiếp tục" (sổ bàn giao) và repo thienai-workflow cho project sakubun.

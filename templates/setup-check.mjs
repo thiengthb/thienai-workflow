@@ -4,7 +4,7 @@
 // The AI runs it at the start of a session and passes in what it can see (instructions text, attached repos, skills).
 // Prints "ổn" when everything matches, otherwise the list of fixes for thien, in Vietnamese. Exit code 1 when something is missing.
 //
-//   node templates/setup-check.mjs --project sakubun --instructions <file|none|unseen> --repos a/b,c/d --skills check-setup@1,start-project@1,make-slides@1
+//   node templates/setup-check.mjs --project sakubun --instructions <file|none|unseen> --repos a/b,c/d --skills start-project@1,make-slides@1
 //        [--sync "/:include"]
 // --instructions none: the project has no instructions. unseen: this session cannot see them (then they are not checked,
 // and the output says so instead of guessing). --sync: the GitHub sync filters of the project's knowledge, as the
@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const here = dirname(dirname(fileURLToPath(import.meta.url)));
-export const SKILLS = ['check-setup', 'start-project', 'make-slides'];
+export const SKILLS = ['start-project', 'make-slides'];
 
 /** Reads the standard out of SETUP.md: version, the instructions block, and the project -> repos table. */
 export function parseSetup(md) {

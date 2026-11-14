@@ -20,6 +20,7 @@ assert.ok(checkTask(fresh.replace('1. <cụ thể', '1. x <')).some(p => p.inclu
 assert.ok(checkTask(filled.replace('Claude tnt024', 'Claude')).some(p => p.includes('tên nick')), 'author line without a nick fails');
 assert.ok(checkTask(filled.replace(/^Ghi bởi:.*\n/m, '')).some(p => p.includes('tên nick')), 'missing author line fails');
 assert.deepEqual(checkTask(filled.replace('Claude tnt024', 'Claude nick chưa rõ')), [], 'unknown nick can still save, said out loud');
+assert.equal(summarize('x.md', filled.replace('Claude tnt024', 'Claude nick chưa rõ')).nick, 'nick chưa rõ', 'list says the nick is unknown');
 assert.match(stamp(filled, new Date('2026-12-01T08:30:00Z')), /Cập nhật: 2026-12-01T08:30Z/, 'save refreshes the update time');
 const s = summarize('review-page.md', filled.replace('Claude <nick>', 'Claude tnt024'));
 assert.equal(s.nick, 'tnt024');

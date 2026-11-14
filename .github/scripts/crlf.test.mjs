@@ -11,6 +11,7 @@ import { spawnSync, execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { checkTask, summarize, readText } from '../../templates/handoff.mjs';
 import { fill } from '../../artifacts/lesson/make-lesson.mjs';
+import { SKILLS } from '../../templates/setup-check.mjs'; // the skill list setup-check expects, so this test follows it
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const crlf = (s) => s.replace(/\r?\n/g, '\r\n');
@@ -32,7 +33,7 @@ assert.equal(r.status, 0, 'after-lesson --check-all on CRLF files:\n' + r.stdout
 // 2. setup-check reads the CRLF SETUP.md and CRLF instructions pasted into a file.
 const block = readFileSync(join(ROOT, 'profile/SETUP.md'), 'utf8').match(/```text\n([\s\S]*?)```/)[1].replace('<tên project>', 'Claude').replace('<tên nick>', 'tnt024');
 // Skills as the session lists them, with the "(bản N)" number when SKILL.md has one (setup v2).
-const skills = ['check-setup', 'start-project', 'make-slides'].map((n) => { const v = (readFileSync(join(ROOT, 'skills', n, 'SKILL.md'), 'utf8').match(/\(bản (\d+)\)\s*$/m) || [])[1]; return v ? `${n}@${v}` : n; }).join(',');
+const skills = SKILLS.map((n) => { const v = (readFileSync(join(ROOT, 'skills', n, 'SKILL.md'), 'utf8').match(/\(bản (\d+)\)\s*$/m) || [])[1]; return v ? `${n}@${v}` : n; }).join(',');
 writeFileSync(join(copy, 'instr.txt'), crlf(block));
 r = run(['templates/setup-check.mjs', '--project', 'Claude', '--instructions', 'instr.txt', '--repos', 'thiengthb/thienai-workflow', '--skills', skills, '--no-git']);
 assert.equal(r.status, 0, 'setup-check on CRLF files:\n' + r.stdout + r.stderr);
