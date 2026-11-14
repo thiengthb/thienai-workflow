@@ -5,7 +5,8 @@
       kèm tên khung chứa nó (id, data-q, data-c, data-pane, data-knob...); không có thuộc tính nào thì lấy chữ trên nút.
       Trang thêm hay bớt nút ở chỗ khác không làm lệch tên. Nút đã bị bỏ thì bỏ qua lần bấm đó, các lần khác vẫn mở lại.
       Tên được tính một lần lúc tải trang, trước khi trang tự đổi thuộc tính, nên lần ghi và lần mở lại khớp nhau.
-      Ô chữ (textarea): tên là data-key, không thì placeholder.
+      Ô chữ (textarea): tên là data-key, không thì placeholder. Thanh kéo (input range): tên là data-key, không thì id,
+      không thì thứ tự; kéo liền một mạch chỉ giữ giá trị cuối. Chữ nói thay gõ (Kit.dictate) cũng được lưu như chữ gõ.
       Bản lưu cũ (theo thứ tự nút, trước 2026-11-14) vẫn mở được theo cách cũ.
    2. Học lại: sau khi bấm "Xong buổi học" (#finish), lần mở sau ẩn [data-part~="review"] và mở khóa [data-review-gate].
    Nút không muốn ghi (nút hỏi Claude, nút quay lại, mic) mang data-noreplay. */
@@ -14,6 +15,7 @@
   const LK = 'lesson-kit:' + ID, DOC = 'drafts/' + ID.replace(/[^a-z0-9-]/gi, '-');
   const btns = () => [...document.querySelectorAll('button:not(#kit-bar button):not([data-noreplay])')];
   const tas = () => [...document.querySelectorAll('textarea')];
+  const rngs = () => [...document.querySelectorAll('input[type=range]')];
   const sq = (t) => (t || '').replace(/\s+/g, ' ').trim();
   const lab = (b) => sq(b.textContent).slice(0, 60);
 
@@ -47,6 +49,8 @@
   const findKey = (k) => { for (const [b, x] of keyed()) if (x === k) return b; return null; };
   const taKey = (t) => (t.dataset.key ? 'k:' + t.dataset.key : 'p:' + (t.placeholder || tas().indexOf(t)));
   const findTa = (k) => tas().find((t) => taKey(t) === k) || null;
+  const rgKey = (g) => (g.dataset.key ? 'k:' + g.dataset.key : g.id ? '#' + g.id : 'i:' + rngs().indexOf(g));
+  const findRg = (k) => rngs().find((g) => rgKey(g) === k) || null;
   keyed();   // tính tên ngay lúc tải, trước khi trang đổi thuộc tính
 
   // ---------- Lưu ----------
@@ -74,7 +78,8 @@
     return Promise.race([db.doc(DOC).set(S), new Promise((r) => setTimeout(r, 8000))]).catch(() => {})
       .then(() => { writing = false; if (again) { again = false; flush(); } });
   }
-  function save() { clearTimeout(timer); timer = setTimeout(flush, 700); }
+  // Ghi vào máy ngay, chỉ hoãn phần gửi lên db: tắt tab trong 700 ms sau lần bấm cuối cũng không mất.
+  function save() { try { localStorage.setItem(LK, JSON.stringify(S)); } catch (e) {} clearTimeout(timer); timer = setTimeout(flush, 700); }
   // Tắt màn, chuyển app hay tải lại trong lúc đang chờ lưu: ghi ngay, đừng để mất lần bấm cuối.
   addEventListener('pagehide', () => { if (timer) flush(); });
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && timer) flush(); });
@@ -87,10 +92,15 @@
     const k = keyOf(b);
     if (k) rec({ k });
   }, true);
+  // Chỉ nhận sự kiện người dùng thật, trừ chữ nói thay gõ: Kit.dictate báo bằng CustomEvent có detail.kitDictation.
   document.addEventListener('input', (e) => {
-    if (replaying || !e.isTrusted || e.target.tagName !== 'TEXTAREA') return;
-    const k = taKey(e.target), last = S.log[S.log.length - 1];
-    if (last && last.t === k) { last.v = e.target.value; acted = true; S.ts = Date.now(); save(); } else rec({ t: k, v: e.target.value });
+    if (replaying || (!e.isTrusted && !(e.detail && e.detail.kitDictation))) return;
+    const el = e.target, last = S.log[S.log.length - 1];
+    let f, k;
+    if (el.tagName === 'TEXTAREA') { f = 't'; k = taKey(el); }
+    else if (el.matches && el.matches('input[type=range]')) { f = 'r'; k = rgKey(el); }
+    else return;
+    if (last && last[f] === k) { last.v = el.value; acted = true; S.ts = Date.now(); save(); } else rec({ [f]: k, v: el.value });
   }, true);
 
   function reviewOff() {
@@ -99,6 +109,7 @@
     if (typeof R !== 'undefined' && R) R.mode = 'hoc-lai';
   }
   const setText = (t, v) => { t.value = v; t.dispatchEvent(new Event('input', { bubbles: true })); };
+  const setRange = (g, v) => { g.value = v; g.dispatchEvent(new Event('input', { bubbles: true })); g.dispatchEvent(new Event('change', { bubbles: true })); };
 
   // ---------- Mở lại ----------
   /** Bản lưu mới (v 2): bấm lại theo tên; nút không còn, hay đang khóa, thì bỏ qua lần đó. */
@@ -107,6 +118,7 @@
     for (const a of log) {
       if ('k' in a) { const b = findKey(a.k); if (b && !b.disabled) b.click(); else miss++; }
       else if ('t' in a) { const t = findTa(a.t); if (t) setText(t, a.v); else miss++; }
+      else if ('r' in a) { const g = findRg(a.r); if (g) setRange(g, a.v); else miss++; }
     }
     return miss;
   }
@@ -129,6 +141,10 @@
           const b = btns()[a.c];
           if ((a.x !== undefined && (!b || lab(b) !== a.x)) || (a.y !== undefined && (!b || ctx(b) !== a.y))) { cut = true; break; }
           if (b && !b.disabled) b.click();
+        } else if ('r' in a) {
+          const g = rngs()[a.r];
+          if (a.id !== undefined && (!g || g.id !== a.id)) { cut = true; break; }   // thanh kéo ở chỗ đó đã là cái khác: dừng
+          if (g) setRange(g, a.v);
         } else { const t = tas()[a.t]; if (t) setText(t, a.v); }
         n++;
       }
@@ -139,7 +155,11 @@
     for (const a of rest) if ('t' in a && typeof a.v === 'string') { const t = tas().find((x) => x.placeholder === a.p); if (t) last.set(t, a.v); }
     for (const [t, v] of last) setText(t, v);
     S.log = [];
-    if (!cut) for (const a of done) { if ('c' in a) { const b = btns()[a.c]; const k = b && keyOf(b); if (k) S.log.push({ k }); } else { const t = tas()[a.t]; if (t) S.log.push({ t: taKey(t), v: a.v }); } }
+    if (!cut) for (const a of done) {
+      if ('c' in a) { const b = btns()[a.c]; const k = b && keyOf(b); if (k) S.log.push({ k }); }
+      else if ('r' in a) { const g = rngs()[a.r]; if (g) S.log.push({ r: rgKey(g), v: a.v }); }
+      else { const t = tas()[a.t]; if (t) S.log.push({ t: taKey(t), v: a.v }); }
+    }
     for (const [t, v] of last) S.log.push({ t: taKey(t), v });
     return cut;
   }
