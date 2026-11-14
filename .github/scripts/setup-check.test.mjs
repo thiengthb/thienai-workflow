@@ -13,7 +13,7 @@ assert.equal(checkStandard(md.replace(/^Phiên bản chuẩn: \*\*\d+\*\*/m, 'Ph
 
 const good = instructionsFor(std, 'sakubun', 'tnt024');
 assert.match(good, new RegExp(`^chuẩn setup v${std.version} · project: sakubun`));
-const all = { repos: ['thiengthb/sakubun', 'thiengthb/thienai-workflow'], skills: ['anthropic-skills:start-project', 'anthropic-skills:make-slides'] };
+const all = { repos: ['thiengthb/sakubun', 'thiengthb/thienai-workflow'], skills: ['anthropic-skills:check-setup', 'anthropic-skills:start-project', 'anthropic-skills:make-slides'] };
 
 let r = checkSetup(std, { project: 'sakubun', instructions: good, ...all }, () => true);
 assert.deepEqual(r.fixes, [], 'fully set up project passes');
@@ -37,7 +37,7 @@ assert.ok(r.fixes.some(f => /chưa gắn repo thiengthb\/thienai-workflow/.test(
 r = checkSetup(std, { project: 'sakubun', instructions: good, ...all }, (repo) => repo !== 'thiengthb/sakubun');
 assert.ok(r.fixes.some(f => /chưa cho Claude đọc thiengthb\/sakubun/.test(f)), 'unreadable repo');
 
-r = checkSetup(std, { project: 'sakubun', instructions: good, repos: all.repos, skills: ['anthropic-skills:start-project'] });
+r = checkSetup(std, { project: 'sakubun', instructions: good, repos: all.repos, skills: ['anthropic-skills:check-setup', 'anthropic-skills:start-project'] });
 assert.ok(r.fixes.some(f => /make-slides/.test(f)), 'missing skill');
 
 r = checkSetup(std, { project: 'tiktok', instructions: instructionsFor(std, 'tiktok', 'tnt024'), repos: [], skills: all.skills });

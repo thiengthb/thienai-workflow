@@ -41,7 +41,8 @@ docs/         Tiến độ và kế hoạch đang chạy của chính repo này
 | | `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
 | `.github/` | `workflows/test.yml` | Chạy test của script đồng bộ, script kiểm STATUS và kế hoạch, và script sinh trang tiến độ ở mỗi PR, để lỗi bị chặn trước khi merge |
 | | `workflows/sync-agents-md.yml` | Mẫu `AGENTS.md` đổi thì tự mở PR vào từng repo trong `life/tracked-repos.md` để cập nhật phần chung, giữ nguyên phần riêng của project. Cần secret `SYNC_TOKEN` |
-| `skills/` | `start-project/` | Skill hỏi thien có áp quy trình không, rồi chép các file mẫu vào project. `SKILL.md` chỉ trỏ tới `STEPS.md`; sửa các bước thì sửa `STEPS.md` |
+| `skills/` | `check-setup/` | Skill kiểm setup đầu mọi phiên, ở mọi project của nick, kể cả project cũ chưa có instructions. Chỉ trỏ tới `profile/SETUP.md` |
+| | `start-project/` | Skill hỏi thien có áp quy trình không, rồi chép các file mẫu vào project. `SKILL.md` chỉ trỏ tới `STEPS.md`; sửa các bước thì sửa `STEPS.md` |
 | | `make-slides/` | Skill làm slide: tóm tắt bài, dàn ý, dựng, kiểm, tập dượt, đăng. `SKILL.md` chỉ trỏ tới `STEPS.md` |
 | `slides/` | `RULES.md` | Bộ quy tắc làm slide (S1 đến S48), đọc trước mọi bài thuyết trình |
 | | `BRIEF.template.md`, `starter/` | Mẫu tóm tắt bài và khung slide web có máy kiểm tra, chép vào project. Xem `slides/README.md` |
@@ -71,7 +72,7 @@ Chuẩn setup cho nick và cho từng project (project instructions, repo phải
    ```
    Dòng thứ tư là bản ngắn của mục "Nhắc việc dở" trong `profile/PROFILE.md`; dòng cuối là luật bàn giao giữa các nick (`profile/HANDOFF.md`). Trong project thì luật nằm ở project instructions theo `profile/SETUP.md`.
 2. Nối GitHub cho tài khoản đó (Settings > Connectors > GitHub), cho phép các repo `thienai-workflow`, `sakubun`, `tiktok`. Repo này để riêng tư, nên không nối thì skill không đọc được các bước.
-3. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên từng file zip: [start-project.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/start-project.zip), [make-slides.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/make-slides.zip). Link mở được khi trình duyệt đang đăng nhập GitHub của thien. Các file này nằm ở release [`skills`](https://github.com/thiengthb/thienai-workflow/releases/tag/skills), do Action `Skill zips` tự đóng gói lại mỗi khi một skill đổi trên main, nên link luôn trỏ tới bản mới nhất.
+3. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên từng file zip: [check-setup.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/check-setup.zip), [start-project.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/start-project.zip), [make-slides.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/make-slides.zip). Link mở được khi trình duyệt đang đăng nhập GitHub của thien. Các file này nằm ở release [`skills`](https://github.com/thiengthb/thienai-workflow/releases/tag/skills), do Action `Skill zips` tự đóng gói lại mỗi khi một skill đổi trên main, nên link luôn trỏ tới bản mới nhất.
 4. Mỗi project: gắn repo và dán project instructions theo `profile/SETUP.md`. Quên thì phiên đầu tiên trong project đó sẽ nhắc.
 
 Codex và Gemini đọc luật qua file trong repo của project, không cần skill:
