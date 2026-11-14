@@ -30,7 +30,16 @@ Chi tiết từng mẫu ở README trong thư mục của mẫu.
 
 ## Lõi chung
 
-`kit/kit.css` và `kit/kit.js` là phần dùng chung cho mọi mẫu mới: màu và chữ theo gu ở dưới, nút, thanh tiến độ, thông báo, lưu nháp vào máy và db, chép kết quả, gửi cho Claude. Mẫu mới dựng trên lõi này; sửa lõi một lần là mọi mẫu đổi theo. Trang học mới dựng từ `lesson/` (đã trên lõi chung, kèm phần tự lưu của `learning/teaching/kit/`); trang học cũ giữ nguyên như lúc học.
+`kit/kit.css` và `kit/kit.js` là phần dùng chung cho mọi mẫu mới: màu và chữ theo gu ở dưới, nút, thanh tiến độ, thông báo, lưu nháp vào máy và db, chép kết quả, gửi cho Claude, và hỏi Claude ngay trên trang (`Kit.ask`, khả năng `sample`). Mẫu mới dựng trên lõi này; sửa lõi một lần là mọi mẫu đổi theo. Trang học mới dựng từ `lesson/` (đã trên lõi chung, kèm phần tự lưu của `learning/teaching/kit/`); trang học cũ giữ nguyên như lúc học.
+
+## Trang tự hỏi Claude (thử từ 2026-11-14)
+
+thien muốn các trang "thông minh" hơn. Trang khai báo khả năng `sample` thì tự hỏi được Claude, bằng lượt dùng Claude của chính người xem; lần hỏi đầu claude.ai hỏi xin phép. Không hỏi được (từ chối, mở ngoài claude.ai) thì mọi chỗ hỏi tự ẩn, trang vẫn chạy như cũ.
+
+- Bài học (mọi môn, cả sa bàn và sân khấu IT): Claude nhận xét bài tự nói lại; chọn sai thì có nút "Vì sao mình chọn sai?"; mỗi bước có "Hỏi Claude về bước này", Claude biết chữ trên bước và việc đã làm trên sân khấu. Bước chưa làm xong thì Claude chỉ gợi ý, không nói đáp án.
+- Trang chọn phương án: ô hỏi về các phương án. Trước khi chọn, Claude chỉ giải thích và so sánh, không nói nên chọn gì (giữ đúng luật đề xuất ẩn).
+- Chưa gắn: trang so sánh (kết quả đằng nào cũng gửi cho Claude đọc) và trang tổng quan.
+- Câu hỏi và nhận xét ghi vào `R.ai`; tóm tắt cuối buổi có dòng "Đã hỏi Claude trong bài" để biết chỗ nào còn vướng.
 
 ## Điểm chung của các mẫu đã được khen
 

@@ -24,9 +24,15 @@
     const L = [];
     Object.entries(r.tried || {}).forEach(([k, v]) => L.push(`Đã thử ${k}: ${v.join(', ')}`));
     Object.entries(r.picks || {}).forEach(([k, v]) => L.push(`Chốt (${k}): ${Object.values(v).join(', ')}`));
-    Object.entries(r.match || {}).forEach(([k, v]) => L.push(`Vặn cho giống (${k}): ${v.best}% sau ${v.moves} lần vặn`));
+    Object.entries(r.match || {}).filter(([, v]) => v.moves).forEach(([k, v]) => L.push(`Vặn cho giống (${k}): ${v.best}% sau ${v.moves} lần vặn`));
     if ((r.peeked || []).length) L.push('Đã nhìn 5 giây: ' + r.peeked.join(', '));
     Object.entries(r.boards || {}).forEach(([k, b]) => { if (b.checked) L.push(`Bảng ${k}: khớp bản mẫu ${b.right}/${b.total}` + (b.diff.length ? ` (khác: ${b.diff.join(', ')})` : '')); });
+    // Bảng đang xếp dở (chưa kiểm): để ô "Hỏi Claude" biết người học đang đặt ai ở đâu.
+    $$('.board', stage).forEach((bd) => {
+      const b = (r.boards || {})[bd.dataset.pane]; if (!b || b.checked || !b.place) return;
+      const parts = Object.entries(b.place).map(([c, z]) => { const card = $(`[data-c="${c}"]`, bd), zone = $(`[data-z="${z}"] span`, bd); return `${card ? cardName(card) : c} → ${zone ? zone.textContent.trim() : z}`; });
+      if (parts.length) L.push(`Đang xếp bảng ${bd.dataset.pane} (chưa kiểm): ${parts.join(', ')}`);
+    });
     if ((r.asked || []).length) L.push('Câu đã hỏi: ' + r.asked.map((a) => `${a.who}: "${a.q}"${a.found ? ' (mở thẻ mới)' : ''}`).join('; '));
     Object.entries(r.ffwd || {}).forEach(([k, v]) => L.push(`Tua 3 tháng (${k}): ${v.length ? v.join(' | ') : 'êm'}`));
     if ((r.heard || []).length) L.push('Đã nghe: ' + r.heard.join(', '));

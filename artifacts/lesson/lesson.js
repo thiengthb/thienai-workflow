@@ -60,6 +60,7 @@
       if (!ok) o.classList.add('wrong');
       if (st) { st.textContent = ok ? 'Đúng.' : 'Chưa đúng. Đáp án đúng có chữ "Đúng".'; st.className = 'status ' + (ok ? 'good' : 'bad'); }
       if (why) why.classList.add('on');
+      if (!ok) smartWhy(q, os, i, a, why);
       (q.dataset.kind === 'review' ? R.review : R.quiz)[id] = { pick: i, ok };
       mark(id);
     }));
@@ -99,6 +100,10 @@
     // Phần thêm của từng loại bài (ví dụ sa bàn chiến tranh) thêm dòng vào tóm tắt qua Lesson.extras.
     extras.forEach((f) => { try { const x = f(R); if (x) L.push('', x); } catch (e) {} });
     if ((R.teach || '').trim()) L.push('', 'Tự nói lại: ' + R.teach.trim());
+    const asked = (R.ai || []).filter((x) => x.kind === 'ask');
+    if (asked.length) L.push('', 'Đã hỏi Claude trong bài: ' + asked.map((x) => `"${x.q}" (${x.step})`).join('; '));
+    const used = (R.ai || []).filter((x) => x.kind !== 'ask').map((x) => x.kind === 'teach' ? 'nhận xét bài tự nói lại' : 'giải thích câu ' + x.q);
+    if (used.length) L.push('Nhờ Claude: ' + [...new Set(used)].join(', '));
     const fb = Object.entries(R.feedback).filter(([k]) => k !== 'note').map(([k, v]) => (fLabel[k] || k) + ': ' + v).join('; ');
     if (fb) L.push('', 'Góp ý: ' + fb);
     if ((R.feedback.note || '').trim()) L.push('Ghi thêm: ' + R.feedback.note.trim());
@@ -122,6 +127,114 @@
         : saved ? 'Đã lưu kết quả. Bạn nhắn "xong" trong thread là Claude đọc được.'
           : 'Chưa lưu được tự động. Bấm "Chép kết quả" rồi dán vào thread.';
     if (copyBtn && !(saved && sent)) { copyBtn.classList.remove('hide'); copyBtn.onclick = () => (window.Kit ? Kit.copy(text) : navigator.clipboard.writeText(text)); }
+  });
+
+  // ---------- Hỏi Claude ngay trong bài (khả năng sample, qua Kit.ask) ----------
+  // Ba chỗ, tự gắn vào mọi bài (thường, chiến tranh, IT), chỉ hiện khi trang hỏi Claude được (CSS .kit-ask):
+  //   1. Ô tự nói lại: Claude nhận xét bài viết so với ý chính (đúng gì, thiếu gì, một câu hỏi để tự nghĩ tiếp).
+  //   2. Chọn sai một câu: Claude giải thích vì sao lựa chọn đó nghe hợp lý mà chưa đúng.
+  //   3. Mỗi bước có nội dung: ô "Hỏi Claude về bước này", Claude biết chữ trên bước và tình trạng sân khấu,
+  //      và chỉ gợi ý (không nói đáp án) cho câu hỏi chưa trả lời.
+  // Nút hỏi có data-noreplay và ô hỏi là <input> (không phải textarea): phần tự lưu không bấm lại, tải lại không tốn lượt hỏi.
+  R.ai = R.ai || [];
+  const VOICE = 'Viết tiếng Việt tự nhiên, ngắn gọn, như người kèm học thân thiện nói chuyện trực tiếp. Gọi người học là "bạn". '
+    + 'Chỉ chữ thường: không Markdown, không dấu *, không gạch đầu dòng, không tiêu đề. Không khen sáo rỗng, không mở đầu bằng "Câu hỏi hay".';
+  const head = () => `Đây là một trang học tương tác. Bài: ${C.subject ? C.subject + ' · ' : ''}${C.title || ID}.`;
+  const clip = (s, n = 1800) => String(s || '').replace(/\s+/g, ' ').trim().slice(0, n);
+  const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+  const aiBtn = (text, cls = 'btn ghost') => { const b = el('button', { type: 'button', className: cls + ' kit-ask', textContent: text }); b.dataset.noreplay = ''; return b; };
+  const canAsk = () => window.Kit && Kit.ask;
+  /** Chữ người học đang thấy ở một phần trang: bỏ lời giải chưa mở, bỏ phần hỏi Claude. */
+  function visibleText(node, n) {
+    const c = node.cloneNode(true);
+    c.querySelectorAll('.why:not(.on), .mine:not(.on), .kit-ask, .ai-out, .status, script, style').forEach((x) => x.remove());
+    c.querySelectorAll('*').forEach((x) => x.append(' '));   // chữ của hai thẻ liền nhau không dính vào nhau
+    return clip(c.textContent, n);
+  }
+  function questionText(q) {
+    let p = q.previousElementSibling;
+    while (p && p.tagName !== 'P') p = p.previousElementSibling;
+    return clip((p || q.closest('.card')?.querySelector('p') || {}).textContent || '', 400);
+  }
+  /** Câu trả lời sai: thêm nút "Vì sao mình chọn sai?" dưới lời giải. */
+  function smartWhy(q, os, pick, ans, why) {
+    if (!canAsk() || q.querySelector('.kit-ask')) return;
+    const b = aiBtn('Vì sao mình chọn sai?', 'ai-open'), out = el('p', { className: 'ai-out kit-ask' });
+    out.setAttribute('role', 'status');
+    (why || os[os.length - 1]).after(b, out);
+    b.addEventListener('click', async () => {
+      b.disabled = true;
+      const qt = questionText(q), opt = (o) => clip(o.textContent.replace(/(Đúng|Bạn chọn|Đã chọn)$/, ''), 200);
+      const prompt = [head(), '',
+        `Câu hỏi: ${qt}`,
+        'Các lựa chọn: ' + os.map((o, j) => `(${j + 1}) ${opt(o)}`).join('; '),
+        `Người học chọn: (${pick + 1}) ${opt(os[pick])}`,
+        `Đáp án đúng: (${ans + 1}) ${opt(os[ans])}`,
+        why ? `Lời giải có sẵn trên trang (người học đã đọc): ${clip(why.textContent, 600)}` : '', '',
+        'Trong 2 đến 3 câu: nói vì sao lựa chọn của người học nghe hợp lý, rồi chỉ đúng điểm khiến nó chưa đúng, '
+        + 'và một mẹo để lần sau phân biệt. Đừng lặp lại lời giải có sẵn. ' + VOICE].join('\n');
+      const a = await Kit.ask(prompt, out, { tier: 'quick' });
+      if (a) { R.ai.push({ kind: 'why', q: q.dataset.q, a }); b.remove(); } else b.disabled = false;
+    });
+  }
+  // 1. Ô tự nói lại
+  const teach = $('textarea[data-key="teach"]');
+  if (teach && canAsk()) {
+    const b = aiBtn('Claude nhận xét bài của mình', 'ai-open'), out = el('p', { className: 'ai-out kit-ask' });
+    out.setAttribute('role', 'status');
+    b.disabled = true;
+    teach.after(b, out);
+    teach.addEventListener('input', () => { b.disabled = teach.value.trim().length < +(teach.dataset.min || 5); });
+    b.addEventListener('click', async () => {
+      b.disabled = true;
+      const step = teach.closest('.step'), mine = $('#mine');
+      const prompt = [head(), '',
+        `Đề bài người học đang làm: ${visibleText(step, 300)}`,
+        mine ? `Ý chính của bài (bản mẫu, người học ${mine.classList.contains('on') ? 'đã' : 'chưa'} xem): ${clip(mine.textContent, 800)}` : '',
+        `Người học tự viết: "${clip(teach.value, 1500)}"`, '',
+        'Nhận xét bài viết của người học trong tối đa 3 câu. Câu 1: một điều họ đã nắm đúng, dẫn lại ý của chính họ. '
+        + 'Câu 2: một điều còn thiếu hay chưa chính xác so với ý chính (nếu đủ ý rồi thì nói vậy). '
+        + 'Câu 3: một câu hỏi ngắn giúp họ tự nghĩ tiếp, không kèm đáp án. ' + VOICE].join('\n');
+      const a = await Kit.ask(prompt, out);
+      if (a) R.ai.push({ kind: 'teach', a });
+      b.disabled = false; b.textContent = 'Nhận xét lại';
+    });
+  }
+  // 3. Hỏi Claude về bước này (bỏ bước ôn và bước góp ý cuối)
+  steps.forEach((step) => {
+    if (!canAsk() || /(^|\s)review(\s|$)/.test(step.dataset.part || '') || step.querySelector('#finish')) return;
+    const box = el('div', { className: 'ai-ask kit-ask' });
+    const open = aiBtn('Hỏi Claude về bước này', 'ai-open');
+    const form = el('form', { className: 'ai-form', hidden: true });
+    const inp = el('input', { type: 'text', placeholder: 'Bạn chưa rõ chỗ nào?', maxLength: 300 });
+    inp.setAttribute('aria-label', 'Câu hỏi cho Claude');
+    const send = aiBtn('Hỏi', 'btn'); send.type = 'submit'; send.classList.remove('kit-ask');
+    const out = el('p', { className: 'ai-out' }); out.setAttribute('role', 'status');
+    form.append(inp, send);
+    box.append(open, form, out);
+    const next = step.querySelector('.next');
+    if (next) next.before(box); else step.append(box);
+    const turns = [];
+    open.addEventListener('click', () => { form.hidden = !form.hidden; open.setAttribute('aria-expanded', String(!form.hidden)); if (!form.hidden) inp.focus(); });
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const qtext = inp.value.trim(); if (!qtext) return;
+      send.disabled = true; inp.disabled = true;
+      const h = clip((step.querySelector('h1, h2') || {}).textContent || '', 120);
+      const pending = [...step.querySelectorAll('.q[data-q]')].filter((q) => !done.has(q.dataset.q)).map(questionText).filter(Boolean);
+      const stage = extras.map((f) => { try { return f(R); } catch (err) { return ''; } }).filter(Boolean).join('\n');
+      const prompt = [head(), '',
+        `Người học đang ở bước "${h}". Chữ trên bước (những gì họ đang thấy): ${visibleText(step, 1800)}`,
+        stage ? `Những gì người học đã làm trên sân khấu tương tác (núm vặn, thẻ đã xếp…): ${clip(stage, 1200)}` : '',
+        pending.length ? `Câu hỏi trên bước mà người học CHƯA trả lời: ${pending.join(' | ')}. Nếu người học hỏi thẳng đáp án của câu này, đừng nói đáp án: chỉ gợi một hướng nghĩ hay một chỗ trên màn để nhìn lại.` : '',
+        turns.length ? 'Những câu đã hỏi trước đó ở bước này: ' + turns.map((t) => `Hỏi: ${t.q} / Đáp: ${clip(t.a, 300)}`).join(' || ') : '',
+        step.querySelector('.next[disabled]') ? 'Người học CHƯA làm xong bước này (còn việc phải tự làm: chọn, xếp, vặn, trả lời). Đừng làm hộ và đừng nói đáp án hay cách xếp đúng; chỉ gợi một hướng nghĩ, hay một chỗ trên màn để nhìn lại.' : '',
+        `Người học hỏi: "${qtext}"`, '',
+        'Trả lời trong tối đa 4 câu, bám vào nội dung bước và ví dụ đang có trên màn. Nếu câu hỏi ra ngoài bài, trả lời ngắn rồi kéo về bài. ' + VOICE].join('\n');
+      const a = await Kit.ask(prompt, out, { cache: false });
+      if (a) { turns.push({ q: qtext, a }); R.ai.push({ kind: 'ask', step: h, q: qtext, a }); inp.value = ''; }
+      send.disabled = false; inp.disabled = false; inp.focus();
+    });
   });
 
   window.Lesson = { go, done: mark, R, summary, extras };

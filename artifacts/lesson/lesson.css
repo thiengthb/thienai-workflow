@@ -78,3 +78,4 @@ textarea { min-height: 88px; resize: vertical; }
 #kit-bar button { font: 600 13px var(--font); border: 0; border-radius: var(--r); min-height: 32px; padding: 0 10px; cursor: pointer; background: var(--bg); color: var(--ink); flex: none; }
 #kit-bar button.x { background: transparent; color: var(--bg); }
 .kit-review-off [data-part~="review"] { display: none !important; }
+

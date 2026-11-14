@@ -81,3 +81,27 @@ textarea:focus, input[type="text"]:focus { border-color: var(--accent); outline:
   padding: 10px 14px; font: 500 14px/1.4 var(--font); box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .15s, transform .15s; }
 #kit-toast.on { opacity: 1; transform: translateX(-50%); pointer-events: auto; }
 @media (prefers-reduced-motion: reduce) { #kit-toast, .bar > span { transition: none; } }
+
+/* Hỏi Claude trên trang (Kit.ask): chỉ hiện khi trang hỏi được (html.kit-ask-on). Câu trả lời là chữ thường, giữ xuống dòng. */
+html:not(.kit-ask-on) .kit-ask { display: none !important; }
+.ai-out { white-space: pre-wrap; font-size: 14.5px; line-height: 1.55; padding: 10px 12px; border-radius: var(--r);
+  background: var(--accent-soft); color: var(--ink); border: 0; margin: 0; }
+.ai-out:empty { display: none; }
+.ai-out.thinking { color: var(--muted); background: var(--soft); }
+.ai-out::before { content: "Claude"; display: block; font: 600 11px/1.4 var(--font); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 2px; }
+.ai-out.thinking::before { color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { .ai-out.thinking { animation: ai-pulse 1.4s ease-in-out infinite; } }
+@keyframes ai-pulse { 50% { opacity: .55; } }
+
+/* Ô hỏi Claude dùng chung (bài học, trang chọn phương án). Nút mở là một dòng chữ nhỏ, không giành mắt với nút chính. */
+.ai-ask { display: grid; gap: 8px; }
+.ai-open { justify-self: start; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 0; border: 0; background: none;
+  font: 500 14px var(--font); color: var(--accent-ink); cursor: pointer; }
+.ai-open::before { content: "?"; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid currentColor; font: 700 11px/15px var(--font); text-align: center; flex: none; }
+.ai-form { display: flex; gap: 8px; }
+.ai-form[hidden] { display: none; }
+.ai-form input { flex: 1; min-width: 0; min-height: 40px; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--r);
+  background: var(--card); color: var(--ink); font: 15px var(--font); }
+.ai-form .btn { flex: none; }
+@media (pointer: coarse) { .ai-open { min-height: 40px; } }
+.ai-open:disabled { color: var(--muted); cursor: default; }

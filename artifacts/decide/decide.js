@@ -156,6 +156,27 @@
     else Kit.toast(await Kit.copy(text) ? 'Chưa gửi thẳng được. Kết quả đã chép: dán vào chat cho Claude.' : 'Chưa gửi thẳng được. Chép kết quả trong ô bên dưới rồi dán vào chat cho Claude.', 8000);
   });
 
+  // Hỏi Claude về các phương án. Trước khi thien chọn, Claude chỉ giải thích và so sánh, không nói nên chọn cái nào
+  // (giống đề xuất đang ẩn); sau khi chọn thì Claude biết lựa chọn và đề xuất lúc soạn trang.
+  const turns = [];
+  $('ai-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const q = $('ai-q').value.trim(); if (!q || !Kit.ask) return;
+    $('ai-send').disabled = true;
+    const rec = D.recommend && byKey(D.recommend.key);
+    const prompt = [`Người dùng đang xem một trang chọn phương án. Câu cần quyết: ${D.question}`, D.context ? 'Bối cảnh: ' + D.context : '', 'Các phương án:',
+      ...opts.map((o) => `${o.key}. ${o.name}${o.short ? ' (' + o.short + ')' : ''}: ${o.summary || ''} Ưu: ${(o.pros || []).join('; ') || 'không ghi'}. Nhược: ${(o.cons || []).join('; ') || 'không ghi'}.`),
+      ...(D.criteria || []).map((c) => `Tiêu chí "${c.name}": ` + opts.map((o) => `${o.key} ${(c.values[o.key] || {}).text || '?'}`).join(', ')),
+      S.pick ? `Người dùng đã chọn ${S.pick}.` + (rec ? ` Lúc soạn trang, Claude đề xuất ${rec.key}: ${D.recommend.why || ''}` : '')
+        : 'Người dùng CHƯA chọn. Đừng nói nên chọn phương án nào, đừng xếp hạng: chỉ giải thích, so sánh khách quan, làm rõ từ khó, để họ tự chọn.',
+      turns.length ? 'Đã hỏi trước đó: ' + turns.map((t) => `Hỏi: ${t.q} / Đáp: ${t.a.slice(0, 300)}`).join(' || ') : '',
+      `Câu hỏi: "${q}"`, '',
+      'Trả lời trong tối đa 4 câu, bám vào các phương án trên trang. Tiếng Việt tự nhiên, gọi người dùng là "bạn", chỉ chữ thường: không Markdown, không gạch đầu dòng.'].join('\n');
+    const a = await Kit.ask(prompt, $('ai-out'), { cache: false });
+    if (a) { turns.push({ q, a }); $('ai-q').value = ''; }
+    $('ai-send').disabled = false;
+  });
+
   async function start() {
     document.title = D.title || D.question;
     $('count').textContent = `Cần bạn chọn · ${opts.length} phương án`;

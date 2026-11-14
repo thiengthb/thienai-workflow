@@ -10,6 +10,7 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 - Góp ý độ dài, độ khó, cách học so với các buổi trước bằng nhóm nút (nút đã chọn tô đen), ô ghi thêm.
 - **Xong buổi học**: lưu toàn bộ kết quả vào db của trang ở `sessions/<id>-<thời điểm>`, rồi gửi tóm tắt cho Claude bằng comment (Claude đang theo dõi trang thì tự thức dậy, thien không cần nhắn "xong"). Gửi không được thì hiện nút "Chép kết quả".
 - Tự lưu chỗ đang học (`learning/teaching/kit/kit.js`): tải lại, tắt màn, mở trên máy khác đều về đúng chỗ. Học lại thì bỏ phần ôn.
+- **Hỏi Claude ngay trong bài** (khả năng `sample`, xem `../README.md`): nhận xét bài tự nói lại, giải thích chỗ chọn sai, ô "Hỏi Claude về bước này". lesson.js tự gắn vào mọi bài, không cần sửa trang. Nút hỏi có `data-noreplay`, ô hỏi là `<input>`: phần tự lưu không bấm lại nên tải lại không tốn lượt hỏi.
 - Chế độ tối theo máy, theo màu của lõi chung. Một bo góc 8px, nút và dòng đáp án cao 44px (thienui `docs/taste.md`).
 
 ## Cách AI soạn một buổi

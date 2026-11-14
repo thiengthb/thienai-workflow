@@ -15,7 +15,8 @@ import { writePublish } from '../kit/publish.mjs';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
-export const CAPABILITIES = { db: {}, comments: {} };
+// sample: trang tự hỏi Claude (nhận xét bài tự nói lại, giải thích chỗ chọn sai, hỏi về một bước), xem lesson.js.
+export const CAPABILITIES = { db: {}, comments: {}, sample: {} };
 const read = (p) => readFileSync(join(here, p), 'utf8');
 const PARTS = {
   'kit-css': ['style', '../kit/kit.css'],

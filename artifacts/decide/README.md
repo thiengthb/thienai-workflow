@@ -9,6 +9,7 @@ Trang dùng mỗi khi AI cần thien chọn 1 trong 2–4 cách có hình: bố 
 - Điện thoại: mỗi phương án một thẻ có ảnh đủ tỉ lệ (cao tới 72% màn), tiêu chí, ưu nhược và nút "Chọn bản này".
 - Bấm ảnh để phóng to. Bấm lại bản đang chọn là bỏ chọn.
 - **Đề xuất của AI ẩn tới khi thien chọn**, để thien chọn theo mắt mình trước. Chọn xong, trang hiện đề xuất kèm lý do và nói lựa chọn giống hay khác đề xuất. Đề xuất vẫn nằm trong mã trang: "ẩn" là ẩn trên màn, không phải bí mật.
+- Ô "Hỏi Claude" về các phương án (khả năng `sample`): trước khi chọn Claude chỉ giải thích, không gợi ý chọn cái nào; không hỏi được thì ô tự ẩn.
 - Ô ghi chú, nút "Chép kết quả" và "Gửi cho Claude". Gửi không được thì tự chép.
 - Lựa chọn và ghi chú lưu vào máy và vào db của trang ở `decisions/<id>`. Nút chọn và ô ghi chú chỉ bật sau khi đã đọc xong bản đã lưu.
 - Comment: dùng comment có sẵn của claude.ai, ghim thẳng vào bản đang xem (`view-<khóa>`), cột trong bảng (`col-<khóa>`) hoặc thẻ (`opt-<khóa>`) của phương án.
