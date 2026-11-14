@@ -1,6 +1,6 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-14 · Claude (project Claude, thread nâng cấp bài học và kiểm trang tự động) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
+Cập nhật lần cuối: 2026-11-14 · Claude (project Claude, thread tự bàn giao việc khi hết usage) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu.
 Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
@@ -24,8 +24,8 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Các đề xuất nâng cấp, đợt 5 | [tài liệu đề xuất](https://claude.ai/artifact/FrUscTcs6BWMVBJGzJTYqF) | 2026-11-14 | Làm sau khi đợt 4 merge |
 
 ## Vừa xong
-- Tự lưu nhớ nút theo tên nên AI sửa trang đang học dở vẫn mở lại đúng chỗ; bộ khung cũ gộp vào `artifacts/kit/`; mọi màu là tên trong `kit.css`, có `check-tokens.mjs`; trang mẫu thành phần; CI kiểm truy cập bằng axe-core (PR này)
-- Sau buổi học: `artifacts/lesson/after-lesson.mjs` soạn nháp nhật ký, thẻ, chỗ còn vướng và kiểm đã ghi đủ; `learning/usage.md` ghi tính năng nào thật sự được dùng (PR #58)
+- Tự lưu nhớ nút theo tên nên AI sửa trang đang học dở vẫn mở lại đúng chỗ; bộ khung cũ gộp vào `artifacts/kit/`; mọi màu là tên trong `kit.css`, có `check-tokens.mjs`; trang mẫu thành phần; CI kiểm truy cập bằng axe-core (PR #61)
+- Sổ bàn giao giữa các nick Claude: ghi việc dở sau mỗi bước lên nhánh `handoff`, nói "tiếp tục" ở nick khác là làm tiếp (`profile/HANDOFF.md`, `templates/handoff.mjs`, quyết định 001; PR này)
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), dựng từ mẫu bàn thử `artifacts/it/` (bài mẫu trong đó chính là nháp buổi 6).
@@ -33,7 +33,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 ## Đang chờ thien
 - Mở 3 trang (link trong file kế hoạch) trên điện thoại và laptop; trên laptop chạy `node templates/check-status.mjs docs/STATUS.md`, thấy "ổn" là xong.
-- Chép dòng Settings mới (README, bước 1) vào từng tài khoản Claude; tải lại 2 file zip skill nếu chưa.
+- Chép dòng Settings mới (README, bước 1, có thêm dòng "tiếp tục") vào từng tài khoản Claude; tải lại 2 file zip skill nếu chưa.
 - Merge sakubun PR #301 (luật AGENTS mới).
 
 ## Đang vướng

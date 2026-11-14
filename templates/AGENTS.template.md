@@ -37,6 +37,10 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 - Sửa STATUS thì gộp vào PR của tính năng đang làm. PR chỉ sửa STATUS thì nhắc thien merge ngay, vì để lâu là nó cũ và bị conflict.
 - Nếu project có `docs/ai-log.md`: thêm dòng cho phiên này, để trống hai cột "Người kiểm gì" và "Quyết định" cho người điền.
 
+## Bàn giao giữa các nick
+- Nick nào cũng có thể hết usage giữa chừng mà không báo trước. Việc nhiều bước: sau mỗi bước đẩy nhánh làm việc và ghi sổ bàn giao (nhánh `handoff` của repo thienai-workflow, lệnh `templates/handoff.mjs`). Trang chờ thien thì ghi cả link và lệnh dựng lại, nguồn trang nằm trong nhánh đã đẩy.
+- thien nói "tiếp tục": đọc sổ, làm tiếp việc dở. Cách làm đủ ở [`profile/HANDOFF.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/HANDOFF.md).
+
 ## Giữ file này ngắn
 - Phần chung dưới 60 dòng. Thêm một luật thì bỏ hoặc gộp một luật khác.
 - Phần chung tự đồng bộ từ repo thienai-workflow qua PR. Giữ nguyên dòng tiêu đề "Phần riêng của project" bên dưới: đó là mốc để biết phần nào là chung.

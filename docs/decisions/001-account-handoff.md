@@ -1,6 +1,6 @@
 # 001. Tự bàn giao việc khi một nick Claude hết usage
 
-Ngày: 2026-11-14 · Trạng thái: Đề xuất · Người quyết: thien
+Ngày: 2026-11-14 · Trạng thái: Đã chọn · Người quyết: thien
 
 ## Cần quyết gì
 thien dùng nhiều nick Claude. Một nick hết usage (phiên hay tuần) giữa chừng thì nick khác chỉ cần nghe "tiếp tục" là làm tiếp được, kể cả khi việc đang dừng ở bước chờ thien chọn trên một artifact. Phần sổ bàn giao làm giống nhau ở mọi phương án; cái cần chọn là cách giữ artifact khi đổi nick.
@@ -25,13 +25,15 @@ thien dùng nhiều nick Claude. Một nick hết usage (phiên hay tuần) gi�
 | C. A, cộng Cloudflare Pages và Worker | Muốn một link mở được ở mọi nick, mọi trình duyệt, và lựa chọn lưu chung | Cài khoảng 45 phút, giữ token, mất phần dùng Claude trên trang; thien đã gác ý này ngày 2026-11-12 |
 
 ## thien chọn
-<chờ thien>
+A, trên trang chọn phương án https://claude.ai/artifact/9SNTkS9pFjKfqA7vhH486B (2026-11-14 10:07 UTC), không ghi chú.
 
 ## AI chọn
 B. Phần lớn giá trị nằm ở sổ bàn giao, có ở mọi phương án. Trang chọn phương án đăng lại chỉ mất vài giây và bấm lại một lựa chọn là đủ, nên không đáng dựng Cloudflare. Nhưng trang tổng quan đang kẹt ở nick khác (chỉ nick đó đăng đè được), nên mời các nick vào vài trang cố định là chữa đúng chỗ đau với một lần bấm cho mỗi trang.
 
 ## Kết luận
-<sau khi thien chọn>
+Làm bản A: sổ bàn giao trên nhánh `handoff`, lệnh `templates/handoff.mjs`, luật ở `profile/HANDOFF.md` và phần chung của AGENTS. Trang chờ thien được dựng lại từ nguồn trong repo khi đổi nick.
+
+Khác với AI ở chỗ: AI chọn B vì trang tổng quan đang chỉ đăng đè được từ nick khác. Với A, nick nào cũng đăng lại được trang tổng quan, chỉ là ra link mới. Nếu sau này đổi link thấy phiền thì thêm phần mời nick của B, không phải sửa gì ở A.
 
 ## Tóm tắt bằng lời của thien
 <thien tự viết, hoặc "bỏ qua">

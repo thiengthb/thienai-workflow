@@ -25,6 +25,7 @@ docs/         Tiến độ và kế hoạch đang chạy của chính repo này
 | | `VOICE.md` | Giọng văn tiếng Việt, câu mẫu, từ thien đã chê, và cách AI phản biện thien |
 | | `GUIDES.md` | Cách viết hướng dẫn cài đặt và hướng dẫn test tay: link, vị trí nút, form điền sẵn, kết quả cần thấy, dữ liệu test |
 | | `PLANNING.md` | Cách AI viết kế hoạch gửi thien duyệt, rồi ghi và cập nhật kế hoạch trong repo |
+| | `HANDOFF.md` | Sổ bàn giao giữa các nick Claude: ghi việc dở sau mỗi bước, nick khác nghe "tiếp tục" là làm tiếp |
 | | `TUTOR.md` | Cách AI dạy thien ở mọi môn: thử trước, giải thích sau, ghi nhật ký; đứng đúng vai khi làm việc |
 | `templates/` | `AGENTS.template.md` | Mẫu `AGENTS.md` cho mỗi project, đọc được bởi Claude, Codex, Gemini. Mỗi project có thêm `CLAUDE.md` chỉ một dòng `@AGENTS.md` |
 | | `STATUS.template.md` | Mẫu `docs/STATUS.md`: project đang ở đâu, việc tiếp theo, đang chờ ai |
@@ -63,8 +64,9 @@ File mẫu giữ đuôi `.template.md` để không bị nhầm thành luật th
    Khi bắt đầu project mới, dùng skill start-project: hỏi mình trước, mình đồng ý mới áp.
    Trả lời bằng tiếng Việt tự nhiên, không tự chế từ, không dịch sát chữ từ tiếng Anh.
    Khi mình giao việc mới, trước khi làm hãy nhắc mình các việc còn dở (thread chưa xong, PR còn mở, câu hỏi chờ mình) kèm mức quan trọng, rồi hỏi có giải quyết trước không.
+   Khi mình nói "tiếp tục": đọc sổ bàn giao ở nhánh handoff của repo thienai-workflow (profile/HANDOFF.md) và làm tiếp việc dở, kể cả việc nick khác đang làm.
    ```
-   Dòng cuối là bản ngắn của mục "Nhắc việc dở" trong `profile/PROFILE.md`. Để ở đây vì Claude luôn đọc ô này, kể cả ở project chưa áp quy trình.
+   Dòng thứ tư là bản ngắn của mục "Nhắc việc dở" trong `profile/PROFILE.md`; dòng cuối là luật bàn giao giữa các nick (`profile/HANDOFF.md`). Để ở đây vì Claude luôn đọc ô này, kể cả ở project chưa áp quy trình.
 2. Nối GitHub cho tài khoản đó (Settings > Connectors > GitHub), cho phép repo `thienai-workflow`. Repo này để riêng tư, nên không nối thì skill không đọc được các bước.
 3. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên file zip của thư mục `skills/start-project/` và `skills/make-slides/`.
 4. Mở một project mới: coordinator sẽ hỏi có áp quy trình không.
