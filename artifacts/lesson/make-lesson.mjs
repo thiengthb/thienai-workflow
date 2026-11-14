@@ -109,7 +109,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
       const root = (() => { try { return execFileSync('git', ['-C', near, 'rev-parse', '--show-toplevel'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch (e) { return ''; } })();
       const paths = [`learning/${subjOpen}.md`, `learning/${subjOpen}/`], list = root && existsSync(join(root, 'learning')) ? openWork({ paths, cwd: root }) : [];
       if (list.length || list.stale) { console.error(report(list, paths) + '\nĐọc các nhánh đó (hoặc gộp vào nhánh của mình) rồi chạy lại với --ack-open.'); process.exit(1); }
-    } catch (e) { console.warn('Không kiểm được nhánh chưa merge (không có git?). Tự xem PR đang mở trước khi làm.'); }
+    } catch (e) { console.error('Không kiểm được nhánh chưa merge (' + (e.message || e) + '). Xem trang Pull requests rồi chạy lại với --ack-open.'); process.exit(1); }
   }
   // Lần đầu: trang chưa có thì chép mẫu ra, để AI điền nội dung rồi chạy lại đúng lệnh này.
   if (!existsSync(file)) {

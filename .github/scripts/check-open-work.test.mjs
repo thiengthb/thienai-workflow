@@ -29,7 +29,13 @@ assert.deepEqual(openWork({ paths: ['learning/war/'], cwd: single }).map((w) => 
 // Không tải được từ origin: báo là chưa chắc, không im lặng nói "không có gì".
 g(single, 'remote', 'set-url', 'origin', join(d, 'missing.git'));
 const off = openWork({ paths: ['learning/ba/'], cwd: single });
-assert.equal(off.stale, true); assert.match(report(off, ['learning/ba/']), /Không tải được/);
+assert.equal(off.stale, true); assert.match(report(off, ['learning/ba/']), /chưa biết chắc/);
+// Clone nông: main đã đi tiếp sau chỗ nhánh "other" tách ra, nên không có merge base. Phải báo chưa chắc, không ném lỗi.
+g(work, 'checkout', '-q', 'main'); writeFileSync(join(work, 'b.md'), 'b'); g(work, 'add', '.'); g(work, 'commit', '-qm', 'more'); g(work, 'push', '-q', 'origin', 'HEAD:main');
+const shallow = join(d, 'shallow');
+execFileSync('git', ['clone', '-q', '--depth=1', '--branch', 'main', 'file://' + origin, shallow], { stdio: 'ignore' });
+const sh = openWork({ paths: ['learning/war/'], cwd: shallow });
+assert.equal(sh.stale, true, 'shallow clone without merge base is reported as unsure');
 // make-lesson: trang mới trong thư mục chưa có (learning/war/pages/) vẫn bị chặn khi nhánh khác đã sửa môn đó.
 const fresh = join(d, 'fresh'); execFileSync('git', ['clone', '-q', origin, fresh], { stdio: 'ignore' }); mkdirSync(join(fresh, 'learning'));
 const page = join(fresh, 'learning/war/pages/new.html'), mk = fileURLToPath(new URL('../../artifacts/lesson/make-lesson.mjs', import.meta.url));

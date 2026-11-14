@@ -31,7 +31,8 @@ export function openWork({ base = 'main', paths = [], fetch = true, cwd = proces
     const ahead = Number(git('rev-list', '--count', `origin/${base}..${b}`));
     if (!ahead) continue;
     try { git('merge-base', '--is-ancestor', b, 'HEAD'); continue; } catch (e) { /* chưa gộp vào nhánh đang đứng */ }
-    const files = git('diff', '--name-only', `origin/${base}...${b}`).split('\n').filter(Boolean);
+    // Clone nông (--depth) có thể thiếu merge base: không so được thì coi là chưa chắc, không bỏ qua im lặng.
+    let files; try { files = git('diff', '--name-only', `origin/${base}...${b}`).split('\n').filter(Boolean); } catch (e) { stale = true; continue; }
     const hit = paths.length ? files.filter((f) => paths.some((p) => f === p || f.startsWith(p.endsWith('/') ? p : p + '/'))) : files;
     if (paths.length && !hit.length) continue;
     const [date, subject] = git('log', '-1', '--format=%cs%x09%s', b).split('\t');
@@ -42,7 +43,7 @@ export function openWork({ base = 'main', paths = [], fetch = true, cwd = proces
 }
 
 export function report(list, paths = []) {
-  if (list.stale) return [`Không tải được nhánh mới từ origin (mất mạng hay không có origin?), nên chưa biết chắc còn việc chưa merge.`,
+  if (list.stale) return [`Không tải hay không so được nhánh trên origin (mất mạng, không có origin, hay repo clone nông?), nên chưa biết chắc còn việc chưa merge.`,
     `Tự xem trang Pull requests trước khi làm.`, ...(list.length ? [report(Object.assign([...list], { stale: false }), paths)] : [])].join('\n');
   if (!list.length) return paths.length ? `Không có nhánh chưa merge nào sửa ${paths.join(', ')}.` : 'Không có nhánh chưa merge.';
   return [paths.length ? `Có ${list.length} nhánh chưa merge sửa ${paths.join(', ')}. Đọc trước khi làm, đừng làm trùng:` : `Có ${list.length} nhánh chưa merge:`,
