@@ -1,0 +1,82 @@
+<title>__TITLE__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>/*KIT_CSS*/</style>
+<style>
+/* Trang ôn thẻ (artifacts/review/README.md). Một vùng chính: thẻ đang hỏi. Thử nhớ trước, rồi mới xem đáp án,
+   rồi tự chấm Nhớ hay Quên. Claude chấm thêm nếu muốn (khả năng sample), nói được thay gõ (khả năng dictation). */
+body { font-size: 15px; }
+[hidden] { display: none !important; }
+main { max-width: 720px; margin: 0 auto; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 14px; }
+.top { display: grid; gap: 8px; }
+.top .meta { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 12px; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.q { font-size: 19px; font-weight: 600; line-height: 1.4; text-wrap: pretty; }
+.answer-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
+textarea { min-height: 84px; resize: vertical; }
+.mic { width: 40px; padding: 0; }
+.mic svg { width: 18px; height: 18px; }
+.mic[aria-pressed="true"] { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+.partial { font-size: 13.5px; color: var(--muted); min-height: 0; }
+.partial:empty { display: none; }
+.acts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.reveal { background: var(--soft); border-radius: var(--r); padding: 12px; display: grid; gap: 6px; }
+.reveal .src { font-size: 13px; color: var(--muted); }
+.judge { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.judge .btn { min-height: 44px; }
+.judge .good { color: var(--good); } .judge .bad { color: var(--bad); }
+.done { display: grid; gap: 12px; }
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.list li { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: baseline; font-size: 14px; }
+.list .id { font: 600 12px/1 var(--mono); color: var(--muted); }
+.status { font-size: 13.5px; color: var(--muted); }
+.empty { color: var(--muted); }
+/* Hỏi Claude: kiểu chung ở kit.css (.ai-open, .ai-out); chỉ hiện khi trang hỏi được (.kit-ask). */
+</style>
+<main>
+  <header class="top">
+    <div class="meta"><span class="label" id="title">Ôn thẻ</span><span class="label" id="cnt"></span></div>
+    <div class="bar"><span id="bar" style="width:0"></span></div>
+  </header>
+
+  <section class="card" id="card" aria-live="polite">
+    <div class="tags"><span class="chip" id="subj"></span><span class="chip" id="box"></span></div>
+    <p class="q" id="q"></p>
+    <div class="answer-row">
+      <textarea id="mine" maxlength="1500" placeholder="Bạn nhớ gì? Gõ vài chữ, chưa cần đúng." aria-label="Câu trả lời của bạn"></textarea>
+      <button class="btn mic" id="mic" type="button" hidden aria-pressed="false" aria-label="Nói thay gõ" title="Nói thay gõ">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v5"/></svg>
+      </button>
+    </div>
+    <p class="partial" id="partial" aria-live="polite"></p>
+    <div class="acts"><button class="btn primary" id="show" type="button">Xem đáp án</button></div>
+    <div class="reveal" id="reveal" hidden>
+      <span class="label">Đáp án</span>
+      <p id="ans"></p>
+      <p class="src" id="src"></p>
+      <button class="ai-open kit-ask" id="grade" type="button">Claude chấm câu của mình</button>
+      <p class="ai-out kit-ask" id="ai" role="status"></p>
+    </div>
+    <div class="judge" id="judge" hidden>
+      <button class="btn good" id="yes" type="button">Nhớ</button>
+      <button class="btn bad" id="no" type="button">Quên</button>
+    </div>
+  </section>
+
+  <section class="card done" id="done" hidden>
+    <h1 style="font-size:20px" id="done-title">Xong buổi ôn</h1>
+    <ul class="list" id="list"></ul>
+    <div class="acts">
+      <button class="btn" id="redo" type="button">Ôn lại thẻ quên</button>
+      <button class="btn" id="copy" type="button">Chép kết quả</button>
+      <button class="btn accent" id="send" type="button">Gửi cho Claude</button>
+    </div>
+    <p class="status" id="status" role="status"></p>
+  </section>
+</main>
+<script type="application/json" id="review">__REVIEW__</script>
+<script>/*KIT_JS*/</script>
+<script>/*REVIEW_JS*/</script>

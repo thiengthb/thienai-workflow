@@ -4,7 +4,7 @@
 //   node artifacts/kit/check-pages.mjs [trang.html ...] [--out <thư-mục-ảnh>]
 //
 // Không đưa trang nào: kiểm mọi trang bài trong learning/*/pages/ và một trang mẫu dựng từ mỗi mẫu trong artifacts/
-// (bài thường, bài chiến tranh, bài frontend, bài BA, trang chọn phương án, trang so sánh).
+// (bài thường, bài chiến tranh, bài frontend, bài BA, trang chọn phương án, trang so sánh, trang ôn thẻ).
 // Mỗi trang mở ở 3 khổ (1180x760 khung xem trên claude.ai, 820x1180 máy tính bảng, 390x844 điện thoại), cả tối lẫn sáng,
 // hiện hết mọi bước, giả có Claude để hiện cả các ô hỏi Claude. Báo LỖI khi:
 //   1. Có lỗi JavaScript.
@@ -72,6 +72,15 @@ export async function buildFixtures(dir, browser) {
   round({ id: 'demo-compare', title: 'Trang mẫu so sánh', items: [{ id: 'home', label: 'Trang chủ', sides: [
     { key: 'old', name: 'Cũ', file: 'a.png' }, { key: 'new', name: 'Mới', file: 'b.png' }] }] }, dir, join(dir, 'compare'));
   out.push({ name: 'compare', file: join(dir, 'compare/preview.html') });
+  // Trang ôn thẻ: bảng thẻ và bài giả cố định, để kết quả không đổi theo ngày hay theo learning/cards.md.
+  writeFileSync(join(dir, 'lesson-1.md'), '# Bài 1\n\nHọc ngày 2026-11-01\n\n## Ý chính\n\nMỗi màn chỉ một chỗ dùng màu nhấn đặc; phần phụ để nhạt.\n\n'
+    + '## Tự kiểm\n\n1. Hai nút đặc cùng màu đặt cạnh nhau thì sao?\n   <details><summary>Đáp án</summary>Mắt không biết bấm nút nào. Để một nút đặc, nút kia viền.</details>\n');
+  writeFileSync(join(dir, 'cards.md'), '| Thẻ | Môn | Câu hỏi | Đáp án ở | Hộp | Hỏi lại |\n|---|---|---|---|---|---|\n'
+    + '| F1 | Frontend | Hai nút đặc cùng màu cạnh nhau thì sao? | [bài 1](lesson-1.md) | 2 | 2026-11-13 |\n'
+    + '| F2 | Frontend | Muốn nút chính nổi hơn mà không thêm màu thì làm gì? | [bài 1](lesson-1.md) | 1 | 2026-11-14 |\n');
+  const { build: review } = await import('../review/make-review.mjs');
+  review(join(dir, 'cards.md'), join(dir, 'review'), { today: '2026-11-14' });
+  out.push({ name: 'review', file: join(dir, 'review/preview.html') });
   return out;
 }
 

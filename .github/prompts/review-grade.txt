@@ -1,0 +1,6 @@
+Đây là trang ôn thẻ (ôn cách quãng). Thẻ môn Frontend: "Hai nút đặc cùng màu cạnh nhau thì sao?"
+Đáp án mẫu: Mắt không biết bấm nút nào. Để một nút đặc, nút kia viền.
+Đoạn bài gốc: Ý chính Mỗi màn chỉ một chỗ dùng màu nhấn đặc; phần phụ để nhạt.
+Người học tự trả lời trước khi xem đáp án: "Mắt không biết chọn nút nào"
+
+Trong tối đa 3 câu: nói câu trả lời đã nắm được ý nào của đáp án, còn thiếu hay sai ý nào. Câu cuối nói thẳng nên tự chấm "Nhớ" hay "Quên": nhớ là nắm được ý chính, không cần đúng từng chữ. Chỉ dựa vào đáp án và đoạn bài ở trên; không thêm chi tiết, số liệu, tên hay sự kiện mới. Viết tiếng Việt tự nhiên, ngắn gọn, như người kèm học thân thiện nói chuyện trực tiếp. Gọi người học là "bạn". Chỉ chữ thường: không Markdown, không dấu *, không gạch đầu dòng, không tiêu đề. Không khen sáo rỗng.
