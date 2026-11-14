@@ -66,7 +66,10 @@
     const legend = $el('div', 'st-legend'), tools = $el('div', 'st-views'), note = $el('span', 'chip st-note');
     note.textContent = 'Địa hình thật' + (G.ex !== 1 ? ' (độ cao ×' + String(G.ex).replace('.', ',') + ')' : '') + ' · vị trí ước lượng';
     note.title = b.note || '';
-    stage.append(cv, labels, legend, tools, note);
+    // La bàn và thước tỉ lệ ở góc dưới phải; khung thông tin hiện khi chạm vào một ký hiệu.
+    const compass = $el('div', 'st-compass', '<i class="st-north" aria-hidden="true"><b></b></i><span class="st-scale"><i></i><em></em></span>');
+    const info = $el('div', 'st-info'); info.hidden = true; info.setAttribute('role', 'status');
+    stage.append(cv, labels, legend, tools, note, compass, info);
     const tl = $el('div', 'st-tl'), row = $el('div', 'st-row'), play = $el('button', 'btn st-play', '▶');
     play.type = 'button'; play.setAttribute('aria-label', 'Chạy từng mốc');
     // Hàng mốc cuộn ngang khi màn hình hẹp, để mỗi mốc vẫn đủ 44px cho ngón tay.
@@ -200,6 +203,30 @@
     // ---------- Nhãn ----------
     const labelEls = {};
     b.units.forEach((u) => { const s = $el('span', 'st-lbl ' + u.side); labels.appendChild(s); labelEls[u.id] = s; });
+    const featLbls = b.features.filter((f) => f.short || f.name).map((f) => { const s = $el('span', 'st-lbl feat ' + f.kind); s.textContent = f.short || f.name; labels.appendChild(s); return { f, e: s }; });
+    let lastHits = []; // vùng chạm của từng ký hiệu và nhãn ở lần vẽ gần nhất
+    function screenAt(x, z) {
+      if (flat) { const [px, pz] = flatProj(x, z); return [px, pz]; }
+      const v = new THREE.Vector3(x, G.hAt(x, z), z).project(camera);
+      return [(v.x + 1) / 2 * stage.clientWidth, (1 - v.y) / 2 * stage.clientHeight];
+    }
+    // Hướng bắc và thước tỉ lệ đo tại điểm đang nhìn, nên khi xoay hay phóng to vẫn đúng.
+    function updateCompass() {
+      const [tx, , tz] = cam.target, p0 = screenAt(tx, tz), pn = screenAt(tx, tz - .5), pe = screenAt(tx + .5, tz);
+      const ang = Math.atan2(pn[0] - p0[0], -(pn[1] - p0[1])) * 180 / Math.PI;
+      compass.querySelector('.st-north').style.transform = `rotate(${ang.toFixed(1)}deg)`;
+      const perKm = Math.hypot(pe[0] - p0[0], pe[1] - p0[1]) * 2;
+      const km = [.1, .2, .25, .5, 1, 2, 5, 10].find((k) => k * perKm >= 48) || 10;
+      compass.querySelector('.st-scale i').style.width = Math.round(Math.min(140, km * perKm)) + 'px';
+      compass.querySelector('.st-scale em').textContent = (km < 1 ? Math.round(km * 1000) + ' m' : String(km).replace('.', ',') + ' km');
+    }
+    // Bảng chú thích không được chạy xuống dưới nút góc phải: chừa đúng chỗ còn lại, hẹp quá thì ẩn.
+    function fitLegend() {
+      const room = stage.clientWidth - tools.offsetWidth - 28;
+      legend.style.maxWidth = Math.max(0, room) + 'px';
+      legend.style.visibility = room < 150 ? 'hidden' : '';
+      note.style.maxWidth = Math.max(80, stage.clientWidth - compass.offsetWidth - 28) + 'px';
+    }
     function project(u) { return projectAt(u.at); }
     function projectAt(at) {
       const [x, z] = G.xz(at);
@@ -210,26 +237,43 @@
     // Nhãn không được đè lên ký hiệu đơn vị, lên khung chú thích hay nút góc, và không tràn mép.
     // Mỗi nhãn thử lần lượt: trên, dưới, phải, trái ký hiệu; chỗ nào cũng vướng thì ẩn nhãn ưu tiên thấp.
     function placeLabels(S) {
+      fitLegend(); updateCompass();
       const W = stage.clientWidth, H = stage.clientHeight, sr = stage.getBoundingClientRect();
-      const ui = [legend, tools, note].filter((x) => x.offsetParent && x.offsetWidth).map((x) => { const r = x.getBoundingClientRect(); return [r.left - sr.left - 4, r.top - sr.top - 4, r.right - sr.left + 4, r.bottom - sr.top + 4]; });
+      const ui = [legend, tools, note, compass].filter((x) => x.style.visibility !== 'hidden').filter((x) => x.offsetParent && x.offsetWidth).map((x) => { const r = x.getBoundingClientRect(); return [r.left - sr.left - 4, r.top - sr.top - 4, r.right - sr.left + 4, r.bottom - sr.top + 4]; });
       const list = b.units.filter((u) => S.show.has(u.id)).map((u) => ({ u, pri: (S.hit.has(u.id) ? 10 : 0) + (u.rank || 1), p: project(u) }));
       list.sort((a, c) => c.pri - a.pri);
-      const marks = list.filter((o) => o.p[2]).map((o) => [o.p[0] - 9, o.p[1] - 6, o.p[0] + 9, o.p[1] + 16]);
+      // Vùng của ký hiệu trên màn hình: 3D thì chiếu tám góc khối thật (to ra khi phóng gần), bản phẳng thì ô cố định.
+      const box3 = flat ? null : new THREE.Box3(), v3 = flat ? null : new THREE.Vector3();
+      function markBox(u, [x, y]) {
+        const fb = [x - 9, y - 6, x + 9, y + 16], m = meshes[u.id];
+        if (flat || !m) return fb;
+        m.updateMatrixWorld(); box3.setFromObject(m); let l = Infinity, t = Infinity, r = -Infinity, btm = -Infinity;
+        for (let k = 0; k < 8; k++) {
+          v3.set(k & 1 ? box3.max.x : box3.min.x, k & 2 ? box3.max.y : box3.min.y, k & 4 ? box3.max.z : box3.min.z).project(camera);
+          const sx = (v3.x + 1) / 2 * W, sy = (1 - v3.y) / 2 * H;
+          l = Math.min(l, sx); r = Math.max(r, sx); t = Math.min(t, sy); btm = Math.max(btm, sy);
+        }
+        return [Math.min(fb[0], l - 3), Math.min(fb[1], t - 3), Math.max(fb[2], r + 3), Math.max(fb[3], btm + 3)];
+      }
+      list.forEach((o) => { o.m = o.p[2] ? markBox(o.u, o.p) : null; });
+      const marks = list.filter((o) => o.m).map((o) => o.m);
       // Đường tấn công, hào: lấy mẫu dọc đường thành ô nhỏ. Nhãn cố tránh, không tránh được thì vẫn hiện.
       const path = [];
       S.lines.forEach((l) => l.pts.forEach((pt, i) => { if (!i) return; const a = l.pts[i - 1];
         for (let k = 0; k <= 6; k++) { const q = projectAt([a[0] + (pt[0] - a[0]) * k / 6, a[1] + (pt[1] - a[1]) * k / 6]); if (q[2]) path.push([q[0] - 3, q[1] - 3, q[0] + 3, q[1] + 3]); } }));
+      lastHits = [];
       const taken = [...ui], hitAny = (bx, arr) => arr.some((t) => !(bx[2] <= t[0] || bx[0] >= t[2] || bx[3] <= t[1] || bx[1] >= t[3]));
       b.units.forEach((u) => { labelEls[u.id].hidden = true; });
-      for (const { u, p: [x, y, front] } of list) {
+      for (const { u, p: [x, y, front], m: mb } of list) {
         const e = labelEls[u.id];
         if (!front || x < 0 || y < 0 || x > W || y > H) continue;
+        lastHits.push({ u, box: mb });
         const name = S.rename[u.id] || u.short || u.name, lost = S.lose.has(u.id);
         e.textContent = name + (lost ? ' · đã mất' : '');
         e.className = 'st-lbl ' + u.side + (S.hit.has(u.id) ? ' hit' : '') + (lost ? ' lost' : '') + (S.dim.has(u.id) ? ' dim' : '');
         e.hidden = false;
         const w = e.offsetWidth, h = e.offsetHeight;
-        const tries = [[x - w / 2, y - h - 8], [x - w / 2, y + 18], [x + 12, y - h / 2 + 4], [x - w - 12, y - h / 2 + 4]];
+        const cy = (mb[1] + mb[3]) / 2, tries = [[x - w / 2, mb[1] - h - 2], [x - w / 2, mb[3] + 2], [mb[2] + 2, cy - h / 2], [mb[0] - w - 2, cy - h / 2]];
         let box = null;
         for (const strict of [true, false]) {
           for (const [l, t] of tries) {
@@ -241,9 +285,38 @@
           if (box) break;
         }
         if (!box) { e.hidden = true; continue; }
-        taken.push(box);
+        taken.push(box); lastHits.push({ u, box });
         e.style.transform = `translate(${Math.round(box[0])}px, ${Math.round(box[1])}px)`;
       }
+      // Tên sông, đường, sân bay: ưu tiên thấp nhất, đặt ở điểm của đường gần giữa khung nhìn, không chen vào đâu thì ẩn.
+      featLbls.forEach(({ f, e }) => {
+        e.hidden = true;
+        const pts = f.pts.map((pt) => { const [x, z] = G.xz(pt); return screenAt(x, z); }).filter(([x, y]) => x > 0 && y > 0 && x < W && y < H);
+        if (!pts.length) return;
+        pts.sort((a, c) => Math.hypot(a[0] - W / 2, a[1] - H * .45) - Math.hypot(c[0] - W / 2, c[1] - H * .45));
+        e.hidden = false; const w = e.offsetWidth, h = e.offsetHeight;
+        for (const [x, y] of pts.slice(0, 6)) {
+          for (const [l, t] of [[x + 6, y - h / 2], [x - w - 6, y - h / 2], [x - w / 2, y + 6]]) {
+            const bx = [l, t, l + w, t + h];
+            if (l < 2 || t < 2 || l + w > W - 2 || t + h > H - 2 || hitAny(bx, taken) || hitAny(bx, marks)) continue;
+            taken.push(bx); e.style.transform = `translate(${Math.round(l)}px, ${Math.round(t)}px)`; return;
+          }
+        }
+        e.hidden = true;
+      });
+      if (!info.hidden && info.dataset.u) showInfo(units[info.dataset.u], S);
+    }
+    // Chạm vào ký hiệu (hay nhãn của nó): hiện tên đầy đủ, bên nào và đang ra sao ở mốc này. Chạm chỗ trống thì đóng.
+    function showInfo(u, S) {
+      const hit = lastHits.find((o) => o.u === u);
+      if (!u || !S || !S.show.has(u.id) || !hit) { info.hidden = true; delete info.dataset.u; return; }
+      const side = b.sides[u.side] ? b.sides[u.side].name : '', kind = u.kind === 'gun' ? 'trận địa pháo' : 'cứ điểm';
+      const state = S.lose.has(u.id) ? 'đã mất' : S.hit.has(u.id) ? 'đang bị đánh' : '';
+      info.innerHTML = `<b>${esc(S.rename[u.id] || u.name)}</b><span>${esc([side, kind, state].filter(Boolean).join(' · '))}</span>`;
+      info.dataset.u = u.id; info.hidden = false;
+      const W = stage.clientWidth, w = info.offsetWidth, h = info.offsetHeight, [l, t, r, btm] = hit.box;
+      const x = Math.max(4, Math.min(W - w - 4, (l + r) / 2 - w / 2)), y = t - h - 6 > 4 ? t - h - 6 : btm + 6;
+      info.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
     }
 
     // ---------- Máy quay ----------
@@ -292,7 +365,8 @@
 
     // Kéo để xoay, lăn hay chụm hai ngón để phóng. Bản đồ phẳng: kéo để dời.
     const ptrs = new Map(); let pinch = 0;
-    cv.addEventListener('pointerdown', (e) => { cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]); });
+    let tap = null;
+    cv.addEventListener('pointerdown', (e) => { cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]); tap = ptrs.size === 1 ? [e.clientX, e.clientY] : null; });
     cv.addEventListener('pointermove', (e) => {
       if (!ptrs.has(e.pointerId)) return;
       const [px, py] = ptrs.get(e.pointerId), dx = e.clientX - px, dy = e.clientY - py; ptrs.set(e.pointerId, [e.clientX, e.clientY]);
@@ -302,7 +376,15 @@
       Object.values(viewBtns).forEach((bt) => bt.setAttribute('aria-pressed', 'false'));
       need();
     });
-    const up = (e) => { ptrs.delete(e.pointerId); pinch = 0; };
+    const up = (e) => {
+      if (e.type === 'pointerup' && tap && Math.hypot(e.clientX - tap[0], e.clientY - tap[1]) < 6) {
+        const r = stage.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+        const near = lastHits.filter((o) => x >= o.box[0] - 4 && x <= o.box[2] + 4 && y >= o.box[1] - 4 && y <= o.box[3] + 4);
+        const u = near.length ? near[0].u : null;
+        showInfo(u && info.dataset.u !== u.id ? u : null, S);
+      }
+      tap = null; ptrs.delete(e.pointerId); pinch = 0;
+    };
     cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
     cv.addEventListener('wheel', (e) => { e.preventDefault(); goal.dist = Math.max(.12, Math.min(1.8, goal.dist * Math.exp(e.deltaY * .0012))); need(); }, { passive: false });
     new ResizeObserver(need).observe(stage);
