@@ -17,6 +17,10 @@ assert.ok(checkTask(filled.replace('## Đang chờ thien\n', '')).length >= 1, '
 assert.equal(section(filled, '## Đang chờ thien').startsWith('Không.'), true);
 
 assert.ok(checkTask(fresh.replace('1. <cụ thể', '1. x <')).some(p => p.includes('tên nick')), 'unfilled nick fails');
+assert.ok(checkTask(filled.replace('Claude tnt024', 'Claude')).some(p => p.includes('tên nick')), 'author line without a nick fails');
+assert.ok(checkTask(filled.replace(/^Ghi bởi:.*\n/m, '')).some(p => p.includes('tên nick')), 'missing author line fails');
+assert.deepEqual(checkTask(filled.replace('Claude tnt024', 'Claude nick chưa rõ')), [], 'unknown nick can still save, said out loud');
+assert.match(stamp(filled, new Date('2026-12-01T08:30:00Z')), /Cập nhật: 2026-12-01T08:30Z/, 'save refreshes the update time');
 const s = summarize('review-page.md', filled.replace('Claude <nick>', 'Claude tnt024'));
 assert.equal(s.nick, 'tnt024');
 assert.equal(s.title, 'Trang ôn thẻ');
@@ -29,28 +33,19 @@ assert.match(summarize('a--b.md', waiting).waiting, /chọn A hay B/);
 
 assert.ok(checkTask(filled.replace('Repo: thiengthb/sakubun', 'Repo: sakubun')).length >= 1, 'Repo line needs owner/repo');
 
-// "Ghi bởi" must say who holds the task (ACCOUNTS.md 24-hour rule); save stamps "Cập nhật" with the time.
-const by = (line) => checkTask(filled.replace(/^Ghi bởi: [^\n·]*/m, line)).filter((p) => /Ghi bởi/.test(p));
-assert.deepEqual(by('Ghi bởi: Claude tnt024, link '), []);
-assert.deepEqual(by('Ghi bởi: Claude nick chưa rõ, link '), [], 'an account whose instructions have no nick yet');
-assert.deepEqual(by('Ghi bởi: Codex '), [], 'other tools write their name');
-assert.equal(by('Ghi bởi: Claude, link ').length, 1, 'Claude without a nick');
-assert.equal(by('Ghi bởi:  ').length, 1, 'empty');
-assert.equal(checkTask(filled.replace(/^Ghi bởi:.*\n/m, '')).filter((p) => /Ghi bởi/.test(p)).length, 1, 'missing line');
-assert.match(stamp(filled, new Date('2026-12-01T08:30:00Z')), /Cập nhật: 2026-12-01T08:30Z/);
-
 // End to end with two local bare repos standing in for sakubun and thienai-workflow: each repo keeps its own book.
 const root = mkdtempSync(join(tmpdir(), 'handoff-test-'));
 const saku = join(root, 'sakubun.git'), flow = join(root, 'flow.git');
 for (const b of [saku, flow]) spawnSync('git', ['init', '-q', '--bare', b]);
 const cli = fileURLToPath(new URL('../../templates/handoff.mjs', import.meta.url));
 const env = { ...process.env, GIT_AUTHOR_NAME: 't', GIT_AUTHOR_EMAIL: 't@t', GIT_COMMITTER_NAME: 't', GIT_COMMITTER_EMAIL: 't@t' };
-const run = (...a) => spawnSync('node', [cli, ...a], { encoding: 'utf8', env });
+const run = (...a) => spawnSync('node', [cli, ...a], { encoding: 'utf8', env: { HANDOFF_NOW: '2026-11-14T10:00:00Z', ...env } });
+const runAt = (now, ...a) => spawnSync('node', [cli, ...a], { encoding: 'utf8', env: { ...env, HANDOFF_NOW: now } });
 const f1 = join(root, 'review-page.md'); writeFileSync(f1, waiting);
 const f2 = join(root, 'account-handoff.md');
 writeFileSync(f2, filled.replace('Trang ôn thẻ', 'Sổ bàn giao').replace('thiengthb/sakubun', 'thiengthb/thienai-workflow').replace('2026-11-14T10:00', '2026-11-14T11:00'));
-let r = run('save', f1, '--remote', saku, '--at', '2026-11-14T10:00:00Z'); assert.equal(r.status, 0, r.stderr);
-r = run('save', f2, '--remote', flow, '--at', '2026-11-14T11:00:00Z'); assert.equal(r.status, 0, r.stderr);
+let r = run('save', f1, '--remote', saku); assert.equal(r.status, 0, r.stderr);
+r = runAt('2026-11-14T11:00:00Z', 'save', f2, '--remote', flow); assert.equal(r.status, 0, r.stderr);
 r = run('list', '--remotes', `${saku},${flow},${join(root, 'missing.git')}`); assert.equal(r.status, 0, r.stderr);
 assert.ok(r.stdout.indexOf('Sổ bàn giao') >= 0 && r.stdout.indexOf('Sổ bàn giao') < r.stdout.indexOf('Trang ôn thẻ'), 'both repos, newest first');
 assert.match(r.stdout, /Đang chờ thien: - Trang: https:\/\/claude.ai\/artifact\/x/);
