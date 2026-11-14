@@ -4,6 +4,8 @@
 //   Progress of one or more repos (docs/STATUS.md + docs/plans/*.md):
 //     node progress-page.mjs --title "Tiến độ" <dir>=<owner/repo> [<dir>=<owner/repo> ...] > page.html
 //     A repo that cannot be read here is listed with its reason: missing=<owner/repo>:<reason>
+//     --prs <file.json>: open pull requests per repo ({"owner/repo": [...] | null}, null = could not fetch),
+//     shown in merge order in "Đang chờ bạn" (publish-progress.mjs fetches them).
 //   Learning roadmap (one markdown file, "##" = subject, "###" = stage):
 //     node progress-page.mjs --title "Lộ trình học" --roadmap <file.md>=<owner/repo>:<path in repo> > page.html
 //
@@ -169,6 +171,74 @@ export const waitingItems = (lines) => waitingLines(lines).reduce((a, l) => {
   return a;
 }, []);
 
+const word = (w) => new RegExp(`(?<!\\p{L})(?:${w})(?!\\p{L})`, 'iu');
+/** What a waiting item asks of thien: 'pr' (merge a pull request), 'decide' (pick an option),
+ *  'page' (open or try a page), or 'other'. The overview gathers items of one kind together. */
+export function waitKind(text) {
+  if (word('merge').test(text) && /#\d+/.test(text)) return 'pr';
+  if (word('chọn|quyết định|duyệt|trả lời').test(text)) return 'decide';
+  if (/claude\.ai\/artifact\//.test(text) || (word('trang').test(text) && word('mở|thử|xem').test(text))) return 'page';
+  return 'other';
+}
+
+/** Open pull requests ({number, title, url, draft, base, head, created, body}) in the order to merge them.
+ *  A PR comes after #N when it is stacked on #N's branch or its text says "merge sau #N", "sau khi merge #N",
+ *  "merge after #N" or "depends on #N". A PR that another one says it includes ("gộp luôn PR #N",
+ *  "thay cho #N", "supersedes #N") is not merged: it gets `closeAfter` and goes after that one.
+ *  Otherwise oldest first, drafts last. */
+export function prOrder(prs) {
+  const open = new Set(prs.map((p) => p.number));
+  // A branch is its repo plus its name, so a fork's "feature" is not the base repo's "feature".
+  const byHead = new Map(prs.map((p) => [`${p.headRepo || ''}:${p.head}`, p.number]));
+  const baseOf = (p) => `${p.baseRepo || ''}:${p.base}`;
+  const refs = (p, re) => [...`${p.title}\n${p.body || ''}`.matchAll(re)].map((m) => +m[1]).filter((n) => open.has(n) && n !== p.number);
+  const after = new Map(prs.map((p) => [p.number, new Set(refs(p, /(?:merge\s+(?:sau|after)|sau\s+khi\s+merge|depends\s+on)\s+(?:PR\s+)?#(\d+)/gi))]));
+  const closeAfter = new Map();
+  for (const p of prs) {
+    if (byHead.has(baseOf(p)) && byHead.get(baseOf(p)) !== p.number) after.get(p.number).add(byHead.get(baseOf(p)));
+    for (const n of refs(p, /(?:gộp\s+(?:luôn\s+)?|thay\s+cho\s+|supersedes\s+)(?:PR\s+)?#(\d+)/giu)) if (!closeAfter.has(n)) closeAfter.set(n, p.number);
+  }
+  for (const [n, by] of closeAfter) { after.get(n).add(by); after.get(by).delete(n); }
+  const rest = [...prs].sort((a, b) => (a.draft - b.draft) || String(a.created).localeCompare(String(b.created)) || a.number - b.number);
+  const out = [], placed = new Set();
+  while (rest.length) {
+    const k = rest.findIndex((p) => [...after.get(p.number)].every((n) => placed.has(n)));
+    const [p] = rest.splice(Math.max(k, 0), 1);   // a cycle: take the oldest and go on
+    placed.add(p.number);
+    out.push({ ...p, after: closeAfter.has(p.number) ? [] : [...after.get(p.number)], closeAfter: closeAfter.get(p.number) ?? 0 });
+  }
+  return out;
+}
+
+/** Everything waiting for thien, per repo: open PRs in merge order and STATUS items with their kind.
+ *  A STATUS item that asks to merge a PR still open becomes a note on that PR (in the repo it names, else its
+ *  own repo); one whose PR is no longer open stays, marked so. Sets r.wait, r.waitCount, and the status badge. */
+export function gatherWaiting(repos) {
+  for (const r of repos) r.wait = { prs: Array.isArray(r.prs) ? prOrder(r.prs).map((p) => ({ ...p, notes: [] })) : [], tasks: [] };
+  for (const r of repos) {
+    for (const t of r.tasks) {
+      const kind = waitKind(t);
+      let hint = '';
+      if (kind === 'pr') {
+        const target = repos.find((o) => o !== r && word(o.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).test(t)) || r;
+        const nums = [...t.matchAll(/#(\d+)/g)].map((m) => +m[1]);
+        if (Array.isArray(target.prs)) {
+          const hit = target.wait.prs.find((p) => nums.includes(p.number));
+          if (hit) { hit.notes.push({ t, base: r.base }); continue; }   // links in the note stay relative to the repo that wrote it
+          hint = 'PR này không còn mở: đã merge hoặc đã đóng.';
+        }
+      }
+      r.wait.tasks.push({ t, kind, hint });
+    }
+  }
+  for (const r of repos) {
+    r.waitCount = r.wait.tasks.length + r.wait.prs.filter((p) => !p.draft && !p.closeAfter).length;
+    if (r.status === 'running' && r.waitCount) r.status = 'waiting';
+    if (r.status === 'waiting' && !r.waitCount) r.status = 'running';
+  }
+  return repos;
+}
+
 /** Plain text of inline markdown, cut at a sentence end near `max` characters. */
 export function plain(md, max = 220) {
   const t = md.replace(/`([^`]+)`/g, '$1').replace(/\*\*([^*]+)\*\*/g, '$1').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\s+/g, ' ').trim();
@@ -282,20 +352,48 @@ export const taskKey = (repo, text) => { let h = 5381; for (const c of repo + '|
  *  grouped by repo and tickable | one card per repo, detail folded); one column when narrow. Every block uses the
  *  same card, row and type sizes so the two columns line up. */
 export function overviewBody(repos, details) {
-  const waiting = repos.filter((r) => r.tasks.length);
-  const total = waiting.reduce((a, r) => a + r.tasks.length, 0);
+  gatherWaiting(repos);
+  const waiting = repos.filter((r) => r.waitCount);
+  const total = waiting.reduce((a, r) => a + r.waitCount, 0);
   const running = repos.reduce((a, r) => a + (r.plans ? r.plans.length : 0), 0);
-  const lead = `<p class="lead">${total ? `<b>${total} việc</b> đang chờ bạn ở ${waiting.length} repo` : 'Không có việc nào đang chờ bạn'} · ${running} kế hoạch đang chạy.</p>`;
-  // A task shows in the overview tab and in its repo's tab: same data-key (one tick), different element ids.
-  const task = (r, t, sfx) => {
-    const key = taskKey(r.repo, t), id = key + sfx;
-    return `<li class="task" data-key="${key}"><label class="tick"><input type="checkbox" id="${id}" disabled aria-labelledby="${id}-t"><span class="box" aria-hidden="true"></span></label><p id="${id}-t">${inline(t, r.base)}</p></li>`;
+  // "Đang chờ bạn" is gathered by kind (PRs to merge in order, pages to try, decisions, the rest), across repos.
+  const KINDS = [['pr', 'PR cần merge', 'PR'], ['page', 'Trang cần thử', 'trang'], ['decide', 'Quyết định cần chọn', 'quyết định'], ['other', 'Việc khác', 'việc khác']];
+  const counts = (rs) => {
+    const c = { pr: 0, page: 0, decide: 0, other: 0 };
+    for (const r of rs) { c.pr += r.wait.prs.filter((p) => !p.draft && !p.closeAfter).length; for (const x of r.wait.tasks) c[x.kind]++; }
+    return c;
   };
-  const group = (r, sfx) => `<div class="grp"><div class="grp-head"><b>${esc(r.name)}</b><span>${r.tasks.length} việc${r.upd ? ` · từ ${esc(shortDate(r.upd))}` : ''}</span></div><ul class="tasks">${r.tasks.map((t) => task(r, t, sfx)).join('')}</ul></div>`;
+  const c = counts(repos);
+  const parts = KINDS.filter(([k]) => c[k]).map(([k, , n]) => `${c[k]} ${n}`).join(', ');
+  const lead = `<p class="lead">${total ? `<b>${total} việc</b> đang chờ bạn: ${parts}` : 'Không có việc nào đang chờ bạn'} · ${running} kế hoạch đang chạy.</p>`;
+  // A task shows in the overview tab and in its repo's tab: same data-key (one tick), different element ids.
+  const task = (r, x, sfx, many) => {
+    const key = taskKey(r.repo, x.t), id = key + sfx;
+    const from = [many ? esc(r.name) : '', esc(x.hint)].filter(Boolean).join(' · ');
+    return `<li class="task" data-key="${key}"><label class="tick"><input type="checkbox" id="${id}" disabled aria-labelledby="${id}-t"><span class="box" aria-hidden="true"></span></label><div><p id="${id}-t">${inline(x.t, r.base)}</p>${from ? `<span class="from">${from}</span>` : ''}</div></li>`;
+  };
+  const prRow = (r, p, k, many) => {
+    const why = p.closeAfter ? `<b>không merge</b>: đóng sau khi merge #${p.closeAfter}` : p.draft ? 'nháp, chưa cần merge' : p.after.length ? `<b>sau ${p.after.map((n) => '#' + n).join(', ')}</b>` : '';
+    const meta = [many ? esc(r.name) : '', p.created ? `mở ${esc(shortDate(String(p.created).slice(0, 10)))}` : '', why].filter(Boolean).join(' · ');
+    return `<li class="pr${p.draft || p.closeAfter ? ' later' : ''}"><span class="ord" aria-hidden="true">${k}</span><div><p><a href="${esc(p.url)}">#${p.number}</a> ${esc(p.title)}</p>${meta ? `<span class="from">${meta}</span>` : ''}${p.notes.map((n) => `<span class="from">${inline(n.t, n.base)}</span>`).join('')}</div></li>`;
+  };
+  const kindCard = (rs, kind, label, sfx) => {
+    const many = rs.length > 1;
+    const prs = kind === 'pr' ? rs.flatMap((r) => r.wait.prs.map((p, k) => prRow(r, p, k + 1, many))) : [];
+    const lost = kind === 'pr' ? rs.filter((r) => r.prs === null).map((r) => esc(r.name)) : [];
+    const miss = lost.length ? [`<li class="miss">Không lấy được danh sách PR của ${lost.join(', ')} lúc dựng trang.</li>`] : [];
+    const tasks = rs.flatMap((r) => r.wait.tasks.filter((x) => x.kind === kind).map((x) => task(r, x, sfx, many)));
+    if (!prs.length && !tasks.length && !miss.length) return '';
+    const n = counts(rs)[kind];
+    const note = kind === 'pr' && prs.length ? '<span>theo thứ tự merge</span>' : `<span>${n}</span>`;
+    return `<div class="grp k-${kind}"><div class="grp-head"><b>${label}</b>${note}</div>${prs.length ? `<ol class="prs" aria-label="${esc(label)}, theo thứ tự merge">${prs.join('')}</ol>` : ''}${tasks.length || miss.length ? `<ul class="tasks">${tasks.join('')}${miss.join('')}</ul>` : ''}</div>`;
+  };
+  const waitCards = (rs, sfx) => KINDS.map(([k, label]) => kindCard(rs, k, label, sfx)).join('');
+  const hasTicks = (rs) => rs.some((r) => r.wait.tasks.length);
   // Repo card: a short timeline (Vừa xong · Bây giờ · Vướng · Tiếp theo); "Bây giờ" carries each running plan as a
   // row of checkpoint steps, the current one ringed. The full STATUS stays folded under "Xem chi tiết".
   const ST = { running: ['Đang chạy', 'run'], waiting: ['Chờ bạn', 'wait'], paused: ['Tạm dừng', 'pause'] };
-  const badge = (r) => `<span class="st ${ST[r.status][1]}"><i aria-hidden="true"></i>${ST[r.status][0]}${r.status === 'waiting' ? ` ${r.tasks.length} việc` : ''}</span>`;
+  const badge = (r) => `<span class="st ${ST[r.status][1]}"><i aria-hidden="true"></i>${ST[r.status][0]}${r.status === 'waiting' ? ` ${r.waitCount} việc` : ''}</span>`;
   const head = (r, sub) => `<div class="rc-head"><b>${esc(r.name)}</b>${sub}<span class="upd">${esc(r.missing ? 'chưa đọc được' : shortDate(r.upd))}</span></div>`;
   const stepper = (p) => {
     const d = p.steps.filter((x) => x.done).length, n = p.steps.length, short = p.steps.every((x) => x.label.length <= 4);
@@ -323,16 +421,16 @@ export function overviewBody(repos, details) {
   };
   const row = (r) => `<a class="rc rrow" href="#${esc(r.id)}" data-tab="${esc(r.id)}">${head(r, plain1(r) ? '' : badge(r))}${plain1(r) ? reason(r) : `<p class="hl">${esc(r.head || r.where)}</p>${r.steps.length ? `<div class="minis">${r.steps.map(miniSteps).join('')}</div>` : ''}`}<span class="open">Mở tab ${esc(r.name)}${icon('next')}</span></a>`;
   const allPanel = `${lead}<div class="cols"><section class="col" aria-labelledby="h-wait"><h2 class="label" id="h-wait">Đang chờ bạn</h2>
-${total ? `${waiting.map((r) => group(r, '')).join('')}${tickNote}` : '<p class="card empty muted">Không có việc nào đang chờ bạn.</p>'}</section>
+${total || repos.some((r) => r.wait.prs.length || r.prs === null) ? `${waitCards(repos, '')}${hasTicks(repos) ? tickNote : ''}` : '<p class="card empty muted">Không có việc nào đang chờ bạn.</p>'}</section>
 <section class="col" aria-labelledby="h-repos"><h2 class="label" id="h-repos">Các repo</h2>${repos.map(row).join('')}</section></div>`;
   // Repo tab: the full timeline and this repo's waiting tasks | the whole STATUS, already open.
   const repoPanel = (r) => plain1(r) ? `<div class="rc rc-static">${head(r, '')}${reason(r)}</div>`
     : `<div class="cols"><div class="col"><h2 class="label">Tiến độ</h2><div class="rc rc-static">${head(r, badge(r))}${timeline(r)}</div>
-${r.tasks.length ? `<h2 class="label gap">Đang chờ bạn</h2>${group(r, '-r')}${tickNote}` : ''}</div>
+${r.wait.tasks.length || r.wait.prs.length || r.prs === null ? `<h2 class="label gap">Đang chờ bạn</h2>${waitCards([r], '-r')}${hasTicks([r]) ? tickNote : ''}` : ''}</div>
 <div class="col"><h2 class="label">Chi tiết</h2><div class="rc rc-full">${details[r.id] || ''}</div></div></div>`;
   const tab = (id, label, n, on) => `<button type="button" role="tab" id="tab-${esc(id)}" aria-controls="p-${esc(id)}" aria-selected="${on}" tabindex="${on ? 0 : -1}" data-tab="${esc(id)}">${esc(label)}${n ? `<span class="cnt" aria-label="${n} việc chờ bạn">${n}</span>` : ''}</button>`;
   const panel = (id, html, on) => `<section class="panel" role="tabpanel" id="p-${esc(id)}" aria-labelledby="tab-${esc(id)}"${on ? '' : ' hidden'}>${html}</section>`;
-  return `<nav class="tabs" role="tablist" aria-label="Xem theo repo">${tab('all', 'Tổng quan', 0, true)}${repos.map((r) => tab(r.id, r.name, r.tasks.length, false)).join('')}</nav>
+  return `<nav class="tabs" role="tablist" aria-label="Xem theo repo">${tab('all', 'Tổng quan', 0, true)}${repos.map((r) => tab(r.id, r.name, r.waitCount, false)).join('')}</nav>
 ${panel('all', allPanel, true)}${repos.map((r) => panel(r.id, repoPanel(r), false)).join('')}
 <script>
 /* Tabs: the hash names the open repo (#<repo id>), so a link or a reload lands on the same tab. */
@@ -431,6 +529,16 @@ main > header .stamp { font-size: 13px; margin: 0; }
 .tick input:checked + .box { background: var(--accent); border-color: var(--accent); }
 .tick input:checked + .box::after { content: ""; position: absolute; left: 5px; top: 1px; width: 6px; height: 11px; border: solid #fff; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); }
 .task.done p { color: var(--muted); text-decoration: line-through; }
+.task > div, .pr > div { display: grid; gap: 2px; min-width: 0; }
+.from { font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; } .from b { color: var(--ink); font-weight: 600; }
+.prs { list-style: none; margin: 0; padding: 0; }
+.pr { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px 14px; }
+.pr + .pr, .prs + .tasks .task:first-child, .prs + .tasks .miss:first-child { border-top: 1px solid var(--line); }
+.pr p { margin: 0; font-size: 14.5px; line-height: 1.5; overflow-wrap: break-word; }
+.pr .ord { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-ink); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.pr.later .ord { background: var(--soft); color: var(--muted); }
+.miss { padding: 10px 14px; font-size: 13px; color: var(--muted); }
+.task + .miss { border-top: 1px solid var(--line); }
 details.rc { padding: 0; }
 details.rc + details.rc { margin-top: 0; }
 .rc-static { display: grid; gap: 8px; padding: 12px 14px; }
@@ -618,11 +726,12 @@ function stampNow() {
 /** The whole page for CLI-style args (--title, --roadmap, <dir>=<repo>, missing=<repo>:<why>). */
 export function buildPage(args) {
   let title = 'Tiến độ';
-  let roadmapArg = null;
+  let roadmapArg = null, prs;
   const repos = [];
   for (let k = 0; k < args.length; k++) {
     if (args[k] === '--title') title = args[++k];
     else if (args[k] === '--roadmap') roadmapArg = args[++k];
+    else if (args[k] === '--prs') prs = JSON.parse(readFileSync(args[++k], 'utf8'));
     else repos.push(args[k]);
   }
   if (roadmapArg) {
@@ -633,11 +742,12 @@ export function buildPage(args) {
   const parsed = repos.map((a) => {
     if (a.startsWith('missing=')) {
       const [repo, ...why] = a.slice(8).split(':');
-      return { id: repoId(repo), name: repo.split('/')[1], repo, missing: true, why: why.join(':'), tasks: [], plans: [], open: 0 };
+      return { id: repoId(repo), name: repo.split('/')[1], repo, missing: true, why: why.join(':'), tasks: [], plans: [], open: 0, prs: prs ? prs[repo] : undefined };
     }
     const [dir, repo] = a.split('=');
     const d = repoData(dir, repo);
     details[d.id] = repoSection(dir, repo);
+    if (prs) d.prs = repo in prs ? prs[repo] : null;
     return d;
   });
   return page(title, overviewBody(parsed, details), stampNow(), { ticks: true });

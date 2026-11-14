@@ -37,6 +37,7 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 - Cập nhật `docs/STATUS.md` (đang ở đâu, việc dở, vừa xong, việc tiếp theo, đang chờ ai). Việc dở vẫn commit và push, và ghi vào mục "Việc dở" kèm nhánh hoặc PR.
 - Kế hoạch đang chạy: tick việc đã có bằng chứng, ghi bước đã đổi và lỗi gặp, sửa mục "Đang ở đâu". Luật và mẫu ở [`profile/PLANNING.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/PLANNING.md).
 - Sửa STATUS thì gộp vào PR của tính năng đang làm. PR chỉ sửa STATUS thì nhắc thien merge ngay, vì để lâu là nó cũ và bị conflict.
+- PR phải merge sau một PR khác thì ghi trong mô tả "Merge sau #N"; PR đã gộp luôn một PR cũ thì ghi "gộp luôn PR #N". Trang tổng quan đọc hai câu này (và nhánh chồng lên nhánh) để xếp thứ tự merge cho thien.
 - Nếu project có `docs/ai-log.md`: thêm dòng cho phiên này, để trống hai cột "Người kiểm gì" và "Quyết định" cho người điền.
 
 ## Bàn giao giữa các nick
