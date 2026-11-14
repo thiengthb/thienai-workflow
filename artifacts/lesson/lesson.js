@@ -21,6 +21,7 @@
     steps.forEach((s, j) => s.classList.toggle('on', j === i));
     const shown = steps.filter((s) => !skip(s)), at = Math.max(0, shown.indexOf(steps[i]));
     $('#cnt').textContent = (at + 1) + '/' + shown.length;
+    const bk = $('.top .back'); if (bk) bk.hidden = at === 0;
     $('#bar').style.width = (shown.length > 1 ? at / (shown.length - 1) * 100 : 100) + '%';
     window.scrollTo(0, 0);
     const h = steps[i].querySelector('h1, h2');
@@ -36,6 +37,18 @@
   function mark(key) { done.add(key); gate(); }
 
   $$('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
+
+  // Nút quay lại ở thanh trên: mở bước liền trước (bỏ qua bước ôn đã ẩn). Không xóa gì đã làm, chỉ để xem lại.
+  // data-noreplay: phần tự lưu không ghi và không đếm nút này, nên bài đang học dở vẫn mở lại đúng chỗ.
+  const meta = $('.top .meta'), back = meta && document.createElement('button');
+  if (back) {
+    back.type = 'button'; back.className = 'back'; back.dataset.noreplay = ''; back.textContent = '← Quay lại'; back.hidden = true;
+    back.addEventListener('click', () => {
+      const i = steps.findIndex((s) => s.classList.contains('on'));
+      for (let j = i - 1; j >= 0; j--) if (!skip(steps[j])) { go(steps[j].dataset.s); return; }
+    });
+    meta.insertBefore(back, $('#cnt'));
+  }
 
   // Câu hỏi một lựa chọn: <div class="q" data-q="F2" data-a="1" [data-kind="review"]> với các .opt, một .status, một .why.
   $$('.q[data-q]').forEach((q) => {
@@ -83,6 +96,8 @@
     const L = [`# Xong buổi: ${C.subject ? C.subject + ' · ' : ''}${C.title || ID}`, ''];
     if (n(R.review).length) L.push(`Ôn: đúng ${right(R.review)}/${n(R.review).length}`);
     if (n(R.quiz).length) L.push(`Câu hỏi nhanh: đúng ${right(R.quiz)}/${n(R.quiz).length}`);
+    // Phần thêm của từng loại bài (ví dụ sa bàn chiến tranh) thêm dòng vào tóm tắt qua Lesson.extras.
+    extras.forEach((f) => { try { const x = f(R); if (x) L.push('', x); } catch (e) {} });
     if ((R.teach || '').trim()) L.push('', 'Tự nói lại: ' + R.teach.trim());
     const fb = Object.entries(R.feedback).filter(([k]) => k !== 'note').map(([k, v]) => (fLabel[k] || k) + ': ' + v).join('; ');
     if (fb) L.push('', 'Góp ý: ' + fb);
@@ -92,6 +107,7 @@
     return L.join('\n');
   }
 
+  const extras = [];
   const fin = $('#finish'), copyBtn = $('#copy'), msg = $('#done-msg');
   if (fin) fin.addEventListener('click', async () => {
     fin.disabled = true; R.end = new Date().toISOString();
@@ -108,7 +124,7 @@
     if (copyBtn && !(saved && sent)) { copyBtn.classList.remove('hide'); copyBtn.onclick = () => (window.Kit ? Kit.copy(text) : navigator.clipboard.writeText(text)); }
   });
 
-  window.Lesson = { go, done: mark, R, summary };
+  window.Lesson = { go, done: mark, R, summary, extras };
   const start = steps.find((s) => s.classList.contains('on')) || steps[0];
   if (start) go(start.dataset.s);
   gate();

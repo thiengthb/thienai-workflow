@@ -6,7 +6,7 @@
 (()=>{
 const ID=(document.querySelector('meta[name="lesson-id"]')||{}).content||document.title;
 const LK='lesson-kit:'+ID, DOC='drafts/'+ID.replace(/[^a-z0-9-]/gi,'-');
-const btns=()=>[...document.querySelectorAll('button:not(#kit-bar button)')], tas=()=>[...document.querySelectorAll('textarea')];
+const btns=()=>[...document.querySelectorAll('button:not(#kit-bar button):not([data-noreplay])')], tas=()=>[...document.querySelectorAll('textarea')];
 const FP=btns().length+'b'+tas().length+'t';
 const lab=b=>(b.textContent||'').replace(/\s+/g,' ').trim().slice(0,60); /* chữ trên nút, để khi bấm lại biết đúng nút cũ */
 const ctx=b=>{ /* chỗ của nút: đi lên tới khối đầu tiên có chữ ngoài các nút (câu hỏi, tên dòng), kèm id hay data-* trên đường đi.

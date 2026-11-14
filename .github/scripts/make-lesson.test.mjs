@@ -40,4 +40,27 @@ assert.ok(!/__[A-Z]+__/.test(once.replace(/__TITLE__|__SUBJECT__|__HEADLINE__/g,
   assert.equal(pub.description, 'Buổi thử');
   assert.match(rd(pagePath, 'utf8'), /<meta name="lesson-id" content="demo-02">/, 'id guessed from the path');
 }
+// War pages: copied from the war template, with the sandtable parts and the battle data filled in.
+{
+  const { mkdtempSync, mkdirSync, copyFileSync, readFileSync: rd } = await import('node:fs');
+  const { spawnSync } = await import('node:child_process');
+  const { join } = await import('node:path');
+  const { tmpdir } = await import('node:os');
+  const d = mkdtempSync(join(tmpdir(), 'war-cli-'));
+  const cli = new URL('../../artifacts/lesson/make-lesson.mjs', import.meta.url).pathname;
+  mkdirSync(join(d, 'learning/war/battles'), { recursive: true });
+  copyFileSync(new URL('../../learning/war/battles/dien-bien-phu-1954.json', import.meta.url).pathname, join(d, 'learning/war/battles/dien-bien-phu-1954.json'));
+  const pagePath = join(d, 'learning/war/pages/lesson-09.html');
+  let r = spawnSync(process.execPath, [cli, pagePath], { encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(rd(pagePath, 'utf8'), /<div id="board">/, 'war template copied');
+  r = spawnSync(process.execPath, [cli, pagePath, '--no-check', '--out', join(d, 'out')], { encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  const html = rd(pagePath, 'utf8');
+  assert.match(html, /window\.Sandtable = /, 'sandtable.js filled in');
+  assert.match(html, /Lesson\.extras\.push/, 'war-lesson.js filled in');
+  const battle = JSON.parse(html.match(/<script type="application\/json" id="battle"[^>]*>([\s\S]*?)<\/script>/)[1]);
+  assert.ok(battle.terrain && battle.terrain.h, 'battle data with terrain filled in');
+  assert.ok(!battle.units.some((u) => u.raw), 'raw snap points dropped');
+}
 console.log('make-lesson: ok');

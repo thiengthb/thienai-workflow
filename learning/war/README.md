@@ -2,6 +2,8 @@
 
 Hồ sơ môn, cách dạy và kế hoạch ở [`../war.md`](../war.md). Mỗi chi tiết lịch sử phải có nguồn (luật 10 trong `profile/TUTOR.md`).
 
+Từ 2026-11-14, bài mới dựng bằng kit sa bàn [`artifacts/war/`](../../artifacts/war/README.md): mỗi trận một file dữ liệu trong [`battles/`](battles/), mỗi buổi một lệnh. Bài cũ giữ nguyên như lúc học. [`pages/lesson-03-sandtable.html`](pages/lesson-03-sandtable.html) là bài 3 dựng lại bằng kit, dùng làm bài ôn ([bản đăng](https://claude.ai/artifact/8oLt98k9adkkAwj8sBv4Ff)).
+
 | Bài | Ý chính | File bài | Trang |
 |---|---|---|---|
 | 1 | Bạch Đằng 938: địa hình, thời điểm, không đấu vào chỗ mạnh của địch | [01-bach-dang-938.md](lessons/01-bach-dang-938.md) | [lesson-01.html](pages/lesson-01.html) |

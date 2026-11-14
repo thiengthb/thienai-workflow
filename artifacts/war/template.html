@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi" data-board="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style id="kit-css"></style>
+<style id="lesson-css"></style>
+<style id="war-css"></style>
+<style>
+/* Phần riêng của bài viết ở đây. */
+</style>
+</head>
+<body>
+<!-- Mẫu bài chiến tranh có sa bàn 3D (artifacts/war/README.md). make-lesson tự chép mẫu này cho trang trong learning/war/pages/.
+     Thay mọi chỗ __…__ và nội dung mẫu (đang là trận Điện Biên Phủ, quyết định 26/1/1954), trỏ data-src tới file trận,
+     rồi chạy: node artifacts/lesson/make-lesson.mjs learning/war/pages/lesson-NN.html -->
+<script type="application/json" id="lesson">{ "id": "__ID__", "subject": "Chiến tranh", "title": "__TITLE__" }</script>
+<script type="application/json" id="battle" data-src="../battles/dien-bien-phu-1954.json"></script>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>Chiến tranh · __TITLE__</span><span id="cnt">1/8</span></div><div class="bar"><span id="bar"></span></div></div>
+  <div id="board"></div>
+
+  <!-- 0. Mở bài: nhìn sa bàn trước, chưa có câu hỏi (cảm nhận trước). data-board="real@0": khóa ở mốc đầu. -->
+  <section class="step on" data-s="0" data-board="real@0">
+    <h1>__HEADLINE__</h1>
+    <p>Trước khi đọc gì, nhìn sa bàn một lúc. Kéo để xoay, chụm hai ngón (hoặc lăn chuột) để phóng to. Thử nút "Từ đồi phía đông" ở góc trên.</p>
+    <p class="small muted">Khoảng 12 phút: ôn nhanh, làm chỉ huy, xem chuyện thật, rồi mới đọc ý chính.</p>
+    <button class="btn primary next" type="button" data-go="1">Bắt đầu</button>
+  </section>
+
+  <!-- 1. Ôn trộn và nhớ lại buổi trước. Chỉ lần học đầu. Không có sa bàn. -->
+  <section class="step" data-s="1" data-part="review">
+    <h2>Ôn nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Câu hỏi ôn từ learning/cards.md.</p>
+      <div class="q" data-q="C1" data-a="0" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Đáp án đúng</button>
+        <button class="opt" type="button">Đáp án sai</button>
+        <p class="why">Một câu giải thích.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="2" data-need="C1" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 2. Làm chỉ huy: biết đúng những gì người thật biết lúc đó, xem trước từng cách trên sa bàn, rồi chọn. -->
+  <section class="step" data-s="2" data-board="real@0">
+    <h2>Bạn là __ROLE__</h2>
+    <ul class="know">
+      <li>Điều người chỉ huy biết lúc đó, có nguồn.</li>
+    </ul>
+    <p><b>Bạn quyết định thế nào?</b> Bấm "Xem" để thấy mỗi cách trên sa bàn trước khi chọn.</p>
+    <div class="choose" data-c="d1" data-real="C" data-same="Giống quyết định thật." data-diff="Người thật chọn khác. Xem chuyện thật rồi so với cách của bạn.">
+      <div class="row"><button class="opt" type="button" data-v="A"><span><b>A.</b> Cách thứ nhất</span></button><button class="btn" type="button" data-plan="A">Xem</button></div>
+      <div class="row"><button class="opt" type="button" data-v="B"><span><b>B.</b> Cách thứ hai</span></button><button class="btn" type="button" data-plan="B">Xem</button></div>
+      <div class="row"><button class="opt" type="button" data-v="C"><span><b>C.</b> Cách người thật đã chọn</span></button><button class="btn" type="button" data-plan="real">Xem</button></div>
+    </div>
+    <button class="btn primary next" type="button" data-go="3" data-need="d1" disabled>Xem chuyện gì xảy ra</button>
+  </section>
+
+  <!-- 3. Xem chuyện thật trên thanh thời gian, rồi tự để ý một điều (tự khám phá) trước khi đọc giải thích. -->
+  <section class="step" data-s="3" data-board="real">
+    <h2>Chuyện gì đã xảy ra</h2>
+    <p class="fb" data-echo="d1"></p>
+    <p>Bấm ▶ hoặc từng mốc dưới sa bàn. Xong thì xem thử các cách còn lại (mô phỏng).</p>
+    <div class="tracks"><button class="btn" type="button" data-track="real">Chuyện thật</button><button class="btn" type="button" data-track="A">Nếu chọn A</button><button class="btn" type="button" data-track="B">Nếu chọn B</button></div>
+    <div class="card"><p>Chạm vào một đỉnh đồi để xem từ đó nhìn thấy tới đâu. Mốc nào có nút mắt bên kia thì bấm thử. Bạn để ý thấy gì trên sa bàn? Một câu thôi.</p><textarea data-key="notice" data-min="3" placeholder="Mình thấy..."></textarea></div>
+    <button class="btn primary next" type="button" data-go="4" data-need="seen-real notice" disabled>Tiếp: vì sao</button>
+  </section>
+
+  <!-- 4. Hiểu sau, có nguồn. -->
+  <section class="step" data-s="4" data-board="real">
+    <h2>Ý chính</h2>
+    <div class="card"><p>Giải thích, nhắc lại đúng lựa chọn của người học.</p></div>
+    <div class="card small"><p><b>Nguồn</b></p><p>Nguồn của từng chi tiết. Không lấy từ sử: lựa chọn mô phỏng, vị trí ước lượng trên sa bàn.</p></div>
+    <button class="btn primary next" type="button" data-go="5">Tiếp</button>
+  </section>
+
+  <!-- 5. Câu hỏi nhanh -->
+  <section class="step" data-s="5">
+    <h2>Câu hỏi nhanh</h2>
+    <div class="card">
+      <p>Câu hỏi.</p>
+      <div class="q" data-q="q1" data-a="0"><p class="status" role="status"></p>
+        <button class="opt" type="button">Đáp án đúng</button>
+        <button class="opt" type="button">Đáp án sai</button>
+        <p class="why">Giải thích.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="6" data-need="q1" disabled>Tiếp</button>
+  </section>
+
+  <!-- 6. Tự nói lại -->
+  <section class="step" data-s="6">
+    <h2>Tự nói lại</h2>
+    <p>Viết 1–2 câu.</p>
+    <textarea data-key="teach" data-min="5" placeholder="Vì..."></textarea>
+    <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Bản mẫu.</div></div>
+    <button class="btn primary next" type="button" data-go="7" data-need="teach" disabled>Tiếp</button>
+  </section>
+
+  <!-- 7. Góp ý, xong buổi -->
+  <section class="step" data-s="7">
+    <h2>Góp ý buổi này</h2>
+    <div class="card">
+      <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
+      <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Cách học so với các buổi trước</b><div class="seg full" data-f="method"><button type="button" data-v="thích hơn" aria-pressed="false">Thích hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="kém hơn" aria-pressed="false">Kém hơn</button></div></div>
+      <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+    </div>
+    <button class="btn primary next" type="button" id="finish">Xong buổi học</button>
+    <p class="done-msg" id="done-msg" role="status"></p>
+    <button class="btn next hide" type="button" id="copy">Chép kết quả</button>
+  </section>
+</div>
+
+<script id="kit-js"></script>
+<script id="lesson-js"></script>
+<script id="war-js"></script>
+<script>
+/* Phần riêng của bài: ghi thêm vào R, gọi Lesson.done('<khóa>') khi một việc xong. */
+</script>
+<script id="lesson-kit"></script>
+</body>
+</html>
