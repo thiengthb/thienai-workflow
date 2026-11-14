@@ -56,9 +56,15 @@ assert.match(d.stuck[1], /hỏi Claude ở bước “Thử trước”: “màu
 assert.match(d.cardRows[0], /^\| F10 \| Frontend \| Màn đặt lịch[^|]*\| \[bài 6\]\(frontend\/lessons\/06-app-colours\.md\) \| 1 \| 2026-11-16 \|$/);
 assert.match(d.cardRows[1], /^\| F11 \|/, 'ít nhất 2 thẻ nháp');
 assert.deepEqual([d.usage['Hỏi Claude'], d.usage['Claude giải thích câu sai'], d.usage['Nói thay gõ'], d.usage['Phút']], [1, 1, 2, 14]);
+assert.deepEqual([d.usage['Xem Claude làm'], d.usage['Nghe'], d.usage['Tình huống thêm']], ['-', 0, 0], 'bài không sân khấu: không có làm mẫu');
+const d2 = draft({ R: { ...R, knobs: {}, listened: 3, ai: [...R.ai, { kind: 'demo', step: 'Thử', moves: 3 }],
+  extra: [{ situation: 's', question: 'Nút nào nổi?', options: ['A', 'B', 'C'], answer: 2, pick: 0, ok: false }] }, html: tpl, subject: subs.frontend, cards });
+assert.deepEqual([d2.usage['Xem Claude làm'], d2.usage['Nghe'], d2.usage['Tình huống thêm']], [1, 3, 1]);
+assert.match(d2.stuck.join('\n'), /tình huống thêm “Nút nào nổi\?” chọn “A”, đúng là “C”/);
+assert.equal(draft({ R: { ...R, lesson: 'war-04', choices: {} }, html: tpl, subject: subs.war, cards }).usage['Tình huống thêm'], '-');
 
 // Bảng tính năng được dùng
-const head = '# x\n\n| Ngày | Trang | Phút | Hỏi Claude | Claude giải thích câu sai | Claude nhận xét, chấm | Nói thay gõ | Ghi chú |\n|---|---|---|---|---|---|---|---|\n';
+const head = '# x\n\n| Ngày | Trang | Phút | Hỏi Claude | Claude giải thích câu sai | Claude nhận xét, chấm | Nói thay gõ | Xem Claude làm | Nghe | Tình huống thêm | Ghi chú |\n|---|---|---|---|---|---|---|---|---|---|---|\n';
 let u = addUsage(head, d.usage);
 u = addUsage(u, { ...d.usage, 'Hỏi Claude': 3 });
 assert.equal(usageRows(u).length, 1, 'cùng ngày cùng trang thì thay dòng cũ');

@@ -7,7 +7,9 @@
    Kit.put(path, obj)    ghi một document một lần (không qua hàng đợi), ví dụ bản chụp của lần gửi.
    Kit.sendToClaude(text, el)  gửi một comment cho Claude (người sửa được trang); trả về true nếu đã gửi.
    Kit.ask(prompt, out, opts)  hỏi Claude ngay trên trang (khả năng sample), chữ hiện dần vào out; trả về câu trả lời hoặc null.
-   Kit.dictate(btn, field, partial, onUse)  nút mic nói thay gõ (khả năng dictation) cho một ô chữ; nút ẩn nơi không có mic. */
+   Kit.askJson(prompt, out, opts)  như ask nhưng Claude trả về một giá trị JSON; out chỉ hiện chữ chờ và lỗi.
+   Kit.dictate(btn, field, partial, onUse)  nút mic nói thay gõ (khả năng dictation) cho một ô chữ; nút ẩn nơi không có mic.
+   Kit.listen(btn, getText, onUse)  nút loa đọc to một đoạn chữ (khả năng tts); nút ẩn nơi không đọc được (Safari, app điện thoại). */
 (() => {
   const caps = {};
   function cap(name, ms = 10000) {
@@ -143,32 +145,86 @@
   const askOffCodes = ['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'];
   cap('sample').then((s) => document.documentElement.classList.toggle('kit-ask-on', !!s));
   /** Hỏi Claude, hiện câu trả lời dần vào `out`. Trả về chữ của câu trả lời, hoặc null khi không hỏi được (đã ghi lý do vào `out`).
-   *  opts: { tier: 'quick'|'default', cache: true|false } */
+   *  opts: { tier: 'quick'|'default', cache: true|false, tools: [{ name, description, inputSchema, execute }] }
+   *  Có tools thì Claude gọi được hàm của trang (ví dụ vặn núm khi làm mẫu); khi đó không dùng bản nhớ đệm. */
   async function ask(prompt, out, opts = {}) {
-    const s = await cap('sample');
-    out.classList.add('ai-out');
-    if (!s || document.documentElement.classList.contains('kit-ask-off')) { out.textContent = 'Trang này chưa hỏi Claude được ở đây.'; return null; }
-    out.textContent = 'Claude đang nghĩ…'; out.classList.add('thinking');
+    const s = await askStart(out);
+    if (!s) return null;
     try {
       const o = { onText: ({ text }) => { out.classList.remove('thinking'); out.textContent = text; } };
       if (opts.tier) o.modelTier = opts.tier;
-      if (opts.cache === false) o.cache = false;
+      if (opts.cache === false || opts.tools) o.cache = false;
+      if (opts.tools) o.tools = opts.tools;
       const { text, truncated } = await s(prompt, o);
       out.classList.remove('thinking');
       out.textContent = text + (truncated ? ' …' : '');
       return text;
-    } catch (e) {
-      out.classList.remove('thinking');
-      const code = e && e.code;
-      if (code === 'cancelled') { out.textContent = (e && e.text) || ''; return null; }
-      if (askOffCodes.includes(code)) {
-        document.documentElement.classList.add('kit-ask-off'); document.documentElement.classList.remove('kit-ask-on');
-        out.textContent = 'Trang chưa được phép hỏi Claude, nên các chỗ hỏi sẽ ẩn đi. Bật lại trong menu Quyền của trang nếu muốn.';
-        return null;
-      }
-      out.textContent = (e && e.text ? e.text + '\n\n' : '') + (askMsg[code] || 'Chưa hỏi được Claude. Thử lại sau.');
+    } catch (e) { return askFail(e, out); }
+  }
+  /** Hỏi Claude một giá trị JSON (ví dụ một tình huống mới có câu hỏi và đáp án). Trả về giá trị, hoặc null như ask. */
+  async function askJson(prompt, out, opts = {}) {
+    const s = await askStart(out);
+    if (!s || typeof s.json !== 'function') { if (s) out.textContent = 'Trang này chưa hỏi Claude được ở đây.'; out.classList.remove('thinking'); return null; }
+    try {
+      const o = { cache: false };
+      if (opts.tier) o.modelTier = opts.tier;
+      const v = await s.json(prompt, o);
+      out.classList.remove('thinking'); out.textContent = '';
+      return v;
+    } catch (e) { return askFail(e, out); }
+  }
+  async function askStart(out) {
+    const s = await cap('sample');
+    out.classList.add('ai-out');
+    if (!s || document.documentElement.classList.contains('kit-ask-off')) { out.textContent = 'Trang này chưa hỏi Claude được ở đây.'; return null; }
+    out.textContent = 'Claude đang nghĩ…'; out.classList.add('thinking');
+    return s;
+  }
+  function askFail(e, out) {
+    out.classList.remove('thinking');
+    const code = e && e.code;
+    if (code === 'cancelled') { out.textContent = (e && e.text) || ''; return null; }
+    if (askOffCodes.includes(code)) {
+      document.documentElement.classList.add('kit-ask-off'); document.documentElement.classList.remove('kit-ask-on');
+      out.textContent = 'Trang chưa được phép hỏi Claude, nên các chỗ hỏi sẽ ẩn đi. Bật lại trong menu Quyền của trang nếu muốn.';
       return null;
     }
+    out.textContent = (e && e.text ? e.text + '\n\n' : '') + (askMsg[code] || 'Chưa hỏi được Claude. Thử lại sau.');
+    return null;
+  }
+
+  /** Nghe thay đọc (khả năng tts): nút loa đọc to chữ getText() trả về, bấm lần nữa để dừng. Chỉ có trên Chrome và app Claude
+      máy tính; nơi khác nút giữ ẩn, chữ vẫn trên màn. Một lúc chỉ một đoạn được đọc (đoạn mới thay đoạn cũ). onUse đếm số lần nghe. */
+  const SPEAKER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+  let speaking = null;
+  function listen(btn, getText, onUse) {
+    if (!btn) return;
+    const label = btn.textContent.trim() || 'Nghe';
+    btn.hidden = true; btn.dataset.noreplay = ''; btn.classList.add('listen'); btn.setAttribute('aria-pressed', 'false');
+    btn.innerHTML = SPEAKER + '<span></span>'; btn.lastChild.textContent = label;
+    const set = (on) => { btn.setAttribute('aria-pressed', String(on)); btn.lastChild.textContent = on ? 'Dừng' : label; };
+    cap('tts').then((t) => {
+      if (!t) return;
+      btn.hidden = false;
+      btn.addEventListener('click', () => {
+        if (speaking === btn) { t.stop(); speaking = null; set(false); return; }
+        const text = String(getText() || '').replace(/\s+/g, ' ').trim().slice(0, 2000);
+        if (!text) return;
+        if (speaking) speaking.dispatchEvent(new Event('kit-listen-off'));
+        speaking = btn; set(true);
+        if (onUse) onUse();
+        // Đọc xong thì speak() trả về; bị dừng hay bị đoạn khác thay thì nó báo lỗi. Cả hai đều đưa nút về "Nghe".
+        const end = () => { if (speaking === btn) { speaking = null; set(false); } };
+        // Ghi rõ tiếng Việt để giọng đọc không đoán nhầm; máy nào không nhận mã ngôn ngữ này thì đọc lại để tự đoán.
+        const known = ['not_granted', 'rate_limited', 'busy', 'cancelled', 'viewer_stopped', 'stopped', 'replaced'];
+        t.speak(text, { language: 'vi' }).catch((e) => (speaking === btn && !known.includes(e && e.code) ? t.speak(text) : Promise.reject(e))).then(end, (e) => {
+          end();
+          if (e && e.code === 'not_granted') { document.querySelectorAll('.listen').forEach((b) => { b.hidden = true; }); }
+          else if (e && e.code === 'rate_limited') toast('Đọc nhiều quá trong một lúc. Thử lại sau ít phút.');
+        });
+      });
+      btn.addEventListener('kit-listen-off', () => set(false));
+    });
   }
 
   /** Nói thay gõ: chỉ có ở Chrome và app Claude trên máy tính, nơi khác nút giữ ẩn và vẫn gõ như thường.
@@ -211,5 +267,5 @@
     return partial;
   }
 
-  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude, ask, dictate, micRow };
+  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude, ask, askJson, dictate, micRow, listen };
 })();

@@ -8,8 +8,8 @@
 import { readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-export const COLUMNS = ['Ngày', 'Trang', 'Phút', 'Hỏi Claude', 'Claude giải thích câu sai', 'Claude nhận xét, chấm', 'Nói thay gõ', 'Ghi chú'];
-const FEATURES = COLUMNS.slice(3, 7);
+export const COLUMNS = ['Ngày', 'Trang', 'Phút', 'Hỏi Claude', 'Claude giải thích câu sai', 'Claude nhận xét, chấm', 'Nói thay gõ', 'Xem Claude làm', 'Nghe', 'Tình huống thêm', 'Ghi chú'];
+const FEATURES = COLUMNS.slice(3, -1);
 const cell = (v) => String(v ?? '-').replace(/\|/g, '/').replace(/\s+/g, ' ').trim() || '-';
 
 /** Thêm (hoặc thay, nếu đã có cùng ngày và cùng trang) một dòng vào bảng của learning/usage.md.
