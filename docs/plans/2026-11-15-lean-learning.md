@@ -5,9 +5,10 @@ Trạng thái: đang chạy · Duyệt: 2026-11-15 · Cập nhật: 2026-11-15 �
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 1 đã làm xong trong PR #77 (chờ merge, sau PR #76). Đợt 0 làm cùng buổi Frontend 6.
+- Đang ở: đợt 1 đã làm xong trong PR #77 (chờ merge). Đợt 0 làm cùng buổi Frontend 6.
 - Còn thiếu: đo buổi Frontend 6 (đợt 0), rồi đợt 2.
-- thien cần làm: merge PR #76 trước, rồi mới merge PR này (xem "Đã đổi"). Buổi tới nhắn "học" như thường.
+- thien cần làm: merge PR #77. PR #76 (chiến tranh 5) để tới khi học xong bài đó mới merge, như mọi bài khác. Buổi tới nhắn "học" như thường.
+- Khi học chiến tranh 5: AI rebase nhánh của PR #76 lên main, chạy `make-lesson.mjs` trên `learning/war/pages/lesson-05.html` (nguồn tự gọn), thêm chữ "kit" vào tiêu đề PR #76 vì nó có sửa `sandtable.js` (câu 3: giữ nguyên, không tách).
 
 ## Mục tiêu
 Chi phí của một buổi học (AI phải đọc bao nhiêu, phải viết bao nhiêu, CI chạy bao lâu, PR đụng bao nhiêu file chung) giữ gần như **cố định** dù đã học 10 hay 200 buổi. Trải nghiệm 7 bước và mọi luật thien đã chốt giữ nguyên.
@@ -138,7 +139,7 @@ Chỗ dễ sa lầy: đợt 3, nếu cứ muốn phần khung tự sinh phủ h�
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
 | 2026-11-15 | Làm đợt 1 trước đợt 0 | Đợt 1 chỉ đổi phần máy, không đụng trải nghiệm học, nên không cần số đo của đợt 0 để quyết. Đợt 0 vẫn đo ở buổi Frontend 6 |
-| 2026-11-15 | Thứ tự merge: PR #76 trước PR này | #76 có trang chiến tranh 5 còn mang kit đã điền và có sửa `sandtable.js`. Merge #76 trước thì PR này rebase và làm gọn luôn trang đó; merge sau thì CI của #76 sẽ đỏ theo luật mới, trái với câu 3 đã chốt |
+| 2026-11-15 | Thứ tự merge: PR #77 trước, PR #76 sau khi học xong | Ban đầu định merge #76 trước. Nhưng bài chưa học thì CI của #76 đỏ sẵn (`after-lesson --check-all` cần thẻ và dòng roadmap của bài), merge vào sẽ làm main đỏ. Nên #76 chờ học như mọi bài; khi rebase thì làm gọn nguồn và thêm chữ "kit" vào tiêu đề, vẫn giữ câu 3 là không tách |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
