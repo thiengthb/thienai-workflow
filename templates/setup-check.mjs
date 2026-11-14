@@ -72,7 +72,7 @@ export function checkSync(standard, filters) {
   const miss = standard.sync.filter(p => !synced(p) || fs.some(f => f.mode === 'exclude' && under(f, clean(p)) && !out.some(o => f.path === o || f.path.startsWith(o + '/'))));
   const heavy = (standard.syncOut || []).filter(p => synced(p) || fs.some(f => f.mode === 'include' && under(f, clean(p))));
   const notes = [];
-  const where = 'Project settings > GitHub, chọn lại theo profile/SETUP.md, mục "Đồng bộ repo vào knowledge"';
+  const where = 'Ô Project knowledge ở cột phải trang project > bấm vào repo, chọn lại theo profile/SETUP.md, mục "Đồng bộ repo vào knowledge"';
   if (heavy.length) notes.push(`Knowledge của project đang đồng bộ cả phần nặng (${heavy.join(', ')}): knowledge nhanh đầy và Claude phải tìm từng đoạn thay vì đọc hết. ${where}.`);
   if (miss.length) notes.push(`Knowledge của project chưa đồng bộ: ${miss.join(', ')}. ${where}.`);
   return notes;
@@ -148,7 +148,7 @@ export function checkSetup(standard, { project, instructions, repos = [], skills
   if (want) {
     const have = new Set(repos.map(r => r.toLowerCase()));
     const missing = want.filter(r => !have.has(r.toLowerCase()));
-    if (missing.length) fixes.push(`Project chưa gắn repo ${missing.join(', ')}. Project settings > Repositories > thêm ${missing.map(r => '`' + r + '`').join(' và ')}.`);
+    if (missing.length) fixes.push(`Project chưa gắn repo ${missing.join(', ')}. Ô Project knowledge ở cột phải trang project > + > GitHub > thêm ${missing.map(r => '`' + r + '`').join(' và ')}, tích file theo profile/SETUP.md, mục "Đồng bộ repo vào knowledge".`);
     const unreadable = want.filter(r => readable(r) === false);
     if (unreadable.length) fixes.push(`Nick này chưa cho Claude đọc ${unreadable.join(', ')} trên GitHub. Settings > Connectors > GitHub > cho phép repo đó (xem profile/SETUP.md, mục "Một lần cho mỗi nick").`);
   }

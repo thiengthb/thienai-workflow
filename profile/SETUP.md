@@ -39,7 +39,7 @@ thien dùng 3 nick Claude (tên ngắn và việc của từng nick ở [`ACCOUN
 | `Claude` | `thiengthb/thienai-workflow` |
 | `sakubun` | `thiengthb/sakubun`, `thiengthb/thienai-workflow` |
 
-Gắn repo: mở project > Project settings > Repositories > thêm từng repo trong bảng.
+Gắn repo: mở trang project trên [claude.ai/projects](https://claude.ai/projects), ở ô **Project knowledge** (cột phải) bấm **+** > **GitHub** (hay **Add from GitHub**), dán link repo, tích file theo mục "Đồng bộ repo vào knowledge" dưới đây, rồi bấm **Add**. Làm lại cho từng repo trong bảng. Giao diện nào có sẵn **Project settings > Repositories** thì thêm repo ở đó cũng được.
 
 Project instructions: Project settings > Instructions, xoá bản cũ rồi dán đoạn dưới, thay `<tên project>` bằng tên ở cột đầu bảng trên và `<tên nick>` bằng tên nick đang dùng trong [`ACCOUNTS.md`](ACCOUNTS.md) (ví dụ `tnt024`):
 
@@ -54,7 +54,7 @@ Trả lời bằng tiếng Việt tự nhiên.
 ```
 
 ## Đồng bộ repo vào knowledge
-Project settings > GitHub (nút đồng bộ repo vào knowledge của project): chỉ tích phần chữ mà AI cần đọc. Ngày 2026-11-14 project `Claude` đồng bộ cả repo, đã dùng khoảng 69% dung lượng knowledge (1,39 triệu trên 2 triệu), phần lớn là trang HTML, JSON trận đánh, font và script. Knowledge to quá thì Claude phải tìm từng đoạn (RAG) thay vì đọc hết, dễ sót luật. Các phần dưới chỉ khoảng 12% repo; phần còn lại AI đọc bằng lệnh khi cần (`profile/MAP.md`, tầng 3).
+Ô **Project knowledge** ở cột phải trang project: bấm vào repo đã thêm để chọn lại file (nút **Update**), bấm **Sync now** để lấy bản mới. Chỉ tích phần chữ mà AI cần đọc. Ngày 2026-11-14 project `Claude` đồng bộ cả repo, đã dùng khoảng 69% dung lượng knowledge (1,39 triệu trên 2 triệu), phần lớn là trang HTML, JSON trận đánh, font và script. Knowledge to quá thì Claude phải tìm từng đoạn (RAG) thay vì đọc hết, dễ sót luật. Các phần dưới chỉ khoảng 12% repo; phần còn lại AI đọc bằng lệnh khi cần (`profile/MAP.md`, tầng 3).
 
 Tích:
 - `AGENTS.md`
@@ -76,13 +76,16 @@ Bỏ tích bên trong `learning/`:
 - bỏ `learning/war/battles/`
 - bỏ `learning/teaching/patterns.html`
 
-Repo khác (sakubun) cũng vậy: tích tài liệu và luật, bỏ ảnh, build, dữ liệu. Sau khi merge PR đổi luật, bấm đồng bộ lại để knowledge có bản mới; trong lúc chưa đồng bộ, đọc file trong repo (connector GitHub hay clone) chứ không tin knowledge.
+Repo khác (sakubun) cũng vậy: tích tài liệu và luật, bỏ ảnh, build, dữ liệu.
+
+Riêng sakubun (2026-11-15: `docs/plans/` nặng 14 MB, gần hết là ảnh PNG trong các thư mục con; file `.md` chỉ khoảng 350 KB): tích `AGENTS.md`, `CLAUDE.md`, `README.md`, `docs/`; bên trong `docs/plans/` bỏ tích mọi thư mục con, giữ các file `.md`. Code (`app/`, `lib/`, `components/`...) AI đọc bằng lệnh khi cần. Sau khi merge PR đổi luật, bấm đồng bộ lại để knowledge có bản mới; trong lúc chưa đồng bộ, đọc file trong repo (connector GitHub hay clone) chứ không tin knowledge.
 
 ## Đổi chuẩn
 - Đổi đoạn project instructions: sửa qua PR, **tăng số "Phiên bản chuẩn"** và số `vN` trong đoạn đó cùng lúc (test trong CI kiểm hai số khớp nhau). Đổi phần khác (bảng repo, mục đồng bộ knowledge) thì không tăng số, để thien không phải dán lại instructions y hệt ở mọi nick; `setup-check.mjs` vẫn kiểm các phần đó mỗi phiên.
 - Không cần nhớ đã sửa ở nick nào: ở mỗi nick, phiên đầu tiên sau khi merge sẽ thấy project instructions còn số cũ và nhắc thien dán bản mới.
 
 ## Lịch sử
+- 2026-11-15, vẫn v2: cách gắn repo theo ô Project knowledge (+ > GitHub), vì project claude.ai thường không có mục Repositories; thêm danh sách tích cho sakubun.
 - 2026-11-14, vẫn v2: thêm mục "Đồng bộ repo vào knowledge"; `setup-check.mjs` so từng dòng instructions và có `--instructions unseen`, `--sync`.
 - v2 (2026-11-14): thêm tên nick vào dòng đầu (`nick: tntXXX`) và luật ghi nick vào commit, PR, sổ bàn giao; skill có số bản để biết khi nào phải tải lại; skill `start-project` bắt cả project cũ chưa setup; sổ nick `profile/ACCOUNTS.md`.
 - v1 (2026-11-14): chuẩn đầu tiên có kiểm tự động. Thêm luật "tiếp tục" (sổ bàn giao) và repo thienai-workflow cho project sakubun.
