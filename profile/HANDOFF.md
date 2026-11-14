@@ -23,8 +23,8 @@ thien dùng nhiều nick Claude. Nick đang làm có thể hết usage (phiên h
 ## Khi nào ghi
 - Ngay khi nhận một việc nhiều bước (một câu hỏi trả lời xong trong một lượt thì không cần).
 - Sau mỗi bước trong checklist: trước hết commit và đẩy nhánh làm việc, rồi sửa "Đã xong" và "Bước tiếp theo", rồi `save`.
-- Ngay sau khi đăng một trang chờ thien (chọn phương án, duyệt giao diện, buổi học): ghi vào "Đang chờ thien" link trang, câu hỏi, và **lệnh dựng lại trang từ repo**. File nguồn của trang (ví dụ `decision.json`, ảnh, trang học) phải nằm trong nhánh làm việc đã đẩy, không để ở `/tmp`, vì nick khác không thấy máy của nick cũ.
-- Khi thien trả lời hay chọn: chép kết quả vào repo (PR, kế hoạch, quyết định) rồi mới sửa sổ.
+- Ngay sau khi đăng một trang chờ thien (chọn phương án, duyệt giao diện, buổi học): ghi vào "Đang chờ thien" link trang, câu hỏi, và **lệnh dựng lại trang từ repo**. File nguồn của trang (ví dụ `decision.json`, ảnh, trang học) phải nằm trong nhánh làm việc đã đẩy, không để ở `/tmp`, vì nick khác không thấy máy của nick cũ. Ảnh nén JPG, mỗi ảnh vài trăm KB; trang phác để đuôi `.txt` cho khỏi bị build; có `docs/plans/` thì để cạnh kế hoạch của bước, ví dụ `docs/plans/<ngày>-<bước>/round2/`.
+- Khi thien trả lời hay chọn: chép **nguyên văn** kết quả vào repo (mục "Kết quả" của kế hoạch, PR, hay quyết định) rồi mới sửa sổ.
 - Xong hẳn (PR merge, hay thien nói thôi): `done`.
 
 ## Khi thien nói "tiếp tục"
