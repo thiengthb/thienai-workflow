@@ -43,6 +43,26 @@
 .screen[data-amount="vua"] .kid .word, .screen[data-amount="nhieu"] .kid .word { background: color-mix(in srgb, var(--a) 12%, #fff); border-color: color-mix(in srgb, var(--a) 40%, #fff); }
 .screen[data-amount="nhieu"] .kid { background: color-mix(in srgb, var(--a) 18%, #fff); }
 .screen[data-amount="nhieu"] .kid .ans span { border-color: var(--a); color: var(--a); background: #fff; }
+/* Cỡ chữ (bàn "Làm theo bản thiết kế"). */
+.screen[data-size="l"] .app { zoom: 1.18; } .screen[data-size="xl"] .app { zoom: 1.36; }
+/* App đặt món: ít = chỉ thanh đặt món; nhiều = cam ở mọi khối. */
+.food { min-height: 100%; display: flex; flex-direction: column; gap: 10px; padding: 14px 12px 0; background: #fff; }
+.food .hd { font-weight: 700; font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
+.food .hd small { font-size: 11px; font-weight: 500; color: #6b6862; }
+.food .search { border-radius: 8px; padding: 8px 10px; background: #f1f3f6; color: #8a877f; font-size: 12px; }
+.food .promo { border-radius: 8px; padding: 12px; background: #fff4ec; color: #9a3412; font-weight: 600; }
+.food .promo small { display: block; font-weight: 500; font-size: 11px; opacity: .85; }
+.food .chips { display: flex; gap: 6px; } .food .chips span { padding: 5px 10px; border-radius: 8px; background: #f1f3f6; font-size: 11.5px; font-weight: 600; }
+.food .it { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #eee; }
+.food .it b { display: block; font-size: 13px; } .food .it small { color: #1b1b1a; font-weight: 600; font-size: 12px; }
+.food .it span { flex: none; padding: 5px 10px; border-radius: 8px; border: 1.5px solid #d6d3cc; font-weight: 700; font-size: 12px; }
+.food .order { margin: auto -12px 0; padding: 14px 12px; background: #ea580c; color: #fff; font-weight: 700; text-align: center; font-size: 14px; }
+.screen[data-amount="nhieu"] .food .hd { color: #ea580c; }
+.screen[data-amount="nhieu"] .food .promo, .screen[data-amount="nhieu"] .food .chips span:first-child { background: #ea580c; color: #fff; }
+.screen[data-amount="nhieu"] .food .chips span { background: #ffedd5; color: #c2410c; }
+.screen[data-amount="nhieu"] .food .it small { color: #ea580c; }
+.screen[data-amount="nhieu"] .food .it span { background: #ea580c; border-color: #ea580c; color: #fff; }
+.screen[data-amount="nhieu"] .food .search { background: #ffedd5; color: #c2410c; }
 </style>
 </head>
 <body>
@@ -51,7 +71,7 @@
      node artifacts/lesson/make-lesson.mjs learning/frontend/pages/lesson-NN.html -->
 <script type="application/json" id="lesson">{ "id": "__ID__", "subject": "Frontend", "title": "__TITLE__" }</script>
 <div class="wrap">
-  <div class="top"><div class="meta"><span>Frontend · __TITLE__</span><span id="cnt">1/9</span></div><div class="bar"><span id="bar"></span></div></div>
+  <div class="top"><div class="meta"><span>Frontend · __TITLE__</span><span id="cnt">1/12</span></div><div class="bar"><span id="bar"></span></div></div>
 
   <div id="stage">
     <!-- Bàn thử 1: app ngân hàng. Núm màu đổi biến --a, núm lượng đổi data-amount. data-soi: chỗ dùng màu nhấn, ở lượng nào. -->
@@ -82,6 +102,8 @@
             </div><span class="now"></span></div>
           <div class="knob" data-knob="amount"><span class="label">Lượng màu</span>
             <div class="seg"><button type="button" data-val="it" data-name="Ít màu" data-code="nút chính">Ít</button><button type="button" data-val="vua" data-name="Vừa" data-code="nút chính, số dư" aria-pressed="true">Vừa</button><button type="button" data-val="nhieu" data-name="Nhiều màu" data-code="đầu trang, số dư, mọi nút, thanh dưới">Nhiều</button></div></div>
+          <div class="knob" data-knob="lens" data-lens data-min="3"><span class="label">Xem bằng mắt</span>
+            <div class="seg"><button type="button" data-val="none" data-name="Mắt thường" aria-pressed="true">Thường</button><button type="button" data-val="blur" data-name="Nheo mắt">Nheo</button><button type="button" data-val="old" data-name="Mắt 70 tuổi">70 tuổi</button><button type="button" data-val="deut" data-name="Mù màu đỏ-lục">Mù màu</button></div><span class="now"></span></div>
           <button class="soi-btn" type="button" data-soi-toggle aria-pressed="false">Soi chỗ dùng màu nhấn</button>
           <span class="soi-count" data-text="Màu nhấn đang nằm ở {n} chỗ"></span>
         </div>
@@ -120,6 +142,63 @@
         <pre class="code"><span data-line="accent">:root { <span class="k">--accent</span>: <span data-v="accent"></span>; }</span><span data-line="amount"><span class="c">/* tô màu: </span><span data-v="amount" class="c"></span><span class="c"> */</span></span></pre>
       </div>
       <pre class="code"><span data-line="accent"><span class="k">--accent</span>: <span data-v="accent"></span>;</span><span data-line="amount"><span class="c">/* tô màu: </span><span data-v="amount" class="c"></span><span class="c"> */</span></span></pre>
+    </div>
+
+    <!-- Bàn thử 3: app đặt món, bước "Nhìn 5 giây" (data-stage="food@cover"). Màn bị che, nút data-peek mở 5 giây. -->
+    <div class="pane bench" data-pane="food">
+      <div class="phone"><div class="screen" data-amount="nhieu">
+        <div class="food">
+          <div class="hd">Đói chưa? <small>Quận 3</small></div>
+          <div class="search">Tìm món, quán…</div>
+          <div class="promo">Giảm 30% cho đơn đầu tiên<small>Đến hết Chủ nhật</small></div>
+          <div class="chips"><span>Gần bạn</span><span>Cơm</span><span>Bún, phở</span><span>Trà sữa</span></div>
+          <div class="it"><div><b>Cơm tấm sườn bì</b><small>55.000 đ</small></div><span>Thêm</span></div>
+          <div class="it"><div><b>Bún bò Huế</b><small>50.000 đ</small></div><span>Thêm</span></div>
+          <div class="it"><div><b>Trà đào cam sả</b><small>40.000 đ</small></div><span>Thêm</span></div>
+          <div class="order">Đặt món · 145.000 đ</div>
+        </div>
+      </div><div class="cover">Màn đang che.<br>Bấm "Xem 5 giây" để nhìn.</div></div>
+      <div class="side">
+        <div class="knobs">
+          <div class="knob" data-knob="amount" data-min="1"><span class="label">Lượng màu cam</span>
+            <div class="seg"><button type="button" data-val="it" data-name="Ít: chỉ thanh đặt món">Ít</button><button type="button" data-val="nhieu" data-name="Nhiều: cam khắp nơi" aria-pressed="true">Nhiều</button></div><span class="now"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bàn thử 4: làm theo bản thiết kế. data-target là giá trị đích; .phone.mini tự chép màn chính và vẽ theo đích; .meter báo % giống. -->
+    <div class="pane bench" data-pane="match" data-target='{"accent":"#0f766e","amount":"it","size":"l"}'>
+      <div class="phone"><div class="screen" data-amount="nhieu" data-size="m">
+        <div class="app">
+          <div class="hd">Chào bác Lan <small>Thứ bảy</small></div>
+          <div class="bal"><span>Số dư</span><b>12.450.000 đ</b></div>
+          <div class="acts"><span class="main">Chuyển tiền</span><span>Nạp</span><span>Lịch sử</span></div>
+          <div class="lb">Gần đây</div>
+          <div class="tx">Tiền điện<span class="out">−412.000</span></div>
+          <div class="tx">Lương tháng 11<span class="in">+9.800.000</span></div>
+          <div class="tx">Chợ Bến Thành<span class="out">−186.000</span></div>
+          <div class="tx">Nhà thuốc<span class="out">−95.000</span></div>
+          <div class="nav"><span class="cur">Trang chủ</span><span>Thẻ</span><span>Ưu đãi</span><span>Tôi</span></div>
+        </div>
+      </div></div>
+      <div class="side">
+        <div class="knobs">
+          <div class="knob" data-knob="accent" data-var="--a"><span class="label">Màu nhấn</span>
+            <div class="row">
+              <button class="sw" type="button" data-val="#2563eb" data-name="Xanh dương" aria-label="Xanh dương" aria-pressed="true" style="--sw:#2563eb"></button>
+              <button class="sw" type="button" data-val="#15803d" data-name="Xanh lá" aria-label="Xanh lá" style="--sw:#15803d"></button>
+              <button class="sw" type="button" data-val="#0f766e" data-name="Xanh ngọc" aria-label="Xanh ngọc" style="--sw:#0f766e"></button>
+              <button class="sw" type="button" data-val="#7c3aed" data-name="Tím" aria-label="Tím" style="--sw:#7c3aed"></button>
+              <button class="sw" type="button" data-val="#ea580c" data-name="Cam" aria-label="Cam" style="--sw:#ea580c"></button>
+            </div><span class="now"></span></div>
+          <div class="knob" data-knob="amount"><span class="label">Lượng màu</span>
+            <div class="seg"><button type="button" data-val="it" data-name="Ít màu">Ít</button><button type="button" data-val="vua" data-name="Vừa">Vừa</button><button type="button" data-val="nhieu" data-name="Nhiều màu" aria-pressed="true">Nhiều</button></div></div>
+          <div class="knob" data-knob="size"><span class="label">Cỡ chữ</span>
+            <div class="seg"><button type="button" data-val="m" data-name="Chữ vừa" aria-pressed="true">Vừa</button><button type="button" data-val="l" data-name="Chữ lớn">Lớn</button><button type="button" data-val="xl" data-name="Chữ rất lớn">Rất lớn</button></div></div>
+          <div class="meter" role="status"><span></span></div>
+        </div>
+      </div>
+      <div class="target"><span class="label">Bản thiết kế</span><div class="phone mini"><div class="screen"></div></div></div>
     </div>
   </div>
 
@@ -196,8 +275,26 @@
     <button class="btn primary next" type="button" data-go="5" data-need="d2" disabled>Tiếp</button>
   </section>
 
-  <!-- 5. Hiểu sau: nhắc lựa chọn, rồi cho tự thấy chỗ màu nhấn va với màu mang nghĩa. -->
-  <section class="step" data-s="5" data-stage="bank">
+  <!-- 5. Nhìn 5 giây: cảm thấy "nhiều màu thì không biết nhìn đâu" trước khi nghe giải thích. -->
+  <section class="step" data-s="5" data-stage="food@cover">
+    <h2>Nhìn 5 giây</h2>
+    <p>Màn một app đặt món đang che. Bạn chỉ được nhìn 5 giây. Tìm nút để đặt hàng.</p>
+    <button class="btn" type="button" data-peek="food" data-sec="5" data-after="Đã xem 5 giây">Xem 5 giây</button>
+    <p>Nút đặt hàng nằm ở đâu?</p>
+    <div class="q" data-q="food" data-a="2" data-wait="peek-food"><p class="status" role="status"></p>
+      <button class="opt" type="button">Trên cùng, cạnh ô tìm kiếm</button>
+      <button class="opt" type="button">Giữa màn, trong khung khuyến mãi</button>
+      <button class="opt" type="button">Dưới cùng</button>
+      <p class="why">Dưới cùng. Màn có hơn 10 chỗ màu cam, nên trong 5 giây mắt không biết dừng ở đâu.</p>
+    </div>
+    <button class="btn" type="button" data-uncover="food" data-need="food" disabled>Bỏ che, cho mình vặn</button>
+    <p class="stage-hint">Giờ vặn Lượng màu cam về Ít, rồi nhìn lại.</p>
+    <div class="tried" data-tried="food.amount"></div>
+    <button class="btn primary next" type="button" data-go="6" data-need="tried-food.amount" disabled>Tiếp</button>
+  </section>
+
+  <!-- 6. Hiểu sau: nhắc lựa chọn, rồi cho tự thấy chỗ màu nhấn va với màu mang nghĩa. -->
+  <section class="step" data-s="6" data-stage="bank">
     <h2>Ý chính</h2>
     <p class="fb" data-echo="d1" data-prefix="Cho bác Lan, bạn chốt: "></p>
     <div class="card small">
@@ -205,7 +302,7 @@
     </div>
     <p><b>Thứ chắc hơn.</b> Bấm nút dưới rồi nhìn các dòng tiền ra.</p>
     <button class="btn" type="button" data-set="bank" data-vals="accent=#dc2626; amount=nhieu" data-done="saw-red">Thử màu đỏ, nhiều màu</button>
-    <div class="q" data-q="red" data-a="1"><p class="status" role="status"></p>
+    <div class="q" data-q="red" data-a="1" data-wait="saw-red"><p class="status" role="status"></p>
       <button class="opt" type="button">Nhìn rõ hơn, đỏ nổi bật</button>
       <button class="opt" type="button">Khó phân biệt đỏ "bấm vào đây" với đỏ "mất tiền"</button>
       <p class="why">Trong app tiền, đỏ đã mang nghĩa: tiền ra, lỗi. Màu nhấn trùng màu mang nghĩa thì cả hai cùng mất nghĩa. Chọn màu nhấn sau khi biết màn đã dùng những màu mang nghĩa nào.</p>
@@ -213,11 +310,33 @@
     <div class="card small">
       <p><b>Ba điều dùng được ngay:</b> màu nhấn không trùng màu mang nghĩa trên màn; người lớn tuổi cần tương phản cao và ít khối màu; app cho trẻ em được phép nhiều màu hơn, miễn việc chính vẫn rõ.</p>
     </div>
-    <button class="btn primary next" type="button" data-go="6" data-need="red" disabled>Tiếp</button>
+    <button class="btn primary next" type="button" data-go="7" data-need="red" disabled>Tiếp</button>
   </section>
 
-  <!-- 6. Câu hỏi nhanh -->
-  <section class="step" data-s="6">
+  <!-- 7. Kính: tự thấy màu không đủ để mang nghĩa. -->
+  <section class="step" data-s="7" data-stage="bank@lens">
+    <h2>Nhìn bằng mắt người khác</h2>
+    <p>Cạnh màn có núm mới: <b>Xem bằng mắt</b>. Thử ít nhất 3 kiểu nhìn, để ý các dòng tiền.</p>
+    <div class="tried" data-tried="bank.lens"></div>
+    <p>Ở kiểu "Mù màu", tiền ra và tiền vào còn phân biệt được nhờ gì?</p>
+    <div class="q" data-q="lens" data-a="1" data-wait="tried-bank.lens"><p class="status" role="status"></p>
+      <button class="opt" type="button">Màu cam và màu xanh</button>
+      <button class="opt" type="button">Dấu − và dấu +</button>
+      <p class="why">Người mù màu đỏ-lục (khoảng 1 trên 12 nam giới) thấy cam và xanh lá gần như một màu. Dấu − và + vẫn đọc được. Màu nên đi kèm chữ hay ký hiệu, đừng là cách duy nhất mang nghĩa.</p>
+    </div>
+    <button class="btn primary next" type="button" data-go="8" data-need="lens" disabled>Tiếp</button>
+  </section>
+
+  <!-- 8. Vặn cho giống: đọc bản thiết kế bằng mắt, không cần đọc mã. -->
+  <section class="step" data-s="8" data-stage="match">
+    <h2>Làm theo bản thiết kế</h2>
+    <p>Bản nhỏ bên cạnh là thiết kế đã duyệt cho bác Lan. Vặn núm cho màn của bạn giống hệt. Thanh dưới núm báo giống bao nhiêu.</p>
+    <p class="fb" data-echo="match-match" data-same="Giống hệt: xanh ngọc, ít màu, chữ lớn. Đúng ba điều vừa học cho người lớn tuổi."></p>
+    <button class="btn primary next" type="button" data-go="9" data-need="match-match" disabled>Tiếp</button>
+  </section>
+
+  <!-- 9. Câu hỏi nhanh -->
+  <section class="step" data-s="9">
     <h2>Câu hỏi nhanh</h2>
     <div class="card">
       <p>App sức khỏe có chữ "Huyết áp cao" màu đỏ. Màu nhấn nên tránh màu gì?</p>
@@ -228,21 +347,21 @@
         <p class="why">Đỏ đã là cảnh báo. Màu nhấn đỏ làm cảnh báo bớt nổi.</p>
       </div>
     </div>
-    <button class="btn primary next" type="button" data-go="7" data-need="q1" disabled>Tiếp</button>
+    <button class="btn primary next" type="button" data-go="10" data-need="q1" disabled>Tiếp</button>
   </section>
 
-  <!-- 7. Tự nói lại -->
-  <section class="step" data-s="7">
+  <!-- 10. Tự nói lại -->
+  <section class="step" data-s="10">
     <h2>Tự nói lại</h2>
     <p>Viết 1–2 câu: lần sau chọn màu cho một app, bạn làm gì trước?</p>
     <textarea data-key="teach" data-min="5" placeholder="Mình sẽ..."></textarea>
     <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
     <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Xem màn đã có những màu mang nghĩa nào (lỗi, tiền ra, thành công), rồi chọn màu nhấn khác hẳn chúng. Lượng màu theo người dùng: người lớn tuổi ít khối màu, trẻ em được nhiều hơn.</div></div>
-    <button class="btn primary next" type="button" data-go="8" data-need="teach" disabled>Tiếp</button>
+    <button class="btn primary next" type="button" data-go="11" data-need="teach" disabled>Tiếp</button>
   </section>
 
-  <!-- 8. Góp ý, xong buổi -->
-  <section class="step" data-s="8">
+  <!-- 11. Góp ý, xong buổi -->
+  <section class="step" data-s="11">
     <h2>Góp ý buổi này</h2>
     <div class="card">
       <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
@@ -259,15 +378,6 @@
 <script id="kit-js"></script>
 <script id="lesson-js"></script>
 <script id="it-js"></script>
-<script>
-/* Phần riêng của bài: câu hỏi "red" chỉ bấm được sau khi đã bấm thử màu đỏ. */
-(() => {
-  const q = document.querySelector('[data-q="red"]');
-  const lock = (on) => q.querySelectorAll('.opt').forEach((o) => { if (!o.classList.contains('right') && !o.classList.contains('wrong')) o.disabled = on; });
-  lock(true);
-  document.querySelector('[data-done="saw-red"]').addEventListener('click', () => lock(false));
-})();
-</script>
 <script id="lesson-kit"></script>
 </body>
 </html>

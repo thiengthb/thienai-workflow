@@ -10,7 +10,9 @@ html[data-stage="on"] #stage { display: block; }
 @media (min-width: 900px) {
   html[data-stage="on"] .wrap { max-width: 1240px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; column-gap: 16px; align-items: start; }
   html[data-stage="on"] .top { grid-column: 1 / -1; }
-  html[data-stage="on"] #stage { grid-column: 1; grid-row: 2 / span 40; position: sticky; top: 52px; height: calc(100vh - 80px); margin: 0; }
+  /* Vừa khít màn hình: trang không cuộn khi bước ngắn, nên sân khấu dính không bị đẩy lên. */
+  html[data-stage="on"] .wrap { padding-bottom: 12px; }
+  html[data-stage="on"] #stage { grid-column: 1; grid-row: 2 / span 40; position: sticky; top: 52px; height: calc(100vh - 72px); margin: 0; }
   html[data-stage="on"] .step { grid-column: 2; }
   .pane.on { height: 100%; }
 }
@@ -68,6 +70,7 @@ html[data-stage="on"] #stage { display: block; }
   .knob .sw { width: 34px; height: 34px; }
   .knob .seg button, .soi-btn { min-height: 40px; }
   .soi-btn { font-size: 13px; }
+  .knob .seg button { font-size: 12px; padding: 0 3px; white-space: normal; line-height: 1.15; }
   .bench .code { flex: 1 1 100%; order: 3; font-size: 11px; }
   .side .code { display: none; }
 }
@@ -143,3 +146,65 @@ html[data-stage="on"] #stage { display: block; }
 .stage-hint { font-size: 13px; color: var(--muted); }
 @media (min-width: 900px) { .stage-hint .ph { display: none; } }
 @media (max-width: 899px) { .stage-hint .pc { display: none; } }
+
+/* ---------- Kính: xem màn qua mắt người khác (núm data-lens) ---------- */
+.screen[data-lens="blur"] { filter: blur(3px); }
+.screen[data-lens="old"] { filter: contrast(.55) brightness(1.08) sepia(.3) blur(.7px); }
+.screen[data-lens="deut"] { filter: url(#it-deut); }
+.screen[data-lens="prot"] { filter: url(#it-prot); }
+.screen { transition: filter .3s; }
+/* Núm kính chỉ hiện ở bước @lens; bước khác màn về bình thường nhưng vẫn nhớ kính đã chọn. */
+.bench:not([data-mode="lens"]) [data-lens] { display: none; }
+/* Bốn kiểu nhìn: lưới 2×2 cho vừa cột núm. */
+.knob[data-lens] .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); }
+.knob[data-lens] .seg button + button { border-left: 0; }
+.bench:not([data-mode="lens"]) .screen[data-lens] { filter: none; }
+
+/* ---------- Vặn cho giống: bản mục tiêu nhỏ và thanh đo ---------- */
+.target { display: grid; gap: 6px; justify-items: center; }
+.target > .label { font-size: 11px; }
+.phone.mini { --pw: 132px; height: 270px; border-width: 5px; border-radius: 18px; box-shadow: none; pointer-events: none; }
+.phone.mini .screen { zoom: .5; overflow: hidden; }
+.meter { position: relative; height: 28px; border-radius: var(--r); background: var(--line); overflow: hidden; }
+.meter::before { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--p, 0%); background: var(--accent); transition: width .4s ease; }
+.meter.full::before { background: var(--good); }
+.meter > span { position: relative; display: block; padding: 0 10px; font: 600 13px/28px var(--font); color: var(--ink); }
+.meter.full > span, .meter[style*="--p: 5"] > span, .meter[style*="--p: 6"] > span, .meter[style*="--p: 7"] > span,
+.meter[style*="--p: 8"] > span, .meter[style*="--p: 9"] > span { color: #fff; }
+
+/* ---------- Nhìn 5 giây: màn bị che, đếm ngược khi mở ---------- */
+.cover, .peek-count { display: none; }
+.pane.covered .phone .screen { visibility: hidden; }
+.pane[data-mode="cover"] .side { visibility: hidden; }
+.pane.covered .cover { display: grid; place-items: center; position: absolute; inset: 0; background: #1b1b1a; color: #fff; text-align: center;
+  font: 600 14px/1.4 var(--font); padding: 16px; z-index: 3; }
+.pane.peeking .peek-count { display: block; position: absolute; top: 8px; right: 8px; z-index: 3; width: 30px; height: 30px; border-radius: 50%;
+  background: #1b1b1a; color: #fff; font: 700 14px/30px var(--font); text-align: center; }
+
+/* ---------- Bảng dán: thẻ ẩn, phản ứng, phỏng vấn, tua 3 tháng ---------- */
+.bd-card[data-hidden]:not(.shown) { display: none; }
+.bd-card.new > i { animation: ping 1.4s ease 2; }
+@keyframes ping { 50% { box-shadow: 0 0 0 8px color-mix(in srgb, var(--c, var(--accent)) 25%, transparent); } }
+.say-bar.react { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 8%, var(--card)); }
+.say-bar.found { border-color: var(--good); background: color-mix(in srgb, var(--good) 8%, var(--card)); }
+.say-bar.pop { animation: pop .3s ease; }
+@keyframes pop { from { transform: translateY(4px); opacity: .4; } }
+.ask { display: grid; gap: 8px; }
+.ask .opt.asked { border-color: var(--ink); }
+.ask .opt.asked::after { content: "Đã hỏi"; margin-left: auto; font-size: 11.5px; color: var(--muted); }
+.ask .opt.found::after { content: "Mở thẻ mới"; color: var(--good); }
+.ask .opt { display: flex; gap: 8px; align-items: center; }
+.reply:empty { display: none; }
+.ffwd { display: none; position: absolute; inset: 0; z-index: 5; background: color-mix(in srgb, var(--card) 97%, transparent); padding: 16px 18px; overflow: auto; }
+.ffwd.on { display: block; }
+.ffwd > .label { font-size: 11px; }
+.ffwd ol { list-style: none; margin: 10px 0 0; padding: 0 0 0 14px; border-left: 2px solid var(--line); display: grid; gap: 12px; }
+.ffwd li { display: grid; grid-template-columns: auto 28px 1fr; gap: 10px; align-items: start; position: relative; animation: fwd .5s ease both; font-size: 14px; }
+.ffwd li::before { content: ""; position: absolute; left: -20px; top: 7px; width: 10px; height: 10px; border-radius: 50%; background: var(--bad); }
+.ffwd li.calm { grid-template-columns: auto 1fr; } .ffwd li.calm::before { background: var(--good); }
+.ffwd li b { font: 600 12px/28px var(--font); color: var(--muted); white-space: nowrap; }
+.ffwd li i { width: 28px; height: 28px; border-radius: 50%; background: var(--c, var(--muted)); color: #fff; font: 700 11px/28px var(--font); font-style: normal; text-align: center; }
+.ffwd li span { padding-top: 4px; }
+@keyframes fwd { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { .ffwd li, .say-bar.pop, .bd-card.new > i { animation: none; } .meter::before { transition: none; } }
+@media (max-width: 899px) { .phone.mini { --pw: 110px; height: 220px; } .phone.mini .screen { zoom: .42; } }

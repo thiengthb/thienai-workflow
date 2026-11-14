@@ -20,12 +20,12 @@
      node artifacts/lesson/make-lesson.mjs learning/ba/pages/lesson-NN.html -->
 <script type="application/json" id="lesson">{ "id": "__ID__", "subject": "BA", "title": "__TITLE__" }</script>
 <div class="wrap">
-  <div class="top"><div class="meta"><span>BA · __TITLE__</span><span id="cnt">1/8</span></div><div class="bar"><span id="bar"></span></div></div>
+  <div class="top"><div class="meta"><span>BA · __TITLE__</span><span id="cnt">1/9</span></div><div class="bar"><span id="bar"></span></div></div>
 
   <div id="stage">
     <!-- Bảng 1: lưới quyền quyết × quan tâm. data-answer: thẻ → ô của bản mẫu. data-hear: nghe bao nhiêu người thì mở khóa heard-who. -->
     <div class="pane board" data-pane="who" data-hear="4"
-      data-answer='{"pdt":"z2","gv":"z2","sv":"z4","ph":"z4","it":"z1","bgh":"z1"}'>
+      data-answer='{"pdt":"z2","gv":"z2","sv":"z4","ph":"z4","it":"z1","bgh":"z1","ctsv":"z2"}'>
       <div class="bd-area">
         <div class="zones grid2">
           <button class="zone" type="button" data-z="z1" data-reset><span>Giữ hài lòng</span></button>
@@ -35,14 +35,17 @@
           <span class="axis y">Quyền quyết ↑</span><span class="axis x">Quan tâm tới app →</span>
         </div>
         <div class="tray"><span class="label">Chưa xếp</span></div>
-        <button class="bd-card" type="button" data-c="pdt" style="--c:#b45309" data-say="Cuối kỳ tôi cần danh sách sinh viên vắng quá 20% để xét cấm thi. Hiện tôi gom từ 40 file Excel." data-why="Phòng đào tạo vừa quyết (duyệt cho dùng), vừa cần số liệu mỗi kỳ."><i>PĐT</i>Phòng đào tạo</button>
-        <button class="bd-card" type="button" data-c="gv" style="--c:#2563eb" data-say="Tiết nào tôi cũng mất 5 phút gọi tên. App mà chậm hơn thì tôi quay lại gọi tên." data-why="Giảng viên dùng mỗi tiết và có thể bỏ app, nên quyền thực tế lớn."><i>GV</i>Giảng viên</button>
-        <button class="bd-card" type="button" data-c="sv" style="--c:#7c3aed" data-say="Em chỉ muốn biết mình còn được vắng mấy buổi."><i>SV</i>Sinh viên</button>
-        <button class="bd-card" type="button" data-c="ph" style="--c:#be185d" data-say="Tôi chỉ cần biết con tôi có đi học không." data-why="Phụ huynh rất quan tâm nhưng không duyệt gì. Và sinh viên đủ 18 tuổi: gửi tin cho phụ huynh cần sinh viên đồng ý."><i>PH</i>Phụ huynh</button>
-        <button class="bd-card" type="button" data-c="it" style="--c:#475569" data-say="App nối vào hệ thống của trường thì phải qua chúng tôi. Còn lại thì tôi không quan tâm lắm." data-why="IT trường ít quan tâm nhưng chặn được việc nối vào hệ thống, nên cần giữ họ hài lòng."><i>IT</i>IT trường</button>
-        <button class="bd-card" type="button" data-c="bgh" style="--c:#0f766e" data-say="Miễn là không có khiếu nại và không tốn thêm tiền." data-why="Ban giám hiệu ít để ý chi tiết nhưng ký cuối cùng."><i>BGH</i>Ban giám hiệu</button>
+        <button class="bd-card" type="button" data-c="pdt" data-react="Không ai ngồi với tôi xem mẫu báo cáo xét cấm thi. Số liệu app xuất ra, tôi không dùng được." data-later="Tháng 1|Báo cáo của app không khớp mẫu xét cấm thi. Phòng đào tạo vẫn gom Excel, nhóm làm lại phần xuất số liệu." style="--c:#b45309" data-say="Cuối kỳ tôi cần danh sách sinh viên vắng quá 20% để xét cấm thi. Hiện tôi gom từ 40 file Excel." data-why="Phòng đào tạo vừa quyết (duyệt cho dùng), vừa cần số liệu mỗi kỳ."><i>PĐT</i>Phòng đào tạo</button>
+        <button class="bd-card" type="button" data-c="gv" data-react="Không ai hỏi tôi một tiết học diễn ra thế nào. App chậm hơn gọi tên, tôi bỏ." data-later="Tháng 1|Một nửa giảng viên bỏ app, quay lại gọi tên. Số liệu vắng thiếu một nửa." style="--c:#2563eb" data-say="Tiết nào tôi cũng mất 5 phút gọi tên. App mà chậm hơn thì tôi quay lại gọi tên." data-why="Giảng viên dùng mỗi tiết và có thể bỏ app, nên quyền thực tế lớn."><i>GV</i>Giảng viên</button>
+        <button class="bd-card" type="button" data-c="sv" data-react="Không ai báo em gì cả. Em vẫn không biết mình còn vắng được mấy buổi." data-later="Tháng 2|Sinh viên không biết còn vắng được mấy buổi, hỏi phòng đào tạo liên tục." data-react-z2="Tuần nào nhóm cũng hẹn em họp. Em chỉ cần một con số thôi mà." data-later-z2="Tháng 1|Nhóm họp sinh viên mỗi tuần, thêm cả chục tính năng theo ý từng bạn. App trễ hạn một tháng." style="--c:#7c3aed" data-say="Em chỉ muốn biết mình còn được vắng mấy buổi."><i>SV</i>Sinh viên</button>
+        <button class="bd-card" type="button" data-c="ph" data-react="Không ai nói với tôi app gửi tin gì, gửi khi nào." data-later="Tháng 2|Phụ huynh nhận tin không đều, gọi lên trường hỏi liên tục." data-react-z2="Nhóm hỏi ý tôi nhiều lắm. Nhưng con tôi 19 tuổi, nó chưa đồng ý cho tôi xem." data-later-z2="Tháng 2|Nhóm làm theo ý phụ huynh, gửi tin vắng khi sinh viên chưa đồng ý. Sinh viên khiếu nại." style="--c:#be185d" data-say="Tôi chỉ cần biết con tôi có đi học không." data-why="Phụ huynh rất quan tâm nhưng không duyệt gì. Và sinh viên đủ 18 tuổi: gửi tin cho phụ huynh cần sinh viên đồng ý."><i>PH</i>Phụ huynh</button>
+        <button class="bd-card" type="button" data-c="it" data-react="App nối vào cổng đăng nhập mà không ai báo tôi trước. Tôi chặn." data-later="Tháng 2|IT trường chặn kết nối cổng đăng nhập. Nhóm mất 3 tuần làm lại." data-react-z2="Họp với tôi mỗi tuần làm gì? Báo trước phần nối hệ thống là đủ." data-later-z2="Tháng 1|Nhóm tốn nhiều buổi họp với IT về chuyện họ không quan tâm. Chậm một chút, nhưng không ai chặn." style="--c:#475569" data-say="App nối vào hệ thống của trường thì phải qua chúng tôi. Còn lại thì tôi không quan tâm lắm." data-why="IT trường ít quan tâm nhưng chặn được việc nối vào hệ thống, nên cần giữ họ hài lòng."><i>IT</i>IT trường</button>
+        <button class="bd-card" type="button" data-c="bgh" data-react="Tôi nghe về app này lần đầu qua một lá đơn khiếu nại." data-later="Tháng 3|Một phụ huynh khiếu nại lên ban giám hiệu. Dự án tạm dừng chờ giải trình." style="--c:#0f766e" data-say="Miễn là không có khiếu nại và không tốn thêm tiền." data-why="Ban giám hiệu ít để ý chi tiết nhưng ký cuối cùng."><i>BGH</i>Ban giám hiệu</button>
+        <!-- Thẻ ẩn: chỉ hiện khi hỏi đúng câu ở bước phỏng vấn (data-reveal="ctsv"). -->
+        <button class="bd-card" type="button" data-c="ctsv" data-hidden style="--c:#9333ea" data-say="Liên lạc với phụ huynh là việc của phòng tôi. Tin gì gửi đi cũng phải theo quy định." data-why="Phòng công tác sinh viên lo liên lạc với phụ huynh và nhận khiếu nại. Không hỏi đúng câu thì không ai nhắc tới họ." data-react="Phụ huynh gọi hỏi tin nhắn của app, mà tôi không biết app đã gửi gì." data-later="Tháng 3|Phụ huynh gọi khiếu nại, phòng công tác sinh viên không biết app đã gửi gì."><i>CTSV</i>Phòng công tác SV</button>
       </div>
       <div class="say-bar"></div>
+      <div class="ffwd" aria-live="polite"><span class="label">Mô phỏng · 3 tháng sau, theo cách bạn xếp</span><ol></ol></div>
     </div>
 
     <!-- Bảng 2: xếp các bước thành luồng (zones.flow). -->
@@ -101,38 +104,53 @@
     <button class="btn primary next" type="button" data-go="2" data-need="B6 B3 F9" data-review-gate disabled>Tiếp</button>
   </section>
 
-  <!-- 2. Thử trước: tự xếp người vào lưới, chưa có lý thuyết. -->
-  <section class="step" data-s="2" data-stage="who">
-    <h2>Xếp 6 người vào bảng</h2>
+  <!-- 2. Phỏng vấn: hỏi đúng câu thì lộ ra một bên liên quan chưa ai nhắc. -->
+  <section class="step" data-s="2" data-stage="who@listen">
+    <h2>Hỏi chuyện phòng đào tạo</h2>
+    <p>Bảng còn thiếu người. Chọn một câu để hỏi phòng đào tạo. Hỏi mấy câu cũng được.</p>
+    <div class="ask" data-ask="pdt" data-of="who">
+      <button class="opt" type="button" data-reply="Ừ, chắc là có. Nghe cũng hay.">"Anh chị có muốn app tự gửi tin cho phụ huynh không?"</button>
+      <button class="opt" type="button" data-reveal="ctsv" data-reply="Tôi gom Excel từ các khoa, lọc ai vắng quá 20%, rồi gửi danh sách cho phòng công tác sinh viên. Bên đó báo phụ huynh và nhận khiếu nại.">"Lần gần nhất xét cấm thi, anh chị làm những bước nào?"</button>
+      <button class="opt" type="button" data-reply="Màu gì cũng được.">"Anh chị muốn app màu gì?"</button>
+      <p class="reply" role="status"></p>
+    </div>
+    <button class="btn primary next" type="button" data-go="3" data-need="reveal-ctsv" disabled>Tiếp</button>
+  </section>
+
+  <!-- 3. Thử trước: tự xếp người vào lưới, chưa có lý thuyết. -->
+  <section class="step" data-s="3" data-stage="who">
+    <h2>Xếp 7 người vào bảng</h2>
     <p>Bấm một người, rồi bấm ô muốn đặt. Đặt sai thì bấm người đó lần nữa để chuyển ô.</p>
     <button class="btn" type="button" data-check="who" data-need="placed-who" disabled>Kiểm tra</button>
     <p class="fb" data-echo="who" data-same="Khớp hết với bản mẫu."></p>
-    <button class="btn primary next" type="button" data-go="3" data-need="checked-who" disabled>Tiếp</button>
+    <button class="btn" type="button" data-ffwd="who" data-need="checked-who" data-label="Tua 3 tháng: chuyện gì xảy ra?" data-back="Quay về bảng" data-good="Các bên được hỏi đúng lúc. App chạy thử ở 2 khoa, không ai chặn." disabled>Tua 3 tháng: chuyện gì xảy ra?</button>
+    <p class="small muted">Đây là mô phỏng để thấy hậu quả, không phải dự đoán chắc chắn.</p>
+    <button class="btn primary next" type="button" data-go="4" data-need="checked-who" disabled>Tiếp</button>
   </section>
 
-  <!-- 3. Hiểu sau: xem bản mẫu trên chính bảng, rồi ý chính ngắn. -->
-  <section class="step" data-s="3" data-stage="who">
+  <!-- 4. Hiểu sau: xem bản mẫu trên chính bảng, rồi ý chính ngắn. -->
+  <section class="step" data-s="4" data-stage="who">
     <h2>Ý chính</h2>
     <button class="btn" type="button" data-answer-of="who">Xem bản mẫu</button>
     <div class="card small">
       <p>Bảng này tên là lưới quyền và quan tâm. Ô "Bàn kỹ với họ" là người vừa quyết được vừa để tâm: gặp sớm, gặp thường xuyên.</p>
-      <p>Người ít quan tâm nhưng có quyền (IT, ban giám hiệu) hay bị quên tới lúc họ chặn. Người rất quan tâm mà không có quyền (sinh viên, phụ huynh) cần được báo tin, và lời của họ vẫn là nhu cầu thật.</p>
+      <p>Người ít quan tâm nhưng có quyền (IT, ban giám hiệu) hay bị quên tới lúc họ chặn. Có bên chỉ lộ ra khi hỏi về một lần làm việc thật, như phòng công tác sinh viên. Người rất quan tâm mà không có quyền (sinh viên, phụ huynh) cần được báo tin, và lời của họ vẫn là nhu cầu thật.</p>
     </div>
     <p class="small muted">Vị trí trong bảng là phỏng đoán ban đầu. Hỏi chuyện từng người rồi xếp lại.</p>
-    <button class="btn primary next" type="button" data-go="4">Tiếp</button>
+    <button class="btn primary next" type="button" data-go="5">Tiếp</button>
   </section>
 
-  <!-- 4. Áp vào luồng: điều vừa thấy (phụ huynh, sinh viên 18 tuổi) làm luồng thêm một bước. -->
-  <section class="step" data-s="4" data-stage="flow">
+  <!-- 5. Áp vào luồng: điều vừa thấy (phụ huynh, sinh viên 18 tuổi) làm luồng thêm một bước. -->
+  <section class="step" data-s="5" data-stage="flow">
     <h2>Luồng báo vắng cho phụ huynh</h2>
     <p>Xếp 4 bước theo thứ tự. Một bước chỉ có vì bạn vừa nghe phụ huynh và sinh viên.</p>
     <button class="btn" type="button" data-check="flow" data-need="placed-flow" disabled>Kiểm tra</button>
     <p class="fb" data-echo="flow" data-same="Đúng thứ tự. Bước hỏi sinh viên đồng ý chỉ lộ ra khi xét đủ các bên."></p>
-    <button class="btn primary next" type="button" data-go="5" data-need="checked-flow" disabled>Tiếp</button>
+    <button class="btn primary next" type="button" data-go="6" data-need="checked-flow" disabled>Tiếp</button>
   </section>
 
-  <!-- 5. Câu hỏi nhanh -->
-  <section class="step" data-s="5">
+  <!-- 6. Câu hỏi nhanh -->
+  <section class="step" data-s="6">
     <h2>Câu hỏi nhanh</h2>
     <div class="card">
       <p>Capstone của bạn cần nối vào cổng đăng nhập của trường. Ai cần gặp sớm nhất?</p>
@@ -143,21 +161,21 @@
         <p class="why">Ít quan tâm nhưng có quyền chặn: gặp trước khi làm, đừng để tới lúc nộp.</p>
       </div>
     </div>
-    <button class="btn primary next" type="button" data-go="6" data-need="q1" disabled>Tiếp</button>
+    <button class="btn primary next" type="button" data-go="7" data-need="q1" disabled>Tiếp</button>
   </section>
 
-  <!-- 6. Tự nói lại -->
-  <section class="step" data-s="6">
+  <!-- 7. Tự nói lại -->
+  <section class="step" data-s="7">
     <h2>Tự nói lại</h2>
     <p>Viết 1–2 câu: bắt đầu một app mới, bạn tìm các bên liên quan thế nào?</p>
     <textarea data-key="teach" data-min="5" placeholder="Mình sẽ..."></textarea>
     <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
     <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Liệt kê cả người dùng, người trả tiền, người duyệt và người bị ảnh hưởng, rồi xếp theo quyền và mức quan tâm. Gặp sớm người có quyền chặn, kể cả khi họ ít quan tâm.</div></div>
-    <button class="btn primary next" type="button" data-go="7" data-need="teach" disabled>Tiếp</button>
+    <button class="btn primary next" type="button" data-go="8" data-need="teach" disabled>Tiếp</button>
   </section>
 
-  <!-- 7. Góp ý, xong buổi. Thêm câu hỏi điều gì làm BA hấp dẫn hơn (learning/ba.md). -->
-  <section class="step" data-s="7">
+  <!-- 8. Góp ý, xong buổi. Thêm câu hỏi điều gì làm BA hấp dẫn hơn (learning/ba.md). -->
+  <section class="step" data-s="8">
     <h2>Góp ý buổi này</h2>
     <div class="card">
       <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
