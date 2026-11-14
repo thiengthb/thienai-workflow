@@ -30,7 +30,7 @@
   /** Enables every [data-need] button whose keys are all done. Review gates stay open once the lesson was finished before. */
   function gate() {
     $$('[data-need]').forEach((b) => {
-      if (b.dataset.running) { b.disabled = true; return; }   // a Claude demo is still running on this step
+      if (b.dataset.running || (demoBusy && b.classList.contains('demo-open'))) { b.disabled = true; return; }   // a Claude demo is running (one per lesson)
       if (reviewOff() && b.hasAttribute('data-review-gate')) { b.disabled = false; return; }
       b.disabled = !b.dataset.need.split(/\s+/).filter(Boolean).every((k) => done.has(k));
     });
@@ -270,7 +270,16 @@
   // Nút "Xem Claude làm" chỉ mở khi người học đã tự làm xong bước (cùng điều kiện với nút Tiếp): thử trước, xem cách khác sau.
   // Claude gọi tools của trang từng thao tác một, kèm một câu vì sao; trang hiện thao tác đó lên sân khấu và vào danh sách.
   // Thao tác của Claude không phải lần bấm của người học nên không vào bản tự lưu; "Trả lại cách của mình" đưa sân khấu về như trước.
+  // Mỗi lúc chỉ một lượt làm mẫu cho cả bài (demoBusy). Lần bấm kế của người học ngoài khung làm mẫu (núm, thẻ, nút Tiếp, Xong buổi)
+  // tự trả sân khấu về cách của người học trước, nên giá trị của Claude không bao giờ vào điểm, lựa chọn hay bản lưu cuối buổi.
   const demoProviders = [];
+  let demoBusy = false, demoShown = null;   // demoShown: hàm trả lại sân khấu khi bản làm mẫu còn hiện
+  const takeBackOn = (e) => {
+    if (!demoShown || !e.isTrusted || !(e.target instanceof Element) || e.target.closest('.demo.kit-ask')) return;
+    if (e.target.closest('button, a, input, select, textarea, label, [role="button"], [data-c], [data-z], canvas')) demoShown();
+  };
+  document.addEventListener('pointerdown', takeBackOn, true);
+  document.addEventListener('click', takeBackOn, true);
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   function demo(p) { demoProviders.push(p); steps.forEach(mountDemo); gate(); }
   function mountDemo(step) {
@@ -288,9 +297,12 @@
     const askBox = step.querySelector('.ai-ask');
     if (askBox) askBox.before(box); else if (next) next.before(box); else step.append(box);
     let saved = null, cur = null, changed = false;   // changed: Claude has moved the stage since the learner's own state
+    const takeBack = () => { if (cur && cur.restore && changed) cur.restore(saved); saved = null; changed = false; undo.hidden = true; if (demoShown === takeBack) demoShown = null; };
     open.addEventListener('click', async () => {
+      if (demoBusy) return;
+      if (demoShown && demoShown !== takeBack) demoShown();   // một bản làm mẫu khác còn hiện: trả lại trước khi chụp cách của người học
       cur = p.match(step); if (!cur) return;
-      open.disabled = true; open.dataset.running = '1'; undo.hidden = true; log.innerHTML = '';
+      demoBusy = true; open.disabled = true; open.dataset.running = '1'; undo.hidden = true; log.innerHTML = ''; gate();
       if (saved == null && cur.save) saved = cur.save();
       let moves = 0;
       const tools = cur.tools.map((t) => ({ name: t.name, description: t.description, inputSchema: t.inputSchema,
@@ -317,11 +329,12 @@
       try { a = await Kit.ask(prompt, out, { tools }); } finally {
         if (moves) changed = true;
         undo.hidden = !(changed && cur.restore);
-        delete open.dataset.running; open.disabled = false; open.textContent = 'Xem Claude làm lại';
+        if (changed && cur.restore) demoShown = takeBack;
+        demoBusy = false; delete open.dataset.running; open.disabled = false; open.textContent = 'Xem Claude làm lại'; gate();
       }
       R.ai.push({ kind: 'demo', step: h, moves, a: a || '' });
     });
-    undo.addEventListener('click', () => { if (cur && cur.restore) cur.restore(saved); saved = null; changed = false; undo.hidden = true; });
+    undo.addEventListener('click', takeBack);
   }
 
   // ---------- Thêm một tình huống như vậy (đề xuất T3) ----------

@@ -63,6 +63,26 @@ const finish = (p, keys) => p.evaluate((ks) => ks.forEach((k) => Lesson.done(k))
   await step.getByRole('button', { name: 'Trả lại cách của mình' }).click();
   assert.equal(await p.evaluate((s) => document.querySelector(s).style.getPropertyValue('--a'), scr) || before, before || '#2563eb');
   assert.ok(await step.getByRole('button', { name: 'Trả lại cách của mình' }).isHidden());
+  // Bản làm mẫu còn hiện mà người học bấm một núm: sân khấu về cách của người học trước, rồi mới nhận lần bấm đó.
+  // Núm người học chưa chọn cũng về đúng "chưa chọn"; điểm giống tốt nhất không lấy từ giá trị của Claude.
+  const snap = () => p.evaluate((s) => ({ a: document.querySelector(s).style.getPropertyValue('--a'), amount: document.querySelector(s).dataset.amount,
+    knobs: { ...R.knobs }, best: (R.match.bank || {}).best, pressed: [...document.querySelectorAll('[data-pane="bank"] [data-knob] button[aria-pressed="true"]')].map((x) => x.dataset.val) }), scr);
+  const mine = await snap();
+  await p.evaluate(() => { window.__moves = () => [['turn_knob', { knob: 'accent', value: '#15803d', why: 'a' }], ['turn_knob', { knob: 'amount', value: 'it', why: 'b' }]]; });
+  await step.getByRole('button', { name: 'Xem Claude làm lại' }).click();
+  await step.getByRole('button', { name: 'Trả lại cách của mình' }).waitFor();
+  assert.equal(await p.evaluate((s) => document.querySelector(s).style.getPropertyValue('--a'), scr), '#15803d');
+  await step.getByRole('button', { name: 'Trả lại cách của mình' }).click();
+  assert.deepEqual(await snap(), mine, 'trả lại đúng như trước lượt làm mẫu, kể cả núm chưa chọn');
+  await step.getByRole('button', { name: 'Xem Claude làm lại' }).click();
+  await step.getByRole('button', { name: 'Trả lại cách của mình' }).waitFor();
+  const other = await p.evaluate(() => [...document.querySelectorAll('[data-pane="bank"] [data-knob="accent"] button[data-val]')].map((x) => x.dataset.val).find((v) => v !== '#15803d'));
+  await p.locator(`[data-pane="bank"] [data-knob="accent"] button[data-val="${other}"]`).click();
+  const after = await snap();
+  assert.equal(after.a, other, 'lần bấm của người học vẫn có tác dụng');
+  assert.equal(after.amount, mine.amount, 'núm Claude vặn mà người học không bấm về như cũ');
+  assert.equal(after.knobs['bank.amount'], mine.knobs['bank.amount']);
+  assert.ok(await step.getByRole('button', { name: 'Trả lại cách của mình' }).isHidden());
   // Tool nhận giá trị sai thì báo lỗi rõ cho Claude, không vỡ trang.
   const err = await p.evaluate(async () => { try { window.__moves = null; let msg = ''; await new Promise((r) => { window.__moves = (tools) => { tools[0].execute({ knob: 'accent', value: 'tím-than' }).catch((e) => { msg = e.message; r(); }); return []; }; document.querySelector('.step[data-s="3"] .demo-open').click(); }); return msg; } catch (e) { return 'x' + e.message; } });
   assert.match(err, /không có giá trị tím-than\. Các giá trị: #2563eb/);

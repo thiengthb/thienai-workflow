@@ -409,7 +409,7 @@
   function reveal() { if (window.innerWidth < 900) stage.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   // ---------- Claude làm mẫu (lesson.js, Lesson.demo) ----------
   // Bàn thử: Claude vặn núm (turn_knob). Bảng dán: Claude xếp từng thẻ vào ô (place_card), có bản mẫu để dựa vào.
-  // Thao tác làm mẫu không tính là người học đã thử, không vào bản tự lưu; "Trả lại cách của mình" đưa về như trước.
+  // Thao tác làm mẫu không tính là người học đã thử, không vào bản tự lưu; "Trả lại cách của mình" (hay lần bấm kế của người học) đưa về như trước.
   const stageOf = (step) => { const [name, mode = ''] = (step.dataset.stage || '').split('@'); return { p: pane(name), name, mode }; };
   const knobLabel = (kn) => ($('.label', kn) || {}).textContent?.trim() || kn.dataset.knob;
   const valName = (btn) => btn.dataset.name || btn.textContent.trim() || btn.dataset.val;
@@ -451,8 +451,31 @@
             benchApply(b, kn, btn, true, true);
             return { did: `${knobLabel(kn)} → ${valName(btn)}.`, result: 'Màn giờ: ' + report() };
           } }],
-        save() { return knobs.map((kn) => [kn, cur(kn)]); },
-        restore(saved) { (saved || []).forEach(([kn, btn]) => { if (btn) benchApply(b, kn, btn, true, true); }); },
+        // Ảnh chụp đủ trước lượt làm mẫu: màn, từng núm (kể cả núm chưa chọn), dòng code, R.knobs, R.match. Trả lại đúng như vậy.
+        save() {
+          const scr = mainScreen(b);
+          return { style: scr.getAttribute('style'), data: { ...scr.dataset }, match: R.match[name] ? { ...R.match[name] } : null,
+            knobs: knobs.map((kn) => ({ kn, btn: cur(kn) || null, now: ($('.now', kn) || {}).textContent, val: R.knobs[name + '.' + kn.dataset.knob] })),
+            v: $$('[data-v]', b).map((e) => [e, e.textContent]) };
+        },
+        restore(s) {
+          if (!s) return;
+          const scr = mainScreen(b);
+          if (s.style == null) scr.removeAttribute('style'); else scr.setAttribute('style', s.style);
+          Object.keys(scr.dataset).forEach((k) => { if (!(k in s.data)) delete scr.dataset[k]; });
+          Object.assign(scr.dataset, s.data);
+          s.knobs.forEach(({ kn, btn, now, val }) => {
+            $$('button[data-val]', kn).forEach((x) => x.setAttribute('aria-pressed', String(x === btn)));
+            const n = $('.now', kn); if (n && now != null) n.textContent = now;
+            const key = name + '.' + kn.dataset.knob;
+            if (val === undefined) delete R.knobs[key]; else R.knobs[key] = val;
+            showTried(key);
+          });
+          s.v.forEach(([e, t]) => { e.textContent = t; });
+          soiMark(b); b.querySelectorAll('.soi-count').forEach(soiCount);
+          matchUpdate(b, false, true);
+          if (s.match) R.match[name] = s.match; else delete R.match[name];
+        },
       };
     } });
 
