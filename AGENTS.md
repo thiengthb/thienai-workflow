@@ -20,6 +20,6 @@ Luật cho mọi AI làm việc trong repo thienai-workflow (Claude, Codex, côn
 
 ## Sửa repo
 - Mọi thay đổi qua nhánh và PR, thien merge. Tên nhánh, tên file, thư mục, commit viết tiếng Anh; nội dung cho thien đọc viết tiếng Việt tự nhiên theo `profile/VOICE.md`.
-- PR và bot review (CodeRabbit, Gemini): theo dòng "Repo có bot review" ở phần chung. Lý do: `docs/decisions/002-coderabbit-one-review.md`.
+- PR và bot review (CodeRabbit): theo dòng "Repo có bot review" ở phần chung. Lý do: `docs/decisions/002-coderabbit-one-review.md`.
 - Chạy được thì chạy test như CI (`.github/workflows/test.yml`), nhất là `node templates/check-status.mjs docs/STATUS.md` khi sửa STATUS.
 - Giữ file này ngắn, dưới 40 dòng. Chi tiết để ở file riêng rồi trỏ tới.
