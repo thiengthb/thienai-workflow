@@ -33,9 +33,10 @@ Làm B:
   2. Xong và test như CI qua thì chuyển sang sẵn sàng. CodeRabbit tự review một lần [đã kiểm ở PR #66: chuyển sẵn sàng lúc 13:18 UTC, review chạy ngay, xong sau 3,5 phút]. Không comment `@coderabbitai review` thêm, vì sẽ thành hai lượt cho cùng một bản (góp ý của CodeRabbit ở PR #66). Chỉ gọi tay khi 2 phút sau vẫn chưa thấy check CodeRabbit chạy.
   3. Chờ đúng một lượt, sửa hay trả lời từng ý, rồi báo thien. Bản sửa lớn (đổi logic khác chỗ bot chỉ, thêm file hay hàm mới) thì gọi review lại; sửa nhỏ đúng chỗ bot chỉ thì không cần.
 - Chỉ áp ở repo này. Repo khác muốn dùng thì thêm `.coderabbit.yaml` của repo đó.
-- [Chưa kiểm] Gói CodeRabbit của thien: nếu là bản dùng thử thì hết hạn sẽ còn ít lượt review mỗi giờ. Khi đó B càng hợp, vì mỗi PR chỉ tốn một lượt.
+- Gói CodeRabbit của thien [đã kiểm, ảnh trang Billing thien gửi 2026-11-14]: dùng thử Advanced, hết hạn 2026-11-24, sau đó tự về gói Free và không bị tính tiền. Gói Free chỉ tóm tắt PR, không review code trên PR (theo trang Plans của CodeRabbit). thien ưu tiên miễn phí, nên trước 2026-11-24 phải chọn công cụ thay. Repo này có 66 PR trong khoảng 10 ngày, nên công cụ thay phải chịu được vài PR mỗi ngày.
 
 ## Xem lại khi
+- Trước 2026-11-24 (CodeRabbit hết dùng thử): chọn công cụ review miễn phí thay thế, so trên cùng PR với CodeRabbit.
 - Mốc 2026-11-22. Đếm số lỗi phát hiện sau merge mà một vòng review lại có thể bắt được. Từ 2 lỗi trở lên thì cân nhắc quay về A cho PR đổi lõi dùng chung (`artifacts/kit/`, `templates/`).
 
 ## Tóm tắt bằng lời của thien
