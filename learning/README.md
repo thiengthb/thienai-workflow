@@ -2,7 +2,7 @@
 
 File này cho biết buổi tới học môn gì. Khi thien nhắn "học" (tài khoản nào, model nào cũng vậy), AI đọc file này trước, mở buổi cho môn kế tiếp trong vòng, rồi cập nhật bảng "Trạng thái" sau buổi.
 
-Học ở Codex hay công cụ khác Claude (ví dụ khi hết quota) thì vẫn theo file này, đọc thêm [codex.md](codex.md) cho phần khác. Trước khi mở buổi, ở công cụ nào cũng vậy, xem có PR buổi học nào chưa merge không: có thì bảng "Trạng thái" dưới đây còn thiếu buổi đó.
+Học ở Codex hay công cụ khác Claude (ví dụ khi hết quota) thì vẫn theo file này, đọc thêm [codex.md](codex.md) cho phần khác. Trước khi mở buổi, ở công cụ nào cũng vậy, chạy `node templates/check-open-work.mjs learning/`: nhánh nào chưa merge mà có buổi học thì bảng "Trạng thái" dưới đây còn thiếu buổi đó, đọc nhánh đó trước. `make-lesson.mjs` tự kiểm việc này cho môn của trang và dừng nếu có nhánh chưa merge sửa bài của môn đó (sau lỗi 2026-11-13: dựng lại bài chiến tranh 4 trong khi PR #44 đã có).
 
 Kế hoạch đầy đủ và lý do nằm ở tài liệu "Kế hoạch học nhiều lĩnh vực song song" (https://claude.ai/artifact/QJwWL3z4pTjZerq5U3Fb9G), thien đồng ý ngày 2026-11-12.
 
