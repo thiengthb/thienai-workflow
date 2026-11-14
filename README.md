@@ -4,7 +4,7 @@ Bộ quy trình chung khi thien làm việc với AI. Áp vào project mới ch�
 
 ## Có gì trong repo
 
-`AGENTS.md` ở gốc repo là luật cho AI làm việc ngay trong repo này (Codex tự nạp, `CLAUDE.md` trỏ tới nó).
+`AGENTS.md` ở gốc repo là luật cho AI làm việc ngay trong repo này (Codex tự nạp, `CLAUDE.md` trỏ tới nó). AI không đọc hết repo: [`profile/MAP.md`](profile/MAP.md) ghi việc nào đọc file nào.
 
 ```text
 profile/      Về thien: AI đọc ở mọi project
@@ -19,7 +19,8 @@ docs/         Tiến độ và kế hoạch đang chạy của chính repo này
 
 | Thư mục | File | Dùng để |
 |---|---|---|
-| `profile/` | `PROFILE.md` | Hồ sơ của thien: cách làm việc, cách ra quyết định với AI, ngôn ngữ, gu UI, trình độ. Gu UI chi tiết ở repo [thienui](https://github.com/thiengthb/thienui), file `docs/taste.md` |
+| `profile/` | `MAP.md` | Đọc gì cho việc gì: AI chỉ mở file cần cho việc đang làm, file lớn nào chỉ dùng lệnh; kèm bảng mỗi luồng đi qua file và lệnh nào |
+| | `PROFILE.md` | Hồ sơ của thien: cách làm việc, cách ra quyết định với AI, ngôn ngữ, gu UI, trình độ. Gu UI chi tiết ở repo [thienui](https://github.com/thiengthb/thienui), file `docs/taste.md` |
 | | `SKILL-LEVEL.md` | Trình độ từng kỹ năng và cách AI dựa vào đó |
 | | `RESEARCH.md` | 5 quy tắc khi AI tra cứu trên mạng, để không trích nguồn bịa hay nguồn chưa đọc, và bảng chọn công cụ |
 | | `VOICE.md` | Giọng văn tiếng Việt, câu mẫu, từ thien đã chê, và cách AI phản biện thien |
@@ -39,7 +40,11 @@ docs/         Tiến độ và kế hoạch đang chạy của chính repo này
 | | `MANUAL-TEST.template.md` | Mẫu hướng dẫn test tay: chuẩn bị, tài khoản test, ca test có mã, bảng kết quả. Chép vào `docs/manual-test/` |
 | | `test-accounts.template.csv` | Mẫu danh sách tài khoản test, chỉ mật khẩu giả |
 | | `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
-| `.github/` | `workflows/test.yml` | Chạy test của script đồng bộ, script kiểm STATUS và kế hoạch, và script sinh trang tiến độ ở mỗi PR, để lỗi bị chặn trước khi merge |
+| | `handoff.mjs` | Sổ bàn giao giữa các nick: `new`, `save`, `list`, `show`, `done`. Luật ở `profile/HANDOFF.md` |
+| | `setup-check.mjs` | Kiểm project đang mở có đúng chuẩn `profile/SETUP.md` không (instructions từng dòng, repo, skill, bộ lọc đồng bộ knowledge) |
+| | `check-open-work.mjs` | In nhánh trên origin chưa merge vào main, kèm file nó sửa, để không làm trùng việc phiên khác |
+| `.github/` | `workflows/test.yml` | Chạy test của mọi script, kiểm link nội bộ (`scripts/check-links.mjs`), kiểm STATUS, và mở từng trang học trong trình duyệt ở mỗi PR, để lỗi bị chặn trước khi merge |
+| | `workflows/windows.yml` | Chạy test script trên Windows khi script đổi, vì lỗi đường dẫn và xuống dòng chỉ lộ ra ở đó |
 | | `workflows/sync-agents-md.yml` | Mẫu `AGENTS.md` đổi thì tự mở PR vào từng repo trong `life/tracked-repos.md` để cập nhật phần chung, giữ nguyên phần riêng của project. Cần secret `SYNC_TOKEN` |
 | `skills/` | `start-project/` | Skill hỏi thien có áp quy trình không, rồi chép các file mẫu vào project. `SKILL.md` chỉ trỏ tới `STEPS.md`; sửa các bước thì sửa `STEPS.md` |
 | | `make-slides/` | Skill làm slide: tóm tắt bài, dàn ý, dựng, kiểm, tập dượt, đăng. `SKILL.md` chỉ trỏ tới `STEPS.md` |
@@ -49,9 +54,12 @@ docs/         Tiến độ và kế hoạch đang chạy của chính repo này
 | | `README.md` | Vòng xoay nhiều môn: buổi tới học môn gì, khung một buổi, cách bắt đầu môn mới, mốc kiểm tra. thien nhắn "học" thì AI đọc file này trước |
 | | `roadmap.md` | Lộ trình học từng môn: các chặng từ người mới đến khá, đã học tới đâu, bài đã học, nguồn học, lộ trình đã đổi |
 | | `cards.md` | Thẻ ôn của mọi môn, hỏi 3 thẻ đến hạn ở đầu mỗi buổi |
-| | `frontend.md` | Đang học frontend tới đâu, buổi tiếp theo dạy gì, để tài khoản khác dạy tiếp |
+| | `frontend.md`, `ba.md`, `war.md` | Mỗi môn một file: cách dạy môn đó, nhật ký, chỗ còn vướng, buổi tiếp theo, để tài khoản khác dạy tiếp. Bài, trang và dữ liệu của môn ở `learning/<môn>/` |
+| | `usage.md` | Tính năng nào của trang học được dùng, mỗi buổi một dòng, để xét giữ hay bỏ |
+| | `teaching/` | Các kiểu bài để chọn khi soạn buổi (`README.md`), mẫu tương tác (`patterns.html`), máy kiểm trang |
 | | `glossary.md` | Bảng tra thuật ngữ tiếng Anh, AI thêm khi dùng từ thien chưa học |
-| `artifacts/` | `README.md` | Danh sách mẫu artifact thien thích và khi nào dùng; mỗi mẫu là một file HTML |
+| `artifacts/` | `README.md` | Danh sách mẫu artifact thien thích, khi nào dùng, lệnh dựng từng mẫu; mỗi mẫu một thư mục có README |
+| `docs/` | `STATUS.md`, `plans/`, `decisions/` | Tiến độ, kế hoạch đang chạy và quyết định khó sửa lại của chính repo này |
 | `life/` | `names.md` | Tên token, project, biến đã thống nhất, để AI dùng lại mà không hỏi lại thien |
 | | `tracked-repos.md` | Danh sách repo đã áp quy trình chung, để Action đồng bộ `AGENTS.md` |
 
@@ -79,6 +87,19 @@ Codex và Gemini đọc luật qua file trong repo của project, không cần s
 - Gemini: thien hiện chỉ dùng bản web miễn phí để hỏi, nên không đọc được luật trong repo. Nếu sau này dùng Gemini CLI (bản miễn phí cho cá nhân đã ngừng từ 2026-06-18): CLI mặc định chỉ đọc `GEMINI.md`. Muốn nó đọc `AGENTS.md` thì thêm `"context": { "fileName": ["AGENTS.md", "GEMINI.md"] }` vào `.gemini/settings.json` của repo project.
 - Link trong `AGENTS.md` trỏ về repo này chỉ mở được nếu công cụ đó đã nối với tài khoản GitHub của thien, vì repo để riêng tư.
 
+## Máy Windows (làm một lần)
+
+Repo ép mọi file chữ xuống dòng kiểu LF (`.gitattributes`). Bản clone có từ trước ngày 2026-11-14 vẫn giữ file CRLF tới khi checkout lại. Trong thư mục repo, khi `git status` đã sạch (không có thay đổi chưa commit):
+
+```text
+git pull
+git rm -rq --cached .
+git reset -q --hard
+node templates/check-status.mjs docs/STATUS.md
+```
+
+Lệnh cuối in "ổn" là xong. Hai lệnh giữa chỉ đọc lại file từ git, nên `git status` chưa sạch thì commit hay cất (`git stash`) trước, không sẽ mất phần đang sửa.
+
 ## Sửa quy trình
 
-Chỉ qua PR vào repo này, thien duyệt. Mỗi milestone AI đề xuất tối đa 3 thay đổi. `profile/PROFILE.md` và phần chung của `templates/AGENTS.template.md` mỗi file dưới 60 dòng: thêm một ý thì bỏ hoặc gộp một ý khác. Các bước của skill nằm ở `skills/start-project/STEPS.md` và được đọc từ repo mỗi lần chạy, nên sửa file đó là đủ. Chỉ khi sửa một file nằm trong zip (mọi file trong `skills/<tên>/` trừ `STEPS.md`) mới phải tải lại file zip (link ở bước 3 phần trên) lên từng tài khoản. Thêm skill mới thì chỉ cần tạo thư mục `skills/<tên>/` có `SKILL.md` (dòng `name:` trùng tên thư mục và dòng `description:` có nội dung); Action tự tạo `<tên>.zip`.
+Chỉ qua PR vào repo này, thien duyệt. Mỗi milestone AI đề xuất tối đa 3 thay đổi. Trước khi thêm một luật vì AI vừa làm sai, trả lời ba câu trong PR: sửa được ở công cụ hay mẫu thay vì thêm lời nhắc không; luật mới thay luật cũ nào; có lệnh hay test nào kiểm được luật đó đã được làm không. Thêm, đổi tên hay bỏ file thì sửa luôn `profile/MAP.md`; CI kiểm link nội bộ. `profile/PROFILE.md` và phần chung của `templates/AGENTS.template.md` mỗi file dưới 60 dòng: thêm một ý thì bỏ hoặc gộp một ý khác. Các bước của skill nằm ở `skills/start-project/STEPS.md` và được đọc từ repo mỗi lần chạy, nên sửa file đó là đủ. Chỉ khi sửa một file nằm trong zip (mọi file trong `skills/<tên>/` trừ `STEPS.md`) mới phải tải lại file zip (link ở bước 3 phần trên) lên từng tài khoản. Thêm skill mới thì chỉ cần tạo thư mục `skills/<tên>/` có `SKILL.md` (dòng `name:` trùng tên thư mục và dòng `description:` có nội dung); Action tự tạo `<tên>.zip`.

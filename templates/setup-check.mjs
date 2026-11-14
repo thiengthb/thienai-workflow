@@ -33,7 +33,8 @@ export function parseSetup(md) {
   // Folders the project knowledge should sync (section "Đồng bộ repo vào knowledge"): lines "- `path`".
   const syncPart = (md.match(/^## Đồng bộ repo vào knowledge\n([\s\S]*?)(?=^## )/m) || [])[1] || '';
   const sync = [...syncPart.matchAll(/^- `([^`]+)`/gm)].map(m => m[1]);
-  return { version, block, blockVersion, projects, sync };
+  const syncOut = [...syncPart.matchAll(/^- bỏ `([^`]+)`/gm)].map(m => m[1]);
+  return { version, block, blockVersion, projects, sync, syncOut };
 }
 
 const squash = (s) => s.replace(/\s+/g, ' ').trim().toLowerCase();
@@ -44,16 +45,26 @@ export function missingLines(standard, project, text) {
   return instructionsFor(standard, project).split('\n').map(l => l.trim()).filter(Boolean).filter(l => !have.includes(squash(l)));
 }
 
-/** Notes about the project's GitHub sync filters: whole repo synced, or a needed folder left out. */
+/**
+ * Notes about the project's GitHub sync filters ([{ path, mode: include|exclude }], as project_info shows them):
+ * a folder AI needs that is not synced, or a heavy folder (HTML pages, battle data) that is.
+ * A path is synced when the longest filter that covers it says include.
+ */
 export function checkSync(standard, filters) {
   if (!filters || !standard.sync.length) return [];
-  const inc = filters.filter(f => f.mode === 'include').map(f => f.path.replace(/^\/+|\/+$/g, ''));
+  const clean = (p) => p.replace(/^\/+|\/+$/g, '');
+  const fs = filters.map(f => ({ path: clean(f.path), mode: f.mode }));
+  const synced = (p) => {
+    p = clean(p);
+    const hit = fs.filter(f => f.path === '' || p === f.path || p.startsWith(f.path + '/')).sort((a, b) => b.path.length - a.path.length)[0];
+    return hit ? hit.mode === 'include' : false;
+  };
   const notes = [];
-  if (inc.includes('')) notes.push(`Project đang đồng bộ cả repo vào knowledge (gồm trang HTML, JSON, font), nên knowledge nhanh đầy và Claude phải tìm (RAG) thay vì đọc hết. Project settings > GitHub > chọn lại chỉ các mục: ${standard.sync.join(', ')} (profile/SETUP.md, mục "Đồng bộ repo vào knowledge").`);
-  else {
-    const miss = standard.sync.filter(p => !inc.some(i => p.replace(/\/+$/, '') === i || p.startsWith(i + '/')));
-    if (miss.length) notes.push(`Knowledge của project chưa đồng bộ: ${miss.join(', ')}. Project settings > GitHub > thêm các mục đó.`);
-  }
+  const miss = standard.sync.filter(p => !synced(p));
+  const heavy = (standard.syncOut || []).filter(p => synced(p));
+  const where = 'Project settings > GitHub, chọn lại theo profile/SETUP.md, mục "Đồng bộ repo vào knowledge"';
+  if (heavy.length) notes.push(`Knowledge của project đang đồng bộ cả phần nặng (${heavy.join(', ')}): knowledge nhanh đầy và Claude phải tìm từng đoạn thay vì đọc hết. ${where}.`);
+  if (miss.length) notes.push(`Knowledge của project chưa đồng bộ: ${miss.join(', ')}. ${where}.`);
   return notes;
 }
 
@@ -137,7 +148,7 @@ function main(argv) {
   if (syncArg !== undefined) notes.push(...checkSync(standard, syncArg.split(',').map(x => x.trim()).filter(Boolean).map(x => { const i = x.lastIndexOf(':'); return { path: i < 0 ? x : x.slice(0, i), mode: i < 0 ? 'include' : x.slice(i + 1) }; })));
   else notes.push('Không có --sync nên chưa kiểm bộ lọc đồng bộ knowledge (xem bằng project_info).');
   for (const n of notes) console.log('nhắc: ' + n);
-  if (!fixes.length) { console.log(`ổn: project "${project}" đúng chuẩn setup v${standard.version}`); return 0; }
+  if (!fixes.length) { console.log(`ổn: project "${project}" đúng chuẩn setup v${standard.version}${unseen ? ' ở những phần đã kiểm (chưa kiểm instructions)' : ''}`); return 0; }
   console.log(`Project "${project}" chưa đúng chuẩn setup v${standard.version}. Nhờ thien làm trước khi bắt đầu:`);
   fixes.forEach((f, i) => console.log(`${i + 1}. ${f}`));
   return 1;

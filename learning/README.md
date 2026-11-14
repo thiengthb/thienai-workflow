@@ -88,7 +88,7 @@ Gợi ý phần "thử trước" cho từng môn (AI đề xuất, chưa thử v
 AI tự nhắc khi tới mốc, thien không cần nhớ.
 
 - **Chủ nhật 2026-11-22:** 15 phút so sánh mù lại các màn frontend đã xem, chốt thử nghiệm frontend.
-- **Chủ nhật 2026-12-13:** 15 phút làm lại câu hỏi cũ của cả 3 môn mà không xem trước, rồi quyết định giữ hay đổi môn. Cùng lúc xem `node artifacts/kit/usage.mjs learning/usage.md`: tính năng nào của trang gần như không dùng (hỏi Claude, nói thay gõ…) thì bỏ cho gọn.
+- **Chủ nhật 2026-12-13:** 15 phút làm lại câu hỏi cũ của cả 3 môn mà không xem trước, rồi quyết định giữ hay đổi môn. Cùng lúc xem `node artifacts/kit/usage.mjs learning/usage.md`: tính năng nào của trang gần như không dùng (hỏi Claude, nói thay gõ…) thì hỏi thien trước khi bỏ: có thấy nút đó không, có hiểu nó làm gì không. Ít bấm có thể vì khó tìm (làm rõ nút), vì đang lỗi (sửa), hay vì thien không cần (lúc đó mới bỏ).
 
 Luật tự điều chỉnh:
 

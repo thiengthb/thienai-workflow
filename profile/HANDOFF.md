@@ -9,10 +9,12 @@ thien dùng nhiều nick Claude. Nick đang làm có thể hết usage (phiên h
 
 | Việc | Lệnh |
 |---|---|
-| Bắt đầu một việc | `node templates/handoff.mjs new <owner/repo> <việc> "<tên việc>" > <việc>.md`, điền rồi `save` (đẩy vào repo ghi ở dòng `Repo:`) |
-| Ghi sau mỗi bước | sửa file rồi `node templates/handoff.mjs save <việc>.md`. Nick khác đã sửa cùng việc từ lúc mình đọc thì lệnh từ chối, không ghi đè; `show <owner/repo> <việc> > <việc>.new.md` lấy bản mới vào file riêng, gộp phần của mình vào đó, đổi tên về `<việc>.md` rồi `save` |
+| Bắt đầu một việc | `node templates/handoff.mjs new <owner/repo> <việc> "<tên việc>" --out <việc>.md`, điền rồi `save` (đẩy vào repo ghi ở dòng `Repo:`) |
+| Ghi sau mỗi bước | sửa file rồi `node templates/handoff.mjs save <việc>.md`. Nick khác đã sửa cùng việc từ lúc mình đọc thì lệnh từ chối, không ghi đè; `show <owner/repo> <việc> --out <việc>.new.md` lấy bản mới vào file riêng, gộp phần của mình vào đó, đổi tên về `<việc>.md` rồi `save` |
 | Xem việc dở | `node templates/handoff.mjs list` (mọi repo) hay `list <owner/repo>`; chi tiết bằng `show <owner/repo> <việc>` |
 | Xong việc | `node templates/handoff.mjs done <owner/repo> <việc>` |
+
+Dùng `--out <file>` thay cho `> file`: trên Windows PowerShell 5, `>` ghi file UTF-16 (lệnh vẫn đọc được, nhưng công cụ khác thì không). Lệnh đọc được file xuống dòng kiểu Windows (CRLF).
 
 ## Sổ không phải nguồn sự thật thứ hai
 - Sự thật về project vẫn là repo đó: code, PR, `docs/STATUS.md`, kế hoạch, quyết định. Sổ chỉ là dấu trang: việc nào đang dở giữa chừng, dừng ở bước nào, bước tiếp theo là gì.
@@ -22,18 +24,21 @@ thien dùng nhiều nick Claude. Nick đang làm có thể hết usage (phiên h
 
 ## Khi nào ghi
 - Ngay khi nhận một việc nhiều bước (một câu hỏi trả lời xong trong một lượt thì không cần).
-- Sau mỗi bước trong checklist: trước hết commit và đẩy nhánh làm việc, rồi sửa "Đã xong" và "Bước tiếp theo", rồi `save`.
+- Sau mỗi bước trong checklist: trước hết commit và đẩy nhánh làm việc, rồi sửa "Đã xong" (kèm mã commit đã đẩy) và "Bước tiếp theo", rồi `save`. Một bước là một kết quả nick khác tiếp được ngay (một commit có nghĩa, một trang đã đăng), không phải mỗi lần sửa một file.
+- Không ghi token, mật khẩu, dữ liệu bài học thô hay chuyện riêng: sổ nằm trong lịch sử git cả khi đã `done`. `save` từ chối chuỗi giống token, nhưng đó chỉ là lưới an toàn.
 - Ngay sau khi đăng một trang chờ thien (chọn phương án, duyệt giao diện, buổi học): ghi vào "Đang chờ thien" link trang, câu hỏi, và **lệnh dựng lại trang từ repo**. File nguồn của trang (ví dụ `decision.json`, ảnh, trang học) phải nằm trong nhánh làm việc đã đẩy, không để ở `/tmp`, vì nick khác không thấy máy của nick cũ. Ảnh nén JPG, mỗi ảnh vài trăm KB; trang phác để đuôi `.txt` cho khỏi bị build; có `docs/plans/` thì để cạnh kế hoạch của bước, ví dụ `docs/plans/<ngày>-<bước>/round2/`.
 - Khi thien trả lời hay chọn: chép **nguyên văn** kết quả vào repo (mục "Kết quả" của kế hoạch, PR, hay quyết định) rồi mới sửa sổ.
 - Xong hẳn (PR merge, hay thien nói thôi): `done`.
 
 ## Khi thien nói "tiếp tục"
 1. Chạy `list`. Repo nào phiên chưa đọc được thì lệnh báo tên; gắn repo đó vào phiên rồi chạy lại. Một việc thì làm luôn; nhiều việc thì kể ra (mới nhất trước, kèm việc nào đang chờ thien) và làm việc mới nhất, trừ khi thien nói việc khác.
-2. `show` việc đó, gắn repo và nhánh ghi trong sổ, `git pull`, đọc `docs/STATUS.md` của repo đó.
-3. Việc đang chờ thien chọn trên trang: link cũ chỉ mở được ở nick cũ. Chạy lệnh dựng lại ghi trong sổ, đăng thành trang mới, gửi thien link mới, ghi link mới vào sổ. Lựa chọn thien đã bấm mà chưa gửi trên trang cũ thì mất; thien bấm lại.
-4. Làm tiếp từ "Bước tiếp theo", và ghi sổ sau mỗi bước như trên.
+2. `show` việc đó, gắn repo và nhánh ghi trong sổ, `git pull`, đọc `docs/STATUS.md` của repo đó. So sổ với git: commit cuối của nhánh (`git log -1`) và PR có khớp "Đã xong" không. Nhánh đi trước sổ (nick cũ hết usage sau khi đẩy, trước khi `save`) thì tin nhánh và sửa sổ; sổ ghi commit mà nhánh không có thì commit đó chưa đẩy, coi như mất.
+3. Nhận việc trước khi làm: "Ghi bởi" là nick khác và "Cập nhật" mới trong vài giờ thì hỏi thien nick đó còn làm không. Rồi sửa dòng "Ghi bởi" thành nick và thread của mình và `save` ngay. `save` bị từ chối vì sổ vừa đổi nghĩa là một nick khác cũng vừa nhận việc này: dừng, hỏi thien.
+4. Việc đang chờ thien chọn trên trang: link cũ chỉ mở được ở nick cũ. Chạy lệnh dựng lại ghi trong sổ, đăng thành trang mới, gửi thien link mới, ghi link mới vào sổ. Lựa chọn thien đã bấm mà chưa gửi trên trang cũ thì mất; thien bấm lại.
+5. Làm tiếp từ "Bước tiếp theo", và ghi sổ sau mỗi bước như trên.
 
 ## Giới hạn
-- Hết usage giữa chừng thì mất nhiều nhất phần làm từ lần `save` gần nhất.
+- Hết usage giữa chừng thì mất phần chưa commit và đẩy. Sổ có thể chậm hơn nhánh một bước (đã đẩy nhưng chưa kịp `save`), nên nick sau luôn so với git như bước 2 ở trên.
+- Sổ chống ghi đè lên chính nó, không khóa code: hai nick vẫn có thể cùng sửa một nhánh nếu bỏ qua bước nhận việc.
 - Chỉ việc làm ở nơi có quyền đẩy lên repo (project có gắn repo, Claude Code, Codex) mới ghi sổ được. Chat thường trên claude.ai không ghi được.
 - Trang tổng quan và các trang link cố định: nick khác đăng lại thì ra link mới. Muốn giữ một link cho mọi nick thì thien mời các nick vào trang đó (Share, mời email, quyền sửa); phần dùng Claude trên trang không chạy ở nick được mời.
