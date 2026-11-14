@@ -13,7 +13,7 @@ export function chromium() {
 
 /** A target as a URL: http(s) and file: stay, an existing local path becomes file://. */
 export function toUrl(target) {
-  if (/^[a-z]+:/i.test(target)) return target;
+  if (/^[a-z][a-z0-9+.-]+:/i.test(target)) return target; // a URL; one letter (C:) is a Windows drive, not a scheme
   if (existsSync(target)) return pathToFileURL(resolve(target)).href;
   throw new Error(`Không có trang hay file: ${target}`);
 }

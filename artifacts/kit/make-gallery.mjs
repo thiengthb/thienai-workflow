@@ -9,15 +9,17 @@ import { join, dirname, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { writePublish } from './publish.mjs';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const here = dirname(fileURLToPath(import.meta.url));
 const PARTS = { '/*KIT_CSS*/': 'kit.css', '/*LESSON_CSS*/': '../lesson/lesson.css', '/*IT_CSS*/': '../it/it.css', '/*WAR_CSS*/': '../war/war.css' };
 
 export function render() {
-  let html = readFileSync(join(here, 'gallery.html'), 'utf8');
+  let html = lf(readFileSync(join(here, 'gallery.html'), 'utf8'));
   for (const [mark, file] of Object.entries(PARTS)) {
     if (!html.includes(mark)) throw new Error(`gallery.html thiếu chỗ gắn ${mark}`);
-    html = html.replace(mark, () => readFileSync(join(here, file), 'utf8'));
+    html = html.replace(mark, () => lf(readFileSync(join(here, file), 'utf8')));
   }
   return html;
 }

@@ -12,6 +12,8 @@ import { join, dirname, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { writePublish } from '../kit/publish.mjs';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const CAPABILITIES = { db: {}, comments: {}, sample: {}, dictation: {} };
@@ -79,7 +81,7 @@ export function lessonExcerpt(md, n = 1600) {
 export function buildReview(cardsText, base, today, max = 10) {
   const items = dueCards(parseCards(cardsText), today, max).map((c) => {
     const file = c.link ? resolve(base, c.link) : '';
-    const md = file && existsSync(file) ? readFileSync(file, 'utf8') : '';
+    const md = file && existsSync(file) ? lf(readFileSync(file, 'utf8')) : '';
     const hit = md ? matchAnswer(c.question, selfCheck(md)) : null;
     return { id: c.id, subject: c.subject, question: c.question, box: c.box, due: c.due, source: c.linkText || c.link,
       answer: hit ? hit.a : '', ref: md ? lessonExcerpt(md) : '' };
@@ -109,16 +111,16 @@ export function applyReview(cardsText, results, today) {
 
 export function render(review) {
   const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-  return readFileSync(join(here, 'template.html'), 'utf8')
+  return lf(readFileSync(join(here, 'template.html'), 'utf8'))
     .replace('__TITLE__', () => esc(`Ôn thẻ ${review.today}`))
-    .replace('/*KIT_CSS*/', () => readFileSync(join(here, '../kit/kit.css'), 'utf8'))
-    .replace('/*KIT_JS*/', () => readFileSync(join(here, '../kit/kit.js'), 'utf8'))
-    .replace('/*REVIEW_JS*/', () => readFileSync(join(here, 'review.js'), 'utf8'))
+    .replace('/*KIT_CSS*/', () => lf(readFileSync(join(here, '../kit/kit.css'), 'utf8')))
+    .replace('/*KIT_JS*/', () => lf(readFileSync(join(here, '../kit/kit.js'), 'utf8')))
+    .replace('/*REVIEW_JS*/', () => lf(readFileSync(join(here, 'review.js'), 'utf8')))
     .replace('__REVIEW__', () => JSON.stringify(review).replace(/</g, '\\u003c'));
 }
 
 export function build(cardsFile, out, { today = new Date().toISOString().slice(0, 10), max = 10 } = {}) {
-  const review = buildReview(readFileSync(cardsFile, 'utf8'), dirname(resolve(cardsFile)), today, max);
+  const review = buildReview(lf(readFileSync(cardsFile, 'utf8')), dirname(resolve(cardsFile)), today, max);
   mkdirSync(out, { recursive: true });
   const html = render(review);
   writeFileSync(join(out, 'index.html'), html);

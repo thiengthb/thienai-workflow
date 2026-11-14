@@ -1,0 +1,34 @@
+# thien works on a Windows laptop; CI's main job runs on Linux. Path and line-ending bugs (C:\ read as a URL,
+# CRLF breaking Markdown parsers) only show up on Windows, so the script tests also run there.
+# Only when scripts change: Windows minutes count double on a private repo.
+name: Windows
+
+on:
+  pull_request:
+    paths: ['**/*.mjs', '**/*.cjs', '**/*.js', '.gitattributes', '.github/workflows/windows.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scripts:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - run: git config --global core.autocrlf true   # like a default Git for Windows install
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Script tests (no browser)
+        shell: bash
+        run: |
+          set -e
+          for t in .github/scripts/*.test.mjs; do
+            case "$t" in *ask-prompts*|*autosave*|*lesson-claude*) continue;; esac   # need Playwright, run on Linux
+            echo "== $t"; node "$t"
+          done
+          node artifacts/lesson/after-lesson.mjs --check-all
+          node templates/check-status.mjs docs/STATUS.md
+          node .github/scripts/check-links.mjs

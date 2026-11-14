@@ -8,8 +8,9 @@ import { subjects, lessonOf, pageQuestions, stuckPoints, addStuck, draft, checkA
 import { fill, subjectFile } from '../../artifacts/lesson/make-lesson.mjs';
 import { addUsage, usageRows, usageSummary } from '../../artifacts/kit/usage.mjs';
 import { reviewUsage } from '../../artifacts/review/apply-review.mjs';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = new URL('../../', import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const read = (p) => readFileSync(join(ROOT, p), 'utf8');
 
 // Môn, mã thẻ, số buổi

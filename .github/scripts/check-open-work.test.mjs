@@ -1,7 +1,7 @@
 // Test for templates/check-open-work.mjs: report wording, and a real run in a temp repo with an unmerged branch.
 import assert from 'node:assert/strict';
 import { mkdtempSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
@@ -33,7 +33,7 @@ assert.equal(off.stale, true); assert.match(report(off, ['learning/ba/']), /chư
 // Clone nông: main đã đi tiếp sau chỗ nhánh "other" tách ra, nên không có merge base. Phải báo chưa chắc, không ném lỗi.
 g(work, 'checkout', '-q', 'main'); writeFileSync(join(work, 'b.md'), 'b'); g(work, 'add', '.'); g(work, 'commit', '-qm', 'more'); g(work, 'push', '-q', 'origin', 'HEAD:main');
 const shallow = join(d, 'shallow');
-execFileSync('git', ['clone', '-q', '--depth=1', '--branch', 'main', 'file://' + origin, shallow], { stdio: 'ignore' });
+execFileSync('git', ['clone', '-q', '--depth=1', '--branch', 'main', pathToFileURL(origin).href, shallow], { stdio: 'ignore' });
 const sh = openWork({ paths: ['learning/war/'], cwd: shallow });
 assert.equal(sh.stale, true, 'shallow clone without merge base is reported as unsure');
 // Repo có nhánh chính tên master: tự nhận ra, không ném lỗi; nhánh chính sai tên thì báo chưa chắc.

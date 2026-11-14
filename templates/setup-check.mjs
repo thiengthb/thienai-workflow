@@ -4,18 +4,25 @@
 // The AI runs it at the start of a session and passes in what it can see (instructions text, attached repos, skills).
 // Prints "ổn" when everything matches, otherwise the list of fixes for thien, in Vietnamese. Exit code 1 when something is missing.
 //
-//   node templates/setup-check.mjs --project sakubun --instructions <file|none> --repos a/b,c/d --skills start-project,make-slides
+//   node templates/setup-check.mjs --project sakubun --instructions <file|none|unseen> --repos a/b,c/d --skills start-project,make-slides
+//        [--sync "/:include"]
+// --instructions none: the project has no instructions. unseen: this session cannot see them (then they are not checked,
+// and the output says so instead of guessing). --sync: the GitHub sync filters of the project's knowledge, as the
+// Projects tool (project_info) shows them, path:include|exclude separated by commas; compared with profile/SETUP.md.
 // Options: --no-git skips the GitHub read check (offline tests); --setup <path> uses another SETUP.md.
 import { readFileSync, existsSync, realpathSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const here = dirname(dirname(fileURLToPath(import.meta.url)));
 export const SKILLS = ['start-project', 'make-slides'];
 
 /** Reads the standard out of SETUP.md: version, the instructions block, and the project -> repos table. */
 export function parseSetup(md) {
+  md = lf(md);
   const version = Number((md.match(/^Phiên bản chuẩn: \*\*(\d+)\*\*/m) || [])[1]);
   const block = (md.match(/```text\n(chuẩn setup v\d+[\s\S]*?)```/) || [])[1] || '';
   const blockVersion = Number((block.match(/^chuẩn setup v(\d+)/) || [])[1]);
@@ -23,7 +30,31 @@ export function parseSetup(md) {
   for (const m of md.matchAll(/^\|\s*`([^`]+)`\s*\|\s*((?:`[\w.-]+\/[\w.-]+`[,\s]*)+)\|/gm)) {
     projects[m[1].toLowerCase()] = [...m[2].matchAll(/`([\w.-]+\/[\w.-]+)`/g)].map(x => x[1]);
   }
-  return { version, block, blockVersion, projects };
+  // Folders the project knowledge should sync (section "Đồng bộ repo vào knowledge"): lines "- `path`".
+  const syncPart = (md.match(/^## Đồng bộ repo vào knowledge\n([\s\S]*?)(?=^## )/m) || [])[1] || '';
+  const sync = [...syncPart.matchAll(/^- `([^`]+)`/gm)].map(m => m[1]);
+  return { version, block, blockVersion, projects, sync };
+}
+
+const squash = (s) => s.replace(/\s+/g, ' ').trim().toLowerCase();
+
+/** Lines of the standard instructions (for this project) that are missing from what the project has. */
+export function missingLines(standard, project, text) {
+  const have = squash(text);
+  return instructionsFor(standard, project).split('\n').map(l => l.trim()).filter(Boolean).filter(l => !have.includes(squash(l)));
+}
+
+/** Notes about the project's GitHub sync filters: whole repo synced, or a needed folder left out. */
+export function checkSync(standard, filters) {
+  if (!filters || !standard.sync.length) return [];
+  const inc = filters.filter(f => f.mode === 'include').map(f => f.path.replace(/^\/+|\/+$/g, ''));
+  const notes = [];
+  if (inc.includes('')) notes.push(`Project đang đồng bộ cả repo vào knowledge (gồm trang HTML, JSON, font), nên knowledge nhanh đầy và Claude phải tìm (RAG) thay vì đọc hết. Project settings > GitHub > chọn lại chỉ các mục: ${standard.sync.join(', ')} (profile/SETUP.md, mục "Đồng bộ repo vào knowledge").`);
+  else {
+    const miss = standard.sync.filter(p => !inc.some(i => p.replace(/\/+$/, '') === i || p.startsWith(i + '/')));
+    if (miss.length) notes.push(`Knowledge của project chưa đồng bộ: ${miss.join(', ')}. Project settings > GitHub > thêm các mục đó.`);
+  }
+  return notes;
 }
 
 /** Problems with SETUP.md itself (CI keeps the two version numbers in step). */
@@ -52,7 +83,7 @@ export function checkSetup(standard, { project, instructions, repos = [], skills
   if (!want) {
     notes.push(`Project "${project}" chưa có trong chuẩn (profile/SETUP.md). Hỏi thien có thêm vào bảng không.`);
   }
-  const text = (instructions || '').trim();
+  const text = (instructions || '').replace(/\r\n?/g, '\n').trim();
   const vm = text.match(/chuẩn setup v(\d+)/);
   const v = vm ? Number(vm[1]) : null;
   const named = (text.match(/chuẩn setup v\d+ · project: ([^\n]+)/) || [])[1]?.trim().toLowerCase();
@@ -60,6 +91,10 @@ export function checkSetup(standard, { project, instructions, repos = [], skills
   else if (v === null) fixes.push(`Project instructions chưa theo chuẩn chung (không có dòng "chuẩn setup vN"). ${paste}`);
   else if (v < standard.version) fixes.push(`Project instructions đang ở chuẩn v${v}, chuẩn mới là v${standard.version}. ${paste}`);
   else if (v > standard.version) notes.push(`Project instructions ghi v${v}, mới hơn repo (v${standard.version}): có thể PR đổi chuẩn chưa merge.`);
+  if (v === standard.version) {
+    const miss = missingLines(standard, project || '<tên project>', text);
+    if (miss.length) fixes.push(`Project instructions có số v${v} nhưng thiếu ${miss.length} dòng của bản chuẩn (bản dán bị cắt hay đã sửa tay): «${miss[0].slice(0, 80)}${miss[0].length > 80 ? '…' : ''}»${miss.length > 1 ? ' và các dòng khác' : ''}. ${paste}`);
+  }
   if (v !== null && named && want && named !== key) fixes.push(`Project instructions ghi "project: ${named}" nhưng đây là project "${project}". ${paste}`);
   if (want) {
     const have = new Set(repos.map(r => r.toLowerCase()));
@@ -85,15 +120,22 @@ function main(argv) {
   const repos = list(opt('--repos'));
   const skills = list(opt('--skills'));
   const noGit = flag('--no-git');
-  if (!project || instrArg === undefined) throw new Error('dùng: --project <tên> --instructions <file|none> [--repos a/b,c/d] [--skills x,y] [--no-git]');
-  const md = readFileSync(setupPath, 'utf8');
+  const syncArg = opt('--sync');
+  if (!project || instrArg === undefined) throw new Error('dùng: --project <tên> --instructions <file|none|unseen> [--repos a/b,c/d] [--skills x,y] [--sync "/:include"] [--no-git]');
+  const md = lf(readFileSync(setupPath, 'utf8'));
   const bad = checkStandard(md);
   if (bad.length) throw new Error('profile/SETUP.md hỏng: ' + bad.join('; '));
   const standard = parseSetup(md);
-  const instructions = instrArg === 'none' ? '' : existsSync(instrArg) ? readFileSync(instrArg, 'utf8') : instrArg;
+  const unseen = instrArg === 'unseen';
+  const instructions = instrArg === 'none' || unseen ? '' : existsSync(instrArg) ? lf(readFileSync(instrArg, 'utf8')) : instrArg;
   const readable = noGit ? () => undefined
     : (r) => spawnSync('git', ['ls-remote', '--exit-code', '-q', `https://github.com/${r}`, 'HEAD'], { encoding: 'utf8', timeout: 30000 }).status === 0;
-  const { fixes, notes } = checkSetup(standard, { project, instructions, repos, skills }, readable);
+  const r = checkSetup(standard, { project, instructions, repos, skills }, readable);
+  // Only report what was actually seen: unseen instructions are "not checked", never "missing".
+  const fixes = unseen ? r.fixes.filter(f => !/^Project (này chưa có|instructions)/.test(f)) : r.fixes;
+  const notes = [...(unseen ? ['Phiên này không thấy project instructions nên chưa kiểm phần đó.'] : []), ...r.notes];
+  if (syncArg !== undefined) notes.push(...checkSync(standard, syncArg.split(',').map(x => x.trim()).filter(Boolean).map(x => { const i = x.lastIndexOf(':'); return { path: i < 0 ? x : x.slice(0, i), mode: i < 0 ? 'include' : x.slice(i + 1) }; })));
+  else notes.push('Không có --sync nên chưa kiểm bộ lọc đồng bộ knowledge (xem bằng project_info).');
   for (const n of notes) console.log('nhắc: ' + n);
   if (!fixes.length) { console.log(`ổn: project "${project}" đúng chuẩn setup v${standard.version}`); return 0; }
   console.log(`Project "${project}" chưa đúng chuẩn setup v${standard.version}. Nhờ thien làm trước khi bắt đầu:`);

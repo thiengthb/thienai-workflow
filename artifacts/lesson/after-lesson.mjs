@@ -17,6 +17,8 @@ import { join, dirname, resolve, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { addUsage, usageRows } from '../kit/usage.mjs';
 import { guessId, stuckPoints, STUCK } from './make-lesson.mjs';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 export { stuckPoints, STUCK };
 
@@ -139,7 +141,7 @@ export function draftText(d, { subjectFile = '' } = {}) {
 
 /** Kiểm đã ghi đủ mọi thứ sau buổi n của môn dir chưa. Trả về [{ ok, what }]. strict: thêm Trạng thái, usage, đủ 2 thẻ. */
 export function checkAfter(root, dir, n, { strict = true } = {}) {
-  const read = (p) => (existsSync(join(root, p)) ? readFileSync(join(root, p), 'utf8') : '');
+  const read = (p) => (existsSync(join(root, p)) ? lf(readFileSync(join(root, p), 'utf8')) : '');
   const readme = read('learning/README.md'), cards = read('learning/cards.md'), subj = subjects(readme, cards)[dir];
   if (!subj) return [{ ok: false, what: `môn "${dir}" không có trong bảng "Môn đang học" của learning/README.md` }];
   const md = read('learning/' + subj.file);
@@ -163,7 +165,7 @@ export function checkAfter(root, dir, n, { strict = true } = {}) {
 
 /** Mọi bài đã có file trong learning/<môn>/lessons/: kiểm phần cốt lõi (nhật ký, thẻ, roadmap). */
 export function checkAll(root) {
-  const read = (p) => (existsSync(join(root, p)) ? readFileSync(join(root, p), 'utf8') : '');
+  const read = (p) => (existsSync(join(root, p)) ? lf(readFileSync(join(root, p), 'utf8')) : '');
   const subs = subjects(read('learning/README.md'), read('learning/cards.md'));
   const out = [];
   for (const dir of Object.keys(subs)) {
@@ -181,7 +183,7 @@ function findPage(root, id, dir) {
   const pd = join(root, 'learning', dir, 'pages');
   if (!existsSync(pd)) return '';
   for (const f of readdirSync(pd).filter((x) => x.endsWith('.html'))) {
-    const html = readFileSync(join(pd, f), 'utf8');
+    const html = lf(readFileSync(join(pd, f), 'utf8'));
     const conf = html.match(/<script type="application\/json" id="lesson">([\s\S]*?)<\/script>/);
     let cid = ''; try { cid = conf ? JSON.parse(conf[1]).id : ''; } catch (e) {}
     if (cid === id || guessId(join(pd, f)) === id) return join(pd, f);
@@ -212,25 +214,25 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const page = opt('page'), today = opt('today'), write = flag('write');
   const [sessionFile] = args;
   if (!sessionFile) { console.error('Cách dùng: node artifacts/lesson/after-lesson.mjs <session.json> [--page <trang.html>] [--today YYYY-MM-DD] [--write] | --check <lesson-id> | --check-all'); process.exit(2); }
-  const raw = JSON.parse(readFileSync(sessionFile, 'utf8'));
+  const raw = JSON.parse(lf(readFileSync(sessionFile, 'utf8')));
   const R = raw && raw.data && raw.data.lesson ? raw.data : raw;
   const l = lessonOf(R.lesson);
   if (!l) { console.error(`Bản lưu không có "lesson" dạng frontend-06 (đang là ${JSON.stringify(R.lesson)})`); process.exit(2); }
-  const read = (p) => (existsSync(join(root, p)) ? readFileSync(join(root, p), 'utf8') : '');
+  const read = (p) => (existsSync(join(root, p)) ? lf(readFileSync(join(root, p), 'utf8')) : '');
   const cards = read('learning/cards.md'), subject = subjects(read('learning/README.md'), cards)[l.dir];
   if (!subject) { console.error(`Môn "${l.dir}" không có trong bảng "Môn đang học" của learning/README.md`); process.exit(2); }
   const pagePath = page || findPage(root, R.lesson, l.dir);
-  const html = pagePath && existsSync(pagePath) ? readFileSync(pagePath, 'utf8') : '';
+  const html = pagePath && existsSync(pagePath) ? lf(readFileSync(pagePath, 'utf8')) : '';
   const ld = join(root, 'learning', l.dir, 'lessons');
-  const lf = existsSync(ld) ? readdirSync(ld).find((f) => f.startsWith(String(l.n).padStart(2, '0') + '-')) : null;
-  const d = draft({ R, html, subject, lessonFile: lf ? `${l.dir}/lessons/${lf}` : '', cards, today });
+  const lessonName = existsSync(ld) ? readdirSync(ld).find((f) => f.startsWith(String(l.n).padStart(2, '0') + '-')) : null;
+  const d = draft({ R, html, subject, lessonFile: lessonName ? `${l.dir}/lessons/${lessonName}` : '', cards, today });
   if (!html) console.error(`Không thấy trang của ${R.lesson}: câu sai chỉ ghi được khóa câu. Truyền --page <trang.html> để có chữ câu hỏi.`);
   console.log(draftText(d, { subjectFile: 'learning/' + subject.file }));
   if (write) {
     const sp = join(root, 'learning', subject.file);
-    writeFileSync(sp, addStuck(readFileSync(sp, 'utf8'), d.stuck));
+    writeFileSync(sp, addStuck(lf(readFileSync(sp, 'utf8')), d.stuck));
     const up = join(root, 'learning/usage.md');
-    writeFileSync(up, addUsage(readFileSync(up, 'utf8'), d.usage));
+    writeFileSync(up, addUsage(lf(readFileSync(up, 'utf8')), d.usage));
     console.log(`Đã ghi: ${d.stuck.length} dòng vào "${STUCK}" của ${relative(root, sp)}, một dòng vào ${relative(root, up)}.`);
   }
 }

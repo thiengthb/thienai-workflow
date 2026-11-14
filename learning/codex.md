@@ -19,15 +19,14 @@ thien quen học bằng trang tương tác như ở Claude. Ngày 2026-11-12 Cod
 
 - **Không hỏi gì trong chat trước khi có trang.** Đọc file rồi dựng trang luôn. Câu trả lời đầu tiên cho thien là đường dẫn trang và cách mở, kèm một dòng nói buổi này học gì.
 - **Trang chứa đủ 7 bước** của khung buổi trong `learning/README.md`: 3 thẻ ôn (không có thẻ đến hạn thì lấy thẻ cũ nhất của môn khác), nhớ lại buổi trước, thử trước, hiểu sau, câu hỏi nhanh, tự nói lại rồi mới xem bản của AI, góp ý. Phần ôn bọc bằng `data-part="review"`. Cuối trang có nút `#finish` và `#copy`.
-- **Giao diện phải giống hệt các trang trước, không tự viết lại.** Ngày 2026-11-12 Codex tự viết trang BA 2 từ đầu: font hệ thống thay vì Onest, không có thanh tiến độ, nút chọn không đổi màu đúng sai, và thien thấy kém hẳn các trang cũ. Vì vậy:
-  - Chép nguyên file trang mới nhất của cùng môn (`cp learning/ba/pages/lesson-02.html learning/ba/pages/lesson-03.html`), rồi chỉ thay chữ, câu hỏi và dữ liệu trong `<script>`. Không viết lại `<head>`, `<style>`, thanh trên cùng, các lớp `.btn`, `.opt`, `.card`, `.chip`. Môn chưa có trang mẫu tốt thì chép trang BA 2.
-  - Cần kiểu bài mới thì chép đúng phần HTML, CSS, JS của kiểu đó từ `learning/teaching/patterns.html`, giữ tên lớp và biến màu.
-  - Trước khi gửi, tự kiểm 5 điều: font Onest; thanh tiến độ có "số bước/tổng"; bấm chọn thì có màu đúng sai và chữ ("Bạn chọn", "Đúng"); mỗi bước có ít nhất một hình hay sơ đồ cho thấy đang ở đâu, không chỉ chữ; khổ điện thoại không tràn ngang; bật chế độ tối của máy rồi xem lại, không chỗ nào chữ trùng màu nền (trong `<style>` của trang dùng biến `var(--card)`, `var(--ink)`, đừng viết cứng `#fff`). Gu giao diện của thien ở repo thienui, file `docs/taste.md`.
+- **Chỉ một cách dựng: `artifacts/lesson/make-lesson.mjs`. Không tự viết trang, không chép trang cũ.** Ngày 2026-11-12 Codex tự viết trang BA 2 từ đầu: font hệ thống thay vì Onest, không có thanh tiến độ, nút chọn không đổi màu đúng sai, và thien thấy kém hẳn các trang cũ. Bộ dựng gắn sẵn những thứ đó (font, thanh "số bước/tổng", màu và chữ đúng sai, tự lưu, chế độ tối) và tự kiểm trang, nên trang nào cũng giống nhau. Môn có mẫu riêng (frontend, BA, chiến tranh) thì script tự chọn mẫu đó.
+  - Trang cũ trong `learning/<môn>/pages/` chỉ để xem lại nội dung và cách tương tác, không làm khung cho bài mới (trang trước 2026-11-14 còn dùng khung cũ). Ngoại lệ: sửa lại đúng một bài cũ thì sửa trên chính file đó rồi chạy lại make-lesson.
+  - Cần kiểu bài mới thì lấy phần HTML, CSS, JS của kiểu đó từ `learning/teaching/patterns.html` đặt vào `<style>` và `<script>` cuối trang, dùng biến màu `var(--card)`, `var(--ink)`, không viết cứng `#fff`. Gu giao diện của thien ở repo thienui, file `docs/taste.md`.
 - Chọn kiểu bài theo `learning/teaching/README.md` và mục "Buổi tiếp theo" của môn.
 - Các bước dựng:
   1. `node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html` (NN là số buổi, hai chữ số) chép mẫu buổi học ra đó. Điền nội dung theo `artifacts/lesson/README.md`.
   2. Chạy lại đúng lệnh đó: script gắn bộ khung và tự kiểm trang bằng Playwright, sửa hết lỗi nó báo.
-  3. Máy không có Playwright thì thêm `--no-check` và ghi "chưa kiểm khổ điện thoại".
+  3. Máy không có Playwright thì thêm `--no-check`, tự xem 3 điều mà script không kiểm được nữa (khổ điện thoại không tràn ngang; bật chế độ tối không chỗ nào chữ trùng màu nền; mỗi bước có ít nhất một hình hay sơ đồ), và ghi "chưa kiểm bằng máy" vào nhật ký.
   4. Gửi thien đường dẫn đầy đủ của file trên máy và cách mở: mở thư mục đó rồi bấm đúp vào file, hoặc kéo file vào Chrome.
 - **Codex chạy trên cloud** (chatgpt.com/codex) thì thien không mở được file. Nói thẳng điều đó, khuyên mở Codex trên laptop, không tự chuyển sang dạy bằng chat.
 - **Chỉ dạy bằng chat khi thien tự xin** ("học bằng chat"). Khi đó vẫn giữ nhịp thử trước, hiểu sau, mỗi lần một câu, và ghi "học bằng chat" vào nhật ký.

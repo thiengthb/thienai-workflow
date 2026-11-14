@@ -6,6 +6,7 @@ import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { buildFixtures } from '../../artifacts/kit/check-pages.mjs';
+import { pathToFileURL } from 'node:url';
 
 const { chromium } = createRequire(import.meta.url)('playwright');
 const browser = await chromium.launch();
@@ -19,7 +20,7 @@ async function open(file, saved) {
   const p = await ctx.newPage();
   const errors = [];
   p.on('pageerror', (e) => errors.push(e.message));
-  await p.goto('file://' + file);
+  await p.goto(pathToFileURL(file).href);
   await p.waitForTimeout(300);
   p.errors = errors;
   return { p, ctx };

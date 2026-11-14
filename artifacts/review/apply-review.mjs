@@ -11,6 +11,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { applyReview } from './make-review.mjs';
 import { addUsage } from '../kit/usage.mjs';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 /** Kết quả gọn { id: 'nho'|'quen' } từ bản lưu của trang hoặc từ dạng gọn. */
 export function verdicts(saved) {
@@ -38,11 +40,11 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const args = process.argv.slice(2), i = args.indexOf('--today'), forced = i < 0 ? null : args.splice(i, 2)[1];
   const [cardsFile, resultFile] = args;
   if (!cardsFile || !resultFile) { console.error('Cách dùng: node apply-review.mjs learning/cards.md <kết-quả.json> [--today YYYY-MM-DD]'); process.exit(1); }
-  const saved = JSON.parse(readFileSync(resultFile, 'utf8'));
+  const saved = JSON.parse(lf(readFileSync(resultFile, 'utf8')));
   const today = forced || saved.today || new Date().toISOString().slice(0, 10);
-  const { text, changed } = applyReview(readFileSync(cardsFile, 'utf8'), verdicts(saved), today);
+  const { text, changed } = applyReview(lf(readFileSync(cardsFile, 'utf8')), verdicts(saved), today);
   writeFileSync(cardsFile, text);
   console.log(changed.length ? changed.join('\n') : 'Không có thẻ nào được chấm.');
   const usageFile = join(dirname(cardsFile), 'usage.md'), row = reviewUsage(saved, today);
-  if (row && existsSync(usageFile)) { writeFileSync(usageFile, addUsage(readFileSync(usageFile, 'utf8'), row)); console.log(`Đã ghi một dòng vào ${usageFile}.`); }
+  if (row && existsSync(usageFile)) { writeFileSync(usageFile, addUsage(lf(readFileSync(usageFile, 'utf8')), row)); console.log(`Đã ghi một dòng vào ${usageFile}.`); }
 }

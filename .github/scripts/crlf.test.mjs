@@ -1,0 +1,62 @@
+// Runs the scripts that read Markdown on a copy of the repo where every text file has CRLF line endings, the way git
+// on Windows (core.autocrlf=true) checks files out when .gitattributes is missing, or the way a handoff file from
+// another repo, or a file AI wrote with a Windows editor, arrives. CI runs on Linux, so without this test a parser
+// that looks for "\n" passes CI and fails on thien's laptop (found 2026-11-14: handoff list showed "Tiếp theo: ?",
+// setup-check said SETUP.md was broken, after-lesson --check-all said no lesson was in the roadmap).
+import assert from 'node:assert/strict';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { tmpdir } from 'node:os';
+import { spawnSync, execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { checkTask, summarize, readText } from '../../templates/handoff.mjs';
+import { fill } from '../../artifacts/lesson/make-lesson.mjs';
+
+const ROOT = fileURLToPath(new URL('../../', import.meta.url));
+const crlf = (s) => s.replace(/\r?\n/g, '\r\n');
+const copy = mkdtempSync(join(tmpdir(), 'crlf-'));
+const files = execFileSync('git', ['ls-files'], { cwd: ROOT, encoding: 'utf8' }).split('\n').filter((f) => /\.(md|mjs|cjs|js|json|html|css|txt|csv)$/.test(f));
+for (const f of files) {
+  mkdirSync(dirname(join(copy, f)), { recursive: true });
+  writeFileSync(join(copy, f), crlf(readFileSync(join(ROOT, f), 'utf8')));
+}
+const run = (args) => spawnSync(process.execPath, args, { cwd: copy, encoding: 'utf8' });
+
+// 1. after-lesson --check-all finds every lesson in the CRLF roadmap, notes and cards.
+let r = run(['artifacts/lesson/after-lesson.mjs', '--check-all']);
+assert.equal(r.status, 0, 'after-lesson --check-all on CRLF files:\n' + r.stdout + r.stderr);
+
+// 2. setup-check reads the CRLF SETUP.md and CRLF instructions pasted into a file.
+const block = readFileSync(join(ROOT, 'profile/SETUP.md'), 'utf8').match(/```text\n([\s\S]*?)```/)[1].replace('<tên project>', 'Claude');
+writeFileSync(join(copy, 'instr.txt'), crlf(block));
+r = run(['templates/setup-check.mjs', '--project', 'Claude', '--instructions', 'instr.txt', '--repos', 'thiengthb/thienai-workflow', '--skills', 'start-project,make-slides', '--no-git']);
+assert.equal(r.status, 0, 'setup-check on CRLF files:\n' + r.stdout + r.stderr);
+assert.match(r.stdout, /ổn: project "Claude"/);
+
+// 3. check-status reads the CRLF STATUS.md.
+r = run(['templates/check-status.mjs', 'docs/STATUS.md']);
+assert.equal(r.status, 0, 'check-status on CRLF STATUS.md:\n' + r.stdout + r.stderr);
+
+// 4. handoff: a CRLF task file passes the format check and `list` still shows the next step and what waits for thien.
+const task = crlf(`# Việc thử\n\nRepo: thiengthb/demo · Nhánh: x · PR: chưa có\nGhi bởi: Claude · Cập nhật: 2026-11-14T10:00Z\n\n## thien muốn gì\nThử.\n\n## Đã xong\n- a\n\n## Bước tiếp theo\n1. Chạy lệnh b\n\n## Đang chờ thien\n- Chọn hướng 2\n`);
+assert.deepEqual(checkTask(task, 'viec-thu.md'), []);
+const sum = summarize('viec-thu.md', task);
+assert.equal(sum.next, 'Chạy lệnh b');
+assert.equal(sum.waiting, '- Chọn hướng 2');
+// Windows PowerShell 5 `show ... > file` writes UTF-16LE with a BOM: readText still gets the same text.
+writeFileSync(join(copy, 'u16.md'), Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from(task, 'utf16le')]));
+assert.equal(readText(join(copy, 'u16.md')), task.replace(/\r\n/g, '\n'));
+r = run(['templates/handoff.mjs', 'check', 'u16.md']);
+assert.equal(r.status, 0, r.stderr);
+assert.ok(checkTask(task.replace('Thử.', 'token ghp_abcdefghijklmnopqrstuvwxyz0123'), 'viec-thu.md').some((p) => /token/.test(p)), 'secrets are refused');
+
+// 5. make-lesson on a CRLF page: one kind of line ending out, and running it again changes nothing.
+const tpl = crlf(readFileSync(join(ROOT, 'artifacts/lesson/template.html'), 'utf8')).replace('"__ID__"', '"frontend-06"');
+const once = fill(tpl);
+assert.ok(!once.includes('\r'), 'no mixed line endings');
+assert.equal(fill(once), once);
+
+// 6. Internal links still resolve when files are CRLF.
+r = spawnSync(process.execPath, [join(ROOT, '.github/scripts/check-links.mjs'), '--root', ROOT], { encoding: 'utf8' });
+assert.equal(r.status, 0, r.stdout);
+console.log('crlf: ok');

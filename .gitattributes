@@ -1,0 +1,16 @@
+# Every text file in this repo uses LF, on every machine. Without this, git on Windows (core.autocrlf=true) checks
+# files out with CRLF, and the scripts that read Markdown (handoff, setup-check, after-lesson, make-lesson) miss
+# headings and blocks they look for with "\n". The scripts also accept CRLF now; this keeps the files clean anyway.
+* text=auto eol=lf
+
+# Binary files: never touch their bytes.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.zip binary
+*.pdf binary

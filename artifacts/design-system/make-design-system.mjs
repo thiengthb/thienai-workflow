@@ -10,6 +10,8 @@ import { readFileSync, writeFileSync, mkdirSync, readdirSync, copyFileSync, real
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -69,7 +71,7 @@ const px = (rem) => (/rem$/.test(rem) ? `${parseFloat(rem) * 16}px` : rem);
 /** tokens.json for the Design System page, from a thienui checkout. */
 export function buildTokens(thienui) {
   const src = join(thienui, 'packages/tokens/src');
-  const read = (f) => JSON.parse(readFileSync(join(src, f), 'utf8'));
+  const read = (f) => JSON.parse(lf(readFileSync(join(src, f), 'utf8')));
   const P = { ...flatten(read('primitive.json')), ...flatten(read('scale.json')) };
   const themes = readdirSync(src).filter((f) => /^semantic\..+\.json$/.test(f)).map(read)
     .sort((a, b) => (b.$default === true) - (a.$default === true));

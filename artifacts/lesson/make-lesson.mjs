@@ -13,12 +13,14 @@ import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { writePublish } from '../kit/publish.mjs';
 import { fileURLToPath } from 'node:url';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const here = dirname(fileURLToPath(import.meta.url));
 // sample: trang tự hỏi Claude (nhận xét bài tự nói lại, giải thích chỗ chọn sai, hỏi về một bước, làm mẫu, tình huống thêm), xem lesson.js.
 // dictation: nói thay gõ ở bước tự nói lại. tts: nút Nghe đọc to phần giải thích và mốc trên sa bàn.
 export const CAPABILITIES = { db: {}, comments: {}, sample: {}, dictation: {}, tts: {} };
-const read = (p) => readFileSync(join(here, p), 'utf8');
+const read = (p) => lf(readFileSync(join(here, p), 'utf8'));
 const PARTS = {
   'kit-css': ['style', '../kit/kit.css'],
   'lesson-css': ['style', 'lesson.css'],
@@ -59,6 +61,7 @@ export function guessId(file) {
 
 /** Returns the page with every kit part filled in and the lesson-id meta set. */
 export function fill(html, id, file = '', { stuck } = {}) {
+  html = lf(html);
   const all = [...Object.entries(PARTS), ...Object.entries(OPTIONAL).filter(([part, [tag]]) => new RegExp(`<${tag} id="${part}">`).test(html))];
   for (const [part, [tag, ...srcs]] of all) {
     const re = new RegExp(`<${tag} id="${part}">[\\s\\S]*?</${tag}>`);
@@ -71,7 +74,7 @@ export function fill(html, id, file = '', { stuck } = {}) {
   html = html.replace(/<script type="application\/json" id="battle" data-src="([^"]+)">[\s\S]*?<\/script>/, (m, src) => {
     const p = resolve(dirname(resolve(file || '.')), src);
     if (!existsSync(p)) throw new Error(`Không thấy file trận ${src} (tính từ trang)`);
-    const b = JSON.parse(readFileSync(p, 'utf8'));
+    const b = JSON.parse(lf(readFileSync(p, 'utf8')));
     if (!b.terrain) throw new Error(`File trận ${src} chưa có địa hình: chạy node artifacts/war/fetch-terrain.mjs ${p}`);
     delete b.raw; (b.units || []).forEach((u) => delete u.raw); (b.features || []).forEach((f) => delete f.raw);
     return `<script type="application/json" id="battle" data-src="${src}">${JSON.stringify(b).replace(/</g, '\\u003c')}</script>`;
@@ -120,11 +123,11 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     console.log(`Đã chép mẫu ra ${file}. Thay mọi chỗ __…__ và nội dung mẫu, rồi chạy lại đúng lệnh này.`);
     process.exit(0);
   }
-  const html = readFileSync(file, 'utf8');
+  const html = lf(readFileSync(file, 'utf8'));
   const conf = (() => { const m = html.match(/<script type="application\/json" id="lesson">([\s\S]*?)<\/script>/); try { return m ? JSON.parse(m[1]) : {}; } catch (e) { return {}; } })();
   let lid = id || conf.id;
   if (!lid || /^__/.test(lid)) lid = guessId(file);
-  const sf = subjectFile(file), stuck = sf && existsSync(sf) ? stuckPoints(readFileSync(sf, 'utf8')) : [];
+  const sf = subjectFile(file), stuck = sf && existsSync(sf) ? stuckPoints(lf(readFileSync(sf, 'utf8'))) : [];
   writeFileSync(file, fill(html, lid, file, { stuck }));
   console.log(`Đã gắn bộ khung vào ${file} (id ${lid})${stuck.length ? `, kèm ${stuck.length} chỗ còn vướng từ ${sf}` : ''}.`);
   const out = resolve(outArg || join(tmpdir(), `lesson-${lid}`));

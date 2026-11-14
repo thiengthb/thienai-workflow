@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { parseCards, dueCards, selfCheck, matchAnswer, lessonExcerpt, buildReview, applyReview, render, INTERVALS } from '../../artifacts/review/make-review.mjs';
 import { verdicts } from '../../artifacts/review/apply-review.mjs';
+import { fileURLToPath } from 'node:url';
 
 const real = readFileSync(new URL('../../learning/cards.md', import.meta.url), 'utf8');
 const cards = parseCards(real);
@@ -30,7 +31,7 @@ assert.match(matchAnswer('Thẻ trạng thái "Đã thanh toán" nên đặc hay
 assert.equal(matchAnswer('Chiến dịch Điện Biên Phủ kéo dài bao lâu?', checks), null, 'câu không liên quan thì không ghép bừa');
 assert.ok(!/Học ngày|Tự kiểm|Đáp án/.test(lessonExcerpt(md)), 'đoạn bài bỏ dòng ngày học và phần tự kiểm');
 
-const review = buildReview(real, new URL('../../learning/', import.meta.url).pathname, '2026-11-14', 10);
+const review = buildReview(real, fileURLToPath(new URL('../../learning/', import.meta.url)), '2026-11-14', 10);
 assert.equal(review.items.length, 10);
 assert.ok(review.items.filter((x) => x.answer).length >= 7, 'phần lớn thẻ tìm được đáp án trong bài');
 assert.ok(review.items.every((x) => x.ref), 'thẻ nào cũng có đoạn bài để Claude chấm');
@@ -53,7 +54,7 @@ assert.deepEqual(verdicts({ A1: 'quen' }), { A1: 'quen' });
 const d = mkdtempSync(join(tmpdir(), 'review-'));
 writeFileSync(join(d, 'cards.md'), t);
 writeFileSync(join(d, 'r.json'), JSON.stringify({ today: '2026-11-14', items: { A2: { verdict: 'quen' } } }));
-const r = spawnSync(process.execPath, [new URL('../../artifacts/review/apply-review.mjs', import.meta.url).pathname, join(d, 'cards.md'), join(d, 'r.json')], { encoding: 'utf8' });
+const r = spawnSync(process.execPath, [fileURLToPath(new URL('../../artifacts/review/apply-review.mjs', import.meta.url)), join(d, 'cards.md'), join(d, 'r.json')], { encoding: 'utf8' });
 assert.equal(r.status, 0, r.stderr);
 assert.match(r.stdout, /A2: quên, hộp 3 → 1, hỏi lại 2026-11-15/);
 assert.equal(parseCards(readFileSync(join(d, 'cards.md'), 'utf8'))[1].box, 1);

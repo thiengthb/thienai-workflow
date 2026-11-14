@@ -7,6 +7,8 @@
 // Dòng mới do after-lesson.mjs (buổi học) và apply-review.mjs (trang ôn) thêm, không ai gõ tay.
 import { readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 export const COLUMNS = ['Ngày', 'Trang', 'Phút', 'Hỏi Claude', 'Claude giải thích câu sai', 'Claude nhận xét, chấm', 'Nói thay gõ', 'Xem Claude làm', 'Nghe', 'Tình huống thêm', 'Ghi chú'];
 const FEATURES = COLUMNS.slice(3, -1);
@@ -51,7 +53,7 @@ export function usageSummary(text) {
 
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   const file = process.argv[2] || 'learning/usage.md';
-  const text = readFileSync(file, 'utf8');
+  const text = lf(readFileSync(file, 'utf8'));
   console.log(`${usageRows(text).length} buổi đã ghi trong ${file}`);
   for (const s of usageSummary(text)) console.log(`- ${s.feature}: dùng ở ${s.used}/${s.sessions} buổi có tính năng này, tổng ${s.times} lần`);
 }

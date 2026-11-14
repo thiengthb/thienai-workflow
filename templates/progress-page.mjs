@@ -13,6 +13,8 @@
 import { fileURLToPath } from 'node:url';
 import { readFileSync, readdirSync, existsSync, realpathSync } from 'node:fs';
 import { join, dirname, posix } from 'node:path';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -277,7 +279,7 @@ export function repoData(dir, repo) {
   const id = repoId(repo), name = repo.split('/')[1];
   const statusFile = join(dir, 'docs/STATUS.md');
   if (!existsSync(statusFile)) return { id, name, repo, noStatus: true, tasks: [], plans: [], steps: [], done: [], next: [], blocked: [], open: 0, where: '', head: '', status: 'running', upd: '' };
-  const md = readFileSync(statusFile, 'utf8');
+  const md = lf(readFileSync(statusFile, 'utf8'));
   const st = sections(md);
   const pick = (n) => st.sections.find((x) => x.title.startsWith(n));
   const base = `${repo}:docs/STATUS.md`;
@@ -286,7 +288,7 @@ export function repoData(dir, repo) {
   for (const l of whereLines) { if (!l.trim()) { if (para.length) break; continue; } para.push(l.trim()); }
   const plansDir = join(dir, 'docs/plans');
   const plans = (existsSync(plansDir) ? readdirSync(plansDir).filter((f) => f.endsWith('.md')).sort().reverse() : [])
-    .map((f) => [f, readFileSync(join(plansDir, f), 'utf8')]).filter(([, m]) => /^## Checkpoint/m.test(m))
+    .map((f) => [f, lf(readFileSync(join(plansDir, f), 'utf8'))]).filter(([, m]) => /^## Checkpoint/m.test(m))
     .map(([f, m]) => parsePlan(m, `${repo}:docs/plans/${f}`)).filter((p) => !/^(xong|bỏ)/.test(p.meta['Trạng thái'] || ''));
   // Plans written before the template have no checkpoints: fall back to the STATUS table row.
   const statusPlans = tableRows(pick('Kế hoạch đang chạy')?.lines ?? []).map((r) => ({ title: r[0], at: r[1] || '', ticks: r[2] || '' }));
@@ -312,12 +314,12 @@ export function repoData(dir, repo) {
 
 function repoSection(dir, repo) {
   const statusFile = join(dir, 'docs/STATUS.md');
-  const status = existsSync(statusFile) ? sections(readFileSync(statusFile, 'utf8')) : null;
+  const status = existsSync(statusFile) ? sections(lf(readFileSync(statusFile, 'utf8'))) : null;
   const base = (f) => `${repo}:${f}`;
   const pick = (name) => status?.sections.find((s) => s.title.startsWith(name));
   const plansDir = join(dir, 'docs/plans');
   const files = existsSync(plansDir) ? readdirSync(plansDir).filter((f) => f.endsWith('.md')).sort().reverse()
-    .map((f) => [f, readFileSync(join(plansDir, f), 'utf8')]) : [];
+    .map((f) => [f, lf(readFileSync(join(plansDir, f), 'utf8'))]) : [];
   // Only plans written from PLAN.template.md have checkpoints; older free-form plans are counted, not parsed.
   const plans = files.filter(([, md]) => /^## Checkpoint/m.test(md)).map(([f, md]) => parsePlan(md, base(`docs/plans/${f}`)));
   const legacy = files.length - plans.length;
@@ -453,7 +455,7 @@ ${panel('all', allPanel, true)}${repos.map((r) => panel(r.id, repoPanel(r), fals
 }
 
 function roadmap(file, linkBase) {
-  const doc = sections(readFileSync(file, 'utf8'));
+  const doc = sections(lf(readFileSync(file, 'utf8')));
   const out = [`<div class="intro">${blocks(doc.intro, linkBase)}</div>`];
   let subject = null;
   const flush = () => { if (subject) out.push(subject.html + '</section>'); };
@@ -484,7 +486,7 @@ const KIT_FALLBACK_CSS = `:root{--bg:#faf8f3;--card:#fff;--soft:#f3f1ec;--line:#
 .chip{font:600 12px/1 var(--font);padding:4px 8px;border-radius:8px;background:var(--soft);color:var(--muted)}.chip.accent{background:var(--accent-soft);color:var(--accent-ink)}.label{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}`;
 const kitFile = (f) => {
   const p = join(dirname(fileURLToPath(import.meta.url)), '../artifacts/kit', f);
-  return existsSync(p) ? readFileSync(p, 'utf8') : f.endsWith('.css') ? KIT_FALLBACK_CSS : '';
+  return existsSync(p) ? lf(readFileSync(p, 'utf8')) : f.endsWith('.css') ? KIT_FALLBACK_CSS : '';
 };
 
 export function page(title, body, stamp, opts = {}) {
@@ -731,7 +733,7 @@ export function buildPage(args) {
   for (let k = 0; k < args.length; k++) {
     if (args[k] === '--title') title = args[++k];
     else if (args[k] === '--roadmap') roadmapArg = args[++k];
-    else if (args[k] === '--prs') prs = JSON.parse(readFileSync(args[++k], 'utf8'));
+    else if (args[k] === '--prs') prs = JSON.parse(lf(readFileSync(args[++k], 'utf8')));
     else repos.push(args[k]);
   }
   if (roadmapArg) {
