@@ -48,6 +48,8 @@ assert.match(checkSkillMd('demo', '# no frontmatter')[0], /mở đầu bằng/);
 assert.match(checkSkillMd('demo', '---\nname: other\ndescription: d\n---\n')[0], /trùng tên thư mục/);
 assert.match(checkSkillMd('demo', '---\nname: demo\n---\n')[0], /thiếu dòng description/);
 assert.match(checkSkillMd('demo', '---\ndescription:\nname: demo\n---\n')[0], /thiếu dòng description/, 'empty value does not borrow the next line');
+for (const q of ['""', "''", '" "']) assert.match(checkSkillMd('demo', `---\nname: demo\ndescription: ${q}\n---\n`)[0], /thiếu dòng description/, `quoted empty ${q} is refused`);
+assert.deepEqual(checkSkillMd('demo', '---\nname: "demo"\ndescription: "có nháy"\n---\n'), [], 'quoted values are fine');
 mkdirSync(join(fake, 'nofile'));
 assert.throws(() => packAll(fake), /nofile\/ không có SKILL.md/);
 
