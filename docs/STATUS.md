@@ -24,8 +24,8 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Các đề xuất nâng cấp, đợt 4 và 5 | [tài liệu đề xuất](https://claude.ai/artifact/FrUscTcs6BWMVBJGzJTYqF) | 2026-11-14 | Làm sau khi đợt 1 đến 3 merge |
 
 ## Vừa xong
+- Bàn giao giữa các nick: đẩy lên PR nháp ngay sau mỗi bước nhỏ hay mỗi trang chọn, nguồn trang artifact nằm trong repo (`artifacts/README.md`, mục "Dùng trang giữa các nick"; PR này)
 - Sau buổi học: `artifacts/lesson/after-lesson.mjs` soạn nháp nhật ký, thẻ, chỗ còn vướng và kiểm đã ghi đủ; mục "Chỗ còn vướng" ở mỗi file môn được đưa vào trang buổi sau; `learning/usage.md` ghi tính năng nào thật sự được dùng (PR này)
-- Bài frontend và BA có sân khấu như sa bàn chiến tranh: bàn thử (núm vặn, soi, dòng CSS sáng lên) và bảng dán (xếp thẻ, nghe người nói), mẫu ở `artifacts/it/` (PR #54)
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), dựng từ mẫu bàn thử `artifacts/it/` (bài mẫu trong đó chính là nháp buổi 6).

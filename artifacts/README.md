@@ -30,6 +30,16 @@ Mỗi mẫu là một lệnh dựng và một lần đăng. Script tự chụp �
 
 Chi tiết từng mẫu ở README trong thư mục của mẫu.
 
+## Dùng trang giữa các nick
+
+thien làm một project bằng nhiều nick Claude (và Codex) vì hay hết usage giữa tuần. Trang artifact chỉ nick tạo ra sửa được và đọc được kết quả lưu trong db; nick khác không thấy thread, bộ nhớ hay trang của nick này. Nên trang chỉ là bản hiển thị, nguồn của trang phải nằm trong repo:
+
+1. Ngay khi đăng một trang cho thien chọn hay duyệt, đẩy vào PR nháp của bước đó, không chờ thien trả lời: file nguồn (`decision.json` hay `round.json`), ảnh (nén JPG, mỗi ảnh vài trăm KB), trang phác nếu có (đuôi `.txt` để không bị build), link trang và lệnh dựng lại. Repo có `docs/plans/` thì để cạnh file kế hoạch của bước, ví dụ `docs/plans/<ngày>-<bước>/round2/`.
+2. Ghi vào file kế hoạch hay mô tả PR: vòng mấy, các phương án, AI đề xuất gì, và mục "Kết quả" để trống tới khi thien trả lời.
+3. thien trả lời (comment, Chép kết quả, hay nhắn trong chat): chép nguyên văn vào mục "Kết quả" ngay trong phiên.
+4. Nick khác cần trang: dựng lại từ nguồn trong repo bằng lệnh ở bảng trên và đăng thành trang mới của nick đó. Không xin quyền vào trang cũ.
+5. Trang cũ vẫn mở được bằng nick đã tạo ra nó. Muốn nick khác xem, thien bấm chia sẻ trên trang (AI không đổi quyền chia sẻ được). [Chưa kiểm] nick khác mở link chia sẻ có thấy ảnh và chọn được không; kết quả lưu trong db thì chắc chắn chỉ nick chủ đọc được, nên bước 3 vẫn bắt buộc.
+
 ## Lõi chung
 
 `kit/kit.css` và `kit/kit.js` là phần dùng chung cho mọi mẫu mới: màu và chữ theo gu ở dưới, nút, thanh tiến độ, thông báo, lưu nháp vào máy và db, chép kết quả, gửi cho Claude, hỏi Claude ngay trên trang (`Kit.ask`, khả năng `sample`), và nói thay gõ cho một ô chữ (`Kit.micRow`, `Kit.dictate`, khả năng `dictation`). Trang nào có tính năng mới thì ghi số lần dùng vào bản lưu, để `learning/usage.md` cho biết tính năng nào thật sự được dùng (`kit/usage.mjs`). Mẫu mới dựng trên lõi này; sửa lõi một lần là mọi mẫu đổi theo. Sửa lõi hay mẫu thì CI tự mở lại mọi trang trong trình duyệt và kiểm lời dặn gửi Claude (`kit/check-pages.mjs`, xem mục "Kiểm trước khi gửi trang" trong `learning/teaching/README.md`). Trang học mới dựng từ `lesson/` (đã trên lõi chung, kèm phần tự lưu của `learning/teaching/kit/`); trang học cũ giữ nguyên như lúc học.

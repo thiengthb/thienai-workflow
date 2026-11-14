@@ -34,6 +34,7 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 ## Cuối phiên
 - Cập nhật `docs/STATUS.md` (đang ở đâu, việc dở, vừa xong, việc tiếp theo, đang chờ ai). Việc dở vẫn commit và push, và ghi vào mục "Việc dở" kèm nhánh hoặc PR.
 - Kế hoạch đang chạy: tick việc đã có bằng chứng, ghi bước đã đổi và lỗi gặp, sửa mục "Đang ở đâu". Luật và mẫu ở [`profile/PLANNING.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/PLANNING.md).
+- Không chờ cuối phiên mới bàn giao, vì usage có thể hết giữa chừng: xong một bước nhỏ, hay vừa đưa thien một trang chọn hoặc duyệt, là đẩy ngay lên PR nháp của bước (code dở, nguồn trang, STATUS). Trang artifact theo mục "Dùng trang giữa các nick" trong [`artifacts/README.md`](https://github.com/thiengthb/thienai-workflow/blob/main/artifacts/README.md).
 - Sửa STATUS thì gộp vào PR của tính năng đang làm. PR chỉ sửa STATUS thì nhắc thien merge ngay, vì để lâu là nó cũ và bị conflict.
 - Nếu project có `docs/ai-log.md`: thêm dòng cho phiên này, để trống hai cột "Người kiểm gì" và "Quyết định" cho người điền.
 
