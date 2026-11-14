@@ -296,20 +296,24 @@
     box.append(open, hint, log, out, undo);
     const askBox = step.querySelector('.ai-ask');
     if (askBox) askBox.before(box); else if (next) next.before(box); else step.append(box);
-    let saved = null, cur = null, changed = false;   // changed: Claude has moved the stage since the learner's own state
-    const takeBack = () => { if (cur && cur.restore && changed) cur.restore(saved); saved = null; changed = false; undo.hidden = true; if (demoShown === takeBack) demoShown = null; };
+    // changed: Claude has moved the stage since the learner's own state. run: the current demo run; taking the stage back ends it,
+    // so tool calls still on their way from that run stop before they touch the stage.
+    let saved = null, cur = null, changed = false, run = 0;
+    const takeBack = () => { run++; if (cur && cur.restore && changed) cur.restore(saved); saved = null; changed = false; undo.hidden = true; if (demoShown === takeBack) demoShown = null; };
     open.addEventListener('click', async () => {
       if (demoBusy) return;
       if (demoShown && demoShown !== takeBack) demoShown();   // một bản làm mẫu khác còn hiện: trả lại trước khi chụp cách của người học
       cur = p.match(step); if (!cur) return;
       demoBusy = true; open.disabled = true; open.dataset.running = '1'; undo.hidden = true; log.innerHTML = ''; gate();
       if (saved == null && cur.save) saved = cur.save();
-      let moves = 0;
+      let moves = 0; const mine = ++run;
+      demoShown = takeBack;   // từ giờ, lần bấm của người học ngoài khung dừng lượt này và trả sân khấu về
       const tools = cur.tools.map((t) => ({ name: t.name, description: t.description, inputSchema: t.inputSchema,
         async execute(input) {
+          if (mine !== run) throw new Error('Người học đã tự làm tiếp. Dừng làm mẫu, không gọi thêm công cụ.');
           if (moves >= 8) throw new Error('Đã đủ 8 thao tác. Dừng lại và viết câu tóm lại.');
           const r = await t.execute(input || {});
-          moves++;
+          moves++; if (mine === run) changed = true;
           const li = el('li', {}, el('b', { textContent: r.did }));
           if (input && input.why) li.append(el('span', { textContent: clip(input.why, 240) }));
           log.append(li);
@@ -327,9 +331,8 @@
         + 'Xong thì viết 1 đến 2 câu tóm lại điều rút ra; nếu cách của bạn khác cách người học đã làm thì nói khác ở đâu, không chê. ' + VOICE].join('\n');
       let a = '';
       try { a = await Kit.ask(prompt, out, { tools }); } finally {
-        if (moves) changed = true;
         undo.hidden = !(changed && cur.restore);
-        if (changed && cur.restore) demoShown = takeBack;
+        if (!(changed && cur.restore) && demoShown === takeBack) demoShown = null;
         demoBusy = false; delete open.dataset.running; open.disabled = false; open.textContent = 'Xem Claude làm lại'; gate();
       }
       R.ai.push({ kind: 'demo', step: h, moves, a: a || '' });

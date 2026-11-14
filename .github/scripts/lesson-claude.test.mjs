@@ -83,6 +83,19 @@ const finish = (p, keys) => p.evaluate((ks) => ks.forEach((k) => Lesson.done(k))
   assert.equal(after.amount, mine.amount, 'núm Claude vặn mà người học không bấm về như cũ');
   assert.equal(after.knobs['bank.amount'], mine.knobs['bank.amount']);
   assert.ok(await step.getByRole('button', { name: 'Trả lại cách của mình' }).isHidden());
+  // Người học bấm núm khi Claude đang làm dở: lượt làm mẫu dừng, sân khấu về cách của người học, thao tác còn lại không chạy.
+  const base = await snap();
+  await p.evaluate(() => { window.__moves = () => [['turn_knob', { knob: 'amount', value: 'it', why: 'a' }], ['turn_knob', { knob: 'accent', value: '#15803d', why: 'b' }]]; });
+  await step.getByRole('button', { name: 'Xem Claude làm lại' }).click();
+  await step.locator('.demo-log li').first().waitFor();
+  const back = await p.evaluate(() => [...document.querySelectorAll('[data-pane="bank"] [data-knob="accent"] button[data-val]')].map((x) => x.dataset.val).find((v) => v !== '#15803d' && v !== document.querySelector('[data-pane="bank"] .phone:not(.mini) .screen').style.getPropertyValue('--a')));
+  await p.locator(`[data-pane="bank"] [data-knob="accent"] button[data-val="${back}"]`).click();
+  await p.waitForFunction(() => !document.querySelector('.step[data-s="3"] .demo-open').disabled);   // lượt dở đã kết thúc
+  const stopped = await snap();
+  assert.equal(stopped.a, back, 'thao tác thứ hai của Claude không chạy sau lần bấm của người học');
+  assert.equal(stopped.amount, base.amount, 'thao tác đầu của Claude đã được trả lại');
+  assert.equal(await step.locator('.demo-log li').count(), 1);
+  assert.ok(await step.getByRole('button', { name: 'Trả lại cách của mình' }).isHidden());
   // Tool nhận giá trị sai thì báo lỗi rõ cho Claude, không vỡ trang.
   const err = await p.evaluate(async () => { try { window.__moves = null; let msg = ''; await new Promise((r) => { window.__moves = (tools) => { tools[0].execute({ knob: 'accent', value: 'tím-than' }).catch((e) => { msg = e.message; r(); }); return []; }; document.querySelector('.step[data-s="3"] .demo-open').click(); }); return msg; } catch (e) { return 'x' + e.message; } });
   assert.match(err, /không có giá trị tím-than\. Các giá trị: #2563eb/);
