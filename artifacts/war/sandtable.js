@@ -91,10 +91,13 @@
 
     // Chú thích: chỉ những thứ trận này có.
     const has = (k) => b.features.some((f) => f.kind === k);
-    const L = [['fr', 'sq', b.sides.fr ? b.sides.fr.name : 'Bên kia'], ['vn', 'tri', b.sides.vn ? b.sides.vn.name : 'Quân ta']];
+    const shapeOf = (s) => { const u = b.units.find((x) => x.side === s); return !u ? (s === 'vn' ? 'tri' : 'sq') : u.kind === 'gun' ? 'tri' : u.kind === 'depot' ? 'dot' : 'sq'; };
+    const L = [['fr', shapeOf('fr'), b.sides.fr ? b.sides.fr.name : 'Bên kia'], ['vn', shapeOf('vn'), b.sides.vn ? b.sides.vn.name : 'Quân ta']];
+    const lineKinds = new Set(); Object.values(b.tracks).forEach((tr) => tr.keys.forEach((k) => (k.lines || []).forEach((l) => lineKinds.add(l.kind))));
     legend.innerHTML = L.map(([s, sh, n]) => `<span class="chip"><i class="st-ico ${sh}" style="background:${b.sides[s] ? b.sides[s].color : '#888'}"></i>${esc(n)}</span>`).join('')
       + (has('road') ? `<span class="chip"><i class="st-ico ln" style="background:${COLORS.road}"></i>Đường tiếp tế</span>` : '')
-      + `<span class="chip"><i class="st-ico ln" style="background:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Hào, hướng đánh</span>`
+      + (['attack', 'trench', 'retreat'].some((k) => lineKinds.has(k)) ? `<span class="chip"><i class="st-ico ln" style="background:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Hào, hướng đánh</span>` : '')
+      + (lineKinds.has('supply') ? `<span class="chip"><i class="st-ico ln" style="background:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Hướng chở hàng</span>` : '')
       // Trạng thái vẽ bằng ký hiệu, nên chú thích nói một lần ở đây thay vì ghi chữ cạnh từng đơn vị.
       + (Object.values(b.tracks).some((tr) => tr.keys.some((k) => (k.hit || []).length)) ? `<span class="chip"><i class="st-ico ring"></i>Đang bị đánh</span>` : '')
       + (Object.values(b.tracks).some((tr) => tr.keys.some((k) => (k.lose || []).length)) ? `<span class="chip"><i class="st-ico flag" style="--fc:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Cắm cờ: đã mất</span>` : '');
@@ -105,6 +108,8 @@
     let curView = 'tilt';
 
     // ---------- 3D ----------
+    // symbolScale: trận trải rộng (đường tiếp tế vài chục km) thì phóng ký hiệu và đường cho dễ thấy.
+    const SS = b.symbolScale || 1;
     let THREE = window.THREE, scene, camera, unitGroup, lineGroup, zoneGroup, meshes = {}, ground = null, eyeMark = null;
     function init3d() {
       if (!THREE) return false;
@@ -162,8 +167,8 @@
       b.units.forEach((u) => {
         const [x, z] = G.xz(u.at), h = G.hAt(x, z), gun = u.kind === 'gun', top = gun ? .34 : .16;
         const other = Object.keys(b.sides).find((k) => k !== u.side);
-        const grp = new THREE.Group(); grp.position.set(x, h, z);
-        const body = new THREE.Mesh(gun ? new THREE.ConeGeometry(.14, .34, 4) : new THREE.BoxGeometry(.3, .16, .3), new THREE.MeshLambertMaterial({ color: b.sides[u.side] ? b.sides[u.side].color : '#888', transparent: true }));
+        const grp = new THREE.Group(); grp.position.set(x, h, z); grp.scale.setScalar(SS);
+        const body = new THREE.Mesh(gun ? new THREE.ConeGeometry(.14, .34, 4) : u.kind === 'depot' ? new THREE.CylinderGeometry(.15, .15, .16, 12) : new THREE.BoxGeometry(.3, .16, .3), new THREE.MeshLambertMaterial({ color: b.sides[u.side] ? b.sides[u.side].color : '#888', transparent: true }));
         body.position.y = top / 2 + .01;
         const flag = new THREE.Group(), pole = new THREE.Mesh(poleGeo, new THREE.MeshLambertMaterial({ color: '#3b3127' }));
         pole.position.y = top + .22;
@@ -194,11 +199,11 @@
       const vn = b.sides.vn ? b.sides.vn.color : '#b23a2a';
       lines.forEach((l) => {
         const color = l.kind === 'retreat' ? COLORS.retreat : l.color || vn;
-        const r = l.kind === 'trench' ? .022 : .04, lift = l.kind === 'trench' ? .015 : .09;
+        const r = (l.kind === 'trench' ? .022 : .04) * SS, lift = (l.kind === 'trench' ? .015 : .09) * SS;
         lineGroup.add(tube(l.pts, color, r, lift));
-        if (l.kind === 'attack' || l.kind === 'retreat') { // đầu mũi tên
+        if (l.kind === 'attack' || l.kind === 'retreat' || l.kind === 'supply') { // đầu mũi tên
           const d = drape(l.pts.slice(-2), lift, .02), a = d[d.length - 2], e = d[d.length - 1];
-          const head = new THREE.Mesh(new THREE.ConeGeometry(.1, .24, 8), new THREE.MeshLambertMaterial({ color }));
+          const head = new THREE.Mesh(new THREE.ConeGeometry(.1 * SS, .24 * SS, 8), new THREE.MeshLambertMaterial({ color }));
           head.position.copy(e); head.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), e.clone().sub(a).normalize()); lineGroup.add(head);
         }
       });
@@ -235,9 +240,9 @@
         ctx.fillStyle = 'rgba(178,58,42,.16)'; ctx.fill(); ctx.setLineDash([5, 4]); ctx.strokeStyle = 'rgba(178,58,42,.7)'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.setLineDash([]); });
       if (vs) { const [px, pz] = flatProj(vs.x, vs.z); ctx.beginPath(); ctx.arc(px, pz, 6, 0, Math.PI * 2); ctx.fillStyle = '#1d1d1b'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); }
       S.lines.forEach((l) => {
-        const color = l.kind === 'retreat' ? COLORS.retreat : (b.sides.vn || {}).color || '#b23a2a';
+        const color = l.kind === 'retreat' ? COLORS.retreat : l.color || (b.sides.vn || {}).color || '#b23a2a';
         path(l.pts, color, l.kind === 'trench' ? 2 : 3, l.kind === 'trench' ? [4, 3] : null);
-        if (l.kind !== 'attack' && l.kind !== 'retreat') return;
+        if (l.kind !== 'attack' && l.kind !== 'retreat' && l.kind !== 'supply') return;
         const [a, e] = l.pts.slice(-2).map(G.xz).map(([x, z]) => flatProj(x, z)), ang = Math.atan2(e[1] - a[1], e[0] - a[0]);
         ctx.beginPath(); ctx.moveTo(e[0], e[1]);
         ctx.lineTo(e[0] - 10 * Math.cos(ang - .45), e[1] - 10 * Math.sin(ang - .45)); ctx.lineTo(e[0] - 10 * Math.cos(ang + .45), e[1] - 10 * Math.sin(ang + .45));
@@ -247,7 +252,7 @@
         const other = Object.keys(b.sides).find((k) => k !== u.side);
         if (S.hit.has(u.id) && !lost) { ctx.beginPath(); ctx.arc(px, pz, 13, 0, Math.PI * 2); ctx.strokeStyle = COLORS.hit; ctx.lineWidth = 3; ctx.stroke(); }
         ctx.globalAlpha = S.dim.has(u.id) ? .35 : 1; ctx.fillStyle = lost ? COLORS.lost : (b.sides[u.side] || {}).color || '#888';
-        ctx.beginPath(); if (u.kind === 'gun') { ctx.moveTo(px, pz - 9); ctx.lineTo(px + 9, pz + 6); ctx.lineTo(px - 9, pz + 6); } else ctx.rect(px - 8, pz - 8, 16, 16); ctx.fill();
+        ctx.beginPath(); if (u.kind === 'gun') { ctx.moveTo(px, pz - 9); ctx.lineTo(px + 9, pz + 6); ctx.lineTo(px - 9, pz + 6); } else if (u.kind === 'depot') ctx.arc(px, pz, 8, 0, Math.PI * 2); else ctx.rect(px - 8, pz - 8, 16, 16); ctx.fill();
         ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = 1.5; ctx.stroke();
         if (lost) { ctx.strokeStyle = '#3b3127'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(px, pz); ctx.lineTo(px, pz - 22); ctx.stroke();
           ctx.fillStyle = other ? b.sides[other].color : COLORS.hit; ctx.fillRect(px, pz - 22, 12, 8); }
@@ -379,7 +384,7 @@
       });
       (S.zones || []).forEach((zn, i) => {
         const e = zoneLbls[i]; if (!e) return; const [x, y, front] = screenAt(zn.x, zn.z); if (!front) { e.hidden = true; return; }
-        e.textContent = (units[zn.id].side === 'vn' ? 'Pháo Việt Minh ở đâu?' : 'Không rõ'); e.hidden = false;
+        e.textContent = zn.label || (units[zn.id].side === 'vn' ? 'Pháo Việt Minh ở đâu?' : 'Không rõ'); e.hidden = false;
         const w = e.offsetWidth, h = e.offsetHeight, bx = [x - w / 2, y - h / 2, x + w / 2, y + h / 2];
         if (bx[0] < 2 || bx[1] < 2 || bx[2] > W - 2 || bx[3] > H - 2 || hitAny(bx, taken)) { e.hidden = true; return; }
         taken.push(bx); e.style.transform = `translate(${Math.round(bx[0])}px, ${Math.round(bx[1])}px)`;
@@ -388,7 +393,7 @@
     }
     // Chạm vào ký hiệu (hay nhãn của nó): hiện tên đầy đủ, bên nào và đang ra sao ở mốc này. Chạm chỗ trống thì đóng.
     function unitFacts(u, S) {
-      const side = b.sides[u.side] ? b.sides[u.side].name : '', kind = u.kind === 'gun' ? 'trận địa pháo' : 'cứ điểm';
+      const side = b.sides[u.side] ? b.sides[u.side].name : '', kind = u.kind === 'gun' ? 'trận địa pháo' : u.kind === 'depot' ? 'kho, điểm trung chuyển' : 'cứ điểm';
       const state = S.lose.has(u.id) ? 'đã mất' : S.hit.has(u.id) ? 'đang bị đánh' : '';
       return [side, kind, state].filter(Boolean).join(' · ');
     }
@@ -552,7 +557,7 @@
         // Chỉ bỏ ký hiệu khỏi mắt bên kia; thay bằng một vùng nghi ngờ rộng, lệch khỏi chỗ thật cho đúng là "không biết chính xác".
         const hide = new Set(fk.hide || []);
         S = { ...S, show: new Set([...S.show].filter((id) => !hide.has(id))), zones: [...hide].filter((id) => units[id] && S.show.has(id)).map((id, i) => {
-          const [x, z] = G.xz(units[id].at), a = (i * 2.4 + id.length) % (Math.PI * 2); return { id, x: x + Math.cos(a) * .45, z: z + Math.sin(a) * .45, r: 1 + (i % 2) * .25 }; }) };
+          const [x, z] = G.xz(units[id].at), a = (i * 2.4 + id.length) % (Math.PI * 2); return { id, x: x + Math.cos(a) * .45, z: z + Math.sin(a) * .45, r: 1 + (i % 2) * .25, label: fk.zoneLabel }; }) };
         cap.innerHTML += `<span class="st-text st-fogtext"><b>${esc(fk.who)}:</b> ${esc(fk.text || '')}${fk.src ? ` <span class="muted">Nguồn: ${esc(fk.src)}.</span>` : ''}</span>`;
       }
       if (renderer) {

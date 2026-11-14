@@ -41,11 +41,11 @@ Vì sao hợp cách học đã chọn (`learning/war.md`, mục "Cách dạy mô
 { "id": "dien-bien-phu-1954", "title": "…", "bbox": [nam, tây, bắc, đông], "exaggerate": 2,
   "note": "Địa hình thật, vị trí ước lượng…", "sides": { "fr": { "name": "Quân Pháp", "color": "#2f5f96" }, "vn": { … } },
   "features": [{ "kind": "river" | "road" | "airfield", "name", "pts": [[lat, lon], …], "snap": "low" }],
-  "units": [{ "id", "side", "kind": "fort" | "gun", "name", "short", "at": [lat, lon], "snap": "high", "rank": 1–3 }],
+  "units": [{ "id", "side", "kind": "fort" | "gun" | "depot", "name", "short", "at": [lat, lon], "snap": "high", "rank": 1–3 }],
   "views": { "tilt": { "label", "yaw", "pitch", "dist", "target" }, "top": { … }, "hill": { "label", "from": [lat, lon, km trên mặt đất], "target" } },
   "tracks": { "real": { "label": "Chuyện thật", "tag": "real", "keys": [ { "date", "title", "text", "src",
       "show" | "add" | "remove": [id], "lose": [id] (giữ tới cuối), "hit" | "dim": [id] (chỉ mốc đó), "rename": { id: "tên mới" },
-      "lines": [{ "kind": "attack" | "retreat" | "trench", "pts" }], "keepLines": true, "focus": [lat, lon],
+      "lines": [{ "kind": "attack" | "retreat" | "trench" | "supply", "pts", "color"? }], "keepLines": true, "focus": [lat, lon],
       "fog": { "who": "Mắt quân Pháp", "hide": [id], "text", "src" } } ] },
     "A": { "label": "Nếu đánh ngay", "tag": "sim", "preview": 1, "keys": [{ "same": "real:0" }, …] } },
   "terrain": "fetch-terrain.mjs tự ghi" }
@@ -53,8 +53,10 @@ Vì sao hợp cách học đã chọn (`learning/war.md`, mục "Cách dạy mô
 
 - Track `tag: "sim"` hiện nhãn "Mô phỏng". Mọi đoạn kể của mô phỏng ghi rõ "Phỏng đoán", và `src` ghi dựa trên nguồn nào (luật 10 trong `profile/TUTOR.md`).
 - `preview`: mốc hiện khi bấm "Xem" ở bước chọn (mặc định 1, là kế hoạch, chưa phải kết cục).
+- `symbolScale`: phóng ký hiệu và đường (mặc định 1, hợp với vùng khoảng 15 km); vùng rộng vài chục km thì đặt 3 đến 4.
 - `exaggerate`: phóng độ cao cho dễ thấy đồi; trang tự ghi "độ cao ×2" ở góc sa bàn.
-- `fog`: mốc nào có thì sa bàn hiện nút mang tên `who`. Bấm vào, các ký hiệu trong `hide` biến thành vùng nghi ngờ rộng, kèm đoạn `text` và nguồn. Dùng để người học thấy bên kia biết gì lúc đó; chỉ ghi điều có nguồn.
+- `depot` (kho, điểm trung chuyển) vẽ thành khối tròn; đường `supply` (hướng chở hàng) có mũi tên, `color` đổi màu cho hàng của bên kia. Dùng cho bài hậu cần.
+- `fog`: mốc nào có thì sa bàn hiện nút mang tên `who`. `zoneLabel` thay chữ trong vùng nghi ngờ (mặc định "Pháo Việt Minh ở đâu?"). Bấm vào, các ký hiệu trong `hide` biến thành vùng nghi ngờ rộng, kèm đoạn `text` và nguồn. Dùng để người học thấy bên kia biết gì lúc đó; chỉ ghi điều có nguồn.
 - `short` của sông, đường, sân bay hiện thành tên nằm trên địa hình.
 - Trạng thái vẽ bằng ký hiệu, không bằng chữ: `hit` là vòng đỏ dưới chân, `lose` là khối xám có cờ của bên kia cắm lên; chú thích tự thêm hai mục này khi trận có. Nhãn chỉ ghi tên, tên trùng (như mấy trận địa pháo) chỉ ghi một lần, đơn vị trong `dim` không ghi tên.
 - Màu đất theo độ cao so với đáy lòng chảo (ruộng nhạt, sườn cỏ, đồi rừng, đỉnh nâu), cộng đường đồng mức 50 m và 250 m theo độ cao thật. Đáy phẳng không vẽ đồng mức.

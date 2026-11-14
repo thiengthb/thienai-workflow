@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="vi" data-board="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="lesson-id" content="war-04-sandtable">
+<title>Buổi 4: Hậu cần trên đường núi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style id="kit-css">
+/* Lõi chung cho mọi trang artifact của thien (xem artifacts/README.md).
+   Sửa ở đây; make-round.mjs và các script dựng trang chép file này vào trang lúc dựng.
+   Gu: Onest, nền trắng ngà, chữ gần đen, một màu nhấn teal cho thứ quan trọng. Màu đúng/sai tách khỏi màu nhấn. */
+:root {
+  --bg: #faf8f3; --card: #ffffff; --soft: #f3f1ec; --line: #e7e3da; --ink: #1b1b1a; --muted: #6b6862;
+  --accent: #308e84; --accent-soft: #e3f1ef; --accent-ink: #1f6b63;
+  --good: #277a4c; --good-soft: #e6f3eb; --bad: #c2410c; --bad-soft: #fdeee6;
+  --shadow: 0 1px 2px rgba(27, 27, 26, .06), 0 6px 18px rgba(27, 27, 26, .06);
+  --font: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --r: 8px; --r-lg: 8px;   /* one radius for buttons, inputs, chips and cards (thienui docs/taste.md); round only for dots and knobs */
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161615; --card: #1f1f1d; --soft: #262523; --line: #34322e; --ink: #ecebe7; --muted: #a19e97;
+  --accent: #4fb3a6; --accent-soft: #1c3330; --accent-ink: #8fd9c9;
+  --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #161615; --card: #1f1f1d; --soft: #262523; --line: #34322e; --ink: #ecebe7; --muted: #a19e97;
+  --accent: #4fb3a6; --accent-soft: #1c3330; --accent-ink: #8fd9c9;
+  --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--font); margin: 0; }
+/* Thanh cuộn mảnh, nền trong, con trượt bo tròn: giống sakubun (app/globals.css). */
+* { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+@supports selector(::-webkit-scrollbar) {
+  *::-webkit-scrollbar { width: 8px; height: 8px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb { background: var(--line); border-radius: 9999px; }
+  *::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+}
+h1, h2, h3 { margin: 0; line-height: 1.25; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; text-underline-offset: 3px; }
+code, .mono { font-family: var(--mono); font-size: .88em; }
+.muted { color: var(--muted); }
+.label { font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Nút: viền 2px cùng màu, bo 8px, bấm thì lún nhẹ. */
+.btn { font: 600 14px/1 var(--font); color: var(--ink); background: var(--card); border: 2px solid var(--line); border-bottom-width: 3px;
+  border-radius: var(--r); min-height: 36px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  cursor: pointer; white-space: nowrap; }
+.btn:hover { border-color: color-mix(in srgb, var(--line) 60%, var(--muted)); }
+.btn:active { transform: translateY(1px); border-bottom-width: 2px; }
+.btn[disabled] { opacity: .45; cursor: default; }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn.accent { background: var(--accent); border-color: color-mix(in srgb, var(--accent) 75%, #000); color: #fff; }
+.btn.ghost { background: transparent; border-color: transparent; }
+.btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); }
+.btn.good[aria-pressed="true"] { background: var(--good-soft); border-color: var(--good); color: var(--good); }
+.btn.bad[aria-pressed="true"] { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+@media (pointer: coarse) { .btn { min-height: 40px; } }
+
+/* Nhóm nút chọn một (segmented). */
+.seg { display: inline-flex; background: var(--soft); border-radius: var(--r); padding: 3px; gap: 2px; }
+.seg button { font: 500 13px/1 var(--font); color: var(--muted); background: transparent; border: 0; border-radius: calc(var(--r) - 3px); min-height: 30px;
+  padding: 0 10px; cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: var(--shadow); font-weight: 600; }
+@media (pointer: coarse) { .seg button { min-height: 36px; } }
+
+.chip { font: 600 12px/1 var(--font); padding: 4px 8px; border-radius: var(--r); background: var(--soft); color: var(--muted); white-space: nowrap; }
+.chip.good { background: var(--good-soft); color: var(--good); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+.chip.accent { background: var(--accent-soft); color: var(--accent-ink); }
+
+.card { background: var(--card); border: 2px solid var(--line); border-radius: var(--r-lg); }
+textarea, input[type="text"] { font: 15px/1.45 var(--font); color: var(--ink); background: var(--card); border: 2px solid var(--line);
+  border-radius: 8px; padding: 8px 10px; width: 100%; }
+textarea:focus, input[type="text"]:focus { border-color: var(--accent); outline: none; }
+
+/* Thanh tiến độ. */
+.bar { height: 6px; background: var(--soft); border-radius: 99px; overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width .2s; }
+
+/* Thông báo nổi ở đáy màn. */
+#kit-toast { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(8px);
+  z-index: 60; max-width: min(460px, calc(100% - 32px)); background: var(--ink); color: var(--bg); border-radius: var(--r);
+  padding: 10px 14px; font: 500 14px/1.4 var(--font); box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .15s, transform .15s; }
+#kit-toast.on { opacity: 1; transform: translateX(-50%); pointer-events: auto; }
+@media (prefers-reduced-motion: reduce) { #kit-toast, .bar > span { transition: none; } }
+
+/* Nói thay gõ (Kit.dictate, Kit.micRow): nút mic cạnh ô chữ, ẩn nơi không có mic. */
+.mic-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
+.btn.mic { width: 44px; min-width: 44px; padding: 0; }
+.btn.mic svg { width: 18px; height: 18px; }
+.btn.mic[aria-pressed="true"] { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+.mic-partial { font-size: 13.5px; color: var(--muted); margin: 0; }
+.mic-partial:empty { display: none; }
+
+/* Hỏi Claude trên trang (Kit.ask): chỉ hiện khi trang hỏi được (html.kit-ask-on). Câu trả lời là chữ thường, giữ xuống dòng. */
+html:not(.kit-ask-on) .kit-ask { display: none !important; }
+.ai-out { white-space: pre-wrap; font-size: 14.5px; line-height: 1.55; padding: 10px 12px; border-radius: var(--r);
+  background: var(--accent-soft); color: var(--ink); border: 0; margin: 0; }
+.ai-out:empty { display: none; }
+.ai-out.thinking { color: var(--muted); background: var(--soft); }
+.ai-out::before { content: "Claude"; display: block; font: 600 11px/1.4 var(--font); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 2px; }
+.ai-out.thinking::before { color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { .ai-out.thinking { animation: ai-pulse 1.4s ease-in-out infinite; } }
+@keyframes ai-pulse { 50% { opacity: .55; } }
+
+/* Ô hỏi Claude dùng chung (bài học, trang chọn phương án). Nút mở là một dòng chữ nhỏ, không giành mắt với nút chính. */
+.ai-ask { display: grid; gap: 8px; }
+.ai-open { justify-self: start; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 0; border: 0; background: none;
+  font: 500 14px var(--font); color: var(--accent-ink); cursor: pointer; }
+.ai-open::before { content: "?"; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid currentColor; font: 700 11px/15px var(--font); text-align: center; flex: none; }
+.ai-form { display: flex; gap: 8px; }
+.ai-form[hidden] { display: none; }
+.ai-form input { flex: 1; min-width: 0; min-height: 40px; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--r);
+  background: var(--card); color: var(--ink); font: 15px var(--font); }
+.ai-form .btn { flex: none; }
+@media (pointer: coarse) { .ai-open { min-height: 40px; } }
+.ai-open:disabled { color: var(--muted); cursor: default; }
+</style>
+<style id="lesson-css">
+/* Khung buổi học trên lõi chung (artifacts/kit/kit.css). Chỉ khung: đầu trang, bước, câu hỏi, góp ý, kết thúc.
+   Phần riêng của bài (sơ đồ, mô phỏng, bản đồ) viết trong trang. Một bo góc 8px, theo thienui docs/taste.md. */
+body { font-size: 16px; line-height: 1.55; -webkit-text-size-adjust: 100%; }
+.wrap { max-width: 560px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 64px max(16px, env(safe-area-inset-left, 0px)); }
+.top { position: sticky; top: 0; z-index: 5; padding: 12px 0 10px; background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.top .meta { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.top .bar { height: 4px; }
+.top .meta { align-items: center; }
+.top .meta > span:first-child { flex: 1; min-width: 0; }
+.top .back { background: none; border: 0; padding: 0 8px; min-height: 32px; font: 600 13px/1 var(--font); color: var(--accent); cursor: pointer; border-radius: var(--r); }
+.top .back:hover { background: var(--soft); }
+@media (pointer: coarse) { .top .back { min-height: 44px; } }
+
+.step { display: none; }
+.step.on { display: grid; gap: 12px; animation: step-in .2s ease; }
+@keyframes step-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .step.on { animation: none; } }
+.step h1 { font-size: 22px; margin-top: 12px; letter-spacing: -.01em; }
+.step h2 { font-size: 18px; margin-top: 8px; letter-spacing: -.01em; }
+.step h1:focus, .step h2:focus { outline: none; }
+.step > .card, .step .card { padding: 14px; display: grid; gap: 10px; }
+.small { font-size: 14px; }
+.hide { display: none !important; }
+
+/* Nút đi tiếp: rộng hết cột, cao như vùng chạm, bo 8px như mọi nút. */
+.next { width: 100%; min-height: 44px; font-size: 15px; }
+
+/* Một dòng đáp án: cả dòng là vùng chạm; chọn, đúng, sai đều có chữ đi kèm, không chỉ đổi màu. */
+.opt { font: 15px/1.45 var(--font); color: var(--ink); background: var(--card); border: 2px solid var(--line); border-radius: var(--r);
+  min-height: 44px; padding: 10px 12px; width: 100%; text-align: left; display: flex; align-items: center; gap: 10px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent; transition: border-color .15s, background-color .15s; }
+.opt:hover:not([disabled]) { border-color: color-mix(in srgb, var(--line) 55%, var(--muted)); }
+.opt[disabled] { cursor: default; }
+.opt::after { margin-left: auto; font-size: 12px; font-weight: 700; flex: none; }
+.opt[aria-pressed="true"] { border-color: var(--ink); background: var(--soft); }
+.opt[aria-pressed="true"]::after { content: "Đã chọn"; }
+.opt.right { border-color: var(--good); background: var(--good-soft); }
+.opt.right::after { content: "Đúng"; color: var(--good); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.opt.wrong::after { content: "Bạn chọn"; color: var(--bad); }
+
+.q { display: grid; gap: 8px; }
+.q .status { font-size: 13px; font-weight: 600; min-height: 0; }
+.q .status:empty { display: none; }
+.q .status.good { color: var(--good); } .q .status.bad { color: var(--bad); }
+.why { display: none; font-size: 14px; padding: 10px 12px; background: var(--soft); border-radius: var(--r); }
+.why.on { display: block; }
+
+/* Lời phản hồi sau một lần thử. */
+.fb { font-size: 14.5px; padding: 10px 12px; border-radius: var(--r); background: var(--soft); }
+.fb:empty { display: none; }
+.fb.good { background: var(--good-soft); } .fb.bad { background: var(--bad-soft); }
+
+/* Tự nói lại: bản của Claude ẩn tới khi bấm xem. */
+.mine { display: none; }
+.mine.on { display: block; }
+.say { padding: 12px 14px; border-radius: var(--r); background: var(--accent-soft); color: var(--ink); font-size: 15px; }
+.say b { display: block; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 4px; }
+textarea { min-height: 88px; resize: vertical; }
+
+/* Góp ý cuối buổi. */
+.crit { display: grid; gap: 8px; }
+.crit + .crit { border-top: 1px solid var(--line); padding-top: 14px; }
+.crit b { font-size: 14px; }
+/* Góp ý: nút rời có viền, nút đã chọn tô đặc màu chữ (đen) cho dễ nhìn, như trang học cũ. */
+.seg.full { display: flex; width: 100%; gap: 8px; background: none; padding: 0; }
+.seg.full button { flex: 1; min-height: 44px; font-size: 15px; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: var(--r); box-shadow: none; }
+.seg.full button[aria-pressed="true"] { background: var(--ink); color: var(--card); border-color: var(--ink); box-shadow: none; }
+.done-msg { font-size: 14px; color: var(--muted); }
+.done-msg:empty { display: none; }
+
+/* Thông báo của phần tự lưu (learning/teaching/kit/kit.js), cùng kiểu với thông báo của lõi chung. */
+#kit-bar { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; display: none;
+  align-items: center; gap: 10px; width: min(480px, calc(100% - 24px)); background: var(--ink); color: var(--bg); border-radius: var(--r);
+  padding: 8px 8px 8px 14px; font: 500 14px/1.4 var(--font); box-shadow: var(--shadow); }
+#kit-bar.on { display: flex; }
+#kit-bar span { flex: 1 1 auto; min-width: 0; }
+#kit-bar button { font: 600 13px var(--font); border: 0; border-radius: var(--r); min-height: 32px; padding: 0 10px; cursor: pointer; background: var(--bg); color: var(--ink); flex: none; }
+#kit-bar button.x { background: transparent; color: var(--bg); }
+.kit-review-off [data-part~="review"] { display: none !important; }
+
+</style>
+<style id="war-css">
+/* Sa bàn và bố cục bài chiến tranh, trên lõi chung (kit.css) và khung buổi học (lesson.css).
+   Khung rộng (từ 900px): sa bàn bên trái đứng yên, các bước bên phải. Điện thoại: sa bàn trên, bước dưới.
+   Bước không ghi data-board thì ẩn sa bàn, trang về một cột hẹp như bài thường. Một bo góc 8px. */
+#board { display: none; }
+html[data-board="on"] #board { display: flex; }
+.st { flex-direction: column; background: var(--card); border: 2px solid var(--line); border-radius: var(--r); overflow: hidden; margin: 4px 0 12px; }
+.st-stage { position: relative; flex: 1; min-height: 0; background: var(--soft); overflow: hidden; }
+.st-canvas, .st-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+.st-canvas:active canvas { cursor: grabbing; }
+.st-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+/* Nhãn đơn vị: chữ nhỏ, không khung, viền sáng để đọc được trên đất (địa hình luôn sáng, kể cả chế độ tối). Trạng thái thể hiện bằng ký hiệu, không bằng chữ. */
+.st-lbl { position: absolute; left: 0; top: 0; font: 600 11.5px/1 var(--font); padding: 2px 3px; border-radius: 4px; color: #2b2a26;
+  text-shadow: 0 0 3px #fffbe9, 0 0 3px #fffbe9, 0 0 2px #fffbe9; white-space: nowrap; will-change: transform; }
+.st-lbl.fr, :root .st-lbl.fr { color: #234f80; } .st-lbl.vn, :root .st-lbl.vn { color: #9c2e21; }
+.st-lbl.lost, :root .st-lbl.lost { color: #5f5c56; font-weight: 500; }
+.st-lbl.hit, :root .st-lbl.hit { background: #d8402b; color: #fff; text-shadow: none; padding: 3px 6px; }
+.st-legend { position: absolute; left: 8px; top: 8px; display: flex; flex-wrap: wrap; gap: 4px; max-width: 60%; pointer-events: none; }
+.st-legend .chip, .st-note { background: color-mix(in srgb, var(--card) 90%, transparent); color: var(--ink); font-weight: 500; }
+.st-ico { display: inline-block; width: 9px; height: 9px; margin-right: 5px; vertical-align: -1px; }
+.st-ico.tri { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.st-ico.dot { border-radius: 50%; }
+.st-ico.ln { height: 3px; width: 14px; vertical-align: 2px; border-radius: 2px; }
+.st-ico.ring { width: 10px; height: 10px; border: 2.5px solid #d8402b; border-radius: 50%; box-sizing: border-box; }
+.st-ico.flag { width: 10px; height: 12px; vertical-align: -2px; background: linear-gradient(#3b3127, #3b3127) 0 0 / 1.5px 100% no-repeat, linear-gradient(var(--fc), var(--fc)) 1.5px 0 / 8px 6px no-repeat; }
+.st-views { position: absolute; right: 8px; top: 8px; max-width: calc(100% - 16px); overflow-x: auto; scrollbar-width: none; background: color-mix(in srgb, var(--soft) 92%, transparent); }
+.st-note { position: absolute; left: 8px; bottom: 8px; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Địa hình luôn sáng, kể cả chế độ tối, nên tên sông, đường dùng màu cố định với viền sáng cho dễ đọc. */
+.st-lbl.feat, :root .st-lbl.feat { border: 0; background: none; padding: 2px 4px; font-weight: 600; font-style: italic; font-size: 11.5px; color: #3d3524;
+  text-shadow: 0 0 3px #fffbe9, 0 0 3px #fffbe9, 0 0 2px #fffbe9; }
+.st-lbl.feat.river, :root .st-lbl.feat.river { color: #1d5f93; }
+.st-compass { position: absolute; right: 8px; bottom: 8px; display: flex; align-items: center; gap: 8px; pointer-events: none; padding: 4px 8px;
+  border-radius: var(--r); background: color-mix(in srgb, var(--card) 90%, transparent); color: var(--ink); font: 500 11px/1 var(--font); }
+.st-north { position: relative; width: 24px; height: 24px; flex: none; border-radius: 99px; border: 1.5px solid var(--line); display: block; }
+.st-north::before { content: ""; position: absolute; left: 50%; top: 2px; margin-left: -4px; border: 4px solid transparent; border-bottom: 7px solid #b23a2a; border-top: 0; }
+.st-north b::before { content: "B"; position: absolute; left: 50%; top: 9px; transform: translateX(-50%); font: 700 8px/1 var(--font); color: var(--muted); }
+.st-scale { display: grid; gap: 3px; justify-items: start; }
+.st-scale i { display: block; height: 5px; border: 1.5px solid var(--ink); border-top: 0; min-width: 20px; }
+.st-scale em { font-style: normal; }
+.st-info { position: absolute; left: 0; top: 0; z-index: 3; display: grid; gap: 2px; max-width: 240px; padding: 6px 10px; border-radius: var(--r);
+  background: var(--card); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 4px 14px rgb(0 0 0 / .18); pointer-events: none; font-size: 13px; line-height: 1.3; }
+.st-info span { color: var(--muted); font-size: 12px; }
+.st-info[hidden] { display: none; }
+.st-vs { position: absolute; left: 8px; bottom: 8px; display: flex; align-items: center; gap: 8px; background: var(--card); color: var(--ink);
+  border: 1px solid var(--line); font-weight: 500; }
+.st-vs span { min-width: 0; white-space: normal; line-height: 1.3; }
+.st-vs button { flex: none; min-height: 28px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r); background: var(--soft); color: var(--ink); font: 600 12px/1 var(--font); cursor: pointer; }
+@media (pointer: coarse) { .st-vs button { min-height: 36px; } }
+.st-vs[hidden] { display: none; }
+.st-lbl.zone, :root .st-lbl.zone { color: #8a2a1e; background: rgb(255 248 240 / .85); border: 1.5px dashed #b23a2a; font-style: italic; }
+.st-views .st-fog { border-left: 1px solid var(--line); }
+.st-views .st-fog[aria-pressed="true"] { background: #2b2b2b; color: #fff; }
+.st-views .st-fog[hidden] { display: none; }
+.st-cap { flex-wrap: wrap; }
+.st-fogtext { flex-basis: 100%; padding: 6px 10px; border-left: 3px solid #b23a2a; background: var(--soft); border-radius: var(--r); }
+.st-tl { padding: 8px 12px 12px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.st-row { display: flex; align-items: center; gap: 10px; }
+.st-play { width: 44px; min-height: 44px; padding: 0; flex: none; }
+.st-scroll { flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.st-scroll::-webkit-scrollbar { display: none; }
+.st-keys { --fill: 0; display: flex; justify-content: space-between; gap: 2px; position: relative; width: max-content; min-width: 100%; }
+.st-keys::before, .st-keys::after { content: ""; position: absolute; left: 22px; right: 22px; top: 12px; height: 4px; border-radius: 99px; background: var(--soft); }
+.st-keys::after { right: auto; width: calc((100% - 44px) * var(--fill)); background: var(--accent); }
+.st-key { position: relative; z-index: 1; background: none; border: 0; padding: 4px 0 2px; min-width: 44px; min-height: 44px; display: grid; justify-items: center; gap: 3px;
+  font: 500 11px/1.1 var(--font); color: var(--muted); cursor: pointer; white-space: nowrap; }
+.st-key i { width: 12px; height: 12px; border-radius: 99px; background: var(--card); border: 2px solid var(--line); margin-top: 2px; }
+.st-key.done i { background: var(--accent); border-color: var(--accent); }
+.st-key.now { color: var(--ink); font-weight: 700; }
+.st-key.now i { width: 16px; height: 16px; margin-top: 0; border: 3px solid var(--accent); }
+.st-key[disabled] { opacity: .35; cursor: default; }
+.st-cap { display: flex; gap: 8px; align-items: baseline; font-size: 14px; line-height: 1.45; }
+.st-cap .chip { flex: none; }
+.chip.sim { background: #f6ecd6; color: #8a5a12; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .chip.sim { background: #3a2f1a; color: #e9c27a; } }
+:root[data-theme="dark"] .chip.sim { background: #3a2f1a; color: #e9c27a; }
+/* Trước khi chọn: chưa cho kéo thời gian. */
+.st.locked .st-row { display: none; }
+
+/* Bố cục: điện thoại và cột hẹp, sa bàn ở trên các bước. */
+#board { height: 50vh; min-height: 300px; max-height: 520px; }
+@media (max-width: 899px) { #board { height: 62vh; scroll-margin-top: 52px; } .st-cap { font-size: 13px; } .st-legend { display: none; } }
+@media (pointer: coarse), (max-width: 899px) { .st-views button { min-height: 36px; } }
+/* Link trong chữ (nguồn): đủ cao để bấm trên điện thoại. */
+.step a { display: inline-block; min-height: 24px; line-height: 24px; }
+/* Khung rộng: hai cột, sa bàn đứng yên bên trái, cao vừa khung xem. */
+@media (min-width: 900px) {
+  html[data-board="on"] .wrap { max-width: 1240px; display: grid; grid-template-columns: minmax(0, 1fr) 400px; column-gap: 16px; align-items: start; }
+  html[data-board="on"] .top { grid-column: 1 / -1; }
+  html[data-board="on"] #board { grid-column: 1; grid-row: 2 / span 40; position: sticky; top: 52px; height: calc(100vh - 68px); max-height: none; margin: 0; }
+  html[data-board="on"] .step { grid-column: 2; }
+}
+
+/* Chọn nước đi: không có đúng sai, chỉ "Bạn chọn" và "Chuyện thật". */
+.choose { display: grid; gap: 8px; }
+.choose .row { display: flex; gap: 6px; align-items: stretch; }
+.choose .row .opt { flex: 1; }
+.choose [data-plan] { flex: none; min-height: 44px; font-size: 13px; }
+.opt.picked { border-color: var(--ink); background: var(--soft); }
+.opt.picked::after { content: "Bạn chọn"; }
+.opt.real { border-color: var(--good); background: var(--good-soft); }
+.opt.real::after { content: "Chuyện thật"; color: var(--good); }
+.opt.picked.real::after { content: "Bạn chọn · chuyện thật"; }
+.fb.note { background: var(--accent-soft); }
+.know { margin: 0; padding-left: 18px; font-size: 14.5px; display: grid; gap: 4px; }
+.tracks { display: flex; gap: 6px; flex-wrap: wrap; }
+.tracks .btn { flex: 1; min-height: 40px; }
+.st-key[hidden] { display: none; }
+/* Danh sách đơn vị cho bàn phím: ẩn khỏi mắt, hiện thành một hàng nút khi được Tab tới. */
+.st-units { position: absolute; left: 8px; top: 8px; display: flex; flex-wrap: wrap; gap: 4px; max-width: calc(100% - 16px); z-index: 4; opacity: 0; pointer-events: none; }
+.st-units:focus-within { opacity: 1; pointer-events: auto; }
+.st-units button { min-height: 32px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); color: var(--ink); font: 500 12px/1 var(--font); cursor: pointer; }
+</style>
+<style>
+/* Bài 4: đoán con số, hình bao gạo */
+.g4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 10px 0; }
+.g4 button { font: 500 15px/1.3 var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: var(--r); min-height: 48px; padding: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.g4 button[aria-pressed="true"] { border-color: var(--ink); font-weight: 600; }
+.g4 button.right { border-color: var(--good); background: var(--good-soft); font-weight: 700; }
+.g4 button.wrong { border-color: var(--bad); background: var(--bad-soft); font-weight: 700; }
+.g4 button.right::after { content: " · Đúng"; } .g4 button.wrong::after { content: " · Bạn chọn"; }
+.g4 button[disabled] { cursor: default; color: var(--ink); }
+.bags { display: flex; flex-wrap: wrap; gap: 4px; margin: 10px 0 4px; }
+.bags i { width: 18px; height: 22px; border-radius: 5px 5px 7px 7px; background: #cdbf9a; border: 1px solid #a8996f; }
+.bags i.keep { background: var(--good); border-color: var(--good); }
+.reveal { display: none; } .reveal.on { display: block; }
+</style>
+</head>
+<body>
+<script type="application/json" id="lesson">{"id":"war-04-sandtable","subject":"Chiến tranh","title":"Buổi 4: Hậu cần trên đường núi","stuck":["2026-11-12, buổi 3: xếp lệch ở hai tầng dưới, chưa phân biệt “một đợt đánh” (Khâm, Liêm, Ung) với “một trận” (trận lớn trên sông)","2026-11-12, buổi 3: chưa nối lý do Đại tướng Võ Nguyên Giáp hoãn trận với tầng trên (“bại thì hết vốn”)"]}</script>
+<script type="application/json" id="battle" data-src="../battles/dien-bien-phu-supply-1954.json">{"id":"dien-bien-phu-supply-1954","title":"Đường tiếp tế Tuần Giáo – Điện Biên Phủ, 1954","bbox":[21.3,102.94,21.66,103.56],"exaggerate":1.5,"note":"Địa hình là độ cao thật. Đường, kho và hướng chở hàng là ước lượng để minh họa, không đúng từng mét.","sides":{"fr":{"name":"Quân Pháp","color":"#2f5f96"},"vn":{"name":"Bên ta","color":"#b23a2a"}},"colorNote":"Màu hai bên chỉ để dễ phân biệt.","features":[{"id":"river","short":"sông Nậm Rốm","kind":"river","name":"sông Nậm Rốm","snap":"low","snapKm":0.5,"pts":[[21.47273,103.03106],[21.45455,103.01944],[21.43636,103.01556],[21.41091,103.01556],[21.39636,103.01169],[21.38909,103.01169],[21.37091,103.00781],[21.35636,103.00394],[21.33455,103.00781],[21.31636,103.00006],[21.30909,102.99231]]},{"id":"road","short":"Tuần Giáo – Điện Biên Phủ, 82 km","kind":"road","name":"đường Tuần Giáo – Điện Biên Phủ, dài 82 km, trước kia chỉ rộng 1 m","pts":[[21.593,103.417],[21.575,103.36],[21.548,103.29],[21.525,103.235],[21.495,103.175],[21.462,103.115],[21.43,103.066],[21.405,103.035],[21.39,103.02]]},{"id":"road41","short":"từ Sơn La, hậu phương","kind":"road","name":"đường từ Sơn La và hậu phương lên Tuần Giáo","pts":[[21.5,103.56],[21.53,103.51],[21.565,103.46],[21.593,103.417]]},{"id":"air","short":"sân bay Mường Thanh","kind":"airfield","name":"sân bay Mường Thanh","pts":[[21.405,103.006],[21.39,103.01]]}],"units":[{"id":"hq","side":"fr","kind":"fort","name":"Tập đoàn cứ điểm Điện Biên Phủ","short":"Điện Biên Phủ","at":[21.3868,103.0158],"rank":3},{"id":"tg","side":"vn","kind":"depot","name":"Tuần Giáo: nơi đường lớn gặp đoạn 82 km cuối","short":"Tuần Giáo","at":[21.593,103.417],"rank":3},{"id":"mid","side":"vn","kind":"depot","name":"Kho dọc đường (vị trí ước lượng)","short":"Kho dọc đường","at":[21.525,103.235],"rank":1},{"id":"front","side":"vn","kind":"depot","name":"Kho gần mặt trận (vị trí ước lượng)","short":"Kho mặt trận","at":[21.44,103.07756],"snap":"high","snapKm":0.6,"rank":2}],"views":{"tilt":{"label":"Nghiêng","yaw":-0.3,"pitch":0.9,"dist":1.05,"target":[21.47,103.22]},"top":{"label":"Từ trên","yaw":0,"pitch":1.5,"dist":1.1,"target":[21.48,103.25]},"hill":{"label":"Từ Tuần Giáo nhìn về mặt trận","from":[21.6,103.45,0.9],"target":[21.4,103.03]}},"tracks":{"real":{"label":"Chuyện thật","tag":"real","preview":2,"keys":[{"date":"12/1953","title":"Làm đường","text":"Từ tháng 12/1953 làm và sửa đường. Đoạn Tuần Giáo đến Điện Biên Phủ dài 82 km, trước kia chỉ rộng 1 m, được mở rộng cho xe kéo pháo. Đường kéo pháo mới rộng 3 m, ngụy trang để máy bay Pháp khó phát hiện.","src":"Học viện Quốc phòng, \"Chiến dịch Điện Biên Phủ 1954\"","show":["hq","tg","mid","front"]},{"date":"1–2/1954","title":"Ô tô là chính trên đường lớn","text":"Phương châm của Tổng cục Cung cấp: \"lấy vận tải cơ giới là chủ yếu, triệt để phát huy cơ giới, đồng thời tranh thủ mọi phương tiện thô sơ\". Cả 16 đại đội, 534 ô tô được dùng, có lúc thêm 94 xe của pháo binh và phòng không. Tuyến hậu cần chiến dịch dài hơn 350 km, chia thành các binh trạm.","src":"Báo Quân đội nhân dân, \"Sức mạnh hậu cần trong Chiến dịch Điện Biên Phủ\" (2024)","lines":[{"kind":"supply","pts":[[21.5,103.56],[21.53,103.51],[21.565,103.46],[21.59,103.425]]},{"kind":"supply","pts":[[21.585,103.4],[21.56,103.33],[21.53,103.245]]}]},{"date":"2–3/1954","title":"Đoạn khó: xe đạp thồ, thuyền bè, sức người","text":"Hơn 20.000 xe đạp thồ, mỗi xe chở 200 đến 300 kg, có xe tới 352 kg, gấp hơn 10 lần một người gánh. Thêm 11.600 bè mảng; thuyền theo sông Nậm Na chở 1.700 tấn gạo về Lai Châu và Điện Biên Phủ. Hơn 261.000 dân công cùng chở.","src":"Học viện Quốc phòng; báo Quân đội nhân dân (2024)","keepLines":true,"lines":[{"kind":"supply","pts":[[21.52,103.225],[21.49,103.165],[21.46,103.112],[21.445,103.088]]},{"kind":"supply","pts":[[21.66,103.02],[21.6,103.04],[21.52,103.06],[21.45,103.075]]}],"fog":{"who":"Mắt quân Pháp","hide":["front","mid"],"text":"Chỉ huy Pháp cho rằng bên ta không thể bảo đảm hậu cần cho một chiến dịch lớn, dài ngày ở vùng núi như thế. Xe đạp thồ là bất ngờ ngoài tính toán của họ.","src":"Học viện Quốc phòng, \"Chiến dịch Điện Biên Phủ 1954\"","zoneLabel":"Kho của Việt Minh ở đâu?"}},{"date":"trong chiến dịch","title":"Lấy thêm tại chỗ","text":"Các đại đoàn tự kiếm thêm ngay ở Tây Bắc: Đại đoàn 308 lấy được 52 tấn củ mài, 32 tấn rau rừng, đánh bắt 32 tấn cá; Đại đoàn 316 đưa đàn bò từ Thanh Hóa lên. Bộ đội đào bếp Hoàng Cầm và giếng nước ngay tại trận địa.","src":"Báo Quân đội nhân dân (2024)","keepLines":true,"lines":[{"kind":"supply","pts":[[21.37,103.15],[21.4,103.12],[21.43,103.09]]},{"kind":"supply","pts":[[21.5,102.98],[21.47,103.03],[21.45,103.07]]}]},{"date":"4/1954","title":"Bên kia: hàng thả từ máy bay","text":"Pháp tiếp tế cho tập đoàn cứ điểm bằng máy bay thả hàng. Ngày 1/4/1954, hơn một nửa số hàng thả rơi ngoài vị trí. Ngày 18/4, hơn 30 tấn hàng rơi sang trận địa của ta.","src":"Học viện Quốc phòng, \"Chiến dịch Điện Biên Phủ 1954\"","keepLines":true,"hit":["hq"],"focus":[21.4,103.03],"lines":[{"kind":"supply","color":"#2f5f96","pts":[[21.3,103.2],[21.35,103.1],[21.385,103.025]]}]},{"date":"7/5","title":"Nuôi đủ tới ngày cuối","text":"Tổng cộng hơn 20.000 tấn vật chất, nuôi hơn 87.000 người suốt chiến dịch. Chiều 7/5/1954, tập đoàn cứ điểm bị chiếm.","src":"Báo Quân đội nhân dân (2024); Britannica","keepLines":true,"lose":["hq"]}]},"A":{"label":"Nếu chỉ dùng ô tô","tag":"sim","preview":1,"keys":[{"date":"12/1953","title":"Làm đường","same":"real:0"},{"date":"1–2/1954","title":"Mô phỏng: dồn hết vào ô tô","text":"Phỏng đoán: mọi sức lực dồn vào khoảng 600 ô tô. Trên đường lớn từ Sơn La lên Tuần Giáo, xe chở nhanh và nhiều.","src":"Mô phỏng, dựa trên số xe trong báo Quân đội nhân dân (2024)","lines":[{"kind":"supply","pts":[[21.5,103.56],[21.53,103.51],[21.565,103.46],[21.59,103.425]]}]},{"date":"sau đó","title":"Mô phỏng: hàng dừng ở Tuần Giáo","text":"Phỏng đoán: đoạn 82 km cuối là đường núi, máy bay Pháp thường xuyên đánh phá (chuyện thật). Mỗi đoạn hỏng là cả đoàn xe nằm chờ; hàng ùn ở Tuần Giáo, kho gần mặt trận thì thiếu.","src":"Mô phỏng, dựa trên Học viện Quốc phòng","keepLines":true,"hit":["tg"],"dim":["front"]}]},"B":{"label":"Nếu chỉ dùng sức người gánh","tag":"sim","preview":1,"keys":[{"date":"12/1953","title":"Làm đường","same":"real:0"},{"date":"1–2/1954","title":"Mô phỏng: thật đông người gánh bộ","text":"Phỏng đoán: thật đông dân công gánh gạo đi bộ từ hậu phương, qua cả chỗ xe không vào được. Chuyện thật để so: kinh nghiệm chiến dịch Tây Bắc 1952, gánh bộ đường xa thì muốn 1 kg gạo tới nơi phải có 24 kg ăn dọc đường.","src":"Mô phỏng; con số 24 kg theo Học viện Quốc phòng","lines":[{"kind":"supply","pts":[[21.5,103.56],[21.565,103.46],[21.56,103.33],[21.525,103.235],[21.46,103.112],[21.445,103.088]]}]},{"date":"sau đó","title":"Mô phỏng: gạo ăn hết trên đường","text":"Phỏng đoán: thêm người gánh là thêm miệng ăn, gạo cho chính người gánh cũng phải có người gánh. Phần lớn gạo bị ăn hết trước khi tới kho mặt trận, và đánh càng lâu thì càng hụt.","src":"Mô phỏng","keepLines":true,"dim":["front"]}]}},"terrain":{"source":"AWS Terrain Tiles (Terrarium), zoom 12","cols":160,"rows":99,"min":373,"max":2127,"widthKm":64.225,"heightKm":39.805,"h":"2B1EKng3RivXJeYkjCWdKAItZCDeDWYQlhIiGCEmUivWMPA6BEnIZJlmcF0VZlxbPUsBOAMrcB1rBbABvgIAALcG4BTEL0lFrFbqTcg7ESkRL9FH/EItK2wselP6XmFtIYx/gp517nOQjrywo9Bs7OLZs8TcsoahzotLewhjBGDebRSAQoBulmqLgn7qiiCaYLWOu0G6AaoIqZ2UQ5Ixl56eY53HnTx8aW1oT3NCxEQ2SRhaKGX6ZBVvqHPodwZ2J43upFyhKZprjlaOxId9fgZwbln5Rs489z/7TVhVEFribRZ+3Y0loyirb5eve+Noq15PRrg4ky0aJ5MkPCoXH8cdHB8JHsEcDBraHG8fBBqqGkgnxjyJT0Rko3sFis2HeZvPl4CaL5CBjFyHLoz9jAmH/HQQdDBoeGDNZIBRhU+GITwttj22NJkxySc3HuMZCyLHGmASsA37FuAj8ChXKWsx80JlXqhzn4EUer1cV0MfNhEvvCEtFGIFRAEdBgUMdBHOHz81uksEXXhaY1GmPbMvd0W1S/MwgCtVPENS/nLGlPqYXZC7hnCGTpeJuOvrUeI/xJunb5R6eS1x83aYf/16UYUAlfWpt57Im0SqJ61Fq6SlC6vXkU6O9ZLQkoCarqDsl3mYmIh1dclnIk9JOUBHg1NFWXJQOFxkWMVcenBwhsao8alvlHGEYYdIgSp10W1vV7tGAjm8OOJHk1bMYStzCIMtlMGowbb9oFuJGG6oWQdL0TtONA4wfSxdQT8sNh0JHiAcYxosGeccWB4hGhIbMxvrHOkmLTq0U3ls5oerlcybTpd8hh2M+38pfbeSJ5OigyB33XUdZhRaPVRKWvUmQDbFNogxYClsIzAWdBFkEgoQlgyBEl4Z/B8RI/ctXTMaRKRWJ3M1eoh9aGMBRPstAR77FlUHYwgcCy4MFAuRFO4ksjStUX9oLmlIUJo4Hj4bUPZKZjOLMzcyz0DTXU+DFKbHpvKhY6DhntWt3NvQ23K5IaN6h6t7DIPGi2aLdIB3l7yzR76wttqo9qSekuqKCYRzlLSHwXZZf/uCW4m7jMGCJXomfpZ19mfkVHk+wzrMT31PAEZdR2RSyWoffzuYJ6p6nGODN359dViBGXUkZW5WuEHsN6A5KUPjSD9SmGI5ce2JnKUzs22eoIWcaz5XSku7RkxEuTnpO09GPDDRIe4bUx0tHTsbHh5IHr8deB1aImIlmR00LYVSaW0Yd86I55FLj8eJmowZhryEan/Oi/OCgHe3bLxn42LhVR5e1i3BOVou3CbuKjcYzBKcGdQddB1yEDcVQSWoJ5glwi55OzVLZmIqb0JmmFzTVPJEHi9RGdoQ8gSICxEPhBHSEEkW/h4xOqpX1GZ+Z1xSw0A2RlddqEraMxBANkYIQJJelYCwn7PBg8IqsqGxEbvf0bHLlaxElmaI0ZCIlDGU/5yvmEehPbqJrw2hRZFiiM96FHGQcY2A+HdAZzZpOHP+eIt5aW0RadVnSGT6ZGhPuj2jOLxH3UF/PGZFp1vsdGN9rIqUkQuR03RIdhVsU3I6abFiQFOmQE40kzP9QKRNiVKRXT5vPYjPo+ymJZ3kiQpzfF1yR69MmlL/TWhD9kRvN1IiLx4MILQwWitdJ+0gvCQOJxEsMzjVHhY4CWTOZeptAnwzhyiIoomxgv2DWIfHgAWBgoHxeLVuCWF1WOVVAGMUNycn1yvfJb0cyBh1Fe4k5yg3G7IRTgtHFb8X2hx7K4M2k02VUQVnFmQNTEI90jaUOXYnOBm3BsQMVAzYCfQU4ifrH3oz70XLWrxtLFmQSAlSPl3hREI9LlhPYHNRzmhgfkagHs121lzESsau1d7Zysg5txCsKKVuoi2aEqeprr2fD5/IpOmYU4Okc+1pNnULX89mj21fZlJaGlvYYONlM20NXsNa9FfyTeJTJE4ROJE0pz7+Nc9DC1GHYlFifGY9bq9+j5AFe4NosmAtYH1e8l4qTLI9xjF/Mw9LN1hNWWxgSncujMGZPJ8Nj7eJrXRQW0JGdD3WQkBEgkrtQ3w08SN0HU0iSjEHP444/jJ3LgIzqSVXI1ge6DF3SCdN81+0bTV6forshi2GRomUkYGM2X5Qast9H3PJc5ttU2MLXLQtmB/3HHcfwBv0FGgdySomG/YhyyAHDsQSGR1BJfc2gjuyQG5N6mT9Y9tXsE2LOTgqtB6sCs8IuAqMCD8MmxhHLyk0KiwcSP5br3JaYr9SdGOzVeNI3URbZtduOl3va3aTvaVizl/mb+CL6B7nh9w+z1G82bNctROrZ6MFrVykUZwpjBqB93/XceRjfFexYltaN1jAXv5YrVGETthStVl/YnxUpUtVUElC7kctTnM/TzJ6M4Q9GFEoYiBo+lJuU7JjBnzkjFh+c3GuZgtcpFDiWThKGzkXMEYx6kGxS4lGwlcQcZSRBaScnyeHNXp6ahVYKUNbMXQ0qjRxOJg2Ci3DI38fiSaSMq5AfUwIRo4+dT4rLfsknB+nIWwscz8jU+lYcG8DesVzbX6zlUGRJ4ePfOZtxW2CbWN3xnE6XRBRNiMkHGUYeRhFFuohiSaSLPccdidQGHoN9hK/GgYnCjPPQLlFnFbRZCVaJky1Rfw/xSQtFwcFDwUjAToGQhF3JeEvYjwJMupE7l6JdT5sK2Q5bq5gLVpbSYharn34cQN0bKbjvf/cpfT//1Pvc856ud62V6mSqiil86WwlryT9Iu7jOB9rmOGZK1fFFd5T05Ok1CWSSZPLEvNRxZBvEToUQlYckoDRVhBSTkZPVs9STlOLgI5rUVyULpXnlLERMBVmml1fpOKtn2MdCdtUV/QTIFPFke9Ni8tajAxN9I/aElhVn1s0Y2Upe6ntJnBf9ZcL0c1OnUvJiyWLKgt5i2pK0smiiTJJ3wusDPjSNRVYFV5SWM3yCnJIQQm+CgpOiY78UAyZuqHdIC1fFJ9UYI8gs58TXmyYDJ1uWXObvpn0FicHOEelyHwGhYeUiIOMJ4j6iqfKkYX/A6SErIg1jNNM2c3fECmSTFdSFDPOgowxzQQLoMWWw6TBE8A9As1FyMncjx+Su5BsEHXWoh0TncLa2B+z3dzYuRXU2D3eVuMDIxlpIHBQ+pp/KfqydlYxL6uGp70lMCbr57ol4GMM4GzeO1v1WSvVfBUu1IZUnFSPVEHSyBCKz7VO5I4wDhYOKE6HT2oPJE3qDOFLxgxsSumLLYuQy/9N2M9DU9URNlBmlJKY+11q374d6ZvgGMLXAZTjUDeOTExUyzWNhVMfFqcXBdianMBipGjC6vhm/eC+WYxVIo+ZjB1LBsq9SnyKgkpcCk1KFUtcTU/O21ERFPoV8RBcS/3Ko8kuijJNlg4aj9zSCBlVISRiTeNnI7ygeBvi22ab0VrqH9ce/Z+s3jrYjAiBytIJNQgkSPfJUQzYCmLLVMjbRhADesQ7h7CJf0m8S9mNmBMFVgrREY6ZS1THeMfIB9rDqoAHAXkF0klsDMeQQJWOVd3RXtiX31tfqVuuYW5i395zGz/c2KCf58csb+43Mb32UPexOd21na/naPMkpWJP4d3i8OMP3uRbORptGQsYrBkqmbVZNZiUGrmZ9ddH1nlT9lEQkbvRSBFHzzIMsUwtyzlLHcrmiyhK6cvFiqjJ/sq9zlZShc80jl9TNtan2d7bvtzRWXZWAJNq0+fOx8tVS09K/YyAEY3VfZhYHXkgMKUJa/2syqPhGsRUutFrDnML6UubysAKT8pjy0cJeIn+zNIRGdRz12kYqZgYkixP5Q5+Sz7J9YtBzGJPYxC91zTegmBaoWzfpNzc3T5g3N0gmdZbS5mtHZSax5htShPIwsiWSrlL/cnDzb+NS8qWBtjHf0RIw08E8QhfiqvOOhDKVTmUKY6KixRLbMmLRSaCQIEsQIVDwkVUyCoOQZN4GMzbRFYUmvOjsKUx4MMiQSgU5VfhgORiJqJrwDPhdiL2fnG+rudxlHITbzZrROr3Z7KlHOIQYLSiBp+dH3vgqt4QXRJedp5NXoae9F2YHhmdtJo5lYeWEFlg188TYVJn0q7QJE6DzniOQU73i2eLMMpUyxkOKJA2TXhNc1BekpjWjNtyXOZYItQ3USxQjQ/Ri6SKREsfDeyQ6RT7GN9ewCVAZ5vt2m2lJFvbnJZklgSQYw0CjB7K4grIi/+LAYkQSiLMztB9lWnXstgtG3LXUBWQEdMOLI0Ozt4NMU5CD2eQ7hhdmf+YYpYUVOyVzpptG1datxjnFMEWvpb+1z5KekyxiWBKdY8MDnPPUk8ESnQKUsvARsmDKwWNDN4MZ099U+zXthPhznJJN0YwhFVEKoG5QlBC/4P/hXXJTAz8j7bV6VuGWlhdkaXsqYFnmGcB6gnsyGjUKq1tBvFtNMN2KXRoboBpAisPLbQtQ62MqmvniuTm4pXg8+ABXvCcQ11wXzLg8R4NW4yaUdp52hpbRJ2D2tbaUhwuXYhafZYf1+eYwxdl1N2UMFQAEPMNXU4RCoUKIQrPTF+LQQspDYzRzFaH3Bia2JcBlD+QYI7PzW7L4ItpC15OJ9E0FKCYZl3GoR5hJGsBcFHoZN5R2yZWjxKXzpmMxUyJTRuKu0jmCLKJfsqcTIzPm1K01oScLZ37Wz7Vq5DN0H/RERBGkRiRftHEFTbWp9h+mezbMNpXly6Wl9XIV0QY5RidWGyXWk1rDarLMA4FzmtLsYuHj4+NCw81y4PFkcMiSDhL8BEsU7zVs9ONUXIMkUoHRokCNwDfQlPDI8T0SFEJLQkcipfOq1RL2cIgLaDUpddvGu6kLEqu1/GgcEQxlPG47oyuGG2WLiOpz2RrZGZncOgg5/vpauh8JEaezdnVGGCZF9dK2E1blR7EnMQYPdZl1ahVBNfrWhcWJFdpWshZm1qwmhpZ5dhlV2JY35qBWemT6FLRT+yMb4upyQ2Ka0oyTDLQBFPCF1CaVRkk1YGTddOD0g6QI06pizOKLYx4z+WSXpNZFg3ZNh4pJPMuI2jF4vafFZirU6vOLE5yUf8SMo86yWXITIm/ydnKy00Aj+NTEVl+oGocyhc9kqzSe5N3EMWTchP5lP6ZGxpPHBjcX2BmYb7fC9klVeOXmRmB06eWK5X8kGtPMg7jTfFMy4p+jLIQVw+PC09H8UN0wvdGLcmzzRiSFlKVTn0Oo0p3R4JEnADWQo8DRsWZSHNM09AL0EDSxJTmGuheoWVlpuqrKPT8Noj1r7aMeN90kq9LaMtnRydBZgjn+mkkY9HfsOMFY/bizyTlpUJgbxtr1WXR+FVi0r7UyxrPG0RbyFdCkrkRhZHDVJ5W35K9UzQWwlS/VpNVhdTJkzjSMFWnmMkaI5bT2MCVj1FDkQNNVolXyNLLPA0T0OFTyxW3Vi4UE9JkUZVOUEuGSn5KXco3zH4SFtXz2PBcNFtSnElhvCdTaKam8x+VGfRSvg0YzQ9SMhSb0W8KqwhAyXfJYAoTS2JOg5NImcegSN5aWfaWRRUVFVxVYBaWGTKYvBu/3lNf3mB2nl9j+eO2naVaZJyGF0XVtxgUVwtOhgxqy/cLDgtZSdrK7E5X0AjMHkb5Qw6FHEeiSayNFRHL0TiLQ4tAyIhFOoNjQMNDFQSohqxK6Q8TlSUXINZsHOLcxmJdqLwtFTEE84dyejMc9rX4PXYW8AKnFR+tXzLg9yM55H6h/h3tIRYeK94eX5FhWyGIWwOVoVAdEbsPb5OBlzwWnFkSVmRRkU5RT/fTp9NXUGyQOpNakLSSMNGlUAqO4lA2EleXNRmxF6XZPxry12bTaQ/fTg8J7EiBi1tO2Y/aUeaTGlBTEH3Nk4xXSqXJJAoGidOLnRA1EzIW29ohXKvfqWOYojDgPmGK3PAWxtNajZYLHw05Dc6LI0gniBHI28otCqyLiw83VK1a4F77HeOZwBd9lvSVsNsYm6MdAJzKnu8hOeCE4JkdRF+zZCUiH14Pmx/XDdqv2C7T3I8ZjMaPt45EC67I0sjwiVrN/UswBhNChsQlyT+OGRGHjiSOOgx9xzwGgQG0AZJAiQLOxUDJSczEEBIU6hfuGR0egmHe47Dle6zfcRxvj29RcU/yizXVeJbzzOzroz/bZdnh3MZda1uMGX3c1ZrKVoyY7l2WISecgFbIkHCNNM0EUZASg9LoVSIWn1GAzQZPQxG1kLpOM0zmUChNGA4UD65MzExjjuESx5e2mXxYwxp0G/1bD5gGU+dPdQsMyFrJdotMDPLOn5EhzYjM1k2hSyCJOIkFDHRMEcvZUSDXHlsCnzhgYWPt56QjqpvPWhmYi1RmUOdNxgo0CbXJYwi7h7HIGUnPT+jStBbrFx4XSpySn03fvxxtGohYBdZd2LsdwKF4IZxjd+F2nYQcRVp9mfTg+17uXYzastgf1+lSA5N5Do8PFlKKUDTN7Qk+h5JHIcq4yVHFbANzQ1uE78s+zxxPiAowiXJEE4ICwXDAzYJ0BILGbcgLyqrO+NFCVWMaNhyJIIClm2exrrMuAOuj7O/tf+5y8yZ5ubcY8DcozqJAm1wXfBa9FTeUJFd1GntVQJNLGXhdXdi3VVISgQ9cjD+OAlBID+wRJpVREpON/A0ODy5NhI73i1JOSQuqS7QOJsqHDGjPhVSg1b1TxtNeF0QWgVeeFrjTnE+vivVIa0iMSgVLBQ9fEOqNAQpmSubKuIhsSWELj87wDIlPeRU22gWhAaQy6A3m5V3X2lhVo9QlEK4Qcw1mStmJZQinB+jHmsi2yhQNdY/21GGbQp5wHvohneCP3s4cExwVmVYZFVwkoHAjfmSFocTfIdwSWWNYEJmDmQyb+p2oV1SUW9ONWhyPI1JtFOgP30vnypLJkgYuBt0GhwR8BrwGpYMMiOcPIE1dy7MFdMIVxpWC/AI6Q8qEi0d6iFvLpc+jUOTTfBXX2CoeSmdCrOWvkywRqYEphOufb7Q0iffwNbqv4qnwpekf2xpY1QGUOBJckqoX0lWIEVgWLRhAVt5SSU9/zOaLx8tLjLLNFE/pkZKTs89ty87OD8pwisuKSYsSi66K2UtICgvO2xJG1N3RV89bENLTDJM9FcfTbREJTpGNLUlgx9XJrIxnELJRxQ3yisEJn0jRR/eJ4UyBTiwLV834kdeXKV0N3iijx54zFuBWFpI6z/cQ1Y0VTNZJ3gjsyNqHwEehiEQMaBFM02OXhxl2G+OdTCCQYV9gUB2WXmLczB2qn3rhbqOyJifiuJ/knv/bUFi81whY4B3M3C5VntLC0goaERH2FW7VT5JKz7zNlkwjydXGhoYxyDqJ7QbGAsEI1A4ODatHPwLAhwJG3EVfBclFLghFy3pNTlCi0rFUPpYQ2GSb2N6Cpa6ulO7g6tqmYef0a18wDLbk+Wc0RWy0pzflDCLrn3ccv1p8VUHRf5PDEDLOgdO2k2qWgJKBTvUL3soPShsJsEtXDKhN1REoztTLBYqXSEaId8ioyHFJLghwyOOLFw1FkQSUBM/TTMIQ9g9Tk6gXxdT+EsrTWw9HyrvH9AjWi5jN9JFZDgEKdUk7x+UHwAp8TLbMQMrbzQvTYZb/mFIak183l85TuRJYDtgOKU3ry+pKwokmCJeH8sdsR/+HiQliS/sN+hG3la8YTJ1sHkFitV+5nknfKB5LnhVfxaHjJEHmtmQT4/ygYRuXWQUbn11tHatbgxmJWD+Xn5qMVqWVbNGPT9WMVYunDl2LXItYCl/M5UxphpLDDYmViXJJyQZCQ96J88d/hukGX0j5yjlL2I2Gj4jVv5hZW0MaYlyCIyloH+xla8injiWhq22urHIT8zc0jjfrLl8ndt96HoqeIdz/3DeU0RB40UxPag8xDsrQSJVjEVqM+MoxDWqN6opXiVPJiYsBjNuMy0xtCQDIggjayIMINUeCR7uIeAmXTOVQI5BtTn3LZUxLDnrSMFcGWl8Y69V4T7DLEki8SCmIzIsYjwfOeMoEiQSIcsd1yjFM+UpmyctMZdBNUiPVgJt6HRHWApHOj0yMm0ymi8vKpQl9iEOHjIdDyJTJngjwCErKgMxCT4vTdJZIGi3ckqG7X4wgmWB9nure0p9aYdOjjaPbIzWiAKCdnPFcCd5JYlBgqV62268XqB53YEXU9NL4kdFQhUsah+ZLmsxBzzONhIt0DIrJzsMcg3mDRcN0wuZFDkrTiUEF+EVFSPGJRcwQUJBSzxTN2pcfkmIwYX9nQuofKOZpouQUp3JrfW1i8Lzuc/JsOLMypOtioSVY9hgs1jDXTNbd0vDRjRQVD5gNY41VEHRQVU5uC0RL+9CDThRLfgoFiTJJPwoEiQ2I/kjTii0LdQp2ST4Iq4dWigjMycz5TVhMF0n7TK5QjhN8GCWcphcv0nbN6EupiaIJdggdifxL6Yp0yjfIlAheh4fLaIpoyf5LE4r8z+cWXtuuXlvZcBH0jxHNQQsrCp2J+claSQSHvIb1R7bJZ4vCy5ZJ74u1jOjO+NIE1ZZaoF1b3TQcqKD7oF7f9KF2XuSgcSHJYkojqyKgoTsfQx9aIaTjUOV0osZbydZeW/TgE9JsFnYUshBTCo6Gowi3xzfLsknihgCEwgUBw7UIFYfwSe1E/0RKx4eHmsROxuyIDYm9jgGR8VHqE28ZFOAUZwKkySXDZIAklaOO4qskOKZYp94rM+sacr/1ubCxq7Xl2dxgltkUtdI1En2RO5EHUAEQ+RDpziWL2gyky0YK0AqLDzPMeotRisYKCwieCBEIYIkLiahK1Y0ZDImLBciJx4cJWUnzCYDKw0msy/hPvVG+lJeYthmOmbMXthGBThSNCAlcx+FIzUoTyDHIIIerRyJI/IkoyGpItwjrSVuPMVWkGiXZHBG1zoTMyAu8SzcI6ojmB+KGzsbrxs6IP0j4y68O18xQz6KRKM79EWsVqVrLWP1bHRsu2+xcTp9P4SvhOGB639WhRmGZIx4hmWBOYiajNmNk4ofed1kn2SoeRF4IUZ1T6BFbThDJjQcYxcCDZYVuyOhEVUT6BStLlc9mT3tJu8TvgvvE1EN2hOKHn4eHypSN089J0H/UBxrZHs9jnF+mYB0fXCDHoqnm7ag6KNTqTqm86uEuj/HEdJwxq+n/oR6c3tfiUymRuBGD0LrOWI5hzlvNCk6gDrUMoE1izOCO6wwxyYEJkcjyh+nIXMl+ySOLD8pVTn6O04roiDUHVsdmR02IKIgjyTIMuIz6EBrVJFaxVOZTjtbx2AOUBQ9bygdHU8jPSVhHqIdiRpCGp8e1CBvHwcfsB5QIZ4y0URMTfhIYja0LXApAClMKgcf8xzjH2ggbR5zHOAg+CW2K8E5oEKNQ/xIn0c2TAZTh1mdV01WMWDEZLBq8XiSeAiDaInkhlqIVogljJ6JWotvkSeWBYq3fjR893MHcbBnhXWzOzQ2ozvMKSce2BqdDuwOYxT7EDERtRZRGfZBAVgsPxArzx0KE9cOXAkbE18XFh4ZKSQr3zRNPBFGuWI4fBR3E3lWegKFeYHfi4CUN54GosepzLKZwHDGUc6u0nK8YqJLjOh0i3Arajllz138Tl5LXz2uNDM4pkZzSHFBKT3KOfA0nyqPJNEhkyS6KKss6Sz0JSovjjVjOrM7XTAWJ+ggoB9MHrgbTR9FJX4q9jVdRLBQC07bQiVAn03FWd5T6z82LGEh7h5BH20bMh2FIFMdNBkBHkkczxowGVsdXCmoOX8z3CwRJkwhfiT1IyUjgxzZHsMpqS5+IeUbsB7cIy4smztRP9ozDDf1QF9Gpz4hQ99OYkiaTGZZyGE2aTBrKnXnhQGNzY2TkDWOx48jkAaQSpQ5jsCE9ng6aW5zLnL0btgsByKUKx8nfBeFDDQQ9xaBJnEbSya9EzIgCkRbV0VFaTvtKfMW4hDJCp4Pixb9IBUjCiFALUY3bUqcaPZ4GHE/fmKLcZjQmC2UgJd1mKGjca1itKjFIs2bzdnBFrB9mOWVJYPTfUF0RGQbX3ZQ9kejNVE2BED5THNR1ExwQBswRSh3JY4hpiYvKjUotjEuL3MofC6hOk40uywVJsYiAx/yIdQjzhwAIGIiQSvUMhlGl0F3P6E0eDfBP/9Kk0ebRD43OibWH9gduyBoI3MoyyDIG7wYyhb7FgIW3hZhHiglzST+G3QXZxp/H+scwB5iJbAtAjmRNLMpiR2JHdIleTVPQ3c/8S/+Nbw7AThUL8k21EBrN6I9oU4BWx1jB2ILbiZ72IO1iGSSsJAbk6WUxZO2mvKQOZFpgdhypXTXdEVi6BoMERESVRD+DxsQvBs/KUE5yzSGJ7UWTx09QrZOqz51LKwnNxhkDK0L5A4qFTcb2Rs5KNYt+jUPRSBi2XvhcoOCpJPgjMKOX5dOoNai5KP0oFemi78u2KjF4rCSoX2YYoiheipv/mELXydZfUlKOqgzPDlrRU5LhUPLQBc5EDQHKAgjyyNVJ2EtXTMePnozWC/9NC9BsjECKkQnOSXqJBItvCEEHaMbWiIYLmU+jUBUOCYyUyz2MpYykj7vOTNEfDqOL3onySpyLTwwTig0H4YhACYsJRcfdxbRHgscABdNFsUWhxw6GuAawyChNHg6A0JzQv82ky2bISUd7iT3LVs3ejA1NK08azQSLTExmD/hOCIy8UC6S0FOz1TgXfJnb2sUfdWHNo+JmFqXWZZLmBOoNJ94j92HGYPaeQpzuX8mEkQegx+2Ed8fISAhIzA50jxDLPYYySTEMvlJZEOjPk8vzSHDHXwRtgs3D78a8S/8MYA68UBXRk9PRGQXfE5xF3n+gZt2JXpahZONBIwGk8ieo6q5wrnL4LWWnmCSPZTgkkp3bWGeT61Rl00DS8E5YjZfQ/ZKpD8xN3Q00TDIKX8lSiuSKWEn+C4UOtRJ/UkhOj1CKEh+PoQ6DDS7LyIy4CmPJPUdYRuFI8wyuj3oNC0uiyfFJwsuhCiTMOYwWDuRN4Y4RjerPqZApDAzJ+IkDSb1L0QzCiTHGmMdHRflFcEZASFvIlUq6yX2IV8urUJFTmw9gS9ZJ90kMx45HywiqSjrKDsvBCy6KAco0y55Mj0xtTP+OD49FD3fQpxWh2Ugd996gIP9jB+QDZWDmZeZxZ/knaGOgoHfepN8kXqcf+IkejOAKLYXySR1LBczQDO5HyEa2yWHQs9OsE1FSD8ypSh0JkIjBRWECxgUeiGHMH04rzh1OLtPT2ZwckiB9Hf9b/RxpHbveQF7Fn5ohuKNTqNFt47KgbskqGWKE4IMff2DF3/TYDxKb0IpQ09D8jvgPcs9PzgfM8Et+yfnJdkkeSbnKIguJiz8K+k1cEbhVcNP6VhCVPhCpDNnLrgq+SNdIVofKx5pHh0dGidyMxksayXOH10hRyZBIlIoSyxSK+oq0CwoPLdMsT+ZMWsrUjf8K6E3oi+jJzQWixOZF/EggSAKMPov7jt2OQApxiWWMtdIoD8QMYIqQSv1IGEerCEOIckhZiJ0I3sl9SZkJjMnPykSLR8wjzCrOyBOvl2kXAdoDW9Hcl93DYRBi96QwZAVm7SWo5BeggZz62gLbqJyNDmeNSwidiQbKtg9x0APPPcneCCRQNVhtV8VSaZAqDalMZEmyxrxD6sPIRdeIiYsmyq7L6dEQFkudfSA+HQGasVt4XJmgnyJWognitqTLKWqrK7DSc5wuMejqoxKetduu2/Vbe9iuVxZSqc4nDDeM6Qz8C6qKXcoUih+JA0mrSg/LHcrpSuOLzww0TAkPPxL1l90XZxT9DrhLLEl4CMeIeAdnx7yG5AZsRn8HzkiyyCSHpgcEB2QHKMbaB3HHZAf4iEmKeYz1EPcQNI2NTQXPJ412DLKK1Yi2hMwE1AVHiHyJ2s3bj+IUSNKhDG8JFg1/Um4QTE0my2LJ6YjHB9nKGsrZCZ0JhAxoiz+NUMv+i+MKzkuMS6wMEw7u0ZhU09POU6rXsBq4nBDe7WIpoMRjH+LmYlFkSuNX33kYxpbG1/ORcor7icmNY1Ae064O6gqqSJDKeBDCF2CW9FKmztdLZYm+yRGGjQNrRl7GcocSyB3K8M6oVFaaHmBqH8EaUBt1HLfcQZ8GY+zkimaSp0NuPTGt9XS1IC3Q6HZjQ55d2jrX9VeRlTCTlBEhzZKMekpiSksKNMo5icLJV0nCyipKwg3sTbpMs48sjpROadB7lBlagxgt1tyR/Q0tyz/Jw8o2STCJUUfiR0XGZAZtRkwGbEZphoBGGYc6xmUGQwaXhyMH2wp9C4IOu1Jg0K0RC9B0DUZKZojTR8hFLcSWxRoHaMhrSvQOKBTiljwNFAnPzXYTzBFJTpVM7csnCInIcolcTjrM+YwgD1DMh093D10PdYwJTeAOms0FTLZOFJF9kGESLlZ0WTlb6h8QobbfSaBwX+RgIaEq36gf9ZzhmRuWVs9ki8DQvM5/lUET6Y9TCowIqYpIzPQVddLVEGaLLcm0CbuIUoaVBIjFrUcsCddKr8vGzkZTPVmOn01dKBoxHg7fjeHC4Vrl2qlqqkDtxrQ491N39jSWroTn2ODB3EeZP9W41GIUUVCeTjXNDQwlS4wMKAtIjUHLgIqYCyMK5Ivb0KNTIs/n01SV55ScVv7ajx5c2IqUmdUPFN7Py0xZDItMV0nbCP2JIkdmxsZI6ojQCS/JiMnBCYQK7MjHxl7GbAe/B+5IuMu7jt9TEFOyz2HMAcuySFaHJYVvBUxFIobcCMuL2NAqVTgXdM6pDOZPSdWKlvPQ608ODkoKw8ifSPpLDRCv0OzRv060Dh3S3c/czGgPLtJwEHdOxs26TilQuxRGFSGW7dswndiiMyBdHr3c9R7koQ8fJZ4HHc9cfRo50vhO/VPuEekWbhhKlK1SwFHeDrmM3RJ7UbfMSYsnCW/IL8XGBGREVUTExkcJXg0+T0uSUJai3AJe+dop2c7e5CLI5Nom4ufMK6TwnbTc91z4G3Qj7/UuEGinYMKc2Fn1V5uU7hQI02CQas7VDXeMxQ6izniM9oq+Sm2LnIzbzEgP+lV+FQfXy51n20CbSRx6GlYTzlCOkZjThdC0UFOLkooCyXgHT8ebhmcGfQiJi/BMzU6ekGVOgI8iCgmGJwWTxqKG9UeoiNqMBM/aUqoOeUpyiJhIR4bfRWxE9ASFhjLHa4mZjN7Qo5YqErQSeJHkkwWXt5ZBkfJREI0kSOIJVYuKEh0V3hUsEp8QO5Nrz6vNek47UanVeBJqUIDQqZAR0aMTvFV72L7cGKFX4kfeRRu/3ZJeXx9xXYlaWFnc2utSzdEyFjlVWltU2xqX8tg3VVURPI4bzRePwg6wi4dKdwgDx+LE0kTdRjZHokv1TvPQA1P4WT2fgaC2WSmaXx90YrNmSKtVrScv6fKANvb2rXR8cEPsf2vrqY9lBWMCXsPaFlWMk/lWKhTOUKcOc42VTY5MakrViisKlIuwTaUORI+AE9QYVNvQ3VOXehdkVpkWPo7bi1nMW07ki/EONQsXyO5HyEd5xmbGCkd4CAFMmU+/lJoVXJHHjUJKZQc2hagFqEXyhlQIVEq2TtmSIo70CwSJOgaUxdOFywZeBduE88aEiQFL7BBmFwXYgNlgFpVUJxTHWaHXNtLVDhsJhkm0TCyQHtcvV/mVidN+UzdO8Q74URISkJaMVogV4VMJE6yVLVicGOLcxt22ojkj2p/sHC8bQptSnQjcGlnYFtDXkRQq1U6YDZsbHITaJ9bZEbpOG01/TSFMlw75zyDP3wxCiSbIbETrBP7Fvwf0y4+NBtNKlsActGNgof9aXpnw33KixyX16MYoFyqAb4vzYy9ZLIIr/Sap6E1oIKQ84gIg81tpFZZTStN11TjS+ZBmzvHNBwuOC0YK5MtqDN5Mnk7eUk5Vy1jrmkiZMhSbEaFQJxIVjR6JEwn4S85JTsv2yUaIeMf6BoUGoIe3COGJ9I2EUm2V5BF0jMeL1kkTRyVGrwYsRaDHBAgTCp4PRQ0UTy4LU8j8R36FfAaxB4YJRIYJRdXI7ouaEDXWgBvTH7wbhJeUVauaRZkUU0TPIwoEid2M99FgGDqcI9wuGFVU75FyDhvQrNSL2F7a3trRlr+XkBnqXeBeGmBnIVZlsuMoHxobAdfh2WOZ7VZAWEMVO1JF19NX11t8moCc0Z3ZWQMQB1D41HKRedCsTwmOzg5ki8PKMAe8BGWFfkalx5+J+019VLuateAepB5gZZvhmHUcmiMJ5ZQkHCVAaoftqy2F6jSn1+g3Y2Sleqc5IwseRt5IHFFXDVRtlHFSj1L1UGVQCE9QzuBNUY01zcTNqY650WzUiNcuVn2VSNWekr7ORczfTiwLeci3x8EI2YfLyTqIesfnBwoGZAc6CAVJrsyqT8xTtFQHDfwKLEisB7VGA8ZGRr0FxQa9CIfLfs2qSjlMtwmQxsXHKkc1hY0FiEdVBXuGMsgxisYOuhX0mh9e2l+IGtQZI1pOmavUpw8by78KNk1LlJ2aix8KXotce5haEzjQiQ/J03YYAJwHXKOYQ1si3xPjDyQg5m6nS2jxo4JgRx01WprV61OkEjVTVxP2EZ+bSJyN2QwWUBZZWRoaSZVaj9IR8hS40I0OdM03TjpMkooEx+yEREVPxgeHqYp9T1uWbdyhoR4fcl5VGTgY8Z3JYP1hkqUs6GurNug6aFmnCeNo4degtORnp7xkjN+yW1Baw5nlVHITFBKh01MR6NEUU2zSfQ32jloQ5VD0ExrWkVutGq2YI5YMUvIT8o/3zE4LYglIyRfI38fvR9iHCwfnBnKGVocoh3rIjsvyDhXPfpEaEnoNH4njh6pHGEeQCQHHwwaaRipH1smeDHAJEgkWiJjGnwd7SCPE6URlRExFOMfeirjKGY2uVa+a419goohgzZ1AnyJbyJS1TiVOgEyzDtYRDtYSHb9gxh01WG0SoVSMkYxSDxc33GpdPhu+YCtjludaqXaq262f67WpVGWYYrmechyvF4uUu1DokaBQx5qw2mzXjFX1E/jS+1MN1WYS3VBl03LQ7w+3y7CKFYx2SfdGIYV5hNuGREjTjcWROhRsGeTeUJm1Wp6ZLFrKm8ogvmP16D3pfiawo4zjbiNr4QOeYB3BXu9hTiCPnqaeEVol2SwVgZQoknrS3lM/0rkVItT6kQpQ4xL6FpdZzh2x4PBbUdS3UdqNolAu0lFQj461zqdMb4r8CimHcAbGhvRG/YexyCUJWMrszKZPfszEDofPMUqcSHjHIYkSisSJ9wdkBzsGhccYiUAL/glZxrjH7EfNxuOFQwRCBEJEjgW8h60LTdBB0tpXhJzyIS+jlaUVYKci/lsalBFPPhIij6yPedIHWDJfOuF+HdmYodZrFz5SThQN2SpdLmCvIRHkoCURJwJp4WsALW9uQisqZ2skCWDJnVabtpZI0SRQ2FEmn7ycI1jwlfbSDRQd04gRaQ/SUjeTW07IDTML5ojkCWRHQ8fNRR/FgccMia9NrhNmF/oaRlveGZ1XjJmlX3Qfu+OXJjXne+f7o1MhHR9kn4dgHlyp2q0cA1+BHKxZQdlg1xDW+VYl0qNSf5PLVGpUaJSGltGV7xbdFdbYJ5jrlQzZFZUVj+TMCsnICtcNasyQT9IRNYtUCSzI3AamBnyHmwg0SEyJoszNj04PNI5RzhIKr8pPSiyHd4n2iqaLCshBSFmH8EcZxdXGhIhPh0bFs4WRhrjHwwdxRAIEXYTvBjQJscj3jNhU1BqI3PzfFaOqJbpmL2WXHU4Vm1YSVYOR/ZBLVTAZ6R/tYize9Jow2yMaIVSdFenaq9+d46TkIyLb5fzn4uZdJ28ql22gKnmmQGH+3y1aP5e+EshQxs/8z87eKJjgVj0Tj9PeWy5ZfxO8Uw7UiBFgDTJMFYuiDHqMPAoCR7pEo0UEB0oKBA9CVKVZitweGNVWQVklHGnhF+MApY/mJqVn42Vg6R5Xm7mbYNop2fHZhVye26jZ/phR1tRU4dNbE+zSUtMSk6DU75ULlh8Y8tgP0+ORF1HgkrDQAxDPz5kL/8kYiL2IeMiXSF9JrQqcSE6HVMaQxuGHrsdGSDtI3kpNTebR6082TUFOIgu1SG8HsIifSaELsgpAi0DJd0ewxpGF40UxROSGPMToxU9Iiw5wyziELIaoh3JIXonKTpXKdtFfGOmb+t8qo/EnsGoFqHIgaFr42hoY4RX9FfPV6pmnYMykiuHSXzMeFBqiV0SZE94pYjcj/yFhYyLk62F1IyblgSjiq13lIB9jWypcUFfMk+QSKVIdEP8QuFhamUfUAtOjl5kdfRu9FTTVxxX2EYnR2tFVz3TN8M3MzVaIpkUjxNKHfcn70LyW/lsOmkTXw5Wy1oWZAJtEXskiHqKF4IqeJN26mdmXIRaDF3hW7Ffzl9QZMZuLGWWW8RSaE9mSEpOIlLbUUZRclatYo9t5V68RPs2fzZKOuU4djPqMFEqMSXiIUsgPR/mHhYeRh0CHMMaHRorGwAdEyILJcwmoSudLls6hjswPF83PSuCITgqCSywJ7oulTQ8NoUm6h7hG7EZQRxGF94ZZxHBEKcYvCENGD4aMi8lIOYw5Sz9QCkxPz4JW6Js9n4vkw2hXqvLrHuU0n8napZ49HSHcC54r3Jreg6HtpdvkTKJTndrcchyXn+GiuiDeIN0ktWHYHs/h9yPvp2ho+uFt2+1Yrtj31d0V3ZW5FSvTxpKE1wqWABSrlSHcO9/xnegaPljWmKxXApWkUbDPUIxBCw9KzAZ5hNOF3Am8DFfRspcyW1IYSxW+FQPXFJovnG3frx+b3obdhNoAWf9aS1XZE8+V9FNLVEpVztewF65Wa1OPEo8Sl5LjFHaVthVZ1cbXFpo93btbJ1LhDdgL0EuZDUuL+onnCV0IwsiXyCMH+QdgxzRG2EbFhuyGtYcBR5JItcoZy6KMlA+djYqMlUzyi6JJkwh1SfGK2Qv8DdCQ2JC/Sm3KQEh4x9eH+gaNBPvEJcQhxB6ELUQGzbyQUMsKS7PN2JFKkzZQcFNvWU3bWWBqJ/Sq4yuUZyjjRF+6oT7ghd/tYtdbRFp5nZvjveTAoLcg8t6Ymtdbdt6X33HhtWW5od1eBSAh4jQldqW2n+UcYlmDGD5YOdrHWl1ZC1jGF1NX7NVOE1NXLd4XHVSbqpjOmZJYrxeTFuTTV022y6XJzMhSBhIGBYYPSUhN2tODV6eZnlYNVc+XVhkcGzKdNd9d3G+bjlo+WBiXG1kvVw1S1FNkk++SABSvVDiTetLd0XxQxpEsESsRzZPnFNnVKNY0l/OZfF1tGGaRv00LyreJ6om9iQ8JEIjcSGcH2UemR2qHVMd1B07G8Mafh6BJiAuGTIdOt48vTYiL8IrPDD4Kz0i6SZIKmcuazTSPIhIbj+AOrYx0yhOJZMhVBsuEuwRgxYYLooePxLqPkxE/j51L7I6hEvaWb1fg1baXzhwdX7OkW2khqrSn42VMI6xkVKO1Y1EhyVpEVu1Ykd40IzvfA5tM2pxYYZkC3GRhvyUd5HLgAp26IC3j6maF5aZhux9fHe0bc1n9W9De1h7NHa/b1pRdVWWXoVyGXiWbxNl/mQTZYhX40uwR646FDFdNm4wgB3MGGIieRtTI0sy8kehWgVhz1SWVbFcNWhucHVy8G6+a9RsSmNfXfNQXVa1WexOv0alSHNO41GpSy9HhkTrQiBFnkYlRppGhkpWUfxRI1bzVghmsnSqYwtF4DcbLb8sBCYGJDkiJyE2IFofZCBfI1AkcCBTHWkb+hsLHyomFjtiS1tJXzoMNPwrWS3TKKkooCLwK9Y2rziNQDlLQU5bQxVGmDl7NtEtPSViH3sT1Rg8JEtG3ieqFzZJLFmXVuBDiU+2VJFmw28ZZkxwBYHEfqmIMKX8qKGjY5qJmHeXtJPSjkaGrWj/UNZWPXHtfguFdHpZcPVjgF2UdJeKb4uyfd52vnRjgyGPtaWdoAuRCH0Eb3hpXGGEbtRyv4b0gBFv9FFOXWBvJ2q4ZD9eWGFXZsBY1lMIQ684SymjJCAlhSCOHo0mGypCIxwoYzeHUPpe4lkpVIJQNVrtafhlbl/cXZRisWiGW81TfkoKSjZPzFKxRfFGUES8SpRI70VRQl9G3EmfSg1M8kqgUFJRC07YT/dTkl42cl5fQErJNtgvpilpJ6Mk9CLRIXEhkCURKfswTy+pJdIcIBy/HRkgsCdKPSpYwkXmM30s2i0zJ3IkTyZjK1gsJjWxNr9AJ1A/UotTvVNZTUg+tivGKNknPh3wKI09g0JoHewX/EL7WR5SCVKyWohutHb1ddt9DICqjxOfTZ+irA6zUavrqBqklZoEj7Z6J3DHZmFQ+1CPWb5rjIhKg7htZl/rWXBpfXuPf6JvkGtufwiDu5X4mguUtYsie0xtkmQ3XuJqGHTadsBn81zaVvJYuVlpYXlhxmIOZ8lnilsCTS5M9T3DKQkybzQfJ9wjgCstMUcsdjOkPOpQwFgpXbdYu0/tW5FgWFuEVCJSTV/MW6BWj039Q0xE81CXR1dG5EA0QnBJbUd6ROdCs0Z0RolGI0cPSDVLGFTaU3JWmFycXzluGmd7RSE6fzlAKmEnhiTkIwokGSnlL1YuxiU1JdIfDB2VHZ4g9SNLMj1IW105S20y+CioJ50oQybGKFQvyDUTPOBGCUy1VuZWUFt7XPRUhz+INyk30C/cI+YqkEXVPi8Y6xOqKdYzWDjXOqxHs16uZjFa9H0ohZeWhLQAuPe8Z72puqW3rqybpJqSWXmJYMBH3EnGS6VIvGFggRuCIHSXZ3pWrV9KcVBtkGLVbcWCZIwdic+J5oejkB5+zXASZFhYxmI1aytt01f3UABjj2plbSpy0GnjYoNlwGd6U4xLIj7JMLo0oTfmM8QhDiokKMUq8ir6L/w/zUrdUuBdDlOrTz9SeVKlTrRNAFJZXFJaOVcPS7VCxkvGRXxA60KJQ99CZUEcQoVDXkLSQm1EJ0SCRw9IblD1TNRPVFU8X/1v13QBe6RQ/T2eMlEtWSd5JrQnniwCMA0yBiTUIPkdfB05H78gtyYgKPk9oFlYZMNJmjg8MA0viyc9KPEpCTXGPz1LGkecSLdVsFlxXr5dg1xeSPA64jAdKeQdGicIOr0/1B0YEQkY+SDQJpYmEzYgTjJGvktnYJ9wC5Gpt3q/vb/kw4LHE8K3uFusnIhhaoBR3TjyOBQ9407oY6xzmILifx9zAlZoVRBj2Vs5aDl0SXyphRR9anwmftmHanlCY1RYA1HfVC9ed2W2V6FLI1bPY9hyXG9GZrxhJ2e5X2NOz0AsPI9Hp0ExLksmvyyIKD8sUDWENJczYkL8Sw1V6GAIYCpPsU7pTGRMBE+dV/5YFVWUTk9MmEV+Qa5AdEOBSZBFxkKKQQ5E9UZgSUtJwkV/RZVGaEldTeJTzFKvVcFi43Q+hieKcGnCRco5rjT8LvEpHi9ePKs7TymGJPkgSB5MHkAhLCJIJ4oyZUEFXvhor1WpTsY/QS6fKm4tBy7POuFE/judNE08gkrfSKdHnUviVhpEKS4cIlcgWxrtIKgnKjUcNCUXcRJUGHAdviioOUY6eTUvPhlGwWI2j+a24sW8xDfKWtELzqvE/KhQiuBmz046Oi4pW0CcRaxKj1N3a+V+EnO/Y6ZPWFJTYBx0YXa8cIdz7XJ8etmEJYbTdC9tdGZWV/xOslEuW2RbC1FuXKJvQXEwZRphQWJbY3xdZU1qU55SdFfxRksyci0UMU0w3y5xNZY7vjeaOGhGAFK5XBBXGUz9SbFLgVK2VOZQdkp9TLVCB0XjPKI930gERiBLDVI8TddIC0vnTl1Tgko9SPlJoUv0S9FQAVjhWGdaw2BecX+FA5R8iQFk8F1cTIczBDd+PoVJ8j7GLl0n9SDGH7AhuCRbI9kkbi2gQnxaM2evW9tasUtNNpMz4DeWOHE79jVALUcs6zbFNt45TTwtPX5NSD7YKZ4dNxsdF8sxGT1lTYFPkDE7GNoTlBkyI54jOCcOLcE2cUFTXcqFw68mxGbRy9J01ZjRbsXUnjGD2WG9Vl1BqCqTMHkyKz5qVn1yC4VQfthszVYZT99OV2N8ZuJcs1hsZlx+hopii0qG/XrGbkRkqFBYT4pY3lnhT7FfH201azBfVmLkZqBlw2l9WAtc6VtlUFpC+jWONW83RTaSNUo3dzweNRc2u08QYE1cxVD2ShFJZU0YTvlPZEmFRohFzz0eO/A6oj1tR/FVuVkiWJJSelO7UuFSGFf2VVNPXkuHTYhRG1kCXItc9F07YUBnt3Ksf1eP+ItvelRemEt9TPFJckdVPKo3OCpPI1IlESbGKw8oOin3OVo/AlMDbqtkxmi2VBc88S+yNJIyiCu+KMwm6irRKqgq+Te5MNQ1vUIVMrolPxsuEqcV6CDVSm1ex12/RsEZ/xNQGzYdlydKNCs+w0bFUJ9efIMUtO/LA9e72ArW8c84vHufPowncOZQcz+ENK0iCSnIO9dUg2LreVNyfGDqUwhJmEi3ScdJEE4aQf5bbnN/fOOFnYD2bTBohWMqTC9HtlFsQPc52lmKXpxfr2HGZV1qXW2qbJ1gS1WAVLpUfkr9QAE7nzjPOjU3AzSGOIstlTT1Sexdk1mlS+tIuktoVb9SeUm0RLk/dzw8PPFDp0GwQaNE+UwgVPtWAVXsUbNSFFf3WcFcG1xHW4Ncy2AhXexaTlrFXPRd92K6azl3NIVAlmN33V6GXoFPPziqNwIz2Sd3JRUpIjV0N2k15TLTK8E/oFMvYQ5qRmbTXV5FvywPJSAoziX/IZMkJB+CHjki4ifrKAsoZjBEMzYvByKKHkAQBhaGEv0gCipeJQsfSxJbF5Ugmiz3PJRLtlE1XQpzjYbrn+a89May0j7YhdWDwguocpAneXhdqlfqUwc/5Sz5IDUrLz4GVp1uR3hWbuha6EPLQ/1DpDxjOpA8rE1xWwZwJoHrf3duC1xKV5BO2UGINyhC3EllZC1jq2QjbaZsAWr0bkVrC1/iUwdOgk34SNI/STmkNj40WTOSKdcuTiWMMYJHilg9TklIcEwcUVhY5FQySUFCDTunO3dCdkrcSepEOEpkT3VPiFFSUQxU2VjBWcNa1132XsVf9WCVYOlbWVnOWa5ap16/Y7Bt8HdLj6OeM3tKWtFQSE0lN6gtQS5yJ+cr3TjkQ6JSYUG7QNw6lkxGYBVjWlSyXZNZrTzSJbUfpiCAHaIaBxyfHiEagxnLHeYe0SSAK6ckdyV+Jy4gKRGADjEOrxKgHyEUtRAiGLAeqCqyNCpGDVsEacFz74Lri1+pQ75qy0vVw9Ld0PO8O6qDmQ+FGHROa3FSkUCXMBIkqiBxNRFMF1+LeZNzBV76UstU9EvPQxxFkTScOR5Eilhdc9B7mG6qYApK2jnpNc4/gVIRW6RwoXHwbs90D24lZplmbGNyXwhXw08cSOZE1EPnPHQ6vTASJwwj5yV/IiIvqkMrSlxMy1RoVYdTUF4MXdVKfj77NkM+M0fRTSpSalPeVjFXzFjaVrxbclmqWgRaxFsXXElcD1z5YFheNFlLWG5ZZlwaXgJiJGj6dc+JdpnbcUdVU0wkPzg2KS70KPgrQDOwSiRfA2gbUBxUPFAsX1NpI1MNTD5G1kUxNE0fAhy/HfkdIh5TI1ooKycdHUIXMBkoH9wdHSDHGsAebSFYFSER5A4YF1RB6kQEI20e7SmHM3k+IEIiT39ZRGpPY2Jrvo5TowCvwMqyzFrOlse5vAij9YzGhdBsZlnfSNM66yiZHbM1xU2zXgl46HqTahRuW13nTjlXgFFKQPEvQUJWVH9o1G88XG5NEzmZMZ87fk3LYBZqNXTCdz941G/KaMdjkV1oVTNYg1MsSxBA/jjwNCcwuCpmJYcqICIAIJgfFzCkP/ZBSE3rX4peilUtVFxM7UNiPCE3Zzd4Q6lIZ0v3U/ZYgF2AYGRbtVkpWmJZ91yoXCNcZlx8YDthuVxJWRRX6VjDWmNdRmAoZfRu4YGWkpSCVW1TXaFUCk3fPx4v2zQ4OZtNTGpCeoVyUGq5ZXxj71mMRQY5girtI4MiVSokKD4j1CMjIQkp8DHaMJ0reB0dF8sXAha8FTQWYxRpFYAUCBFSEdkbDTjNTZU3Fz/fMdAv9yo3OJtEWFI/TCJYA2svc6KMd6jZxOPLBMZpyu3EJLF0o5SOBX53a39fa0gjMG0bXCxiQjdVw3JWiASDWXmIaxJeEVuISyk3Ry8xOppSM1iKWDxTdEO4Plgy8DRrRdNXP2EReJJ+CXVzbuRpHmG6XTdVUkvRRD87Ji8iLGcoliZWH8YcqCe0J2gmjh5uM0059T1PTMddJV1VSltDc0XFOVc3NzXkOiRLOkyvTFNPt08pWrNY6FdAVq9YcV6xX+VbG2I3Z3lhOFzSWWZWRld5WJlao1sPX69h+2oSgWyY3Y1rbn5qdFqFUs5CmjWAPSNEOkPfV8pxgXi1hdZzqVFkSX8zLiYzJHUsXy5YOxI7SivmJ9QsiS97K1AkHR03HtEhmR1YGMkTpBxtG1QYIRqyF0kQ7RJ6Kl4rYh9CHTseExxlIa0orjedN/RFW1ebXttr9YkYoNS45cQCv3XKgcSPtpio7J1MkL18WWrbUd0vHRrJJxY+FU+pYmpzKIi1f/JwXl+vT7dJSkBdMMQy0kUyTyI+f0KQPIg3KTEvRNJFd1GuZv19UIEQeldpJV3+VW9Om0ovR2BJTD44LR0jTR98IHokUBu/KXYnKyR4HaE0BTvHQDZSSV8ZZgZQNz7WNqw5okbYPZ0910iWTIJK/EvUTyNcEViHVrdWZVWeVbNVt1trXRpkyFjtWKVXs1XwV7NY2VtVXCxfU2PCa5h/N40edY1g+193X5pSqztrOt1EgFFAUC5Yl2FXb26COWvMSRU1jyqtLio4wT9bRmpCJTqUORo1tSiNIyUdMiDNJ40pWyayHW4WxhnBHCAc6h6vG+sZzRCTDc0NxA8TE64ReRJSFBwUwxfAIcAyJE44X2FwfIALkcCh4a1LuGWzlrt9uBaqJqc7p4yXFop3cQpTTTbrGfwiWSdbPTlOuGfEexZ+pX1ocpRcalamRmA1eSwBODNEzDigLe0scCxgLEI040UlV0lrToCUhaZyjWMzZLNeiFQnU89RRFCDPMougio3JEooriAzGDIgWh+/Gt0esjSdOuFEfVV2Z9Jc4EndOJ4vCzkWTbRK3z97SKVL/Eg5SxRO2FUKVv9Wh1XXVjtUyFjIXlReqFwIV4hXQ1WnVd5WdFr/Wb5aHV3fYrloWXYlhl5xD2JDWO1SgUymQ0U8SUgRW59kNnLUdWt3Gn5qX9FNXjyHKhU1iEXtWPtWqkOKMh4vpiznJbMmvyzxL20nACCuIG0bgyJoIE8g8SDUHVQeOxgWFRUPPR/EEt4TsRPSFjodjyRfF5UXWyYUOnJWrXEtgzqPY5pwpk2r8J2Sp4uol5aimICg6Zh7iGN6lGW0SvohXxr8HLQqKEUzTTBZRWv8dAZ5a2uhV/ZHTjc2LD0oZzR6MOQmOzVEQQI5JjViNixIklVoiT+BAm0GcyhoaV4RWIBUgFELSytBhjXNLR0jsRxlHuQaHRdKF2Ma4R66MQI5XUFZU9hgPFlTQ4MzFD21PytKnkxoSY1GSEq2TlhPEVWjWEpXSlWtVYdWeVujYXBgIlsXWUNYY1foVOZW+FfZWFJajVrWXBphsmMjcJCF9G4+aTlXMVHUWC1O3EwWTdxd4GyxguuIXoK1br1cMUtIO1Ms4zxWUV1kz2O+Tq84rSg9KLY6MTpJMxIqJyEBG0YXthroIMolpCqoJwAdBBqHFr0W1RhoKUgwlCv/JKckuCqaMvIkHhIaHho1sEScViRrxogGmXWnt5ubjeGbNZEzfrZ90n+fgZCFyoJTabdS+jXrGcoW2CBxMjY9Glu8e8p/Z4MGc49cH1YASWQ1mStAJ6wqLjiqQ4VSK0oaStw6yjlAUMWQbXtlbflyo2ruYaxT6z97OQI2XDIELN0kXSFfIzkoUyDPGvAUahZ7HBEsOjqmPRZKHEjVRPs53S/9QKhTelAVTIFJR0n3TRlMS08XU0pV9VWgVhtVsFbBXBJeS1g3WIpYzVZNVqVUdlb3VoRXNFnaWYNcp2FSa516Fo1ueTdhxFvhXhNoE2VJYlhVpl0fc3WBM41thFpxm15fQx8whzZrRS9eOWt3a+lY0T6INzQ5vjcjOcUq3CC1HA0YhhsQIJEjECuzJhUgYRtXIIcffRW7IJI+7j6ESDM+1DUuOJw/JTppGxsWDCPeM5ZME2VBhb+Y6Zi3icOAiJHifNBsp2cEY7JglWMnZMRbB0J9Iy4VABrIG3AsdEZmVhxrLGt9dbpu6WxqX6FUAEbqMAokYjPOQpdTQ2GLWZRcBEkfNt1By4lzd712Y3E+YLNV+EUxOngxCiodKUspYCm7KSYp9SMnIasbUhQlF/obAidZOdQ1Nj0bNo8tSC0OMLRBulfUWEtMIEvfSN5QflDUUudTAVQwVk1Zc1VcWGdX8lgwVlFWnFZcWGpWX1RLVXpWW1fhWG5feWHdZJFpfXIzh2SMFXjuZNxvMX2edWxjn2SQZRB0MIJoj1CEx10rTZ87dTVER3xXsmZ3cdNgdVh8UWBPSDsSMNAm8SOOIc4Z3RsZJvkjMikzKiMk5CDOIrEl2x9yGTMYvy9gOxxRa12hUbFI2lAoP5go8hV+LadH2lmWbxSG1YqsipJ+BnPwg8l2RWXWWUpRGUzqTYhFQkCXKu0VhR18IOQXjB8mMrlFVFWWT2xpnGj8Zf5kJ1OcQvwrhSzRO99LLVpQbUFurmBuTUU85Dchhgh9cXszcMRVHUChOsk28C48OeE7RDNrLo4hDyJTIzogZhkYFC8YTRw5KJs7fTheK30psyMfNik9V0BlTdRVi1OdTpJM2FWIV4lV1lN3VABWxVZ9W/dWtVYCWbtVDFfvVkpX4lNSVM9UZFWgVo9Zg1z6XpljbWpte1aLY5TrgiFvmYCDf2d3i22Ng3+LEH1Xj5aStHYfXGlHdDeeQNxMC19YcvN/rHDdYaFUkE52R1M6uTAKLfgf+hiVI6YsKizvM/ksVyONIDYsICiNHZwlVRnsF6IgQTk4XEh2/nLwYBxLdDQIFH4eGz/NU3NlXmJVedR1/l6MZfR6Z3RqZR1Pl0c+OjM4szKUKBkdFhiMNFou1yVCF7wn4TtCOiw5YVasTXlMnFP8SNk+RSi8NeE+FU99XgtuZnYdY4lS3jwVQEZ9tXwCeflv7U+9UGxSgj5mPGM9qy/nJYYhhhulH00i1xchFCwTRRarHloonDaYPM0tPiNmHOslATtlUNFT9FGeVTFX5FRbXQtcDFZbVdhUclWKWApWhVV8V3VVJVc1V2BV7VVjVHpWp1UYV1VWEFd1WPpb9l7KaDB8m4oklzaP5IYiiliE1HVoew2V05GQjm6cn5MhaWZTtUhMO7NMo1geYcF8dX6Ebl5ciEvBM8gyjTdPL2ggUxpfGssdiiS2MfFAFjtuKiompDClLhwfviUcKA8crhqtKIo4DFdpZBVyl1NePAsi3hY8KpU3Yki4QU1oF19sTCZV8WY+XURq4lN6QQ01JimbISkavBh6MPlJHEj3P2Qj4Bq0JCMnezY+QCk3OzWjNRIwnimMKJk0yEGFSaRWZGaubBRg6U8sRSBLRnSJdSFm71/7XCJkAlYLSF1HCDcoK1sxxitGIBQaph3WFsQSGxPRGPgfqC3eMH0ylTSHLUAhqhpoLC8+rkDqTfJKAVgTXzJp4WEMXS5YJFR4VVtdHlv0VrJWpVRSVY1UQlRUVdZWWVbQWGVhpFyLWXZcdlwBXuFkKXfKi3uUMZcqmJeKKH+2fcaOepa5mTiid6VMkDNqfFEvR8Y/yFLzZaZvlH/qba5dAkrHPRAuCyIWJLghGxzhHsYc3SRXINQpgz8WTRBAHzNaKF8gGSARMk462io9Imcx3jBuOSRLUV/gXY1MQzjeFnQU3x8GLdYwL1AUTq1L6EAlV7BBal/YUj5J5TKMJeIWlRT8LsZLF2hFaM5ZuDjDGoUd4B0+JqIjlyEvJHsrbCblLE085DT3NmM9EUngXalr2Gl0WtxPaFVrdxtzmm8iZFNm6Vu7T8pIFz/JNoEv/TTDKRUg7xbqG1kT6BTRGBoYvxprKxQrHCV6LbYxLilmGakiLChuNhZHPU4FXoRatmPVZPZhXFt2Vg9VqlWkWRRVoVTsVKVTilMwU1RVllVmVt5Z71+YX2xjpmPVZFdmkG5/fICG8Y/AoZWgSJl0hpmJr57onSWvvK1GoOCD0mipVAVE5kcOUC1jpHkCeYVjF1PNREsvWSe3IIUdJx5/H1kk4B26Jb8jpy9BQstXVVCmQJMwAyIGKtM3TUW5PJUuyC9fQ5o4Gz9GVJVjdF2UQoUdfxBREFIUtyMVLPY1ED0yLKA8yTCmQEM7XDi+K7wb7hvoIO5HU2ymhml+vXNHUoUpMik4MHAjNDBRNvVAgz/LN005rkYATPFAnEjGUchkT3KFbCFd61xxZ7RqQmDhZwRgaFKzTP9H8zZNMGUqFSP7JPwfJhgBFY0XnRRcElcUpRRxGOAjSybfH28oHCUMI/MZMBbhHogr0kXKS0RQAVXoWkFiWF6sVvZUqVXOVC1UpVObU8xTZlVBVYtZNVR2VrxYjV2AXRZkSWvxb3V4JXq2cT6Aoom4kLKgd5S8kDCOoZSFqQCpqLa+oN2K0YHJbRdWb0tOWstaLmm0c8tpY1rVRyJBIzbOJWQghCWqIzojvCcHH0UiCyscNKFL+lt5TJQ5hCv2JGk71ElwT+pHYzp8N6JM9kclPQxD81xhZI9HZCxdIb0W0w5tD68VyyDcJiQZmBwmG4IhOhcQGhMZMBwuKSIv0VBYgSGDG3xgeN9ruUVYLMgsQiPONndOWVkmVddLr0yDVj9efFQbUwJZCm1veoVyF2gwa5Z1r09+UM9jeVvJSupBqDn+NY82rDAFLx4emxhYFZwTihXzEy0RnRHMEgsZPCTjHwUbXiIIIC8eqhRaGQscyS1NOWZI8FGoWVBeO2R/X1tXpFXRVrRUMFbjVg9VQFZJVkBWZlkpVL5X2lY+XfphuG0/eJCL2Z5DldmBpYhRlieZY5RbjIWJZZbOpQipSqNeq/ya3YppfllqZlY/WP1pCGwQdI1vXmX/UwRDnzhHL1Qv+yrMMhQunimfKrgkuyOBLzw8GU/Ga2lb2UHFKistDD2QUTFdjFRoQ7tDgEthRw5Kk1CgWQdiIlLtSdk+ICUEICkX0hD3DZYS8xPkDjgTQheYH5EdVB62MTsyFD0BW1+JypHuhI92IW9xZ9o/mSB2ISwiAD2IWv1skl5YW/VgXmsnZ0VlXmKQceOC93wbdvF4y3csQllTr1VxZNZZa0taRRpBSTmaNakxlSCNF/QUuRM8E3wRhBHJEB4SvRbEITMbrheGGxQaaRgfGSkX6yL7Kiw5qkDDSahT+18ca/ZkMFk3WHFYKVUFVwJW7VWoVvNWjVoQVxVVIFdrWrxbhl5aawx6RYJfifKTzZOSmNimUZn/kPSL84IWhweXSI3smoel1plOjuiA23QpYLZg2GNbY3V1MH8rczxZu0bITO5NMkYgLlc3YDtsL/M5xTBIKjsyAUGzW5V9JF//RJA/sj20Si9QSEoDS/BLHEu3RvQ6fD0cSD9MwVCyXdZieFfjRf4+TCeYFrIOuRCVEVwbAyKeKZMwhjUIN31Js0ZHSW9rt5KymgOLxHiScrhwOlpKMZkuDiqwKrxHTm75cjpyBG/Ie1l8J3nRc5J7aYqHiLGFC4UieAc8bUREVjJSzEzsOho1zDXLMWcucCy4G0cVBBRJE2QSLREzEtYQJRFCFCUdBRsFFY4YqBaWFesZFBpdJE0thjjZPhZEt0wyYyxrIme5XzhWh1ZGVVZXTVakVnJWt1uOWGBVkVdNWYJb8l7KZQdokG6Eem+I85mjrcOyaq6Tn5eZ4Ixjg6d+oIjhhBuTEpl2kJ6MuXlHbEhh1lliXEdbwGdRc7V5gmc8XLBQm0oLSJ41cTgBRIpBOUhrOt9CU0ZlTc1nL4HNZEFOclYiTw1PWkjkOv44M0oPQtFBLTGALoo+ZDiiQNtL2Vs1WtdIVj8DMRsWqxKMH34nrjHqPi5DbUGNTOpQSF5oWBNfV4ZBokGi6IxHfsFzXW30aCVJ+jVIKocqU0PMWAJiDXVfgHCGmYNdiuCGjIjplUCZxpTCi02COjqcSCdN3UGXQYszUynVKsQvFif8HxcW3RKrEiISUhHFEAwRhxCgEEMSFBfnFngUwxSKFRcWFBfZG8sdGSbkNHU7nkYxVNpc+2qib4pqyFguVcpVBlkhWhBdi1mOW5FXTlcIYCBiYF6mYARjwW2UdKF9UI32pFupMrLltaKsUaKUkZSFz3o3gbZ6C4LSi8KI4IBHb+pkXlzNU7tSJVc+XZldOXGhdwdlcE/YQ+4+W0Y+PSxIi1YMXRhO/GLFas5Z13Eteq1i9WMYcStqJmHITAs54ipnNwY5IDRFJc0kMDYdLFgv3DoYSw9IajyELgQjRRPsGlIrDj5+U8RhHFquWhtiVGpDbHtxJIVCpqewx6bfkdyGa3f5ZiRfWVkJPg0mUymFLDpJkGiEd+h9r36afrGIPZEOjWyV8Zu6neKWhI7sN5U9o0dZNlY0dTKdKHYhhCvxI6MVExOZEaURwBK1EJMQbhCXEJwQchN9FaQTVxTpEpoVWxQmGJIehSCBIPwr3DqCRPhUkVd4aYRunm/ZWxFVF1a2V5JeyGEpXf5e81b9VzNeuWW6YCtkYWqTbQJ5pYvhoZWjz506rzi8H7l/sTWgbY1nfW90CnNjetmEnnhpcI1gSmMsX65aU1JHUpNWmlJaX/9zbGxYVchSLEtkUgtOKk8JW9Jr62WHc4d/FnB3dKt+aGzJbYd8jnUiZENMyzFdJMAk2CnmKiQikCLyKkAkBCPKKCo7RjqRI9UbahM7D8MadifgNzpMWl8cceJ2UnomfsmK3afmrR6tm6SSnmCPGnv5ZrNeQWufZMVfKjjkMUsvlk/TUVxe8WlZcxSDwHsdgCGD54iBjCWMVpSim3wxDz9xPk02gifbLowo+R2+JZQivxdYEl8RCBH3ELAQWRA8EGIQYhBjEXITnhIqEjsSjxPBE28XPRwXHF4i8y0XOStHT1W+SHlhrW5faTtbdlYUVxVYAl+KZIxlW2C6V0ZdKWNsZhxlkGuMdDN7YJKHorehEJRymZ+t8LTYuOCmLZcMjNWBSndcb190FIB6akZddFfqZJlXa1T7VpBOcE/YT1FcLGiyY9ByO2dbZtZli22BZkVuiHqqg3yDiI5ziE1/O3u/b0llQWsPa8Nj+00TNmknDCD+Hish+RrRHmUhphfPGmwgAicUMTckfRJRCs8LyyACOahQOWU/eISOr5hRnxWsMbR6tqeqBafvorOYWIcae99ovF6YaFRhYWeYSKkrhSkmOEo3k0rHWpBrXXbXdAdxanlHe3t/GIDAjSOWcjMMMQotvijGHyshUiX8HHgaSRlnFH0SnRGIEU4RuRBJEDgQ8Q8+ESER+BGGEp0R6RLDFIEUcRXeGR4ejCJVLYsqozhhR4lDO1sAZjRipFkYWi5bHlvaX0pj/GXlW9pWaV6CZGxmIWzicDB5kYn1pkqd5ZXgiYyU06Cnqvyuz52EkciBWHgGcxlsqm9nd7tjh1aTUzZgLlLxSclKIFF2RG9OclkhYBNlXm7dexCD5IB8fUt7AYcTi6KP8o3/kDR/PmlTZqZjP083RNVNW1p+U4hFvDgdKQgdsRkNFR4VHhinEu0SqxgeGB4k0yhcGwUPXxfnH4UyjEhSWj5mqXRceBCJaaEUpoms/aMeqiewKputkWODDnArZK1fAlxMWwBGKjLrKKs+q0F0QFg+R0+hXbRqhm1GdHF4cnzrgnqH8ZL8KJskZh8VIEkl8iHoGpwWcRXPFH8T4RK+EUYR8xBqECwQDhCnD5wQPhETE2IT5BE5EeESDxNrFAQVvRbdG/4e3yIGLbM1LD+lVH9cyVmSWGdaCVsIXXtcQmAnZCldwldNXKhfuGQraudxJnuGkzOkHZUnihmJ1JVpobWrUKRglciHSoCpdw5wJ20RbLVrAlnuTXZNQ0+sShZBIUAMQLBBrFCUX+toxm4dbL566IArjbWLYJUpnROcVIepevJ7I3blYZpPZVCCQZI1YzRyR/hFzDsBQVI0QCRaH64XGxNEEPoPeA6EDvISShedKFEc2w6nGEQn/zYcRdJFHEU6TwlbXnHQjLCWUaWjpISmtauHq3SjxY3EgU50GWMFVQtRRleqQ4EsQzvZWB1gLVGQQuZEqlpIcIVyhXWVfXSDBIm0jccmfSaFJtYtoTcYNF8jBxn5FAQUchPIEgESlRH7EKAQLBD+D8QPPBD9ET8SbhM+EXgRKhI/EjEXuRbhFW0YOBzbHxokZzF+QeFPRlTSVm5ZomAuW51acF2GXhZhi1zUWGJZAF0QYEFoTnqVfe2Jl5DLg5h/w4ZGl22hoqmDnD6PK4rsgJV6Sn36eH1y1mWTVjNhDU92So1GnEULRTdHZURaUXdixWqLdl90tHOrcjt7GYYJkp2REJ3GjvN5T2+fZ/tcvk4rRwlMPEdpNR8zBS/sKxg3/j4fOYwl6RUWFbYaEhv5F+wR+AtVENIcDB0XDVsXFyLCNCwzKy2+MehDSlToWlZoZHhsjHGbbaE8n4KhnJ8kpY+Z8oFAbalUgEtSUZtNoTGvOMRV8mrHY69eVlHtT/JqiH3agi+KvI26lGmTsTZAMJMzJChdJKkoBR4kGZEU6xNFE68SzxE+EcUQYhAfEPEPeQ8JEowRjBHTFCIVDBF5EmIT7BdJHGAYwRY+HfQl+i8HPORDOUgASVxPE1noYDpgZmJ7X9ZiM2HJWUNY3VuDXABj8W9+hKF9tXyEfX95/X17iB2SCJ00ooeWb4vRgZ9++4K0hy+HqHaKYfJb1WrxY/BaA1SIUWtI7kROSBlVL16KZKFx+HTBbcZ31Htth0yBjYNglcGWM4eAekNv0250Zs9aR1u8TZFJ2TtmOV0tHycUMQk41SRnGoMiTCd5KZwfJyGeEgUM7AttD08MYhmEJVEwOx42IJYpcTJQO+dI9lViZc15OY5lp8inlqEWoSOc86LZkB92CGC3TJhFGkczOIs/ylG8bZRx/HQ9YjdVjWwffyd8II5SlxCUhJFnOmA76S/0Jc8gFSB3H3QakRQ4E68SOxLPERwRoBA0EAYQ9g/YD6AQeBSAEdITXRO6EeQRNxWQGcUkSSKbG3Qgwij3MOU4SD71QMtDWU3kWkZd4WHKaKdq+mTnXxtcOFlCWkZdM2oehIKBNHbGdPd5cnx1foaEGodFkZOZvpeXjZGDU4b5jEqU3Y0beYlmn2eHdmB18WO5XDdVv0NoQH1PLVqmY15l6m3xaZBrg3n1gxN8UnpqhYWPOo8HjiiCVIFOgNFz2G9EZINfbEzVOzE9tEcqMuAjMiO6K2EwUT8oRZA8+zAAI5QWiRcTE+gRmQjdDF4Zth0aGzsvCCZSNJ9BP1ITYhZq9W+WeJuTV6Z4pmmh7Z4+pk2fuIRabipS9EXgRuU1wTzQSaBfSncCdoFpclZTYJdh5mpNfICGdn82hg4tEiozKrsgKyGrG4obdBdcFU0TUBLCEaERvRB/EA4Q2A+rD1QPTRCyEf8Q0hP3EAgRfRKWFYIeCiH7KrAntiv2Mk43lDnvPxNC6EOMUf1auVz+YVRqQHAAaS9k9lt2WR5byGHXfQeFb3r3cy54zHXIeKF6GH0LgkiK8JR9koyIRoaciwWbnptQgZ9wAGNUZF5ofmfbWq9Vb1S8QTNBWk4YXYVpHWZkZgtiHW/LfUd7n20JfreJI41/guR9V4anfmR1YnwUd6Jyp2TYUqdHuEpvSO8/KyqGJGsrHDSuOiBILk8hQLorYSTSGTwTbAypCC4JSwxjEXsfKjLCK9077kqOXhhXllv6WFhkunqnh9GnQLY2r8Gc5ZVPjM5uA2smWy9HWTm+N7hEh1Mqb/t/wm68bYdlwF4KZ5B0Q3j+dcx7vi5aKAok+iHPHQscUxeDFtkVVxR1EvARNRHeEHIQNBDdDw4QYA9REIARoBAIEa4RZBLyEkEWnyEDKyMwAjYxPcJFgkdsQHg9rESfR79Pq1iKXmZlt2m/bEdpeGYCXP5bAGAyb16ICXvpcktyEHFZczx5In6EfRCDw4zbkZmGDXvqhNSMxJsGkGZ5nW7uYddXo1jHV1xPb1E0Uw8/BkfoV8RntnTcbwRmCV6iZgBscGkudRd8IYb4jm2NgoGsdhR012vGZedcuGFfWpNQh0JFPyM5hzmLNjE62Th7Of1DNUi/QPxCEDQZLBobARJ2EEAQ3AmsDQ0VoxiSHjQw9SxiM71CrkCeRjxTCGBobM1z8Yxmq3Cpg6VMkCN5wnFbfbdv3VW0Tdk+tj3DTIJh83xGgCN8QnejZ2Zf1WQWahZwzG/lMrkwPiYNJk0fUx3YGk4XIRRuE90S/REYEbAQ9g/+Dw4Q7Q95D4cQHBFNELkQ0BJFExgUpBYaHo8nMS5YOL0/wEcxUYVJQz5tRFJUhFQaWF5cIWPVZ9hpD2sCYhtcv2DraGd61nblb1pu4nCCc314wH7Fgq+BN4QGgmyGUXm2dMR7KYYLlESK23HnZaRfvl2SVSROOEqsSuFSL0EpUcFZ5mddZOdl5VuuWshe4GAMaThwIHq3jJqVVZPziKqDvnp7cSpvI1y3TI9K3EBQOww63Dr9TAZZ21S3UrRNYjmkMKM+ATJ7KEspkByWEogLSguwCkcSuRZ+G1gb0SfiOXw0CjDdNeU+1EZyVqBir3LuhC6YQ5gUlBCGfImGe1J9hHd8ZrxYQUu2QDFI+1kpd8uMDYSzeDxqLGiPbcVqoGWCZ58kEio2LHoeDB0FG9MXOxU+FDwTpxLsERQRrBAnELsPpw+nD1gPqw+rD+EPuhGeEiYVqxVYGOMcGCVELWo2lEJdUDRW7k1CRppMBVgMXcJXNVfuXvlj+2ocaO1mSGTRZBJwZG8jc2R4qHY/deR6pX2phf2M8ntTb8xvmXSlcRhuWnQ3foiLpYipdI1pwXOXavpbYFJAUCdKuEeJQy9QRlR3Uf5PsFazWJho2nA+ZrBtiHTMgT+VNZQklPSRn5N6iiKBwXaSZP5ekkwZQ3NIrkl6RPRR31SaTwJfjFQCPDEltyPSIrQb0yhRHHIQyggRDGAPchafGD0f3yuGNSNEIUP3NpVGllKqV05RqldSaI5+KZe1kbKJ7o3kj+qK4IZdfGRv5mTRZ2hjOE1rUeRmwIGrdbtsHnWUdCWG4nyaeDl0tCd6IZ8hlyRjLrwneCDRGEcVYhOGEr4REBFiEBsQqw+FD5oPdQ/MD68PJxDkEXITkhWuF2Ma5iG0KoA0BDpmSK9Sp1UfUHlMbE+WVeVbtVlGUeJWYWEgaDpm3GZFZbxqK3bicAV1ZnYndi5+JYZQgUKGzY2EegBsnGKxZetoEmePbYN5n4FYfmFzqHNifEdsrmNOXWFQM0prRfI+ZEOnROdOKl6KYTZg/W8+gHN3zmsVcgh95467mPaN1ogcjqSC+n7VgUp62W28XkZaJlKCSk9JfkpMRHM/xk5JSPFA7DG0JBAaNxXYHdUethq3DOccyyCUIiMkkSP/J8g1kEh1UsNPJ1C5XHBphWkWZxB0EH1/iHCJIIjJigeIoZe0mQiG3nkUdLqOsokdbApTh1/ugVqCYXMbdlSENZFdjbmFeIZKMXUsmixiKBQ0tC2sIfMfPxWvEiYSkREIETAQxA9gD2gPQw+jD6sP2A+9EJoSzhPdFUYXfhtHIwUvoTRbPc1Kb1cRVThQTk45TjxQFVVAU+pNj1nvYopkPWI0Yu1sjWwyb7Bn5mepaD1xKX0tgKt4k3z5hkl/gWy5Wehazl9FX3Rjj2rWc4JtGmcLblJ6L2d7Yv5YC0vLQz0/QTwlRiBR2GOadUxtCW/uc9mETXkfbQ55l3mfjTOQ04YBigWBRno9dzF97Xvmec93RW4LYrhHqDYwMJ0uOzLtQ3hDxzRmNmA7bCyJF1gPGxCQDu8QUCF4HV4cSCFqHwsiSCdtNctG42IrbQRjzm4uexB9LIKLkKaVVovfehSAaYSUiPqbcpaMlFmQHJSyhpt2pGIFXo19dopehYp4fXXPeiqBRoAEjKQzQzJKN+EyqzVcLK4jJhvTFzgToRFGEaQQ7Q+zD2QPRw9UD2gPqw9AEPsQYBJmE4IVFBeRHYwlWSoGMAs5DUknWRxaK1CeTxVSOFALTuBMKE7SVmBY6VjDWklfmGXDZnhj0WH+XkJmXG+zb7NyG3N6dlZ6u3VPZrBZWVBuVgFe2lbBWeBjE1+nW/hlRG0dY+xUlE4gSGFEBkdPPQpQTGewZM9xAIBFfxeCIItqhZ54h3l+hImMHI7ZhCmDv4nggzl68XIGc1Rn9Gh4ZiJefFEtPcIu+ySjJ5YyzzGaL5ojfieDGREPShEqDwYQagpxDEkQNRTSFj8spz5WQnpH1lCmY+t/ZoVGd1p3AIN4jxeWTIEYfd145W/Lei+E5pB0kvCa+5Cll/OWRI3MdTNqH3x3lK+VeIzdhBaNUJBRiH+RX0N8PaM7gC57KOYnXyCiIH8WXBIcEeYQHxCSDz8Pjg/oDm0PfQ95DzwQShEaEnsTNBb5F/UdaCC8JzkuvDtwSZdWcF3JU0pRQFCwTTlOw0wmTJJM4k2PVqJSnFw6aR1mV2D5WjBfrWJmYotfN2dDb0dyi23razVr+l6aVQ1MBFrDWntO+FHPUQJTwFgdYJJhqFniUDtS1E9uUJU9gk1pZ4Fys36NfQGBN41fnUeVhY+zjHOLC5QzgbaGkX1gfpGDy3qsdktyw1rEUgdO6UldRMY/UTBgKaIdkBzoHUIdOBPhEooS6h6XLTwqLChjF0IONh3mJ78paCZbOrtMJWBScVaFK4ezjESHlIWqjHSD/3ntb5BiPWi3adJ/wZNLlciVZaSNktGKAY1Zn9WKUH5QgYigzp+2lF+MrJxNnGuOwI1kRkBEHTqGNZ4vKiOTIZkaxROgEEAQMBDlD4EPIg9DD+gOQw8eDyoPJxBjEZISexMbFkgYNxvZJNoqyS3ONgVEQ1WbYWtX3VLmTcFNJE4dT2hPl0fiVl1TsEr2WPpbcWFuXHNRMU6SVYdWbV6/aR51pnKbYQFeT2OcXItTFEtPUuVbNU41RSRIt0wuTIpYSFA4UxRasFaSTNRJnT26VLtmHHo4gj+BZo7hnhuibZ72nr+vdKb1ktR4enm7dT5voXqxggiAsnScZVxbOk+1RXk+4TgaPlUqwRlwFxgUcRJ8EbYaKCIXLQQ6IzkPNp8hsxJdDc4ckzApPZE90jMHSJhoxITAihaKuX9pgSp7BmoIXeVVC07hUvlslIhUjc2Tmp72quqnUqCFj2iPK5avgcaIY6AsqMSh1JhNopKkXZxejpk6xDu6K/EmBiqbJJgZRhS3EtcROBAsEKMPKg8JDw0Pxg5kDwUPDQ91D54SjhL/EyYV8xaOG8cjayh5LFg4qklKV/NikF8cUQpQRFDNUIdNf0X1QNdIGUmaSa5XiFEOVqFO/UZhUDFR1FVPYJ9nInKee45kTlegUzxNWUe7RpBLRlRKS0JD9kEHRYlGD0s5RcxPhFS4TSVGTEFlPjhNM1jgbEtyH3bmkL+p9qHBnJGgHLEdslWZ1nZYZzBiO2EGavhxbnmEd+x0uGeGXg5TI1OtRWAyPCTYHachACMvHlUZyBhyJ901WS1kKRIn1xc7DxcNcRt5JgEhjiEeL4ZE6VWFVTpgqm9ucEd7X3TdXiZSmEIsPOVPp2Skfx+T0aeirPmviLHYqQSj+5Pmh7mFnoZWl92q3qWvpEapL6QSlmmT9jg7PrI0QSXbH78akRoGFs8RDBEOEO0PgQ8mDy4P1w70DjsP/A5HDycQUhHPERMTshTrFq4XWyO/L4c5D0K/TBRUTGG3ZrdYRFOgUzRWn0pPSctGoD+VPSdHJ1DITF9GF0VXTEhTglveX/VgRXHkfauEX3TDZttRUk6RSQ9F5kFlRClDQkC/PXw9RkA5QtFB9kcPRd9Fhz+RPac7Uk6aWJVgaW3XevGMcZhRnHia7ZUEoyCo6KbhhFJ01mKjVSdZZlyyZslnzG+qbylgLk8US8BBAy6KHv4eCi3ION04yC/JJA0sXzHJJCgZMRotHeccZA8fCtUVhBSRIGYl6D1wQ506izxaSEpakmQncLhh8kcCNkw7+1zahaOeWJ71r+q21Kw2pv+fQp3soyak96h/kfeCQYsGkMemdq0vpA+fVJ6wRD8+YTA+I3kmSyMIHTQT/xBJENgPYA9HD/gO3w7bDlIO2w4RD0sPlg8MEZkRqBMpFNIWrRloKZYvfDGRNFE/aE9BX/FpQVzaXMpfU2BVU/tQXUrCQkk/LEIPSGxDgkePUMFTpFbBX/twnmkUcXWBJ42SeJBoAF0fU4xLN0ddROpBCz+QP79A+j5BPD876EBjPXs8Pz4JO1A+LjhPSeBgq3Wib1px83abjTubz5cVjxuf6aQdo9SVMIh2eXZnZlMVT55V9VIeW8heCVUAQIAx9yqRJsYu9Sw8LSlAFk1lRGJC6D0sKJchiCLMKYc2UyaHFp0RKwrUCTQQZR5qMIwuHCt0SQ1ey2AzTX5BZkLZNdk1004MY66DgpOCpOux66hmqLiWHpiFjIiOv5gUo1aU1nkjaoR3dI+cqMOmmaZNrphC4T6LMBItXy5aJQQazhN8EUQQfQ8mDz8Pyw7GDs8OnQ7PDgUPYA/hD6gQRhHUEhwU4BfhGx4kjSYzKp41X0bIVd9iI2qsZ61oHXIzcLJjvlQGTV1KokD+PoQ9qzsrSvdWX2BTacNvTXzAe9B4VoUEj7l87m0MYxFY2k0mUk9MJEvZQUlF2UogRY1AjznPPR44nzjZO6dBnkMGOf1GlFyxa2lezl+gc5qP7Z5ymW2KiZg0nPida6M1l0mLt3K8YeZQQkZ9ST1FQUJIO30ySDCLKgowGUOOO3xAykLVTaxQ91CJQFgyTjE1NFI0ICvzHJcbFhgsEFENRgjkFBMcCBpYLw5QblxWUahK7DQHKBUpHUMwaLGFHpjaooKnx68lpjmUqozciQSD1328fnGKHo1QgY5el2T9fXuLTaXZsL+7yDtxQco/HjV0KZchlRfaExoSSRBkD88OBQ/TDroOFQ+2DtsO2w4uD6cPQBC6Ef4SThSkFpkalye9Lcg1f0UyUjBZJmFFbvp41HgKivN8JGJKUcJI7kFQPok6cThiP99O01cPYkB2VH5xitOUp4fCl2KRj3xIbQBgN1VfVLFctVaCUClD1E9SVI9HZj+5Ob05OjpdQSNHTULMO643pkYpXflafFQXX712m5CwmXaNI3nDiZmU6pnXoLmiw4+QhdN0nGLNU9NUeVK4QbM1lEJ+TbBKp0SQS3NOAlnLWuVb6F3NTe1G9kdaSDhNWEErKl8g1h/iFtcOgQ/WCiUUbQ/gF8gvlEIYS3A9Mi97IkgkCz/pWwly1nmIiw+feJ29nMWfR5itkbaGMHxvfTB82nDYcnJ22GNWUfdiO3Ubk0+y47r7ObhEoTfxKQ8iOBzPF3sT1BIOEDsPwg6dDq4OlQ74DsYOwg7CDtcOaA84EIgRAhPLFAcZWx2pJYgoiS+9NhFGG1NYYSJ1g4sZjxSUyoiQbtZfz07HSbE/UzqgNlBEXVNeX4lpZ33njnyjWq5lquqtbpOogkRzHWOJXb9jC2vZXtpNaElAWcxbrE2eQDQ8mUC8PptHEE5XTPA9RjemQ3VYKE6/Ujtk4YG4kA6TwIeabGB1no8Xlt2emaP7lm6WCYThZKxWJ1O+SBlApDkaR6dbX2kHZbxq7l6cX+ZtZ3SRaV9ag1moWSZbUlFMPlQ4rSt7GRAUDBTNEIwIOAosE8olxDLXK+onSCcaG5opeT7GVMRbgGBTdSGSJYw1fROIfZLUkqWapoyae4J+k436ftBpQmCVV4BLZE+eZtZ83ZtwsiY1AUTAO8U27CtUHmkYqhRUFa8PFQ++DnwOjA6EDp0Ovg5vDqUO2w5YDxsQnRH9FCUUMxgoHPUjoikwMMs9F1CyY8xydYG9iFqIwIrifOtoW1rHV0hQHUDhNXA6u0lZU/JhrXHaghmSRqbvv+DD/78eoZ+KPXSiZpRot2/YbAZcc0tvUZte6VtWTrtGXUSZQ+NCyj8HSABM50JrOoM5GUn7R9tXGmdkcjx/AIaxglZoYG9viNGQsaIIqXKi9Jr9g8VtSVaGR/1DOUJ+QcxPMFaQa6x88IDvfKl6vH7kgI95SWv5aeJtY2ClThA6CS8oJZAoKiksIqQW+A7zCjgN2hz7MAUh6RhjFHcc8CtxPjg88UwjbbeJUYJycHBvX3cPf4t/uI1fl4qNpnJJfx2J9HodbN1e5lP8Rd9XH3AnfMqUsTkeQec8NTfXKFcgwxqyFFQSzRCOD8IOcw5rDm8OiA6hDkoOkA7bDjcPpw8sEPMTcBTpFdEYOiAgJU0wWkXPZgp5/oRfift2RX9XgAdx+WNvUbFLcEkxPYo1kzZHRr1TWGRjd0aDrJDEp7C/mr66vSyuaZB7f8h+uXkncz5pclYqT7xbG2K0U1NMJEgKTYBLc0U/Ozs+JDxKOks14Dd2RKVO9F0iYXBjRXHdeF90d2L6Z1R4Uo5xniWphZtdimmBTno/ZI1ap1g7UsVW+l7SaHx0FoTsg6V9JX26fbGCFoHif1+AkHchYzxQCzxqM+4qsjppQR474iGvG30SyQc8E8AY0BIpDnkPDRVjGkQhGSx6RDxf2nDGaPJ+m4oafq91s34JlSyLl4fleCtqjnWOfgt0ZGwiXktJXUqVVzFgL3OzKVkzIzCdN6cyViJlGCMWDxODEFQPnQ5vDmsOeA6IDowOhA58DugOMg+WDzwQHxNRE3EVNxjPIGEnsDOJSb9jknJBf/J+L22xbp5yPmARW4xLykKYPLU2zzSANKJAe06+Xflv+X2YiPel6bg+r2O3QbcUpqmX/Y+zeBVpY2MuVW1YGmTwWplRoU4fUBRUu0l0QxA6LDwQPRBAPzUpPWRPmVrhWMVW6V75XfBua2sCXDBi5XjZjSmdIqcrmYGMo43SfBJqrWgoZchVAlN5YU5dFmSQbl90Q2zQaVdp7m2Oe7p9AIAsf75utloPS1NAqjr9Q61FZDJCMRszpyHLDl4IDAs7EtYi0SRvItM3PDxmOXJHyFgOZIB9ZYoujxCU3Y2webV5HH0ocbVlo2HKcd5fp2QAbDNbCEnhQZ9KbFJ/a4wi7SYbLbUzrjQAJh0g9BdZE3kSVA+EDl8OiA6VDmcOyw6dDmsOnQ4qD7cPWRCMEcgSjhWWGIEj7i03OwdOr2GFbCd8UnrWaC5b3GBGV9lK6kEsPDU63T7MNfI1mEJsTLNYt2b/c0V/d5f7omWNFqRQpHWVLI5+jbd7YHJmaL5aQWIqXrpXPFYiWz1UAVhlTbhB6Tt7QpVG40J8NG0+OE3FU1pRbVXlUu1bOWh0aaRWMWCedR6NFKbfqBCm1aFunCyIDXWPfK5sJWA1TutFB0U9UctUg2LwXfhUNFYiW+JtjWYKZ3NucnYEaQ1bclOiUpJY40ilN8U2PCrcIA8cPwlqE+UVHiGaNRk9skDsV9duSWvQeyKHX3qGe+OCuYhWhdRs01pYUuNRKVrfbt171GbAWGtU5mSTUDc+iUZOUbtpAiqPKrI09zyFL4Ejlx6nFeEVFBTLDlIOVg5GDmsOcw5bDogOqQ7XDjsPuw9iEBgRDRL5FIkXJB+tKMQ1k0fhWLdpWHuzeCtkpVSMUahKVEeESAtIyUpLTNk+XzRUPjJGKVFkWD1rPXQ+fc6CUnF8huGBJIWUiFKLUIcfdnlsGWZRX6FUZ1ESUJdNxUcyScBBE0VRQhVJL0egPLo0nTecOZlDr0wqTGxSpFa3WNZQn0qYX9Fzfoc3pNGkQ6Rzrlegt4/nfyONTYI6Zk9VRTx5Mts0Xz1OSFZLajxUQepQwGE1VDxTj1nFan52G3MrarxqaWqjVR1JGzzuJyka9hLVB/YYHB8OKlw4eUk/Vctg8WYidUmC7IMsha59YG8nan9oDk31QwlPNFDqYd2Ev4NFf5NtXFWtSFZO6z9vSKpMi1knKk43RkDwPbspCiQ+HSwW4BQ3EioPgA5fDl8OZw4cDoAO5A7oDgUPRw/dDzAQ6xBVEwYWHxlwIN4q0jMSQSJSU2A7dcp06GPtVRxR106lUcZUO1XvU+JTsEeSMvI1uDvRRDNKqFwTZVNsymjdYdduFm2/cqB54ICGhNN0PmlxZJhfb1fxTHZKlUYIQ7VFEk3nS7NGdkTDRoVDzjmTM/QxkTqMRe5Kck2OUl5Ov0MfSkdbn3BsiSqhr6TrqEmxprLMofiO4ZXniBR0xV/gRp0xXSddLWgvcTXwK6s1tUiwUA5Kez+KR6RWlWnhexV7kG5oaVtapkMWOAMrhxzWEGkHYw6uGo8tFjicP8dDfkqeTAVYgFqtaOlygHSNZtpTrkYePl9X6mQqbGtuB3ewczt+xX9Sa49QmDwDRWNR2EmeT58ngiqPM4s5iy0KLWslCBeSEtoQahCEDjUOJQ5ODkoOVg6+DvQOFQ9xD5oPbhBvEasSrxXHFzQflySBL/c/OVE/Xs9xH3CBZnlhOGIGWaZdil47Xnpkz13eUPM5WTBLL0c4ZEZuUzRcs16rVU5U/lXDWnxj8W9ke9aCY3rUcutrnmYPXOpNLVRaTkFFR0a0R79GQkafRNBGn01YRDs7hzBFOadBpVR0TNRGREFTQ/tNPF9AdoiLg5+YrqSffKnFvxC6BKB4nZeNYn+nZytQHUCzLP0gah/ZIT8e/CjLOhY+WTYDLskzpklqXL9g/WN0WnlVNVSnOEgq2CbpGOIN5wWhCBsTBCASIfwoUjRIO0U8Oz7VRN1Hs0mLTS5DcT7BNkhEjE4YXfp18Xihd2Rs/HdZf+dun1shSR47yUfJR2JL/B/aLYs8UkgqSdZCnS65GZkRChAiD18OPQ4gDkYONQ5bDpUOpQ62DjcPfQ8nEHwRfxYpFxccGiHGIoQoZDhXSTtYTGoudTt4nXQxcRZtWW39aRZwU3IAY7dSjEL9OjExnTGLP1dMBE8/TFtG4EZhR6lR3lxtZ9FzW4A7gcVtD2JYWDlRXFXuXspOE0WZQ/5B4EM1RQ5E3EOiQ0w+ezbjLk438E7XUatBkjtFRf1JG1bgaUl8oH9lkK6dKpL+lTam2LicsSae64gydcRkiFFeP6wwYCbKHA0YQhfYIyQo+i++MdIlYS3/R8NJaE9VWT1IBz9YOGgspx66Gh8WfQlTBkAH/weKEpcQZRg5Imso3yvNLdc0LjJ1LyYp4iQlNNVHQlrPZldvJHFraEFranMahF93qWvYY+9ICznoOqFITk5sI/I1HUl3S6dE2TVSIlgYhhL+D1gPIhLdDyAOKQ5KDmMONQ6EDowOoQ5tD38QkhLMFeAX7xn+Hgsisyk1N0xEQ1hLbO17AIlUgdt6sYKSfpF99YOoc+leelPnSHBAcjO0KhA66kG4RPhCMz4eR4VSE1lPYMtp9HeOhJx/72g+XQJW6VhlXo9WxktWRZlDSETyQYBAcEAcQghDbUepP2A13TJPPcJFYDIrPitQ+1leYv9zuXbldZiCqYjgj0mI65Gho5ms/5wdj4SA62VqU0VCWDWTLfUglBn2ElUWYRtIHo4hHiHVKmM9djlPPTRQ5ElROV8ucSEHGcEQOQj7CooYkxDXDmMIZwi+CyMTIRegGYoetyOXIbAe7htBJbI6QVwSavZtZnxBcUJmiG4ifoKHy4BpZ3NURFCUP3w0lDyxSMMgCS9PQAU+xDWrMsUnMSvhFZ4P2w4+FIsW8A4xDoAOZw4pDkIOWw6yDjcPBhByEzcVyhaVGmgg/CJRLQs5bUe8WA9r74LQj+eLcYoskVyb4pBJfFRqBGD4V+1MIUN5OIgrYjZDOzQ8/jjePBVJMFkBZzluF3O2feuIOoZ3dHRpm15WaFxhq1JTT4RLe0iwRPZB8UDYQPw/HkEMRoxIREHtL+Q3JTciNV5F1l/DaRVpY32+dBxu4XgXhXmE9YkBh0Obn6c5lHSPPYUOc8pcV0mNQCI4GC5HI1saixb3EIwRuRP9EfIbTyncLH8zKD/KOTA8LS7LHY4SJAjFDasPAhamF6MYhxA0DVkKZAZoCTIMbhBuE84TJBkvIXYw5EAjWWZ8bIPlb6Bog2VkdXeC0HiNbG5zOFm1Qkk5YjNmNoVM"},"symbolScale":3.5}</script>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>Chiến tranh · Buổi 4: Hậu cần trên đường núi</span><span id="cnt">1/9</span></div><div class="bar"><span id="bar"></span></div></div>
+  <div id="board"></div>
+
+  <!-- 0. Mở bài: nhìn sa bàn trước -->
+  <section class="step on" data-s="0" data-board="real@0">
+    <h1>82 km cuối cùng</h1>
+    <p>Bản nhẹ hôm trước bạn đã thấy: đổi sang "đánh chắc tiến chắc" thì đạn, gạo cần tăng vọt. Hôm nay là câu hỏi tiếp theo: <b>chở số hàng đó vào bằng cách nào?</b></p>
+    <p>Trước khi đọc gì, nhìn sa bàn một lúc. Đây là địa hình thật từ Tuần Giáo (góc phải) tới lòng chảo Điện Biên Phủ (góc trái). Kéo để xoay, chụm hai ngón hoặc lăn chuột để phóng to. Thử nút "Từ Tuần Giáo nhìn về mặt trận".</p>
+    <p class="small muted">Khoảng 20 phút.</p>
+    <button class="btn primary next" type="button" data-go="1">Bắt đầu</button>
+  </section>
+
+  <!-- 1. Ôn, chỉ lần học đầu -->
+  <section class="step" data-s="1" data-part="review">
+    <h2>Ôn nhanh</h2>
+    <p class="small muted">Trả lời theo trí nhớ, đừng lật lại bài cũ.</p>
+    <div class="card">
+      <p><b>1.</b> Buổi 4 bản nhẹ: đổi sang "đánh chắc tiến chắc", đạn tăng gần 3,5 lần, gạo gần 2 lần. Vì sao đạn tăng mạnh hơn?</p>
+      <div class="q" data-q="recall" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Vì quân đông hơn nên cần nhiều súng hơn</button>
+        <button class="opt" type="button">Vì đánh chắc là đánh từng cứ điểm suốt nhiều tuần, ngày nào pháo cũng bắn</button>
+        <button class="opt" type="button">Vì gạo lấy được tại chỗ, còn đạn thì không</button>
+        <p class="why">Đúng ý bạn tự nói hôm trước: đánh lâu thì ngày nào cũng nuôi người và nã pháo. Người ăn mỗi ngày gần như cố định, còn pháo thì bắn nhiều hơn hẳn khi phá từng cứ điểm (báo Quân đội nhân dân, 2024).</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Phá Khâm, Liêm rồi vây thành Ung hơn 40 ngày (năm 1075–1076) là tầng nào?</p>
+      <div class="q" data-q="W7" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Một trận</button>
+        <button class="opt" type="button">Một đợt đánh (chiến dịch)</button>
+        <button class="opt" type="button">Cả cuộc chiến (chiến lược)</button>
+        <p class="why">Nhiều trận nối nhau suốt mấy tháng, ở nhiều chỗ, cùng một mục tiêu: một đợt đánh. Mẹo tách với "một trận": hỏi có mấy chỗ, kéo dài bao lâu.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="2" data-need="recall W7" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 2. Thử trước: đoán con số -->
+  <section class="step" data-s="2">
+    <h2>Đoán trước một con số</h2>
+    <p>Một người gánh gạo đi bộ hàng trăm cây số qua núi. Dọc đường người đó cũng phải ăn. Theo bạn, để <b>1 kg gạo</b> tới được mặt trận, dọc đường đã ăn mất bao nhiêu?</p>
+    <div class="g4" id="guess" role="group" aria-label="Đoán số gạo ăn dọc đường">
+      <button type="button" data-g="0" aria-pressed="false">Dưới 1 kg</button>
+      <button type="button" data-g="1" aria-pressed="false">1 đến 3 kg</button>
+      <button type="button" data-g="2" aria-pressed="false">4 đến 10 kg</button>
+      <button type="button" data-g="3" aria-pressed="false">Hơn 10 kg</button>
+    </div>
+    <div class="card reveal" id="bagBox">
+      <p class="small"><b>24 kg.</b> Đó là kinh nghiệm tổng kết từ chiến dịch Tây Bắc năm 1952: gánh bộ đường xa, muốn 1 kg gạo tới nơi thì phải có 24 kg ăn dọc đường (Học viện Quốc phòng).</p>
+      <div class="bags" id="bags" aria-hidden="true"></div>
+      <p class="small muted">Xanh: 1 kg tới mặt trận. Vàng: 24 kg ăn dọc đường.</p>
+    </div>
+    <p class="fb" id="guessFb" role="status"></p>
+    <button class="btn primary next" type="button" data-go="3" data-need="guess" disabled>Tiếp: làm người lo vận tải</button>
+  </section>
+
+  <!-- 3. Quyết định -->
+  <section class="step" data-s="3" data-board="real@0">
+    <h2>Bạn lo vận tải cho chiến dịch</h2>
+    <p class="small muted">Cuối tháng 1/1954, ngay sau lệnh lui quân ở buổi 3. Đây là những gì người lo hậu cần biết lúc đó:</p>
+    <ul class="know">
+      <li>Mặt trận cách hậu phương 500 đến 700 km, đèo dốc, máy bay Pháp thường xuyên đánh phá đường.</li>
+      <li>Đổi sang "đánh chắc tiến chắc": quân đông hơn, đánh lâu hơn. Việc chuẩn bị hậu cần cho kế hoạch cũ vừa căn bản xong ngày 25/1, giờ phải tính lại.</li>
+      <li>Đoạn Tuần Giáo đến Điện Biên Phủ dài 82 km, trước kia chỉ rộng 1 m.</li>
+      <li>Trong tay: 534 ô tô của Tổng cục Cung cấp, rất nhiều người sẵn sàng đi dân công, và con số bạn vừa thấy: gánh xa thì 24 kg ăn dọc đường cho 1 kg tới nơi.</li>
+      <li>Bên kia: Pháp tiếp tế cho lòng chảo bằng máy bay, và tin rằng bên ta không nuôi nổi một chiến dịch lớn, dài ngày ở vùng núi.</li>
+    </ul>
+    <p><b>Bạn dồn sức vào cách chở nào?</b> Bấm "Xem" để thấy mỗi cách trên sa bàn trước khi chọn.</p>
+    <div class="choose" data-c="d1" data-real="C" data-same="Gần với cách thật. Để ý: ô tô vẫn là chính, các cách khác lấp chỗ ô tô không làm được." data-diff="Người thật chọn ghép nhiều cách. Xem chuyện thật rồi so với cách của bạn.">
+      <div class="row"><button class="opt" type="button" data-v="A"><span><b>A.</b> Dồn hết vào ô tô: chở nhanh, chở nhiều, người lái không phải ăn hết phần hàng mình chở</span></button><button class="btn" type="button" data-plan="A">Xem</button></div>
+      <div class="row"><button class="opt" type="button" data-v="B"><span><b>B.</b> Dồn vào sức người: thật đông dân công gánh bộ, đi được cả chỗ xe không vào</span></button><button class="btn" type="button" data-plan="B">Xem</button></div>
+      <div class="row"><button class="opt" type="button" data-v="C"><span><b>C.</b> Ô tô làm chính trên đường lớn, đoạn khó dùng mọi cách khác, và lấy thêm lương thực ngay tại Tây Bắc</span></button><button class="btn" type="button" data-plan="real">Xem</button></div>
+    </div>
+    <button class="btn primary next" type="button" data-go="4" data-need="d1" disabled>Xem chuyện gì xảy ra</button>
+  </section>
+
+  <!-- 4. Xem chuyện thật, tự để ý -->
+  <section class="step" data-s="4" data-board="real">
+    <h2>Chuyện gì đã xảy ra</h2>
+    <p class="fb" data-echo="d1"></p>
+    <p>Bấm ▶ hoặc từng mốc dưới sa bàn. Ở mốc "Đoạn khó", thử nút "Mắt quân Pháp". Xong thì xem hai cách còn lại (mô phỏng).</p>
+    <div class="tracks"><button class="btn" type="button" data-track="real">Chuyện thật</button><button class="btn" type="button" data-track="A">Nếu chỉ ô tô</button><button class="btn" type="button" data-track="B">Nếu chỉ gánh bộ</button></div>
+    <div class="card"><p>Bạn để ý thấy gì về đoạn 82 km cuối? Một câu thôi.</p><textarea data-key="notice" data-min="3" placeholder="Mình thấy..."></textarea></div>
+    <button class="btn primary next" type="button" data-go="5" data-need="seen-real notice" disabled>Tiếp: vì sao</button>
+  </section>
+
+  <!-- 5. Ý chính, nguồn -->
+  <section class="step" data-s="5" data-board="real">
+    <h2>Hậu cần là phép trừ trên đường đi</h2>
+    <p class="fb" id="echo5"></p>
+    <div class="card">
+      <p><b>1. Cái tới nơi bằng cái gửi đi trừ cái mất dọc đường.</b> Mất vì người chở phải ăn, vì máy bay đánh, vì đường không đi được. Mỗi cách chở mạnh ở một đoạn: ô tô ở đường lớn, xe đạp thồ ở đường hẹp, thuyền bè theo sông. Ghép đúng cách vào đúng đoạn thì phép trừ nhỏ lại. (Cách nói này là suy luận của mình, từ các con số có nguồn ở dưới.)</p>
+      <p><b>2. Pháp tính sai đúng ở chỗ này.</b> Chỉ huy Pháp tin bên ta không nuôi nổi chiến dịch lớn, dài ngày ở vùng núi. Xe đạp thồ chở 200 đến 300 kg, gấp hơn 10 lần một người gánh, là bất ngờ ngoài tính toán của họ. Còn hàng của chính họ thả từ máy bay: ngày 1/4/1954, hơn một nửa rơi ngoài vị trí.</p>
+      <p><b>3. Hậu cần có ở cả ba tầng.</b> Cả cuộc chiến: Trung ương chỉ thị dồn toàn lực, huy động người và của từ Liên khu 3, 4 và Việt Bắc. Một đợt đánh: tuyến hậu cần chiến dịch hơn 350 km với các binh trạm. Một trận: bếp Hoàng Cầm và giếng nước đào ngay tại trận địa.</p>
+    </div>
+    <div class="card small"><p><b>Nguồn</b></p>
+      <p>Trung tướng Trần Duy Giang, Chủ nhiệm Tổng cục Hậu cần, <a href="https://www.qdnd.vn/quoc-phong-an-ninh/chien-thang-dien-bien-phu-moc-son-lich-su/chuyen-o-chien-truong/suc-manh-hau-can-trong-chien-dich-dien-bien-phu-774381" target="_blank" rel="noopener">"Sức mạnh hậu cần trong Chiến dịch Điện Biên Phủ"</a>, báo Quân đội nhân dân, 26/4/2024: 500 đến 700 km; hậu cần căn bản xong ngày 25/1 rồi phải tính lại; Trung ương chỉ thị dồn toàn lực; tuyến hơn 350 km, các binh trạm; phương châm vận tải; 16 đại đội, 534 ô tô, thêm 94 xe; 11.600 bè mảng; hơn 20.000 xe đạp thồ; 1.700 tấn gạo theo sông Nậm Na; Đại đoàn 308 và 316 lấy tại chỗ; hơn 261.000 dân công; hơn 20.000 tấn vật chất cho hơn 87.000 người; bếp Hoàng Cầm, giếng tại trận địa.</p>
+      <p>Học viện Quốc phòng, <a href="https://nda.edu.vn/tin-tuc/cac-chien-le/chien-dich-dien-bien-phu-1954-960.html" target="_blank" rel="noopener">"Chiến dịch Điện Biên Phủ 1954"</a>: con số 24 kg (kinh nghiệm Tây Bắc 1952); xe đạp thồ 200 đến 300 kg, kỷ lục 352 kg, gấp hơn 10 lần gánh bộ, bất ngờ với chỉ huy Pháp; đường 82 km trước rộng 1 m, đường kéo pháo 3 m ngụy trang; hàng thả ngày 1/4 và 18/4.</p>
+      <p>Chỗ các nguồn ghi khác nhau: bè mảng 11.600 (báo Quân đội nhân dân) hay 11.800 (<a href="https://thongke.quangngai.gov.vn/tin-tuc/thong-tin-qua-cac-bao/chien-dich-dien-bien-phu-chuyen-ke-tu-nhung-con-so-thong-ke.html" target="_blank" rel="noopener">Cục Thống kê Quảng Ngãi</a>); ngựa thồ 500 (Cục Thống kê) hay 17.000 (báo Quân đội nhân dân, bài dùng ở bản nhẹ), nên bài không đưa số ngựa; ô tô 534 cộng 94 xe tăng cường, khớp với con số 628 xe ở bản nhẹ.</p>
+      <p>Tập đoàn cứ điểm bị chiếm ngày 7/5/1954: <a href="https://www.britannica.com/event/Battle-of-Dien-Bien-Phu" target="_blank" rel="noopener">Britannica</a>. Địa hình: độ cao thật từ AWS Terrain Tiles.</p>
+      <p>Không lấy từ sử: hai cách A và B (mô phỏng), vị trí kho và hướng chở hàng trên sa bàn (ước lượng), phần giải thích (suy luận của Claude).</p>
+    </div>
+    <button class="btn primary next" type="button" data-go="6">Tiếp</button>
+  </section>
+
+  <!-- 6. Câu hỏi nhanh -->
+  <section class="step" data-s="6">
+    <h2>Câu hỏi nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Xe đạp thồ giải bài toán "24 kg" như thế nào?</p>
+      <div class="q" data-q="q1" data-a="2"><p class="status" role="status"></p>
+        <button class="opt" type="button">Xe đạp đi nhanh hơn ô tô trên đường lớn</button>
+        <button class="opt" type="button">Máy bay Pháp không nhìn thấy được xe đạp</button>
+        <button class="opt" type="button">Một người đẩy xe chở gấp hơn 10 lần một người gánh, nên gạo ăn dọc đường tính trên mỗi kg tới nơi giảm hẳn</button>
+        <p class="why">Người đẩy xe vẫn ăn như người gánh, nhưng chở 200 đến 300 kg thay vì vài chục kg. Phần ăn dọc đường chia cho nhiều gạo hơn, nên phép trừ nhỏ đi nhiều.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Vì sao không dồn hết vào ô tô, dù ô tô chở nhiều nhất?</p>
+      <div class="q" data-q="q2" data-a="0"><p class="status" role="status"></p>
+        <button class="opt" type="button">Ô tô mạnh ở đường lớn, nhưng đoạn cuối là đường núi hẹp bị máy bay đánh phá; hàng sẽ ùn lại giữa đường</button>
+        <button class="opt" type="button">Vì ô tô tốn xăng hơn người gánh</button>
+        <button class="opt" type="button">Vì Pháp đã phá hết ô tô của ta</button>
+        <p class="why">Ô tô vẫn là chính trong chuyện thật. Chỉ là một cách chở không đi hết được mọi đoạn, nên phải ghép thêm cách khác cho đoạn cuối.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="7" data-need="q1 q2" disabled>Tiếp</button>
+  </section>
+
+  <!-- 7. Tự nói lại -->
+  <section class="step" data-s="7">
+    <h2>Tự nói lại</h2>
+    <p>Viết 1–2 câu: vì sao chỉ thêm thật nhiều người gánh thì không giải được bài toán gạo, và bên ta đã giải bằng gì?</p>
+    <textarea data-key="teach" data-min="5" placeholder="Vì..."></textarea>
+    <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Người gánh đường xa ăn gần hết phần mình chở: 1 kg tới nơi thì 24 kg mất dọc đường, thêm người là thêm miệng ăn. Bên ta cho mỗi cách chở chạy đúng đoạn của nó: ô tô là chính trên đường lớn, xe đạp thồ chở gấp hơn 10 lần một người ở đường hẹp, thuyền bè theo sông, lấy thêm lương thực tại chỗ, và mở rộng đường để xe vào sâu hơn.</div></div>
+    <button class="btn primary next" type="button" data-go="8" data-need="teach" disabled>Tiếp</button>
+  </section>
+
+  <!-- 8. Góp ý -->
+  <section class="step" data-s="8">
+    <h2>Góp ý buổi này</h2>
+    <div class="card">
+      <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
+      <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Sa bàn 3D so với sơ đồ phẳng các buổi trước</b><div class="seg full" data-f="method"><button type="button" data-v="thích hơn" aria-pressed="false">Thích hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="kém hơn" aria-pressed="false">Kém hơn</button></div></div>
+      <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+    </div>
+    <button class="btn primary next" type="button" id="finish">Xong buổi học</button>
+    <p class="done-msg" id="done-msg" role="status"></p>
+    <button class="btn next hide" type="button" id="copy">Chép kết quả</button>
+  </section>
+</div>
+
+<script id="kit-js">
+/* Lõi chung cho mọi trang artifact của thien (xem artifacts/README.md). Không phụ thuộc thư viện nào.
+   Kit.cap(name)         khả năng của artifact (db, comments, downloads...) hoặc null; không bao giờ ném lỗi.
+   Kit.toast(msg)        một dòng thông báo ở đáy màn.
+   Kit.copy(text)        chép vào clipboard; không chép được thì hiện ô chữ để tự chọn.
+   Kit.saveFile(n, text) đưa file cho người xem lưu (khả năng downloads); không có thì chép.
+   Kit.store(key, path)  nháp trong máy (localStorage) + bản trong db của trang ở `path`, để Claude đọc lại.
+   Kit.put(path, obj)    ghi một document một lần (không qua hàng đợi), ví dụ bản chụp của lần gửi.
+   Kit.sendToClaude(text, el)  gửi một comment cho Claude (người sửa được trang); trả về true nếu đã gửi.
+   Kit.ask(prompt, out, opts)  hỏi Claude ngay trên trang (khả năng sample), chữ hiện dần vào out; trả về câu trả lời hoặc null.
+   Kit.dictate(btn, field, partial, onUse)  nút mic nói thay gõ (khả năng dictation) cho một ô chữ; nút ẩn nơi không có mic. */
+(() => {
+  const caps = {};
+  function cap(name, ms = 10000) {
+    if (caps[name]) return caps[name];
+    const c = window.claude;
+    caps[name] = !c || typeof c.use !== 'function' ? Promise.resolve(null)
+      : Promise.race([Promise.resolve().then(() => c.use(name)).catch(() => null), new Promise((r) => setTimeout(() => r(null), ms))]);
+    return caps[name];
+  }
+
+  let toastEl, toastTimer;
+  function toast(msg, ms = 4000) {
+    if (!toastEl) { toastEl = document.createElement('div'); toastEl.id = 'kit-toast'; toastEl.setAttribute('role', 'status'); document.body.appendChild(toastEl); }
+    toastEl.textContent = msg; toastEl.classList.add('on');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('on'), ms);
+  }
+
+  function showText(text) {
+    const box = document.createElement('div');
+    box.className = 'card'; box.style.cssText = 'position:fixed;inset:auto 16px 16px;z-index:70;padding:12px;display:grid;gap:8px;box-shadow:var(--shadow)';
+    const ta = document.createElement('textarea'); ta.id = 'kit-copy-box'; ta.rows = 8; ta.value = text; ta.readOnly = true;
+    const close = document.createElement('button'); close.className = 'btn'; close.type = 'button'; close.textContent = 'Đóng';
+    close.onclick = () => box.remove();
+    box.append(Object.assign(document.createElement('p'), { textContent: 'Không chép tự động được. Chọn hết chữ dưới đây rồi chép.', className: 'muted' }), ta, close);
+    document.body.appendChild(box); ta.focus(); ta.select();
+  }
+  async function copy(text) {
+    try { await navigator.clipboard.writeText(text); toast('Đã chép.'); return true; }
+    catch (e) { showText(text); return false; }
+  }
+
+  async function saveFile(filename, text) {
+    const d = await cap('downloads', 3000);
+    if (d && d.save) {
+      try { await d.save({ filename, data: text }); return true; } catch (e) { if (e && e.code === 'declined') return false; }
+    }
+    return copy(text);
+  }
+
+  function store(key, path) {
+    const lk = 'kit:' + key;
+    let timer = null, pending = null, running = null;
+    // The db copy could not be read at load: until a later read shows it is not newer than what this draft
+    // started from (`base`), never write over it. A newer copy blocks db writes. `base` is kept on the device
+    // (key lk + ':base') so a reload does not forget that the local draft was never merged with db.
+    const gk = lk + ':base';
+    let unread = false, base = 0, blocked = false;
+    const wait = (p, ms) => Promise.race([p, new Promise((_, j) => setTimeout(() => j(new Error('timeout')), ms))]);
+    const keepBase = (v) => { try { if (v === null) localStorage.removeItem(gk); else localStorage.setItem(gk, String(v)); } catch (e) { /* in memory only */ } };
+    const readBase = () => { try { const v = localStorage.getItem(gk); return v === null ? null : +v || 0; } catch (e) { return null; } };
+    const conflict = () => { blocked = true; toast('Trang có bản lưu mới hơn từ lần mở khác. Thay đổi ở đây tạm chỉ lưu trên máy này, chưa ghi đè bản trên trang.', 9000); };
+    /** A db copy `r` is safe to write over when it is missing or not newer than `base`. */
+    const settle = (r) => { if (!r || (r.ts || 0) <= base) { unread = false; keepBase(null); return true; } conflict(); return false; };
+    async function mayWrite(db) {
+      if (blocked) return false;
+      if (!unread) return true;
+      try { const s = await wait(db.doc(path).get(), 8000); return settle(s.exists ? s.data() : null); }
+      catch (e) { return false; /* still unreadable: try again on the next save */ }
+    }
+    const readLocal = () => { try { return JSON.parse(localStorage.getItem(lk) || 'null'); } catch (e) { return null; } };
+    /** Writes the newest object; writes queued while one runs collapse into one. Resolves true once db holds it. */
+    async function push(obj) {
+      const db = await cap('db');
+      if (!db || !path || !(await mayWrite(db))) return false;
+      pending = obj;
+      if (!running) running = (async () => {
+        let ok = true;
+        while (pending) { const o = pending; pending = null; try { await db.doc(path).set(o); ok = true; } catch (e) { ok = false; } }
+        running = null;
+        return ok;
+      })();
+      return Promise.race([running, new Promise((r) => setTimeout(() => r(false), 8000))]);
+    }
+    return {
+      /** The newer of the local draft and the db copy (by `ts`). */
+      async load() {
+        const local = readLocal();
+        const kept = local ? readBase() : null;   // set by an earlier view whose db read failed
+        let remote = null;
+        const db = await cap('db');
+        if (db && path) {
+          try {
+            const s = await wait(db.doc(path).get(), 8000); remote = s.exists ? s.data() : null;
+            if (kept !== null) { unread = true; base = kept; if (!settle(remote)) return local; }
+          } catch (e) {
+            remote = null; unread = true; base = kept !== null ? kept : (local && local.ts) || 0; keepBase(base);
+          }
+        }
+        if (local && remote) return (local.ts || 0) >= (remote.ts || 0) ? local : remote;
+        return local || remote;
+      },
+      /** Saves now to the device, and to db after a short pause. */
+      save(obj, now) {
+        obj.ts = Date.now();
+        try { localStorage.setItem(lk, JSON.stringify(obj)); } catch (e) { /* private window: db copy still works */ }
+        clearTimeout(timer);
+        if (now) return push(obj);
+        timer = setTimeout(() => push(obj), 800);
+        return Promise.resolve(true);
+      },
+    };
+  }
+
+  async function sendToClaude(text, el) {
+    const c = await cap('comments', 3000);
+    if (!c || !c.sendToClaude || !c.canSendToClaude) return false;
+    try {
+      if ((await c.canSendToClaude()) !== 'available') return false;
+      const anchor = await c.anchorFor(el || document.body);
+      await c.sendToClaude({ anchor, text: text.slice(0, 3900) });
+      return true;
+    } catch (e) { return false; }
+  }
+
+  /** Writes one document once (no queue), e.g. a frozen copy of what was sent. True once db holds it. */
+  async function put(path, obj, ms = 8000) {
+    const db = await cap('db');
+    if (!db || !path) return false;
+    try { await Promise.race([db.doc(path).set(obj), new Promise((_, j) => setTimeout(() => j(new Error('timeout')), ms))]); return true; }
+    catch (e) { return false; }
+  }
+
+  // ---------- Hỏi Claude ngay trên trang (khả năng sample) ----------
+  // Tốn lượt dùng Claude của chính người xem; lần hỏi đầu, claude.ai hỏi người xem có cho phép không.
+  // Trang hỏi được thì <html> có class kit-ask-on (CSS chỉ hiện các chỗ hỏi khi có class này); người xem từ chối thì kit-ask-off.
+  const askMsg = {
+    rate_limited: 'Hỏi nhiều quá trong một lúc, hoặc đã hết lượt dùng Claude. Thử lại sau ít phút.',
+    session_expired: 'Phiên đăng nhập claude.ai đã hết. Tải lại trang rồi hỏi lại.',
+    refused: 'Claude không trả lời câu này. Thử hỏi cách khác.',
+    empty_completion: 'Claude chưa viết được gì. Thử hỏi ngắn hơn.',
+    prompt_too_large: 'Câu hỏi dài quá. Thử hỏi ngắn hơn.',
+  };
+  const askOffCodes = ['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'];
+  cap('sample').then((s) => document.documentElement.classList.toggle('kit-ask-on', !!s));
+  /** Hỏi Claude, hiện câu trả lời dần vào `out`. Trả về chữ của câu trả lời, hoặc null khi không hỏi được (đã ghi lý do vào `out`).
+   *  opts: { tier: 'quick'|'default', cache: true|false } */
+  async function ask(prompt, out, opts = {}) {
+    const s = await cap('sample');
+    out.classList.add('ai-out');
+    if (!s || document.documentElement.classList.contains('kit-ask-off')) { out.textContent = 'Trang này chưa hỏi Claude được ở đây.'; return null; }
+    out.textContent = 'Claude đang nghĩ…'; out.classList.add('thinking');
+    try {
+      const o = { onText: ({ text }) => { out.classList.remove('thinking'); out.textContent = text; } };
+      if (opts.tier) o.modelTier = opts.tier;
+      if (opts.cache === false) o.cache = false;
+      const { text, truncated } = await s(prompt, o);
+      out.classList.remove('thinking');
+      out.textContent = text + (truncated ? ' …' : '');
+      return text;
+    } catch (e) {
+      out.classList.remove('thinking');
+      const code = e && e.code;
+      if (code === 'cancelled') { out.textContent = (e && e.text) || ''; return null; }
+      if (askOffCodes.includes(code)) {
+        document.documentElement.classList.add('kit-ask-off'); document.documentElement.classList.remove('kit-ask-on');
+        out.textContent = 'Trang chưa được phép hỏi Claude, nên các chỗ hỏi sẽ ẩn đi. Bật lại trong menu Quyền của trang nếu muốn.';
+        return null;
+      }
+      out.textContent = (e && e.text ? e.text + '\n\n' : '') + (askMsg[code] || 'Chưa hỏi được Claude. Thử lại sau.');
+      return null;
+    }
+  }
+
+  /** Nói thay gõ: chỉ có ở Chrome và app Claude trên máy tính, nơi khác nút giữ ẩn và vẫn gõ như thường.
+      Chữ đã chốt nối vào cuối ô và phát sự kiện input (phần tự lưu ghi lại như chữ gõ); chữ đang nghe hiện ở partial.
+      start() gọi thẳng trong lúc bấm (không await gì trước), theo luật của khả năng dictation. */
+  function dictate(btn, field, partial, onUse) {
+    if (!btn || !field) return;
+    let d = null, listening = false;
+    btn.hidden = true; btn.dataset.noreplay = ''; btn.setAttribute('aria-pressed', 'false');
+    const say = (t) => { if (partial) partial.textContent = t; };
+    cap('dictation').then((x) => {
+      if (!x) return;
+      d = x; btn.hidden = false;
+      d.onPartial(({ text }) => say(text));
+      d.onFinal(({ text }) => {
+        if (!text || !text.trim()) return;
+        field.value = (field.value.trim() ? field.value.trim() + ' ' : '') + text.trim();
+        field.dispatchEvent(new Event('input', { bubbles: true })); say('');
+        if (onUse) onUse();
+      });
+      d.onState(({ state }) => { listening = state === 'listening'; btn.setAttribute('aria-pressed', String(listening)); if (!listening) say(''); });
+    });
+    btn.addEventListener('click', () => {
+      if (!d) return;
+      if (listening) { d.stop().catch(() => {}); return; }
+      d.start().catch((e) => {
+        if (e && e.code === 'not_granted') { btn.hidden = true; toast('Chưa được phép dùng mic. Bạn vẫn gõ được như thường.'); }
+      });
+    });
+  }
+  const MIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v5"/></svg>';
+  /** Bọc một ô chữ có sẵn thành hàng [ô | mic] kèm dòng chữ đang nghe, rồi gắn dictate. Trả về phần tử ngoài cùng. */
+  function micRow(field, onUse) {
+    const row = document.createElement('div'); row.className = 'mic-row';
+    const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'btn mic';
+    btn.setAttribute('aria-label', 'Nói thay gõ'); btn.title = 'Nói thay gõ'; btn.innerHTML = MIC;
+    const partial = document.createElement('p'); partial.className = 'mic-partial'; partial.setAttribute('aria-live', 'polite');
+    field.before(row); row.append(field, btn); row.after(partial);
+    dictate(btn, field, partial, onUse);
+    return partial;
+  }
+
+  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude, ask, dictate, micRow };
+})();
+</script>
+<script id="lesson-js">
+/* Khung buổi học trên lõi chung (xem artifacts/lesson/README.md). Cấu hình nằm trong <script type="application/json" id="lesson">.
+   Lo phần chung của mọi buổi: chuyển bước, thanh tiến độ, câu hỏi một lựa chọn, ô tự nói lại, góp ý, nút xong.
+   Kết quả nằm trong window.R; phần riêng của bài ghi thêm vào R rồi gọi Lesson.done('<khóa>') để mở nút đi tiếp.
+   Xong buổi: lưu R vào db ở sessions/<id>-<thời điểm>, rồi gửi tóm tắt cho Claude; gửi không được thì hiện nút chép. */
+(() => {
+  const $ = (s) => document.querySelector(s), $$ = (s) => [...document.querySelectorAll(s)];
+  const C = JSON.parse(($('#lesson') || {}).textContent || '{}');
+  // Cùng một id với phần tự lưu (drafts/<id>): meta lesson-id trước, rồi mới tới cấu hình của bài.
+  const ID = (document.querySelector('meta[name="lesson-id"]') || {}).content || C.id || document.title;
+  const R = window.R = Object.assign({ lesson: ID, start: new Date().toISOString(), review: {}, quiz: {}, teach: '', feedback: {} }, window.R || {});
+  const steps = $$('.step');
+  const done = new Set();
+  const reviewOff = () => document.documentElement.classList.contains('kit-review-off');
+  const skip = (s) => reviewOff() && /(^|\s)review(\s|$)/.test(s.dataset.part || '');
+
+  /** Opens the step whose data-s is n (or the next one that is not hidden as review). */
+  function go(n) {
+    let i = steps.findIndex((s) => +s.dataset.s === +n);
+    while (i >= 0 && i < steps.length - 1 && skip(steps[i])) i++;
+    if (i < 0) return;
+    steps.forEach((s, j) => s.classList.toggle('on', j === i));
+    const shown = steps.filter((s) => !skip(s)), at = Math.max(0, shown.indexOf(steps[i]));
+    $('#cnt').textContent = (at + 1) + '/' + shown.length;
+    const bk = $('.top .back'); if (bk) bk.hidden = at === 0;
+    $('#bar').style.width = (shown.length > 1 ? at / (shown.length - 1) * 100 : 100) + '%';
+    window.scrollTo(0, 0);
+    const h = steps[i].querySelector('h1, h2');
+    if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+  }
+  /** Enables every [data-need] button whose keys are all done. Review gates stay open once the lesson was finished before. */
+  function gate() {
+    $$('[data-need]').forEach((b) => {
+      if (reviewOff() && b.hasAttribute('data-review-gate')) { b.disabled = false; return; }
+      b.disabled = !b.dataset.need.split(/\s+/).filter(Boolean).every((k) => done.has(k));
+    });
+  }
+  function mark(key) { done.add(key); gate(); }
+
+  $$('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
+
+  // Nút quay lại ở thanh trên: mở bước liền trước (bỏ qua bước ôn đã ẩn). Không xóa gì đã làm, chỉ để xem lại.
+  // data-noreplay: phần tự lưu không ghi và không đếm nút này, nên bài đang học dở vẫn mở lại đúng chỗ.
+  const meta = $('.top .meta'), back = meta && document.createElement('button');
+  if (back) {
+    back.type = 'button'; back.className = 'back'; back.dataset.noreplay = ''; back.textContent = '← Quay lại'; back.hidden = true;
+    back.addEventListener('click', () => {
+      const i = steps.findIndex((s) => s.classList.contains('on'));
+      for (let j = i - 1; j >= 0; j--) if (!skip(steps[j])) { go(steps[j].dataset.s); return; }
+    });
+    meta.insertBefore(back, $('#cnt'));
+  }
+
+  // Câu hỏi một lựa chọn: <div class="q" data-q="F2" data-a="1" [data-kind="review"]> với các .opt, một .status, một .why.
+  $$('.q[data-q]').forEach((q) => {
+    const id = q.dataset.q, a = +q.dataset.a, os = [...q.querySelectorAll('.opt')], st = q.querySelector('.status'), why = q.querySelector('.why');
+    os.forEach((o, i) => o.addEventListener('click', () => {
+      if (done.has(id)) return;
+      const ok = i === a;
+      os.forEach((x, j) => { x.disabled = true; if (j === a) x.classList.add('right'); });
+      if (!ok) o.classList.add('wrong');
+      if (st) { st.textContent = ok ? 'Đúng.' : 'Chưa đúng. Đáp án đúng có chữ "Đúng".'; st.className = 'status ' + (ok ? 'good' : 'bad'); }
+      if (why) why.classList.add('on');
+      if (!ok) smartWhy(q, os, i, a, why);
+      (q.dataset.kind === 'review' ? R.review : R.quiz)[id] = { pick: i, ok };
+      mark(id);
+    }));
+  });
+
+  // Ô viết: <textarea data-key="teach" data-min="5">. Đủ chữ thì khóa đó tính là xong.
+  $$('textarea[data-key]').forEach((t) => t.addEventListener('input', () => {
+    const k = t.dataset.key, min = +(t.dataset.min || 5);
+    R[k] = t.value;
+    if (t.value.trim().length >= min) mark(k); else { done.delete(k); gate(); }
+  }));
+  // Nút xem bản của Claude: <button data-show="mine">; ghi lại là xem trước hay sau khi tự viết.
+  $$('[data-show]').forEach((b) => b.addEventListener('click', () => {
+    const box = document.getElementById(b.dataset.show);
+    if (box) box.classList.add('on');
+    b.classList.add('hide');
+    R.sawMineBeforeWriting = (R.teach || '').trim().length < 5;
+  }));
+
+  // Góp ý: <div class="seg" data-f="len"><button data-v="vừa">…; ô #note.
+  // Tên tiêu chí lấy từ <b> trong cùng .crit, để tóm tắt ghi "Độ dài: vừa" thay vì "len vừa".
+  const fLabel = {};
+  $$('[data-f]').forEach((sg) => { const c = sg.closest('.crit'), b = c && c.querySelector('b'); fLabel[sg.dataset.f] = b ? b.textContent.trim() : sg.dataset.f; });
+  $$('[data-f]').forEach((sg) => sg.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+    R.feedback[sg.dataset.f] = b.dataset.v;
+    sg.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    mark('fb-' + sg.dataset.f);
+  })));
+  const note = $('#note');
+  if (note) note.addEventListener('input', () => { R.feedback.note = note.value; });
+
+  function summary(doc) {
+    const n = (o) => Object.values(o || {}), right = (o) => n(o).filter((x) => x.ok).length;
+    const L = [`# Xong buổi: ${C.subject ? C.subject + ' · ' : ''}${C.title || ID}`, ''];
+    if (n(R.review).length) L.push(`Ôn: đúng ${right(R.review)}/${n(R.review).length}`);
+    if (n(R.quiz).length) L.push(`Câu hỏi nhanh: đúng ${right(R.quiz)}/${n(R.quiz).length}`);
+    // Phần thêm của từng loại bài (ví dụ sa bàn chiến tranh) thêm dòng vào tóm tắt qua Lesson.extras.
+    extras.forEach((f) => { try { const x = f(R); if (x) L.push('', x); } catch (e) {} });
+    if ((R.teach || '').trim()) L.push('', 'Tự nói lại: ' + R.teach.trim());
+    const asked = (R.ai || []).filter((x) => x.kind === 'ask');
+    if (asked.length) L.push('', 'Đã hỏi Claude trong bài: ' + asked.map((x) => `"${x.q}" (${x.step})`).join('; '));
+    const used = (R.ai || []).filter((x) => x.kind !== 'ask').map((x) => x.kind === 'teach' ? 'nhận xét bài tự nói lại' : 'giải thích câu ' + x.q);
+    if (used.length) L.push('Nhờ Claude: ' + [...new Set(used)].join(', '));
+    const fb = Object.entries(R.feedback).filter(([k]) => k !== 'note').map(([k, v]) => (fLabel[k] || k) + ': ' + v).join('; ');
+    if (fb) L.push('', 'Góp ý: ' + fb);
+    if ((R.feedback.note || '').trim()) L.push('Ghi thêm: ' + R.feedback.note.trim());
+    L.push('', doc ? `Kết quả đầy đủ trong db của trang: ${doc}` : 'Chưa lưu được vào db: kết quả đầy đủ ở dưới.', '');
+    if (!doc) L.push('```json', JSON.stringify(R), '```');
+    return L.join('\n');
+  }
+
+  const extras = [];
+  const fin = $('#finish'), copyBtn = $('#copy'), msg = $('#done-msg');
+  if (fin) fin.addEventListener('click', async () => {
+    fin.disabled = true; R.end = new Date().toISOString();
+    if (msg) msg.textContent = 'Đang lưu…';
+    const doc = 'sessions/' + String(ID).replace(/[^a-z0-9-]/gi, '-') + '-' + Date.now();
+    const saved = window.Kit ? await Kit.put(doc, R) : false;
+    const text = summary(saved ? doc : '');
+    const sent = window.Kit ? await Kit.sendToClaude(text, $('.top')) : false;
+    // Chỉ báo xong hẳn khi vừa lưu được vào db vừa gửi được cho Claude; thiếu một trong hai thì hiện nút chép.
+    if (msg) msg.textContent = saved && sent ? 'Đã lưu và gửi cho Claude. Claude trả lời trong thread.'
+      : sent ? 'Đã gửi tóm tắt cho Claude nhưng chưa lưu được vào db. Bấm "Chép kết quả" rồi dán vào thread cho chắc.'
+        : saved ? 'Đã lưu kết quả. Bạn nhắn "xong" trong thread là Claude đọc được.'
+          : 'Chưa lưu được tự động. Bấm "Chép kết quả" rồi dán vào thread.';
+    if (copyBtn && !(saved && sent)) { copyBtn.classList.remove('hide'); copyBtn.onclick = () => (window.Kit ? Kit.copy(text) : navigator.clipboard.writeText(text)); }
+  });
+
+  // ---------- Hỏi Claude ngay trong bài (khả năng sample, qua Kit.ask) ----------
+  // Ba chỗ, tự gắn vào mọi bài (thường, chiến tranh, IT), chỉ hiện khi trang hỏi Claude được (CSS .kit-ask):
+  //   1. Ô tự nói lại: Claude nhận xét bài viết so với ý chính (đúng gì, thiếu gì, một câu hỏi để tự nghĩ tiếp).
+  //   2. Chọn sai một câu: Claude giải thích vì sao lựa chọn đó nghe hợp lý mà chưa đúng.
+  //   3. Mỗi bước có nội dung: ô "Hỏi Claude về bước này", Claude biết chữ trên bước và tình trạng sân khấu,
+  //      và chỉ gợi ý (không nói đáp án) cho câu hỏi chưa trả lời.
+  // Nút hỏi có data-noreplay và ô hỏi là <input> (không phải textarea): phần tự lưu không bấm lại, tải lại không tốn lượt hỏi.
+  R.ai = R.ai || [];
+  const VOICE = 'Viết tiếng Việt tự nhiên, ngắn gọn, như người kèm học thân thiện nói chuyện trực tiếp. Gọi người học là "bạn". '
+    + 'Chỉ chữ thường: không Markdown, không dấu *, không gạch đầu dòng, không tiêu đề. Không khen sáo rỗng, không mở đầu bằng "Câu hỏi hay".';
+  const head = () => `Đây là một trang học tương tác. Bài: ${C.subject ? C.subject + ' · ' : ''}${C.title || ID}.`;
+  // Chỗ còn vướng ở các buổi trước của môn (make-lesson.mjs lấy từ learning/<môn>.md, đề xuất T4).
+  const stuck = () => (Array.isArray(C.stuck) && C.stuck.length ? ['Những chỗ người học còn vướng ở các buổi trước của môn này: '
+    + C.stuck.map((x) => clip(x, 300)).join(' | ') + '. Chỉ nối vào khi liên quan tới điều đang hỏi, một câu là đủ, đừng giảng lại bài cũ.'] : []);
+  const clip = (s, n = 1800) => String(s || '').replace(/\s+/g, ' ').trim().slice(0, n);
+  const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+  const aiBtn = (text, cls = 'btn ghost') => { const b = el('button', { type: 'button', className: cls + ' kit-ask', textContent: text }); b.dataset.noreplay = ''; return b; };
+  const canAsk = () => window.Kit && Kit.ask;
+  /** Chữ người học đang thấy ở một phần trang: bỏ lời giải chưa mở, bỏ phần hỏi Claude. */
+  function visibleText(node, n) {
+    const c = node.cloneNode(true);
+    c.querySelectorAll('.why:not(.on), .mine:not(.on), .kit-ask, .ai-out, .status, script, style').forEach((x) => x.remove());
+    c.querySelectorAll('*').forEach((x) => x.append(' '));   // chữ của hai thẻ liền nhau không dính vào nhau
+    return clip(c.textContent, n);
+  }
+  function questionText(q) {
+    let p = q.previousElementSibling;
+    while (p && p.tagName !== 'P') p = p.previousElementSibling;
+    return clip((p || q.closest('.card')?.querySelector('p') || {}).textContent || '', 400);
+  }
+  /** Câu trả lời sai: thêm nút "Vì sao mình chọn sai?" dưới lời giải. */
+  function smartWhy(q, os, pick, ans, why) {
+    if (!canAsk() || q.querySelector('.kit-ask')) return;
+    const b = aiBtn('Vì sao mình chọn sai?', 'ai-open'), out = el('p', { className: 'ai-out kit-ask' });
+    out.setAttribute('role', 'status');
+    (why || os[os.length - 1]).after(b, out);
+    b.addEventListener('click', async () => {
+      b.disabled = true;
+      const qt = questionText(q), opt = (o) => clip(o.textContent.replace(/(Đúng|Bạn chọn|Đã chọn)$/, ''), 200);
+      const prompt = [head(), '',
+        `Câu hỏi: ${qt}`,
+        'Các lựa chọn: ' + os.map((o, j) => `(${j + 1}) ${opt(o)}`).join('; '),
+        `Người học chọn: (${pick + 1}) ${opt(os[pick])}`,
+        `Đáp án đúng: (${ans + 1}) ${opt(os[ans])}`,
+        why ? `Lời giải có sẵn trên trang (người học đã đọc): ${clip(why.textContent, 600)}` : '', '',
+        'Trong 2 đến 3 câu: nói vì sao lựa chọn của người học nghe hợp lý, rồi chỉ đúng điểm khiến nó chưa đúng, '
+        + 'và một mẹo để lần sau phân biệt. Đừng lặp lại lời giải có sẵn. ' + VOICE].join('\n');
+      const a = await Kit.ask(prompt, out, { tier: 'quick' });
+      if (a) { R.ai.push({ kind: 'why', q: q.dataset.q, a }); b.remove(); } else b.disabled = false;
+    });
+  }
+  // 1. Ô tự nói lại. Nói thay gõ (Kit.micRow, khả năng dictation): nút mic cạnh ô, ẩn nơi không có mic.
+  // R.spoke đếm số lần nói, để biết tính năng có thật sự được dùng (learning/usage.md).
+  const teach = $('textarea[data-key="teach"]');
+  const teachEnd = teach && window.Kit && Kit.micRow ? Kit.micRow(teach, () => { R.spoke = (R.spoke || 0) + 1; }) : teach;
+  if (teach && canAsk()) {
+    const b = aiBtn('Claude nhận xét bài của mình', 'ai-open'), out = el('p', { className: 'ai-out kit-ask' });
+    out.setAttribute('role', 'status');
+    b.disabled = true;
+    teachEnd.after(b, out);
+    teach.addEventListener('input', () => { b.disabled = teach.value.trim().length < +(teach.dataset.min || 5); });
+    b.addEventListener('click', async () => {
+      b.disabled = true;
+      const step = teach.closest('.step'), mine = $('#mine');
+      const prompt = [head(), '',
+        `Đề bài người học đang làm: ${visibleText(step, 300)}`,
+        mine ? `Ý chính của bài (bản mẫu, người học ${mine.classList.contains('on') ? 'đã' : 'chưa'} xem): ${clip(mine.textContent, 800)}` : '',
+        `Người học tự viết: "${clip(teach.value, 1500)}"`, ...stuck(), '',
+        'Nhận xét bài viết của người học trong tối đa 3 câu. Câu 1: một điều họ đã nắm đúng, dẫn lại ý của chính họ. '
+        + 'Câu 2: một điều còn thiếu hay chưa chính xác so với ý chính (nếu đủ ý rồi thì nói vậy). '
+        + 'Câu 3: một câu hỏi ngắn giúp họ tự nghĩ tiếp, không kèm đáp án. ' + VOICE].join('\n');
+      const a = await Kit.ask(prompt, out);
+      if (a) R.ai.push({ kind: 'teach', a });
+      b.disabled = false; b.textContent = 'Nhận xét lại';
+    });
+  }
+  // 3. Hỏi Claude về bước này (bỏ bước ôn và bước góp ý cuối)
+  steps.forEach((step) => {
+    if (!canAsk() || /(^|\s)review(\s|$)/.test(step.dataset.part || '') || step.querySelector('#finish')) return;
+    const box = el('div', { className: 'ai-ask kit-ask' });
+    const open = aiBtn('Hỏi Claude về bước này', 'ai-open');
+    const form = el('form', { className: 'ai-form', hidden: true });
+    const inp = el('input', { type: 'text', placeholder: 'Bạn chưa rõ chỗ nào?', maxLength: 300 });
+    inp.setAttribute('aria-label', 'Câu hỏi cho Claude');
+    const send = aiBtn('Hỏi', 'btn'); send.type = 'submit'; send.classList.remove('kit-ask');
+    const out = el('p', { className: 'ai-out' }); out.setAttribute('role', 'status');
+    form.append(inp, send);
+    box.append(open, form, out);
+    const next = step.querySelector('.next');
+    if (next) next.before(box); else step.append(box);
+    const turns = [];
+    open.addEventListener('click', () => { form.hidden = !form.hidden; open.setAttribute('aria-expanded', String(!form.hidden)); if (!form.hidden) inp.focus(); });
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const qtext = inp.value.trim(); if (!qtext) return;
+      send.disabled = true; inp.disabled = true;
+      const h = clip((step.querySelector('h1, h2') || {}).textContent || '', 120);
+      const pending = [...step.querySelectorAll('.q[data-q]')].filter((q) => !done.has(q.dataset.q)).map(questionText).filter(Boolean);
+      const stage = extras.map((f) => { try { return f(R); } catch (err) { return ''; } }).filter(Boolean).join('\n');
+      const prompt = [head(), '',
+        `Người học đang ở bước "${h}". Chữ trên bước (những gì họ đang thấy): ${visibleText(step, 1800)}`,
+        stage ? `Những gì người học đã làm trên sân khấu tương tác (núm vặn, thẻ đã xếp…): ${clip(stage, 1200)}` : '',
+        pending.length ? `Câu hỏi trên bước mà người học CHƯA trả lời: ${pending.join(' | ')}. Nếu người học hỏi thẳng đáp án của câu này, đừng nói đáp án: chỉ gợi một hướng nghĩ hay một chỗ trên màn để nhìn lại.` : '',
+        turns.length ? 'Những câu đã hỏi trước đó ở bước này: ' + turns.map((t) => `Hỏi: ${t.q} / Đáp: ${clip(t.a, 300)}`).join(' || ') : '',
+        step.querySelector('.next[disabled]') ? 'Người học CHƯA làm xong bước này (còn việc phải tự làm: chọn, xếp, vặn, trả lời). Đừng làm hộ và đừng nói đáp án hay cách xếp đúng; chỉ gợi một hướng nghĩ, hay một chỗ trên màn để nhìn lại.' : '',
+        ...stuck(),
+        `Người học hỏi: "${qtext}"`, '',
+        'Trả lời trong tối đa 4 câu, bám vào nội dung bước và ví dụ đang có trên màn. Nếu câu hỏi ra ngoài bài, trả lời ngắn rồi kéo về bài. ' + VOICE].join('\n');
+      const a = await Kit.ask(prompt, out, { cache: false });
+      if (a) { turns.push({ q: qtext, a }); R.ai.push({ kind: 'ask', step: h, q: qtext, a }); inp.value = ''; }
+      send.disabled = false; inp.disabled = false; inp.focus();
+    });
+  });
+
+  window.Lesson = { go, done: mark, R, summary, extras };
+  const start = steps.find((s) => s.classList.contains('on')) || steps[0];
+  if (start) go(start.dataset.s);
+  gate();
+  // Phần tự lưu bật chế độ học lại sau khi trang đã chạy: mở lại các nút khóa bởi phần ôn và bỏ qua bước ôn.
+  new MutationObserver(() => { gate(); const cur = steps.find((s) => s.classList.contains('on')); if (cur && skip(cur)) go(cur.dataset.s); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+})();
+</script>
+<script id="war-js">
+/* Sa bàn 3D cho bài học chiến tranh (xem artifacts/war/README.md). Dựng từ một file dữ liệu trận (learning/war/battles/<trận>.json):
+   địa hình là độ cao thật (fetch-terrain.mjs), quân và đường vẽ theo từng mốc của một "track" (chuyện thật, hay một lựa chọn mô phỏng).
+   Cần three.js r128 (cdnjs) nạp trước. Máy không vẽ được 3D thì tự chuyển sang bản đồ phẳng tô bóng đồi, cùng dữ liệu.
+   Chỉ vẽ lại khi có gì đổi (xoay, chuyển mốc), không chạy liên tục, để đỡ tốn pin điện thoại.
+
+   API: const st = Sandtable.mount(el, battle, { onKey(track, i, isLast) {} });
+        st.show(track, { at, upto })   // upto: khóa thanh thời gian ở mốc đó (ví dụ trước khi người học chọn)
+        st.view(name)                  // một góc nhìn trong battle.views */
+(() => {
+  const $el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const COLORS = { river: '#3f7fb5', road: '#8a5a2b', airfield: '#7d786c', hit: '#d8402b', lost: '#7c7a74', retreat: '#d9917f' };
+  // Màu đất theo độ cao so với đáy lòng chảo (mét): ruộng cát nhạt, sườn cỏ, đồi rừng, đỉnh núi nâu. Dùng chung cho 3D và bản phẳng.
+  const LAND = [[0, '#ece3c2'], [15, '#e3dcb4'], [120, '#b9c48f'], [400, '#7f945c'], [800, '#66744a'], [1100, '#7a6a4c']];
+  const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16) / 255);
+  const LANDRGB = LAND.map(([h, c]) => [h, hex(c)]);
+  function landAt(m) { // trả [r,g,b] 0..1
+    if (m <= LANDRGB[0][0]) return LANDRGB[0][1].slice();
+    for (let i = 1; i < LANDRGB.length; i++) { const [h1, c1] = LANDRGB[i], [h0, c0] = LANDRGB[i - 1];
+      if (m <= h1) { const f = (m - h0) / (h1 - h0); return c0.map((v, k) => v + (c1[k] - v) * f); } }
+    return LANDRGB[LANDRGB.length - 1][1].slice();
+  }
+
+  function decodeHeights(t) {
+    const bin = atob(t.h), u8 = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    const u16 = new Uint16Array(u8.buffer), out = new Float32Array(u16.length), span = t.max - t.min;
+    for (let i = 0; i < u16.length; i++) out[i] = t.min + u16[i] / 65535 * span;
+    return out;
+  }
+
+  /** Map geometry: lat/lon → km in a local frame centred on the bbox (x east, z south), heights in km above the lowest point. */
+  function geo(b) {
+    const [S, W, N, E] = b.bbox, t = b.terrain, H = decodeHeights(t), ex = b.exaggerate || 1.5;
+    const wk = t.widthKm, hk = t.heightKm;
+    const xz = ([lat, lon]) => [(lon - W) / (E - W) * wk - wk / 2, (N - lat) / (N - S) * hk - hk / 2];
+    const hAt = (x, z) => { // bilinear, x,z in km
+      const c = (x + wk / 2) / wk * t.cols - .5, r = (z + hk / 2) / hk * t.rows - .5;
+      const c0 = Math.max(0, Math.min(t.cols - 1, Math.floor(c))), r0 = Math.max(0, Math.min(t.rows - 1, Math.floor(r)));
+      const c1 = Math.min(t.cols - 1, c0 + 1), r1 = Math.min(t.rows - 1, r0 + 1), fc = Math.max(0, Math.min(1, c - c0)), fr = Math.max(0, Math.min(1, r - r0));
+      const g = (rr, cc) => H[rr * t.cols + cc];
+      const v = g(r0, c0) * (1 - fc) * (1 - fr) + g(r0, c1) * fc * (1 - fr) + g(r1, c0) * (1 - fc) * fr + g(r1, c1) * fc * fr;
+      return (v - t.min) / 1000 * ex;
+    };
+    return { wk, hk, xz, hAt, H, t, ex, span: Math.max(wk, hk) };
+  }
+
+  /** The state at key i of a track: what is shown, dimmed, hit, lost, renamed, and which lines are drawn. */
+  function stateAt(b, track, i) {
+    const keys = b.tracks[track].keys;
+    let st = { show: new Set(b.units.map((u) => u.id)), lose: new Set(), rename: {}, lines: [], dim: new Set(), hit: new Set(), focus: null };
+    for (let k = 0; k <= i; k++) {
+      const key = keys[k];
+      if (key.same) { const [t2, j] = key.same.split(':'); const s2 = stateAt(b, t2, +j); st = { ...s2, show: new Set(s2.show), lose: new Set(s2.lose), rename: { ...s2.rename }, lines: s2.lines.slice() }; }
+      if (key.show) st.show = new Set(key.show);
+      (key.add || []).forEach((id) => st.show.add(id));
+      (key.remove || []).forEach((id) => st.show.delete(id));
+      (key.lose || []).forEach((id) => st.lose.add(id));
+      Object.assign(st.rename, key.rename || {});
+      if (key.lines) st.lines = key.keepLines ? st.lines.concat(key.lines) : key.lines.slice();
+      st.dim = new Set(key.dim || (key.same ? [...st.dim] : []));
+      st.hit = new Set(key.hit || (key.same ? [...st.hit] : []));
+      st.focus = key.focus || (key.same ? st.focus : null);
+    }
+    return st;
+  }
+  const keyOf = (b, track, i) => { const k = b.tracks[track].keys[i]; if (k.same && !k.text) { const [t2, j] = k.same.split(':'); return { ...b.tracks[t2].keys[+j], ...k, text: b.tracks[t2].keys[+j].text, src: b.tracks[t2].keys[+j].src }; } return k; };
+
+  function mount(el, b, opts = {}) {
+    const G = geo(b);
+    const units = Object.fromEntries(b.units.map((u) => [u.id, u]));
+    el.classList.add('st');
+    el.innerHTML = '';
+    const stage = $el('div', 'st-stage'), cv = $el('div', 'st-canvas'), labels = $el('div', 'st-labels');
+    const legend = $el('div', 'st-legend'), tools = $el('div', 'st-views'), note = $el('span', 'chip st-note');
+    note.textContent = 'Địa hình thật' + (G.ex !== 1 ? ' (độ cao ×' + String(G.ex).replace('.', ',') + ')' : '') + ' · vị trí ước lượng';
+    note.title = b.note || '';
+    // La bàn và thước tỉ lệ ở góc dưới phải; khung thông tin hiện khi chạm vào một ký hiệu.
+    const compass = $el('div', 'st-compass', '<i class="st-north" aria-hidden="true"><b></b></i><span class="st-scale"><i></i><em></em></span>');
+    const info = $el('div', 'st-info'); info.hidden = true; info.setAttribute('role', 'status');
+    // Nút "Bỏ" không ghi vào phần tự lưu (data-noreplay): chỗ đứng nhìn không được lưu lại.
+    const vsBox = $el('div', 'chip st-vs', '<span></span><button type="button" data-noreplay>Bỏ</button>'); vsBox.hidden = true; vsBox.setAttribute('role', 'status');
+    stage.append(cv, labels, legend, tools, note, compass, info, vsBox);
+    const tl = $el('div', 'st-tl'), row = $el('div', 'st-row'), play = $el('button', 'btn st-play', '▶');
+    play.type = 'button'; play.setAttribute('aria-label', 'Chạy từng mốc');
+    // Hàng mốc cuộn ngang khi màn hình hẹp, để mỗi mốc vẫn đủ 44px cho ngón tay.
+    const scroller = $el('div', 'st-scroll'), keysBox = $el('div', 'st-keys'), cap = $el('div', 'st-cap');
+    cap.setAttribute('role', 'status');
+    scroller.appendChild(keysBox); row.append(play, scroller); tl.append(row, cap);
+    el.append(stage, tl);
+
+    // Chú thích: chỉ những thứ trận này có.
+    const has = (k) => b.features.some((f) => f.kind === k);
+    const shapeOf = (s) => { const u = b.units.find((x) => x.side === s); return !u ? (s === 'vn' ? 'tri' : 'sq') : u.kind === 'gun' ? 'tri' : u.kind === 'depot' ? 'dot' : 'sq'; };
+    const L = [['fr', shapeOf('fr'), b.sides.fr ? b.sides.fr.name : 'Bên kia'], ['vn', shapeOf('vn'), b.sides.vn ? b.sides.vn.name : 'Quân ta']];
+    const lineKinds = new Set(); Object.values(b.tracks).forEach((tr) => tr.keys.forEach((k) => (k.lines || []).forEach((l) => lineKinds.add(l.kind))));
+    legend.innerHTML = L.map(([s, sh, n]) => `<span class="chip"><i class="st-ico ${sh}" style="background:${b.sides[s] ? b.sides[s].color : '#888'}"></i>${esc(n)}</span>`).join('')
+      + (has('road') ? `<span class="chip"><i class="st-ico ln" style="background:${COLORS.road}"></i>Đường tiếp tế</span>` : '')
+      + (['attack', 'trench', 'retreat'].some((k) => lineKinds.has(k)) ? `<span class="chip"><i class="st-ico ln" style="background:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Hào, hướng đánh</span>` : '')
+      + (lineKinds.has('supply') ? `<span class="chip"><i class="st-ico ln" style="background:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Hướng chở hàng</span>` : '')
+      // Trạng thái vẽ bằng ký hiệu, nên chú thích nói một lần ở đây thay vì ghi chữ cạnh từng đơn vị.
+      + (Object.values(b.tracks).some((tr) => tr.keys.some((k) => (k.hit || []).length)) ? `<span class="chip"><i class="st-ico ring"></i>Đang bị đánh</span>` : '')
+      + (Object.values(b.tracks).some((tr) => tr.keys.some((k) => (k.lose || []).length)) ? `<span class="chip"><i class="st-ico flag" style="--fc:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Cắm cờ: đã mất</span>` : '');
+    legend.title = b.colorNote || '';
+
+    let track = Object.keys(b.tracks)[0], at = 0, upto = null, timer = null, renderer = null, flat = null;
+    const cam = { target: [0, 0, 0], yaw: -.5, pitch: .8, dist: 1 }, goal = { ...cam, target: [0, 0, 0] };
+    let curView = 'tilt';
+
+    // ---------- 3D ----------
+    // symbolScale: trận trải rộng (đường tiếp tế vài chục km) thì phóng ký hiệu và đường cho dễ thấy.
+    const SS = b.symbolScale || 1;
+    let THREE = window.THREE, scene, camera, unitGroup, lineGroup, zoneGroup, meshes = {}, ground = null, eyeMark = null;
+    function init3d() {
+      if (!THREE) return false;
+      try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false }); } catch (e) { return false; }
+      if (!renderer.getContext()) return false;
+      renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+      cv.appendChild(renderer.domElement);
+      scene = new THREE.Scene();
+      const bg = new THREE.Color((getComputedStyle(el).getPropertyValue('--soft') || '#f3f1ec').trim() || '#f3f1ec');
+      scene.background = bg; scene.fog = new THREE.Fog(bg, G.span * 1.1, G.span * 2.6);
+      camera = new THREE.PerspectiveCamera(38, 1, .05, 200);
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x6d7a55, .8));
+      const sun = new THREE.DirectionalLight(0xfff4dd, .75); sun.position.set(-8, 10, -6); scene.add(sun);
+      // Mặt đất: lưới theo đúng dữ liệu độ cao, màu theo độ cao và độ dốc (đồng lúa thấp phẳng, đồi cỏ, rừng trên cao).
+      const { t } = G, g = new THREE.PlaneGeometry(G.wk, G.hk, t.cols - 1, t.rows - 1); g.rotateX(-Math.PI / 2);
+      const pos = g.attributes.position, col = new Float32Array(pos.count * 3);
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i), z = pos.getZ(i), h = G.hAt(x, z); pos.setY(i, h);
+        const c = landAt(h / G.ex * 1000);
+        col[i * 3] = c[0]; col[i * 3 + 1] = c[1]; col[i * 3 + 2] = c[2];
+      }
+      g.setAttribute('color', new THREE.BufferAttribute(col, 3)); g.computeVertexNormals();
+      const gmat = new THREE.MeshLambertMaterial({ vertexColors: true });
+      // Đường đồng mức như bản đồ địa hình: nét mảnh mỗi 50 m, nét đậm mỗi 250 m (độ cao thật). Cần WebGL2 để nét đều độ dày.
+      // Đáy lòng chảo gần như phẳng, đồng mức ở đó chỉ là vết lăn tăn, nên chỉ vẽ từ khoảng 30 m trên đáy trở lên.
+      if (renderer.capabilities.isWebGL2) gmat.onBeforeCompile = (sh) => {
+        sh.uniforms.uM = { value: 1000 / G.ex }; sh.uniforms.uOff = { value: G.t.min };
+        sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying float vH;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvH = position.y;');
+        sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vH;\nuniform float uM;\nuniform float uOff;')
+          .replace('#include <dithering_fragment>', `#include <dithering_fragment>
+          { float m = vH * uM + uOff, d = max(fwidth(m), 1e-3);
+            float a = 1.0 - smoothstep(.4, 1.4, abs(fract(m / 50.0 + .5) - .5) * 50.0 / d);
+            float c = 1.0 - smoothstep(.6, 1.9, abs(fract(m / 250.0 + .5) - .5) * 250.0 / d);
+            gl_FragColor.rgb *= 1.0 - (.13 * a + .2 * c) * smoothstep(20.0, 40.0, vH * uM); }`);
+      };
+      ground = { mesh: new THREE.Mesh(g, gmat), base: col.slice() };
+      scene.add(ground.mesh);
+      // Chỗ đứng nhìn: một cột mảnh có vòng ở chân, ẩn cho tới khi chạm vào đồi.
+      eyeMark = new THREE.Group();
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, .5, 8), new THREE.MeshLambertMaterial({ color: '#1d1d1b' })); pole.position.y = .25;
+      const ring = new THREE.Mesh(new THREE.RingGeometry(.07, .1, 24), new THREE.MeshBasicMaterial({ color: '#1d1d1b', side: THREE.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.position.y = .01;
+      eyeMark.add(pole, ring); eyeMark.visible = false; scene.add(eyeMark);
+      zoneGroup = new THREE.Group(); scene.add(zoneGroup);
+      // Sông, đường, sân bay: cố định cho cả trận.
+      b.features.forEach((f) => {
+        if (f.kind === 'airfield') {
+          const [a, c] = f.pts.map(G.xz), len = Math.hypot(c[0] - a[0], c[1] - a[1]);
+          const m = new THREE.Mesh(new THREE.BoxGeometry(.12, .02, len), new THREE.MeshLambertMaterial({ color: COLORS.airfield }));
+          m.position.set((a[0] + c[0]) / 2, G.hAt((a[0] + c[0]) / 2, (a[1] + c[1]) / 2) + .012, (a[1] + c[1]) / 2); m.rotation.y = Math.atan2(c[0] - a[0], c[1] - a[1]); scene.add(m);
+        } else scene.add(tube(f.pts, f.kind === 'river' ? COLORS.river : COLORS.road, f.kind === 'river' ? .045 : .028, .012));
+      });
+      unitGroup = new THREE.Group(); lineGroup = new THREE.Group(); scene.add(unitGroup, lineGroup);
+      // Mỗi đơn vị: khối màu của bên mình; cờ của bên kia cắm lên khi đã mất; vòng đỏ dưới chân khi đang bị đánh.
+      const poleGeo = new THREE.CylinderGeometry(.009, .009, .44, 6), clothGeo = new THREE.PlaneGeometry(.22, .14), ringGeo = new THREE.RingGeometry(.25, .33, 36);
+      b.units.forEach((u) => {
+        const [x, z] = G.xz(u.at), h = G.hAt(x, z), gun = u.kind === 'gun', top = gun ? .34 : .16;
+        const other = Object.keys(b.sides).find((k) => k !== u.side);
+        const grp = new THREE.Group(); grp.position.set(x, h, z); grp.scale.setScalar(SS);
+        const body = new THREE.Mesh(gun ? new THREE.ConeGeometry(.14, .34, 4) : u.kind === 'depot' ? new THREE.CylinderGeometry(.15, .15, .16, 12) : new THREE.BoxGeometry(.3, .16, .3), new THREE.MeshLambertMaterial({ color: b.sides[u.side] ? b.sides[u.side].color : '#888', transparent: true }));
+        body.position.y = top / 2 + .01;
+        const flag = new THREE.Group(), pole = new THREE.Mesh(poleGeo, new THREE.MeshLambertMaterial({ color: '#3b3127' }));
+        pole.position.y = top + .22;
+        const cloth = new THREE.Mesh(clothGeo, new THREE.MeshLambertMaterial({ color: other ? b.sides[other].color : COLORS.hit, side: THREE.DoubleSide }));
+        cloth.position.set(.11, top + .37, 0); flag.add(pole, cloth); flag.visible = false;
+        const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: COLORS.hit, side: THREE.DoubleSide, transparent: true, opacity: .95, depthTest: false }));
+        ring.rotation.x = -Math.PI / 2; ring.position.y = .04; ring.renderOrder = 2; ring.visible = false;
+        grp.add(body, flag, ring); grp.userData = { body, flag, ring };
+        unitGroup.add(grp); meshes[u.id] = grp;
+      });
+      return true;
+    }
+    function drape(pts, lift, step = .08) {
+      const P = pts.map(G.xz), out = [];
+      for (let i = 0; i < P.length - 1; i++) {
+        const [x0, z0] = P[i], [x1, z1] = P[i + 1], n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, z1 - z0) / step));
+        for (let k = 0; k < n; k++) { const f = k / n, x = x0 + (x1 - x0) * f, z = z0 + (z1 - z0) * f; out.push(new THREE.Vector3(x, G.hAt(x, z) + lift, z)); }
+      }
+      const [xl, zl] = P[P.length - 1]; out.push(new THREE.Vector3(xl, G.hAt(xl, zl) + lift, zl));
+      return out;
+    }
+    function tube(pts, color, r, lift) {
+      const path = new THREE.CatmullRomCurve3(drape(pts, lift));
+      return new THREE.Mesh(new THREE.TubeGeometry(path, Math.max(8, path.points.length * 2), r, 6), new THREE.MeshLambertMaterial({ color }));
+    }
+    function drawLines3d(lines) {
+      while (lineGroup.children.length) { const c = lineGroup.children.pop(); c.geometry.dispose(); c.material.dispose(); }
+      const vn = b.sides.vn ? b.sides.vn.color : '#b23a2a';
+      lines.forEach((l) => {
+        const color = l.kind === 'retreat' ? COLORS.retreat : l.color || vn;
+        const r = (l.kind === 'trench' ? .022 : .04) * SS, lift = (l.kind === 'trench' ? .015 : .09) * SS;
+        lineGroup.add(tube(l.pts, color, r, lift));
+        if (l.kind === 'attack' || l.kind === 'retreat' || l.kind === 'supply') { // đầu mũi tên
+          const d = drape(l.pts.slice(-2), lift, .02), a = d[d.length - 2], e = d[d.length - 1];
+          const head = new THREE.Mesh(new THREE.ConeGeometry(.1 * SS, .24 * SS, 8), new THREE.MeshLambertMaterial({ color }));
+          head.position.copy(e); head.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), e.clone().sub(a).normalize()); lineGroup.add(head);
+        }
+      });
+    }
+
+    // ---------- Bản đồ phẳng (khi máy không vẽ được 3D) ----------
+    function initFlat() {
+      const c = $el('canvas'); cv.appendChild(c); flat = { c, ctx: c.getContext('2d') };
+      stage.classList.add('st-flat'); note.textContent = 'Máy này không vẽ được 3D: đang xem bản đồ phẳng';
+    }
+    function flatProj(x, z) { const W = flat.w, H = flat.h, s = Math.min(W / G.wk, H / G.hk) * 1.0 / Math.max(.4, cam.dist); const [tx, , tz] = cam.target; return [W / 2 + (x - tx) * s, H / 2 + (z - tz) * s]; }
+    function drawFlat(S) {
+      const { c, ctx } = flat, W = c.clientWidth, H = c.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+      if (c.width !== W * dpr || c.height !== H * dpr) { c.width = W * dpr; c.height = H * dpr; }
+      flat.w = W; flat.h = H; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.fillStyle = '#b9c48f'; ctx.fillRect(0, 0, W, H);
+      // Đất chỉ tô một lần vào ảnh nhỏ (mỗi ô lưới một điểm ảnh), tô lại khi đổi chỗ đứng nhìn; mỗi lần vẽ chỉ phóng ảnh đó ra, mịn và nhanh.
+      const { t } = G;
+      if (!flat.img || flat.imgVs !== vs) {
+        const cw = G.wk / t.cols, ch = G.hk / t.rows, img = flat.img || Object.assign(document.createElement('canvas'), { width: t.cols, height: t.rows });
+        const ic = img.getContext('2d'), data = ic.createImageData(t.cols, t.rows), d = data.data;
+        for (let r = 0; r < t.rows; r++) for (let cc = 0; cc < t.cols; cc++) {
+          const x = -G.wk / 2 + (cc + .5) * cw, z = -G.hk / 2 + (r + .5) * ch, h = G.hAt(x, z), sh = (G.hAt(x - cw, z - ch) - G.hAt(x + cw, z + ch)) * 6;
+          const light = 1 + Math.max(-.3, Math.min(.3, sh)), dark = vs && !vs.vis[r * t.cols + cc] ? .48 : 1, base = landAt(h / G.ex * 1000), o = (r * t.cols + cc) * 4;
+          for (let k = 0; k < 3; k++) d[o + k] = Math.round(Math.min(255, base[k] * 255 * light * dark));
+          d[o + 3] = 255;
+        }
+        ic.putImageData(data, 0, 0); flat.img = img; flat.imgVs = vs;
+      }
+      const [px0, pz0] = flatProj(-G.wk / 2, -G.hk / 2), [px1, pz1] = flatProj(G.wk / 2, G.hk / 2);
+      ctx.imageSmoothingEnabled = true; ctx.drawImage(flat.img, px0, pz0, px1 - px0, pz1 - pz0);
+      const path = (pts, color, w, dash) => { ctx.beginPath(); pts.map(G.xz).forEach(([x, z], i) => { const [px, pz] = flatProj(x, z); i ? ctx.lineTo(px, pz) : ctx.moveTo(px, pz); }); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.setLineDash(dash || []); ctx.stroke(); ctx.setLineDash([]); };
+      b.features.forEach((f) => path(f.pts, COLORS[f.kind] || '#888', f.kind === 'airfield' ? 5 : f.kind === 'river' ? 3 : 2, f.kind === 'road' ? [6, 4] : null));
+      (S.zones || []).forEach((zn) => { const [px, pz] = flatProj(zn.x, zn.z), [qx] = flatProj(zn.x + zn.r, zn.z); ctx.beginPath(); ctx.arc(px, pz, qx - px, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(178,58,42,.16)'; ctx.fill(); ctx.setLineDash([5, 4]); ctx.strokeStyle = 'rgba(178,58,42,.7)'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.setLineDash([]); });
+      if (vs) { const [px, pz] = flatProj(vs.x, vs.z); ctx.beginPath(); ctx.arc(px, pz, 6, 0, Math.PI * 2); ctx.fillStyle = '#1d1d1b'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); }
+      S.lines.forEach((l) => {
+        const color = l.kind === 'retreat' ? COLORS.retreat : l.color || (b.sides.vn || {}).color || '#b23a2a';
+        path(l.pts, color, l.kind === 'trench' ? 2 : 3, l.kind === 'trench' ? [4, 3] : null);
+        if (l.kind !== 'attack' && l.kind !== 'retreat' && l.kind !== 'supply') return;
+        const [a, e] = l.pts.slice(-2).map(G.xz).map(([x, z]) => flatProj(x, z)), ang = Math.atan2(e[1] - a[1], e[0] - a[0]);
+        ctx.beginPath(); ctx.moveTo(e[0], e[1]);
+        ctx.lineTo(e[0] - 10 * Math.cos(ang - .45), e[1] - 10 * Math.sin(ang - .45)); ctx.lineTo(e[0] - 10 * Math.cos(ang + .45), e[1] - 10 * Math.sin(ang + .45));
+        ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+      });
+      b.units.forEach((u) => { if (!S.show.has(u.id)) return; const [x, z] = G.xz(u.at), [px, pz] = flatProj(x, z), lost = S.lose.has(u.id);
+        const other = Object.keys(b.sides).find((k) => k !== u.side);
+        if (S.hit.has(u.id) && !lost) { ctx.beginPath(); ctx.arc(px, pz, 13, 0, Math.PI * 2); ctx.strokeStyle = COLORS.hit; ctx.lineWidth = 3; ctx.stroke(); }
+        ctx.globalAlpha = S.dim.has(u.id) ? .35 : 1; ctx.fillStyle = lost ? COLORS.lost : (b.sides[u.side] || {}).color || '#888';
+        ctx.beginPath(); if (u.kind === 'gun') { ctx.moveTo(px, pz - 9); ctx.lineTo(px + 9, pz + 6); ctx.lineTo(px - 9, pz + 6); } else if (u.kind === 'depot') ctx.arc(px, pz, 8, 0, Math.PI * 2); else ctx.rect(px - 8, pz - 8, 16, 16); ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = 1.5; ctx.stroke();
+        if (lost) { ctx.strokeStyle = '#3b3127'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(px, pz); ctx.lineTo(px, pz - 22); ctx.stroke();
+          ctx.fillStyle = other ? b.sides[other].color : COLORS.hit; ctx.fillRect(px, pz - 22, 12, 8); }
+        ctx.globalAlpha = 1; });
+    }
+
+    // ---------- Nhãn ----------
+    const labelEls = {};
+    b.units.forEach((u) => { const s = $el('span', 'st-lbl ' + u.side); labels.appendChild(s); labelEls[u.id] = s; });
+    const featLbls = b.features.filter((f) => f.short || f.name).map((f) => { const s = $el('span', 'st-lbl feat ' + f.kind); s.textContent = f.short || f.name; labels.appendChild(s); return { f, e: s }; });
+    let lastHits = [];
+    // Bàn phím: mỗi đơn vị một nút (ẩn, hiện ra khi được Tab tới), bấm thì mở cùng khung thông tin như khi chạm.
+    // data-noreplay: phần tự lưu không đếm các nút này. Số nút cố định theo dữ liệu trận.
+    const unitList = $el('div', 'st-units'); unitList.setAttribute('aria-label', 'Các đơn vị trên sa bàn');
+    b.units.forEach((u) => { const bt = $el('button', '', esc(u.name)); bt.type = 'button'; bt.dataset.noreplay = '';
+      bt.addEventListener('click', () => { if (!S || !S.show.has(u.id)) { kbInfo(`<b>${esc(u.name)}</b><span>Chưa có trên sa bàn ở mốc này</span>`); return; }
+        if (!lastHits.some((o) => o.u === u)) { kbInfo(`<b>${esc(S.rename[u.id] || u.name)}</b><span>${esc(unitFacts(u, S))}</span><span>Ngoài khung nhìn: thử nút "Từ trên"</span>`); return; }
+        showInfo(u, S); });
+      unitList.appendChild(bt); });
+    const listBottom = () => unitList.offsetTop + unitList.offsetHeight + 6;
+    function kbInfo(html) { info.hidden = false; info.innerHTML = html; delete info.dataset.u; info.style.transform = `translate(8px, ${listBottom()}px)`; }
+    stage.appendChild(unitList);
+    const zoneLbls = b.units.map(() => { const s = $el('span', 'st-lbl zone'); s.hidden = true; labels.appendChild(s); return s; }); // vùng chạm của từng ký hiệu và nhãn ở lần vẽ gần nhất
+    function screenAt(x, z) {
+      if (flat) { const [px, pz] = flatProj(x, z); return [px, pz, true]; }
+      const v = new THREE.Vector3(x, G.hAt(x, z), z).project(camera);
+      return [(v.x + 1) / 2 * stage.clientWidth, (1 - v.y) / 2 * stage.clientHeight, v.z < 1]; // v.z >= 1: sau máy quay
+    }
+    // Hướng bắc và thước tỉ lệ đo tại điểm đang nhìn, nên khi xoay hay phóng to vẫn đúng.
+    function updateCompass() {
+      // Thước đo theo hướng ngang của màn hình: 3D lấy đoạn vuông góc với hướng nhìn, bản phẳng lấy hướng đông.
+      const [tx, , tz] = cam.target, rx = flat ? 1 : Math.cos(cam.yaw), rz = flat ? 0 : -Math.sin(cam.yaw);
+      const p0 = screenAt(tx, tz), pn = screenAt(tx, tz - .5), pe = screenAt(tx + .5 * rx, tz + .5 * rz);
+      const ang = Math.atan2(pn[0] - p0[0], -(pn[1] - p0[1])) * 180 / Math.PI;
+      compass.querySelector('.st-north').style.transform = `rotate(${ang.toFixed(1)}deg)`;
+      const perKm = Math.hypot(pe[0] - p0[0], pe[1] - p0[1]) * 2;
+      const km = [.1, .2, .25, .5, 1, 2, 5, 10].find((k) => k * perKm >= 48) || 10;
+      compass.querySelector('.st-scale i').style.width = Math.round(Math.min(140, km * perKm)) + 'px';
+      compass.querySelector('.st-scale em').textContent = (km < 1 ? Math.round(km * 1000) + ' m' : String(km).replace('.', ',') + ' km');
+    }
+    // Bảng chú thích không được chạy xuống dưới nút góc phải: chừa đúng chỗ còn lại, hẹp quá thì ẩn.
+    function fitLegend() {
+      const room = stage.clientWidth - tools.offsetWidth - 28;
+      legend.style.maxWidth = Math.max(0, room) + 'px';
+      legend.style.visibility = room < 150 ? 'hidden' : '';
+      note.style.maxWidth = Math.max(80, stage.clientWidth - compass.offsetWidth - 28) + 'px';
+      vsBox.style.maxWidth = Math.max(140, stage.clientWidth - compass.offsetWidth - 28) + 'px';
+    }
+    function project(u) { return projectAt(u.at); }
+    function projectAt(at) {
+      const [x, z] = G.xz(at);
+      if (flat) { const [px, pz] = flatProj(x, z); return [px, pz - 10, true]; }
+      const v = new THREE.Vector3(x, G.hAt(x, z) + .3, z).project(camera);
+      return [(v.x + 1) / 2 * stage.clientWidth, (1 - v.y) / 2 * stage.clientHeight, v.z < 1];
+    }
+    // Nhãn không được đè lên ký hiệu đơn vị, lên khung chú thích hay nút góc, và không tràn mép.
+    // Mỗi nhãn thử lần lượt: trên, dưới, phải, trái ký hiệu; chỗ nào cũng vướng thì ẩn nhãn ưu tiên thấp.
+    function placeLabels(S) {
+      fitLegend(); updateCompass();
+      const W = stage.clientWidth, H = stage.clientHeight, sr = stage.getBoundingClientRect();
+      const ui = [legend, tools, note, compass, vsBox].filter((x) => x.style.visibility !== 'hidden').filter((x) => x.offsetParent && x.offsetWidth).map((x) => { const r = x.getBoundingClientRect(); return [r.left - sr.left - 4, r.top - sr.top - 4, r.right - sr.left + 4, r.bottom - sr.top + 4]; });
+      const list = b.units.filter((u) => S.show.has(u.id)).map((u) => ({ u, pri: (S.hit.has(u.id) ? 10 : 0) + (u.rank || 1), p: project(u) }));
+      list.sort((a, c) => c.pri - a.pri);
+      // Vùng của ký hiệu trên màn hình: 3D thì chiếu tám góc khối thật (to ra khi phóng gần), bản phẳng thì ô cố định.
+      const box3 = flat ? null : new THREE.Box3(), v3 = flat ? null : new THREE.Vector3();
+      function markBox(u, [x, y]) {
+        const fb = [x - 10, y - 4, x + 10, y + 20], m = meshes[u.id];
+        if (flat || !m) return fb;
+        m.updateMatrixWorld(); box3.setFromObject(m.userData.body); if (m.userData.flag.visible) box3.expandByObject(m.userData.flag); let l = Infinity, t = Infinity, r = -Infinity, btm = -Infinity;
+        for (let k = 0; k < 8; k++) {
+          v3.set(k & 1 ? box3.max.x : box3.min.x, k & 2 ? box3.max.y : box3.min.y, k & 4 ? box3.max.z : box3.min.z).project(camera);
+          const sx = (v3.x + 1) / 2 * W, sy = (1 - v3.y) / 2 * H;
+          l = Math.min(l, sx); r = Math.max(r, sx); t = Math.min(t, sy); btm = Math.max(btm, sy);
+        }
+        return [Math.min(fb[0], l - 3), Math.min(fb[1], t - 3), Math.max(fb[2], r + 3), Math.max(fb[3], btm + 3)];
+      }
+      list.forEach((o) => { o.m = o.p[2] ? markBox(o.u, o.p) : null; });
+      const marks = list.filter((o) => o.m).map((o) => o.m);
+      // Đường tấn công, hào: lấy mẫu dọc đường thành ô nhỏ. Nhãn cố tránh, không tránh được thì vẫn hiện.
+      const path = [];
+      S.lines.forEach((l) => l.pts.forEach((pt, i) => { if (!i) return; const a = l.pts[i - 1];
+        for (let k = 0; k <= 6; k++) { const q = projectAt([a[0] + (pt[0] - a[0]) * k / 6, a[1] + (pt[1] - a[1]) * k / 6]); if (q[2]) path.push([q[0] - 3, q[1] - 3, q[0] + 3, q[1] + 3]); } }));
+      lastHits = [];
+      const taken = [...ui], hitAny = (bx, arr) => arr.some((t) => !(bx[2] <= t[0] || bx[0] >= t[2] || bx[3] <= t[1] || bx[1] >= t[3]));
+      b.units.forEach((u) => { labelEls[u.id].hidden = true; });
+      const named = new Set();
+      for (const { u, p: [x, y, front], m: mb } of list) {
+        const e = labelEls[u.id];
+        if (!front || x < 0 || y < 0 || x > W || y > H) continue;
+        lastHits.push({ u, box: mb });
+        // Bớt chữ: trạng thái đã thể hiện bằng cờ và vòng đỏ; tên trùng (mấy trận địa pháo) chỉ ghi một lần; đơn vị mờ không ghi tên.
+        const name = S.rename[u.id] || u.short || u.name, lost = S.lose.has(u.id);
+        if (S.dim.has(u.id) || named.has(name)) continue;
+        named.add(name);
+        e.textContent = name;
+        e.className = 'st-lbl ' + u.side + (S.hit.has(u.id) ? ' hit' : '') + (lost ? ' lost' : '') + (S.dim.has(u.id) ? ' dim' : '');
+        e.hidden = false;
+        const w = e.offsetWidth, h = e.offsetHeight;
+        const cy = (mb[1] + mb[3]) / 2, tries = [[x - w / 2, mb[1] - h - 2], [x - w / 2, mb[3] + 2], [mb[2] + 2, cy - h / 2], [mb[0] - w - 2, cy - h / 2]];
+        let box = null;
+        for (const strict of [true, false]) {
+          for (const [l, t] of tries) {
+            const bx = [l, t, l + w, t + h];
+            if (l < 2 || t < 2 || l + w > W - 2 || t + h > H - 2) continue;
+            if (hitAny(bx, taken) || hitAny(bx, marks) || (strict && hitAny(bx, path))) continue;
+            box = bx; break;
+          }
+          if (box) break;
+        }
+        if (!box) { e.hidden = true; continue; }
+        taken.push(box); lastHits.push({ u, box });
+        e.style.transform = `translate(${Math.round(box[0])}px, ${Math.round(box[1])}px)`;
+      }
+      // Tên sông, đường, sân bay: ưu tiên thấp nhất, đặt ở điểm của đường gần giữa khung nhìn, không chen vào đâu thì ẩn.
+      featLbls.forEach(({ f, e }) => {
+        e.hidden = true;
+        const pts = f.pts.map((pt) => { const [x, z] = G.xz(pt); return screenAt(x, z); }).filter(([x, y, front]) => front && x > 0 && y > 0 && x < W && y < H);
+        if (!pts.length) return;
+        pts.sort((a, c) => Math.hypot(a[0] - W / 2, a[1] - H * .45) - Math.hypot(c[0] - W / 2, c[1] - H * .45));
+        e.hidden = false; const w = e.offsetWidth, h = e.offsetHeight;
+        for (const [x, y] of pts.slice(0, 6)) {
+          for (const [l, t] of [[x + 6, y - h / 2], [x - w - 6, y - h / 2], [x - w / 2, y + 6]]) {
+            const bx = [l, t, l + w, t + h];
+            if (l < 2 || t < 2 || l + w > W - 2 || t + h > H - 2 || hitAny(bx, taken) || hitAny(bx, marks)) continue;
+            taken.push(bx); e.style.transform = `translate(${Math.round(l)}px, ${Math.round(t)}px)`; return;
+          }
+        }
+        e.hidden = true;
+      });
+      (S.zones || []).forEach((zn, i) => {
+        const e = zoneLbls[i]; if (!e) return; const [x, y, front] = screenAt(zn.x, zn.z); if (!front) { e.hidden = true; return; }
+        e.textContent = zn.label || (units[zn.id].side === 'vn' ? 'Pháo Việt Minh ở đâu?' : 'Không rõ'); e.hidden = false;
+        const w = e.offsetWidth, h = e.offsetHeight, bx = [x - w / 2, y - h / 2, x + w / 2, y + h / 2];
+        if (bx[0] < 2 || bx[1] < 2 || bx[2] > W - 2 || bx[3] > H - 2 || hitAny(bx, taken)) { e.hidden = true; return; }
+        taken.push(bx); e.style.transform = `translate(${Math.round(bx[0])}px, ${Math.round(bx[1])}px)`;
+      });
+      if (!info.hidden && info.dataset.u) showInfo(units[info.dataset.u], S);
+    }
+    // Chạm vào ký hiệu (hay nhãn của nó): hiện tên đầy đủ, bên nào và đang ra sao ở mốc này. Chạm chỗ trống thì đóng.
+    function unitFacts(u, S) {
+      const side = b.sides[u.side] ? b.sides[u.side].name : '', kind = u.kind === 'gun' ? 'trận địa pháo' : u.kind === 'depot' ? 'kho, điểm trung chuyển' : 'cứ điểm';
+      const state = S.lose.has(u.id) ? 'đã mất' : S.hit.has(u.id) ? 'đang bị đánh' : '';
+      return [side, kind, state].filter(Boolean).join(' · ');
+    }
+    function showInfo(u, S) {
+      const hit = lastHits.find((o) => o.u === u);
+      if (!u || !S || !S.show.has(u.id) || !hit) { info.hidden = true; delete info.dataset.u; return; }
+      info.innerHTML = `<b>${esc(S.rename[u.id] || u.name)}</b><span>${esc(unitFacts(u, S))}</span>`;
+      info.dataset.u = u.id; info.hidden = false;
+      const W = stage.clientWidth, w = info.offsetWidth, h = info.offsetHeight, [l, t, r, btm] = hit.box;
+      // Hàng nút bàn phím đang hiện (có thể xuống nhiều dòng trên điện thoại): khung thông tin nằm dưới hàng nút, không bị che.
+      const top = unitList.matches(':focus-within') ? listBottom() : 4;
+      const x = Math.max(4, Math.min(W - w - 4, (l + r) / 2 - w / 2)), y = Math.max(top, t - h - 6 > top ? t - h - 6 : btm + 6);
+      info.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
+    }
+
+    // ---------- Nhìn từ một điểm ----------
+    // Chạm vào đất: đứng ở đó (mắt cao 15 m), mỗi ô lưới được dò theo đường thẳng tới mắt; có núi chắn thì ô đó tối.
+    let vs = null;
+    const EYE = .015;
+    function viewshed(x0, z0) {
+      const { t } = G, cw = G.wk / t.cols, ch = G.hk / t.rows, y0 = G.hAt(x0, z0) + EYE * G.ex, vis = new Uint8Array(t.cols * t.rows), step = Math.min(cw, ch) * 1.2;
+      for (let r = 0; r < t.rows; r++) for (let c = 0; c < t.cols; c++) {
+        const x1 = -G.wk / 2 + (c + .5) * cw, z1 = -G.hk / 2 + (r + .5) * ch, y1 = G.hAt(x1, z1) + .004 * G.ex;
+        const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, z1 - z0) / step)); let ok = 1;
+        for (let k = 1; k < n; k++) { const f = k / n; if (G.hAt(x0 + (x1 - x0) * f, z0 + (z1 - z0) * f) > y0 + (y1 - y0) * f) { ok = 0; break; } }
+        vis[r * t.cols + c] = ok;
+      }
+      return vis;
+    }
+    function setViewpoint(x, z) {
+      if (x == null) { vs = null; vsBox.hidden = true; note.style.visibility = ''; }
+      else {
+        vs = { x, z, vis: viewshed(x, z) };
+        const m = Math.round(G.hAt(x, z) / G.ex * 1000 + G.t.min), seen = vs.vis.reduce((a, v) => a + v, 0) / vs.vis.length;
+        vsBox.firstChild.textContent = `Đứng ở độ cao ${m.toLocaleString('vi-VN')} m: thấy ${Math.round(seen * 100)}% sa bàn, vùng tối bị núi che`;
+        vsBox.hidden = false; note.style.visibility = 'hidden';
+      }
+      if (ground) {
+        const c = ground.mesh.geometry.attributes.color, a = c.array, base = ground.base;
+        for (let i = 0; i < a.length / 3; i++) {
+          const hid = vs && !vs.vis[i];
+          a[i * 3] = hid ? base[i * 3] * .42 + .05 : base[i * 3]; a[i * 3 + 1] = hid ? base[i * 3 + 1] * .42 + .06 : base[i * 3 + 1]; a[i * 3 + 2] = hid ? base[i * 3 + 2] * .42 + .1 : base[i * 3 + 2];
+        }
+        c.needsUpdate = true;
+        eyeMark.visible = !!vs; if (vs) eyeMark.position.set(x, G.hAt(x, z), z);
+      }
+      need();
+    }
+    vsBox.lastChild.addEventListener('click', () => setViewpoint(null));
+    // Từ chỗ chạm trên màn hình ra toạ độ trên đất.
+    function groundAt(sx, sy) {
+      if (flat) { const s = Math.min(flat.w / G.wk, flat.h / G.hk) / Math.max(.4, cam.dist), [tx, , tz] = cam.target; return [tx + (sx - flat.w / 2) / s, tz + (sy - flat.h / 2) / s]; }
+      const rc = new THREE.Raycaster(); rc.setFromCamera(new THREE.Vector2(sx / stage.clientWidth * 2 - 1, -(sy / stage.clientHeight) * 2 + 1), camera);
+      const hit = rc.intersectObject(ground.mesh)[0]; return hit ? [hit.point.x, hit.point.z] : null;
+    }
+
+    // ---------- Máy quay ----------
+    const T0 = b.views && b.views.tilt && b.views.tilt.target ? G.xz(b.views.tilt.target) : [0, 0];
+    function viewGoal(name) {
+      const v = (b.views || {})[name] || {};
+      const tg = v.target ? G.xz(v.target) : T0, ty = G.hAt(tg[0], tg[1]);
+      if (v.from) { // đứng ở một điểm: đổi sang toạ độ cầu quanh đích nhìn
+        const [fx, fz] = G.xz(v.from), fy = G.hAt(fx, fz) + (v.from[2] || .05) * G.ex;
+        const dx = fx - tg[0], dy = fy - ty, dz = fz - tg[1], d = Math.hypot(dx, dy, dz);
+        return { target: [tg[0], ty, tg[1]], yaw: Math.atan2(dx, dz), pitch: Math.asin(dy / d), dist: d / G.span };
+      }
+      return { target: [tg[0], ty, tg[1]], yaw: v.yaw ?? -.5, pitch: v.pitch ?? .8, dist: v.dist ?? 1 };
+    }
+    const viewBtns = {};
+    Object.entries(b.views || { tilt: { label: 'Nghiêng' } }).forEach(([k, v]) => {
+      const bt = $el('button', '', esc(v.label || k)); bt.type = 'button'; bt.setAttribute('aria-pressed', String(k === curView));
+      bt.addEventListener('click', () => view(k)); tools.appendChild(bt); viewBtns[k] = bt;
+    });
+    tools.className = 'seg st-views';
+    // Mắt bên kia: ở mốc có "fog", bấm để chỉ thấy những gì bên đó biết lúc ấy. Nút luôn có trong trang (số nút không đổi), mốc không có thì ẩn.
+    const fogWho = Object.values(b.tracks).flatMap((t) => t.keys).map((k) => k.fog && k.fog.who).find(Boolean);
+    let fogOn = false, fogBtn = null;
+    if (fogWho) {
+      fogBtn = $el('button', 'st-fog', esc(fogWho)); fogBtn.type = 'button'; fogBtn.setAttribute('aria-pressed', 'false'); fogBtn.hidden = true;
+      fogBtn.addEventListener('click', () => { fogOn = !fogOn; fogBtn.setAttribute('aria-pressed', String(fogOn)); paint(); });
+      tools.appendChild(fogBtn);
+    }
+    function view(name) { curView = name; Object.entries(viewBtns).forEach(([k, bt]) => bt.setAttribute('aria-pressed', String(k === name))); Object.assign(goal, viewGoal(name)); need(); }
+    function applyCam() {
+      const [tx, ty, tz] = cam.target, d = cam.dist * G.span, cp = Math.cos(cam.pitch);
+      camera.position.set(tx + d * Math.sin(cam.yaw) * cp, ty + d * Math.sin(cam.pitch), tz + d * Math.cos(cam.yaw) * cp);
+      camera.lookAt(tx, ty, tz);
+    }
+
+    let raf = 0, S = null;
+    const lerp = (a, c, f) => a + (c - a) * f;
+    function frame() {
+      raf = 0;
+      let moving = false;
+      const f = .18;
+      ['yaw', 'pitch', 'dist'].forEach((k) => { if (Math.abs(goal[k] - cam[k]) > 1e-4) { cam[k] = lerp(cam[k], goal[k], f); moving = true; } else cam[k] = goal[k]; });
+      for (let i = 0; i < 3; i++) { if (Math.abs(goal.target[i] - cam.target[i]) > 1e-4) { cam.target[i] = lerp(cam.target[i], goal.target[i], f); moving = true; } else cam.target[i] = goal.target[i]; }
+      const W = stage.clientWidth, H = stage.clientHeight;
+      if (renderer) {
+        const sz = renderer.getSize(new THREE.Vector2());
+        if (sz.x !== W || sz.y !== H) { renderer.setSize(W, H); camera.aspect = W / Math.max(1, H); camera.updateProjectionMatrix(); }
+        applyCam();
+        Object.values(meshes).forEach((g) => { const f = g.userData.flag; if (f.visible) f.rotation.y = Math.atan2(camera.position.x - g.position.x, camera.position.z - g.position.z); });
+        renderer.render(scene, camera);
+      } else if (flat) drawFlat(S);
+      if (S) placeLabels(S);
+      if (moving) need();
+    }
+    function need() { if (!raf) raf = requestAnimationFrame(frame); }
+
+    // Kéo để xoay, lăn hay chụm hai ngón để phóng. Bản đồ phẳng: kéo để dời.
+    const ptrs = new Map(); let pinch = 0;
+    let tap = null;
+    cv.addEventListener('pointerdown', (e) => { cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]); tap = ptrs.size === 1 ? [e.clientX, e.clientY] : null; });
+    cv.addEventListener('pointermove', (e) => {
+      if (!ptrs.has(e.pointerId)) return;
+      const [px, py] = ptrs.get(e.pointerId), dx = e.clientX - px, dy = e.clientY - py; ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+      if (ptrs.size === 2) { const [a, c] = [...ptrs.values()], d = Math.hypot(a[0] - c[0], a[1] - c[1]); if (pinch) goal.dist = Math.max(.12, Math.min(1.8, goal.dist * pinch / d)); pinch = d; }
+      else if (flat) { const s = Math.min(flat.w / G.wk, flat.h / G.hk) / Math.max(.4, cam.dist); goal.target[0] -= dx / s; goal.target[2] -= dy / s; }
+      else { goal.yaw -= dx * .006; goal.pitch = Math.max(.08, Math.min(1.52, goal.pitch + dy * .005)); }
+      Object.values(viewBtns).forEach((bt) => bt.setAttribute('aria-pressed', 'false'));
+      need();
+    });
+    const up = (e) => {
+      if (e.type === 'pointerup' && tap && Math.hypot(e.clientX - tap[0], e.clientY - tap[1]) < 6) {
+        const r = stage.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+        const near = lastHits.filter((o) => x >= o.box[0] - 4 && x <= o.box[2] + 4 && y >= o.box[1] - 4 && y <= o.box[3] + 4);
+        const u = near.length ? near[0].u : null;
+        if (u) showInfo(info.dataset.u !== u.id ? u : null, S);
+        else if (!info.hidden) showInfo(null, S);
+        else { const g = groundAt(x, y); if (g && Math.abs(g[0]) <= G.wk / 2 && Math.abs(g[1]) <= G.hk / 2) setViewpoint(g[0], g[1]); }
+      }
+      tap = null; ptrs.delete(e.pointerId); pinch = 0;
+    };
+    cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+    cv.addEventListener('wheel', (e) => { e.preventDefault(); goal.dist = Math.max(.12, Math.min(1.8, goal.dist * Math.exp(e.deltaY * .0012))); need(); }, { passive: false });
+    new ResizeObserver(need).observe(stage);
+
+    // ---------- Thanh thời gian ----------
+    // Số nút mốc cố định cho cả trang (bằng track dài nhất), track ngắn thì ẩn bớt: phần tự lưu bấm lại theo thứ tự nút nên số nút không được đổi.
+    const MAXK = Math.max(...Object.values(b.tracks).map((t) => t.keys.length));
+    const keyBtns = Array.from({ length: MAXK }, (_, i) => { const bt = $el('button', 'st-key', '<i></i><span></span>'); bt.type = 'button'; bt.addEventListener('click', () => go(i)); keysBox.appendChild(bt); return bt; });
+    function buildKeys() {
+      const keys = b.tracks[track].keys;
+      keyBtns.forEach((bt, i) => { const k = keys[i]; bt.hidden = !k; if (!k) return; bt.lastChild.textContent = k.date; bt.setAttribute('aria-label', `${k.date}: ${k.title || ''}`); });
+    }
+    function paint() {
+      const keys = b.tracks[track].keys, lim = upto == null ? keys.length - 1 : upto;
+      keyBtns.forEach((bt, i) => { bt.classList.toggle('done', i < at); bt.classList.toggle('now', i === at); bt.disabled = i > lim; bt.setAttribute('aria-current', i === at ? 'step' : 'false'); });
+      const cur = keyBtns[at]; if (cur && scroller.scrollWidth > scroller.clientWidth) scroller.scrollLeft = Math.max(0, cur.offsetLeft - (scroller.clientWidth - cur.offsetWidth) / 2);
+      keysBox.style.setProperty('--fill', keys.length > 1 ? at / (keys.length - 1) : 1);
+      el.classList.toggle('locked', upto != null && upto === at && lim === 0);
+      play.disabled = at >= lim;
+      const k = keyOf(b, track, at), sim = b.tracks[track].tag === 'sim';
+      cap.innerHTML = `<span class="chip ${sim ? 'sim' : 'good'}">${sim ? 'Mô phỏng · ' + esc(b.tracks[track].label) : esc(b.tracks[track].label || 'Chuyện thật')}</span>`
+        + `<span class="st-text"><b>${esc(k.date)}. ${esc(k.title || '')}.</b> ${esc(k.text || '')}${k.src ? ` <span class="muted">Nguồn: ${esc(k.src)}.</span>` : ''}</span>`;
+      S = stateAt(b, track, at);
+      const fk = k.fog;
+      if (fogBtn) fogBtn.hidden = !fk;
+      if (fogOn && fk) {
+        // Chỉ bỏ ký hiệu khỏi mắt bên kia; thay bằng một vùng nghi ngờ rộng, lệch khỏi chỗ thật cho đúng là "không biết chính xác".
+        const hide = new Set(fk.hide || []);
+        S = { ...S, show: new Set([...S.show].filter((id) => !hide.has(id))), zones: [...hide].filter((id) => units[id] && S.show.has(id)).map((id, i) => {
+          const [x, z] = G.xz(units[id].at), a = (i * 2.4 + id.length) % (Math.PI * 2); return { id, x: x + Math.cos(a) * .45, z: z + Math.sin(a) * .45, r: 1 + (i % 2) * .25, label: fk.zoneLabel }; }) };
+        cap.innerHTML += `<span class="st-text st-fogtext"><b>${esc(fk.who)}:</b> ${esc(fk.text || '')}${fk.src ? ` <span class="muted">Nguồn: ${esc(fk.src)}.</span>` : ''}</span>`;
+      }
+      if (renderer) {
+        while (zoneGroup.children.length) { const c = zoneGroup.children.pop(); c.geometry.dispose(); c.material.dispose(); }
+        (S.zones || []).forEach((zn) => {
+          const m = new THREE.Mesh(new THREE.CircleGeometry(zn.r, 40), new THREE.MeshBasicMaterial({ color: '#b23a2a', transparent: true, opacity: .16, depthWrite: false }));
+          m.rotation.x = -Math.PI / 2; m.position.set(zn.x, G.hAt(zn.x, zn.z) + .12, zn.z); zoneGroup.add(m);
+        });
+        b.units.forEach((u) => { const g = meshes[u.id], { body, flag, ring } = g.userData, lost = S.lose.has(u.id); g.visible = S.show.has(u.id);
+          body.material.color.set(lost ? COLORS.lost : (b.sides[u.side] || {}).color || '#888');
+          body.material.opacity = S.dim.has(u.id) ? .35 : 1; flag.visible = lost; ring.visible = S.hit.has(u.id) && !lost; });
+        drawLines3d(S.lines);
+      }
+      zoneLbls.forEach((e) => { e.hidden = true; });
+      if (S.focus && curView !== 'hill') { const [x, z] = G.xz(S.focus); goal.target = [x, G.hAt(x, z), z]; }
+      need();
+    }
+    function go(i) {
+      const keys = b.tracks[track].keys, lim = upto == null ? keys.length - 1 : upto;
+      at = Math.max(0, Math.min(lim, i)); paint();
+      if (opts.onKey) opts.onKey(track, at, at === keys.length - 1);
+    }
+    play.addEventListener('click', () => {
+      clearInterval(timer);
+      const lim = upto == null ? b.tracks[track].keys.length - 1 : upto;
+      if (at >= lim) return;
+      go(at + 1);
+      timer = setInterval(() => { if (at >= lim) return clearInterval(timer); go(at + 1); }, 2600);
+    });
+    function show(t, o = {}) {
+      if (!b.tracks[t]) return;
+      clearInterval(timer);
+      const changed = t !== track; track = t; upto = o.upto == null ? null : o.upto;
+      if (changed || !keyBtns[0].lastChild.textContent) buildKeys();
+      go(o.at == null ? (changed ? 0 : at) : o.at);
+    }
+
+    if (!init3d()) initFlat();
+    Object.assign(cam, viewGoal('tilt')); Object.assign(goal, viewGoal('tilt'), { target: cam.target.slice() });
+    show(track, { at: 0 });
+    return { show, view, go, get track() { return track; }, get at() { return at; } };
+  }
+
+  window.Sandtable = { mount, stateAt };
+})();
+
+/* Nối sa bàn với khung buổi học (artifacts/lesson/lesson.js). Chạy sau lesson.js, trước phần tự lưu, để mọi nút có sẵn lúc tải trang.
+   Trong trang (xem artifacts/war/README.md):
+   - <script type="application/json" id="battle">: dữ liệu trận (make-lesson chép từ learning/war/battles/<trận>.json theo data-src).
+   - <div id="board"></div>: chỗ đặt sa bàn, một lần cho cả trang.
+   - Mỗi bước: data-board="real" (xem track đó), "real@0" (khóa ở mốc 0, chưa cho kéo thời gian), không ghi thì ẩn sa bàn.
+   - <button data-track="A">: chuyển sa bàn sang track A.
+   - <div class="choose" data-c="d1" data-real="C"> với các <button class="opt" data-v="A">, nút xem trước <button data-plan="A">.
+     Chọn xong: R.choices.d1, Lesson.done('d1'), chữ vào [data-echo="d1"] (data-same / data-diff trên .choose).
+   - Xem tới mốc cuối của track X: R.seen.X = true, Lesson.done('seen-X'). */
+(() => {
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const data = $('#battle'), board = $('#board');
+  if (!data || !board || !window.Sandtable) return;
+  let battle;
+  try { battle = JSON.parse(data.textContent); } catch (e) { board.textContent = 'Chưa có dữ liệu trận: chạy make-lesson.mjs để chép vào.'; return; }
+  if (!battle.terrain) { board.textContent = 'Dữ liệu trận chưa có địa hình: chạy artifacts/war/fetch-terrain.mjs.'; return; }
+  const R = window.R || (window.R = {});
+  R.choices = R.choices || {}; R.seen = R.seen || {}; R.viewed = R.viewed || [];
+  const done = (k) => window.Lesson && Lesson.done(k);
+  if (window.Lesson && Lesson.extras) Lesson.extras.push((r) => {
+    const L = Object.entries(r.choices || {}).map(([k, c]) => `Chọn nước đi (${k}): ${c.pick}, chuyện thật là ${c.real}${c.same ? ' (giống)' : ''}`);
+    if (r.previewed && r.previewed.length) L.push('Đã bấm xem trước: ' + r.previewed.join(', '));
+    const seen = Object.keys(r.seen || {}); if (seen.length) L.push('Đã xem hết: ' + seen.join(', '));
+    if ((r.notice || '').trim()) L.push('Tự để ý trên sa bàn: ' + r.notice.trim());
+    return L.join('\n');
+  });
+
+  const st = window.Board = Sandtable.mount(board, battle, {
+    onKey(track, i, last) {
+      const tag = track + ':' + i; if (!R.viewed.includes(tag)) R.viewed.push(tag);
+      if (last) { R.seen[track] = true; done('seen-' + track); }
+      $$('[data-track]').forEach((bt) => bt.setAttribute('aria-pressed', String(bt.dataset.track === track)));
+    },
+  });
+
+  // Bước đang mở quyết định sa bàn hiện gì. lesson.js chuyển bước bằng class "on".
+  const steps = $$('.step');
+  let last = null;
+  function sync() {
+    const cur = steps.find((s) => s.classList.contains('on'));
+    if (!cur || cur === last) return;
+    last = cur;
+    const spec = cur.dataset.board || '';
+    document.documentElement.dataset.board = spec ? 'on' : 'off';
+    if (!spec) return;
+    const [track, lock] = spec.split('@');
+    st.show(track, lock == null ? { at: 0 } : { at: +lock, upto: +lock });
+  }
+  new MutationObserver(sync).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+  // Đồng bộ ngay sau mỗi lần bấm (kể cả lúc phần tự lưu bấm lại liên tục), không đợi MutationObserver: nút mốc phải mở khóa trước lần bấm kế.
+  document.addEventListener('click', sync);
+  sync();
+
+  // Điện thoại: sa bàn nằm trên các bước, bấm xem thì cuộn lên cho thấy.
+  const reveal = () => { if (window.innerWidth < 900) board.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+  $$('[data-track]').forEach((bt) => bt.addEventListener('click', () => { st.show(bt.dataset.track, { at: 0 }); reveal(); }));
+
+  // Chọn nước đi: chưa có đúng sai, chỉ có "bạn chọn" và "chuyện thật".
+  $$('.choose[data-c]').forEach((box) => {
+    const id = box.dataset.c, real = box.dataset.real, opts = $$('.opt[data-v]', box);
+    $$('[data-plan]', box).forEach((bt) => bt.addEventListener('click', () => {
+      const t = bt.dataset.plan, n = (battle.tracks[t] || {}).preview ?? 1;
+      st.show(t, { at: n, upto: n });
+      $$('[data-plan]', box).forEach((x) => x.setAttribute('aria-pressed', String(x === bt)));
+      R.previewed = [...new Set([...(R.previewed || []), t])];
+      reveal();
+    }));
+    opts.forEach((o) => o.addEventListener('click', () => {
+      if (R.choices[id]) return;
+      const v = o.dataset.v, same = v === real;
+      R.choices[id] = { pick: v, real, same };
+      opts.forEach((x) => { x.disabled = true; x.classList.toggle('picked', x === o); x.classList.toggle('real', x.dataset.v === real); });
+      $$('[data-plan]', box).forEach((x) => { x.disabled = true; });
+      $$(`[data-echo="${id}"]`).forEach((e) => { e.textContent = `Bạn chọn ${v}. ` + (same ? box.dataset.same || '' : box.dataset.diff || ''); e.classList.add(same ? 'good' : 'note'); });
+      done(id);
+    }));
+  });
+})();
+</script>
+<script>
+/* Bài 4: đoán con số gạo ăn dọc đường, nhắc lại lựa chọn ở bước ý chính. */
+(() => {
+  const msg = ['Thấp hơn thật rất nhiều.', 'Thấp hơn thật rất nhiều.', 'Vẫn thấp hơn thật hơn hai lần.', 'Đúng khoảng.'];
+  const bs = [...document.querySelectorAll('#guess button')];
+  bs.forEach((b) => b.addEventListener('click', () => {
+    if (R.guess !== undefined) return;
+    const g = +b.dataset.g; R.guess = g;
+    bs.forEach((x) => { x.disabled = true; x.setAttribute('aria-pressed', String(x === b)); if (+x.dataset.g === 3) x.classList.add('right'); else if (x === b) x.classList.add('wrong'); });
+    const box = document.getElementById('bags'); box.innerHTML = '';
+    for (let i = 0; i < 25; i++) { const e = document.createElement('i'); if (i === 24) e.className = 'keep'; box.appendChild(e); }
+    document.getElementById('bagBox').classList.add('on');
+    const fb = document.getElementById('guessFb'); fb.textContent = msg[g] + ' Gánh xa thì người gánh ăn gần hết phần mình gánh. Giữ con số này cho phần sau.';
+    Lesson.done('guess');
+  }));
+  document.querySelectorAll('.choose[data-c="d1"] .opt').forEach((o) => o.addEventListener('click', () => {
+    const v = o.dataset.v, e = document.getElementById('echo5');
+    e.textContent = v === 'C' ? 'Bạn chọn C, gần với chuyện thật. Đây là vì sao ghép nhiều cách lại hơn dồn vào một cách.'
+      : v === 'A' ? 'Bạn chọn A. Ô tô đúng là phần chính của chuyện thật; chỗ thiếu là đoạn cuối, như dưới đây.'
+      : 'Bạn chọn B. Sức người là thật và rất lớn, nhưng phải đi cùng các cách chở khác thì phép trừ dọc đường mới nhỏ lại.';
+  }));
+})();
+</script>
+<script id="lesson-kit">
+/* Bộ khung chung cho trang học (xem learning/teaching/README.md, mục "Bộ khung chung").
+   1. Tự lưu chỗ đang học: ghi lại từng lần bấm và chữ đã gõ, lưu vào máy (localStorage) và vào db của trang (drafts/<id>).
+      Mở lại, tải lại, hay trang được đăng bản sửa: bấm lại đúng thứ tự để về chỗ cũ.
+   2. Học lại: sau khi bấm "Xong buổi học", lần mở sau ẩn phần [data-part~="review"] (ôn đầu buổi) và mở khóa nút [data-review-gate].
+   Không cần sửa gì trong trang, chỉ cần các id chuẩn: #finish, #copy. */
+(()=>{
+const ID=(document.querySelector('meta[name="lesson-id"]')||{}).content||document.title;
+const LK='lesson-kit:'+ID, DOC='drafts/'+ID.replace(/[^a-z0-9-]/gi,'-');
+const btns=()=>[...document.querySelectorAll('button:not(#kit-bar button):not([data-noreplay])')], tas=()=>[...document.querySelectorAll('textarea')], rngs=()=>[...document.querySelectorAll('input[type=range]')];
+const FP=btns().length+'b'+tas().length+'t';
+const lab=b=>(b.textContent||'').replace(/\s+/g,' ').trim().slice(0,60); /* chữ trên nút, để khi bấm lại biết đúng nút cũ */
+const ctx=b=>{ /* chỗ của nút: đi lên tới khối đầu tiên có chữ ngoài các nút (câu hỏi, tên dòng), kèm id hay data-* trên đường đi.
+   Nhờ vậy hai nút "Chưa" ở dòng "User story" và dòng "Use case" không bị nhầm với nhau. */
+ const sq=t=>(t||'').replace(/\s+/g,' ').trim();let tag='';
+ for(let p=b.parentElement;p&&p!==document.body;p=p.parentElement){
+  tag+=(p.id?'#'+p.id:'')+[...p.attributes].filter(a=>a.name.startsWith('data-')&&a.name!=='data-part').map(a=>'['+a.name+'='+a.value+']').join('');
+  let rest=p.textContent||'';for(const x of p.querySelectorAll('button'))rest=rest.split(x.textContent||'').join('');
+  if(sq(rest))return (tag+'|'+sq(p.textContent)).slice(0,160);}
+ return tag;};
+let S={fp:FP,log:[],finished:false,everDone:false,doneAt:null,start:new Date().toISOString(),ts:0};
+let replaying=false,acted=false,timer=null,writing=false,again=false,db=null;
+const bar=document.createElement('div');bar.id='kit-bar';bar.setAttribute('role','status');document.body.appendChild(bar);
+function say(msg,withReset){bar.innerHTML='<span></span>'+(withReset?'<button type="button" data-k="reset">Học lại từ đầu</button>':'')+'<button type="button" class="x" data-k="x" aria-label="Đóng">✕</button>';
+ bar.firstChild.textContent=msg;bar.classList.add('on');clearTimeout(say.t);say.t=setTimeout(()=>bar.classList.remove('on'),9000);}
+bar.addEventListener('click',e=>{const k=e.target.dataset.k;if(k==='x')bar.classList.remove('on');if(k==='reset'){S.log=[];S.finished=false;S.ts=Date.now();flush(true).then(()=>location.reload());}});
+function local(){try{return JSON.parse(localStorage.getItem(LK)||'null');}catch(e){return null;}}
+function flush(now){clearTimeout(timer);timer=null;try{localStorage.setItem(LK,JSON.stringify(S));}catch(e){}
+ if(!db)return Promise.resolve();if(writing){again=true;return Promise.resolve();}writing=true;
+ return Promise.race([db.doc(DOC).set(S),new Promise(r=>setTimeout(r,8000))]).catch(()=>{}).then(()=>{writing=false;if(again){again=false;flush();}});}
+function save(){clearTimeout(timer);timer=setTimeout(flush,700);}
+/* tắt màn, chuyển app hay tải lại trong lúc đang chờ lưu: ghi ngay, đừng để mất lần bấm cuối */
+addEventListener('pagehide',()=>{if(timer)flush();});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&timer)flush();});
+function rec(a){if(replaying)return;acted=true;S.log.push(a);S.ts=Date.now();save();}
+document.addEventListener('click',e=>{if(!e.isTrusted)return;const b=e.target.closest('button');if(!b||b.closest('#kit-bar')||b.id==='copy')return;
+ if(b.id==='finish'){acted=true;S.finished=true;S.everDone=true;S.doneAt=new Date().toISOString();S.ts=Date.now();flush(true);return;}
+ const i=btns().indexOf(b);if(i>=0)rec({c:i,x:lab(b),y:ctx(b)});},true);
+document.addEventListener('input',e=>{if(replaying||!e.isTrusted)return;
+ if(e.target.matches('input[type=range]')){const i=rngs().indexOf(e.target),last=S.log[S.log.length-1]; /* slider: record its value; a continuous drag keeps only the latest value */
+  if(last&&last.r===i)last.v=e.target.value;else rec({r:i,v:e.target.value,id:e.target.id});acted=true;S.ts=Date.now();save();return;}
+ if(e.target.tagName!=='TEXTAREA')return;const i=tas().indexOf(e.target),last=S.log[S.log.length-1];
+ if(last&&last.t===i)last.v=e.target.value;else rec({t:i,v:e.target.value,p:e.target.placeholder});acted=true;S.ts=Date.now();save();},true);
+function reviewOff(){document.documentElement.classList.add('kit-review-off');document.querySelectorAll('[data-review-gate]').forEach(b=>b.disabled=false);
+ if(typeof R!=='undefined'&&R)R.mode='hoc-lai';}
+/* trả lại chữ đã gõ theo ô (tìm bằng placeholder), kể cả khi đã xóa trống, rồi ghi lại vào S.log để tải lại không mất */
+function keepText(log){const last=new Map();for(const a of log)if('t' in a&&typeof a.v==='string'){const t=tas().find(x=>x.placeholder===a.p);if(t)last.set(t,a.v);}
+ for(const [t,v] of last){t.value=v;t.dispatchEvent(new Event('input',{bubbles:true}));S.log.push({t:tas().indexOf(t),v,p:t.placeholder});}}
+function apply(d){if(!d)return false;S.everDone=!!d.everDone;S.doneAt=d.doneAt||null;if(S.everDone)reviewOff();
+ if(d.finished||!d.log||!d.log.length){return false;}
+ if(d.fp!==FP){ /* trang đã đổi số nút: chỉ trả lại chữ đã gõ */
+  S.log=[];keepText(d.log);S.start=d.start||S.start;S.ts=Date.now();save();
+  say('Trang vừa được sửa nên mình chỉ giữ lại được chữ bạn đã gõ.',false);return true;}
+ replaying=true;let n=0,cut=false;try{for(const a of d.log){if('c' in a){const b=btns()[a.c];
+   if((a.x!==undefined&&(!b||lab(b)!==a.x))||(a.y!==undefined&&(!b||ctx(b)!==a.y))){cut=true;break;} /* nút ở chỗ đó đã khác (trang đổi thứ tự, hay xáo đáp án): dừng, không bấm nhầm */
+   if(b&&!b.disabled)b.click();}else if('r' in a){const g=rngs()[a.r];if(a.id!==undefined&&(!g||g.id!==a.id)){cut=true;break;} /* slider at that index is a different one now: stop */
+   if(g){g.value=a.v;g.dispatchEvent(new Event('input',{bubbles:true}));}}else{const t=tas()[a.t];if(t){t.value=a.v;t.dispatchEvent(new Event('input',{bubbles:true}));}}n++;}}catch(e){}
+ replaying=false;
+ if(cut){S.log=d.log.slice(0,n);keepText(d.log.slice(n));S.start=d.start||S.start;S.ts=Date.now();save();
+  say('Trang đã đổi nên mình chỉ mở lại được tới chỗ còn khớp, kèm chữ bạn đã gõ.',true);return true;}
+ S.log=d.log;S.start=d.start||S.start;S.ts=d.ts||Date.now();
+ if(typeof R!=='undefined'&&R&&d.start)R.start=d.start;
+ say('Đã mở lại đúng chỗ bạn đang học.',true);return true;}
+const L=local();const usedL=apply(L);
+(async()=>{try{const dbp=window.claude&&window.claude.use?window.claude.use('db'):null;db=dbp?await Promise.race([dbp,new Promise(r=>setTimeout(()=>r(null),10000))]):null;}catch(e){db=null;}
+ if(!db)return;let d=null;try{const snap=await Promise.race([db.doc(DOC).get(),new Promise(r=>setTimeout(()=>r(null),8000))]);d=snap&&(typeof snap.data==='function'?snap.data():snap.data!==undefined?snap.data:snap);}catch(e){d=null;}
+ if(d&&!acted&&(!L||(d.ts||0)>(L.ts||0))){ /* bản trên db mới hơn: nếu đã bấm lại bản trong máy thì nạp lại trang từ bản db, để không bấm chồng hai lần */
+  if(usedL){try{localStorage.setItem(LK,JSON.stringify(d));location.reload();}catch(e){say('Có bản lưu mới hơn ở máy khác nhưng chưa mở được. Trang giữ chỗ bạn đang học trên máy này.',false);}return;}apply(d);}else if(d&&d.everDone&&!S.everDone){S.everDone=true;S.doneAt=d.doneAt;reviewOff();}
+ if(acted)save();})();
+})();
+</script>
+</body>
+</html>
