@@ -188,12 +188,14 @@ export function waitKind(text) {
  *  Otherwise oldest first, drafts last. */
 export function prOrder(prs) {
   const open = new Set(prs.map((p) => p.number));
-  const byHead = new Map(prs.map((p) => [p.head, p.number]));
+  // A branch is its repo plus its name, so a fork's "feature" is not the base repo's "feature".
+  const byHead = new Map(prs.map((p) => [`${p.headRepo || ''}:${p.head}`, p.number]));
+  const baseOf = (p) => `${p.baseRepo || ''}:${p.base}`;
   const refs = (p, re) => [...`${p.title}\n${p.body || ''}`.matchAll(re)].map((m) => +m[1]).filter((n) => open.has(n) && n !== p.number);
   const after = new Map(prs.map((p) => [p.number, new Set(refs(p, /(?:merge\s+(?:sau|after)|sau\s+khi\s+merge|depends\s+on)\s+(?:PR\s+)?#(\d+)/gi))]));
   const closeAfter = new Map();
   for (const p of prs) {
-    if (byHead.has(p.base) && byHead.get(p.base) !== p.number) after.get(p.number).add(byHead.get(p.base));
+    if (byHead.has(baseOf(p)) && byHead.get(baseOf(p)) !== p.number) after.get(p.number).add(byHead.get(baseOf(p)));
     for (const n of refs(p, /(?:gộp\s+(?:luôn\s+)?|thay\s+cho\s+|supersedes\s+)(?:PR\s+)?#(\d+)/giu)) if (!closeAfter.has(n)) closeAfter.set(n, p.number);
   }
   for (const [n, by] of closeAfter) { after.get(n).add(by); after.get(by).delete(n); }
@@ -222,7 +224,7 @@ export function gatherWaiting(repos) {
         const nums = [...t.matchAll(/#(\d+)/g)].map((m) => +m[1]);
         if (Array.isArray(target.prs)) {
           const hit = target.wait.prs.find((p) => nums.includes(p.number));
-          if (hit) { hit.notes.push(t); continue; }
+          if (hit) { hit.notes.push({ t, base: r.base }); continue; }   // links in the note stay relative to the repo that wrote it
           hint = 'PR này không còn mở: đã merge hoặc đã đóng.';
         }
       }
@@ -373,7 +375,7 @@ export function overviewBody(repos, details) {
   const prRow = (r, p, k, many) => {
     const why = p.closeAfter ? `<b>không merge</b>: đóng sau khi merge #${p.closeAfter}` : p.draft ? 'nháp, chưa cần merge' : p.after.length ? `<b>sau ${p.after.map((n) => '#' + n).join(', ')}</b>` : '';
     const meta = [many ? esc(r.name) : '', p.created ? `mở ${esc(shortDate(String(p.created).slice(0, 10)))}` : '', why].filter(Boolean).join(' · ');
-    return `<li class="pr${p.draft || p.closeAfter ? ' later' : ''}"><span class="ord" aria-hidden="true">${k}</span><div><p><a href="${esc(p.url)}">#${p.number}</a> ${esc(p.title)}</p>${meta ? `<span class="from">${meta}</span>` : ''}${p.notes.map((t) => `<span class="from">${inline(t, r.base)}</span>`).join('')}</div></li>`;
+    return `<li class="pr${p.draft || p.closeAfter ? ' later' : ''}"><span class="ord" aria-hidden="true">${k}</span><div><p><a href="${esc(p.url)}">#${p.number}</a> ${esc(p.title)}</p>${meta ? `<span class="from">${meta}</span>` : ''}${p.notes.map((n) => `<span class="from">${inline(n.t, n.base)}</span>`).join('')}</div></li>`;
   };
   const kindCard = (rs, kind, label, sfx) => {
     const many = rs.length > 1;
@@ -424,7 +426,7 @@ ${total || repos.some((r) => r.wait.prs.length || r.prs === null) ? `${waitCards
   // Repo tab: the full timeline and this repo's waiting tasks | the whole STATUS, already open.
   const repoPanel = (r) => plain1(r) ? `<div class="rc rc-static">${head(r, '')}${reason(r)}</div>`
     : `<div class="cols"><div class="col"><h2 class="label">Tiến độ</h2><div class="rc rc-static">${head(r, badge(r))}${timeline(r)}</div>
-${r.wait.tasks.length || r.wait.prs.length ? `<h2 class="label gap">Đang chờ bạn</h2>${waitCards([r], '-r')}${hasTicks([r]) ? tickNote : ''}` : ''}</div>
+${r.wait.tasks.length || r.wait.prs.length || r.prs === null ? `<h2 class="label gap">Đang chờ bạn</h2>${waitCards([r], '-r')}${hasTicks([r]) ? tickNote : ''}` : ''}</div>
 <div class="col"><h2 class="label">Chi tiết</h2><div class="rc rc-full">${details[r.id] || ''}</div></div></div>`;
   const tab = (id, label, n, on) => `<button type="button" role="tab" id="tab-${esc(id)}" aria-controls="p-${esc(id)}" aria-selected="${on}" tabindex="${on ? 0 : -1}" data-tab="${esc(id)}">${esc(label)}${n ? `<span class="cnt" aria-label="${n} việc chờ bạn">${n}</span>` : ''}</button>`;
   const panel = (id, html, on) => `<section class="panel" role="tabpanel" id="p-${esc(id)}" aria-labelledby="tab-${esc(id)}"${on ? '' : ' hidden'}>${html}</section>`;

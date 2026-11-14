@@ -22,10 +22,11 @@ assert.equal(pub.url, 'https://claude.ai/artifact/Z');
 assert.equal(pub.icon, undefined, 'an update keeps the old icon');
 assert.equal(pub.files, undefined, 'no empty files map');
 // Open PRs: gh first, then the public API; null when neither answers. Only the fields the page needs.
-const api = [{ number: 3, title: 't', html_url: 'u', draft: false, base: { ref: 'main' }, head: { ref: 'b' }, created_at: '2026-01-01T00:00:00Z', body: 'x'.repeat(5000), user: {} }];
+const api = [{ number: 3, title: 't', html_url: 'u', draft: false, base: { ref: 'main', repo: { full_name: 'o/r' } }, head: { ref: 'b', repo: { full_name: 'f/r' } }, created_at: '2026-01-01T00:00:00Z', body: 'x'.repeat(5000) + ' Merge sau #2.', user: {} }];
 const gh = await openPrs('o/r', () => ({ status: 0, stdout: JSON.stringify(api) }), () => { throw new Error('no fetch'); });
-assert.deepEqual(Object.keys(gh[0]).sort(), ['base', 'body', 'created', 'draft', 'head', 'number', 'title', 'url']);
-assert.equal(gh[0].body.length, 4000, 'long bodies are cut');
+assert.deepEqual(Object.keys(gh[0]).sort(), ['base', 'baseRepo', 'body', 'created', 'draft', 'head', 'headRepo', 'number', 'title', 'url']);
+assert.match(gh[0].body, /Merge sau #2\.$/, 'the whole body is kept: a merge-order line can sit at the end');
+assert.deepEqual([gh[0].baseRepo, gh[0].headRepo], ['o/r', 'f/r'], 'which repo each branch lives in');
 const pub2 = await openPrs('o/r', () => ({ status: 1 }), async () => ({ ok: true, json: async () => api }));
 assert.equal(pub2[0].url, 'u', 'falls back to the public API');
 assert.equal(await openPrs('o/r', () => ({ status: null, error: new Error('no gh') }), async () => ({ ok: false })), null);

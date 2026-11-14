@@ -56,4 +56,4 @@ Trang không đọc repo được, nên số liệu là 4 file JSON tải lên t
 2. Tải từng file lên trang: công cụ Artifact, `asset: true`, `url` là link trang trên.
 3. Ghi đè nguồn `datasets/<tên>` của trang (công cụ ArtifactData, `update`): `source.url` là `/_blob/<id>` vừa nhận, `updated: {at, by: "Claude"}`, `edit: {via: "claude", at}`. Xóa file cũ (`delete` với id cũ) khi không còn nguồn nào trỏ tới.
 
-Giao diện trang là `learning-week.html` trong thư mục này; sửa thì ghi lại vào `files/index.html` của trang. Tài khoản Claude khác không ghi được vào trang này: khi đó tạo trang mới từ loại Data, ghi `dash/meta` (`{title: "Học tuần này", lang: "vi"}`), 4 nguồn và `files/index.html`, rồi sửa link ở đây và trong `learning/README.md`.
+Giao diện trang là `learning-week.html` trong thư mục này; sửa thì ghi lại vào `files/index.html` của trang. Tài khoản Claude khác không ghi được vào trang này: khi đó tạo trang mới từ loại Data, ghi `dash/meta` (`{title: "Học tuần này", lang: "vi"}`), 4 nguồn và `files/index.html`, rồi sửa link ở đây, trong `artifacts/README.md` và trong `learning/README.md`.

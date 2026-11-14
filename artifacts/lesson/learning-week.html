@@ -46,7 +46,7 @@
 
   <section class="lw-sec" id="so-buoi">
     <h2>Số buổi mỗi tuần</h2>
-    <p class="lw-note" data-read lang="vi">Tuần tính từ thứ Hai. Vòng xoay là mỗi ngày một môn, mỗi môn một buổi.</p>
+    <p class="lw-note" data-read lang="vi">Tuần tính từ thứ Hai. Vòng xoay không gắn với ngày: một tối có thể học hai buổi của hai môn khác nhau, nhưng mỗi môn một buổi.</p>
     <ul class="lw-legend" aria-hidden="true"><li><i data-c="0"></i>Frontend</li><li><i data-c="1"></i>BA</li><li><i data-c="2"></i>Chiến tranh</li></ul>
     <div class="lw-card"><div class="lw-chart" data-draw="weekly" data-source="weekly"></div></div>
   </section>
@@ -55,6 +55,7 @@
     <h2>Thẻ đến hạn</h2>
     <p class="lw-note" data-read lang="vi"><b data-draw="num" data-source="due_now">—</b> thẻ đến hạn hôm nay hoặc đã quá hạn, thêm <b data-draw="num" data-source="due_soon">—</b> thẻ đến hạn trong 7 ngày tới. Ôn ở <a href="https://claude.ai/artifact/L612hHx2vHUokcPBgH7RPu">trang ôn thẻ</a>.</p>
     <p class="lw-note" data-empty="due" hidden>Không có thẻ nào đến hạn trong 7 ngày tới.</p>
+    <p class="lw-note" data-error="due" hidden>Không tải được danh sách thẻ.</p>
     <div class="lw-card lw-wrap" data-show="due">
       <table class="lw-table" data-source="due" data-row-key="card">
         <thead><tr><th data-field="card">Thẻ</th><th data-field="subject">Môn</th><th data-field="question">Câu hỏi</th><th data-field="box">Hộp</th><th data-field="when">Hỏi lại</th></tr></thead>
@@ -67,6 +68,7 @@
     <h2>Chỗ còn vướng</h2>
     <p class="lw-note" data-read lang="vi">Frontend <b data-draw="num" data-source="stuck_by_subject" data-field="count" data-where="subject=Frontend">—</b>, BA <b data-draw="num" data-source="stuck_by_subject" data-field="count" data-where="subject=BA">—</b>, Chiến tranh <b data-draw="num" data-source="stuck_by_subject" data-field="count" data-where="subject=Chiến tranh">—</b>. Claude xóa một dòng khi bạn làm đúng chỗ đó ở buổi sau.</p>
     <p class="lw-note" data-empty="stuck" hidden>Không còn chỗ nào vướng.</p>
+    <p class="lw-note" data-error="stuck" hidden>Không tải được chỗ còn vướng.</p>
     <div class="lw-card lw-wrap" data-show="stuck">
       <table class="lw-table" data-source="stuck" data-row-key="id">
         <thead><tr><th data-field="subject">Môn</th><th data-field="session">Buổi</th><th data-field="kind">Loại</th><th data-field="text">Chỗ vướng</th></tr></thead>
@@ -78,6 +80,7 @@
   <section class="lw-sec" id="hoi-claude">
     <h2>Hay hỏi Claude ở môn nào</h2>
     <p class="lw-note" data-empty="asks" hidden>Chưa có buổi nào ghi số lần hỏi Claude. Trang học bắt đầu đếm từ buổi tới, ghi vào learning/usage.md.</p>
+    <p class="lw-note" data-error="asks" hidden>Không tải được số lần hỏi Claude.</p>
     <div class="lw-card" data-show="asks" hidden><div class="lw-chart lw-short" data-draw="asks" data-source="asks_by_subject"></div></div>
   </section>
 
@@ -167,7 +170,8 @@ dash.onData(() => {
   for (const [id, src] of [['due', 'due'], ['stuck', 'stuck'], ['asks', 'asks_by_subject']]) {
     const d = dash.data(src), empty = d.status === 'ok' && d.data.length === 0;
     document.querySelectorAll(`[data-empty="${id}"]`).forEach((p) => { p.hidden = !empty; });
-    document.querySelectorAll(`[data-show="${id}"]`).forEach((p) => { p.hidden = empty || (id === 'asks' && d.status !== 'ok'); });
+    document.querySelectorAll(`[data-error="${id}"]`).forEach((p) => { p.hidden = d.status !== 'error'; });
+    document.querySelectorAll(`[data-show="${id}"]`).forEach((p) => { p.hidden = empty || d.status === 'error' || (id === 'asks' && d.status !== 'ok'); });
   }
 });
 

@@ -46,7 +46,8 @@ function clone(repo, into) {
 
 /** Open pull requests of a repo, trimmed to what the overview shows; null when they cannot be fetched here. */
 export async function openPrs(repo, run = spawnSync, get = globalThis.fetch) {
-  const norm = (a) => a.map((p) => ({ number: p.number, title: p.title, url: p.html_url, draft: !!p.draft, base: p.base?.ref ?? '', head: p.head?.ref ?? '', created: p.created_at ?? '', body: String(p.body || '').slice(0, 4000) }));
+  const norm = (a) => a.map((p) => ({ number: p.number, title: p.title, url: p.html_url, draft: !!p.draft, base: p.base?.ref ?? '', head: p.head?.ref ?? '',
+    baseRepo: p.base?.repo?.full_name ?? '', headRepo: p.head?.repo?.full_name ?? '', created: p.created_at ?? '', body: String(p.body || '') }));   // whole body: "merge sau #N" can sit anywhere in it
   const path = `repos/${repo}/pulls?state=open&per_page=100`;
   const r = run('gh', ['api', path], { encoding: 'utf8', timeout: 30000 });
   if (r.status === 0) { try { return norm(JSON.parse(r.stdout)); } catch { /* fall through to the public API */ } }

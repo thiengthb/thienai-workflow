@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { parsePlan, blocks, inline, repoId, waitingLines, planSteps, statusSteps, listItems, waitKind, prOrder, gatherWaiting } from '../../templates/progress-page.mjs';
+import { parsePlan, blocks, inline, repoId, waitingLines, planSteps, statusSteps, listItems, waitKind, prOrder, gatherWaiting, overviewBody } from '../../templates/progress-page.mjs';
 
 const plan = parsePlan([
   '# Kế hoạch thử', '', 'Trạng thái: đang chạy · Duyệt: 2026-01-01 · Cập nhật: 2026-01-02', '',
@@ -81,11 +81,15 @@ assert.deepEqual(order.find((p) => p.number === 2).after, [7], '"Merge sau #7"')
 assert.equal(order.find((p) => p.number === 1).closeAfter, 7, '#7 includes #1: close #1 after merging #7');
 assert.deepEqual(prOrder([pr(1, 'a', { body: 'merge after #2' }), pr(2, 'b', { body: 'depends on #1' })]).map((p) => p.number), [1, 2], 'a cycle still lists every PR');
 assert.deepEqual(prOrder([pr(1, 'a', { body: 'merge sau #9' })])[0].after, [], 'a closed PR is no dependency');
+// A fork's branch named like a branch of the repo is a different branch: #12 is stacked on #10, not on the fork's #11.
+const fork = prOrder([pr(12, 'c', { base: 'feature', baseRepo: 'o/r' }), pr(11, 'b', { head: 'feature', headRepo: 'f/r' }), pr(10, 'a', { head: 'feature', headRepo: 'o/r' })]);
+assert.deepEqual(fork.find((p) => p.number === 12).after, [10]);
 
 // A STATUS item about a PR still open becomes a note on it, in the repo it names; one whose PR is gone is marked.
 const R = (name, tasks, prs) => ({ name, repo: 'o/' + name, tasks, prs, status: tasks.length ? 'waiting' : 'running' });
-const [ra, rb] = gatherWaiting([R('a', ['Merge b PR #2 trước.', 'Merge PR #9.', 'Mở trang thử.'], [pr(1, 'x')]), R('b', [], [pr(2, 'y'), pr(3, 'z', { draft: true })])]);
-assert.deepEqual(rb.wait.prs[0].notes, ['Merge b PR #2 trước.']);
+const [ra, rb] = gatherWaiting([{ ...R('a', ['Merge b PR #2 trước; xem [kế hoạch](plans/x.md).', 'Merge PR #9.', 'Mở trang thử.'], [pr(1, 'x')]), base: 'https://github.com/o/a/blob/main/' }, R('b', [], [pr(2, 'y'), pr(3, 'z', { draft: true })])]);
+assert.deepEqual(rb.wait.prs[0].notes.map((n) => n.t), ['Merge b PR #2 trước; xem [kế hoạch](plans/x.md).']);
+assert.equal(rb.wait.prs[0].notes[0].base, 'https://github.com/o/a/blob/main/', 'a moved note keeps links to the repo that wrote it');
 assert.equal(ra.wait.tasks.find((x) => x.kind === 'pr').hint, 'PR này không còn mở: đã merge hoặc đã đóng.');
 assert.equal(ra.waitCount, 3, 'PR #1, the closed-PR item and the page');
 assert.equal(rb.waitCount, 1, 'a draft does not wait for thien');
@@ -98,6 +102,8 @@ const withPrs = run('--title', 'T', '--prs', join(dir, 'prs.json'), '.=thiengthb
 assert.match(withPrs, /<b>PR cần merge<\/b><span>theo thứ tự merge<\/span>/);
 assert.match(withPrs, /#8<\/a> Tám &lt;b&gt;.*#9<\/a>.*<b>sau #8<\/b>/s, 'PRs listed in merge order, titles escaped');
 assert.match(withPrs, /Không lấy được danh sách PR của x lúc dựng trang/);
+const quiet = { id: 'q', name: 'q', repo: 'o/q', tasks: [], prs: null, steps: [], status: 'running', head: 'h', plans: [], done: [], blocked: [], next: [] };
+assert.equal(overviewBody([quiet], { q: '' }).split('Không lấy được danh sách PR của q').length - 1, 2, 'a repo with nothing to do still warns in its own tab');
 assert.doesNotMatch(repoPage, /PR cần merge<\/b><span>theo thứ tự/, 'without --prs no PR list is shown');
 
 console.log('ok progress-page');

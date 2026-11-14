@@ -108,7 +108,8 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const args = process.argv.slice(2), k = args.indexOf('--out');
   const out = resolve(k >= 0 ? args.splice(k, 2)[1] : 'design-system-out');
   const thienui = resolve(args[0] || '../thienui');
-  const commit = spawnSync('git', ['-C', thienui, 'rev-parse', '--short', 'HEAD'], { encoding: 'utf8' }).stdout.trim();
+  const git = spawnSync('git', ['-C', thienui, 'rev-parse', '--short', 'HEAD'], { encoding: 'utf8' });
+  const commit = git.status === 0 ? String(git.stdout || '').trim() : '';   // không có git thì bỏ qua mã commit
   const tokens = buildTokens(thienui);
   if (commit) tokens.meta.source += ` @ ${commit}`;
   mkdirSync(join(out, 'project/components/Cover'), { recursive: true });
