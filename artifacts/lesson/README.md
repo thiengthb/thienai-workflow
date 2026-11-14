@@ -43,4 +43,17 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 | `template.html` | Buổi mẫu đủ 8 màn, chép ra làm buổi mới |
 | `lesson.css`, `lesson.js` | Khung: bước, câu hỏi, góp ý, kết thúc |
 | `make-lesson.mjs` | Chép mẫu ra trang mới; chép `../kit/kit.css`, `../kit/kit.js`, khung và phần tự lưu vào trang, đưa chỗ còn vướng vào cấu hình, kiểm trang, ghi `publish.json` |
+| `learning-week.mjs`, `learning-week.html` | Bảng học tuần (xem dưới) |
 | `after-lesson.mjs` | Sau buổi: soạn nháp nhật ký, chỗ còn vướng, thẻ, dòng "Trạng thái" từ bản lưu của trang; `--write` ghi chỗ còn vướng và dòng `learning/usage.md`; `--check` kiểm đã ghi đủ. Test: `.github/scripts/after-lesson.test.mjs` |
+
+## Bảng học tuần
+
+Trang https://claude.ai/artifact/LijnAF7tSR4gBMrspPuQtV (loại trang Data của claude.ai): số buổi từng môn theo tuần, thẻ đến hạn, chỗ còn vướng, môn hay hỏi Claude. Bấm vào một số để xem nó lấy từ dòng nào, tính thế nào.
+
+Trang không đọc repo được, nên số liệu là 4 file JSON tải lên trang. Mỗi Chủ nhật (hoặc khi thien hỏi), AI làm:
+
+1. `node artifacts/lesson/learning-week.mjs --out <thư-mục>` ghi `sessions.json`, `cards.json`, `stuck.json`, `asks.json`. Mỗi file mang luôn code của script, để trên trang ai cũng xem được.
+2. Tải từng file lên trang: công cụ Artifact, `asset: true`, `url` là link trang trên.
+3. Ghi đè nguồn `datasets/<tên>` của trang (công cụ ArtifactData, `update`): `source.url` là `/_blob/<id>` vừa nhận, `updated: {at, by: "Claude"}`, `edit: {via: "claude", at}`. Xóa file cũ (`delete` với id cũ) khi không còn nguồn nào trỏ tới.
+
+Giao diện trang là `learning-week.html` trong thư mục này; sửa thì ghi lại vào `files/index.html` của trang. Tài khoản Claude khác không ghi được vào trang này: khi đó tạo trang mới từ loại Data, ghi `dash/meta` (`{title: "Học tuần này", lang: "vi"}`), 4 nguồn và `files/index.html`, rồi sửa link ở đây và trong `learning/README.md`.

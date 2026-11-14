@@ -38,6 +38,8 @@ Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakub
 
 ## Trạng thái
 
+Bảng học tuần (số buổi mỗi tuần, thẻ đến hạn, chỗ còn vướng): https://claude.ai/artifact/LijnAF7tSR4gBMrspPuQtV. AI làm mới số liệu mỗi Chủ nhật, cách làm trong [`artifacts/lesson/README.md`](../artifacts/lesson/README.md).
+
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
 | BA 2 (hỏi chuyện người dùng; học với Codex, Claude làm lại trang) | 2026-11-12 | BA | **Frontend 6 (chọn màu cho app)**, rồi Chiến tranh 4 (hậu cần), rồi BA 3 (các bên liên quan) |

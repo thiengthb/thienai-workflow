@@ -38,6 +38,10 @@ Chi tiết từng mẫu ở README trong thư mục của mẫu.
 
 **Trang mẫu thành phần.** `kit/gallery.html` gom mọi mảnh dùng chung (nút, nhãn, câu hỏi, hỏi Claude, thông báo, núm vặn, bảng dán) vào một trang, có nút đổi sáng, tối. Sửa lõi xong thì dựng `node artifacts/kit/make-gallery.mjs --url https://claude.ai/artifact/HuyQj149mQAYpicvQrY7Ne` rồi đăng đè để nhìn mọi thứ một lượt; CI cũng mở trang này như mọi trang khác.
 
+**Bộ màu trên claude.ai.** Màu, chữ, khoảng cách, bo góc của thienui có trang Design System riêng (https://claude.ai/artifact/2kM7som4ok6kmh7QaCSXZJ, nguồn và cách đăng lại ở [`design-system/`](design-system/README.md)). Claude trên claude.ai dựng slide hay bản thiết kế cho thien thì chọn bộ này; trang dựng từ mẫu ở đây vẫn dùng `kit/kit.css`.
+
+**Bảng học tuần.** Số buổi từng môn theo tuần, thẻ đến hạn, chỗ còn vướng: https://claude.ai/artifact/LijnAF7tSR4gBMrspPuQtV, làm mới mỗi Chủ nhật (cách làm ở [`lesson/README.md`](lesson/README.md), mục "Bảng học tuần").
+
 ## Trang tự hỏi Claude (thử từ 2026-11-14)
 
 thien muốn các trang "thông minh" hơn. Trang khai báo khả năng `sample` thì tự hỏi được Claude, bằng lượt dùng Claude của chính người xem; lần hỏi đầu claude.ai hỏi xin phép. Không hỏi được (từ chối, mở ngoài claude.ai) thì mọi chỗ hỏi tự ẩn, trang vẫn chạy như cũ.

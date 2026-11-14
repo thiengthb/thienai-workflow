@@ -5,6 +5,7 @@
 //
 // overview (mặc định): tổng quan các repo trong life/tracked-repos.md và repo này; tự clone nông từng repo,
 //   repo không đọc được thì vẫn có thẻ kèm lý do. Link trang: dòng "Trang tổng quan" trong life/tracked-repos.md.
+//   Lấy luôn PR đang mở của từng repo (gh, không có thì API công khai) để mục "Đang chờ bạn" xếp thứ tự merge.
 // repo: tiến độ riêng repo đang đứng (thư mục hiện tại), link ở dòng "Trang tiến độ:" của docs/STATUS.md.
 // roadmap: lộ trình học learning/roadmap.md, link ở dòng "Trang để xem trên điện thoại:" của file đó.
 // --new: bỏ link, đăng thành trang mới (khi trang cũ thuộc tài khoản Claude khác, đăng đè sẽ bị từ chối).
@@ -43,6 +44,30 @@ function clone(repo, into) {
   return r.status === 0 ? '' : 'không đọc được repo ở đây (repo riêng tư hoặc không có mạng)';
 }
 
+/** Open pull requests of a repo, trimmed to what the overview shows; null when they cannot be fetched here. */
+export async function openPrs(repo, run = spawnSync, get = globalThis.fetch) {
+  const norm = (a) => a.map((p) => ({ number: p.number, title: p.title, url: p.html_url, draft: !!p.draft, base: p.base?.ref ?? '', head: p.head?.ref ?? '', created: p.created_at ?? '', body: String(p.body || '').slice(0, 4000) }));
+  const path = `repos/${repo}/pulls?state=open&per_page=100`;
+  const r = run('gh', ['api', path], { encoding: 'utf8', timeout: 30000 });
+  if (r.status === 0) { try { return norm(JSON.parse(r.stdout)); } catch { /* fall through to the public API */ } }
+  try {
+    const res = await get(`https://api.github.com/${path}`, { headers: { accept: 'application/vnd.github+json', 'user-agent': 'progress-page' }, signal: AbortSignal.timeout(20000) });
+    if (res.ok) return norm(await res.json());
+  } catch { /* no network */ }
+  return null;
+}
+
+async function prsFile(repos, out) {
+  const map = {};
+  for (const repo of repos) {
+    map[repo] = await openPrs(repo);
+    console.log(map[repo] ? `${repo}: ${map[repo].length} PR đang mở` : `${repo}: không lấy được PR`);
+  }
+  const file = join(out, 'prs.json');
+  writeFileSync(file, JSON.stringify(map, null, 1));
+  return file;
+}
+
 const read = (p) => (existsSync(p) ? readFileSync(p, 'utf8') : '');
 
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
@@ -56,8 +81,9 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   let pageArgs, url, capabilities = { db: {} }, description;
   if (kind === 'overview') {
     const md = read(join(root, 'life/tracked-repos.md'));
-    pageArgs = ['--title', 'Tổng quan tiến độ', `${root}=${SELF}`];
-    for (const repo of trackedRepos(md).filter((r) => r !== SELF)) {
+    const others = trackedRepos(md).filter((r) => r !== SELF);
+    pageArgs = ['--title', 'Tổng quan tiến độ', '--prs', await prsFile([SELF, ...others], out), `${root}=${SELF}`];
+    for (const repo of others) {
       const dir = join(out, 'repos', basename(repo));
       const why = clone(repo, dir);
       pageArgs.push(why ? `missing=${repo}:${why}` : `${dir}=${repo}`);
@@ -67,7 +93,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     description = 'Tiến độ các repo đang theo quy trình chung';
   } else if (kind === 'repo') {
     const dir = process.cwd(), repo = originRepo(dir) || SELF;
-    pageArgs = ['--title', `Tiến độ ${repo.split('/')[1]}`, `${dir}=${repo}`];
+    pageArgs = ['--title', `Tiến độ ${repo.split('/')[1]}`, '--prs', await prsFile([repo], out), `${dir}=${repo}`];
     url = linkAfter(read(join(dir, 'docs/STATUS.md')), 'Trang tiến độ:');
     description = `Tiến độ repo ${repo}`;
   } else if (kind === 'roadmap') {
