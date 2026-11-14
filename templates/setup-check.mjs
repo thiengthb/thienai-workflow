@@ -70,7 +70,7 @@ export function checkSetup(standard, { project, instructions, repos = [], skills
   }
   const seen = new Set(skills.map(s => s.toLowerCase().replace(/^.*:/, '')));
   const noSkill = SKILLS.filter(s => !seen.has(s));
-  if (skills.length && noSkill.length) fixes.push(`Nick này chưa tải skill ${noSkill.join(', ')}. Customize > Skills > tải lên file zip của thư mục skills/<tên> trong repo thienai-workflow.`);
+  if (skills.length && noSkill.length) fixes.push(`Nick này chưa tải skill ${noSkill.join(', ')}. Tải file zip ở ${noSkill.map(s => 'https://github.com/thiengthb/thienai-workflow/releases/download/skills/' + s + '.zip').join(' và ')} (trình duyệt cần đăng nhập GitHub), rồi Customize > Skills > tải lên.`);
   if (!skills.length) notes.push('Không thấy danh sách skill nên chưa kiểm skill.');
   return { fixes, notes };
 }
