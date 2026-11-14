@@ -34,7 +34,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 ## Đang chờ thien
 - Trên laptop Windows: làm mục "Máy Windows (làm một lần)" trong `README.md`, lệnh cuối in "ổn" là xong.
 - Ở từng nick (tnt024, tnt628, tnt697): dán project instructions bản v2 có tên nick, gắn repo, tải lại 2 skill, và chọn lại phần đồng bộ knowledge, theo `profile/SETUP.md`.
-- Merge sakubun PR #301 (luật AGENTS mới).
+- Merge sakubun PR #321 (đồng bộ luật AGENTS lần mới; #301 đã merge).
 
 ## Đang vướng
 - Không có. Trang tổng quan đọc sakubun bằng bản clone công khai.
