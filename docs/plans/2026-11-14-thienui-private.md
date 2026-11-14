@@ -28,7 +28,7 @@ Người ngoài không xem, không clone được gu giao diện, component, lu�
 | Repo thienai-workflow | Đã riêng tư. Có `artifacts/design-system/brand-book.md` tóm từ `taste.md`, và link tới thienui | Không lộ gì; link chỉ mở được khi đăng nhập |
 | Action đồng bộ AGENTS (`SYNC_TOKEN`) | Không đụng thienui (thienui không nằm trong `life/tracked-repos.md`) | Không cần đổi |
 | Trang "Bộ màu thienui" trên claude.ai (https://claude.ai/artifact/2kM7som4ok6kmh7QaCSXZJ) | Trang claude.ai mặc định riêng tư; AI không xem được trang đã bật chia sẻ hay chưa | thien kiểm ở bước 4 |
-| Repo sakubun | **Công khai**. Có bản chép 37 luật và token ([tooling/thienui-guards](https://github.com/thiengthb/sakubun/tree/main/tooling/thienui-guards), [app/globals.css](https://github.com/thiengthb/sakubun/blob/main/app/globals.css), [docs/ui-standard.md](https://github.com/thiengthb/sakubun/blob/main/docs/ui-standard.md)), và email `tranngocthien628@...` ở 60 commit | Vẫn lộ, trừ khi thien quyết làm thêm (thẻ hỏi trong thread) |
+| Repo sakubun | **Công khai**. Có bản chép 37 luật và token ([tooling/thienui-guards](https://github.com/thiengthb/sakubun/tree/main/tooling/thienui-guards), [app/globals.css](https://github.com/thiengthb/sakubun/blob/main/app/globals.css), [docs/ui-standard.md](https://github.com/thiengthb/sakubun/blob/main/docs/ui-standard.md)), và email `tranngocthien628@...` ở 60 commit | Vẫn lộ; thien chọn để sau (checkpoint 3) |
 
 ## Các bước cho thien
 Đã thử ngày 2026-11-14: chưa bước nào, vì cả 5 bước cần tài khoản của bạn. Mình viết theo [tài liệu GitHub về đổi chế độ repo](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility), đọc ngày 2026-11-14.
@@ -80,8 +80,8 @@ Xong khi: mở thienui ở cửa sổ ẩn danh thấy 404, và cả 3 nick đ�
 - [ ] Bước 1 đến 5 ở trên
 
 ### 3. sakubun
-Xong khi: thien chọn trên thẻ hỏi trong thread, và việc đã chọn xong.
-- [ ] Chờ thien chọn
+Xong khi: thien đã chọn cách làm với sakubun.
+- [x] 2026-11-14 thien chọn: chỉ chuyển thienui, sakubun để công khai, tính sau (màu và chữ của app đang chạy ai cũng xem được trong CSS)
 
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
