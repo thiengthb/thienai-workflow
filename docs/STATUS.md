@@ -1,6 +1,6 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-14 · Claude (project Claude, thread CodeRabbit và PR #60) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
+Cập nhật lần cuối: 2026-11-14 · Claude (project Claude, thread review bằng Claude) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu.
 Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
@@ -19,12 +19,12 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
 |---|---|---|---|
 | Cài dòng Settings mới cho từng tài khoản Claude | README, bước 1 | 2026-11-12 | thien tự làm, AI không kiểm được |
+| Gỡ CodeRabbit: thien gỡ app, AI xoá `.coderabbit.yaml` ở đây và sakubun | quyết định 003 | 2026-11-14 | Làm ngày 2026-11-24, khi hết dùng thử |
 | Các đề xuất nâng cấp, đợt 5 | [tài liệu đề xuất](https://claude.ai/artifact/FrUscTcs6BWMVBJGzJTYqF) | 2026-11-14 | Làm sau khi đợt 4 merge |
 
 ## Vừa xong
-- Tải skill bằng một file zip: Action `Skill zips` tự đóng gói từng thư mục trong `skills/` lên release `skills`, link cố định ở README bước 3 (PR #65). Trước đó: tự lưu nút theo tên, bộ màu `kit.css`, kiểm truy cập bằng axe-core (PR #61)
 - Sổ bàn giao giữa các nick Claude: ghi việc dở sau mỗi bước lên nhánh `handoff` của từng repo, nói "tiếp tục" ở nick khác là làm tiếp (`profile/HANDOFF.md`, `templates/handoff.mjs`, quyết định 001), và chuẩn setup chung cho 3 nick có số phiên bản, AI tự kiểm đầu phiên (`profile/SETUP.md`, `templates/setup-check.mjs`); PR #62
-- CodeRabbit review một lần mỗi PR: PR nháp trong lúc làm, sẵn sàng mới gọi review, bỏ review nhật ký học (quyết định 002, `.coderabbit.yaml`, PR này); sổ bàn giao thêm cách để ảnh và nguồn trang, lấy từ PR #60
+- Review PR bằng Claude (quyết định 003, `profile/REVIEW.md`, PR #66): agent mới review trong phiên trước khi PR sẵn sàng, check `review-section` báo đỏ khi thiếu mục `## Review`, gọi Claude trên GitHub khi cần mắt độc lập; CodeRabbit chạy thêm tới 24/11 (quyết định 002); sổ bàn giao thêm cách để ảnh và nguồn trang, lấy từ PR #60
 - Chiến tranh buổi 4 (hậu cần): bản nhẹ, phác chặng 2 và phần 2 trên sa bàn 3D; kiểm nhánh chưa merge trước khi dựng bài (PR #59, gộp cả PR #44)
 
 ## Việc tiếp theo
@@ -33,7 +33,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 ## Đang chờ thien
 - Trên laptop chạy `node templates/check-status.mjs docs/STATUS.md`, thấy "ổn" là xong.
-- Ở từng nick: dán project instructions và gắn repo cho project Claude và sakubun theo `profile/SETUP.md` (phiên đầu ở mỗi project sẽ nhắc nếu quên).
+- Ở từng nick: dán project instructions và gắn repo theo `profile/SETUP.md`. Một lần cho thienai-workflow và sakubun: cài app [Claude](https://github.com/apps/claude) và secret `CLAUDE_CODE_OAUTH_TOKEN` (`claude setup-token`), theo `profile/REVIEW.md`.
 - Merge sakubun PR #301 (luật AGENTS mới).
 
 ## Đang vướng

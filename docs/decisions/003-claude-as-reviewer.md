@@ -8,7 +8,7 @@ CodeRabbit hết dùng thử ngày 2026-11-24; gói Free của nó không review
 ## Các phương án đã xét
 | Phương án | Lúc nào nó là lựa chọn tốt | Lý do mạnh nhất để không chọn |
 |---|---|---|
-| A. Review trong phiên: agent mới review trước khi PR sẵn sàng, CI chặn PR thiếu mục `## Review` | Gần như mọi PR do Claude mở trong phiên | Cùng một nick vừa làm vừa review: nick sắp hết usage thì lượt review có thể bị cắt; agent mới cùng phiên ít độc lập hơn bot ở môi trường khác; PR thien tự mở không có ai review |
+| A. Review trong phiên: agent mới review trước khi PR sẵn sàng, CI báo đỏ PR thiếu mục `## Review` | Gần như mọi PR do Claude mở trong phiên | Cùng một nick vừa làm vừa review: nick sắp hết usage thì lượt review có thể bị cắt; agent mới cùng phiên ít độc lập hơn bot ở môi trường khác; PR thien tự mở không có ai review |
 | B. Claude GitHub Action tự review khi PR chuyển sẵn sàng, chạy bằng token gói Claude | Muốn tự động hoàn toàn như CodeRabbit, review cả PR thien tự mở | Tốn phút GitHub Actions ở repo riêng tư (thienai-workflow tuần 7–14/11 đã có 168 lượt CI, khoảng 300 phút chạy, có thể gần giới hạn 2.000 phút mỗi tháng của gói Free [suy luận]); token gắn với một nick, nick đó hết usage thì review lỗi; phải cài một lần trên laptop |
 | C. Kết hợp: A mặc định, Action chỉ chạy khi có người comment `@claude` | Muốn A, cộng một lối review độc lập cho PR thien tự mở hay lượt review lại sau sửa lớn | Vẫn phải cài như B, hai chỗ cấu hình |
 | Bỏ review | PR toàn tài liệu | Số liệu ở 002: review bắt được lỗi thật mà test không bắt, ví dụ `reset --hard` ở #62 |
@@ -22,9 +22,9 @@ A. Từ tháng 12 gần như mọi PR do Claude mở trong phiên, nên A phủ 
 ## Kết luận
 Làm C:
 - Cách làm: [`profile/REVIEW.md`](../../profile/REVIEW.md). Agent mới (không kèm lịch sử phiên) review diff theo luật của repo; AI sửa hay trả lời từng ý rồi ghi mục `## Review` vào mô tả PR.
-- CI: `templates/check-review.mjs` chạy trong `.github/workflows/review-check.yml` (vài giây, chỉ chạy bước này), chặn PR không còn nháp mà thiếu mục `## Review` hay mục đó trống.
+- CI: `templates/check-review.mjs` chạy trong `.github/workflows/review-check.yml` (vài giây, chỉ chạy bước này), báo đỏ PR không còn nháp mà mục `## Review` thiếu hay chưa điền. Repo riêng tư trên gói GitHub Free không bắt buộc check được (API bảo vệ nhánh trả 403, agent review PR #66 kiểm ngày 2026-11-14), nên luật là không ai merge khi check đỏ.
 - `@claude`: `.github/workflows/claude.yml` chỉ chạy khi có comment chứa `@claude` của người có quyền ghi. thien cài một lần: app Claude trên GitHub và secret `CLAUDE_CODE_OAUTH_TOKEN` (tạo bằng `claude setup-token` trên laptop, nick nào cũng được).
-- CodeRabbit vẫn chạy theo 002 tới 2026-11-24, rồi thien gỡ app. Áp ở thienai-workflow và sakubun.
+- CodeRabbit vẫn chạy theo 002 tới 2026-11-24. Ngày đó: thien gỡ app CodeRabbit, AI xoá `.coderabbit.yaml` ở thienai-workflow và sakubun (không xoá thì luật "chờ thêm một lượt CodeRabbit" sẽ chờ một lượt không bao giờ tới). Áp ở thienai-workflow và sakubun (thiengthb/sakubun#316).
 
 ## Xem lại khi
 - 2026-12-14 (một tháng chỉ dùng Claude): đếm lỗi lọt qua review trong phiên và số lần gọi `@claude`. Hầu như không gọi `@claude` thì bỏ phần Action; lọt nhiều lỗi thì cân nhắc B.

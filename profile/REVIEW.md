@@ -1,7 +1,7 @@
 # Review PR bằng Claude
 
 Quyết định: [`docs/decisions/003-claude-as-reviewer.md`](../docs/decisions/003-claude-as-reviewer.md). Mỗi PR có hai lớp:
-1. **Review trong phiên** (mặc định, mọi PR do AI mở): agent mới review trước khi PR chuyển sẵn sàng. CI chặn PR đã sẵn sàng mà mô tả thiếu mục `## Review`.
+1. **Review trong phiên** (mặc định, mọi PR do AI mở): agent mới review trước khi PR chuyển sẵn sàng. Check `review-section` báo đỏ khi PR đã sẵn sàng mà mô tả thiếu mục `## Review`. Repo riêng tư trên gói GitHub Free không bắt buộc check được, nên luật là: **không ai merge khi `review-section` đỏ**, kể cả AI.
 2. **`@claude` trên GitHub** (khi cần mắt độc lập): Claude GitHub Action chỉ chạy khi có người comment `@claude ...` trên PR. Dùng cho PR thien tự mở, hay lượt review lại sau một bản sửa lớn.
 
 ## Review trong phiên
@@ -30,10 +30,11 @@ Không có gì đáng nêu thì nói rõ đã đọc những file nào. Viết t
 - Đã sửa: <ý> (<commit>), ...
 - Không sửa: <ý>, vì <lý do>. Hoặc "không có".
 ```
-PR chỉ đổi `docs/STATUS.md` hay nhật ký học được ghi `- Bỏ qua: <lý do>`; CI chấp nhận miễn mục không trống.
+PR chỉ đổi `docs/STATUS.md` hay nhật ký học được ghi `- Bỏ qua: <lý do>`. Check cần một dòng `- Ai:` hay `- Bỏ qua:` có nội dung, không còn chỗ `<...>` chưa điền; link phiên và dòng "Generated with" ở cuối mô tả không tính. PR do bot đồng bộ AGENTS mở (`chore/sync-agents-md`) được bỏ qua.
 
 ## `@claude` trên GitHub
-- Comment trên PR: `@claude review PR này theo profile/REVIEW.md của thienai-workflow, mục Review trong phiên` (hay một yêu cầu cụ thể hơn).
+- Comment trên PR (Action chỉ thấy repo đang chạy, không đọc được thienai-workflow riêng tư, nên lời gọi phải tự đủ):
+  `@claude review PR này như người ngoài: đọc AGENTS.md, CLAUDE.md; lấy diff bằng git diff origin/main...HEAD; tìm theo thứ tự mất dữ liệu hay lộ dữ liệu, sai logic hay lỗi bị nuốt, phá luật repo, truy cập, link hỏng; tối đa 10 ý, mỗi ý có mức, file:dòng, đầu vào gây lỗi, cách sửa; viết tiếng Việt; không sửa file.`
 - Chạy bằng token gói Claude của một nick (secret `CLAUDE_CODE_OAUTH_TOKEN`), trừ vào usage của nick đó; nick đó hết usage thì lượt chạy báo lỗi, không chặn merge.
 - Chỉ người có quyền ghi vào repo gọi được. Không có lượt chạy tự động, nên không tốn phút Actions khi không ai gọi.
 - Comment của AI đăng bằng tài khoản của thien, nên AI không viết chữ `@claude` trong comment trừ khi muốn gọi; nói về nó thì viết "lệnh gọi Claude".

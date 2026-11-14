@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   claude:
-    if: contains(github.event.comment.body, '@claude')
+    if: contains(github.event.comment.body, '@claude') && github.event.comment.user.type != 'Bot'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0   # full history so git diff origin/main...HEAD works in a review
       - uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
