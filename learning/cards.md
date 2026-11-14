@@ -8,6 +8,8 @@ Sau khi hỏi, AI sửa hai cột cuối:
 
 Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở hộp 1.
 
+Ôn ngoài buổi học: [trang ôn thẻ](https://claude.ai/artifact/L612hHx2vHUokcPBgH7RPu) hiện các thẻ đến hạn. Kết quả ôn ở đó ghi vào bảng này bằng `node artifacts/review/apply-review.mjs` (xem [`artifacts/review/`](../artifacts/review/README.md)). Giữ đúng các cột của bảng, vì script đọc theo tên cột.
+
 | Thẻ | Môn | Câu hỏi | Đáp án ở | Hộp | Hỏi lại |
 |---|---|---|---|---|---|
 | F1 | Frontend | Hai nút cùng cỡ, cùng màu đặt cạnh nhau thì sao? | [bài 1](frontend/lessons/01-one-focal-point.md) | 2 | 2026-11-15 |

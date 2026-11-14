@@ -10,6 +10,7 @@ Các trang artifact thien đã dùng và khen. Ở project nào, tài khoản n�
 | [`decide/`](decide/README.md) | Cần thien chọn 1 trong 2–4 cách có hình (bố cục, kiến trúc, công cụ); đề xuất của AI ẩn tới khi thien chọn | Bố cục do thien chọn 2026-11-14: bảng so sánh trên khung rộng, thẻ trên điện thoại |
 | [`it/`](it/README.md) | Bài frontend và BA: mẫu buổi học có thêm sân khấu. Frontend có bàn thử (màn app, núm vặn, soi, dòng CSS sáng lên), BA có bảng dán (xếp thẻ người vào ô, nghe họ nói, xếp luồng) | thien chọn kiểu "bàn thử và bảng dán" ở vòng `it-lesson-stage-r1` (2026-11-14) |
 | [`war/`](war/README.md) | Bài chiến tranh: mẫu buổi học có thêm sa bàn 3D từ độ cao thật, thanh thời gian chuyện thật và mô phỏng | thien chọn kiểu địa hình 3D ở vòng `war-kit-sandtable-r1` (2026-11-13) |
+| [`review/`](review/README.md) | Ôn thẻ đến hạn trong `learning/cards.md` lúc nào cũng được: gõ hay nói điều mình nhớ, xem đáp án, Claude chấm, tự chấm Nhớ/Quên | Mới, thêm 2026-11-14 (đợt 2 của tài liệu đề xuất) |
 | [`lesson/`](lesson/README.md) | Một buổi học khoảng 15 phút theo khung 7 bước; xong buổi tự lưu và gửi kết quả cho Claude | Kiểu trang học "rất thích" từ buổi frontend 1 (2026-11-07): đủ dài, độ khó vừa, làm trọn trên điện thoại. Chuyển lên lõi chung 2026-11-14 |
 
 ## Dùng nhanh
@@ -24,6 +25,7 @@ Mỗi mẫu là một lệnh dựng và một lần đăng. Script tự chụp �
 | Buổi học | `node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html`: lần đầu chép mẫu ra; điền nội dung rồi chạy lại, script gắn khung và tự kiểm trang | `publish.json` |
 | Bài frontend, BA có sân khấu | lệnh buổi học như trên với `learning/frontend/pages/lesson-NN.html` hay `learning/ba/pages/lesson-NN.html` (tự chép mẫu có bàn thử hay bảng dán) | `publish.json` |
 | Bài chiến tranh có sa bàn | trận mới thì một lần `node artifacts/war/fetch-terrain.mjs learning/war/battles/<trận>.json`; rồi lệnh buổi học như trên với `learning/war/pages/lesson-NN.html` (tự chép mẫu có sa bàn) | `publish.json` |
+| Ôn thẻ đến hạn | `node artifacts/review/make-review.mjs learning/cards.md --url https://claude.ai/artifact/L612hHx2vHUokcPBgH7RPu`; ghi kết quả bằng `artifacts/review/apply-review.mjs` | `publish.json`, đăng đè link cố định |
 | Trang tiến độ, tổng quan, lộ trình học | `node templates/publish-progress.mjs overview` (hoặc `repo`, `roadmap`): tự clone các repo trong danh sách, lấy link trang cũ trong repo | `publish.json`, đăng đè trang cũ |
 
 Chi tiết từng mẫu ở README trong thư mục của mẫu.

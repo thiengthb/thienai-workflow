@@ -44,7 +44,7 @@ Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakub
 
 ## Khung một buổi, chung cho mọi môn
 
-1. **Ôn trộn (2 phút):** 3 thẻ đến hạn trong [cards.md](cards.md), môn nào cũng được. thien trả lời trước rồi mới lật.
+1. **Ôn trộn (2 phút):** 3 thẻ đến hạn trong [cards.md](cards.md), môn nào cũng được. thien trả lời trước rồi mới lật. Các thẻ đến hạn còn lại ôn ở [trang ôn thẻ](https://claude.ai/artifact/L612hHx2vHUokcPBgH7RPu) lúc nào cũng được, không chờ buổi học: trước khi mở buổi, AI dựng lại trang đó từ `cards.md` và ghi kết quả ôn lần trước (xem [`artifacts/review/`](../artifacts/review/README.md)).
 2. **Nhớ lại buổi trước của môn này (1 phút):** một hình, một câu.
 
 Hai phần ôn này chỉ dành cho lần học đầu: trong trang, bọc chúng bằng `data-part="review"`, nút đi tiếp bị khóa bởi chúng thì thêm `data-review-gate`. Học xong, lần mở sau trang tự ẩn phần ôn, chỉ còn nội dung và câu hỏi của chính bài đó (thien yêu cầu 2026-11-12). Xem "Bộ khung chung" trong [teaching/README.md](teaching/README.md).

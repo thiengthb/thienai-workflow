@@ -82,6 +82,14 @@ async function open(file) {
   assert.deepEqual(p.errors, []);
   await ctx.close();
 }
+{ // Trang ôn thẻ: Claude chấm câu trả lời, chỉ dựa trên đáp án và bài.
+  const { p, ctx } = await open(pages.review);
+  await p.fill('#mine', 'Mắt không biết chọn nút nào');
+  await p.click('#show');
+  await p.ask('review-grade', () => p.click('#grade'));
+  assert.deepEqual(p.errors, []);
+  await ctx.close();
+}
 await browser.close();
 
 // 1. Luật cứng
@@ -96,8 +104,11 @@ assert.match(P['frontend-stage-ask'], /CHƯA làm xong bước này/);
 assert.match(P['decide-before-pick'], /CHƯA chọn\. Đừng nói nên chọn/);
 assert.doesNotMatch(P['decide-before-pick'], /Gọn nhất|đề xuất a/i, 'chưa chọn thì không lộ đề xuất');
 assert.match(P['decide-after-pick'], /đã chọn a\. Lúc soạn trang, Claude đề xuất a: Gọn nhất/);
+assert.match(P['review-grade'], /Người học tự trả lời trước khi xem đáp án: "Mắt không biết chọn nút nào"/);
+assert.match(P['review-grade'], /Đáp án mẫu: Mắt không biết bấm nút nào/);
+assert.match(P['review-grade'], /không thêm chi tiết, số liệu, tên hay sự kiện mới/, 'chấm chỉ dựa trên bài (luật nguồn của TUTOR)');
 for (const [k, v] of Object.entries(P)) {
-  if (k.startsWith('lesson') || k.startsWith('frontend')) assert.match(v, /không Markdown/, `${k}: dặn viết chữ thường`);
+  if (!k.startsWith('decide')) assert.match(v, /không Markdown/, `${k}: dặn viết chữ thường`);
   assert.ok(v.length < 6000, `${k}: lời dặn dài ${v.length} ký tự`);
 }
 
