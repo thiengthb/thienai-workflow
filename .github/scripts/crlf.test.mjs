@@ -15,10 +15,13 @@ import { fill } from '../../artifacts/lesson/make-lesson.mjs';
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const crlf = (s) => s.replace(/\r?\n/g, '\r\n');
 const copy = mkdtempSync(join(tmpdir(), 'crlf-'));
-const files = execFileSync('git', ['ls-files'], { cwd: ROOT, encoding: 'utf8' }).split('\n').filter((f) => /\.(md|mjs|cjs|js|json|html|css|txt|csv)$/.test(f));
+// Every tracked file is copied; only text files get CRLF (fonts, images stay as they are).
+const files = execFileSync('git', ['ls-files', '-z'], { cwd: ROOT, encoding: 'utf8' }).split('\0').filter(Boolean);
+const TEXT = /\.(md|mjs|cjs|js|json|html|css|txt|csv|yml|yaml)$|(^|\/)\.git(ignore|attributes)$/;
 for (const f of files) {
   mkdirSync(dirname(join(copy, f)), { recursive: true });
-  writeFileSync(join(copy, f), crlf(readFileSync(join(ROOT, f), 'utf8')));
+  const buf = readFileSync(join(ROOT, f));
+  writeFileSync(join(copy, f), TEXT.test(f) ? crlf(buf.toString('utf8')) : buf);
 }
 const run = (args) => spawnSync(process.execPath, args, { cwd: copy, encoding: 'utf8' });
 
@@ -40,7 +43,7 @@ r = run(['templates/check-status.mjs', 'docs/STATUS.md']);
 assert.equal(r.status, 0, 'check-status on CRLF STATUS.md:\n' + r.stdout + r.stderr);
 
 // 4. handoff: a CRLF task file passes the format check and `list` still shows the next step and what waits for thien.
-const task = crlf(`# Việc thử\n\nRepo: thiengthb/demo · Nhánh: x · PR: chưa có\nGhi bởi: Claude · Cập nhật: 2026-11-14T10:00Z\n\n## thien muốn gì\nThử.\n\n## Đã xong\n- a\n\n## Bước tiếp theo\n1. Chạy lệnh b\n\n## Đang chờ thien\n- Chọn hướng 2\n`);
+const task = crlf(`# Việc thử\n\nRepo: thiengthb/demo · Nhánh: x · PR: chưa có\nGhi bởi: Claude tnt024 · Cập nhật: 2026-11-14T10:00Z\n\n## thien muốn gì\nThử.\n\n## Đã xong\n- a\n\n## Bước tiếp theo\n1. Chạy lệnh b\n\n## Đang chờ thien\n- Chọn hướng 2\n`);
 assert.deepEqual(checkTask(task, 'viec-thu.md'), []);
 const sum = summarize('viec-thu.md', task);
 assert.equal(sum.next, 'Chạy lệnh b');
@@ -58,7 +61,10 @@ const once = fill(tpl);
 assert.ok(!once.includes('\r'), 'no mixed line endings');
 assert.equal(fill(once), once);
 
-// 6. Internal links still resolve when files are CRLF.
-r = spawnSync(process.execPath, [join(ROOT, '.github/scripts/check-links.mjs'), '--root', ROOT], { encoding: 'utf8' });
+// 6. Internal links still resolve when files are CRLF (the checker lists files with git, so the copy becomes a repo;
+// core.autocrlf=false keeps the CRLF files as they are).
+execFileSync('git', ['-c', 'core.autocrlf=false', 'init', '-q'], { cwd: copy });
+execFileSync('git', ['-c', 'core.autocrlf=false', 'add', '-A'], { cwd: copy, stdio: 'ignore' });
+r = spawnSync(process.execPath, [join(ROOT, '.github/scripts/check-links.mjs'), '--root', copy], { encoding: 'utf8' });
 assert.equal(r.status, 0, r.stdout);
 console.log('crlf: ok');

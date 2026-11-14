@@ -81,6 +81,12 @@ const good2 = [...std.sync.map(p => ({ path: p, mode: 'include' })), ...std.sync
 assert.deepEqual(checkSync(std, good2), []);
 assert.ok(checkSync(std, good2.filter(f => f.path !== 'profile/')).some(n => /chưa đồng bộ: profile\//.test(n)));
 assert.deepEqual(checkSync(std, undefined), [], 'no filters given: nothing to say here (main prints "chưa kiểm")');
+assert.ok(checkSync(std, [...good2, { path: 'profile/SETUP.md', mode: 'exclude' }]).some(n => /chưa đồng bộ: profile\//.test(n)), 'a file left out inside a synced folder');
+assert.ok(checkSync(std, [...good2, { path: 'learning/war/battles/dien-bien-phu-1954.json', mode: 'include' }]).some(n => /phần nặng.*learning\/war\/battles/.test(n)), 'a heavy file included again');
+
+// The first line must name the project: "chuẩn setup v2 · nick: tnt024" alone is not enough.
+r = checkSetup(std, { project: 'sakubun', instructions: good.replace(/ · project: [^·\n]+/, ''), ...all });
+assert.ok(r.fixes.some(f => /thiếu "project: sakubun"/.test(f)), 'missing project field');
 
 // CLI: --instructions unseen is "not checked", not "missing".
 {

@@ -14,7 +14,8 @@
 //   node templates/handoff.mjs check <slug>.md                           only check the format
 // Options: --remote <git url> (save/show/done: use this remote instead of github.com/<owner/repo>),
 //          --remotes <url,url> (list: these remotes instead of the tracked repos),
-//          --out <file> (new/show: write the file instead of printing; on Windows PowerShell `>` writes UTF-16).
+//          --out <file> (new/show: write the file instead of printing; on Windows PowerShell `>` writes UTF-16),
+//          --at <ISO time> (save: time for "Cập nhật"; without it save writes the current time).
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, rmSync, mkdtempSync, realpathSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -76,13 +77,21 @@ export function checkTask(text, name = '') {
   if (!/^# \S/m.test(text)) out.push('thiếu dòng tiêu đề "# <tên việc>"');
   if (!/^Repo: [\w.-]+\/[\w.-]+/m.test(text)) out.push('thiếu dòng "Repo: <owner/repo> · ..."');
   if (!/Cập nhật: \d{4}-\d{2}-\d{2}/.test(text)) out.push('thiếu "Cập nhật: YYYY-MM-DD..."');
-  if (/Ghi bởi: Claude <nick>/.test(text)) out.push('dòng "Ghi bởi" chưa điền tên nick (lấy ở dòng "nick:" của project instructions, ví dụ tnt024)');
+  // Who holds the task: the 24-hour rule in profile/ACCOUNTS.md needs it. A Claude account writes its nick (tnt024), or
+  // "nick chưa rõ" when its project instructions have none yet; other tools write their name (Codex, Claude Code).
+  const by = (text.match(/^Ghi bởi: *([^\n·,]*)/m) || [])[1];
+  if (by === undefined) out.push('thiếu dòng "Ghi bởi: Claude tntXXX, <link thread> · Cập nhật: ..."');
+  else if (/<nick>/.test(by) || !by.trim()) out.push('dòng "Ghi bởi" chưa điền ai giữ việc (Claude kèm tên nick lấy ở dòng "nick:" của project instructions, ví dụ "Claude tnt024"; không có thì "Claude nick chưa rõ"; công cụ khác ghi tên, ví dụ "Codex")');
+  else if (/^Claude\s*$/i.test(by.trim()) || (/^Claude\b/i.test(by) && !/\btnt\d+\b|nick chưa rõ|Claude Code/i.test(by))) out.push(`dòng "Ghi bởi" có "${by.trim()}" nhưng thiếu tên nick: ghi "Claude tnt024" (tên ở dòng "nick:" của project instructions) hoặc "Claude nick chưa rõ"`);
   for (const h of REQUIRED) if (!text.includes(h + '\n')) out.push(`thiếu mục "${h}"`);
   const next = section(text, '## Bước tiếp theo');
   if (!next || /^\s*1\.\s*<[^>]*>\s*$/m.test(next) || !next.replace(/<!--[\s\S]*?-->/g, '').trim()) out.push('mục "Bước tiếp theo" còn trống');
   if (SECRET.test(text)) out.push('có chuỗi giống token hay khoá bí mật: xoá đi, sổ nằm trong lịch sử git mãi mãi');
   return out;
 }
+
+/** Sets "Cập nhật:" to now, so the 24-hour rule sees when the task was last touched (save does it every time). */
+export const stamp = (text, now = new Date()) => normalize(text).replace(/Cập nhật: [0-9T:.-]+Z?/, `Cập nhật: ${now.toISOString().slice(0, 16)}Z`);
 
 /** Body of a "## " section, without the heading. */
 export function section(text, heading) {
@@ -193,6 +202,7 @@ function main(argv) {
   const remoteOpt = opt('--remote');
   const remotesOpt = opt('--remotes');
   const outOpt = opt('--out');
+  const atOpt = opt('--at'); // save: the time to write in "Cập nhật" instead of now (tests)
   const emit = (text) => { if (outOpt) { writeFileSync(outOpt, text); console.error('Đã ghi ' + outOpt); } else process.stdout.write(text); };
   const [cmd, a, b, c] = argv;
   const fail = (msg) => { throw new Error(msg); };
@@ -205,7 +215,7 @@ function main(argv) {
   }
   if (cmd === 'check' || cmd === 'save') {
     if (!a || !existsSync(a)) fail('không thấy file ' + (a || ''));
-    const text = readText(a);
+    let text = readText(a);
     const probs = checkTask(text, basename(a));
     if (probs.length) fail('Sổ bàn giao chưa đúng mẫu:\n- ' + probs.join('\n- '));
     if (cmd === 'check') return console.log('ổn');
@@ -223,6 +233,7 @@ function main(argv) {
       fail(`Việc ${basename(a, '.md')} không còn trong sổ của ${repo} (đã \`done\` hay bị xoá từ lúc bạn đọc). Chưa ghi gì. ` +
         'Nếu việc vẫn còn dở, xoá dòng handoff-base ở cuối file rồi `save` lại để tạo lại việc.');
     }
+    text = stamp(text, atOpt ? new Date(atOpt) : new Date());
     writeFileSync(target, stripBase(text));
     const out = commitPush(dir, `handoff: update ${basename(a, '.md')}`);
     writeFileSync(a, withBase(text)); // the next save from this copy is based on what was just written

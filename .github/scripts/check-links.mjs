@@ -23,11 +23,12 @@ export function slug(heading) {
 
 export function anchors(md) {
   const out = new Set();
-  const seen = {};
   for (const m of lf(md).replace(/```[\s\S]*?```/g, '').matchAll(/^#{1,6}\s+(.+?)\s*#*$/gm)) {
+    // GitHub makes every anchor unique: a heading whose slug is taken gets -1, -2, … until the name is free.
     const s = slug(m[1]);
-    const n = seen[s] = (seen[s] ?? -1) + 1;
-    out.add(n ? `${s}-${n}` : s);
+    let a = s;
+    for (let n = 1; out.has(a); n++) a = `${s}-${n}`;
+    out.add(a);
   }
   return out;
 }
@@ -42,11 +43,13 @@ export function references(md, topDirs) {
   lines.forEach((line, i) => {
     if (/^\s*```/.test(line)) { fence = !fence; return; }
     if (fence) return;
-    for (const m of line.matchAll(/\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
+    // A [x](y) written inside `code` is an example, not a link.
+    for (const m of line.replace(/`[^`]*`/g, '').matchAll(/\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
       const url = m[1];
       if (/^[a-z][a-z0-9+.-]+:/i.test(url) || url.startsWith('//')) continue; // http:, mailto:, …
       const [target, anchor] = url.split('#');
-      refs.push({ target: decodeURIComponent(target), anchor: anchor || '', line: i + 1, kind: 'link' });
+      const dec = (x) => { try { return decodeURIComponent(x); } catch { return x; } };
+      refs.push({ target: dec(target), anchor: anchor ? dec(anchor) : '', line: i + 1, kind: 'link' });
     }
     // Backtick paths: only ones that start with a real top-level folder or file of the repo.
     for (const m of line.replace(/\[[^\]]*\]\([^)]*\)/g, '').matchAll(/`([^`\s]+)`/g)) {
@@ -69,7 +72,8 @@ export function ignoreList(root) {
 
 export function checkRepo(root) {
   const ignore = ignoreList(root);
-  const files = execFileSync('git', ['ls-files'], { cwd: root, encoding: 'utf8' }).split('\n').filter(Boolean);
+  // -z: real file names (without it git quotes names with non-ASCII letters, e.g. "docs/caf\303\251.md").
+  const files = execFileSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'utf8' }).split('\0').filter(Boolean);
   const tracked = new Set(files);
   const dirs = new Set(files.flatMap((f) => f.split('/').slice(0, -1).map((_, i, a) => a.slice(0, i + 1).join('/'))));
   const topDirs = new Set(files.map((f) => f.split('/')[0]));
@@ -84,6 +88,7 @@ export function checkRepo(root) {
       let p = r.target;
       if (r.kind === 'link') {
         if (!p) p = f; // [x](#anchor) is the same file
+        else if (p.startsWith('/')) p = normalize(p.slice(1)).replace(/\\/g, '/'); // [x](/README.md): from the repo root
         else p = normalize(join(dirname(f), p)).replace(/\\/g, '/');
       }
       p = p.replace(/^\.\//, '').replace(/\/$/, '');

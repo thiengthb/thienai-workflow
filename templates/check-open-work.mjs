@@ -24,8 +24,10 @@ export function openWork({ base, paths = [], fetch = true, cwd = process.cwd() }
   let stale = false;
   // Clone nông (phiên Claude Code clone --depth 1) không có merge base để so nhánh: tải thêm một đoạn lịch sử có giới hạn.
   // Không dùng --unshallow: có repo chặn, và lịch sử đầy đủ có thể rất nặng.
-  let shallow = false; try { shallow = git('rev-parse', '--is-shallow-repository') === 'true'; } catch (e) { /* not a repo */ }
-  if (fetch) { try { git('fetch', '-q', '--prune', ...(shallow ? ['--depth=300'] : []), 'origin', '+refs/heads/*:refs/remotes/origin/*'); } catch (e) { stale = true; /* offline: dùng bản đã tải, nhưng báo cho bên gọi */ } }
+  // --depth không được nhỏ hơn lịch sử đang có (bản clone đã sâu 1000 thì --depth=300 sẽ cắt bớt và mất merge base).
+  let depth = 0;
+  try { if (git('rev-parse', '--is-shallow-repository') === 'true') depth = Math.max(300, Number(git('rev-list', '--count', '--all')) + 50); } catch (e) { /* not a repo */ }
+  if (fetch) { try { git('fetch', '-q', '--prune', ...(depth ? [`--depth=${depth}`] : []), 'origin', '+refs/heads/*:refs/remotes/origin/*'); } catch (e) { stale = true; /* offline: dùng bản đã tải, nhưng báo cho bên gọi */ } }
   const has = (ref) => { try { git('rev-parse', '-q', '--verify', ref); return true; } catch (e) { return false; } };
   if (!base) {
     try { base = git('symbolic-ref', '--short', 'refs/remotes/origin/HEAD').replace(/^origin\//, ''); } catch (e) { /* clone không ghi origin/HEAD */ }

@@ -65,9 +65,13 @@ export function checkSync(standard, filters) {
     const hit = fs.filter(f => f.path === '' || p === f.path || p.startsWith(f.path + '/')).sort((a, b) => b.path.length - a.path.length)[0];
     return hit ? hit.mode === 'include' : false;
   };
+  // Filters inside a folder count too: profile/SETUP.md excluded under an included profile/ is a miss, and a file
+  // included again under an excluded learning/war/battles/ is heavy. The leave-out list itself is allowed.
+  const out = (standard.syncOut || []).map(clean);
+  const under = (f, p) => f.path !== p && f.path.startsWith(p + '/');
+  const miss = standard.sync.filter(p => !synced(p) || fs.some(f => f.mode === 'exclude' && under(f, clean(p)) && !out.some(o => f.path === o || f.path.startsWith(o + '/'))));
+  const heavy = (standard.syncOut || []).filter(p => synced(p) || fs.some(f => f.mode === 'include' && under(f, clean(p))));
   const notes = [];
-  const miss = standard.sync.filter(p => !synced(p));
-  const heavy = (standard.syncOut || []).filter(p => synced(p));
   const where = 'Project settings > GitHub, chọn lại theo profile/SETUP.md, mục "Đồng bộ repo vào knowledge"';
   if (heavy.length) notes.push(`Knowledge của project đang đồng bộ cả phần nặng (${heavy.join(', ')}): knowledge nhanh đầy và Claude phải tìm từng đoạn thay vì đọc hết. ${where}.`);
   if (miss.length) notes.push(`Knowledge của project chưa đồng bộ: ${miss.join(', ')}. ${where}.`);
@@ -139,6 +143,7 @@ export function checkSetup(standard, { project, instructions, repos = [], skills
     else if (/nghỉ/i.test(row.status)) fixes.push(`Nick ${nick} đã đánh dấu "đã nghỉ" trong profile/ACCOUNTS.md mà vẫn đang dùng. Hỏi thien: dùng lại nick này, hay project instructions ghi nhầm tên nick?`);
     else if (want && !row.projects.includes(key)) notes.push(`AI tự làm: thêm project \`${project}\` vào dòng nick ${nick} trong profile/ACCOUNTS.md (gộp vào PR đang làm, không có thì mở PR nhỏ).`);
   }
+  if (v !== null && !named) fixes.push(`Dòng đầu project instructions thiếu "project: ${project}". ${paste}`);
   if (v !== null && named && want && named !== key) fixes.push(`Project instructions ghi "project: ${named}" nhưng đây là project "${project}". ${paste}`);
   if (want) {
     const have = new Set(repos.map(r => r.toLowerCase()));
