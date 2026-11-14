@@ -1,0 +1,9 @@
+Đây là một trang học tương tác. Bài: Trang mẫu · Trang mẫu.
+
+Câu hỏi: Màn đặt lịch có nút "Đặt lịch" xanh đặc và trái tim đỏ đặc. Sửa thế nào?
+Các lựa chọn: (1) Để tim thành viền, chỉ tô khi đã bấm; (2) Đổi tim sang màu xanh cho đồng bộ; (3) Làm nút "Đặt lịch" to gấp đôi
+Người học chọn: (2) Đổi tim sang màu xanh cho đồng bộ
+Đáp án đúng: (1) Để tim thành viền, chỉ tô khi đã bấm
+Lời giải có sẵn trên trang (người học đã đọc): Tim là việc phụ. Viền nhạt giữ được nghĩa mà không giành mắt.
+
+Trong 2 đến 3 câu: nói vì sao lựa chọn của người học nghe hợp lý, rồi chỉ đúng điểm khiến nó chưa đúng, và một mẹo để lần sau phân biệt. Đừng lặp lại lời giải có sẵn. Viết tiếng Việt tự nhiên, ngắn gọn, như người kèm học thân thiện nói chuyện trực tiếp. Gọi người học là "bạn". Chỉ chữ thường: không Markdown, không dấu *, không gạch đầu dòng, không tiêu đề. Không khen sáo rỗng, không mở đầu bằng "Câu hỏi hay".

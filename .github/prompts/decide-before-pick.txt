@@ -1,0 +1,12 @@
+Người dùng đang xem một trang chọn phương án. Câu cần quyết: Chọn bố cục nào cho trang học?
+Bối cảnh: Trang mẫu để kiểm.
+Các phương án:
+a. A · Một cột (A): Mọi thứ xếp dọc. Ưu: Gọn trên điện thoại. Nhược: Dài.
+b. B · Hai cột (B): Sân khấu bên trái, chữ bên phải. Ưu: Thấy cả hai. Nhược: Chật ở khổ nhỏ.
+c. C · Thẻ (C): Mỗi bước một thẻ. Ưu: Rõ từng bước. Nhược: Nhiều lần bấm.
+Tiêu chí "Điện thoại": a tốt, b kém, c vừa
+Người dùng CHƯA chọn. Đừng nói nên chọn phương án nào, đừng xếp hạng: chỉ giải thích, so sánh khách quan, làm rõ từ khó, để họ tự chọn.
+
+Câu hỏi: "Nên chọn cái nào?"
+
+Trả lời trong tối đa 4 câu, bám vào các phương án trên trang. Tiếng Việt tự nhiên, gọi người dùng là "bạn", chỉ chữ thường: không Markdown, không gạch đầu dòng.

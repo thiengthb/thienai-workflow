@@ -86,6 +86,8 @@ Khung 7 bước trong [`../README.md`](../README.md) giữ nguyên. Thay đổi:
 2. Xem bằng mắt ảnh chụp cả hai khổ mà nó lưu lại.
 3. Tự làm bài một lượt trên khổ điện thoại, kể cả chọn sai.
 
+**CI kiểm thêm ở mọi PR** (`artifacts/kit/check-pages.mjs`, thêm 2026-11-14): mở mọi trang trong `learning/*/pages/` và một trang dựng từ mỗi mẫu trong `artifacts/`, ở 3 khổ (1180, 820, 390) cả tối lẫn sáng, hiện hết mọi bước. Báo lỗi khi có lỗi JavaScript, tràn ngang, thiếu thẻ viewport, chữ mờ dưới 3:1, hay một khung to mà mọi thứ bên trong bị ẩn (lỗi màn điện thoại trắng của bài frontend 6). Ảnh chụp đính vào lần chạy CI, tên "page-screenshots". Chạy trên máy: `node artifacts/kit/check-pages.mjs [trang.html]`. CI cũng chạy `.github/scripts/ask-prompts.test.mjs`: đọc các lời dặn trang gửi cho Claude bằng một Claude giả, giữ luật "chưa làm xong thì không nói đáp án", và lưu lời dặn thành file mẫu trong `.github/prompts/` để PR nào đổi lời dặn cũng hiện rõ.
+
 Bài kiểm không bắt được: nội dung sai, chữ khó hiểu, thao tác kéo trên biểu đồ. Nó cũng chỉ bấm các nút có sẵn lúc mới mở trang, mỗi nút trên một trang vừa tải lại, nên bỏ qua nút đang được chọn, nút bị khóa lúc đầu (như "Kiểm tra" khi chưa xếp xong) và nút chỉ có tác dụng sau một bước khác (như "Làm lại"; gắn thuộc tính `data-reset` cho loại nút này để bài kiểm bỏ qua, không báo nhầm). Trang có hiệu ứng chạy liên tục thì ảnh trước và sau luôn khác nhau, nên nút hỏng trên trang đó cũng lọt qua. Những thứ đó vẫn phải tự bấm thử trên cả khổ điện thoại lẫn laptop.
 
 ## Bộ khung chung: tự lưu, chế độ tối, học lại

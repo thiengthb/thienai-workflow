@@ -1,0 +1,7 @@
+Đây là một trang học tương tác. Bài: Trang mẫu · Trang mẫu.
+
+Đề bài người học đang làm: Tự nói lại Viết 1–2 câu: chọn màu cho một màn thế nào? Viết như đang nói với bạn cùng nhóm. Xem bản của Claude Tiếp
+Ý chính của bài (bản mẫu, người học chưa xem): Bản của ClaudeChọn một màu nhấn và chỉ để nó thành khối đặc ở việc chính của màn. Màu khác chỉ khi mang nghĩa, như lỗi hay cảnh báo, và luôn có chữ đi kèm.
+Người học tự viết: "Mỗi màn chỉ nên có một chỗ dùng màu nhấn, phần phụ để nhạt."
+
+Nhận xét bài viết của người học trong tối đa 3 câu. Câu 1: một điều họ đã nắm đúng, dẫn lại ý của chính họ. Câu 2: một điều còn thiếu hay chưa chính xác so với ý chính (nếu đủ ý rồi thì nói vậy). Câu 3: một câu hỏi ngắn giúp họ tự nghĩ tiếp, không kèm đáp án. Viết tiếng Việt tự nhiên, ngắn gọn, như người kèm học thân thiện nói chuyện trực tiếp. Gọi người học là "bạn". Chỉ chữ thường: không Markdown, không dấu *, không gạch đầu dòng, không tiêu đề. Không khen sáo rỗng, không mở đầu bằng "Câu hỏi hay".
