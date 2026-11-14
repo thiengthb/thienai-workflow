@@ -105,7 +105,12 @@ for (const [k, v] of Object.entries(P)) {
 mkdirSync(SNAP, { recursive: true });
 for (const [k, v] of Object.entries(P)) {
   const f = join(SNAP, `${k}.txt`);
-  if (UPDATE || !existsSync(f)) { writeFileSync(f, v + '\n'); continue; }
+  if (UPDATE) { writeFileSync(f, v + '\n'); continue; }
+  if (!existsSync(f)) {
+    changed++;
+    console.error(`Thiếu file mẫu ${f} cho lời dặn "${k}". Chạy lại với --update rồi commit file mẫu.`);
+    continue;
+  }
   if (readFileSync(f, 'utf8') !== v + '\n') {
     changed++;
     console.error(`Lời dặn "${k}" khác file mẫu ${f}. Nếu cố ý sửa: chạy lại với --update rồi commit file mẫu.`);
