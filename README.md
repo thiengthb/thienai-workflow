@@ -38,12 +38,14 @@ docs/         Tiến độ và kế hoạch đang chạy của chính repo này
 | | `DECISION.template.md` | Mẫu ghi quyết định khó sửa lại, trong `docs/decisions/` |
 | | `SETUP-GUIDE.template.md` | Mẫu hướng dẫn cài đặt theo `profile/GUIDES.md` |
 | | `MANUAL-TEST.template.md` | Mẫu hướng dẫn test tay: chuẩn bị, tài khoản test, ca test có mã, bảng kết quả. Chép vào `docs/manual-test/` |
+| | `gitattributes.template` | Chép thành `.gitattributes` ở gốc project: mọi file chữ xuống dòng kiểu LF, kể cả trên Windows |
 | | `test-accounts.template.csv` | Mẫu danh sách tài khoản test, chỉ mật khẩu giả |
 | | `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
 | | `handoff.mjs` | Sổ bàn giao giữa các nick: `new`, `save`, `list`, `show`, `done`. Luật ở `profile/HANDOFF.md` |
 | | `setup-check.mjs` | Kiểm project đang mở có đúng chuẩn `profile/SETUP.md` không (instructions từng dòng, repo, skill, bộ lọc đồng bộ knowledge) |
 | | `check-open-work.mjs` | In nhánh trên origin chưa merge vào main, kèm file nó sửa, để không làm trùng việc phiên khác |
 | `.github/` | `workflows/test.yml` | Chạy test của mọi script, kiểm link nội bộ (`scripts/check-links.mjs`), kiểm STATUS, và mở từng trang học trong trình duyệt ở mỗi PR, để lỗi bị chặn trước khi merge |
+| | `scripts/reading-cost.mjs` | Đo mỗi loại việc AI phải đọc bao nhiêu chữ, theo bảng ở `profile/MAP.md`; CI đỏ khi quá ngân sách |
 | | `workflows/windows.yml` | Chạy test script trên Windows khi script đổi, vì lỗi đường dẫn và xuống dòng chỉ lộ ra ở đó |
 | | `workflows/sync-agents-md.yml` | Mẫu `AGENTS.md` đổi thì tự mở PR vào từng repo trong `life/tracked-repos.md` để cập nhật phần chung, giữ nguyên phần riêng của project. Cần secret `SYNC_TOKEN` |
 | `skills/` | `start-project/` | Skill hỏi thien có áp quy trình không, rồi chép các file mẫu vào project. `SKILL.md` chỉ trỏ tới `STEPS.md`; sửa các bước thì sửa `STEPS.md` |
