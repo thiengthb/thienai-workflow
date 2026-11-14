@@ -44,5 +44,5 @@ Dùng `--out <file>` thay cho `> file`: trên Windows PowerShell 5, `>` ghi file
 ## Giới hạn
 - Hết usage giữa chừng thì mất phần chưa commit và đẩy. Sổ có thể chậm hơn nhánh một bước (đã đẩy nhưng chưa kịp `save`), nên nick sau luôn so với git như bước 2 ở trên.
 - Sổ chống ghi đè lên chính nó, không khóa code: hai nick vẫn có thể cùng sửa một nhánh nếu bỏ qua bước nhận việc.
-- Chỉ việc làm ở nơi có quyền đẩy lên repo (project có gắn repo, Claude Code, Codex) mới ghi sổ được. Chat thường trên claude.ai không ghi được.
+- Ghi sổ được ở mọi phiên chạy được lệnh và có quyền đẩy lên repo: thread của project beta, chat trong project cũ có chạy lệnh (như nick tnt697), Claude Code, Codex. Phiên chỉ đọc repo mà không chạy được lệnh thì không ghi được: nói với thien việc đang dở và bước tiếp theo để thien mở phiên khác ghi.
 - Trang tổng quan và các trang link cố định: nick khác đăng lại thì ra link mới. Muốn giữ một link cho mọi nick thì thien mời các nick vào trang đó (Share, mời email, quyền sửa); phần dùng Claude trên trang không chạy ở nick được mời.

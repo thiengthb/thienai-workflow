@@ -17,6 +17,25 @@ Trạng thái: `đang dùng`, `tạm nghỉ` (hết usage lâu, chưa bỏ), `đ
 
 AI sửa sổ này khi lần kiểm setup báo (`nhắc: AI tự làm: ...`), hoặc khi thien dán xong instructions bản mới: gộp vào PR đang làm của thread đó, không có thì mở PR nhỏ. Nick nào ở bản thấp hơn [`SETUP.md`](SETUP.md) là nick đó chưa đồng bộ.
 
+## Kiểu project ở từng nick
+Claude có hai kiểu project, và một nick chỉ có một kiểu. Bản mới (beta) chỉ mở dần cho nick chưa có project cũ, nên nick đã có project cũ thì ở lại bản cũ tới khi Anthropic chuyển (không mất gì khi chuyển).
+
+| Nick | Kiểu project | Biết từ đâu |
+|---|---|---|
+| tnt024 | beta: một chat điều phối mở nhiều thread | PR của nick này đến từ thread (nhánh `claude/project-thread-...`) |
+| tnt628 | chưa rõ | thien xác nhận khi mở project ở nick đó |
+| tnt697 | cũ: mỗi chat riêng, không có thread | thien nói 2026-11-15; chat trong project vẫn chạy lệnh, đẩy nhánh, mở PR được |
+
+| Bản cũ | Bản beta |
+|---|---|
+| Mỗi chat một ngữ cảnh riêng; knowledge đồng bộ repo nằm sẵn trong mọi chat | Một chat điều phối, mỗi việc một thread (một phiên Claude Code riêng, nhánh riêng) |
+| Bước "Nhắc việc dở" làm ở chat đầu tiên của việc | Chat điều phối làm bước đó trước khi mở thread; thread không hỏi lại |
+| Một việc một lúc, nhẹ usage: hợp với học, ôn thẻ, review, sửa nhỏ | Chạy song song nhưng mỗi thread tính như một phiên đầy đủ, gói Pro hết usage nhanh: để cho việc lớn chia được nhiều phần |
+| Không có màn Overview: việc dở nằm ở sổ bàn giao và mục "Việc dở" của STATUS | Overview cho thấy thread nào xong, chờ review hay chờ thien |
+| Knowledge có thể chậm hơn main vài phút sau khi merge: đọc file trong repo | Mỗi thread clone repo mới |
+
+Nick đổi kiểu (Anthropic chuyển lên beta, hay thien vào danh sách chờ) thì sửa bảng trên qua PR.
+
 ## Việc nằm ở nick nào
 - Commit: dòng `Claude-Nick: tntXXX` ở cuối. Tìm việc của một nick: `git log --grep "Claude-Nick: tnt024" --oneline`.
 - PR: dòng `Nick: tntXXX` trong mô tả.
