@@ -4,9 +4,15 @@
 // Limits: whole file at most 40 lines, at most 3 items under "## Đang chờ thien".
 // Also checks every docs/plans/*.md written from PLAN.template.md (has "## Checkpoint") has the sections
 // the progress page reads (rules in profile/PLANNING.md of thienai-workflow).
+// Optional flags (off by default, so copies in other projects keep working without git or gh):
+//   --git          fail when "Cập nhật lần cuối: YYYY-MM-DD" is more than 3 days older than the newest commit.
+//   --prs          remind (no failure) about open PRs the file never mentions as #N; needs gh, skipped without it.
+//   --cards <file> remind (no failure) about review cards whose "Hỏi lại" date is more than 3 days past.
+// Reminders print as "nhắc: ..." and, inside GitHub Actions, as ::warning:: so they show on the PR's checks.
 import { fileURLToPath } from 'node:url';
 import { readFileSync, readdirSync, existsSync, realpathSync } from 'node:fs';
 import { join, dirname } from 'node:path';
+import { spawnSync } from 'node:child_process';
 
 export const MAX_LINES = 40;
 export const MAX_WAITING = 3;
@@ -32,6 +38,34 @@ export function checkStatus(text) {
   return problems;
 }
 
+export const STALE_DAYS = 3;
+const day = (d) => Math.floor(Date.parse(d + 'T00:00:00Z') / 864e5);
+
+/** Fails when the file's "Cập nhật lần cuối" date is more than STALE_DAYS before the newest commit (YYYY-MM-DD). */
+export function checkFresh(text, lastCommit) {
+  const m = /Cập nhật lần cuối:\s*(\d{4}-\d{2}-\d{2})/.exec(text);
+  if (!m) return ['thiếu dòng "Cập nhật lần cuối: YYYY-MM-DD".'];
+  const gap = day(lastCommit) - day(m[1]);
+  return gap > STALE_DAYS ? [`STATUS cập nhật ngày ${m[1]}, cũ hơn commit mới nhất (${lastCommit}) ${gap} ngày. Sửa lại các mục cho đúng hiện tại.`] : [];
+}
+
+/** Open PRs ([{number, title}]) that the file never mentions as #N; `self` is the PR being checked, left out. */
+export function missingPrs(text, prs, self) {
+  return prs.filter((p) => p.number !== self && !new RegExp(`#${p.number}(?!\\d)`).test(text))
+    .map((p) => `PR #${p.number} (${p.title}) đang mở mà STATUS không nhắc.`);
+}
+
+/** Review cards (markdown table with a "Hỏi lại" date column) overdue by more than STALE_DAYS on `today`. */
+export function overdueCards(text, today) {
+  const rows = text.split('\n').filter((l) => /^\|/.test(l));
+  const head = (rows[0] || '').split('|').map((c) => c.trim());
+  const col = head.indexOf('Hỏi lại');
+  if (col < 0) return [];
+  const late = rows.slice(2).map((l) => l.split('|').map((c) => c.trim()))
+    .filter((c) => /^\d{4}-\d{2}-\d{2}$/.test(c[col] || '') && day(today) - day(c[col]) > STALE_DAYS);
+  return late.length ? [`${late.length} thẻ ôn quá hạn hơn ${STALE_DAYS} ngày (${late.slice(0, 5).map((c) => c[1]).join(', ')}${late.length > 5 ? '…' : ''}). Mở buổi ôn.`] : [];
+}
+
 export const PLAN_SECTIONS = ['Đang ở đâu', 'Mục tiêu', 'Không làm', 'Checkpoint', 'Đã đổi', 'Lỗi gặp'];
 
 /** Returns problems for one plan file; plans written before the template (no "## Checkpoint") are skipped. */
@@ -51,8 +85,28 @@ export function checkPlan(text) {
 // Compare real paths, not URL strings: on Windows, or with spaces or Vietnamese letters in the
 // path, `file://${argv[1]}` never equals import.meta.url and the script silently did nothing.
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
-  const file = process.argv[2] ?? 'docs/STATUS.md';
-  const problems = checkStatus(readFileSync(file, 'utf8')).map((p) => `${file}: ${p}`);
+  const args = process.argv.slice(2);
+  const flag = (n) => { const i = args.indexOf('--' + n); return i < 0 ? false : (args.splice(i, 1), true); };
+  const opt = (n) => { const i = args.indexOf('--' + n); return i < 0 ? null : args.splice(i, 2)[1]; };
+  const useGit = flag('git'), usePrs = flag('prs'), cards = opt('cards');
+  const file = args[0] ?? 'docs/STATUS.md';
+  const text = readFileSync(file, 'utf8');
+  const problems = checkStatus(text).map((p) => `${file}: ${p}`);
+  const notes = [];
+  if (useGit) {
+    const r = spawnSync('git', ['log', '-1', '--format=%cs'], { encoding: 'utf8' });
+    if (r.status === 0 && r.stdout.trim()) problems.push(...checkFresh(text, r.stdout.trim()).map((p) => `${file}: ${p}`));
+  }
+  if (usePrs) {
+    const repo = process.env.GITHUB_REPOSITORY;
+    const r = spawnSync('gh', ['api', repo ? `repos/${repo}/pulls?state=open&per_page=100` : 'repos/{owner}/{repo}/pulls?state=open&per_page=100'], { encoding: 'utf8' });
+    if (r.status === 0) {
+      const self = Number((process.env.GITHUB_REF || '').match(/refs\/pull\/(\d+)\//)?.[1]) || null;
+      notes.push(...missingPrs(text, JSON.parse(r.stdout), self));
+    } else notes.push('chưa đọc được danh sách PR (cần gh đã đăng nhập), bỏ qua phần này.');
+  }
+  if (cards) notes.push(...overdueCards(readFileSync(cards, 'utf8'), new Date().toISOString().slice(0, 10)));
+  for (const n of notes) console.log(process.env.GITHUB_ACTIONS ? `::warning::${n}` : `nhắc: ${n}`);
   const plansDir = join(dirname(file), 'plans');
   if (existsSync(plansDir)) {
     for (const f of readdirSync(plansDir).filter((n) => n.endsWith('.md'))) {
