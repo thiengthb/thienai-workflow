@@ -27,9 +27,11 @@ docs/         Tiến độ và kế hoạch đang chạy của chính repo này
 | | `PLANNING.md` | Cách AI viết kế hoạch gửi thien duyệt, rồi ghi và cập nhật kế hoạch trong repo |
 | | `SETUP.md` | Chuẩn setup chung cho mọi nick và project Claude, có số phiên bản; AI tự kiểm đầu phiên và nhắc khi thiếu |
 | | `HANDOFF.md` | Sổ bàn giao giữa các nick Claude: ghi việc dở sau mỗi bước, nick khác nghe "tiếp tục" là làm tiếp |
+| | `REVIEW.md` | Cách review PR bằng Claude: agent mới review trong phiên trước khi PR sẵn sàng, mục `## Review` trong mô tả PR (CI kiểm), `@claude` khi cần mắt độc lập |
 | | `TUTOR.md` | Cách AI dạy thien ở mọi môn: thử trước, giải thích sau, ghi nhật ký; đứng đúng vai khi làm việc |
 | `templates/` | `AGENTS.template.md` | Mẫu `AGENTS.md` cho mỗi project, đọc được bởi Claude, Codex, Gemini. Mỗi project có thêm `CLAUDE.md` chỉ một dòng `@AGENTS.md` |
 | | `STATUS.template.md` | Mẫu `docs/STATUS.md`: project đang ở đâu, việc tiếp theo, đang chờ ai |
+| | `check-review.mjs` | Script chặn PR đã sẵn sàng mà mô tả thiếu mục `## Review` (`profile/REVIEW.md`). Chép vào `scripts/` của project, chạy bằng một workflow riêng như `.github/workflows/review-check.yml` |
 | | `check-status.mjs` | Script kiểm `docs/STATUS.md` tối đa 40 dòng và tối đa 3 việc chờ thien. Chép vào `scripts/` của project, chạy trong CI |
 | | `PLAN.template.md` | Mẫu ghi kế hoạch đã duyệt vào `docs/plans/`: đang ở đâu, checkpoint có tick, bước đã đổi, lỗi gặp. Luật ở `profile/PLANNING.md` |
 | | `progress-page.mjs` | Sinh trang tiến độ (một repo, hoặc tổng quan nhiều repo) và trang lộ trình học, để AI đăng thành artifact |

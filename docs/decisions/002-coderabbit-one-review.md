@@ -1,6 +1,6 @@
 # 002. CodeRabbit review một lần mỗi PR, khi PR đã sẵn sàng
 
-Ngày: 2026-11-14 · Trạng thái: Đã chọn · Người quyết: thien
+Ngày: 2026-11-14 · Trạng thái: Đã chọn, tới 2026-11-24; sau đó thay bằng [003](003-claude-as-reviewer.md) · Người quyết: thien
 
 ## Cần quyết gì
 CodeRabbit (bot review PR) bắt được nhiều lỗi thật, nhưng mỗi lần đẩy nó review mất 5–11 phút, gần gấp đôi thời gian CI (khoảng 4 phút). AI chờ review xong mới báo thien, rồi sửa xong lại phải chờ thêm một vòng, nên thien thấy AI làm chậm đi. Luật bàn giao mới (đẩy nhánh sau mỗi bước, PR #62) còn làm số lần đẩy tăng lên.
