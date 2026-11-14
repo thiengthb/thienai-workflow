@@ -11,7 +11,7 @@ thien dùng nhiều nick Claude trên cùng các repo. Các nick không nhìn th
 |---|---|---|---|---|---|
 | `tnt024` | đang dùng | 2026-11 | `Claude`, `sakubun` | Claude: chưa dán | |
 | `tnt628` | đang dùng | 2026-11 | `Claude`, `sakubun` | chưa kiểm | |
-| `tnt697` | đang dùng | 2026-11 | `Claude`, `sakubun` | chưa kiểm | |
+| `tnt697` | đang dùng | 2026-11 | `Claude`, `sakubun` | Claude v2 (kiểm 2026-11-15), sakubun chưa kiểm | |
 
 Trạng thái: `đang dùng`, `tạm nghỉ` (hết usage lâu, chưa bỏ), `đã nghỉ`. Cột "Chuẩn setup" ghi bản đã dán ở từng project, ví dụ `Claude v2, sakubun v1`.
 
