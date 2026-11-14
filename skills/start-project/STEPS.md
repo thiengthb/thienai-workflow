@@ -2,6 +2,11 @@
 
 File này là phần thân của skill `start-project`. `SKILL.md` chỉ trỏ tới đây, nên sửa file này thì không phải tải lại skill lên các tài khoản Claude.
 
+## Khi project đã có nhưng chưa setup (chưa có instructions "chuẩn setup", chưa gắn repo)
+Đây là cổng duy nhất bắt được project quên setup, vì khi chưa gắn repo thì AGENTS.md không được đọc. Lỗi đã gặp 2026-11-14: project "Claude" ở nick tnt024 thiếu instructions và repo mà không ai nhắc.
+- Project nằm trong bảng của `profile/SETUP.md`: kiểm theo mục "AI kiểm gì, lúc nào" ở đó (gắn repo thienai-workflow vào phiên nếu được rồi chạy `templates/setup-check.mjs`), nhắc thien đoạn cần dán và chỗ bấm, rồi làm việc thien giao. Không hỏi lại câu "áp quy trình chung không".
+- Project không có trong bảng: làm như mục dưới (project mới).
+
 ## Khi bắt đầu project mới
 Skill có thể được gọi ở coordinator hoặc ở một thread. Khi nói với thien, gọi là "quy trình chung", không nhắc tên skill.
 

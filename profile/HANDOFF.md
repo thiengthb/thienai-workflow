@@ -33,6 +33,10 @@ thien dùng nhiều nick Claude. Nick đang làm có thể hết usage (phiên h
 3. Việc đang chờ thien chọn trên trang: link cũ chỉ mở được ở nick cũ. Chạy lệnh dựng lại ghi trong sổ, đăng thành trang mới, gửi thien link mới, ghi link mới vào sổ. Lựa chọn thien đã bấm mà chưa gửi trên trang cũ thì mất; thien bấm lại.
 4. Làm tiếp từ "Bước tiếp theo", và ghi sổ sau mỗi bước như trên.
 
+## Nhiều nick
+- Dòng "Ghi bởi" luôn có tên nick (`Ghi bởi: Claude tnt024, <link thread>`), và link trang ghi "(mở ở nick tntXXX)". `list` in nick của từng việc.
+- Việc mà nick khác ghi trong 24 giờ qua: hỏi thien trước khi nhận, trừ khi thien đã nói "tiếp tục". Luật đủ ở [`ACCOUNTS.md`](ACCOUNTS.md).
+
 ## Giới hạn
 - Hết usage giữa chừng thì mất nhiều nhất phần làm từ lần `save` gần nhất.
 - Chỉ việc làm ở nơi có quyền đẩy lên repo (project có gắn repo, Claude Code, Codex) mới ghi sổ được. Chat thường trên claude.ai không ghi được.
