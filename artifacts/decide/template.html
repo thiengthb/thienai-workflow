@@ -102,6 +102,11 @@ dialog#zoom img { display: block; width: 100%; height: auto; }
   <section class="view-table card tbl" id="table" data-area="table" aria-label="Bảng so sánh"></section>
   <section class="view-cards cards" id="cards" data-area="cards" aria-label="Các phương án"></section>
   <div class="rec" id="rec" role="status" aria-live="polite"></div>
+  <!-- Hỏi Claude về các phương án (Kit.ask, khả năng sample). Chỉ hiện khi trang hỏi được. -->
+  <div class="card ai-ask kit-ask">
+    <form class="ai-form" id="ai-form"><input id="ai-q" type="text" maxlength="300" placeholder="Hỏi Claude, ví dụ: B khác C ở chỗ nào?" aria-label="Câu hỏi cho Claude về các phương án"><button class="btn" type="submit" id="ai-send">Hỏi</button></form>
+    <p class="ai-out" id="ai-out" role="status"></p>
+  </div>
   <div class="card ask">
     <label class="label" for="note">Ghi chú (không bắt buộc)</label>
     <textarea id="note" maxlength="3000" disabled placeholder="Ví dụ: lấy C nhưng thêm phần thanh bước của B"></textarea>

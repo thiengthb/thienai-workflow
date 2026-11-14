@@ -100,5 +100,5 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   await shootOptions(spec, specDir, resolve(out)).catch((e) => { console.error(e.message); process.exit(1); });
   const { decision, files } = build(spec, specDir, resolve(out));
   console.log(`Đã dựng ${decision.options.length} phương án vào ${resolve(out)}/index.html`);
-  for (const l of writePublish(resolve(out), { files, capabilities: { comments: {}, db: {} }, icon: 'choice', description: decision.question })) console.log(l);
+  for (const l of writePublish(resolve(out), { files, capabilities: { comments: {}, db: {}, sample: {} }, icon: 'choice', description: decision.question })) console.log(l);
 }

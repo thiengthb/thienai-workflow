@@ -5,7 +5,8 @@
    Kit.saveFile(n, text) đưa file cho người xem lưu (khả năng downloads); không có thì chép.
    Kit.store(key, path)  nháp trong máy (localStorage) + bản trong db của trang ở `path`, để Claude đọc lại.
    Kit.put(path, obj)    ghi một document một lần (không qua hàng đợi), ví dụ bản chụp của lần gửi.
-   Kit.sendToClaude(text, el)  gửi một comment cho Claude (người sửa được trang); trả về true nếu đã gửi. */
+   Kit.sendToClaude(text, el)  gửi một comment cho Claude (người sửa được trang); trả về true nếu đã gửi.
+   Kit.ask(prompt, out, opts)  hỏi Claude ngay trên trang (khả năng sample), chữ hiện dần vào out; trả về câu trả lời hoặc null. */
 (() => {
   const caps = {};
   function cap(name, ms = 10000) {
@@ -128,5 +129,46 @@
     catch (e) { return false; }
   }
 
-  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude };
+  // ---------- Hỏi Claude ngay trên trang (khả năng sample) ----------
+  // Tốn lượt dùng Claude của chính người xem; lần hỏi đầu, claude.ai hỏi người xem có cho phép không.
+  // Trang hỏi được thì <html> có class kit-ask-on (CSS chỉ hiện các chỗ hỏi khi có class này); người xem từ chối thì kit-ask-off.
+  const askMsg = {
+    rate_limited: 'Hỏi nhiều quá trong một lúc, hoặc đã hết lượt dùng Claude. Thử lại sau ít phút.',
+    session_expired: 'Phiên đăng nhập claude.ai đã hết. Tải lại trang rồi hỏi lại.',
+    refused: 'Claude không trả lời câu này. Thử hỏi cách khác.',
+    empty_completion: 'Claude chưa viết được gì. Thử hỏi ngắn hơn.',
+    prompt_too_large: 'Câu hỏi dài quá. Thử hỏi ngắn hơn.',
+  };
+  const askOffCodes = ['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'];
+  cap('sample').then((s) => document.documentElement.classList.toggle('kit-ask-on', !!s));
+  /** Hỏi Claude, hiện câu trả lời dần vào `out`. Trả về chữ của câu trả lời, hoặc null khi không hỏi được (đã ghi lý do vào `out`).
+   *  opts: { tier: 'quick'|'default', cache: true|false } */
+  async function ask(prompt, out, opts = {}) {
+    const s = await cap('sample');
+    out.classList.add('ai-out');
+    if (!s || document.documentElement.classList.contains('kit-ask-off')) { out.textContent = 'Trang này chưa hỏi Claude được ở đây.'; return null; }
+    out.textContent = 'Claude đang nghĩ…'; out.classList.add('thinking');
+    try {
+      const o = { onText: ({ text }) => { out.classList.remove('thinking'); out.textContent = text; } };
+      if (opts.tier) o.modelTier = opts.tier;
+      if (opts.cache === false) o.cache = false;
+      const { text, truncated } = await s(prompt, o);
+      out.classList.remove('thinking');
+      out.textContent = text + (truncated ? ' …' : '');
+      return text;
+    } catch (e) {
+      out.classList.remove('thinking');
+      const code = e && e.code;
+      if (code === 'cancelled') { out.textContent = (e && e.text) || ''; return null; }
+      if (askOffCodes.includes(code)) {
+        document.documentElement.classList.add('kit-ask-off'); document.documentElement.classList.remove('kit-ask-on');
+        out.textContent = 'Trang chưa được phép hỏi Claude, nên các chỗ hỏi sẽ ẩn đi. Bật lại trong menu Quyền của trang nếu muốn.';
+        return null;
+      }
+      out.textContent = (e && e.text ? e.text + '\n\n' : '') + (askMsg[code] || 'Chưa hỏi được Claude. Thử lại sau.');
+      return null;
+    }
+  }
+
+  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude, ask };
 })();
