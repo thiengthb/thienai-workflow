@@ -1,6 +1,6 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-14 · Claude (project Claude, thread tải skill bằng zip) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
+Cập nhật lần cuối: 2026-11-14 · Claude (project Claude, thread gộp main vào PR #59) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu.
 Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.

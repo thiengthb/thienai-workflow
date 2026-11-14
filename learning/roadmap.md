@@ -80,8 +80,12 @@ Xong khi: thien xếp xong 10 ý lớn và học được vài ý đầu qua cá
 - [x] Ý 2, ba tầng: xếp việc 1075–1077 vào tầng, làm Đại tướng Võ Nguyên Giáp ở Điện Biên Phủ (2026-11-12, [bài](war/lessons/03-three-levels-dien-bien-phu.md))
 - [x] Ý 4, hậu cần: đánh chắc cần thêm bao nhiêu, chở bằng gì ở Điện Biên Phủ (2026-11-12, phần 2 trên sa bàn 2026-11-14, [bài](war/lessons/04-logistics-dien-bien-phu.md))
 - [ ] Ý 3, địa hình và thời tiết (đã chạm ở buổi 1)
-- [ ] Ý 5 đánh chỗ yếu tránh chỗ mạnh, ý 6 bất ngờ và lừa địch: mỗi ý một buổi riêng (buổi 1 mới chạm qua; thien chọn học riêng ngày 2026-11-14)
-- [ ] Ý 7 tinh thần, ý 8 vũ khí và công nghệ, ý 9 sương mù chiến tranh, ý 10 chiến tranh nhân dân và du kích
+- [ ] Ý 5, đánh chỗ yếu tránh chỗ mạnh (buổi 1 mới chạm qua; thien chọn học riêng ngày 2026-11-14)
+- [ ] Ý 6, bất ngờ và lừa địch (buổi 1 mới chạm qua; thien chọn học riêng ngày 2026-11-14)
+- [ ] Ý 7, tinh thần
+- [ ] Ý 8, vũ khí và công nghệ
+- [ ] Ý 9, sương mù chiến tranh
+- [ ] Ý 10, chiến tranh nhân dân và du kích
 
 ### Chặng 2: Đi sâu một chiến dịch (thien chọn hướng 1 ngày 2026-11-12)
 Bắt đầu khi: xong 10 ý ở chặng 1, khoảng 7 buổi nữa (ý 3, 5, 6, 7, 8, 9, 10), mỗi ý một buổi. Quyết định ở mốc 2026-12-13: đi sâu, giữ ở mức ôn, hay cho môn nghỉ. Bốn hướng, đều lấy từ mục "Mục tiêu" trong `war.md`:
