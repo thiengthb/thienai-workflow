@@ -53,7 +53,7 @@
 
   // ---------- Bàn thử ----------
   // <div class="pane bench" data-pane="bank"> chứa .phone > .screen (màn app), [data-knob] (núm), .code (dòng CSS), [data-soi-toggle].
-  function benchApply(b, knob, btn, quiet) {
+  function benchApply(b, knob, btn, quiet, demo) {
     const scr = mainScreen(b), k = knob.dataset.knob, val = btn.dataset.val, name = b.dataset.pane;
     if (knob.dataset.var) scr.style.setProperty(knob.dataset.var, val); else scr.dataset[k] = val;
     $$('button[data-val]', knob).forEach((x) => x.setAttribute('aria-pressed', String(x === btn)));
@@ -64,7 +64,7 @@
     soiMark(b); b.querySelectorAll('.soi-count').forEach(soiCount);
     const key = name + '.' + k;
     R.knobs[key] = label;
-    matchUpdate(b, !quiet);
+    matchUpdate(b, !quiet, demo);
     if (quiet) return showTried(key);
     const t = R.tried[key] = R.tried[key] || [];
     if (!t.includes(label)) t.push(label);
@@ -108,7 +108,7 @@
       mini.setAttribute('aria-hidden', 'true');
     }
   }
-  function matchUpdate(b, moved) {
+  function matchUpdate(b, moved, demo) {   // demo: Claude's move, never the learner's best
     if (!b.dataset.target) return;
     const target = JSON.parse(b.dataset.target), scr = mainScreen(b), name = b.dataset.pane;
     const scores = Object.entries(target).map(([k, v]) => {
@@ -121,7 +121,7 @@
     const pct = Math.round(scores.reduce((s, x) => s + x, 0) / scores.length * 100);
     const m = R.match[name] = R.match[name] || { best: 0, moves: 0 };
     if (moved) m.moves++;
-    m.now = pct; m.best = Math.max(m.best, pct);
+    m.now = pct; if (!demo) m.best = Math.max(m.best, pct);
     $$('.meter', b).forEach((el) => {
       el.style.setProperty('--p', pct + '%'); el.classList.toggle('full', pct === 100);
       const t = $('span', el); if (t) t.textContent = pct === 100 ? 'Giống hệt' : `Giống ${pct}%`;
@@ -256,7 +256,7 @@
     // Vẽ: thẻ xếp thành hàng trong ô của nó (hoặc trong khay nếu chưa đặt), tính bằng px trong .bd-area.
     function layout(depth = 0) {
       // st.demo: chỗ Claude đang xếp khi làm mẫu (Lesson.demo), đè lên cách của người học tới khi bấm "Trả lại cách của mình".
-      const where = st.showAnswer ? ans : (st.demo || st.place), A = area.getBoundingClientRect(), gap = 6;
+      const where = st.demo || (st.showAnswer ? ans : st.place), A = area.getBoundingClientRect(), gap = 6;
       let grew = false;
       const groups = new Map();
       visible().forEach((c) => { const z = where[c.dataset.c]; const box = (z && zones.find((x) => x.dataset.z === z)) || tray; if (!groups.has(box)) groups.set(box, []); groups.get(box).push(c); });
@@ -448,11 +448,11 @@
             if (!kn) throw new Error('Không có núm ' + knob + '. Các núm: ' + knobs.map((x) => x.dataset.knob).join(', '));
             const btn = $$('button[data-val]', kn).find((x) => x.dataset.val === value || valName(x) === value);
             if (!btn) throw new Error(`Núm ${knob} không có giá trị ${value}. Các giá trị: ` + $$('button[data-val]', kn).map((x) => x.dataset.val).join(', '));
-            benchApply(b, kn, btn, true);
+            benchApply(b, kn, btn, true, true);
             return { did: `${knobLabel(kn)} → ${valName(btn)}.`, result: 'Màn giờ: ' + report() };
           } }],
         save() { return knobs.map((kn) => [kn, cur(kn)]); },
-        restore(saved) { (saved || []).forEach(([kn, btn]) => { if (btn) benchApply(b, kn, btn, true); }); },
+        restore(saved) { (saved || []).forEach(([kn, btn]) => { if (btn) benchApply(b, kn, btn, true, true); }); },
       };
     } });
 

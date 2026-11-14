@@ -30,6 +30,7 @@
   /** Enables every [data-need] button whose keys are all done. Review gates stay open once the lesson was finished before. */
   function gate() {
     $$('[data-need]').forEach((b) => {
+      if (b.dataset.running) { b.disabled = true; return; }   // a Claude demo is still running on this step
       if (reviewOff() && b.hasAttribute('data-review-gate')) { b.disabled = false; return; }
       b.disabled = !b.dataset.need.split(/\s+/).filter(Boolean).every((k) => done.has(k));
     });
@@ -102,7 +103,7 @@
     if ((R.teach || '').trim()) L.push('', 'Tự nói lại: ' + R.teach.trim());
     const asked = (R.ai || []).filter((x) => x.kind === 'ask');
     if (asked.length) L.push('', 'Đã hỏi Claude trong bài: ' + asked.map((x) => `"${x.q}" (${x.step})`).join('; '));
-    const used = (R.ai || []).filter((x) => x.kind !== 'ask').map((x) => x.kind === 'teach' ? 'nhận xét bài tự nói lại' : 'giải thích câu ' + x.q);
+    const used = (R.ai || []).filter((x) => x.kind !== 'ask' && x.kind !== 'demo').map((x) => x.kind === 'teach' ? 'nhận xét bài tự nói lại' : 'giải thích câu ' + x.q);
     if (used.length) L.push('Nhờ Claude: ' + [...new Set(used)].join(', '));
     const demos = (R.ai || []).filter((x) => x.kind === 'demo');
     if (demos.length) L.push('Xem Claude làm mẫu: ' + [...new Set(demos.map((x) => x.step))].join(', '));
@@ -286,10 +287,10 @@
     box.append(open, hint, log, out, undo);
     const askBox = step.querySelector('.ai-ask');
     if (askBox) askBox.before(box); else if (next) next.before(box); else step.append(box);
-    let saved = null, cur = null;
+    let saved = null, cur = null, changed = false;   // changed: Claude has moved the stage since the learner's own state
     open.addEventListener('click', async () => {
       cur = p.match(step); if (!cur) return;
-      open.disabled = true; undo.hidden = true; log.innerHTML = '';
+      open.disabled = true; open.dataset.running = '1'; undo.hidden = true; log.innerHTML = '';
       if (saved == null && cur.save) saved = cur.save();
       let moves = 0;
       const tools = cur.tools.map((t) => ({ name: t.name, description: t.description, inputSchema: t.inputSchema,
@@ -312,12 +313,15 @@
         + 'Mỗi lần gọi công cụ là một thao tác; ghi lý do vào "why": một câu ngắn nói vì sao làm vậy, người học thấy câu này ngay cạnh thao tác. '
         + 'Làm từ 2 đến 6 thao tác theo thứ tự hợp lý, đừng thử lung tung. Chỉ dùng điều có trên trang, không thêm chi tiết mới. '
         + 'Xong thì viết 1 đến 2 câu tóm lại điều rút ra; nếu cách của bạn khác cách người học đã làm thì nói khác ở đâu, không chê. ' + VOICE].join('\n');
-      const a = await Kit.ask(prompt, out, { tools });
+      let a = '';
+      try { a = await Kit.ask(prompt, out, { tools }); } finally {
+        if (moves) changed = true;
+        undo.hidden = !(changed && cur.restore);
+        delete open.dataset.running; open.disabled = false; open.textContent = 'Xem Claude làm lại';
+      }
       R.ai.push({ kind: 'demo', step: h, moves, a: a || '' });
-      if (moves && cur.restore) undo.hidden = false;
-      open.disabled = false; open.textContent = 'Xem Claude làm lại';
     });
-    undo.addEventListener('click', () => { if (cur && cur.restore) cur.restore(saved); saved = null; undo.hidden = true; });
+    undo.addEventListener('click', () => { if (cur && cur.restore) cur.restore(saved); saved = null; changed = false; undo.hidden = true; });
   }
 
   // ---------- Thêm một tình huống như vậy (đề xuất T3) ----------
@@ -353,11 +357,12 @@
       const v = await Kit.askJson(prompt, out);
       gen.disabled = false;
       if (!v) return;
-      const ok = v && typeof v.situation === 'string' && typeof v.question === 'string' && Array.isArray(v.options) && v.options.length >= 2
-        && v.options.every((o) => typeof o === 'string') && Number.isInteger(v.answer) && v.answer >= 0 && v.answer < v.options.length;
+      const text = (s) => typeof s === 'string' && s.trim() !== '';
+      const ok = v && text(v.situation) && text(v.question) && text(v.why) && Array.isArray(v.options) && v.options.length === 3
+        && v.options.every(text) && Number.isInteger(v.answer) && v.answer >= 0 && v.answer < v.options.length;
       if (!ok) { out.textContent = 'Claude soạn chưa đúng dạng. Bấm lại để soạn tình huống khác.'; return; }
       gen.textContent = 'Tình huống khác';
-      const st = el('p', { className: 'status', role: 'status' }), why = el('p', { className: 'why', textContent: v.why || '' });
+      const st = el('p', { className: 'status', role: 'status' }), why = el('p', { className: 'why', textContent: v.why });
       const opts = v.options.map((t) => { const o = el('button', { type: 'button', className: 'opt', textContent: t }); o.dataset.noreplay = ''; return o; });
       area.append(el('p', { textContent: v.situation }), el('p', {}, el('b', { textContent: v.question })), el('div', { className: 'q' }, st, ...opts, why));
       opts.forEach((o, i) => o.addEventListener('click', () => {
