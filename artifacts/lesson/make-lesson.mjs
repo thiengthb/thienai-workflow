@@ -96,9 +96,22 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const args = process.argv.slice(2);
   const flag = (n) => { const i = args.indexOf('--' + n); return i >= 0 ? args.splice(i, 2)[1] : undefined; };
   const bool = (n) => { const i = args.indexOf('--' + n); return i >= 0 ? (args.splice(i, 1), true) : false; };
-  const outArg = flag('out'), noCheck = bool('no-check');
+  const outArg = flag('out'), noCheck = bool('no-check'), ackOpen = bool('ack-open');
   const [file, id] = args;
-  if (!file) { console.error('Cách dùng: node artifacts/lesson/make-lesson.mjs <trang.html> [lesson-id] [--out <thư-mục>] [--no-check]'); process.exit(1); }
+  if (!file) { console.error('Cách dùng: node artifacts/lesson/make-lesson.mjs <trang.html> [lesson-id] [--out <thư-mục>] [--no-check] [--ack-open]'); process.exit(1); }
+  // Trước khi dựng: nhánh chưa merge (PR đang mở) nào đã sửa bài của môn này thì dừng, để không làm trùng việc phiên khác (lỗi 2026-11-13, PR #44).
+  const subjOpen = (file.replace(/\\/g, '/').match(/learning\/([^/]+)\/pages\//) || [])[1];
+  if (subjOpen && !ackOpen) {
+    try {
+      const { openWork, report } = await import('../../templates/check-open-work.mjs');
+      const { execFileSync } = await import('node:child_process');
+      // Trang mới thì thư mục của nó có thể chưa có: đi lên tới thư mục cha đã có rồi mới hỏi git.
+      let near = dirname(resolve(file)); while (!existsSync(near) && dirname(near) !== near) near = dirname(near);
+      const root = (() => { try { return execFileSync('git', ['-C', near, 'rev-parse', '--show-toplevel'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch (e) { return ''; } })();
+      const paths = [`learning/${subjOpen}.md`, `learning/${subjOpen}/`], list = root && existsSync(join(root, 'learning')) ? openWork({ paths, cwd: root }) : [];
+      if (list.length || list.stale) { console.error(report(list, paths) + '\nĐọc các nhánh đó (hoặc gộp vào nhánh của mình) rồi chạy lại với --ack-open.'); process.exit(1); }
+    } catch (e) { console.error('Không kiểm được nhánh chưa merge (' + (e.message || e) + '). Xem trang Pull requests rồi chạy lại với --ack-open.'); process.exit(1); }
+  }
   // Lần đầu: trang chưa có thì chép mẫu ra, để AI điền nội dung rồi chạy lại đúng lệnh này.
   if (!existsSync(file)) {
     mkdirSync(dirname(resolve(file)), { recursive: true });

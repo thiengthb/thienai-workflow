@@ -30,7 +30,11 @@ jobs:
       - run: node .github/scripts/publish-progress.test.mjs
       - run: node .github/scripts/make-review.test.mjs
       - run: node .github/scripts/after-lesson.test.mjs
+      - run: node .github/scripts/check-open-work.test.mjs
+      - run: node .github/scripts/handoff.test.mjs
+      - run: node .github/scripts/setup-check.test.mjs
       - run: node .github/scripts/check-tokens.test.mjs
+      - run: node .github/scripts/pack-skills.test.mjs
       - run: node artifacts/lesson/after-lesson.mjs --check-all
       - run: node templates/check-status.mjs docs/STATUS.md --git --prs --cards learning/cards.md
         env:

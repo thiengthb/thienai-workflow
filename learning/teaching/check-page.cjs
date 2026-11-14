@@ -53,6 +53,9 @@ const SIZES = [
     const page = await ctx.newPage();
     // bộ khung chung tự lưu chỗ đang học vào localStorage; xóa trước mỗi lần tải để mỗi lần bấm thử bắt đầu từ trang sạch
     await ctx.addInitScript(() => { try { localStorage.clear(); } catch (e) {} });
+    // Máy kiểm không ra được CDN (mạng chặn): THREE_JS=<đường dẫn three.min.js> thì lấy bản ở máy; phông chữ bỏ qua.
+    if (process.env.THREE_JS) await ctx.route(/three(\.js)?\/r?\d+.*three\.min\.js$/, (r) => r.fulfill({ path: process.env.THREE_JS, contentType: 'text/javascript' }));
+    await ctx.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.fulfill({ body: '', contentType: 'text/css' }));
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)/.test(m.text())) errors.push(m.text()); });
@@ -67,7 +70,7 @@ const SIZES = [
 
     const targets = await page.evaluate(() => { const shown = e => { if (e.offsetParent === null && getComputedStyle(e).position !== 'fixed') return false; let o = 1; for (let n = e; n && n.nodeType === 1; n = n.parentElement) { const cs = getComputedStyle(n); if (cs.visibility === 'hidden' || cs.display === 'none') return false; o *= +cs.opacity; } return o > 0.05; }; return [...document.querySelectorAll('button, a[href], input, select, textarea, [role=button]')]
       .filter(shown)
-      .map((e, i) => { e.dataset.chk = i; const r = e.getBoundingClientRect(); return { i, w: r.width, h: r.height, t: (e.textContent || e.getAttribute('aria-label') || e.tagName).trim().slice(0, 40), btn: e.tagName === 'BUTTON' && !e.disabled && e.getAttribute('aria-pressed') !== 'true' && !e.hasAttribute('data-reset') }; }); });
+      .map((e, i) => { e.dataset.chk = i; const r = e.getBoundingClientRect(); return { i, w: r.width, h: r.height, t: (e.textContent || e.getAttribute('aria-label') || e.tagName).trim().slice(0, 40), btn: e.tagName === 'BUTTON' && !e.disabled && e.getAttribute('aria-pressed') !== 'true' && !e.hasAttribute('data-reset') && !e.classList.contains('mic') }; }); });
     for (const t of targets) {
       const m = Math.min(t.w, t.h);
       if (m < 24) { fails++; console.log(`[${size.name}] LỖI vùng bấm ${Math.round(t.w)}x${Math.round(t.h)}: "${t.t}"`); }

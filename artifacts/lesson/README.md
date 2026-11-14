@@ -20,7 +20,7 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 
 ## Cách AI soạn một buổi
 
-1. `node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html`: trang chưa có thì script chép `template.html` ra đó rồi dừng.
+1. `node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html`: trang chưa có thì script chép `template.html` ra đó rồi dừng. Trước đó script tải nhánh mới nhất và dừng nếu có nhánh chưa merge (PR của phiên khác) sửa `learning/<môn>.md` hay `learning/<môn>/`: đọc nhánh đó, gộp vào nhánh của mình nếu cần, rồi chạy lại với `--ack-open`.
 2. Thay mọi chỗ `__…__` (id dạng `frontend-06`, tên môn, tên buổi, tiêu đề) và nội dung mẫu. Phần riêng của bài (sơ đồ, mô phỏng) viết trong `<style>` và `<script>` cuối trang; ghi kết quả vào `R`, gọi `Lesson.done('<khóa>')` khi một việc xong. Chỉ đổi `R` và gọi `Lesson.done` trong lúc bấm nút hay gõ chữ: phần tự lưu chỉ ghi lại lần bấm và chữ đã gõ, tải lại thì bấm lại đúng thứ tự, nên thứ gì sinh ra từ đó đều tự về. Kéo thả hay hẹn giờ thì không về được, cần thì đổi thành nút.
 3. Chạy lại đúng lệnh ở bước 1. Script chép lõi chung và khung vào trang (chạy lại được, thay bản cũ), tự chạy `learning/teaching/check-page.cjs` trên điện thoại và laptop, qua thì ghi `publish.json` vào thư mục tạm `lesson-<id>` (hoặc `--out <thư-mục>`). Chưa qua thì sửa rồi chạy lại.
 4. Gọi Artifact với đúng tham số trong `publish.json` (trang, `capabilities` `{"db": {}, "comments": {}, "sample": {}, "dictation": {}, "tts": {}}`).

@@ -242,7 +242,7 @@
       d.onFinal(({ text }) => {
         if (!text || !text.trim()) return;
         field.value = (field.value.trim() ? field.value.trim() + ' ' : '') + text.trim();
-        field.dispatchEvent(new Event('input', { bubbles: true })); say('');
+        field.dispatchEvent(new CustomEvent('input', { bubbles: true, detail: { kitDictation: true } })); say(''); // detail: phần tự lưu chỉ nhận sự kiện thật, trừ chữ nói thay gõ
         if (onUse) onUse();
       });
       d.onState(({ state }) => { listening = state === 'listening'; btn.setAttribute('aria-pressed', String(listening)); if (!listening) say(''); });
