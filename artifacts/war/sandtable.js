@@ -200,26 +200,47 @@
     // ---------- Nhãn ----------
     const labelEls = {};
     b.units.forEach((u) => { const s = $el('span', 'st-lbl ' + u.side); labels.appendChild(s); labelEls[u.id] = s; });
-    function project(u) {
-      const [x, z] = G.xz(u.at);
+    function project(u) { return projectAt(u.at); }
+    function projectAt(at) {
+      const [x, z] = G.xz(at);
       if (flat) { const [px, pz] = flatProj(x, z); return [px, pz - 10, true]; }
       const v = new THREE.Vector3(x, G.hAt(x, z) + .3, z).project(camera);
       return [(v.x + 1) / 2 * stage.clientWidth, (1 - v.y) / 2 * stage.clientHeight, v.z < 1];
     }
+    // Nhãn không được đè lên ký hiệu đơn vị, lên khung chú thích hay nút góc, và không tràn mép.
+    // Mỗi nhãn thử lần lượt: trên, dưới, phải, trái ký hiệu; chỗ nào cũng vướng thì ẩn nhãn ưu tiên thấp.
     function placeLabels(S) {
-      const W = stage.clientWidth, H = stage.clientHeight, taken = [];
-      const list = b.units.filter((u) => S.show.has(u.id)).map((u) => ({ u, pri: (S.hit.has(u.id) ? 10 : 0) + (u.rank || 1) }));
+      const W = stage.clientWidth, H = stage.clientHeight, sr = stage.getBoundingClientRect();
+      const ui = [legend, tools, note].filter((x) => x.offsetParent && x.offsetWidth).map((x) => { const r = x.getBoundingClientRect(); return [r.left - sr.left - 4, r.top - sr.top - 4, r.right - sr.left + 4, r.bottom - sr.top + 4]; });
+      const list = b.units.filter((u) => S.show.has(u.id)).map((u) => ({ u, pri: (S.hit.has(u.id) ? 10 : 0) + (u.rank || 1), p: project(u) }));
       list.sort((a, c) => c.pri - a.pri);
+      const marks = list.filter((o) => o.p[2]).map((o) => [o.p[0] - 9, o.p[1] - 6, o.p[0] + 9, o.p[1] + 16]);
+      // Đường tấn công, hào: lấy mẫu dọc đường thành ô nhỏ. Nhãn cố tránh, không tránh được thì vẫn hiện.
+      const path = [];
+      S.lines.forEach((l) => l.pts.forEach((pt, i) => { if (!i) return; const a = l.pts[i - 1];
+        for (let k = 0; k <= 6; k++) { const q = projectAt([a[0] + (pt[0] - a[0]) * k / 6, a[1] + (pt[1] - a[1]) * k / 6]); if (q[2]) path.push([q[0] - 3, q[1] - 3, q[0] + 3, q[1] + 3]); } }));
+      const taken = [...ui], hitAny = (bx, arr) => arr.some((t) => !(bx[2] <= t[0] || bx[0] >= t[2] || bx[3] <= t[1] || bx[1] >= t[3]));
       b.units.forEach((u) => { labelEls[u.id].hidden = true; });
-      for (const { u } of list) {
-        const e = labelEls[u.id], [x, y, front] = project(u);
+      for (const { u, p: [x, y, front] } of list) {
+        const e = labelEls[u.id];
         if (!front || x < 0 || y < 0 || x > W || y > H) continue;
         const name = S.rename[u.id] || u.short || u.name, lost = S.lose.has(u.id);
         e.textContent = name + (lost ? ' · đã mất' : '');
         e.className = 'st-lbl ' + u.side + (S.hit.has(u.id) ? ' hit' : '') + (lost ? ' lost' : '') + (S.dim.has(u.id) ? ' dim' : '');
         e.hidden = false;
-        const w = e.offsetWidth, h = e.offsetHeight, box = [x - w / 2, y - h - 4, x + w / 2, y - 4];
-        if (taken.some((t) => !(box[2] < t[0] || box[0] > t[2] || box[3] < t[1] || box[1] > t[3]))) { e.hidden = true; continue; }
+        const w = e.offsetWidth, h = e.offsetHeight;
+        const tries = [[x - w / 2, y - h - 8], [x - w / 2, y + 18], [x + 12, y - h / 2 + 4], [x - w - 12, y - h / 2 + 4]];
+        let box = null;
+        for (const strict of [true, false]) {
+          for (const [l, t] of tries) {
+            const bx = [l, t, l + w, t + h];
+            if (l < 2 || t < 2 || l + w > W - 2 || t + h > H - 2) continue;
+            if (hitAny(bx, taken) || hitAny(bx, marks) || (strict && hitAny(bx, path))) continue;
+            box = bx; break;
+          }
+          if (box) break;
+        }
+        if (!box) { e.hidden = true; continue; }
         taken.push(box);
         e.style.transform = `translate(${Math.round(box[0])}px, ${Math.round(box[1])}px)`;
       }

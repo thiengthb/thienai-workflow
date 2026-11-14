@@ -5,6 +5,11 @@ body { font-size: 16px; line-height: 1.55; -webkit-text-size-adjust: 100%; }
 .top { position: sticky; top: 0; z-index: 5; padding: 12px 0 10px; background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
 .top .meta { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
 .top .bar { height: 4px; }
+.top .meta { align-items: center; }
+.top .meta > span:first-child { flex: 1; min-width: 0; }
+.top .back { background: none; border: 0; padding: 0 8px; min-height: 32px; font: 600 13px/1 var(--font); color: var(--accent); cursor: pointer; border-radius: var(--r); }
+.top .back:hover { background: var(--soft); }
+@media (pointer: coarse) { .top .back { min-height: 44px; } }
 
 .step { display: none; }
 .step.on { display: grid; gap: 12px; animation: step-in .2s ease; }

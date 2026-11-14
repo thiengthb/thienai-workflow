@@ -21,6 +21,7 @@
     steps.forEach((s, j) => s.classList.toggle('on', j === i));
     const shown = steps.filter((s) => !skip(s)), at = Math.max(0, shown.indexOf(steps[i]));
     $('#cnt').textContent = (at + 1) + '/' + shown.length;
+    const bk = $('.top .back'); if (bk) bk.hidden = at === 0;
     $('#bar').style.width = (shown.length > 1 ? at / (shown.length - 1) * 100 : 100) + '%';
     window.scrollTo(0, 0);
     const h = steps[i].querySelector('h1, h2');
@@ -36,6 +37,18 @@
   function mark(key) { done.add(key); gate(); }
 
   $$('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
+
+  // Nút quay lại ở thanh trên: mở bước liền trước (bỏ qua bước ôn đã ẩn). Không xóa gì đã làm, chỉ để xem lại.
+  // data-noreplay: phần tự lưu không ghi và không đếm nút này, nên bài đang học dở vẫn mở lại đúng chỗ.
+  const meta = $('.top .meta'), back = meta && document.createElement('button');
+  if (back) {
+    back.type = 'button'; back.className = 'back'; back.dataset.noreplay = ''; back.textContent = '← Quay lại'; back.hidden = true;
+    back.addEventListener('click', () => {
+      const i = steps.findIndex((s) => s.classList.contains('on'));
+      for (let j = i - 1; j >= 0; j--) if (!skip(steps[j])) { go(steps[j].dataset.s); return; }
+    });
+    meta.insertBefore(back, $('#cnt'));
+  }
 
   // Câu hỏi một lựa chọn: <div class="q" data-q="F2" data-a="1" [data-kind="review"]> với các .opt, một .status, một .why.
   $$('.q[data-q]').forEach((q) => {
