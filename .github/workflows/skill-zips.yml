@@ -1,0 +1,56 @@
+# Packs every folder in skills/ into <name>.zip and puts the zips on the "skills" release, so thien
+# downloads a ready-to-upload file from a fixed link instead of each file by hand:
+#   https://github.com/thiengthb/thienai-workflow/releases/download/skills/<name>.zip
+# Runs when a skill changes on main, or by hand (Actions > Skill zips > Run workflow).
+name: Skill zips
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'skills/**'
+      - '.github/scripts/pack-skills.mjs'
+      - '.github/workflows/skill-zips.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write   # create the release and upload its files
+
+concurrency:
+  group: skill-zips
+  cancel-in-progress: false
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node .github/scripts/pack-skills.mjs --out dist/skills
+      - name: Create the release once
+        run: |
+          gh release view skills >/dev/null 2>&1 || gh release create skills \
+            --title "Skill zip" --latest=false \
+            --notes "File zip của từng skill trong skills/, tự cập nhật mỗi khi skill đổi trên main. Tải file rồi tải lên Claude ở Customize > Skills."
+      - name: Upload the zips (replaces old ones with the same name)
+        run: gh release upload skills dist/skills/*.zip --clobber
+      - name: Drop zips of skills that no longer exist
+        run: |
+          for a in $(gh release view skills --json assets --jq '.assets[].name'); do
+            [ -f "dist/skills/$a" ] || gh release delete-asset skills "$a" --yes
+          done
+      - name: Note which commit the zips came from
+        run: |
+          {
+            echo "File zip của từng skill trong \`skills/\`, tự cập nhật mỗi khi skill đổi trên main. Tải file rồi tải lên Claude ở Customize > Skills."
+            echo
+            echo "Đóng gói từ commit ${GITHUB_SHA::7} ($(date -u +%F))."
+            echo
+            for f in dist/skills/*.zip; do n=$(basename "$f"); echo "- [$n](https://github.com/${GITHUB_REPOSITORY}/releases/download/skills/$n)"; done
+          } > notes.md
+          gh release edit skills --notes-file notes.md

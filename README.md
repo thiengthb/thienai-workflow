@@ -71,7 +71,7 @@ Chuẩn setup cho nick và cho từng project (project instructions, repo phải
    ```
    Dòng thứ tư là bản ngắn của mục "Nhắc việc dở" trong `profile/PROFILE.md`; dòng cuối là luật bàn giao giữa các nick (`profile/HANDOFF.md`). Trong project thì luật nằm ở project instructions theo `profile/SETUP.md`.
 2. Nối GitHub cho tài khoản đó (Settings > Connectors > GitHub), cho phép các repo `thienai-workflow`, `sakubun`, `tiktok`. Repo này để riêng tư, nên không nối thì skill không đọc được các bước.
-3. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên file zip của thư mục `skills/start-project/` và `skills/make-slides/`.
+3. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên từng file zip: [start-project.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/start-project.zip), [make-slides.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/make-slides.zip). Link mở được khi trình duyệt đang đăng nhập GitHub của thien. Các file này nằm ở release [`skills`](https://github.com/thiengthb/thienai-workflow/releases/tag/skills), do Action `Skill zips` tự đóng gói lại mỗi khi một skill đổi trên main, nên link luôn trỏ tới bản mới nhất.
 4. Mỗi project: gắn repo và dán project instructions theo `profile/SETUP.md`. Quên thì phiên đầu tiên trong project đó sẽ nhắc.
 
 Codex và Gemini đọc luật qua file trong repo của project, không cần skill:
@@ -81,4 +81,4 @@ Codex và Gemini đọc luật qua file trong repo của project, không cần s
 
 ## Sửa quy trình
 
-Chỉ qua PR vào repo này, thien duyệt. Mỗi milestone AI đề xuất tối đa 3 thay đổi. `profile/PROFILE.md` và phần chung của `templates/AGENTS.template.md` mỗi file dưới 60 dòng: thêm một ý thì bỏ hoặc gộp một ý khác. Các bước của skill nằm ở `skills/start-project/STEPS.md` và được đọc từ repo mỗi lần chạy, nên sửa file đó là đủ. Chỉ khi sửa `SKILL.md` mới phải tải lại file zip lên từng tài khoản.
+Chỉ qua PR vào repo này, thien duyệt. Mỗi milestone AI đề xuất tối đa 3 thay đổi. `profile/PROFILE.md` và phần chung của `templates/AGENTS.template.md` mỗi file dưới 60 dòng: thêm một ý thì bỏ hoặc gộp một ý khác. Các bước của skill nằm ở `skills/start-project/STEPS.md` và được đọc từ repo mỗi lần chạy, nên sửa file đó là đủ. Chỉ khi sửa `SKILL.md` mới phải tải lại file zip (link ở bước 3 phần trên) lên từng tài khoản. Thêm skill mới thì chỉ cần tạo thư mục `skills/<tên>/` có `SKILL.md` (dòng `name:` trùng tên thư mục); Action tự tạo `<tên>.zip`.
