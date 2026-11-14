@@ -24,7 +24,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Thử CodeRabbit CLI gói Free (3 lần mỗi giờ) | quyết định 002 | 2026-11-14 | Sau 24/11; [chưa kiểm] chạy không cần trình duyệt có cần Agentic API key và Usage-based add-on không |
 
 ## Vừa xong
-- Trang bài trong repo chỉ còn là nguồn (kit dựng ra thư mục tạm), CI chỉ kiểm trang bài đổi, chặn PR vừa sửa bài vừa sửa kit (PR này)
+- Trang bài trong repo chỉ còn là nguồn (kit dựng ra thư mục tạm), CI chỉ kiểm trang bài đổi, chặn PR vừa sửa bài vừa sửa kit (PR #77)
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), dựng từ mẫu bàn thử `artifacts/it/` (bài mẫu trong đó chính là nháp buổi 6). Cuối phiên chạy skill `explain-usage` và ghi số vào đợt 0 của kế hoạch học nhẹ dần.

@@ -5,7 +5,7 @@ Trạng thái: đang chạy · Duyệt: 2026-11-15 · Cập nhật: 2026-11-15 �
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 1 đã làm xong trong PR của kế hoạch này (chờ merge). Đợt 0 làm cùng buổi Frontend 6.
+- Đang ở: đợt 1 đã làm xong trong PR #77 (chờ merge, sau PR #76). Đợt 0 làm cùng buổi Frontend 6.
 - Còn thiếu: đo buổi Frontend 6 (đợt 0), rồi đợt 2.
 - thien cần làm: merge PR #76 trước, rồi mới merge PR này (xem "Đã đổi"). Buổi tới nhắn "học" như thường.
 
@@ -102,9 +102,9 @@ Xong khi: thien thấy một bảng trong file này ghi số token của buổi 
 
 ### 1. Repo hết nặng thêm (chỉ máy, không đổi trải nghiệm)
 Xong khi: PR thêm một bài mới chỉ thêm khoảng 20–35 KB; job `pages` không chạy lại bài cũ; thien mở lại 2 link bài cũ trên điện thoại vẫn học được.
-- [ ] `make-lesson.mjs` ghi bản dựng ra thư mục tạm, giữ nguồn rỗng thẻ kit; chạy trên nguồn cũ thì tự làm gọn; đã làm gọn hai trang sa bàn (210 và 185 KB còn 14 và 21 KB) (chờ merge PR này)
-- [ ] `check-pages.mjs --changed` chỉ kiểm trang đổi trong PR cộng trang mẫu mỗi loại (chờ merge PR này)
-- [ ] `check-lesson-sources.mjs` chặn nguồn có kit đã điền, chặn PR vừa sửa bài vừa sửa kit (chờ merge PR này)
+- [ ] `make-lesson.mjs` ghi bản dựng ra thư mục tạm, giữ nguồn rỗng thẻ kit; chạy trên nguồn cũ thì tự làm gọn; đã làm gọn hai trang sa bàn (210 và 185 KB còn 14 và 21 KB) (chờ merge PR #77)
+- [ ] `check-pages.mjs --changed` chỉ kiểm trang đổi trong PR cộng trang mẫu mỗi loại (chờ merge PR #77)
+- [ ] `check-lesson-sources.mjs` chặn nguồn có kit đã điền, chặn PR vừa sửa bài vừa sửa kit (chờ merge PR #77)
 
 ### 2. Hồ sơ nóng cố định và gói buổi
 Xong khi: `reading-cost.mjs` in luồng "học" khoảng 50 KB; thêm 10 buổi giả trong test mà con số không tăng; gói buổi in đúng 3 thẻ đến hạn so với `cards.md`.
