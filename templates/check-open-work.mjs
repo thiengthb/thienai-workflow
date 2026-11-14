@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // Liệt kê việc còn nằm trên nhánh chưa merge (thường là PR đang mở), để không làm trùng việc của phiên khác.
 //
-//   node templates/check-open-work.mjs [đường-dẫn ...] [--base main] [--no-fetch]
+//   node templates/check-open-work.mjs [đường-dẫn ...] [--base <nhánh chính>] [--no-fetch]
 //
-// Tải nhánh mới nhất từ origin, rồi in mọi nhánh trên origin có commit chưa vào main, kèm file nó sửa.
+// Tải nhánh mới nhất từ origin, rồi in mọi nhánh trên origin có commit chưa vào nhánh chính, kèm file nó sửa.
+// Nhánh chính: --base nếu có; không thì nhánh mặc định của origin (origin/HEAD), rồi main, rồi master.
 // Có đường dẫn (ví dụ learning/war.md learning/war/): chỉ báo nhánh sửa đúng những chỗ đó, và thoát mã 1 nếu có,
 // để script khác (make-lesson.mjs) dừng lại. Nhánh đang đứng, và nhánh đã gộp hết vào nhánh đang đứng, không tính.
 // Lý do: ngày 2026-11-13 một phiên dựng bài chiến tranh 4 từ main trong khi PR #44 của phiên khác đã có bài 4
@@ -17,15 +18,23 @@ const git = (...a) => execFileSync('git', a, { cwd: CWD, encoding: 'utf8', stdio
 
 /** Returns [{ branch, subject, date, files }] for origin branches with commits not on base, optionally only those touching paths.
     The array has .stale = true when the fetch failed and the answer comes from old refs. */
-export function openWork({ base = 'main', paths = [], fetch = true, cwd = process.cwd() } = {}) {
+export function openWork({ base, paths = [], fetch = true, cwd = process.cwd() } = {}) {
   CWD = cwd;
   // Ghi rõ refspec: repo clone một nhánh (--single-branch) thì fetch thường chỉ tải main, sẽ không thấy nhánh nào khác.
   let stale = false;
   if (fetch) { try { git('fetch', '-q', '--prune', 'origin', '+refs/heads/*:refs/remotes/origin/*'); } catch (e) { stale = true; /* offline: dùng bản đã tải, nhưng báo cho bên gọi */ } }
+  const has = (ref) => { try { git('rev-parse', '-q', '--verify', ref); return true; } catch (e) { return false; } };
+  if (!base) {
+    try { base = git('symbolic-ref', '--short', 'refs/remotes/origin/HEAD').replace(/^origin\//, ''); } catch (e) { /* clone không ghi origin/HEAD */ }
+    if (!base || !has(`refs/remotes/origin/${base}`)) base = ['main', 'master'].find((b) => has(`refs/remotes/origin/${b}`)) || 'main';
+  }
+  // Không có nhánh chính trên origin thì không so được gì: báo chưa chắc, không ném lỗi.
+  if (!has(`refs/remotes/origin/${base}`)) return Object.assign([], { stale: true, base, missingBase: true });
   let current = '';
   try { current = git('rev-parse', '--abbrev-ref', 'HEAD'); } catch (e) { /* not a repo */ }
   const branches = git('for-each-ref', '--format=%(refname:short)', 'refs/remotes/origin').split('\n')
-    .filter((b) => b && b !== 'origin' && b !== 'origin/HEAD' && b !== `origin/${base}` && b !== `origin/${current}`);
+    // Nhánh handoff là sổ bàn giao, không bao giờ merge (profile/HANDOFF.md): không phải việc chưa merge.
+    .filter((b) => b && b !== 'origin' && b !== 'origin/HEAD' && b !== 'origin/handoff' && b !== `origin/${base}` && b !== `origin/${current}`);
   const out = [];
   for (const b of branches) {
     const ahead = Number(git('rev-list', '--count', `origin/${base}..${b}`));
@@ -38,11 +47,12 @@ export function openWork({ base = 'main', paths = [], fetch = true, cwd = proces
     const [date, subject] = git('log', '-1', '--format=%cs%x09%s', b).split('\t');
     out.push({ branch: b.replace(/^origin\//, ''), subject, date, ahead, files: hit });
   }
-  out.stale = stale;
+  out.stale = stale; out.base = base;
   return out;
 }
 
 export function report(list, paths = []) {
+  if (list.missingBase) return `Không thấy nhánh chính origin/${list.base}. Chạy lại với --base <tên nhánh chính>, hoặc tự xem trang Pull requests trước khi làm.`;
   if (list.stale) return [`Không tải hay không so được nhánh trên origin (mất mạng, không có origin, hay repo clone nông?), nên chưa biết chắc còn việc chưa merge.`,
     `Tự xem trang Pull requests trước khi làm.`, ...(list.length ? [report(Object.assign([...list], { stale: false }), paths)] : [])].join('\n');
   if (!list.length) return paths.length ? `Không có nhánh chưa merge nào sửa ${paths.join(', ')}.` : 'Không có nhánh chưa merge.';
@@ -52,7 +62,7 @@ export function report(list, paths = []) {
 
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   const args = process.argv.slice(2);
-  const bi = args.indexOf('--base'), base = bi >= 0 ? args.splice(bi, 2)[1] : 'main';
+  const bi = args.indexOf('--base'), base = bi >= 0 ? args.splice(bi, 2)[1] : undefined;
   const ni = args.indexOf('--no-fetch'), fetch = ni < 0; if (ni >= 0) args.splice(ni, 1);
   const list = openWork({ base, paths: args, fetch });
   console.log(report(list, args));

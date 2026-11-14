@@ -36,6 +36,19 @@ const shallow = join(d, 'shallow');
 execFileSync('git', ['clone', '-q', '--depth=1', '--branch', 'main', 'file://' + origin, shallow], { stdio: 'ignore' });
 const sh = openWork({ paths: ['learning/war/'], cwd: shallow });
 assert.equal(sh.stale, true, 'shallow clone without merge base is reported as unsure');
+// Repo có nhánh chính tên master: tự nhận ra, không ném lỗi; nhánh chính sai tên thì báo chưa chắc.
+const om = join(d, 'origin-master.git'), wm = join(d, 'work-master');
+execFileSync('git', ['init', '-q', '--bare', '-b', 'master', om]);
+execFileSync('git', ['clone', '-q', om, wm], { stdio: 'ignore' });
+for (const [k, v] of [['user.email', 't@t'], ['user.name', 't']]) g(wm, 'config', k, v);
+writeFileSync(join(wm, 'a.md'), 'a'); g(wm, 'add', '.'); g(wm, 'commit', '-qm', 'init'); g(wm, 'push', '-q', 'origin', 'HEAD:master');
+g(wm, 'checkout', '-qb', 'feat'); writeFileSync(join(wm, 'f.md'), 'f'); g(wm, 'add', '.'); g(wm, 'commit', '-qm', 'feat'); g(wm, 'push', '-q', 'origin', 'feat');
+g(wm, 'checkout', '-q', '--orphan', 'handoff'); writeFileSync(join(wm, 'h.md'), 'h'); g(wm, 'add', 'h.md'); g(wm, 'commit', '-qm', 'note'); g(wm, 'push', '-q', 'origin', 'handoff');
+g(wm, 'checkout', '-qf', 'master');
+const ms = openWork({ cwd: wm });
+assert.equal(ms.base, 'master'); assert.deepEqual(ms.map((w) => w.branch), ['feat'], 'master repo: finds the unmerged branch, skips the handoff branch');
+const wrong = openWork({ cwd: wm, base: 'develop', fetch: false });
+assert.equal(wrong.stale, true); assert.match(report(wrong), /--base/, 'missing base is reported, not thrown');
 // make-lesson: trang mới trong thư mục chưa có (learning/war/pages/) vẫn bị chặn khi nhánh khác đã sửa môn đó.
 const fresh = join(d, 'fresh'); execFileSync('git', ['clone', '-q', origin, fresh], { stdio: 'ignore' }); mkdirSync(join(fresh, 'learning'));
 const page = join(fresh, 'learning/war/pages/new.html'), mk = fileURLToPath(new URL('../../artifacts/lesson/make-lesson.mjs', import.meta.url));
