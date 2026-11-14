@@ -1,0 +1,217 @@
+<title>Thành phần trang học</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>/*KIT_CSS*/</style>
+<style>/*LESSON_CSS*/</style>
+<style>/*IT_CSS*/</style>
+<style>/*WAR_CSS*/</style>
+<style>
+/* Trang mẫu thành phần (đề xuất U1): mọi mảnh dùng chung của trang học, trang ôn, trang chọn phương án, ở một chỗ.
+   Dựng bằng node artifacts/kit/make-gallery.mjs. Chỉ bố cục ở đây; màu lấy từ kit.css như mọi trang khác. */
+body { font-size: 15px; }
+main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 16px; }
+.g-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+.g-head h1 { font-size: 22px; letter-spacing: -.01em; }
+.g-head p { color: var(--muted); max-width: 60ch; margin-top: 4px; }
+.g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 16px; align-items: start; }
+.g-sec { padding: 14px; display: grid; gap: 12px; align-content: start; }
+.g-sec.wide { grid-column: 1 / -1; }
+.g-sec h2 { font-size: 16px; }
+.g-sec > p { font-size: 13.5px; color: var(--muted); }
+.g-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.g-sw { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.g-sw div { display: grid; gap: 4px; font-size: 12px; }
+.g-sw i { display: block; height: 32px; border-radius: var(--r); border: 1px solid var(--line); }
+.g-sw code { font-size: 12px; color: var(--muted); }
+/* Thông báo nổi và thanh tự lưu thường dính đáy màn; ở đây đặt vào dòng để xem. */
+.g-float #kit-toast, .g-float #kit-bar { position: static; transform: none; opacity: 1; width: auto; max-width: none; }
+.g-float { display: grid; gap: 8px; }
+.g-board { display: grid; gap: 10px; }
+.g-board .zones { min-height: 180px; }
+.g-board .tray { display: flex; flex-wrap: wrap; gap: 12px; padding: 26px 12px 12px; }
+.g-board .bd-card { position: relative; }
+.g-knobs { width: 100%; }
+</style>
+<main>
+  <header class="g-head">
+    <div>
+      <h1>Thành phần trang học</h1>
+      <p>Mọi mảnh dùng chung của trang học, trang ôn và trang chọn phương án. Sửa màu hay kiểu ở kit.css thì trang này đổi theo, nhìn một lần là biết có vỡ chỗ nào.</p>
+    </div>
+    <div class="seg" role="group" aria-label="Chế độ màu" id="g-theme">
+      <button type="button" data-t="" aria-pressed="true">Theo máy</button>
+      <button type="button" data-t="light" aria-pressed="false">Sáng</button>
+      <button type="button" data-t="dark" aria-pressed="false">Tối</button>
+    </div>
+  </header>
+
+  <div class="g-grid">
+    <section class="card g-sec wide">
+      <h2>Màu</h2>
+      <p>Chỉ dùng các tên này, không viết thẳng mã màu. check-tokens.mjs báo khi có chỗ viết thẳng.</p>
+      <div class="g-sw" id="g-tokens"></div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Nút</h2>
+      <p>.btn và các biến thể. Một màn chỉ một nút đặc.</p>
+      <div class="g-row">
+        <button class="btn" type="button">Thường</button>
+        <button class="btn primary" type="button">Chính</button>
+        <button class="btn accent" type="button">Nhấn</button>
+        <button class="btn ghost" type="button">Nhạt</button>
+      </div>
+      <div class="g-row">
+        <button class="btn" type="button" aria-pressed="true">Đang bật</button>
+        <button class="btn good" type="button" aria-pressed="true">Nhớ</button>
+        <button class="btn bad" type="button" aria-pressed="true">Quên</button>
+        <button class="btn" type="button" disabled>Chưa bấm được</button>
+      </div>
+      <button class="btn primary next" type="button">Tiếp</button>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Chọn một trong vài</h2>
+      <p>.seg cho lựa chọn nhỏ, .seg.full cho góp ý cuối buổi.</p>
+      <div class="seg" role="group" aria-label="Ví dụ">
+        <button type="button" aria-pressed="true">Ngày</button><button type="button" aria-pressed="false">Tuần</button><button type="button" aria-pressed="false">Tháng</button>
+      </div>
+      <div class="crit">
+        <b>Độ dài buổi học</b>
+        <div class="seg full" role="group" aria-label="Độ dài">
+          <button type="button" aria-pressed="false">Ngắn</button><button type="button" aria-pressed="true">Vừa</button><button type="button" aria-pressed="false">Dài</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Nhãn</h2>
+      <p>.chip để báo trạng thái, luôn có chữ, không chỉ màu.</p>
+      <div class="g-row">
+        <span class="chip">Mặc định</span>
+        <span class="chip good">Đúng</span>
+        <span class="chip bad">Sai</span>
+        <span class="chip accent">Mới</span>
+        <span class="chip sim">Mô phỏng</span>
+      </div>
+      <p class="label">Nhãn mục</p>
+      <p class="muted small">Chữ phụ dùng .muted, chữ nhỏ dùng .small.</p>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Đầu trang và tiến độ</h2>
+      <p>.top dính trên cùng của bài, .bar báo đã đi được bao xa.</p>
+      <div class="top" style="position: static">
+        <div class="meta"><span>Frontend · Buổi 6</span><button class="back" type="button">Quay lại</button><span>3/7</span></div>
+        <div class="bar"><span style="width: 43%"></span></div>
+      </div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Câu hỏi</h2>
+      <p>.q với các dòng .opt: chọn, đúng, sai đều có chữ đi kèm.</p>
+      <div class="q">
+        <b>Hai nút đặc cùng màu đặt cạnh nhau thì sao?</b>
+        <button class="opt" type="button">Không sao, càng nổi càng tốt</button>
+        <button class="opt wrong" type="button" disabled>Trông đồng bộ hơn</button>
+        <button class="opt right" type="button" disabled>Mắt không biết bấm nút nào</button>
+        <div class="status bad">Chưa đúng</div>
+        <div class="why on">Một màn chỉ một chỗ đặc. Nút kia để viền.</div>
+      </div>
+      <button class="opt" type="button" aria-pressed="true">Dòng đang chọn</button>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Phản hồi và tự nói lại</h2>
+      <p>.fb sau một lần thử, .say là bản của Claude để so.</p>
+      <div class="fb good">Đúng rồi: nút chính giờ nổi nhất màn.</div>
+      <div class="fb bad">Màu nhấn đang nằm ở 5 chỗ, mắt không biết nhìn đâu.</div>
+      <div class="say"><b>Bản của Claude</b>Mỗi màn để một chỗ dùng màu nhấn đặc, phần còn lại để nhạt.</div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Ô chữ và nói thay gõ</h2>
+      <p>textarea trong .mic-row, nút mic ẩn khi máy không có mic.</p>
+      <div class="mic-row">
+        <textarea aria-label="Tự nói lại">Mình nghĩ nên để một nút đặc thôi</textarea>
+        <button class="btn mic" type="button" aria-pressed="true" aria-label="Đang nghe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+      </div>
+      <p class="mic-partial">… nút kia để viền</p>
+      <input type="text" aria-label="Ô một dòng" value="Ô một dòng">
+    </section>
+
+    <section class="card g-sec">
+      <h2>Hỏi Claude</h2>
+      <p>.ai-ask: một dòng chữ nhỏ để mở, câu trả lời trong .ai-out.</p>
+      <div class="ai-ask">
+        <button class="ai-open" type="button">Hỏi Claude về bước này</button>
+        <form class="ai-form" onsubmit="return false"><input type="text" aria-label="Câu hỏi" value="Màu trạng thái có tính là màu nhấn không?"><button class="btn" type="submit">Hỏi</button></form>
+        <p class="ai-out">Không tính. Màu trạng thái (xanh đúng, đỏ sai) báo kết quả, còn màu nhấn chỉ chỗ cần bấm.</p>
+        <p class="ai-out thinking">Đang nghĩ…</p>
+      </div>
+    </section>
+
+    <section class="card g-sec g-float">
+      <h2>Thông báo</h2>
+      <p>#kit-toast báo nhanh, #kit-bar là thanh của phần tự lưu. Trên trang thật cả hai nổi ở đáy màn.</p>
+      <div id="kit-toast" class="on">Đã chép vào bộ nhớ tạm</div>
+      <div id="kit-bar" class="on"><span>Đã mở lại đúng chỗ bạn đang học.</span><button type="button">Học lại từ đầu</button><button class="x" type="button" aria-label="Đóng">✕</button></div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Núm vặn và code</h2>
+      <p>Bàn thử của bài frontend: .knob, ô màu .sw, .soi-btn, khối .code luôn tối.</p>
+      <div class="knobs g-knobs">
+        <div class="knob"><span class="label">Màu nhấn</span>
+          <div class="row">
+            <button class="sw" type="button" aria-label="Xanh dương" aria-pressed="true" style="--sw:#2563eb"></button>
+            <button class="sw" type="button" aria-label="Xanh lá" aria-pressed="false" style="--sw:#15803d"></button>
+            <button class="sw" type="button" aria-label="Cam" aria-pressed="false" style="--sw:#ea580c"></button>
+          </div><span class="now">Xanh dương</span></div>
+        <div class="knob"><span class="label">Lượng màu</span>
+          <div class="seg"><button type="button" aria-pressed="false">Ít</button><button type="button" aria-pressed="true">Vừa</button><button type="button" aria-pressed="false">Nhiều</button></div></div>
+        <button class="soi-btn" type="button" aria-pressed="true">Soi chỗ dùng màu nhấn</button>
+      </div>
+      <pre class="code"><span class="c">/* đổi theo núm */</span><span>:root { <span class="k">--accent</span>: <span data-v>#2563eb</span>; }</span><span>.btn-main { background: var(--accent); }</span></pre>
+    </section>
+
+    <section class="card g-sec wide">
+      <h2>Bảng dán</h2>
+      <p>Bảng của bài BA: ô .zone để thả thẻ, thẻ người .bd-card (màu riêng của từng người là nội dung bài), .say-bar là lời người đó nói.</p>
+      <div class="pane board on g-board">
+        <div class="bd-area">
+          <div class="zones grid2">
+            <button class="zone" type="button"><span>Giữ hài lòng</span></button>
+            <button class="zone key" type="button"><span>Bàn kỹ với họ</span></button>
+            <button class="zone" type="button"><span>Để mắt tới</span></button>
+            <button class="zone" type="button"><span>Báo tin đều</span></button>
+            <span class="axis y">Quyền quyết ↑</span><span class="axis x">Quan tâm tới app →</span>
+          </div>
+          <div class="tray"><span class="label">Chưa xếp</span>
+            <button class="bd-card sel" type="button" style="--c:#2563eb"><i>GV</i>Giảng viên</button>
+            <button class="bd-card ok" type="button" style="--c:#7c3aed"><i>SV</i>Sinh viên</button>
+            <button class="bd-card no" type="button" style="--c:#be185d"><i>PH</i>Phụ huynh</button>
+          </div>
+        </div>
+        <div class="say-bar"><i style="--c:#2563eb">GV</i><div><small>Giảng viên</small><q>Tiết nào tôi cũng mất 5 phút gọi tên.</q></div></div>
+      </div>
+    </section>
+  </div>
+</main>
+<script>
+// Bảng màu: đọc thẳng từ kit.css lúc chạy, nên luôn khớp với file.
+(function () {
+  const names = ['--bg', '--card', '--soft', '--line', '--ink', '--muted', '--accent', '--accent-soft', '--accent-ink', '--accent-fill', '--good', '--good-soft', '--bad', '--bad-soft', '--warn', '--warn-soft', '--on-fill', '--mark', '--code-bg'];
+  const box = document.getElementById('g-tokens');
+  box.innerHTML = names.map((n) => `<div><i style="background:var(${n})"></i><code>${n}</code></div>`).join('');
+  const seg = document.getElementById('g-theme');
+  const set = (t) => {
+    if (t) document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme');
+    seg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.t === t)));
+  };
+  seg.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) set(b.dataset.t); });
+  // Các nút mẫu khác chỉ để xem: bấm vào không làm gì.
+})();
+</script>

@@ -4,7 +4,8 @@
 :root {
   --bg: #faf8f3; --card: #ffffff; --soft: #f3f1ec; --line: #e7e3da; --ink: #1b1b1a; --muted: #6b6862;
   --accent: #308e84; --accent-soft: #e3f1ef; --accent-ink: #1f6b63;
-  --good: #277a4c; --good-soft: #e6f3eb; --bad: #c2410c; --bad-soft: #fdeee6;
+  --good: #277a4c; --good-soft: #e6f3eb; --bad: #c2410c; --bad-soft: #fdeee6; --warn: #8a5a12; --warn-soft: #f6ecd6;
+  --accent-fill: #2a7d74; --on-accent: #fff;   /* nền đặc màu nhấn (nút Gửi, nút đang chọn) và chữ trên nền đặc nhấn, đúng, sai */
   --shadow: 0 1px 2px rgba(27, 27, 26, .06), 0 6px 18px rgba(27, 27, 26, .06);
   --font: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -13,13 +14,27 @@
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #161615; --card: #1f1f1d; --soft: #262523; --line: #34322e; --ink: #ecebe7; --muted: #a19e97;
   --accent: #4fb3a6; --accent-soft: #1c3330; --accent-ink: #8fd9c9;
-  --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219;
+  --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
+  --accent-fill: #4fb3a6; --on-accent: #161615;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #161615; --card: #1f1f1d; --soft: #262523; --line: #34322e; --ink: #ecebe7; --muted: #a19e97;
   --accent: #4fb3a6; --accent-soft: #1c3330; --accent-ink: #8fd9c9;
-  --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219;
+  --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
+  --accent-fill: #4fb3a6; --on-accent: #161615;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; }
+/* Bộ token thứ hai, như nhau ở sáng và tối. Mọi màu của các mẫu (lesson, it, war, review, decide, compare) lấy từ đây hay từ trên;
+   check-tokens.mjs báo khi có mã màu viết thẳng ngoài file này. Riêng màu của màn mô phỏng và địa hình trong từng bài là nội dung bài. */
+:root {
+  --on-fill: #fff; --accent-edge: color-mix(in srgb, var(--accent-fill) 75%, #000);   /* chữ trắng trên màu riêng của bài hay khung máy, viền đậm của nút nhấn */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / .06); --shadow-pop: 0 4px 14px rgb(0 0 0 / .18); --shadow-lift: 0 8px 20px rgb(0 0 0 / .16);
+  --shadow-device: 0 10px 30px rgb(0 0 0 / .12); --scrim: rgb(0 0 0 / .55); --lit: rgb(79 179 166 / .2); --lit-strong: rgb(79 179 166 / .65);
+  /* Màu nội dung: khung điện thoại và giấy của màn mô phỏng, khối code, bút soi, nhãn trên sa bàn. Luôn giữ như nhau vì là một phần của bài. */
+  --paper: #fff; --device: #1b1b1a; --code-bg: #1f1f1d; --code-ink: #d6d3cc; --code-muted: #8a877f; --code-key: #8fd9c9; --code-val: #fff;
+  --mark: #e11d48; --mark-ink: #be123c;
+  --map-ink: #2b2a26; --map-halo: #fffbe9; --map-fr: #234f80; --map-vn: #9c2e21; --map-lost: #5f5c56; --map-hit: #d8402b; --map-flag: #3b3127;
+  --map-feat: #3d3524; --map-river: #1d5f93; --map-red: #b23a2a; --map-zone: #8a2a1e; --map-zone-bg: rgb(255 248 240 / .85); --map-fog: #2b2b2b;
+}
 
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--font); margin: 0; }
@@ -47,7 +62,7 @@ code, .mono { font-family: var(--mono); font-size: .88em; }
 .btn:active { transform: translateY(1px); border-bottom-width: 2px; }
 .btn[disabled] { opacity: .45; cursor: default; }
 .btn.primary { background: var(--ink); border-color: var(--ink); color: var(--bg); }
-.btn.accent { background: var(--accent); border-color: color-mix(in srgb, var(--accent) 75%, #000); color: #fff; }
+.btn.accent { background: var(--accent-fill); border-color: var(--accent-edge); color: var(--on-accent); }
 .btn.ghost { background: transparent; border-color: transparent; }
 .btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); }
 .btn.good[aria-pressed="true"] { background: var(--good-soft); border-color: var(--good); color: var(--good); }
@@ -113,3 +128,13 @@ html:not(.kit-ask-on) .kit-ask { display: none !important; }
 .ai-form .btn { flex: none; }
 @media (pointer: coarse) { .ai-open { min-height: 40px; } }
 .ai-open:disabled { color: var(--muted); cursor: default; }
+
+/* Thông báo của phần tự lưu (kit/autosave.js), cùng kiểu với thông báo của lõi chung. */
+#kit-bar { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; display: none;
+  align-items: center; gap: 10px; width: min(480px, calc(100% - 24px)); background: var(--ink); color: var(--bg); border-radius: var(--r);
+  padding: 8px 8px 8px 14px; font: 500 14px/1.4 var(--font); box-shadow: var(--shadow); }
+#kit-bar.on { display: flex; }
+#kit-bar span { flex: 1 1 auto; min-width: 0; }
+#kit-bar button { font: 600 13px var(--font); border: 0; border-radius: var(--r); min-height: 32px; padding: 0 10px; cursor: pointer; background: var(--bg); color: var(--ink); flex: none; }
+#kit-bar button.x { background: transparent; color: var(--bg); }
+.kit-review-off [data-part~="review"] { display: none !important; }

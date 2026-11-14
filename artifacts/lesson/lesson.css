@@ -7,7 +7,7 @@ body { font-size: 16px; line-height: 1.55; -webkit-text-size-adjust: 100%; }
 .top .bar { height: 4px; }
 .top .meta { align-items: center; }
 .top .meta > span:first-child { flex: 1; min-width: 0; }
-.top .back { background: none; border: 0; padding: 0 8px; min-height: 32px; font: 600 13px/1 var(--font); color: var(--accent); cursor: pointer; border-radius: var(--r); }
+.top .back { background: none; border: 0; padding: 0 8px; min-height: 32px; font: 600 13px/1 var(--font); color: var(--accent-ink); cursor: pointer; border-radius: var(--r); }
 .top .back:hover { background: var(--soft); }
 @media (pointer: coarse) { .top .back { min-height: 44px; } }
 
@@ -69,13 +69,4 @@ textarea { min-height: 88px; resize: vertical; }
 .done-msg { font-size: 14px; color: var(--muted); }
 .done-msg:empty { display: none; }
 
-/* Thông báo của phần tự lưu (learning/teaching/kit/kit.js), cùng kiểu với thông báo của lõi chung. */
-#kit-bar { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; display: none;
-  align-items: center; gap: 10px; width: min(480px, calc(100% - 24px)); background: var(--ink); color: var(--bg); border-radius: var(--r);
-  padding: 8px 8px 8px 14px; font: 500 14px/1.4 var(--font); box-shadow: var(--shadow); }
-#kit-bar.on { display: flex; }
-#kit-bar span { flex: 1 1 auto; min-width: 0; }
-#kit-bar button { font: 600 13px var(--font); border: 0; border-radius: var(--r); min-height: 32px; padding: 0 10px; cursor: pointer; background: var(--bg); color: var(--ink); flex: none; }
-#kit-bar button.x { background: transparent; color: var(--bg); }
-.kit-review-off [data-part~="review"] { display: none !important; }
 

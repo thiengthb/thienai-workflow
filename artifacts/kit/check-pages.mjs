@@ -4,7 +4,7 @@
 //   node artifacts/kit/check-pages.mjs [trang.html ...] [--out <thư-mục-ảnh>]
 //
 // Không đưa trang nào: kiểm mọi trang bài trong learning/*/pages/ và một trang mẫu dựng từ mỗi mẫu trong artifacts/
-// (bài thường, bài chiến tranh, bài frontend, bài BA, trang chọn phương án, trang so sánh, trang ôn thẻ).
+// (bài thường, bài chiến tranh, bài frontend, bài BA, trang chọn phương án, trang so sánh, trang ôn thẻ, trang mẫu thành phần).
 // Mỗi trang mở ở 3 khổ (1180x760 khung xem trên claude.ai, 820x1180 máy tính bảng, 390x844 điện thoại), cả tối lẫn sáng,
 // hiện hết mọi bước, giả có Claude để hiện cả các ô hỏi Claude. Báo LỖI khi:
 //   1. Có lỗi JavaScript.
@@ -13,8 +13,11 @@
 //   4. Chữ quá mờ so với nền: tương phản dưới 3:1. Dưới 4.5:1 với chữ nhỏ thì chỉ cảnh báo.
 //   5. Còn chữ giữ chỗ của mẫu như __TITLE__ (chỉ với trang trong repo).
 //   6. Thiếu thẻ viewport: điện thoại dựng trang rộng 980px rồi thu nhỏ.
+//   7. axe-core (kiểm truy cập theo WCAG 2.1 AA) thấy lỗi mức nặng: nút không có tên, ô nhập không nhãn, aria sai...
+//      Lỗi mức vừa và nhẹ chỉ cảnh báo. Độ tương phản do mục 4 kiểm, nên tắt luật đó của axe.
 // Ảnh chụp cả trang ở mọi khổ nằm trong thư mục ảnh (mặc định .check-pages/), CI đính kèm vào lần chạy để xem lại.
-// Cần Playwright (máy Claude cloud có sẵn; CI cài trong bước riêng).
+// Cần Playwright (máy Claude cloud có sẵn; CI cài trong bước riêng) và axe-core (npm install --no-save axe-core@4.14.0;
+// thiếu thì bỏ qua mục 7 và nói rõ).
 import { createRequire } from 'node:module';
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync, readdirSync, existsSync, realpathSync } from 'node:fs';
 import { join, resolve, dirname, basename, relative } from 'node:path';
@@ -83,6 +86,9 @@ export async function buildFixtures(dir, browser) {
   const { build: review } = await import('../review/make-review.mjs');
   review(join(dir, 'cards.md'), join(dir, 'review'), { today: '2026-11-14' });
   out.push({ name: 'review', file: join(dir, 'review/preview.html') });
+  // Trang mẫu thành phần: mọi mảnh dùng chung ở một trang (make-gallery.mjs).
+  const { build: gallery } = await import('./make-gallery.mjs');
+  out.push({ name: 'gallery', file: gallery(join(dir, 'gallery')) });
   return out;
 }
 
@@ -148,11 +154,30 @@ function inspect() {
   return { empty, contrast };
 }
 
+/** Mã nguồn axe-core để chèn vào trang, hoặc null nếu chưa cài. */
+export function axeSource() {
+  try { return readFileSync(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8'); } catch (e) { return null; }
+}
+
+/** Chạy axe trong trang đã mở; trả về [{ bad, msg }]. */
+export async function axeCheck(p, source) {
+  await p.addScriptTag({ content: source });
+  const res = await p.evaluate(async () => {
+    const r = await window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] }, rules: { 'color-contrast': { enabled: false } }, resultTypes: ['violations'] });
+    return r.violations.map((v) => ({ id: v.id, impact: v.impact, help: v.help, nodes: v.nodes.slice(0, 3).map((n) => n.target.join(' ')), count: v.nodes.length }));
+  });
+  return res.map((v) => ({ bad: v.impact === 'critical' || v.impact === 'serious',
+    msg: `${v.id} (${v.impact}): ${v.help}, ${v.count} chỗ, ví dụ ${v.nodes.join(' | ')}` }));
+}
+
 /** Kiểm các trang; trả về { fails, warns, lines }. */
 export async function checkPages(pages, { out = join(root, '.check-pages'), browser, log = console.log } = {}) {
   let fails = 0, warns = 0;
   const lines = [];
   const say = (l) => { lines.push(l); log(l); };
+  const axe = axeSource();
+  if (!axe && process.env.CI) fails++;   // trên CI phải có axe, không được lặng lẽ bỏ qua
+  if (!axe) say((process.env.CI ? 'LỖI ' : '') + 'Bỏ qua kiểm truy cập (mục 7): chưa cài axe-core. Cài: npm install --no-save --no-package-lock axe-core@4.14.0');
   for (const { name, file, own } of pages) {
     const src = readFileSync(file, 'utf8');
     if (own) {
@@ -187,6 +212,8 @@ export async function checkPages(pages, { out = join(root, '.check-pages'), brow
       for (const e of empty) { fails++; say(`LỖI ${tag} khung trống, mọi thứ bên trong bị ẩn: ${e}`); }
       for (const c of contrast) { if (c.bad) { fails++; say(`LỖI ${tag} chữ mờ: ${c.msg}`); } else { warns++; say(`cảnh báo ${tag} chữ hơi mờ: ${c.msg}`); } }
       for (const e of [...new Set(errors)]) { fails++; say(`LỖI ${tag} JavaScript: ${e}`); }
+      // Truy cập: chạy một lần mỗi chế độ màu ở khổ rộng nhất (luật của axe ít khi đổi theo khổ màn).
+      if (axe && size === SIZES[0]) for (const a of await axeCheck(p, axe)) { if (a.bad) { fails++; say(`LỖI ${tag} truy cập: ${a.msg}`); } else { warns++; say(`cảnh báo ${tag} truy cập: ${a.msg}`); } }
       await p.screenshot({ path: join(out, name, `${scheme}-${size.name}.png`), fullPage: true });
       await ctx.close();
     }
