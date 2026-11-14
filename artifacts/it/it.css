@@ -3,7 +3,7 @@
    Bước không ghi data-stage thì ẩn sân khấu, trang về một cột hẹp như bài thường. Một bo góc 8px. */
 #stage { display: none; }
 html[data-stage="on"] #stage { display: block; }
-#stage { margin: 4px 0 12px; scroll-margin-top: 52px; }
+#stage { margin: 4px 0 12px; scroll-margin-top: 68px; }
 .pane { display: none; position: relative; background: var(--soft); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
 .pane.on { display: flex; }
 
@@ -20,7 +20,9 @@ html[data-stage="on"] #stage { display: block; }
 /* ---------- Bàn thử (frontend): màn app trong khung điện thoại, núm vặn, dòng CSS sáng lên ---------- */
 .bench { align-items: center; justify-content: center; gap: 20px; padding: 16px; }
 .phone { --pw: 260px; flex: none; width: var(--pw); height: min(540px, calc(100vh - 110px)); background: #fff; color: #1b1b1a;
-  border: 7px solid #1b1b1a; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 30px rgb(0 0 0 / .12); position: relative; }
+  border: 7px solid #1b1b1a; border-radius: 30px; overflow: hidden; position: relative;
+  /* Vòng mảnh màu --line để khung máy vẫn thấy được trên nền tối. */
+  box-shadow: 0 0 0 1px var(--line), 0 10px 30px rgb(0 0 0 / .12); }
 .screen { height: 100%; overflow: auto; scrollbar-width: none; font: 13px/1.4 var(--font); color-scheme: light; }
 .screen::-webkit-scrollbar { display: none; }
 .screen * { transition: background-color .25s, color .25s, border-color .25s; }
@@ -154,7 +156,7 @@ html[data-stage="on"] #stage { display: block; }
 .screen[data-lens="prot"] { filter: url(#it-prot); }
 .screen { transition: filter .3s; }
 /* Núm kính chỉ hiện ở bước @lens; bước khác màn về bình thường nhưng vẫn nhớ kính đã chọn. */
-.bench:not([data-mode="lens"]) [data-lens] { display: none; }
+.bench:not([data-mode="lens"]) .knob[data-lens] { display: none; }
 /* Bốn kiểu nhìn: lưới 2×2 cho vừa cột núm. */
 .knob[data-lens] .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); }
 .knob[data-lens] .seg button + button { border-left: 0; }
@@ -175,7 +177,7 @@ html[data-stage="on"] #stage { display: block; }
 /* ---------- Nhìn 5 giây: màn bị che, đếm ngược khi mở ---------- */
 .cover, .peek-count { display: none; }
 .pane.covered .phone .screen { visibility: hidden; }
-.pane[data-mode="cover"] .side { visibility: hidden; }
+.pane[data-mode="cover"] .side { display: none; }
 .pane.covered .cover { display: grid; place-items: center; position: absolute; inset: 0; background: #1b1b1a; color: #fff; text-align: center;
   font: 600 14px/1.4 var(--font); padding: 16px; z-index: 3; }
 .pane.peeking .peek-count { display: block; position: absolute; top: 8px; right: 8px; z-index: 3; width: 30px; height: 30px; border-radius: 50%;
