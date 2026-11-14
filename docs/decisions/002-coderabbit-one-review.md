@@ -32,7 +32,8 @@ Làm B:
   1. Mở PR ở dạng nháp.
   2. Xong và test như CI qua thì chuyển sang sẵn sàng. CodeRabbit tự review một lần [đã kiểm ở PR #66: chuyển sẵn sàng lúc 13:18 UTC, review chạy ngay, xong sau 3,5 phút]. Không comment `@coderabbitai review` thêm, vì sẽ thành hai lượt cho cùng một bản (góp ý của CodeRabbit ở PR #66). Chỉ gọi tay khi 2 phút sau vẫn chưa thấy check CodeRabbit chạy.
   3. Chờ đúng một lượt, sửa hay trả lời từng ý, rồi báo thien. Bản sửa lớn (đổi logic khác chỗ bot chỉ, thêm file hay hàm mới) thì gọi review lại; sửa nhỏ đúng chỗ bot chỉ thì không cần.
-- Chỉ áp ở repo này. Repo khác muốn dùng thì thêm `.coderabbit.yaml` của repo đó.
+- Áp ở thienai-workflow và sakubun (sakubun qua PR riêng). Luật nằm ở phần chung của `templates/AGENTS.template.md` (dòng "Repo có bot review"), chỉ có hiệu lực ở repo có cấu hình bot.
+- Thêm Gemini Code Assist (miễn phí) chạy song song tới 2026-11-24, thien cài ngày 2026-11-14. `.gemini/config.yaml`: không review PR nháp (`include_drafts: false`, vì mặc định là có review), không tóm tắt PR (CodeRabbit đã làm), bỏ qua cùng các file nhật ký học như CodeRabbit. `.gemini/styleguide.md` dặn góp ý bằng tiếng Việt và nêu những chỗ đáng soi của repo. Tài liệu Gemini không nói PR nháp chuyển sẵn sàng có tự được review không [chưa kiểm], nên luật có bước gọi `/gemini review` nếu 2 phút chưa thấy chạy. Số liệu so sánh ghi ở `docs/reviews/bot-trial.md`.
 - Gói CodeRabbit của thien [đã kiểm, ảnh trang Billing thien gửi 2026-11-14]: dùng thử Advanced, hết hạn 2026-11-24, sau đó tự về gói Free và không bị tính tiền. Gói Free chỉ tóm tắt PR, không review code trên PR (theo trang Plans của CodeRabbit). thien ưu tiên miễn phí, nên trước 2026-11-24 phải chọn công cụ thay. Repo này có 66 PR trong khoảng 10 ngày, nên công cụ thay phải chịu được vài PR mỗi ngày.
 
 ## Xem lại khi

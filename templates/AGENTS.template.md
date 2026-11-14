@@ -18,6 +18,7 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 ## Thế nào là xong
 - "Xong" phải có bằng chứng: test chạy được, ảnh chụp, hoặc link CI. Không có bằng chứng thì ghi "chưa kiểm".
 - Không sửa test cho xanh. Test sai thì nói lý do, thien quyết.
+- Repo có bot review (`.coderabbit.yaml`, `.gemini/`): PR để nháp tới khi xong và test qua, rồi chuyển sẵn sàng; chờ một lượt của mỗi bot (2 phút chưa thấy chạy thì comment `@coderabbitai review`, `/gemini review`), sửa hay trả lời từng ý rồi mới báo thien hay merge. Sửa lớn (đổi logic khác chỗ bot chỉ, thêm file hay hàm mới) mới gọi review lại. Tới 2026-11-24 ghi mỗi PR vào [`docs/reviews/bot-trial.md`](https://github.com/thiengthb/thienai-workflow/blob/main/docs/reviews/bot-trial.md) của thienai-workflow.
 
 ## Không được làm
 - Không đụng production và dữ liệu thật. Người bấm nút.
