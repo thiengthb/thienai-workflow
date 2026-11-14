@@ -1,0 +1,48 @@
+<!-- @dsCard height=288 -->
+<style>
+  .cv { position: relative; width: 960px; height: 288px; background: var(--background); overflow: hidden; font-family: var(--font-sans); }
+  .cv svg { position: absolute; inset: 0; }
+  .cv .brand { fill: var(--primary); }
+  .cv .ink { fill: var(--foreground); }
+  .cv .wash { fill: var(--brand-wash); }
+  .cv .info { fill: var(--info); }
+  .cv .tile { fill: var(--muted); stroke: var(--input); stroke-width: 1; }
+  .cv .tile.on { fill: var(--accent-brand); stroke: none; }
+  .cv .r { rx: var(--radius-card); ry: var(--radius-card); }
+  .cv-text { position: absolute; left: 32px; bottom: 32px; max-width: 440px; display: grid; gap: 8px; }
+  .cv-name { margin: 0; font-size: 100px; line-height: .92; font-weight: 600; letter-spacing: -0.022em; color: var(--foreground); }
+  .cv-tag { margin: 0; font-size: 14px; line-height: 1.4; color: var(--muted-foreground); }
+</style>
+<div class="cv">
+  <svg viewBox="0 0 960 288" width="960" height="288" aria-hidden="true">
+    <!--
+      blocks: primary 192×304 (space-16 × 3, bleeds off the top), foreground 256×112, brand-wash 128×136, info 112×56; corners radius-card (8px)
+      arrangement: one tall slab with satellites, right of x = 480, edges on the 16px step (space-4)
+      pattern: geometric, modular, dense UI ("một bo góc 8px cho mọi thứ", lưới 8px) → 24px tiles cut by radius-card, two merged two-wide
+      scales: space-3 (24px) tiles, pitch space-8 (32px), gap space-2 (8px), radius-card 8px
+    -->
+    <rect class="brand r" x="496" y="-16" width="192" height="304"/>
+    <rect class="ink r" x="704" y="16" width="240" height="112"/>
+    <rect class="wash r" x="704" y="144" width="128" height="128"/>
+    <rect class="info r" x="848" y="144" width="96" height="48"/>
+    <g>
+      <rect class="tile r" x="848" y="208" width="24" height="24"/>
+      <rect class="tile on r" x="880" y="208" width="56" height="24"/>
+      <rect class="tile r" x="848" y="240" width="56" height="24"/>
+      <rect class="tile r" x="912" y="240" width="24" height="24"/>
+      <rect class="tile r" x="720" y="160" width="24" height="24"/>
+      <rect class="tile on r" x="752" y="160" width="24" height="24"/>
+      <rect class="tile r" x="784" y="160" width="24" height="24"/>
+      <rect class="tile r" x="720" y="192" width="24" height="24"/>
+      <rect class="tile r" x="752" y="192" width="24" height="24"/>
+      <rect class="tile r" x="784" y="192" width="24" height="24"/>
+      <rect class="tile r" x="720" y="224" width="24" height="24"/>
+      <rect class="tile r" x="752" y="224" width="24" height="24"/>
+      <rect class="tile on r" x="784" y="224" width="24" height="24"/>
+    </g>
+  </svg>
+  <div class="cv-text">
+    <p class="cv-name">thienui</p>
+    <p class="cv-tag">Đồng bộ trước, đẹp sau. Một bo góc, chữ Onest.</p>
+  </div>
+</div>
