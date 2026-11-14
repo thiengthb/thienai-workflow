@@ -4,7 +4,7 @@
 // The AI runs it at the start of a session and passes in what it can see (instructions text, attached repos, skills).
 // Prints "ổn" when everything matches, otherwise the list of fixes for thien, in Vietnamese. Exit code 1 when something is missing.
 //
-//   node templates/setup-check.mjs --project sakubun --instructions <file|none> --repos a/b,c/d --skills check-setup@1,start-project@1,make-slides@1
+//   node templates/setup-check.mjs --project sakubun --instructions <file|none> --repos a/b,c/d --skills start-project@1,make-slides@1
 // --skills: each skill the session lists, with the "(bản N)" number at the end of its description as @N (no number: plain name).
 // The nick comes from the "nick: tntXXX" part of the instructions; profile/ACCOUNTS.md is the registry it is checked against.
 // Options: --no-git skips the GitHub read check (offline tests); --setup <path> uses another SETUP.md;
@@ -15,7 +15,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(dirname(fileURLToPath(import.meta.url)));
-export const SKILLS = ['check-setup', 'start-project', 'make-slides'];
+export const SKILLS = ['start-project', 'make-slides'];
 
 /** Reads the standard out of SETUP.md: version, the instructions block, and the project -> repos table. */
 export function parseSetup(md) {
