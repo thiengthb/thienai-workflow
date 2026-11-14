@@ -38,8 +38,8 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 - Nếu project có `docs/ai-log.md`: thêm dòng cho phiên này, để trống hai cột "Người kiểm gì" và "Quyết định" cho người điền.
 
 ## Bàn giao giữa các nick
-- Nick nào cũng có thể hết usage giữa chừng mà không báo trước. Việc nhiều bước: sau mỗi bước đẩy nhánh làm việc và ghi sổ bàn giao (nhánh `handoff` của repo thienai-workflow, lệnh `templates/handoff.mjs`). Trang chờ thien thì ghi cả link và lệnh dựng lại, nguồn trang nằm trong nhánh đã đẩy.
-- thien nói "tiếp tục": đọc sổ, làm tiếp việc dở. Cách làm đủ ở [`profile/HANDOFF.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/HANDOFF.md).
+- Nick nào cũng có thể hết usage giữa chừng mà không báo trước. Việc nhiều bước: sau mỗi bước đẩy nhánh làm việc và ghi sổ bàn giao vào nhánh `handoff` của chính repo này (lệnh `templates/handoff.mjs` ở repo thienai-workflow). Sổ chỉ là dấu trang, sự thật vẫn là main, STATUS và PR. Trang chờ thien thì ghi cả link và lệnh dựng lại, nguồn trang nằm trong nhánh đã đẩy.
+- thien nói "tiếp tục": đọc sổ của mọi repo (`handoff.mjs list`), làm tiếp việc dở. Cách làm đủ ở [`profile/HANDOFF.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/HANDOFF.md).
 
 ## Giữ file này ngắn
 - Phần chung dưới 60 dòng. Thêm một luật thì bỏ hoặc gộp một luật khác.

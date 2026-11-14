@@ -6,7 +6,7 @@ Ngày: 2026-11-14 · Trạng thái: Đã chọn · Người quyết: thien
 thien dùng nhiều nick Claude. Một nick hết usage (phiên hay tuần) giữa chừng thì nick khác chỉ cần nghe "tiếp tục" là làm tiếp được, kể cả khi việc đang dừng ở bước chờ thien chọn trên một artifact. Phần sổ bàn giao làm giống nhau ở mọi phương án; cái cần chọn là cách giữ artifact khi đổi nick.
 
 ## Phần chung cho mọi phương án
-- **Sổ bàn giao**: nhánh `handoff` trong repo thienai-workflow, mỗi việc dở một file `tasks/<repo>--<slug>.md`: repo, nhánh hay PR, đang ở bước nào, bước tiếp theo cụ thể, artifact đang chờ (link, file nguồn, `publish.json`, đang hỏi thien gì), nick nào ghi, lúc nào. Nhánh này không bao giờ merge vào main, AI đẩy thẳng không qua PR, nên không phải chờ thien.
+- **Sổ bàn giao**: nhánh `handoff` trong repo của từng project, mỗi việc dở một file `tasks/<slug>.md`: repo, nhánh hay PR, đang ở bước nào, bước tiếp theo cụ thể, artifact đang chờ (link, file nguồn, `publish.json`, đang hỏi thien gì), nick nào ghi, lúc nào. Nhánh này không bao giờ merge vào main, AI đẩy thẳng không qua PR, nên không phải chờ thien.
 - **Ghi liên tục**: không có tín hiệu nào báo trước là sắp hết usage [Fact: claude.ai và phiên cloud không có hook như vậy]. Nên AI ghi sổ và đẩy nhánh làm việc ngay sau mỗi bước, và ngay sau mỗi lần đăng artifact chờ thien. Hết usage giữa chừng thì mất nhiều nhất một bước.
 - **Luật "tiếp tục"** trong phần chung của AGENTS (tự đồng bộ sang mọi repo): đọc nhánh `handoff`, liệt kê việc dở mới nhất trước, làm tiếp từ "bước tiếp theo". Việc dừng ở bước chọn thì đưa thien link trang để chọn.
 - **Một lần cho mỗi nick**: project của nick đó gắn repo thienai-workflow (và repo đang làm), thêm một dòng vào ô hướng dẫn cho Claude.
@@ -31,9 +31,12 @@ A, trên trang chọn phương án https://claude.ai/artifact/9SNTkS9pFjKfqA7vhH
 B. Phần lớn giá trị nằm ở sổ bàn giao, có ở mọi phương án. Trang chọn phương án đăng lại chỉ mất vài giây và bấm lại một lựa chọn là đủ, nên không đáng dựng Cloudflare. Nhưng trang tổng quan đang kẹt ở nick khác (chỉ nick đó đăng đè được), nên mời các nick vào vài trang cố định là chữa đúng chỗ đau với một lần bấm cho mỗi trang.
 
 ## Kết luận
-Làm bản A: sổ bàn giao trên nhánh `handoff`, lệnh `templates/handoff.mjs`, luật ở `profile/HANDOFF.md` và phần chung của AGENTS. Trang chờ thien được dựng lại từ nguồn trong repo khi đổi nick.
+Làm bản A: sổ bàn giao trên nhánh `handoff` của từng repo, lệnh `templates/handoff.mjs`, luật ở `profile/HANDOFF.md` và phần chung của AGENTS. Trang chờ thien được dựng lại từ nguồn trong repo khi đổi nick.
 
 Khác với AI ở chỗ: AI chọn B vì trang tổng quan đang chỉ đăng đè được từ nick khác. Với A, nick nào cũng đăng lại được trang tổng quan, chỉ là ra link mới. Nếu sau này đổi link thấy phiền thì thêm phần mời nick của B, không phải sửa gì ở A.
 
 ## Tóm tắt bằng lời của thien
 <thien tự viết, hoặc "bỏ qua">
+
+## Đã đổi
+- 2026-11-14: ban đầu một sổ chung ở thienai-workflow. thien hỏi project sakubun làm sao biết, và ghi ở hai nơi có thành hai nguồn sự thật không. Đổi thành mỗi repo giữ sổ của mình, `list` đọc mọi repo trong `life/tracked-repos.md`; thêm luật sổ chỉ là dấu trang, lệch thì repo thắng.

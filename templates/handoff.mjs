@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 // Handoff book shared by all of thien's Claude accounts (decision docs/decisions/001-account-handoff.md).
-// Unfinished work lives on the `handoff` branch of thienai-workflow, one file per task: tasks/<repo>--<slug>.md.
-// The branch is never merged into main; AI pushes to it directly, after every step, so an account that runs
-// out of usage mid-task loses at most one step. Another account says "tiếp tục", runs `list`, and carries on.
+// Each project keeps its own unfinished work in its own repo, on a `handoff` branch, one file per task:
+// tasks/<slug>.md. The branch is never merged into main; AI pushes to it directly, after every step, so an
+// account that runs out of usage mid-task loses at most one step. Another account says "tiếp tục", runs
+// `list` (which reads thienai-workflow and every repo in life/tracked-repos.md), and carries on.
 //
 //   node templates/handoff.mjs new <owner/repo> <slug> "<task title>"   print a filled-in skeleton to stdout
-//   node templates/handoff.mjs save <file.md>                            check, then commit + push to tasks/<file name>
-//   node templates/handoff.mjs list                                      open tasks, newest first, with next step
-//   node templates/handoff.mjs show <name>                               print one task file
-//   node templates/handoff.mjs done <name>                               remove a finished task
-//   node templates/handoff.mjs check <file.md>                           only check the format
-// Options: --remote <git url> (default: origin of this repo), --dir <path> (reuse a clone of the branch).
+//   node templates/handoff.mjs save <slug>.md                            check, then push to tasks/<slug>.md of the repo in its "Repo:" line
+//   node templates/handoff.mjs list [owner/repo]                         open tasks of all repos (or one), newest first
+//   node templates/handoff.mjs show <owner/repo> <slug>                  print one task file
+//   node templates/handoff.mjs done <owner/repo> <slug>                  remove a finished task
+//   node templates/handoff.mjs check <slug>.md                           only check the format
+// Options: --remote <git url> (save/show/done: use this remote instead of github.com/<owner/repo>),
+//          --remotes <url,url> (list: these remotes instead of the tracked repos), --dir <path> (reuse a clone).
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, rmSync, mkdtempSync, realpathSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -19,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 
 export const BRANCH = 'handoff';
 export const REQUIRED = ['## thien muốn gì', '## Đã xong', '## Bước tiếp theo', '## Đang chờ thien'];
-const NAME = /^[a-z0-9._-]+--[a-z0-9._-]+\.md$/;
+const NAME = /^[a-z0-9._-]+\.md$/;
 
 /** Skeleton for a new task file. */
 export function skeleton(repo, slug, title, now = new Date()) {
@@ -52,9 +54,9 @@ Không.
 /** Problems with a task file, in Vietnamese; empty when it is fine. */
 export function checkTask(text, name = '') {
   const out = [];
-  if (name && !NAME.test(name)) out.push(`tên file "${name}" phải dạng <repo>--<việc>.md, chữ thường, không dấu`);
+  if (name && !NAME.test(name)) out.push(`tên file "${name}" phải dạng <việc>.md, chữ thường, không dấu`);
   if (!/^# \S/m.test(text)) out.push('thiếu dòng tiêu đề "# <tên việc>"');
-  if (!/^Repo: \S+/m.test(text)) out.push('thiếu dòng "Repo: ..."');
+  if (!/^Repo: [\w.-]+\/[\w.-]+/m.test(text)) out.push('thiếu dòng "Repo: <owner/repo> · ..."');
   if (!/Cập nhật: \d{4}-\d{2}-\d{2}/.test(text)) out.push('thiếu "Cập nhật: YYYY-MM-DD..."');
   for (const h of REQUIRED) if (!text.includes(h + '\n')) out.push(`thiếu mục "${h}"`);
   const next = section(text, '## Bước tiếp theo');
@@ -87,10 +89,22 @@ function git(args, cwd, quiet = true) {
   return r;
 }
 
-function defaultRemote() {
-  const here = dirname(dirname(fileURLToPath(import.meta.url)));
-  const r = git(['remote', 'get-url', 'origin'], here);
-  return r.status === 0 ? r.stdout.trim() : 'https://github.com/thiengthb/thienai-workflow';
+export const repoOf = (text) => (text.match(/^Repo: ([\w.-]+\/[\w.-]+)/m) || [])[1];
+const urlOf = (repo) => `https://github.com/${repo}`;
+const here = dirname(dirname(fileURLToPath(import.meta.url)));
+
+/** thienai-workflow plus every repo in life/tracked-repos.md. */
+export function allRepos() {
+  const md = existsSync(join(here, 'life/tracked-repos.md')) ? readFileSync(join(here, 'life/tracked-repos.md'), 'utf8') : '';
+  const tracked = md.split('\n').map(l => l.match(/^\|\s*`([\w.-]+\/[\w.-]+)`\s*\|/)).filter(Boolean).map(m => m[1]);
+  return ['thiengthb/thienai-workflow', ...tracked];
+}
+
+/** Clone of the handoff branch for reading, or null when the repo has no handoff branch (or cannot be read). */
+function readOnly(remote) {
+  const dir = mkdtempSync(join(tmpdir(), 'handoff-'));
+  if (git(['clone', '-q', '--depth', '1', '--branch', BRANCH, remote, dir]).status !== 0) return null;
+  return existsSync(join(dir, 'tasks')) ? dir : null;
 }
 
 /** A fresh shallow clone of the handoff branch (or an empty orphan branch when it does not exist yet). */
@@ -131,7 +145,8 @@ export function commitPush(dir, message) {
 
 function main(argv) {
   const opt = (k) => { const i = argv.indexOf(k); if (i < 0) return undefined; const v = argv[i + 1]; argv.splice(i, 2); return v; };
-  const remote = opt('--remote') || defaultRemote();
+  const remoteOpt = opt('--remote');
+  const remotesOpt = opt('--remotes');
   const dirOpt = opt('--dir');
   const [cmd, a, b, c] = argv;
   const fail = (msg) => { console.error(msg); process.exit(1); };
@@ -139,39 +154,48 @@ function main(argv) {
   if (cmd === 'new') {
     if (!a || !b) fail('dùng: new <owner/repo> <slug> "<tên việc>"');
     process.stdout.write(skeleton(a, b, c || b));
-    console.error(`Lưu thành ${a.split('/').pop().toLowerCase()}--${b}.md, điền rồi chạy: node templates/handoff.mjs save <file>`);
+    console.error(`Lưu thành ${b}.md, điền rồi chạy: node templates/handoff.mjs save ${b}.md`);
     return;
   }
   if (cmd === 'check' || cmd === 'save') {
     if (!a || !existsSync(a)) fail('không thấy file ' + (a || ''));
-    const probs = checkTask(readFileSync(a, 'utf8'), basename(a));
+    const text = readFileSync(a, 'utf8');
+    const probs = checkTask(text, basename(a));
     if (probs.length) fail('Sổ bàn giao chưa đúng mẫu:\n- ' + probs.join('\n- '));
     if (cmd === 'check') return console.log('ổn');
-    const dir = checkout(remote, dirOpt);
-    writeFileSync(join(dir, 'tasks', basename(a)), readFileSync(a));
-    console.log(commitPush(dir, `handoff: update ${basename(a, '.md')}`) + `: tasks/${basename(a)} (nhánh ${BRANCH})`);
+    const repo = repoOf(text);
+    const dir = checkout(remoteOpt || urlOf(repo), dirOpt);
+    writeFileSync(join(dir, 'tasks', basename(a)), text);
+    console.log(commitPush(dir, `handoff: update ${basename(a, '.md')}`) + `: ${repo}, nhánh ${BRANCH}, tasks/${basename(a)}`);
     return;
   }
-  if (cmd === 'list' || cmd === 'show' || cmd === 'done') {
-    const dir = checkout(remote, dirOpt);
-    const tasks = join(dir, 'tasks');
-    if (cmd === 'list') {
-      const rows = readdirSync(tasks).filter(f => f.endsWith('.md'))
-        .map(f => summarize(f, readFileSync(join(tasks, f), 'utf8')))
-        .sort((x, y) => y.updated.localeCompare(x.updated));
-      if (!rows.length) return console.log('Không có việc dở nào trong sổ bàn giao.');
-      for (const r of rows) {
-        console.log(`- ${r.title} (${r.repo}, cập nhật ${r.updated || '?'}) · file ${r.name}`);
-        console.log(`  Tiếp theo: ${r.next || '?'}`);
-        if (r.waiting) console.log(`  Đang chờ thien: ${r.waiting.split('\n')[0]}`);
-      }
-      return;
+  if (cmd === 'list') {
+    const remotes = remotesOpt ? remotesOpt.split(',').map(r => [r, r]) : (a ? [a] : allRepos()).map(r => [r, urlOf(r)]);
+    const rows = [];
+    const unread = [];
+    for (const [name, url] of remotes) {
+      const dir = readOnly(url);
+      if (!dir) { if (git(['ls-remote', url]).status !== 0) unread.push(name); continue; }
+      for (const f of readdirSync(join(dir, 'tasks')).filter(f => f.endsWith('.md'))) rows.push(summarize(f, readFileSync(join(dir, 'tasks', f), 'utf8')));
     }
-    const name = a && (a.endsWith('.md') ? a : a + '.md');
-    if (!name || !existsSync(join(tasks, name))) fail('không có việc ' + (a || '') + ' trong sổ');
-    if (cmd === 'show') return process.stdout.write(readFileSync(join(tasks, name), 'utf8'));
-    rmSync(join(tasks, name));
-    console.log(commitPush(dir, `handoff: done ${basename(name, '.md')}`) + `: đã xoá tasks/${name}`);
+    rows.sort((x, y) => y.updated.localeCompare(x.updated));
+    if (!rows.length) console.log('Không có việc dở nào trong sổ bàn giao.');
+    for (const r of rows) {
+      console.log(`- ${r.title} (${r.repo}, cập nhật ${r.updated || '?'}) · show ${r.repo} ${r.name.replace(/\.md$/, '')}`);
+      console.log(`  Tiếp theo: ${r.next || '?'}`);
+      if (r.waiting) console.log(`  Đang chờ thien: ${r.waiting.split('\n')[0]}`);
+    }
+    if (unread.length) console.log(`Không đọc được: ${unread.join(', ')} (phiên chưa có quyền đọc repo đó; gắn repo vào phiên rồi chạy lại).`);
+    return;
+  }
+  if (cmd === 'show' || cmd === 'done') {
+    if (!a || !b) fail(`dùng: ${cmd} <owner/repo> <slug>`);
+    const name = b.endsWith('.md') ? b : b + '.md';
+    const dir = cmd === 'show' ? readOnly(remoteOpt || urlOf(a)) : checkout(remoteOpt || urlOf(a), dirOpt);
+    if (!dir || !existsSync(join(dir, 'tasks', name))) fail(`không có việc ${b} trong sổ của ${a}`);
+    if (cmd === 'show') return process.stdout.write(readFileSync(join(dir, 'tasks', name), 'utf8'));
+    rmSync(join(dir, 'tasks', name));
+    console.log(commitPush(dir, `handoff: done ${basename(name, '.md')}`) + `: đã xoá tasks/${name} ở ${a}`);
     return;
   }
   fail('lệnh: new | save | list | show | done | check (xem đầu file templates/handoff.mjs)');

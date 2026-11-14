@@ -25,7 +25,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 ## Vừa xong
 - Tự lưu nhớ nút theo tên nên AI sửa trang đang học dở vẫn mở lại đúng chỗ; bộ khung cũ gộp vào `artifacts/kit/`; mọi màu là tên trong `kit.css`, có `check-tokens.mjs`; trang mẫu thành phần; CI kiểm truy cập bằng axe-core (PR #61)
-- Sổ bàn giao giữa các nick Claude: ghi việc dở sau mỗi bước lên nhánh `handoff`, nói "tiếp tục" ở nick khác là làm tiếp (`profile/HANDOFF.md`, `templates/handoff.mjs`, quyết định 001; PR này)
+- Sổ bàn giao giữa các nick Claude: ghi việc dở sau mỗi bước lên nhánh `handoff` của từng repo, nói "tiếp tục" ở nick khác là làm tiếp (`profile/HANDOFF.md`, `templates/handoff.mjs`, quyết định 001; PR này)
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), dựng từ mẫu bàn thử `artifacts/it/` (bài mẫu trong đó chính là nháp buổi 6).
