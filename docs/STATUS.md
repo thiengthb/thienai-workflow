@@ -1,6 +1,6 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-14 · Claude tnt024 (project Claude, thread theo dõi nick) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
+Cập nhật lần cuối: 2026-11-14 · Claude (project Claude, thread review lại Codex; nick chưa rõ vì instructions còn v1) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu.
 Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
@@ -19,21 +19,21 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
 |---|---|---|---|
 | Cài dòng Settings mới cho từng tài khoản Claude | README, bước 1 | 2026-11-12 | thien tự làm, AI không kiểm được |
+| Xoá nhánh `docs/cross-account-handoff` | PR #60 đã đóng, phần cần đã vào #62 | 2026-11-14 | thien bấm Delete branch; còn thì `check-open-work` cứ báo là việc chưa merge |
 | Thử CodeRabbit CLI gói Free (3 lần mỗi giờ) | quyết định 002 | 2026-11-14 | Sau 24/11; [chưa kiểm] chạy không cần trình duyệt có cần Agentic API key và Usage-based add-on không |
 
 ## Vừa xong
+- Sửa lỗi Windows theo review của Codex: `.gitattributes` ép LF, các script đọc được CRLF (sổ bàn giao, setup-check, after-lesson, make-lesson), đường dẫn `C:\` không còn bị coi là link, CI Windows và test CRLF; bản đồ đọc theo việc `profile/MAP.md`; kiểm link nội bộ trong CI; chuẩn đồng bộ knowledge của project (PR #69, merge sau #68)
 - Sổ nick `profile/ACCOUNTS.md` (tnt024, tnt628, tnt697: nick nào dựng project nào, ở chuẩn setup bản mấy, việc nằm ở nick nào, thêm hay cho nghỉ nick); chuẩn setup v2 có tên nick ở dòng đầu instructions; commit, PR, sổ bàn giao, link trang đều ghi nick; skill có số bản để lần kiểm setup báo khi phải tải lại (PR này)
 - Trang tổng quan: mục "Đang chờ bạn" gom theo loại, PR đang mở xếp theo thứ tự merge; bảng học tuần (`artifacts/lesson/learning-week.mjs`); bộ màu thienui thành trang Design System (`artifacts/design-system/`) (PR #64)
-- Trang học: "Xem Claude làm" sau khi tự làm xong bước (Claude vặn núm, xếp thẻ, dẫn sa bàn kèm lý do), "Cho mình một tình huống" ở cuối bài frontend và BA, nút "Nghe" đọc to phần giải thích (PR #63)
-- Sổ bàn giao giữa các nick Claude: ghi việc dở sau mỗi bước lên nhánh `handoff` của từng repo, nói "tiếp tục" ở nick khác là làm tiếp (`profile/HANDOFF.md`, `templates/handoff.mjs`, quyết định 001), và chuẩn setup chung cho 3 nick có số phiên bản, AI tự kiểm đầu phiên (`profile/SETUP.md`, `templates/setup-check.mjs`); PR #62
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), dựng từ mẫu bàn thử `artifacts/it/` (bài mẫu trong đó chính là nháp buổi 6).
 2. Dùng mẫu so sánh mới cho vòng duyệt giao diện kế tiếp ở sakubun, ghi lại chỗ còn vướng.
 
 ## Đang chờ thien
-- Trên laptop chạy `node templates/check-status.mjs docs/STATUS.md`, thấy "ổn" là xong.
-- Ở từng nick (tnt024, tnt628, tnt697): dán project instructions bản v2 có tên nick, gắn repo, tải lại 2 skill, theo `profile/SETUP.md`.
+- Trên laptop Windows: làm mục "Máy Windows (làm một lần)" trong `README.md`, lệnh cuối in "ổn" là xong.
+- Ở từng nick (tnt024, tnt628, tnt697): dán project instructions bản v2 có tên nick, gắn repo, tải lại 2 skill, và chọn lại phần đồng bộ knowledge, theo `profile/SETUP.md`.
 - Merge sakubun PR #301 (luật AGENTS mới).
 
 ## Đang vướng
