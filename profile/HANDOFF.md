@@ -10,7 +10,7 @@ thien dùng nhiều nick Claude. Nick đang làm có thể hết usage (phiên h
 | Việc | Lệnh |
 |---|---|
 | Bắt đầu một việc | `node templates/handoff.mjs new <owner/repo> <việc> "<tên việc>" > <việc>.md`, điền rồi `save` (đẩy vào repo ghi ở dòng `Repo:`) |
-| Ghi sau mỗi bước | sửa file rồi `node templates/handoff.mjs save <việc>.md`. Nick khác đã sửa cùng việc từ lúc mình đọc thì lệnh từ chối, không ghi đè; `show <owner/repo> <việc> > <việc>.md` lấy bản mới rồi gộp |
+| Ghi sau mỗi bước | sửa file rồi `node templates/handoff.mjs save <việc>.md`. Nick khác đã sửa cùng việc từ lúc mình đọc thì lệnh từ chối, không ghi đè; `show <owner/repo> <việc> > <việc>.new.md` lấy bản mới vào file riêng, gộp phần của mình vào đó, đổi tên về `<việc>.md` rồi `save` |
 | Xem việc dở | `node templates/handoff.mjs list` (mọi repo) hay `list <owner/repo>`; chi tiết bằng `show <owner/repo> <việc>` |
 | Xong việc | `node templates/handoff.mjs done <owner/repo> <việc>` |
 

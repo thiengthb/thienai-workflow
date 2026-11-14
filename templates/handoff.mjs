@@ -192,7 +192,8 @@ function main(argv) {
       const current = readFileSync(target, 'utf8');
       if (hashOf(current) !== hashOf(text) && baseOf(text) !== hashOf(current)) {
         fail(`Trong sổ, việc ${basename(a, '.md')} đã được sửa từ lúc bạn đọc (có thể bởi nick khác). Chưa ghi gì. ` +
-          `Chạy \`show ${repo} ${basename(a, '.md')} > ${basename(a)}\` để lấy bản mới, gộp phần của mình vào rồi \`save\` lại.`);
+          `Chạy \`show ${repo} ${basename(a, '.md')} > ${basename(a, '.md')}.new.md\` để lấy bản mới vào file riêng (đừng ghi đè file đang sửa). ` +
+          `Gộp phần của mình từ ${basename(a)} vào ${basename(a, '.md')}.new.md, đổi tên file đó thành ${basename(a)} rồi chạy \`save ${basename(a)}\`.`);
       }
     } else if (baseOf(text)) {
       fail(`Việc ${basename(a, '.md')} không còn trong sổ của ${repo} (đã \`done\` hay bị xoá từ lúc bạn đọc). Chưa ghi gì. ` +
