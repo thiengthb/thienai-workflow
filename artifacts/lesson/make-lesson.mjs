@@ -28,9 +28,12 @@ const PARTS = {
 const OPTIONAL = {
   'war-css': ['style', '../war/war.css'],
   'war-js': ['script', '../war/sandtable.js', '../war/war-lesson.js'],
+  // Sân khấu bài IT: bàn thử (frontend) và bảng dán (BA) (artifacts/it/README.md).
+  'it-css': ['style', '../it/it.css'],
+  'it-js': ['script', '../it/it-stage.js'],
 };
-// Mẫu riêng theo môn khi chép trang mới: bài chiến tranh có sẵn sa bàn.
-const TEMPLATES = { war: '../war/template.html' };
+// Mẫu riêng theo môn khi chép trang mới: bài chiến tranh có sẵn sa bàn, frontend có bàn thử, BA có bảng dán.
+const TEMPLATES = { war: '../war/template.html', frontend: '../it/template-frontend.html', ba: '../it/template-ba.html' };
 
 export function guessId(file) {
   const m = file.replace(/\\/g, '/').match(/learning\/([^/]+)\/pages\/lesson-(\d+)/);

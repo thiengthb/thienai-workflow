@@ -22,11 +22,11 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Cài dòng Settings mới cho từng tài khoản Claude | README, bước 1 | 2026-11-12 | thien tự làm, AI không kiểm được |
 
 ## Vừa xong
+- Bài frontend và BA có sân khấu như sa bàn chiến tranh: bàn thử (núm vặn, soi, dòng CSS sáng lên) và bảng dán (xếp thẻ, nghe người nói), mẫu ở `artifacts/it/` (PR này)
 - Mỗi mẫu artifact dùng lại bằng một lệnh và một lần đăng (`publish.json`): so sánh `shoot.mjs`, chọn phương án tự chụp, buổi học tự kiểm, trang tiến độ `publish-progress.mjs` (PR #52)
-- Mẫu so sánh làm gọn (nút nằm ở cột trái, nút icon, nút thích cho từng bản, ảnh khít chiều cao) và lệnh một bước `shoot.mjs`, `publish.json` (PR #50)
 
 ## Việc tiếp theo
-1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), buổi đầu dựng từ mẫu `artifacts/lesson/`.
+1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), dựng từ mẫu bàn thử `artifacts/it/` (bài mẫu trong đó chính là nháp buổi 6).
 2. Dùng mẫu so sánh mới cho vòng duyệt giao diện kế tiếp ở sakubun, ghi lại chỗ còn vướng.
 
 ## Đang chờ thien
