@@ -40,7 +40,7 @@ Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakub
 
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
-| Chiến tranh 4 (hậu cần, buổi nhẹ) | 2026-11-12 | Chiến tranh | **Frontend 6 (chọn màu cho app)**, rồi BA 3 (các bên liên quan), rồi Frontend 7, rồi Chiến tranh 5 (địa hình và thời tiết) |
+| Chiến tranh 4, phần 2 (hậu cần trên sa bàn 3D) | 2026-11-14 | Chiến tranh | **Frontend 6 (chọn màu cho app)**, rồi BA 3 (các bên liên quan), rồi Frontend 7, rồi Chiến tranh 5 (địa hình và thời tiết) |
 
 ## Khung một buổi, chung cho mọi môn
 

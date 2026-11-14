@@ -19,13 +19,12 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
 |---|---|---|---|
 | Cài dòng Settings mới cho từng tài khoản Claude | README, bước 1 | 2026-11-12 | thien tự làm, AI không kiểm được |
-| Bài chiến tranh 4 dựng lại bằng sa bàn (hậu cần) | nhánh `claude/project-thread-wp7625` | 2026-11-14 | Chờ thien học, rồi mở một PR gộp cả PR #44 |
 | Các đề xuất nâng cấp, đợt 4 và 5 | [tài liệu đề xuất](https://claude.ai/artifact/FrUscTcs6BWMVBJGzJTYqF) | 2026-11-14 | Làm sau khi đợt 1 đến 3 merge |
 
 ## Vừa xong
 - Theo dõi kế hoạch và trang tiến độ (PR #31, #45)
 - Sau buổi học: `artifacts/lesson/after-lesson.mjs` soạn nháp nhật ký, thẻ, chỗ còn vướng và kiểm đã ghi đủ; mục "Chỗ còn vướng" ở mỗi file môn được đưa vào trang buổi sau; `learning/usage.md` ghi tính năng nào thật sự được dùng (PR #58)
-- Môn chiến tranh buổi 4 bản nhẹ (hậu cần) và phác chặng 2 của môn (PR #44, gộp vào PR này)
+- Chiến tranh buổi 4 (hậu cần): bản nhẹ, phác chặng 2 (PR #44) và phần 2 trên sa bàn 3D; kiểm nhánh chưa merge trước khi dựng bài (PR này, gộp cả PR #44)
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), dựng từ mẫu bàn thử `artifacts/it/` (bài mẫu trong đó chính là nháp buổi 6).
