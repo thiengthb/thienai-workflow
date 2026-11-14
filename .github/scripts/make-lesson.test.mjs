@@ -36,7 +36,7 @@ assert.ok(!/__[A-Z]+__/.test(once.replace(/__TITLE__|__SUBJECT__|__HEADLINE__/g,
   assert.equal(r.status, 0, r.stderr);
   const pub = JSON.parse(rd(join(d, 'out/publish.json'), 'utf8'));
   assert.equal(pub.file_path, pagePath);
-  assert.deepEqual(pub.capabilities, { db: {}, comments: {}, sample: {} });
+  assert.deepEqual(pub.capabilities, { db: {}, comments: {}, sample: {}, dictation: {} });
   assert.equal(pub.description, 'Buổi thử');
   assert.match(rd(pagePath, 'utf8'), /<meta name="lesson-id" content="demo-02">/, 'id guessed from the path');
 }

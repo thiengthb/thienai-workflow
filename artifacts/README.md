@@ -32,7 +32,7 @@ Chi tiết từng mẫu ở README trong thư mục của mẫu.
 
 ## Lõi chung
 
-`kit/kit.css` và `kit/kit.js` là phần dùng chung cho mọi mẫu mới: màu và chữ theo gu ở dưới, nút, thanh tiến độ, thông báo, lưu nháp vào máy và db, chép kết quả, gửi cho Claude, và hỏi Claude ngay trên trang (`Kit.ask`, khả năng `sample`). Mẫu mới dựng trên lõi này; sửa lõi một lần là mọi mẫu đổi theo. Sửa lõi hay mẫu thì CI tự mở lại mọi trang trong trình duyệt và kiểm lời dặn gửi Claude (`kit/check-pages.mjs`, xem mục "Kiểm trước khi gửi trang" trong `learning/teaching/README.md`). Trang học mới dựng từ `lesson/` (đã trên lõi chung, kèm phần tự lưu của `learning/teaching/kit/`); trang học cũ giữ nguyên như lúc học.
+`kit/kit.css` và `kit/kit.js` là phần dùng chung cho mọi mẫu mới: màu và chữ theo gu ở dưới, nút, thanh tiến độ, thông báo, lưu nháp vào máy và db, chép kết quả, gửi cho Claude, hỏi Claude ngay trên trang (`Kit.ask`, khả năng `sample`), và nói thay gõ cho một ô chữ (`Kit.micRow`, `Kit.dictate`, khả năng `dictation`). Trang nào có tính năng mới thì ghi số lần dùng vào bản lưu, để `learning/usage.md` cho biết tính năng nào thật sự được dùng (`kit/usage.mjs`). Mẫu mới dựng trên lõi này; sửa lõi một lần là mọi mẫu đổi theo. Sửa lõi hay mẫu thì CI tự mở lại mọi trang trong trình duyệt và kiểm lời dặn gửi Claude (`kit/check-pages.mjs`, xem mục "Kiểm trước khi gửi trang" trong `learning/teaching/README.md`). Trang học mới dựng từ `lesson/` (đã trên lõi chung, kèm phần tự lưu của `learning/teaching/kit/`); trang học cũ giữ nguyên như lúc học.
 
 ## Trang tự hỏi Claude (thử từ 2026-11-14)
 

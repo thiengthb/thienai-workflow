@@ -6,7 +6,8 @@
    Kit.store(key, path)  nháp trong máy (localStorage) + bản trong db của trang ở `path`, để Claude đọc lại.
    Kit.put(path, obj)    ghi một document một lần (không qua hàng đợi), ví dụ bản chụp của lần gửi.
    Kit.sendToClaude(text, el)  gửi một comment cho Claude (người sửa được trang); trả về true nếu đã gửi.
-   Kit.ask(prompt, out, opts)  hỏi Claude ngay trên trang (khả năng sample), chữ hiện dần vào out; trả về câu trả lời hoặc null. */
+   Kit.ask(prompt, out, opts)  hỏi Claude ngay trên trang (khả năng sample), chữ hiện dần vào out; trả về câu trả lời hoặc null.
+   Kit.dictate(btn, field, partial, onUse)  nút mic nói thay gõ (khả năng dictation) cho một ô chữ; nút ẩn nơi không có mic. */
 (() => {
   const caps = {};
   function cap(name, ms = 10000) {
@@ -170,5 +171,45 @@
     }
   }
 
-  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude, ask };
+  /** Nói thay gõ: chỉ có ở Chrome và app Claude trên máy tính, nơi khác nút giữ ẩn và vẫn gõ như thường.
+      Chữ đã chốt nối vào cuối ô và phát sự kiện input (phần tự lưu ghi lại như chữ gõ); chữ đang nghe hiện ở partial.
+      start() gọi thẳng trong lúc bấm (không await gì trước), theo luật của khả năng dictation. */
+  function dictate(btn, field, partial, onUse) {
+    if (!btn || !field) return;
+    let d = null, listening = false;
+    btn.hidden = true; btn.dataset.noreplay = ''; btn.setAttribute('aria-pressed', 'false');
+    const say = (t) => { if (partial) partial.textContent = t; };
+    cap('dictation').then((x) => {
+      if (!x) return;
+      d = x; btn.hidden = false;
+      d.onPartial(({ text }) => say(text));
+      d.onFinal(({ text }) => {
+        if (!text || !text.trim()) return;
+        field.value = (field.value.trim() ? field.value.trim() + ' ' : '') + text.trim();
+        field.dispatchEvent(new Event('input', { bubbles: true })); say('');
+        if (onUse) onUse();
+      });
+      d.onState(({ state }) => { listening = state === 'listening'; btn.setAttribute('aria-pressed', String(listening)); if (!listening) say(''); });
+    });
+    btn.addEventListener('click', () => {
+      if (!d) return;
+      if (listening) { d.stop().catch(() => {}); return; }
+      d.start().catch((e) => {
+        if (e && e.code === 'not_granted') { btn.hidden = true; toast('Chưa được phép dùng mic. Bạn vẫn gõ được như thường.'); }
+      });
+    });
+  }
+  const MIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v5"/></svg>';
+  /** Bọc một ô chữ có sẵn thành hàng [ô | mic] kèm dòng chữ đang nghe, rồi gắn dictate. Trả về phần tử ngoài cùng. */
+  function micRow(field, onUse) {
+    const row = document.createElement('div'); row.className = 'mic-row';
+    const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'btn mic';
+    btn.setAttribute('aria-label', 'Nói thay gõ'); btn.title = 'Nói thay gõ'; btn.innerHTML = MIC;
+    const partial = document.createElement('p'); partial.className = 'mic-partial'; partial.setAttribute('aria-live', 'polite');
+    field.before(row); row.append(field, btn); row.after(partial);
+    dictate(btn, field, partial, onUse);
+    return partial;
+  }
+
+  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude, ask, dictate, micRow };
 })();

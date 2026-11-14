@@ -54,7 +54,16 @@ Hai phần ôn này chỉ dành cho lần học đầu: trong trang, bọc chún
 6. **Tự nói lại ý chính** rồi mới xem bản của AI.
 7. **Góp ý** độ dài và độ khó.
 
-Trang dựng từ mẫu `artifacts/lesson/`: bấm "Xong buổi học" là kết quả được lưu và gửi cho Claude. Sau buổi: ghi nhật ký vào `learning/<môn>.md`, lưu bài vào `learning/<môn>/`, thêm 2–3 thẻ vào `cards.md`, cập nhật bảng "Trạng thái" ở trên, và tick chặng trong [roadmap.md](roadmap.md) kèm link bài. Buổi học ngoài Claude thì ghi tên công cụ vào nhật ký, ví dụ "(Codex)". Xong thì mở PR để thien merge. Luật dạy chung ở `profile/TUTOR.md`.
+Trang dựng từ mẫu `artifacts/lesson/`: bấm "Xong buổi học" là kết quả được lưu và gửi cho Claude.
+
+**Sau buổi**, theo thứ tự:
+1. Đọc kết quả trong db của trang (`sessions/<id>-<thời điểm>`), lưu ra file JSON, rồi chạy `node artifacts/lesson/after-lesson.mjs <file.json> --write`. Lệnh in nháp (số liệu, dòng nhật ký, chỗ còn vướng, thẻ mới, dòng "Trạng thái") và tự ghi hai thứ: các dòng mới vào mục "Chỗ còn vướng" của `learning/<môn>.md`, một dòng vào [usage.md](usage.md).
+2. Từ nháp, viết: nhật ký trong `learning/<môn>.md` (chỗ thien đổi cách nhìn, không ghi như bảng điểm), file bài trong `learning/<môn>/lessons/`, 2–3 thẻ trong `cards.md`, bảng "Trạng thái" ở trên, tick chặng trong [roadmap.md](roadmap.md) kèm link bài, mục "Buổi tiếp theo". Đọc lại mục "Chỗ còn vướng": gọn lại, xóa dòng thien đã làm đúng ở buổi này.
+3. `node artifacts/lesson/after-lesson.mjs --check <lesson-id>` phải ra toàn ✓, rồi mở PR để thien merge. CI chạy `--check-all` để bài nào cũng có nhật ký, thẻ và roadmap.
+
+Buổi học ngoài Claude thì ghi tên công cụ vào nhật ký, ví dụ "(Codex)"; không có bản lưu trong db thì dán kết quả thien chép vào file JSON (phần trong khối json của tin nhắn). Luật dạy chung ở `profile/TUTOR.md`.
+
+**Chỗ còn vướng** ở cuối mỗi file môn là cầu nối giữa các buổi: AI dùng nó cho phần "Nhớ lại" và "Thử trước" của buổi sau, và `make-lesson.mjs` đưa 6 dòng mới nhất vào trang để Claude trong trang biết khi thien hỏi hay nhờ nhận xét.
 
 ## Bắt đầu một môn mới
 
@@ -77,7 +86,7 @@ Gợi ý phần "thử trước" cho từng môn (AI đề xuất, chưa thử v
 AI tự nhắc khi tới mốc, thien không cần nhớ.
 
 - **Chủ nhật 2026-11-22:** 15 phút so sánh mù lại các màn frontend đã xem, chốt thử nghiệm frontend.
-- **Chủ nhật 2026-12-13:** 15 phút làm lại câu hỏi cũ của cả 3 môn mà không xem trước, rồi quyết định giữ hay đổi môn.
+- **Chủ nhật 2026-12-13:** 15 phút làm lại câu hỏi cũ của cả 3 môn mà không xem trước, rồi quyết định giữ hay đổi môn. Cùng lúc xem `node artifacts/kit/usage.mjs learning/usage.md`: tính năng nào của trang gần như không dùng (hỏi Claude, nói thay gõ…) thì bỏ cho gọn.
 
 Luật tự điều chỉnh:
 

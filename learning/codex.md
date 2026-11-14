@@ -37,7 +37,7 @@ thien quen học bằng trang tương tác như ở Claude. Ngày 2026-11-12 Cod
 - Xem PR đang mở. Có PR buổi học chưa merge thì bảng "Trạng thái" trên main còn thiếu buổi đó: nhắc thien merge trước, hoặc đọc bảng trong nhánh của PR đó.
 
 ## Sau buổi
-1. Ghi đủ như mục "Sau buổi" trong `learning/README.md`: nhật ký trong `learning/<môn>.md`, file bài trong `learning/<môn>/lessons/` và dòng trong `learning/<môn>/README.md`, 2–3 thẻ trong `cards.md`, bảng "Trạng thái", tick chặng trong `roadmap.md`. Sửa luôn mục "Buổi tiếp theo" của môn đó.
+1. Ghi đủ như mục "Sau buổi" trong `learning/README.md` (chạy `after-lesson.mjs` như ở đó, kết quả thien dán thì lưu phần json ra file): nhật ký trong `learning/<môn>.md`, file bài trong `learning/<môn>/lessons/` và dòng trong `learning/<môn>/README.md`, 2–3 thẻ trong `cards.md`, bảng "Trạng thái", tick chặng trong `roadmap.md`. Sửa luôn mục "Buổi tiếp theo" của môn đó.
 2. Trong dòng nhật ký, ghi công cụ: "(Codex)". Để sau này so được buổi ở Codex với buổi ở Claude.
 3. thien dán kết quả (nút "Chép kết quả") vào chat. Đọc kết quả rồi mới ghi nhật ký; ghi chỗ thien đổi cách nhìn, không ghi như bảng điểm.
 4. Tạo nhánh `learning/<môn>-<số buổi>` (ví dụ `learning/ba-02`), commit, push, mở PR. Không mở được PR thì đưa thien link tạo PR. Nhắc thien merge trước buổi kế tiếp, ở công cụ nào cũng vậy.
