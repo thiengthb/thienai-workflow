@@ -80,7 +80,7 @@ export function summarize(name, text) {
   const title = (text.match(/^# (.+)$/m) || [])[1] || name;
   const repo = (text.match(/^Repo: ([^·\n]+)/m) || [])[1]?.trim() || '?';
   const updated = (text.match(/Cập nhật: ([0-9T:-]+Z?)/) || [])[1] || '';
-  const nick = (text.match(/^Ghi bởi: Claude (tnt\d+)/m) || [])[1] || '';
+  const nick = (text.match(/^Ghi bởi: Claude (tnt\d+|nick chưa rõ)/m) || [])[1] || '';
   const next = (section(text, '## Bước tiếp theo').split('\n').find(l => l.trim() && !l.startsWith('<!--')) || '').replace(/^\d+\.\s*/, '');
   const waiting = section(text, '## Đang chờ thien').replace(/<!--[\s\S]*?-->/g, '').trim();
   return { name, title, repo, updated, nick, next, waiting: waiting && !/^Không\.?$/i.test(waiting) ? waiting : '' };
