@@ -223,7 +223,7 @@
     const unitList = $el('div', 'st-units'); unitList.setAttribute('aria-label', 'Các đơn vị trên sa bàn');
     b.units.forEach((u) => { const bt = $el('button', '', esc(u.name)); bt.type = 'button'; bt.dataset.noreplay = '';
       bt.addEventListener('click', () => { if (!S || !S.show.has(u.id)) { info.hidden = false; info.innerHTML = `<b>${esc(u.name)}</b><span>Chưa có trên sa bàn ở mốc này</span>`; info.style.transform = 'translate(8px, 48px)'; delete info.dataset.u; return; }
-        if (!lastHits.some((o) => o.u === u)) { info.hidden = false; info.innerHTML = `<b>${esc(S.rename[u.id] || u.name)}</b><span>Ngoài khung nhìn: thử nút "Từ trên"</span>`; info.style.transform = 'translate(8px, 48px)'; delete info.dataset.u; return; }
+        if (!lastHits.some((o) => o.u === u)) { info.hidden = false; info.innerHTML = `<b>${esc(S.rename[u.id] || u.name)}</b><span>${esc(unitFacts(u, S))}</span><span>Ngoài khung nhìn: thử nút "Từ trên"</span>`; info.style.transform = 'translate(8px, 48px)'; delete info.dataset.u; return; }
         showInfo(u, S); });
       unitList.appendChild(bt); });
     stage.appendChild(unitList);
@@ -340,12 +340,15 @@
       if (!info.hidden && info.dataset.u) showInfo(units[info.dataset.u], S);
     }
     // Chạm vào ký hiệu (hay nhãn của nó): hiện tên đầy đủ, bên nào và đang ra sao ở mốc này. Chạm chỗ trống thì đóng.
+    function unitFacts(u, S) {
+      const side = b.sides[u.side] ? b.sides[u.side].name : '', kind = u.kind === 'gun' ? 'trận địa pháo' : 'cứ điểm';
+      const state = S.lose.has(u.id) ? 'đã mất' : S.hit.has(u.id) ? 'đang bị đánh' : '';
+      return [side, kind, state].filter(Boolean).join(' · ');
+    }
     function showInfo(u, S) {
       const hit = lastHits.find((o) => o.u === u);
       if (!u || !S || !S.show.has(u.id) || !hit) { info.hidden = true; delete info.dataset.u; return; }
-      const side = b.sides[u.side] ? b.sides[u.side].name : '', kind = u.kind === 'gun' ? 'trận địa pháo' : 'cứ điểm';
-      const state = S.lose.has(u.id) ? 'đã mất' : S.hit.has(u.id) ? 'đang bị đánh' : '';
-      info.innerHTML = `<b>${esc(S.rename[u.id] || u.name)}</b><span>${esc([side, kind, state].filter(Boolean).join(' · '))}</span>`;
+      info.innerHTML = `<b>${esc(S.rename[u.id] || u.name)}</b><span>${esc(unitFacts(u, S))}</span>`;
       info.dataset.u = u.id; info.hidden = false;
       const W = stage.clientWidth, w = info.offsetWidth, h = info.offsetHeight, [l, t, r, btm] = hit.box;
       const x = Math.max(4, Math.min(W - w - 4, (l + r) / 2 - w / 2)), y = t - h - 6 > 4 ? t - h - 6 : btm + 6;
