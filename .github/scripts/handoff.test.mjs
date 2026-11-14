@@ -1,7 +1,7 @@
 // Tests for templates/handoff.mjs, run in CI by .github/workflows/test.yml.
 // Uses a local bare repo as the remote, so nothing touches GitHub.
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, readFileSync, existsSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
@@ -47,7 +47,25 @@ r = run('list', '--remotes', flow); assert.ok(!r.stdout.includes('Trang ôn th�
 r = run('show', 'thiengthb/sakubun', 'review-page', '--remote', saku); assert.equal(r.stdout, waiting);
 r = run('done', 'thiengthb/sakubun', 'review-page', '--remote', saku); assert.equal(r.status, 0, r.stderr);
 r = run('list', '--remotes', `${saku},${flow}`); assert.ok(!r.stdout.includes('Trang ôn thẻ') && r.stdout.includes('Sổ bàn giao'));
+assert.ok(!r.stdout.includes('Không đọc được'), 'a book emptied by done is empty, not unreadable');
+const nobook = join(root, 'nobook.git'); spawnSync('git', ['init', '-q', '--bare', nobook]);
+r = run('list', '--remotes', nobook); assert.match(r.stdout, /Không có việc dở/); assert.ok(!r.stdout.includes('Không đọc được'), 'a repo without a book is not unreadable');
+
+// Two accounts edit the same task at once: the second save must stop with an error, not claim it pushed.
+const { checkout, commitPush } = await import('../../templates/handoff.mjs');
+Object.assign(process.env, { GIT_AUTHOR_NAME: 't', GIT_AUTHOR_EMAIL: 't@t', GIT_COMMITTER_NAME: 't', GIT_COMMITTER_EMAIL: 't@t' });
+const dA = checkout(flow), dB = checkout(flow);
+writeFileSync(join(dA, 'tasks', 'account-handoff.md'), 'A\n'); assert.equal(commitPush(dA, 'a'), 'đã đẩy');
+writeFileSync(join(dB, 'tasks', 'account-handoff.md'), 'B\n');
+assert.throws(() => commitPush(dB, 'b'), /nick khác vừa sửa cùng việc/);
+const dC = checkout(flow); assert.equal(readFileSync(join(dC, 'tasks', 'account-handoff.md'), 'utf8'), 'A\n', 'remote keeps the first edit');
+// Two accounts edit different tasks at once: the second save rebases and pushes.
+writeFileSync(join(dC, 'tasks', 'other.md'), 'C\n'); const dD = checkout(flow);
+writeFileSync(join(dD, 'tasks', 'third.md'), 'D\n');
+assert.equal(commitPush(dC, 'c'), 'đã đẩy'); assert.equal(commitPush(dD, 'd'), 'đã đẩy');
+const dE = checkout(flow); assert.ok(existsSync(join(dE, 'tasks', 'other.md')) && existsSync(join(dE, 'tasks', 'third.md')));
 r = run('save', join(root, 'nope.md')); assert.notEqual(r.status, 0, 'missing file fails');
 const bad = join(root, 'x.md'); writeFileSync(bad, fresh); r = run('save', bad, '--remote', saku);
 assert.notEqual(r.status, 0, 'unfilled file is not pushed'); assert.match(r.stderr, /Bước tiếp theo/);
+for (const d of [root, dA, dB, dC, dD, dE]) rmSync(d, { recursive: true, force: true });
 console.log('handoff ok');

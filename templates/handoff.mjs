@@ -12,7 +12,7 @@
 //   node templates/handoff.mjs done <owner/repo> <slug>                  remove a finished task
 //   node templates/handoff.mjs check <slug>.md                           only check the format
 // Options: --remote <git url> (save/show/done: use this remote instead of github.com/<owner/repo>),
-//          --remotes <url,url> (list: these remotes instead of the tracked repos), --dir <path> (reuse a clone).
+//          --remotes <url,url> (list: these remotes instead of the tracked repos).
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, rmSync, mkdtempSync, realpathSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -100,26 +100,30 @@ export function allRepos() {
   return ['thiengthb/thienai-workflow', ...tracked];
 }
 
-/** Clone of the handoff branch for reading, or null when the repo has no handoff branch (or cannot be read). */
-function readOnly(remote) {
-  const dir = mkdtempSync(join(tmpdir(), 'handoff-'));
-  if (git(['clone', '-q', '--depth', '1', '--branch', BRANCH, remote, dir]).status !== 0) return null;
-  return existsSync(join(dir, 'tasks')) ? dir : null;
+// Every clone this tool makes is a throwaway temp dir, removed when the command ends (see main).
+const temps = [];
+function tempDir() { const d = mkdtempSync(join(tmpdir(), 'handoff-')); temps.push(d); return d; }
+
+/**
+ * Clone of the handoff branch for reading. Returns the dir, 'none' when the repo has no handoff branch yet,
+ * or null when the repo cannot be read (no access, network).
+ */
+export function readOnly(remote) {
+  const dir = tempDir();
+  if (git(['clone', '-q', '--depth', '1', '--branch', BRANCH, remote, dir]).status === 0) {
+    mkdirSync(join(dir, 'tasks'), { recursive: true }); // git keeps no empty dirs: an emptied book has no tasks/
+    return dir;
+  }
+  // Exit code 2: the remote answered and has no handoff branch, so the book is simply empty.
+  return git(['ls-remote', '--exit-code', remote, 'refs/heads/' + BRANCH]).status === 2 ? 'none' : null;
 }
 
 /** A fresh shallow clone of the handoff branch (or an empty orphan branch when it does not exist yet). */
-export function checkout(remote, dir) {
-  if (dir && existsSync(join(dir, '.git'))) {
-    git(['fetch', '--depth', '1', 'origin', BRANCH], dir);
-    git(['reset', '--hard', 'FETCH_HEAD'], dir);
-    return dir;
-  }
-  dir = dir || mkdtempSync(join(tmpdir(), 'handoff-'));
-  const c = git(['clone', '--depth', '1', '--branch', BRANCH, remote, dir]);
+export function checkout(remote) {
+  const dir = tempDir();
+  const c = git(['clone', '-q', '--depth', '1', '--branch', BRANCH, remote, dir]);
   if (c.status !== 0) {
-    if (!/not found|Could not find remote branch/i.test(c.stderr)) throw new Error('không clone được nhánh handoff: ' + c.stderr.trim());
-    rmSync(dir, { recursive: true, force: true });
-    mkdirSync(dir, { recursive: true });
+    if (git(['ls-remote', '--exit-code', remote, 'refs/heads/' + BRANCH]).status !== 2) throw new Error('không clone được nhánh handoff: ' + c.stderr.trim());
     git(['init', '-q', '-b', BRANCH], dir);
     git(['remote', 'add', 'origin', remote], dir);
   }
@@ -127,7 +131,10 @@ export function checkout(remote, dir) {
   return dir;
 }
 
-/** Commits whatever changed and pushes, rebasing on the remote up to 4 times when another account pushed first. */
+/**
+ * Commits whatever changed and pushes. When another account pushed first, rebases and tries again (up to 4 times);
+ * a failed fetch or a rebase conflict (two accounts editing the same task) stops with an error instead of pushing.
+ */
 export function commitPush(dir, message) {
   git(['add', '-A'], dir);
   if (git(['diff', '--cached', '--quiet'], dir).status === 0) return 'không có gì đổi';
@@ -135,9 +142,16 @@ export function commitPush(dir, message) {
     '-c', 'user.email=' + (git(['config', 'user.email'], dir).stdout.trim() || 'noreply@anthropic.com')];
   if (git([...who, 'commit', '-q', '-m', message], dir, false).status !== 0) throw new Error('commit lỗi');
   for (let i = 0; i < 4; i++) {
-    if (git(['push', '-q', 'origin', 'HEAD:' + BRANCH], dir, i === 3).status === 0) return 'đã đẩy';
-    git(['fetch', '-q', '--depth', '50', 'origin', BRANCH], dir);
-    git([...who, 'rebase', '-q', 'FETCH_HEAD'], dir);
+    const push = git(['push', '-q', 'origin', 'HEAD:' + BRANCH], dir);
+    if (push.status === 0) return 'đã đẩy';
+    if (i === 3) break;
+    const f = git(['fetch', '-q', '--depth', '50', 'origin', BRANCH], dir);
+    if (f.status !== 0) throw new Error('đẩy bị từ chối và không fetch được nhánh handoff: ' + (f.stderr || push.stderr).trim());
+    const r = git([...who, 'rebase', '-q', 'FETCH_HEAD'], dir);
+    if (r.status !== 0) {
+      git(['rebase', '--abort'], dir);
+      throw new Error('nick khác vừa sửa cùng việc này trong sổ; chạy `show` để đọc bản mới, gộp tay rồi `save` lại. Chưa đẩy gì.');
+    }
     spawnSync('sleep', [String(2 ** i)]);
   }
   throw new Error('đẩy lên nhánh handoff không được sau 4 lần');
@@ -147,9 +161,8 @@ function main(argv) {
   const opt = (k) => { const i = argv.indexOf(k); if (i < 0) return undefined; const v = argv[i + 1]; argv.splice(i, 2); return v; };
   const remoteOpt = opt('--remote');
   const remotesOpt = opt('--remotes');
-  const dirOpt = opt('--dir');
   const [cmd, a, b, c] = argv;
-  const fail = (msg) => { console.error(msg); process.exit(1); };
+  const fail = (msg) => { throw new Error(msg); };
 
   if (cmd === 'new') {
     if (!a || !b) fail('dùng: new <owner/repo> <slug> "<tên việc>"');
@@ -164,7 +177,7 @@ function main(argv) {
     if (probs.length) fail('Sổ bàn giao chưa đúng mẫu:\n- ' + probs.join('\n- '));
     if (cmd === 'check') return console.log('ổn');
     const repo = repoOf(text);
-    const dir = checkout(remoteOpt || urlOf(repo), dirOpt);
+    const dir = checkout(remoteOpt || urlOf(repo));
     writeFileSync(join(dir, 'tasks', basename(a)), text);
     console.log(commitPush(dir, `handoff: update ${basename(a, '.md')}`) + `: ${repo}, nhánh ${BRANCH}, tasks/${basename(a)}`);
     return;
@@ -175,7 +188,8 @@ function main(argv) {
     const unread = [];
     for (const [name, url] of remotes) {
       const dir = readOnly(url);
-      if (!dir) { if (git(['ls-remote', url]).status !== 0) unread.push(name); continue; }
+      if (dir === 'none') continue;
+      if (!dir) { unread.push(name); continue; }
       for (const f of readdirSync(join(dir, 'tasks')).filter(f => f.endsWith('.md'))) rows.push(summarize(f, readFileSync(join(dir, 'tasks', f), 'utf8')));
     }
     rows.sort((x, y) => y.updated.localeCompare(x.updated));
@@ -191,8 +205,8 @@ function main(argv) {
   if (cmd === 'show' || cmd === 'done') {
     if (!a || !b) fail(`dùng: ${cmd} <owner/repo> <slug>`);
     const name = b.endsWith('.md') ? b : b + '.md';
-    const dir = cmd === 'show' ? readOnly(remoteOpt || urlOf(a)) : checkout(remoteOpt || urlOf(a), dirOpt);
-    if (!dir || !existsSync(join(dir, 'tasks', name))) fail(`không có việc ${b} trong sổ của ${a}`);
+    const dir = cmd === 'show' ? readOnly(remoteOpt || urlOf(a)) : checkout(remoteOpt || urlOf(a));
+    if (!dir || dir === 'none' || !existsSync(join(dir, 'tasks', name))) fail(`không có việc ${b} trong sổ của ${a}`);
     if (cmd === 'show') return process.stdout.write(readFileSync(join(dir, 'tasks', name), 'utf8'));
     rmSync(join(dir, 'tasks', name));
     console.log(commitPush(dir, `handoff: done ${basename(name, '.md')}`) + `: đã xoá tasks/${name} ở ${a}`);
@@ -202,5 +216,8 @@ function main(argv) {
 }
 
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
-  try { main(process.argv.slice(2)); } catch (e) { console.error(e.message); process.exit(1); }
+  let code = 0;
+  try { main(process.argv.slice(2)); } catch (e) { console.error(e.message); code = 1; }
+  finally { for (const d of temps) rmSync(d, { recursive: true, force: true }); }
+  process.exitCode = code;
 }
