@@ -9,7 +9,7 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 - Ô tự nói lại, bản của Claude ẩn tới khi bấm xem (ghi lại là xem trước hay sau khi tự viết).
 - Góp ý độ dài, độ khó, cách học so với các buổi trước bằng nhóm nút (nút đã chọn tô đen), ô ghi thêm.
 - **Xong buổi học**: lưu toàn bộ kết quả vào db của trang ở `sessions/<id>-<thời điểm>`, rồi gửi tóm tắt cho Claude bằng comment (Claude đang theo dõi trang thì tự thức dậy, thien không cần nhắn "xong"). Gửi không được thì hiện nút "Chép kết quả".
-- Tự lưu chỗ đang học (`learning/teaching/kit/kit.js`): tải lại, tắt màn, mở trên máy khác đều về đúng chỗ. Học lại thì bỏ phần ôn.
+- Tự lưu chỗ đang học (`../kit/autosave.js`): tải lại, tắt màn, mở trên máy khác, hay mở bản AI vừa sửa đều về đúng chỗ, vì phần tự lưu nhớ nút theo tên chứ không theo thứ tự. Học lại thì bỏ phần ôn.
 - **Hỏi Claude ngay trong bài** (khả năng `sample`, xem `../README.md`): nhận xét bài tự nói lại, giải thích chỗ chọn sai, ô "Hỏi Claude về bước này". lesson.js tự gắn vào mọi bài, không cần sửa trang. Nút hỏi có `data-noreplay`, ô hỏi là `<input>`: phần tự lưu không bấm lại nên tải lại không tốn lượt hỏi.
 - **Claude biết chỗ còn vướng của các buổi trước**: `make-lesson.mjs` đọc mục "Chỗ còn vướng" của `learning/<môn>.md` (6 dòng mới nhất) vào cấu hình bài (`"stuck"`); lời dặn khi hỏi về một bước và khi nhận xét bài tự nói lại có thêm phần này, dặn chỉ nối vào khi liên quan. Sửa mục đó rồi dựng lại trang là trang có bản mới.
 - **Nói thay gõ** ở ô tự nói lại (khả năng `dictation`, `Kit.micRow` trong lõi chung): nút mic cạnh ô, chỉ có ở Chrome và app Claude trên máy tính, nơi khác tự ẩn. Số lần nói ghi vào `R.spoke`.

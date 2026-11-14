@@ -1,6 +1,6 @@
 /* Sân khấu cho bài IT: bàn thử (frontend) và bảng dán (BA). Chạy sau lesson.js, trước phần tự lưu. Xem artifacts/it/README.md.
-   Mọi thao tác là bấm nút có sẵn lúc tải trang, không kéo thả, không tạo nút mới, để phần tự lưu bấm lại đúng thứ tự là về đúng chỗ.
-   Thẻ trên bảng dán không bao giờ đổi chỗ trong DOM (phần tự lưu nhận nút theo thứ tự), chỉ đổi vị trí vẽ. */
+   Mọi thao tác là bấm nút có sẵn lúc tải trang, không kéo thả, không tạo nút mới, để phần tự lưu (kit/autosave.js) bấm lại theo tên nút
+   là về đúng chỗ. Thẻ trên bảng dán không đổi chỗ trong DOM, chỉ đổi vị trí vẽ. */
 (() => {
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const stage = $('#stage');
@@ -19,6 +19,8 @@
   const panes = $$('.pane[data-pane]', stage);
   const pane = (n) => panes.find((p) => p.dataset.pane === n);
   const mainScreen = (b) => $('.phone:not(.mini) .screen', b);
+  // Khối code cuộn ngang được: cho Tab tới để cuộn bằng phím (axe: scrollable-region-focusable).
+  $$('pre.code', stage).forEach((c) => { if (!c.hasAttribute('tabindex')) c.tabIndex = 0; });
 
   if (window.Lesson && Lesson.extras) Lesson.extras.push((r) => {
     const L = [];

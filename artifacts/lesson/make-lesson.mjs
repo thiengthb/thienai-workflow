@@ -23,7 +23,7 @@ const PARTS = {
   'lesson-css': ['style', 'lesson.css'],
   'kit-js': ['script', '../kit/kit.js'],
   'lesson-js': ['script', 'lesson.js'],
-  'lesson-kit': ['script', '../../learning/teaching/kit/kit.js'],   // tự lưu chỗ đang học, chế độ học lại
+  'lesson-kit': ['script', '../kit/autosave.js'],   // tự lưu chỗ đang học theo tên nút, chế độ học lại
 };
 // Phần thêm, chỉ gắn khi trang có thẻ đó: sa bàn cho bài chiến tranh (artifacts/war/README.md).
 const OPTIONAL = {

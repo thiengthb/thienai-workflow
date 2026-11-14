@@ -31,14 +31,18 @@ jobs:
       - run: node .github/scripts/make-review.test.mjs
       - run: node .github/scripts/after-lesson.test.mjs
       - run: node .github/scripts/check-open-work.test.mjs
+      - run: node .github/scripts/handoff.test.mjs
+      - run: node .github/scripts/setup-check.test.mjs
+      - run: node .github/scripts/check-tokens.test.mjs
+      - run: node .github/scripts/pack-skills.test.mjs
       - run: node artifacts/lesson/after-lesson.mjs --check-all
       - run: node templates/check-status.mjs docs/STATUS.md --git --prs --cards learning/cards.md
         env:
           GH_TOKEN: ${{ github.token }}
 
-  # Opens every lesson page and one page built from each artifact template in a real browser
+  # Opens every lesson page, one page built from each artifact template and the component gallery in a real browser
   # (3 widths, dark and light), and checks the prompts pages send to Claude. Screenshots are
-  # attached to the run as "page-screenshots".
+  # attached to the run as "page-screenshots". axe-core adds WCAG 2.1 AA checks (serious and critical fail the run).
   pages:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -47,9 +51,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install --no-save --no-package-lock playwright@1.63.0
+      - run: npm install --no-save --no-package-lock playwright@1.63.0 axe-core@4.14.0
       - run: npx playwright install --with-deps chromium
       - run: node .github/scripts/ask-prompts.test.mjs
+      - run: node .github/scripts/autosave.test.mjs
       - run: node artifacts/kit/check-pages.mjs --out .check-pages
       - uses: actions/upload-artifact@v4
         if: always()
