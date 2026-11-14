@@ -58,6 +58,8 @@ assert.match(run('show', 'thiengthb/sakubun', 'review-page', '--remote', saku).s
 // A file without a base line may not overwrite an existing task either (two accounts picked the same name).
 r = run('save', f1, '--remote', saku); assert.notEqual(r.status, 0, 'new copy cannot clobber an existing task');
 r = run('done', 'thiengthb/sakubun', 'review-page', '--remote', saku); assert.equal(r.status, 0, r.stderr);
+// show -> done (by another account) -> save of the old copy must not bring the finished task back.
+r = run('save', a0, '--remote', saku); assert.notEqual(r.status, 0, 'stale copy of a finished task refused'); assert.match(r.stderr, /không còn trong sổ/);
 r = run('list', '--remotes', `${saku},${flow}`); assert.ok(!r.stdout.includes('Trang ôn thẻ') && r.stdout.includes('Sổ bàn giao'));
 assert.ok(!r.stdout.includes('Không đọc được'), 'a book emptied by done is empty, not unreadable');
 const nobook = join(root, 'nobook.git'); spawnSync('git', ['init', '-q', '--bare', nobook]);

@@ -194,6 +194,9 @@ function main(argv) {
         fail(`Trong sổ, việc ${basename(a, '.md')} đã được sửa từ lúc bạn đọc (có thể bởi nick khác). Chưa ghi gì. ` +
           `Chạy \`show ${repo} ${basename(a, '.md')} > ${basename(a)}\` để lấy bản mới, gộp phần của mình vào rồi \`save\` lại.`);
       }
+    } else if (baseOf(text)) {
+      fail(`Việc ${basename(a, '.md')} không còn trong sổ của ${repo} (đã \`done\` hay bị xoá từ lúc bạn đọc). Chưa ghi gì. ` +
+        'Nếu việc vẫn còn dở, xoá dòng handoff-base ở cuối file rồi `save` lại để tạo lại việc.');
     }
     writeFileSync(target, stripBase(text));
     const out = commitPush(dir, `handoff: update ${basename(a, '.md')}`);
