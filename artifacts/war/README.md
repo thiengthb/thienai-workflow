@@ -56,6 +56,8 @@ Vì sao hợp cách học đã chọn (`learning/war.md`, mục "Cách dạy mô
 - `exaggerate`: phóng độ cao cho dễ thấy đồi; trang tự ghi "độ cao ×2" ở góc sa bàn.
 - `fog`: mốc nào có thì sa bàn hiện nút mang tên `who`. Bấm vào, các ký hiệu trong `hide` biến thành vùng nghi ngờ rộng, kèm đoạn `text` và nguồn. Dùng để người học thấy bên kia biết gì lúc đó; chỉ ghi điều có nguồn.
 - `short` của sông, đường, sân bay hiện thành tên nằm trên địa hình.
+- Trạng thái vẽ bằng ký hiệu, không bằng chữ: `hit` là vòng đỏ dưới chân, `lose` là khối xám có cờ của bên kia cắm lên; chú thích tự thêm hai mục này khi trận có. Nhãn chỉ ghi tên, tên trùng (như mấy trận địa pháo) chỉ ghi một lần, đơn vị trong `dim` không ghi tên.
+- Màu đất theo độ cao so với đáy lòng chảo (ruộng nhạt, sườn cỏ, đồi rừng, đỉnh nâu), cộng đường đồng mức 50 m và 250 m theo độ cao thật. Đáy phẳng không vẽ đồng mức.
 - Người học chạm vào đất trống thì sa bàn tính vùng nhìn thấy từ điểm đó (mắt cao 15 m, theo độ cao thật); chạm vào ký hiệu thì hiện tên đầy đủ và tình trạng ở mốc đó. Không cần ghi gì trong dữ liệu.
 - Vị trí quân, hào, mũi tên là ước lượng để minh họa; chỉ địa hình là số liệu thật. Trang luôn ghi "vị trí ước lượng".
 

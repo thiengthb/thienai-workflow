@@ -8,19 +8,19 @@ html[data-board="on"] #board { display: flex; }
 .st-canvas, .st-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
 .st-canvas:active canvas { cursor: grabbing; }
 .st-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.st-lbl { position: absolute; left: 0; top: 0; font: 600 12px/1 var(--font); padding: 4px 6px; border-radius: 6px; background: var(--card); color: var(--ink);
-  border: 2px solid currentColor; white-space: nowrap; will-change: transform; }
-.st-lbl.fr { color: #2f5f96; } .st-lbl.vn { color: #b23a2a; }
-.st-lbl.hit { background: #e0533d; border-color: #e0533d; color: #fff; }
-.st-lbl.lost { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
-.st-lbl.dim { opacity: .5; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .st-lbl.fr { color: #8db4e6; } :root:not([data-theme="light"]) .st-lbl.vn { color: #f08a78; } }
-:root[data-theme="dark"] .st-lbl.fr { color: #8db4e6; } :root[data-theme="dark"] .st-lbl.vn { color: #f08a78; }
+/* Nhãn đơn vị: chữ nhỏ, không khung, viền sáng để đọc được trên đất (địa hình luôn sáng, kể cả chế độ tối). Trạng thái thể hiện bằng ký hiệu, không bằng chữ. */
+.st-lbl { position: absolute; left: 0; top: 0; font: 600 11.5px/1 var(--font); padding: 2px 3px; border-radius: 4px; color: #2b2a26;
+  text-shadow: 0 0 3px #fffbe9, 0 0 3px #fffbe9, 0 0 2px #fffbe9; white-space: nowrap; will-change: transform; }
+.st-lbl.fr, :root .st-lbl.fr { color: #234f80; } .st-lbl.vn, :root .st-lbl.vn { color: #9c2e21; }
+.st-lbl.lost, :root .st-lbl.lost { color: #5f5c56; font-weight: 500; }
+.st-lbl.hit, :root .st-lbl.hit { background: #d8402b; color: #fff; text-shadow: none; padding: 3px 6px; }
 .st-legend { position: absolute; left: 8px; top: 8px; display: flex; flex-wrap: wrap; gap: 4px; max-width: 60%; pointer-events: none; }
 .st-legend .chip, .st-note { background: color-mix(in srgb, var(--card) 90%, transparent); color: var(--ink); font-weight: 500; }
 .st-ico { display: inline-block; width: 9px; height: 9px; margin-right: 5px; vertical-align: -1px; }
 .st-ico.tri { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
 .st-ico.ln { height: 3px; width: 14px; vertical-align: 2px; border-radius: 2px; }
+.st-ico.ring { width: 10px; height: 10px; border: 2.5px solid #d8402b; border-radius: 50%; box-sizing: border-box; }
+.st-ico.flag { width: 10px; height: 12px; vertical-align: -2px; background: linear-gradient(#3b3127, #3b3127) 0 0 / 1.5px 100% no-repeat, linear-gradient(var(--fc), var(--fc)) 1.5px 0 / 8px 6px no-repeat; }
 .st-views { position: absolute; right: 8px; top: 8px; max-width: calc(100% - 16px); overflow-x: auto; scrollbar-width: none; background: color-mix(in srgb, var(--soft) 92%, transparent); }
 .st-note { position: absolute; left: 8px; bottom: 8px; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* Địa hình luôn sáng, kể cả chế độ tối, nên tên sông, đường dùng màu cố định với viền sáng cho dễ đọc. */

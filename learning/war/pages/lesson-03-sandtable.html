@@ -187,19 +187,19 @@ html[data-board="on"] #board { display: flex; }
 .st-canvas, .st-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
 .st-canvas:active canvas { cursor: grabbing; }
 .st-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.st-lbl { position: absolute; left: 0; top: 0; font: 600 12px/1 var(--font); padding: 4px 6px; border-radius: 6px; background: var(--card); color: var(--ink);
-  border: 2px solid currentColor; white-space: nowrap; will-change: transform; }
-.st-lbl.fr { color: #2f5f96; } .st-lbl.vn { color: #b23a2a; }
-.st-lbl.hit { background: #e0533d; border-color: #e0533d; color: #fff; }
-.st-lbl.lost { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
-.st-lbl.dim { opacity: .5; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .st-lbl.fr { color: #8db4e6; } :root:not([data-theme="light"]) .st-lbl.vn { color: #f08a78; } }
-:root[data-theme="dark"] .st-lbl.fr { color: #8db4e6; } :root[data-theme="dark"] .st-lbl.vn { color: #f08a78; }
+/* Nhãn đơn vị: chữ nhỏ, không khung, viền sáng để đọc được trên đất (địa hình luôn sáng, kể cả chế độ tối). Trạng thái thể hiện bằng ký hiệu, không bằng chữ. */
+.st-lbl { position: absolute; left: 0; top: 0; font: 600 11.5px/1 var(--font); padding: 2px 3px; border-radius: 4px; color: #2b2a26;
+  text-shadow: 0 0 3px #fffbe9, 0 0 3px #fffbe9, 0 0 2px #fffbe9; white-space: nowrap; will-change: transform; }
+.st-lbl.fr, :root .st-lbl.fr { color: #234f80; } .st-lbl.vn, :root .st-lbl.vn { color: #9c2e21; }
+.st-lbl.lost, :root .st-lbl.lost { color: #5f5c56; font-weight: 500; }
+.st-lbl.hit, :root .st-lbl.hit { background: #d8402b; color: #fff; text-shadow: none; padding: 3px 6px; }
 .st-legend { position: absolute; left: 8px; top: 8px; display: flex; flex-wrap: wrap; gap: 4px; max-width: 60%; pointer-events: none; }
 .st-legend .chip, .st-note { background: color-mix(in srgb, var(--card) 90%, transparent); color: var(--ink); font-weight: 500; }
 .st-ico { display: inline-block; width: 9px; height: 9px; margin-right: 5px; vertical-align: -1px; }
 .st-ico.tri { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
 .st-ico.ln { height: 3px; width: 14px; vertical-align: 2px; border-radius: 2px; }
+.st-ico.ring { width: 10px; height: 10px; border: 2.5px solid #d8402b; border-radius: 50%; box-sizing: border-box; }
+.st-ico.flag { width: 10px; height: 12px; vertical-align: -2px; background: linear-gradient(#3b3127, #3b3127) 0 0 / 1.5px 100% no-repeat, linear-gradient(var(--fc), var(--fc)) 1.5px 0 / 8px 6px no-repeat; }
 .st-views { position: absolute; right: 8px; top: 8px; max-width: calc(100% - 16px); overflow-x: auto; scrollbar-width: none; background: color-mix(in srgb, var(--soft) 92%, transparent); }
 .st-note { position: absolute; left: 8px; bottom: 8px; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* Địa hình luôn sáng, kể cả chế độ tối, nên tên sông, đường dùng màu cố định với viền sáng cho dễ đọc. */
@@ -698,7 +698,17 @@ html[data-board="on"] #board { display: flex; }
 (() => {
   const $el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const COLORS = { river: '#4f86b3', road: '#9a6b3a', airfield: '#8d8a80', hit: '#e0533d', lost: '#8b8985', retreat: '#d9917f' };
+  const COLORS = { river: '#3f7fb5', road: '#8a5a2b', airfield: '#7d786c', hit: '#d8402b', lost: '#7c7a74', retreat: '#d9917f' };
+  // Màu đất theo độ cao so với đáy lòng chảo (mét): ruộng cát nhạt, sườn cỏ, đồi rừng, đỉnh núi nâu. Dùng chung cho 3D và bản phẳng.
+  const LAND = [[0, '#ece3c2'], [15, '#e3dcb4'], [120, '#b9c48f'], [400, '#7f945c'], [800, '#66744a'], [1100, '#7a6a4c']];
+  const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16) / 255);
+  const LANDRGB = LAND.map(([h, c]) => [h, hex(c)]);
+  function landAt(m) { // trả [r,g,b] 0..1
+    if (m <= LANDRGB[0][0]) return LANDRGB[0][1].slice();
+    for (let i = 1; i < LANDRGB.length; i++) { const [h1, c1] = LANDRGB[i], [h0, c0] = LANDRGB[i - 1];
+      if (m <= h1) { const f = (m - h0) / (h1 - h0); return c0.map((v, k) => v + (c1[k] - v) * f); } }
+    return LANDRGB[LANDRGB.length - 1][1].slice();
+  }
   const KIND_LABEL = { fort: 'Cứ điểm', gun: 'Pháo', hq: 'Sở chỉ huy', troop: 'Quân' };
 
   function decodeHeights(t) {
@@ -774,7 +784,10 @@ html[data-board="on"] #board { display: flex; }
     const L = [['fr', 'sq', b.sides.fr ? b.sides.fr.name : 'Bên kia'], ['vn', 'tri', b.sides.vn ? b.sides.vn.name : 'Quân ta']];
     legend.innerHTML = L.map(([s, sh, n]) => `<span class="chip"><i class="st-ico ${sh}" style="background:${b.sides[s] ? b.sides[s].color : '#888'}"></i>${esc(n)}</span>`).join('')
       + (has('road') ? `<span class="chip"><i class="st-ico ln" style="background:${COLORS.road}"></i>Đường tiếp tế</span>` : '')
-      + `<span class="chip"><i class="st-ico ln" style="background:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Hào, hướng đánh</span>`;
+      + `<span class="chip"><i class="st-ico ln" style="background:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Hào, hướng đánh</span>`
+      // Trạng thái vẽ bằng ký hiệu, nên chú thích nói một lần ở đây thay vì ghi chữ cạnh từng đơn vị.
+      + (Object.values(b.tracks).some((tr) => tr.keys.some((k) => (k.hit || []).length)) ? `<span class="chip"><i class="st-ico ring"></i>Đang bị đánh</span>` : '')
+      + (Object.values(b.tracks).some((tr) => tr.keys.some((k) => (k.lose || []).length)) ? `<span class="chip"><i class="st-ico flag" style="--fc:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Cắm cờ: đã mất</span>` : '');
     legend.title = b.colorNote || '';
 
     let track = Object.keys(b.tracks)[0], at = 0, upto = null, timer = null, renderer = null, flat = null;
@@ -798,20 +811,26 @@ html[data-board="on"] #board { display: flex; }
       // Mặt đất: lưới theo đúng dữ liệu độ cao, màu theo độ cao và độ dốc (đồng lúa thấp phẳng, đồi cỏ, rừng trên cao).
       const { t } = G, g = new THREE.PlaneGeometry(G.wk, G.hk, t.cols - 1, t.rows - 1); g.rotateX(-Math.PI / 2);
       const pos = g.attributes.position, col = new Float32Array(pos.count * 3);
-      const cLow = new THREE.Color('#e6dcb1'), cMid = new THREE.Color('#b3c08f'), cHigh = new THREE.Color('#6c8152'), cTop = new THREE.Color('#5a6b47'), tmp = new THREE.Color();
-      const ramp = (h) => { // độ cao thật so với đáy lòng chảo, tính bằng mét
-        if (h < 12) return tmp.copy(cLow);
-        if (h < 120) return tmp.copy(cLow).lerp(cMid, (h - 12) / 108);
-        if (h < 450) return tmp.copy(cMid).lerp(cHigh, (h - 120) / 330);
-        return tmp.copy(cHigh).lerp(cTop, Math.min(1, (h - 450) / 500));
-      };
       for (let i = 0; i < pos.count; i++) {
         const x = pos.getX(i), z = pos.getZ(i), h = G.hAt(x, z); pos.setY(i, h);
-        ramp(h / G.ex * 1000);
-        col[i * 3] = tmp.r; col[i * 3 + 1] = tmp.g; col[i * 3 + 2] = tmp.b;
+        const c = landAt(h / G.ex * 1000);
+        col[i * 3] = c[0]; col[i * 3 + 1] = c[1]; col[i * 3 + 2] = c[2];
       }
       g.setAttribute('color', new THREE.BufferAttribute(col, 3)); g.computeVertexNormals();
-      ground = { mesh: new THREE.Mesh(g, new THREE.MeshLambertMaterial({ vertexColors: true })), base: col.slice() };
+      const gmat = new THREE.MeshLambertMaterial({ vertexColors: true });
+      // Đường đồng mức như bản đồ địa hình: nét mảnh mỗi 50 m, nét đậm mỗi 250 m (độ cao thật). Cần WebGL2 để nét đều độ dày.
+      // Đáy lòng chảo gần như phẳng, đồng mức ở đó chỉ là vết lăn tăn, nên chỉ vẽ từ khoảng 30 m trên đáy trở lên.
+      if (renderer.capabilities.isWebGL2) gmat.onBeforeCompile = (sh) => {
+        sh.uniforms.uM = { value: 1000 / G.ex }; sh.uniforms.uOff = { value: G.t.min };
+        sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying float vH;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvH = position.y;');
+        sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vH;\nuniform float uM;\nuniform float uOff;')
+          .replace('#include <dithering_fragment>', `#include <dithering_fragment>
+          { float m = vH * uM + uOff, d = max(fwidth(m), 1e-3);
+            float a = 1.0 - smoothstep(.4, 1.4, abs(fract(m / 50.0 + .5) - .5) * 50.0 / d);
+            float c = 1.0 - smoothstep(.6, 1.9, abs(fract(m / 250.0 + .5) - .5) * 250.0 / d);
+            gl_FragColor.rgb *= 1.0 - (.13 * a + .2 * c) * smoothstep(20.0, 40.0, vH * uM); }`);
+      };
+      ground = { mesh: new THREE.Mesh(g, gmat), base: col.slice() };
       scene.add(ground.mesh);
       // Chỗ đứng nhìn: một cột mảnh có vòng ở chân, ẩn cho tới khi chạm vào đồi.
       eyeMark = new THREE.Group();
@@ -828,11 +847,22 @@ html[data-board="on"] #board { display: flex; }
         } else scene.add(tube(f.pts, f.kind === 'river' ? COLORS.river : COLORS.road, f.kind === 'river' ? .045 : .028, .012));
       });
       unitGroup = new THREE.Group(); lineGroup = new THREE.Group(); scene.add(unitGroup, lineGroup);
+      // Mỗi đơn vị: khối màu của bên mình; cờ của bên kia cắm lên khi đã mất; vòng đỏ dưới chân khi đang bị đánh.
+      const poleGeo = new THREE.CylinderGeometry(.009, .009, .44, 6), clothGeo = new THREE.PlaneGeometry(.22, .14), ringGeo = new THREE.RingGeometry(.25, .33, 36);
       b.units.forEach((u) => {
-        const [x, z] = G.xz(u.at), h = G.hAt(x, z);
-        const geom = u.kind === 'gun' ? new THREE.ConeGeometry(.1, .26, 4) : new THREE.BoxGeometry(.22, .12, .22);
-        const m = new THREE.Mesh(geom, new THREE.MeshLambertMaterial({ color: b.sides[u.side] ? b.sides[u.side].color : '#888', transparent: true }));
-        m.position.set(x, h + (u.kind === 'gun' ? .15 : .07), z); unitGroup.add(m); meshes[u.id] = m;
+        const [x, z] = G.xz(u.at), h = G.hAt(x, z), gun = u.kind === 'gun', top = gun ? .34 : .16;
+        const other = Object.keys(b.sides).find((k) => k !== u.side);
+        const grp = new THREE.Group(); grp.position.set(x, h, z);
+        const body = new THREE.Mesh(gun ? new THREE.ConeGeometry(.14, .34, 4) : new THREE.BoxGeometry(.3, .16, .3), new THREE.MeshLambertMaterial({ color: b.sides[u.side] ? b.sides[u.side].color : '#888', transparent: true }));
+        body.position.y = top / 2 + .01;
+        const flag = new THREE.Group(), pole = new THREE.Mesh(poleGeo, new THREE.MeshLambertMaterial({ color: '#3b3127' }));
+        pole.position.y = top + .22;
+        const cloth = new THREE.Mesh(clothGeo, new THREE.MeshLambertMaterial({ color: other ? b.sides[other].color : COLORS.hit, side: THREE.DoubleSide }));
+        cloth.position.set(.11, top + .37, 0); flag.add(pole, cloth); flag.visible = false;
+        const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: COLORS.hit, side: THREE.DoubleSide, transparent: true, opacity: .95, depthTest: false }));
+        ring.rotation.x = -Math.PI / 2; ring.position.y = .04; ring.renderOrder = 2; ring.visible = false;
+        grp.add(body, flag, ring); grp.userData = { body, flag, ring };
+        unitGroup.add(grp); meshes[u.id] = grp;
       });
       return true;
     }
@@ -873,12 +903,11 @@ html[data-board="on"] #board { display: flex; }
     function drawFlat(S) {
       const { c, ctx } = flat, W = c.clientWidth, H = c.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
       if (c.width !== W * dpr || c.height !== H * dpr) { c.width = W * dpr; c.height = H * dpr; }
-      flat.w = W; flat.h = H; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.fillStyle = '#a9b68f'; ctx.fillRect(0, 0, W, H);
-      const { t } = G, cw = G.wk / t.cols, ch = G.hk / t.rows, relMax = (t.max - t.min) / 1000 * G.ex;
+      flat.w = W; flat.h = H; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.fillStyle = '#b9c48f'; ctx.fillRect(0, 0, W, H);
+      const { t } = G, cw = G.wk / t.cols, ch = G.hk / t.rows;
       for (let r = 0; r < t.rows; r += 1) for (let cc = 0; cc < t.cols; cc += 1) {
         const x = -G.wk / 2 + (cc + .5) * cw, z = -G.hk / 2 + (r + .5) * ch, h = G.hAt(x, z), sh = (G.hAt(x - cw, z - ch) - G.hAt(x + cw, z + ch)) * 6;
-        const k = h / relMax, light = Math.max(-.3, Math.min(.3, sh));
-        const base = k < .04 ? [230, 220, 177] : k < .4 ? [180, 192, 143] : [108, 129, 82];
+        const m = h / G.ex * 1000, light = Math.max(-.3, Math.min(.3, sh)), base = landAt(m).map((v) => v * 255);
         const dark = vs && !vs.vis[r * t.cols + cc] ? .48 : 1;
         ctx.fillStyle = `rgb(${base.map((v) => Math.round(v * (1 + light) * dark)).join(',')})`;
         const [px, pz] = flatProj(x - cw / 2, z - ch / 2), [qx, qz] = flatProj(x + cw / 2, z + ch / 2); ctx.fillRect(px, pz, qx - px + .6, qz - pz + .6);
@@ -897,9 +926,15 @@ html[data-board="on"] #board { display: flex; }
         ctx.lineTo(e[0] - 10 * Math.cos(ang - .45), e[1] - 10 * Math.sin(ang - .45)); ctx.lineTo(e[0] - 10 * Math.cos(ang + .45), e[1] - 10 * Math.sin(ang + .45));
         ctx.closePath(); ctx.fillStyle = color; ctx.fill();
       });
-      b.units.forEach((u) => { if (!S.show.has(u.id)) return; const [x, z] = G.xz(u.at), [px, pz] = flatProj(x, z);
-        ctx.globalAlpha = S.dim.has(u.id) ? .35 : 1; ctx.fillStyle = S.hit.has(u.id) ? COLORS.hit : S.lose.has(u.id) ? COLORS.lost : (b.sides[u.side] || {}).color || '#888';
-        ctx.beginPath(); if (u.kind === 'gun') { ctx.moveTo(px, pz - 7); ctx.lineTo(px + 7, pz + 5); ctx.lineTo(px - 7, pz + 5); } else ctx.rect(px - 6, pz - 6, 12, 12); ctx.fill(); ctx.globalAlpha = 1; });
+      b.units.forEach((u) => { if (!S.show.has(u.id)) return; const [x, z] = G.xz(u.at), [px, pz] = flatProj(x, z), lost = S.lose.has(u.id);
+        const other = Object.keys(b.sides).find((k) => k !== u.side);
+        if (S.hit.has(u.id) && !lost) { ctx.beginPath(); ctx.arc(px, pz, 13, 0, Math.PI * 2); ctx.strokeStyle = COLORS.hit; ctx.lineWidth = 3; ctx.stroke(); }
+        ctx.globalAlpha = S.dim.has(u.id) ? .35 : 1; ctx.fillStyle = lost ? COLORS.lost : (b.sides[u.side] || {}).color || '#888';
+        ctx.beginPath(); if (u.kind === 'gun') { ctx.moveTo(px, pz - 9); ctx.lineTo(px + 9, pz + 6); ctx.lineTo(px - 9, pz + 6); } else ctx.rect(px - 8, pz - 8, 16, 16); ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = 1.5; ctx.stroke();
+        if (lost) { ctx.strokeStyle = '#3b3127'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(px, pz); ctx.lineTo(px, pz - 22); ctx.stroke();
+          ctx.fillStyle = other ? b.sides[other].color : COLORS.hit; ctx.fillRect(px, pz - 22, 12, 8); }
+        ctx.globalAlpha = 1; });
     }
 
     // ---------- Nhãn ----------
@@ -962,9 +997,9 @@ html[data-board="on"] #board { display: flex; }
       // Vùng của ký hiệu trên màn hình: 3D thì chiếu tám góc khối thật (to ra khi phóng gần), bản phẳng thì ô cố định.
       const box3 = flat ? null : new THREE.Box3(), v3 = flat ? null : new THREE.Vector3();
       function markBox(u, [x, y]) {
-        const fb = [x - 9, y - 6, x + 9, y + 16], m = meshes[u.id];
+        const fb = [x - 10, y - 4, x + 10, y + 20], m = meshes[u.id];
         if (flat || !m) return fb;
-        m.updateMatrixWorld(); box3.setFromObject(m); let l = Infinity, t = Infinity, r = -Infinity, btm = -Infinity;
+        m.updateMatrixWorld(); box3.setFromObject(m.userData.body); if (m.userData.flag.visible) box3.expandByObject(m.userData.flag); let l = Infinity, t = Infinity, r = -Infinity, btm = -Infinity;
         for (let k = 0; k < 8; k++) {
           v3.set(k & 1 ? box3.max.x : box3.min.x, k & 2 ? box3.max.y : box3.min.y, k & 4 ? box3.max.z : box3.min.z).project(camera);
           const sx = (v3.x + 1) / 2 * W, sy = (1 - v3.y) / 2 * H;
@@ -981,12 +1016,16 @@ html[data-board="on"] #board { display: flex; }
       lastHits = [];
       const taken = [...ui], hitAny = (bx, arr) => arr.some((t) => !(bx[2] <= t[0] || bx[0] >= t[2] || bx[3] <= t[1] || bx[1] >= t[3]));
       b.units.forEach((u) => { labelEls[u.id].hidden = true; });
+      const named = new Set();
       for (const { u, p: [x, y, front], m: mb } of list) {
         const e = labelEls[u.id];
         if (!front || x < 0 || y < 0 || x > W || y > H) continue;
         lastHits.push({ u, box: mb });
+        // Bớt chữ: trạng thái đã thể hiện bằng cờ và vòng đỏ; tên trùng (mấy trận địa pháo) chỉ ghi một lần; đơn vị mờ không ghi tên.
         const name = S.rename[u.id] || u.short || u.name, lost = S.lose.has(u.id);
-        e.textContent = name + (lost ? ' · đã mất' : '');
+        if (S.dim.has(u.id) || named.has(name)) continue;
+        named.add(name);
+        e.textContent = name;
         e.className = 'st-lbl ' + u.side + (S.hit.has(u.id) ? ' hit' : '') + (lost ? ' lost' : '') + (S.dim.has(u.id) ? ' dim' : '');
         e.hidden = false;
         const w = e.offsetWidth, h = e.offsetHeight;
@@ -1134,7 +1173,9 @@ html[data-board="on"] #board { display: flex; }
       if (renderer) {
         const sz = renderer.getSize(new THREE.Vector2());
         if (sz.x !== W || sz.y !== H) { renderer.setSize(W, H); camera.aspect = W / Math.max(1, H); camera.updateProjectionMatrix(); }
-        applyCam(); renderer.render(scene, camera);
+        applyCam();
+        Object.values(meshes).forEach((g) => { const f = g.userData.flag; if (f.visible) f.rotation.y = Math.atan2(camera.position.x - g.position.x, camera.position.z - g.position.z); });
+        renderer.render(scene, camera);
       } else if (flat) drawFlat(S);
       if (S) placeLabels(S);
       if (moving) need();
@@ -1203,9 +1244,9 @@ html[data-board="on"] #board { display: flex; }
           const m = new THREE.Mesh(new THREE.CircleGeometry(zn.r, 40), new THREE.MeshBasicMaterial({ color: '#b23a2a', transparent: true, opacity: .16, depthWrite: false }));
           m.rotation.x = -Math.PI / 2; m.position.set(zn.x, G.hAt(zn.x, zn.z) + .12, zn.z); zoneGroup.add(m);
         });
-        b.units.forEach((u) => { const m = meshes[u.id]; m.visible = S.show.has(u.id);
-          m.material.color.set(S.hit.has(u.id) ? COLORS.hit : S.lose.has(u.id) ? COLORS.lost : (b.sides[u.side] || {}).color || '#888');
-          m.material.opacity = S.dim.has(u.id) ? .35 : 1; });
+        b.units.forEach((u) => { const g = meshes[u.id], { body, flag, ring } = g.userData, lost = S.lose.has(u.id); g.visible = S.show.has(u.id);
+          body.material.color.set(lost ? COLORS.lost : (b.sides[u.side] || {}).color || '#888');
+          body.material.opacity = S.dim.has(u.id) ? .35 : 1; flag.visible = lost; ring.visible = S.hit.has(u.id) && !lost; });
         drawLines3d(S.lines);
       }
       zoneLbls.forEach((e) => { e.hidden = true; });
