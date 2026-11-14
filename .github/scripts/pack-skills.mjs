@@ -81,7 +81,7 @@ export function checkSkillMd(folder, text) {
   const problems = [];
   const m = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text);
   if (!m) return [`skills/${folder}/SKILL.md phải mở đầu bằng khối --- name, description ---`];
-  const field = (k) => (new RegExp(`^${k}:\\s*(.+)$`, 'm').exec(m[1]) || [])[1]?.trim();
+  const field = (k) => (new RegExp(`^${k}:[ \\t]*(\\S.*)$`, 'm').exec(m[1]) || [])[1]?.trim();
   if (!field('name')) problems.push(`skills/${folder}/SKILL.md thiếu dòng name:`);
   else if (field('name') !== folder) problems.push(`skills/${folder}/SKILL.md có name: ${field('name')}, phải trùng tên thư mục (${folder})`);
   if (!field('description')) problems.push(`skills/${folder}/SKILL.md thiếu dòng description:`);

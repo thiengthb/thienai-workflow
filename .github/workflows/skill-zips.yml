@@ -22,6 +22,9 @@ concurrency:
 
 jobs:
   pack:
+    # The release is the fixed download link, so only main may write to it. A manual run picked on
+    # another branch is skipped instead of publishing unmerged skills or deleting zips main still has.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
@@ -38,14 +41,20 @@ jobs:
             --title "Skill zip" --latest=false \
             --notes "File zip của từng skill trong skills/, tự cập nhật mỗi khi skill đổi trên main. Tải file rồi tải lên Claude ở Customize > Skills."
       - name: Upload the zips (replaces old ones with the same name)
-        run: gh release upload skills dist/skills/*.zip --clobber
+        run: |
+          shopt -s nullglob
+          zips=(dist/skills/*.zip)
+          if [ ${#zips[@]} -eq 0 ]; then echo "Không còn skill nào để đóng gói."; exit 0; fi
+          gh release upload skills "${zips[@]}" --clobber
       - name: Drop zips of skills that no longer exist
         run: |
+          shopt -s nullglob
           for a in $(gh release view skills --json assets --jq '.assets[].name'); do
             [ -f "dist/skills/$a" ] || gh release delete-asset skills "$a" --yes
           done
       - name: Note which commit the zips came from
         run: |
+          shopt -s nullglob
           {
             echo "File zip của từng skill trong \`skills/\`, tự cập nhật mỗi khi skill đổi trên main. Tải file rồi tải lên Claude ở Customize > Skills."
             echo

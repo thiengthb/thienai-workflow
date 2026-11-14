@@ -22,7 +22,7 @@ thien dùng 3 nick Claude, nick nào cũng có các project giống nhau (projec
 
 ## Một lần cho mỗi nick
 1. Nối GitHub: Settings > Connectors > GitHub, cho phép các repo `thienai-workflow`, `sakubun`, `tiktok`.
-2. Skill: Settings bật "Code execution and file creation", rồi Customize > Skills tải lên từng file zip, tải ở https://github.com/thiengthb/thienai-workflow/releases/download/skills/<tên skill>.zip (`start-project.zip`, `make-slides.zip`). Link luôn là bản mới nhất, xem README bước 3.
+2. Skill: Settings bật "Code execution and file creation", rồi Customize > Skills tải lên từng file zip, tải ở [start-project.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/start-project.zip) và [make-slides.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/make-slides.zip). Link luôn là bản mới nhất, xem README bước 3.
 3. (Chỉ cho chat thường, ngoài project) Settings > Your Claude: đoạn ở README, mục "Cài cho một tài khoản Claude".
 
 ## Mỗi project, ở mỗi nick

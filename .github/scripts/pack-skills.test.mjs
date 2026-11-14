@@ -3,7 +3,7 @@
 // and that a broken SKILL.md stops the run before anything is uploaded.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync, mkdirSync, readFileSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, readFileSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,7 +15,8 @@ const unzipList = (file) => execFileSync('unzip', ['-Z1', file], { encoding: 'ut
 // The real skills in this repo pack cleanly.
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const packs = packAll(join(root, 'skills'));
-assert.ok(packs.length >= 2, 'start-project and make-slides are packed');
+const dirs = readdirSync(join(root, 'skills'), { withFileTypes: true }).filter((e) => e.isDirectory() && !e.name.startsWith('.'));
+assert.equal(packs.length, dirs.length, 'every skill folder gets a zip');
 for (const p of packs) {
   const file = join(tmp, p.file);
   writeFileSync(file, makeZip(p.entries));
@@ -46,6 +47,7 @@ assert.deepEqual(checkSkillMd('demo', '---\nname: demo\ndescription: d\n---\n'),
 assert.match(checkSkillMd('demo', '# no frontmatter')[0], /mở đầu bằng/);
 assert.match(checkSkillMd('demo', '---\nname: other\ndescription: d\n---\n')[0], /trùng tên thư mục/);
 assert.match(checkSkillMd('demo', '---\nname: demo\n---\n')[0], /thiếu dòng description/);
+assert.match(checkSkillMd('demo', '---\ndescription:\nname: demo\n---\n')[0], /thiếu dòng description/, 'empty value does not borrow the next line');
 mkdirSync(join(fake, 'nofile'));
 assert.throws(() => packAll(fake), /nofile\/ không có SKILL.md/);
 
