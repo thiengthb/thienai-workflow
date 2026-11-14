@@ -11,7 +11,7 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 | thien nói hay việc là | Đọc | Chạy | Ghi khi xong |
 |---|---|---|---|
 | Giao việc mới | `profile/PROFILE.md` mục "Nhắc việc dở" | `templates/check-open-work.mjs`, `templates/handoff.mjs list`, danh sách PR | (chưa ghi gì tới khi thien chọn) |
-| "tiếp tục" | `profile/HANDOFF.md` | `templates/handoff.mjs list`, `show`, rồi `git log` nhánh làm việc | sổ bàn giao sau mỗi bước |
+| "tiếp tục" | `profile/HANDOFF.md`, `profile/ACCOUNTS.md` khi việc do nick khác ghi | `templates/handoff.mjs list`, `show`, rồi `git log` nhánh làm việc | sổ bàn giao sau mỗi bước |
 | "học" | `learning/README.md` (mục "Trạng thái", "Khung một buổi"), `learning/<môn>.md` (mục "Cách dạy môn này", "Chỗ còn vướng", "Buổi tiếp theo"), `learning/cards.md`, `profile/TUTOR.md`, `artifacts/lesson/README.md`; không phải Claude thì thêm `learning/codex.md` | `artifacts/lesson/make-lesson.mjs`, `artifacts/review/make-review.mjs` | mục "Sau buổi" của `learning/README.md` (`after-lesson.mjs`), rồi PR |
 | Dạy hay giải thích để thien học | `profile/TUTOR.md` | | |
 | Duyệt giao diện, chọn phương án có hình | `artifacts/README.md` rồi README của đúng mẫu (`compare/`, `decide/`) | `artifacts/compare/make-round.mjs`, `artifacts/decide/make-decision.mjs` | kết quả nguyên văn vào PR hay kế hoạch |
@@ -33,7 +33,7 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 | Buổi học | `learning/README.md` "Trạng thái" | `artifacts/lesson/make-lesson.mjs` → Artifact | trang học, `sessions/` trong db trang | `artifacts/lesson/after-lesson.mjs --write`, nhật ký môn, `cards.md`, `roadmap.md`, "Trạng thái", PR; `--check <id>` ra toàn ✓ |
 | Ôn thẻ | `learning/cards.md` | `artifacts/review/make-review.mjs` → link cố định | kết quả trong db trang | `artifacts/review/apply-review.mjs`, `usage.md` |
 | Đổi nick giữa chừng | sổ ở nhánh `handoff` | `templates/handoff.mjs` | file `tasks/<việc>.md` | sổ sau mỗi bước, `done` khi PR merge |
-| Setup nick và project | `profile/SETUP.md` | `templates/setup-check.mjs` | danh sách việc thien bấm | `SETUP.md` qua PR khi đổi chuẩn |
+| Setup nick và project | `profile/SETUP.md`, sổ nick `profile/ACCOUNTS.md` | `templates/setup-check.mjs` | danh sách việc thien bấm | `SETUP.md` qua PR khi đổi chuẩn |
 | Luật chung tới project khác | `templates/AGENTS.template.md` | Action `.github/workflows/sync-agents-md.yml` | PR vào từng repo trong `life/tracked-repos.md` | thien merge ở từng repo |
 | Trang tiến độ | `docs/STATUS.md`, `docs/plans/` | `templates/publish-progress.mjs` | `publish.json` | đăng đè link cũ |
 

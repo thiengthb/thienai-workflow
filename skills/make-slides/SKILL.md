@@ -1,6 +1,6 @@
 ---
 name: make-slides
-description: Dùng khi thien cần làm, sửa hay tập một bài thuyết trình, slide, deck, bài báo cáo trước lớp hay hội đồng, bằng web, Canva, PDF hay PowerPoint. Làm theo bộ quy tắc và quy trình làm slide trong repo thienai-workflow.
+description: Dùng khi thien cần làm, sửa hay tập một bài thuyết trình, slide, deck, bài báo cáo trước lớp hay hội đồng, bằng web, Canva, PDF hay PowerPoint. Làm theo bộ quy tắc và quy trình làm slide trong repo thienai-workflow. (bản 1)
 ---
 
 # Làm slide theo quy trình của thien

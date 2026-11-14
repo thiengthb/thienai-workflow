@@ -42,6 +42,7 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 
 ## Bàn giao giữa các nick
 - Nick nào cũng có thể hết usage giữa chừng mà không báo trước. Việc nhiều bước: sau mỗi bước đẩy nhánh làm việc và ghi sổ bàn giao vào nhánh `handoff` của chính repo này (lệnh `templates/handoff.mjs` ở repo thienai-workflow). Sổ chỉ là dấu trang, sự thật vẫn là main, STATUS và PR. Trang chờ thien thì ghi cả link và lệnh dựng lại, nguồn trang nằm trong nhánh đã đẩy.
+- Tên nick (`tntXXX`) lấy ở dòng đầu project instructions. Ghi nó vào cuối mọi commit (`Claude-Nick: tntXXX`), vào mô tả PR (`Nick: tntXXX`), vào dòng "Ghi bởi" của sổ bàn giao, và kèm mọi link trang ("mở ở nick tntXXX"). Sổ nick và luật nhiều nick cùng repo: [`profile/ACCOUNTS.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/ACCOUNTS.md).
 - thien nói "tiếp tục": đọc sổ của mọi repo (`handoff.mjs list`), làm tiếp việc dở. Cách làm đủ ở [`profile/HANDOFF.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/HANDOFF.md).
 
 ## Giữ file này ngắn

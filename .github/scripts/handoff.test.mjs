@@ -10,13 +10,15 @@ import { skeleton, checkTask, summarize, section, stripBase, baseOf } from '../.
 
 const fresh = skeleton('thiengthb/sakubun', 'review-page', 'Trang ôn thẻ', new Date('2026-11-14T10:00:00Z'));
 assert.ok(checkTask(fresh).some(p => p.includes('Bước tiếp theo')), 'an unfilled skeleton must fail on the next step');
-const filled = fresh.replace('1. <cụ thể tới mức nick khác làm được ngay: lệnh nào, file nào>', '1. Chạy `node x.mjs` rồi đăng lại trang');
+const filled = fresh.replace('1. <cụ thể tới mức nick khác làm được ngay: lệnh nào, file nào>', '1. Chạy `node x.mjs` rồi đăng lại trang').replace('Claude <nick>', 'Claude tnt024');
 assert.deepEqual(checkTask(filled, 'review-page.md'), [], 'a filled skeleton passes');
 assert.equal(checkTask(filled, 'Review Page.md').length, 1, 'bad file name fails');
 assert.ok(checkTask(filled.replace('## Đang chờ thien\n', '')).length >= 1, 'missing section fails');
 assert.equal(section(filled, '## Đang chờ thien').startsWith('Không.'), true);
 
-const s = summarize('review-page.md', filled);
+assert.ok(checkTask(fresh.replace('1. <cụ thể', '1. x <')).some(p => p.includes('tên nick')), 'unfilled nick fails');
+const s = summarize('review-page.md', filled.replace('Claude <nick>', 'Claude tnt024'));
+assert.equal(s.nick, 'tnt024');
 assert.equal(s.title, 'Trang ôn thẻ');
 assert.equal(s.repo, 'thiengthb/sakubun');
 assert.equal(s.updated, '2026-11-14T10:00Z');
