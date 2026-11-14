@@ -25,6 +25,8 @@ docs/         Tiến độ và kế hoạch đang chạy của chính repo này
 | | `VOICE.md` | Giọng văn tiếng Việt, câu mẫu, từ thien đã chê, và cách AI phản biện thien |
 | | `GUIDES.md` | Cách viết hướng dẫn cài đặt và hướng dẫn test tay: link, vị trí nút, form điền sẵn, kết quả cần thấy, dữ liệu test |
 | | `PLANNING.md` | Cách AI viết kế hoạch gửi thien duyệt, rồi ghi và cập nhật kế hoạch trong repo |
+| | `SETUP.md` | Chuẩn setup chung cho mọi nick và project Claude, có số phiên bản; AI tự kiểm đầu phiên và nhắc khi thiếu |
+| | `HANDOFF.md` | Sổ bàn giao giữa các nick Claude: ghi việc dở sau mỗi bước, nick khác nghe "tiếp tục" là làm tiếp |
 | | `TUTOR.md` | Cách AI dạy thien ở mọi môn: thử trước, giải thích sau, ghi nhật ký; đứng đúng vai khi làm việc |
 | `templates/` | `AGENTS.template.md` | Mẫu `AGENTS.md` cho mỗi project, đọc được bởi Claude, Codex, Gemini. Mỗi project có thêm `CLAUDE.md` chỉ một dòng `@AGENTS.md` |
 | | `STATUS.template.md` | Mẫu `docs/STATUS.md`: project đang ở đâu, việc tiếp theo, đang chờ ai |
@@ -57,17 +59,20 @@ File mẫu giữ đuôi `.template.md` để không bị nhầm thành luật th
 
 ## Cài cho một tài khoản Claude (làm một lần cho mỗi tài khoản)
 
-1. Settings > Your Claude, dán vào ô hướng dẫn cho Claude:
+Chuẩn setup cho nick và cho từng project (project instructions, repo phải gắn, skill) nằm ở [`profile/SETUP.md`](profile/SETUP.md), có số phiên bản. AI tự kiểm theo chuẩn đó ở đầu mỗi phiên và nhắc khi thiếu hay cũ, nên các nick tự đồng bộ dần mà thien không phải nhớ đã sửa ở nick nào. Các bước dưới đây là phần cho cả nick.
+
+1. (Cho chat thường, ngoài project; phiên trong project không đọc ô này) Settings > Your Claude, dán vào ô hướng dẫn cho Claude:
    ```text
    Mình là thien. Quy trình làm việc chung của mình ở repo github.com/thiengthb/thienai-workflow.
    Khi bắt đầu project mới, dùng skill start-project: hỏi mình trước, mình đồng ý mới áp.
    Trả lời bằng tiếng Việt tự nhiên, không tự chế từ, không dịch sát chữ từ tiếng Anh.
    Khi mình giao việc mới, trước khi làm hãy nhắc mình các việc còn dở (thread chưa xong, PR còn mở, câu hỏi chờ mình) kèm mức quan trọng, rồi hỏi có giải quyết trước không.
+   Khi mình nói "tiếp tục": làm theo profile/HANDOFF.md của repo thienai-workflow (đọc sổ bàn giao ở nhánh handoff của các repo) và làm tiếp việc dở, kể cả việc nick khác đang làm.
    ```
-   Dòng cuối là bản ngắn của mục "Nhắc việc dở" trong `profile/PROFILE.md`. Để ở đây vì Claude luôn đọc ô này, kể cả ở project chưa áp quy trình.
-2. Nối GitHub cho tài khoản đó (Settings > Connectors > GitHub), cho phép repo `thienai-workflow`. Repo này để riêng tư, nên không nối thì skill không đọc được các bước.
+   Dòng thứ tư là bản ngắn của mục "Nhắc việc dở" trong `profile/PROFILE.md`; dòng cuối là luật bàn giao giữa các nick (`profile/HANDOFF.md`). Trong project thì luật nằm ở project instructions theo `profile/SETUP.md`.
+2. Nối GitHub cho tài khoản đó (Settings > Connectors > GitHub), cho phép các repo `thienai-workflow`, `sakubun`, `tiktok`. Repo này để riêng tư, nên không nối thì skill không đọc được các bước.
 3. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên file zip của thư mục `skills/start-project/` và `skills/make-slides/`.
-4. Mở một project mới: coordinator sẽ hỏi có áp quy trình không.
+4. Mỗi project: gắn repo và dán project instructions theo `profile/SETUP.md`. Quên thì phiên đầu tiên trong project đó sẽ nhắc.
 
 Codex và Gemini đọc luật qua file trong repo của project, không cần skill:
 - Codex tự đọc `AGENTS.md`.
