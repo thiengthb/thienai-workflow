@@ -25,7 +25,7 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 
 ## Tầng 3: chỉ mở khi cần
 - Theo nhu cầu: `learning/teaching/README.md` (chọn kiểu bài), `learning/roadmap.md` (khi tick chặng), `learning/glossary.md`, `learning/usage.md`, `profile/SKILL-LEVEL.md` (khi chọn độ khó), các quyết định cũ trong `docs/decisions/`.
-- Không đọc cả file, dùng lệnh thay: trang học `learning/*/pages/*.html` (vài trăm KB mỗi trang; `make-lesson.mjs`, `after-lesson.mjs` đọc giúp), dữ liệu trận `learning/war/battles/*.json`, `templates/progress-page.mjs`, `artifacts/*/*.js`. Cần một chỗ thì tìm (`grep`) rồi đọc đúng đoạn đó.
+- Không đọc cả file, dùng lệnh thay: trang học `learning/*/pages/*.html` (nguồn 15–40 KB, trang cũ trước 2026-11-14 tới vài trăm KB; `make-lesson.mjs`, `after-lesson.mjs` đọc giúp), dữ liệu trận `learning/war/battles/*.json`, `templates/progress-page.mjs`, `artifacts/*/*.js`. Cần một chỗ thì tìm (`grep`) rồi đọc đúng đoạn đó.
 
 ## Một việc đi qua những đâu
 | Luồng | Bắt đầu | Công cụ | Đầu ra | Cập nhật |

@@ -6,7 +6,7 @@
 
 | Ở Claude | Ở Codex |
 |---|---|
-| Đăng trang học thành artifact, mở trên điện thoại | Ghi trang vào `learning/<môn>/pages/lesson-NN.html`, thien mở file đó bằng trình duyệt trên laptop. Không mở được trên điện thoại |
+| Đăng trang học thành artifact, mở trên điện thoại | Nguồn ghi vào `learning/<môn>/pages/lesson-NN.html`, bản dựng ra thư mục `--out` (dòng "Đã dựng …" in đường dẫn); thien mở bản dựng bằng trình duyệt trên laptop. Không mở được trên điện thoại |
 | Kết quả tự lưu vào db của trang (`sessions`), AI đọc lại | Không có db. Cuối bài bấm "Xong buổi học", trang báo chưa lưu được và hiện nút "Chép kết quả". thien bấm rồi dán vào chat Codex. Đã thử với trang chiến tranh 2 mở dạng file ngày 2026-11-12: chạy đúng, không lỗi |
 | Tự lưu chỗ đang học, mở lại trên máy khác vẫn còn | Vẫn tự lưu, nhưng chỉ trên trình duyệt của máy đó |
 | Chụp màn thật bằng Firecrawl | Tự dựng màn bằng HTML (như frontend 3–5) và ghi rõ là màn dựng lại; hoặc chụp bằng Playwright nếu máy có |
@@ -24,10 +24,10 @@ thien quen học bằng trang tương tác như ở Claude. Ngày 2026-11-12 Cod
   - Cần kiểu bài mới thì lấy kiểu đó từ `learning/teaching/patterns.html`: phần HTML đặt vào đúng bước của bài, CSS vào `<style>` và JS vào `<script>` cuối trang. Dùng biến màu `var(--card)`, `var(--ink)`, không viết cứng `#fff`. Gu giao diện của thien ở repo thienui, file `docs/taste.md`.
 - Chọn kiểu bài theo `learning/teaching/README.md` và mục "Buổi tiếp theo" của môn.
 - Các bước dựng:
-  1. `node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html` (NN là số buổi, hai chữ số) chép mẫu buổi học ra đó. Điền nội dung theo `artifacts/lesson/README.md`.
+  1. `node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html --out build/<môn>-NN` (NN là số buổi, hai chữ số; `build/` không vào git) chép mẫu buổi học ra đó. Điền nội dung theo `artifacts/lesson/README.md`.
   2. Chạy lại đúng lệnh đó: script gắn bộ khung và tự kiểm trang bằng Playwright, sửa hết lỗi nó báo.
   3. Máy không có Playwright thì thêm `--no-check`, tự xem 3 điều mà script không kiểm được nữa (khổ điện thoại không tràn ngang; bật chế độ tối không chỗ nào chữ trùng màu nền; mỗi bước có ít nhất một hình hay sơ đồ), và ghi "chưa kiểm bằng máy" vào nhật ký.
-  4. Gửi thien đường dẫn đầy đủ của file trên máy và cách mở: mở thư mục đó rồi bấm đúp vào file, hoặc kéo file vào Chrome.
+  4. Gửi thien đường dẫn đầy đủ của **bản dựng** trong `build/<môn>-NN/` (không phải nguồn trong `learning/`, nguồn không có kit nên mở ra trống) và cách mở: mở thư mục đó rồi bấm đúp vào file, hoặc kéo file vào Chrome.
 - **Codex chạy trên cloud** (chatgpt.com/codex) thì thien không mở được file. Nói thẳng điều đó, khuyên mở Codex trên laptop, không tự chuyển sang dạy bằng chat.
 - **Chỉ dạy bằng chat khi thien tự xin** ("học bằng chat"). Khi đó vẫn giữ nhịp thử trước, hiểu sau, mỗi lần một câu, và ghi "học bằng chat" vào nhật ký.
 
