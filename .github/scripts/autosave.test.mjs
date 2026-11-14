@@ -109,5 +109,53 @@ for (const name of ['lesson', 'frontend']) {
   await b.ctx.close();
 }
 
+// 5. Thanh kéo, chữ nói thay gõ (Kit.dictate) và lưu vào máy ngay (PR #59).
+{
+  const js = readFileSync(new URL('../../artifacts/kit/autosave.js', import.meta.url), 'utf8');
+  const page = join(dir, 'controls.html');
+  writeFileSync(page, `<!doctype html><html><head><meta charset="utf-8"><meta name="lesson-id" content="demo-controls"></head><body>
+<input type="range" id="speed" min="0" max="10" value="2"><output id="out">2</output>
+<input type="range" min="0" max="10" value="5" aria-label="không tên">
+<textarea placeholder="Ghi chú"></textarea>
+<script>for (const g of document.querySelectorAll('input[type=range]')) g.addEventListener('input', () => { if (g.id) out.textContent = g.value; });</script>
+<script id="lesson-kit">\n${js}</script></body></html>`);
+  const key = 'lesson-kit:demo-controls';
+  const state = (p) => p.evaluate(() => ({ speed: speed.value, other: document.querySelectorAll('input[type=range]')[1].value, out: out.textContent, note: document.querySelector('textarea').value }));
+
+  const a = await open(page);
+  await a.p.locator('#speed').focus();
+  for (let i = 0; i < 3; i++) await a.p.keyboard.press('ArrowRight');          // kéo thật: 2 -> 5
+  await a.p.locator('input[aria-label="không tên"]').focus();
+  await a.p.keyboard.press('ArrowLeft');                                          // 5 -> 4
+  await a.p.evaluate(() => {                                                      // chữ nói thay gõ: sự kiện không phải người bấm, có detail.kitDictation
+    const t = document.querySelector('textarea'); t.value = 'nói vào mic';
+    t.dispatchEvent(new CustomEvent('input', { bubbles: true, detail: { kitDictation: true } }));
+  });
+  const now = await a.p.evaluate((k) => localStorage.getItem(k), key);           // không chờ 700 ms
+  assert.ok(now, 'lưu vào máy ngay, không đợi hết thời gian chờ');
+  const S = JSON.parse(now);
+  assert.deepEqual(S.log, [{ r: '#speed', v: '5' }, { r: 'i:1', v: '4' }, { t: 'p:Ghi chú', v: 'nói vào mic' }], 'kéo liền một mạch chỉ giữ giá trị cuối; thanh có id gọi theo id');
+  await a.p.evaluate(() => {                                                      // sự kiện giả không có dấu đọc chữ: không ghi
+    const t = document.querySelector('textarea'); t.value = 'script tự đổi'; t.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  assert.equal(JSON.parse(await a.p.evaluate((k) => localStorage.getItem(k), key)).log[2].v, 'nói vào mic', 'sự kiện giả bị bỏ qua');
+  assert.deepEqual(a.p.errors, []);
+  await a.ctx.close();
+
+  const b = await open(page, [key, now]);
+  assert.deepEqual(await state(b.p), { speed: '5', other: '4', out: '5', note: 'nói vào mic' }, 'tải lại: thanh kéo và chữ về đúng giá trị, trang nhận sự kiện input');
+  await b.ctx.close();
+
+  // Bản lưu kiểu cũ của trang chiến tranh (kit trước 2026-11-14 ghi thanh kéo theo thứ tự kèm id).
+  const old = { fp: '0b1t', log: [{ r: 0, v: '8', id: 'speed' }, { t: 0, v: 'cũ', p: 'Ghi chú' }], ts: 1 };
+  const c = await open(page, [key, JSON.stringify(old)]);
+  assert.deepEqual(await state(c.p), { speed: '8', other: '5', out: '8', note: 'cũ' }, 'bản cũ: thanh kéo mở lại theo thứ tự');
+  await c.p.waitForTimeout(900);
+  assert.deepEqual(JSON.parse(await c.p.evaluate((k) => localStorage.getItem(k), key)).log, [{ r: '#speed', v: '8' }, { t: 'p:Ghi chú', v: 'cũ' }], 'bản cũ được chuyển sang cách lưu theo tên');
+  const d = await open(page, [key, JSON.stringify({ ...old, log: [{ r: 0, v: '8', id: 'khac' }, { t: 0, v: 'cũ', p: 'Ghi chú' }] })]);
+  assert.deepEqual(await state(d.p), { speed: '2', other: '5', out: '2', note: 'cũ' }, 'bản cũ: thanh ở chỗ đó đã khác thì dừng, chỉ giữ chữ');
+  await c.ctx.close(); await d.ctx.close();
+}
+
 await browser.close();
 console.log('ok autosave');

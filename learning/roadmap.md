@@ -78,12 +78,27 @@ Xong khi: thien xếp xong 10 ý lớn và học được vài ý đầu qua cá
 - [x] thien xếp thứ tự 10 ý lớn (buổi 1, ở `war.md`)
 - [x] Ý 1, mục tiêu chính trị: làm triều đình Lý 1075–1077 (2026-11-12, [bài](war/lessons/02-ly-song-war-1075-1077.md))
 - [x] Ý 2, ba tầng: xếp việc 1075–1077 vào tầng, làm Đại tướng Võ Nguyên Giáp ở Điện Biên Phủ (2026-11-12, [bài](war/lessons/03-three-levels-dien-bien-phu.md))
-- [ ] Ý 4, hậu cần
+- [x] Ý 4, hậu cần: đánh chắc cần thêm bao nhiêu, chở bằng gì ở Điện Biên Phủ (2026-11-12, phần 2 trên sa bàn 2026-11-14, [bài](war/lessons/04-logistics-dien-bien-phu.md))
+- [ ] Ý 3, địa hình và thời tiết (đã chạm ở buổi 1)
+- [ ] Ý 5, đánh chỗ yếu tránh chỗ mạnh (buổi 1 mới chạm qua; thien chọn học riêng ngày 2026-11-14)
+- [ ] Ý 6, bất ngờ và lừa địch (buổi 1 mới chạm qua; thien chọn học riêng ngày 2026-11-14)
+- [ ] Ý 7, tinh thần
+- [ ] Ý 8, vũ khí và công nghệ
+- [ ] Ý 9, sương mù chiến tranh
+- [ ] Ý 10, chiến tranh nhân dân và du kích
+
+### Chặng 2: Đi sâu một chiến dịch (thien chọn hướng 1 ngày 2026-11-12)
+Bắt đầu khi: xong 10 ý ở chặng 1, khoảng 7 buổi nữa (ý 3, 5, 6, 7, 8, 9, 10), mỗi ý một buổi. Quyết định ở mốc 2026-12-13: đi sâu, giữ ở mức ôn, hay cho môn nghỉ. Bốn hướng, đều lấy từ mục "Mục tiêu" trong `war.md`:
+1. Đi sâu một chiến dịch từ đầu đến cuối (ví dụ Điện Biên Phủ): dàn binh bố trận, hậu cần, từng đợt đánh. **thien đã chọn hướng này.** Chiến dịch cụ thể chốt khi gần xong chặng 1; ứng viên đầu là Điện Biên Phủ vì đã học buổi 3 và 4.
+2. Ngồi ghế người lãnh đạo: mỗi buổi một quyết định lớn có thật, cả Á lẫn Âu.
+3. So học thuyết Đông và Tây: Tôn Tử, Clausewitz, chiến tranh nhân dân, mỗi học thuyết thử trên một trận thật.
+4. Hiểu thời sự: dùng 10 ý để đọc các cuộc chiến đang diễn ra.
 
 ### Bài đã học
 - Trang buổi 1: [Bạch Đằng 938](https://claude.ai/artifact/EZzNBAA7saekceEaKU36up)
 - Trang buổi 2: [Mục tiêu chính trị](https://claude.ai/artifact/ESWNPJdCAgzDYZyDWG8xfP)
 - Trang buổi 3: [Ba tầng](https://claude.ai/artifact/3JnZLK7bgfqWoqRfoEtZWr)
+- Trang buổi 4: [Hậu cần](https://claude.ai/artifact/8w59Y36sfADf6oy8wQuGfJ), phần 2: [Hậu cần trên đường núi](https://claude.ai/artifact/5vgaCmHzUkfnWvpMo1Ybrg)
 
 ### Nguồn học
 - Cách dạy môn này (bắt người học quyết định trước khi biết kết cục, như trường quân sự Mỹ): ở mục "Cách dạy môn này" của `war.md`.
@@ -98,3 +113,5 @@ Testing, kinh tế, chính trị. Một môn chỉ vào học khi có môn khác
 | 2026-11-12 | Buổi frontend 6 đổi thành chọn màu cho cả một app | thien muốn học sâu về màu sau buổi 5 |
 | 2026-11-12 | Học buổi làm quen chiến tranh trước BA 2 | thien muốn học chiến tranh ngay |
 | 2026-11-12 | Học chiến tranh 3 trước BA 2 | thien nhắn "học tiếp chiến tranh" |
+| 2026-11-12 | Học chiến tranh 4 trước Frontend 6; phác chặng 2 môn chiến tranh | thien nhắn "học chiến tranh"; thien hỏi học xong tổng quan thì học gì tiếp |
+| 2026-11-14 | Ý 5 và 6 môn chiến tranh có buổi riêng, chặng 1 còn khoảng 7 buổi thay vì 5 | Luật 10 buổi đầu là mỗi buổi một ý; buổi 1 mới chạm qua. thien chọn trên thẻ quyết định |

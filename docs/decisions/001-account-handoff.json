@@ -1,0 +1,26 @@
+{ "id": "account-handoff",
+  "question": "Khi đổi nick Claude, giữ artifact bằng cách nào?",
+  "context": "Phần chung đã chốt cho mọi bản: AI ghi sổ bàn giao vào repo sau mỗi bước (nhánh handoff), nick mới nghe \"tiếp tục\" là đọc sổ và làm tiếp. Không có tín hiệu báo sắp hết usage, nên ghi liên tục, mất nhiều nhất một bước. Cái còn phải chọn: trang artifact đang chờ bạn chọn hay xem thì nick mới lấy lại thế nào. Nhớ: nick mới không đọc được chat hay memory của nick cũ, chỉ đọc repo.",
+  "options": [
+    { "key": "a", "name": "A · Đăng lại từ repo",
+      "summary": "Nick mới đọc sổ, dựng lại trang từ file nguồn trong repo, đăng thành link mới rồi gửi bạn chọn.",
+      "pros": ["Không cài gì, làm được ngay", "Trang vẫn đủ phần hỏi Claude, Gửi cho Claude"],
+      "cons": ["Mỗi lần đổi nick là link mới", "Đã bấm chọn mà chưa gửi thì phải bấm lại (vài giây)", "Trang tổng quan vẫn kẹt ở nick cũ, nick khác chỉ đăng được bản mới"] },
+    { "key": "b", "name": "B · A + mời nick vào trang cố định",
+      "summary": "Như A, cộng thêm: các trang dùng lâu (tổng quan, ôn thẻ, tiến độ) bạn bấm Share mời email các nick còn lại quyền sửa, một lần mỗi trang. Từ đó nick nào cũng mở và đăng đè đúng link đó.",
+      "pros": ["Trang dùng lâu giữ một link cho mọi nick", "Nick mới đọc được lựa chọn đã lưu trên trang cũ", "Mỗi trang chỉ bấm một lần, khoảng 30 giây"],
+      "cons": ["Bạn phải tự bấm Share, AI không mời thay được", "Mở trang của nick khác thì phần dùng Claude trên trang không chạy", "Lời mời chưa nhận hết hạn sau 30 ngày"] },
+    { "key": "c", "name": "C · A + Cloudflare",
+      "summary": "Như A, cộng thêm: trang đưa lên Cloudflare Pages (khóa bằng đăng nhập email), lựa chọn lưu ở Worker chung, nick nào cũng đọc được.",
+      "pros": ["Một link mở được ở mọi nick, mọi trình duyệt, cả khi không đăng nhập Claude", "Lựa chọn lưu một chỗ chung"],
+      "cons": ["Cài khoảng 45 phút, giữ token cho từng nick", "Mất phần hỏi Claude và Gửi cho Claude trên trang", "Thêm một thứ phải bảo trì; bạn đã gác ý này ngày 12/11"] }
+  ],
+  "criteria": [
+    { "name": "Bạn phải cài", "values": { "a": "không", "b": { "text": "bấm Share một lần mỗi trang dùng lâu", "tone": "neutral" }, "c": { "text": "khoảng 45 phút", "tone": "bad" } } },
+    { "name": "Link trang khi đổi nick", "values": { "a": { "text": "link mới", "tone": "bad" }, "b": { "text": "trang dùng lâu giữ link, trang chọn thì link mới", "tone": "neutral" }, "c": { "text": "giữ nguyên", "tone": "good" } } },
+    { "name": "Lựa chọn đã bấm mà chưa gửi", "values": { "a": { "text": "bấm lại", "tone": "neutral" }, "b": { "text": "đọc được ở trang mời, còn lại bấm lại", "tone": "neutral" }, "c": { "text": "giữ", "tone": "good" } } },
+    { "name": "Hỏi Claude ngay trên trang", "values": { "a": "tốt", "b": { "text": "chỉ ở nick chủ trang", "tone": "neutral" }, "c": "kém" } },
+    { "name": "Bảo trì về sau", "values": { "a": "tốt", "b": "tốt", "c": "kém" } }
+  ],
+  "recommend": { "key": "b", "why": "Giá trị chính nằm ở sổ bàn giao, bản nào cũng có. Trang chọn đăng lại chỉ tốn vài giây nên không đáng dựng Cloudflare. Nhưng trang tổng quan đang kẹt ở nick khác, và mời nick vào vài trang dùng lâu chữa đúng chỗ đó chỉ với một lần bấm mỗi trang." }
+}
