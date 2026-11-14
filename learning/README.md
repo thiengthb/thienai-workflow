@@ -2,7 +2,7 @@
 
 File này cho biết buổi tới học môn gì. Khi thien nhắn "học" (tài khoản nào, model nào cũng vậy), AI đọc file này trước, mở buổi cho môn kế tiếp trong vòng, rồi cập nhật bảng "Trạng thái" sau buổi.
 
-Học ở Codex hay công cụ khác Claude (ví dụ khi hết quota) thì vẫn theo file này, đọc thêm [codex.md](codex.md) cho phần khác. Trước khi mở buổi, ở công cụ nào cũng vậy, xem có PR buổi học nào chưa merge không: có thì bảng "Trạng thái" dưới đây còn thiếu buổi đó.
+Học ở Codex hay công cụ khác Claude (ví dụ khi hết quota) thì vẫn theo file này, đọc thêm [codex.md](codex.md) cho phần khác. Trước khi mở buổi, ở công cụ nào cũng vậy, chạy `node templates/check-open-work.mjs learning/`: nhánh nào chưa merge mà có buổi học thì bảng "Trạng thái" dưới đây còn thiếu buổi đó, đọc nhánh đó trước. `make-lesson.mjs` tự kiểm việc này cho môn của trang và dừng nếu có nhánh chưa merge sửa bài của môn đó (sau lỗi 2026-11-13: dựng lại bài chiến tranh 4 trong khi PR #44 đã có).
 
 Kế hoạch đầy đủ và lý do nằm ở tài liệu "Kế hoạch học nhiều lĩnh vực song song" (https://claude.ai/artifact/QJwWL3z4pTjZerq5U3Fb9G), thien đồng ý ngày 2026-11-12.
 
@@ -21,7 +21,7 @@ Tối đa 3 môn cùng lúc. Thêm một môn thì phải cho một môn nghỉ.
 |---|---|---|---|
 | Frontend | Môn chính, một nửa số buổi | [frontend.md](frontend.md) | Đã học 5 buổi |
 | BA | Môn mở rộng | [ba.md](ba.md) | Đã học 2 buổi |
-| Chiến tranh | Môn mở rộng | [war.md](war.md) | Đã học 3 buổi |
+| Chiến tranh | Môn mở rộng | [war.md](war.md) | Đã học 4 buổi |
 
 Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakubun nên không nằm trong vòng.
 
@@ -40,7 +40,7 @@ Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakub
 
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
-| BA 2 (hỏi chuyện người dùng; học với Codex, Claude làm lại trang) | 2026-11-12 | BA | **Frontend 6 (chọn màu cho app)**, rồi Chiến tranh 4 (hậu cần), rồi BA 3 (các bên liên quan) |
+| Chiến tranh 4, phần 2 (hậu cần trên sa bàn 3D) | 2026-11-14 | Chiến tranh | **Frontend 6 (chọn màu cho app)**, rồi BA 3 (các bên liên quan), rồi Frontend 7, rồi Chiến tranh 5 (địa hình và thời tiết) |
 
 ## Khung một buổi, chung cho mọi môn
 

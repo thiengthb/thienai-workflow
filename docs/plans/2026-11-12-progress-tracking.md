@@ -1,13 +1,11 @@
 # Theo dõi tiến độ kế hoạch và lộ trình học
 
-Trạng thái: đang chạy · Duyệt: 2026-11-12 · Cập nhật: 2026-11-12 (sau PR #43) · Thread: [Theo dõi tiến độ các kế hoạch đã duyệt](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvR1jxNiHJob8uUW8r9JhndVb)
+Trạng thái: xong · Duyệt: 2026-11-12 · Cập nhật: 2026-11-13 · Thread: [Theo dõi tiến độ các kế hoạch đã duyệt](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvR1jxNiHJob8uUW8r9JhndVb)
 
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đã tick đủ 13/13 việc. Lần nhắc đầu tiên đã chạy tối 2026-11-12 và 3 trang đã đăng lại với dữ liệu mới.
-- Còn thiếu: thien xác nhận mở được 3 trang trên điện thoại và laptop (điều kiện "xong khi" của checkpoint 3 và 4); sau đó chuyển kế hoạch sang "xong".
-- thien cần làm: mở [trang tiến độ](https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4), [trang tổng quan](https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n), [trang lộ trình học](https://claude.ai/artifact/Vubbj6ghT9L7eKYegTfT9n) bằng tài khoản đã đăng chúng.
+- Xong 2026-11-13: thien đã nhận lời nhắc đầu tiên và đọc 3 trang.
 
 ## Mục tiêu
 Khi thien mở lại sau vài ngày, trong 2 phút biết kế hoạch nào đã duyệt và đang chạy, đang ở checkpoint nào, đã tick gì, gặp lỗi gì, đổi bước nào, và việc tiếp theo của thien. Cùng lúc có một lộ trình học riêng cho từng môn.

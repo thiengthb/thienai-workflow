@@ -30,6 +30,7 @@ jobs:
       - run: node .github/scripts/publish-progress.test.mjs
       - run: node .github/scripts/make-review.test.mjs
       - run: node .github/scripts/after-lesson.test.mjs
+      - run: node .github/scripts/check-open-work.test.mjs
       - run: node .github/scripts/handoff.test.mjs
       - run: node .github/scripts/setup-check.test.mjs
       - run: node .github/scripts/check-tokens.test.mjs
