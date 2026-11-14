@@ -55,6 +55,48 @@
   const reveal = () => { if (window.innerWidth < 900) board.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
   $$('[data-track]').forEach((bt) => bt.addEventListener('click', () => { st.show(bt.dataset.track, { at: 0 }); reveal(); }));
 
+  // Nghe mốc đang xem (khả năng tts, đề xuất N2): nút loa ở mỗi bước có sa bàn, đọc chữ của mốc đang hiện (kể cả nguồn).
+  if (window.Kit && Kit.listen) steps.filter((s) => s.dataset.board).forEach((step) => {
+    const h = step.querySelector('h1, h2'), b = document.createElement('button');
+    b.type = 'button'; b.textContent = 'Nghe mốc đang xem';
+    (h || step.firstElementChild).after(b);
+    Kit.listen(b, () => ($('.st-cap', board) || {}).textContent || '', () => { R.listened = (R.listened || 0) + 1; });
+  });
+
+  // Claude làm mẫu (lesson.js, Lesson.demo): dẫn người học qua các mốc trên sa bàn, mỗi mốc một câu vì sao xem mốc đó.
+  // Chỉ được dùng chữ của các mốc (đã có nguồn), không thêm chi tiết lịch sử mới (luật 10 trong profile/TUTOR.md).
+  // Bước khóa ở một mốc (data-board="real@0") thì không có làm mẫu, vì bước đó chưa cho xem tiếp.
+  const keyAt = (t, i) => { const k = battle.tracks[t].keys[i]; if (k.same && !k.text) { const [t2, j] = k.same.split(':'); return { ...battle.tracks[t2].keys[+j], ...k, text: battle.tracks[t2].keys[+j].text, src: battle.tracks[t2].keys[+j].src }; } return k; };
+  const trackName = (t) => battle.tracks[t].label || (t === 'real' ? 'Chuyện thật' : t);
+  if (window.Lesson && Lesson.demo) Lesson.demo({ match(step) {
+    const spec = step.dataset.board || '';
+    if (!spec || spec.includes('@')) return null;
+    const ts = Object.keys(battle.tracks);
+    return {
+      context() {
+        // Luật và lựa chọn của người học đứng trước danh sách mốc (dài), để không bị cắt mất khi lời dặn quá dài.
+        return ['Sân khấu: sa bàn 3D của trận đánh; mỗi "track" là một diễn biến (chuyện thật, hay mô phỏng nếu chọn khác), mỗi mốc là một thời điểm.',
+          'Luật: chỉ dùng chữ của các mốc dưới đây (đã có nguồn), không thêm chi tiết lịch sử nào khác. Mốc mô phỏng thì nói rõ là mô phỏng.',
+          'Người học đã chọn: ' + (Object.entries(R.choices || {}).map(([k, c]) => `${k}: ${c.pick} (chuyện thật là ${c.real})`).join('; ') || 'chưa chọn'),
+          'Các mốc (track:số thứ tự từ 0, ngày, tên, chữ, nguồn): ' + ts.map((t) => `[${t} = ${trackName(t)}${battle.tracks[t].tag === 'sim' ? ', mô phỏng' : ''}] `
+            + battle.tracks[t].keys.map((_, i) => { const k = keyAt(t, i); return `${t}:${i} ${k.date || ''} ${k.title || ''}: ${k.text || ''}${k.src ? ' (nguồn: ' + k.src + ')' : ''}`; }).join(' / ')).join(' || ')].join('\n');
+      },
+      tools: [{ name: 'show_moment', description: 'Đưa sa bàn tới một mốc của một track. Người học thấy quân, đường đánh và chữ của mốc đó.',
+        inputSchema: { type: 'object', required: ['track', 'index', 'why'], properties: {
+          track: { type: 'string', enum: ts }, index: { type: 'integer', minimum: 0 },
+          why: { type: 'string', description: 'một câu ngắn: vì sao xem mốc này, nhìn vào đâu trên sa bàn' } } },
+        execute({ track, index }) {
+          const t = battle.tracks[track];
+          if (!t || !Number.isInteger(index) || index < 0 || index >= t.keys.length) throw new Error(`Không có mốc ${track}:${index}. Các track: ` + ts.map((x) => `${x} (0 đến ${battle.tracks[x].keys.length - 1})`).join(', '));
+          st.show(track, { at: index }); reveal();
+          const k = keyAt(track, index);
+          return { did: `${trackName(track)} · ${k.date || 'mốc ' + (index + 1)}${k.title ? ': ' + k.title : ''}.`, result: 'Đang hiện mốc ' + track + ':' + index };
+        } }],
+      save() { return { track: st.track, at: st.at }; },
+      restore(s) { if (s) st.show(s.track, { at: s.at }); },
+    };
+  } });
+
   // Chọn nước đi: chưa có đúng sai, chỉ có "bạn chọn" và "chuyện thật".
   $$('.choose[data-c]').forEach((box) => {
     const id = box.dataset.c, real = box.dataset.real, opts = $$('.opt[data-v]', box);

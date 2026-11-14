@@ -210,3 +210,5 @@ html[data-stage="on"] #stage { display: block; }
 @keyframes fwd { from { opacity: 0; transform: translateY(6px); } }
 @media (prefers-reduced-motion: reduce) { .ffwd li, .say-bar.pop, .bd-card.new > i { animation: none; } .meter::before { transition: none; } }
 @media (max-width: 899px) { .phone.mini { --pw: 110px; height: 220px; } .phone.mini .screen { zoom: .42; } }
+/* Claude đang làm mẫu trên bảng: ẩn dấu ✓ ! của lần kiểm để không lẫn với cách Claude xếp. */
+.board.demo .bd-card::after { display: none; }

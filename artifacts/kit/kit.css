@@ -139,3 +139,29 @@ html:not(.kit-ask-on) .kit-ask { display: none !important; }
 #kit-bar button { font: 600 13px var(--font); border: 0; border-radius: var(--r); min-height: 32px; padding: 0 10px; cursor: pointer; background: var(--bg); color: var(--ink); flex: none; }
 #kit-bar button.x { background: transparent; color: var(--bg); }
 .kit-review-off [data-part~="review"] { display: none !important; }
+
+/* Nghe thay đọc (Kit.listen): nút chữ nhỏ có loa, ẩn nơi không đọc được. Đang đọc thì thành "Dừng". */
+.listen { justify-self: start; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 0; border: 0; background: none;
+  font: 500 14px var(--font); color: var(--accent-ink); cursor: pointer; }
+.listen svg { width: 16px; height: 16px; flex: none; }
+.listen[aria-pressed="true"] { color: var(--bad); }
+.listen[hidden] { display: none; }
+@media (pointer: coarse) { .listen { min-height: 40px; } }
+
+/* Claude làm mẫu (lesson.js, Lesson.demo): nút mở, lời nhắc khi chưa tự làm xong, danh sách thao tác kèm lý do. */
+.demo { display: grid; gap: 8px; }
+.demo-open::before { content: "▶"; font-size: 8px; line-height: 15px; }
+.demo-hint { font-size: 13px; color: var(--muted); margin: -4px 0 0; }
+.demo-open:not(:disabled) ~ .demo-hint { display: none; }
+.demo-log { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; counter-reset: demo; }
+.demo-log:empty { display: none; }
+.demo-log li { counter-increment: demo; display: grid; grid-template-columns: 22px 1fr; gap: 0 8px; font-size: 14px; line-height: 1.5; }
+.demo-log li::before { content: counter(demo); grid-row: span 2; width: 22px; height: 22px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-ink);
+  font: 700 11px/22px var(--font); text-align: center; }
+.demo-log li b { font-weight: 600; }
+.demo .btn[hidden] { display: none; }
+
+/* Tình huống thêm (lesson.js, đề xuất T3) ở bước cuối. */
+.extra { padding: 14px; display: grid; gap: 10px; }
+.extra-q { display: grid; gap: 8px; }
+.extra-q:empty { display: none; }

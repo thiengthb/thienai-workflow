@@ -255,7 +255,8 @@
     st.checkPlaced = () => { if (visible().every((c) => st.place[c.dataset.c])) done('placed-' + id); };
     // Vẽ: thẻ xếp thành hàng trong ô của nó (hoặc trong khay nếu chưa đặt), tính bằng px trong .bd-area.
     function layout(depth = 0) {
-      const where = st.showAnswer ? ans : st.place, A = area.getBoundingClientRect(), gap = 6;
+      // st.demo: chỗ Claude đang xếp khi làm mẫu (Lesson.demo), đè lên cách của người học tới khi bấm "Trả lại cách của mình".
+      const where = st.showAnswer ? ans : (st.demo || st.place), A = area.getBoundingClientRect(), gap = 6;
       let grew = false;
       const groups = new Map();
       visible().forEach((c) => { const z = where[c.dataset.c]; const box = (z && zones.find((x) => x.dataset.z === z)) || tray; if (!groups.has(box)) groups.set(box, []); groups.get(box).push(c); });
@@ -406,5 +407,89 @@
   sync();
   // Điện thoại: sân khấu nằm trên các bước, bấm thứ làm đổi sân khấu thì cuộn lên cho thấy.
   function reveal() { if (window.innerWidth < 900) stage.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  // ---------- Claude làm mẫu (lesson.js, Lesson.demo) ----------
+  // Bàn thử: Claude vặn núm (turn_knob). Bảng dán: Claude xếp từng thẻ vào ô (place_card), có bản mẫu để dựa vào.
+  // Thao tác làm mẫu không tính là người học đã thử, không vào bản tự lưu; "Trả lại cách của mình" đưa về như trước.
+  const stageOf = (step) => { const [name, mode = ''] = (step.dataset.stage || '').split('@'); return { p: pane(name), name, mode }; };
+  const knobLabel = (kn) => ($('.label', kn) || {}).textContent?.trim() || kn.dataset.knob;
+  const valName = (btn) => btn.dataset.name || btn.textContent.trim() || btn.dataset.val;
+  if (window.Lesson && Lesson.demo) {
+    Lesson.demo({ match(step) {
+      const { p: b, name, mode } = stageOf(step);
+      if (!b || !b.classList.contains('bench') || mode === 'cover') return null;
+      const knobs = $$('[data-knob]', b).filter((kn) => mode === 'lens' || !kn.hasAttribute('data-lens'));
+      if (!knobs.length) return null;
+      const cur = (kn) => $$('button[data-val]', kn).find((x) => x.getAttribute('aria-pressed') === 'true');
+      const report = () => {
+        const L = knobs.map((kn) => `${knobLabel(kn)}: ${cur(kn) ? valName(cur(kn)) : 'chưa chọn'}`);
+        soiMark(b); const n = $$('.phone:not(.mini) .screen .soi-on', b).length;
+        if ($('[data-soi]', b)) L.push(`màu nhấn đang nằm ở ${n} chỗ trên màn`);
+        if (b.dataset.target) L.push(`giống bản mục tiêu ${(R.match[name] || {}).now ?? 0}%`);
+        return L.join('; ');
+      };
+      return {
+        context() {
+          const scr = mainScreen(b), target = b.dataset.target ? JSON.parse(b.dataset.target) : null;
+          return ['Sân khấu: bàn thử, một màn app trong khung điện thoại; vặn núm thì màn đổi ngay.',
+            `Trên màn app đang có: ${(scr ? scr.textContent : '').replace(/\s+/g, ' ').trim().slice(0, 600)}`,
+            'Các núm (tên núm: các giá trị có thể chọn, theo dạng mã = tên): ' + knobs.map((kn) => `${kn.dataset.knob} (${knobLabel(kn)}): `
+              + $$('button[data-val]', kn).map((x) => `${x.dataset.val} = ${valName(x)}`).join(', ')).join(' | '),
+            `Người học để núm ở: ${report()}.`,
+            (R.tried && Object.keys(R.tried).length) ? 'Người học đã thử: ' + Object.entries(R.tried).filter(([k]) => k.startsWith(name + '.')).map(([k, v]) => `${k.split('.')[1]}: ${v.join(', ')}`).join('; ') : '',
+            target ? 'Bước này có bản mục tiêu cần vặn cho giống: ' + Object.entries(target).map(([k, v]) => `${k} = ${v}`).join(', ') : ''].filter(Boolean).join('\n');
+        },
+        tools: [{ name: 'turn_knob', description: 'Vặn một núm trên bàn thử sang một giá trị. Màn app đổi ngay; kết quả cho biết màn giờ thế nào.',
+          inputSchema: { type: 'object', required: ['knob', 'value', 'why'], properties: {
+            knob: { type: 'string', enum: knobs.map((kn) => kn.dataset.knob), description: 'mã núm' },
+            value: { type: 'string', description: 'mã giá trị (phần trước dấu =)' },
+            why: { type: 'string', description: 'một câu ngắn: vì sao vặn như vậy' } } },
+          execute({ knob, value }) {
+            const kn = knobs.find((x) => x.dataset.knob === knob);
+            if (!kn) throw new Error('Không có núm ' + knob + '. Các núm: ' + knobs.map((x) => x.dataset.knob).join(', '));
+            const btn = $$('button[data-val]', kn).find((x) => x.dataset.val === value || valName(x) === value);
+            if (!btn) throw new Error(`Núm ${knob} không có giá trị ${value}. Các giá trị: ` + $$('button[data-val]', kn).map((x) => x.dataset.val).join(', '));
+            benchApply(b, kn, btn, true);
+            return { did: `${knobLabel(kn)} → ${valName(btn)}.`, result: 'Màn giờ: ' + report() };
+          } }],
+        save() { return knobs.map((kn) => [kn, cur(kn)]); },
+        restore(saved) { (saved || []).forEach(([kn, btn]) => { if (btn) benchApply(b, kn, btn, true); }); },
+      };
+    } });
+
+    Lesson.demo({ match(step) {
+      const { p: bd, name, mode } = stageOf(step), st = boards[name];
+      if (!bd || !st || mode === 'listen') return null;
+      const zones = $$('.zone[data-z]', bd), zname = (z) => ($('span', z) || z).textContent.trim();
+      const ans = JSON.parse(bd.dataset.answer || '{}');
+      return {
+        context() {
+          const cards = st.visible();
+          return ['Sân khấu: bảng dán; mỗi thẻ là một người (hay một bước), xếp thẻ vào ô.',
+            'Các ô: ' + zones.map((z) => `${z.dataset.z} = ${zname(z)}`).join(', ') + '.',
+            'Các thẻ (mã = tên, lời họ nói, ghi chú): ' + cards.map((c) => `${c.dataset.c} = ${cardName(c)}`
+              + (c.dataset.say ? `, nói: "${c.dataset.say}"` : '') + (c.dataset.why ? `, ghi chú: ${c.dataset.why}` : '')).join(' | '),
+            'Bản mẫu (cách xếp đúng của bài, hãy xếp theo đúng bản mẫu này và giải thích bằng lời của từng người): '
+              + cards.map((c) => `${c.dataset.c} → ${ans[c.dataset.c] || '?'}`).join(', '),
+            'Người học đã xếp: ' + (cards.map((c) => st.place[c.dataset.c] ? `${c.dataset.c} → ${st.place[c.dataset.c]}` : '').filter(Boolean).join(', ') || 'chưa xếp thẻ nào')].join('\n');
+        },
+        tools: [{ name: 'place_card', description: 'Đặt một thẻ vào một ô trên bảng dán. Người học thấy thẻ dời sang ô đó.',
+          inputSchema: { type: 'object', required: ['card', 'zone', 'why'], properties: {
+            card: { type: 'string', enum: st.visible().map((c) => c.dataset.c), description: 'mã thẻ' },
+            zone: { type: 'string', enum: zones.map((z) => z.dataset.z), description: 'mã ô' },
+            why: { type: 'string', description: 'một câu ngắn: vì sao thẻ này vào ô này' } } },
+          execute({ card, zone }) {
+            const c = st.visible().find((x) => x.dataset.c === card), z = zones.find((x) => x.dataset.z === zone);
+            if (!c || !z) throw new Error('Không có thẻ hay ô đó. Thẻ: ' + st.visible().map((x) => x.dataset.c).join(', ') + '. Ô: ' + zones.map((x) => x.dataset.z).join(', '));
+            st.demo = st.demo || {}; st.demo[card] = zone; st.layout();
+            if (c.dataset.say) st.sayText(c, c.dataset.say);
+            st.live.textContent = `Claude xếp ${cardName(c)} → ${zname(z)}`;
+            return { did: `${cardName(c)} → ${zname(z)}.`, result: 'Đã đặt. Còn chưa đặt: ' + (st.visible().filter((x) => !st.demo[x.dataset.c]).map((x) => x.dataset.c).join(', ') || 'không còn thẻ nào') };
+          } }],
+        // Làm mẫu bắt đầu từ khay trống; dấu ✓ ! của lần kiểm ẩn đi để không lẫn với cách Claude xếp.
+        save() { st.demo = {}; bd.classList.add('demo'); st.layout(); return null; },
+        restore() { st.demo = null; bd.classList.remove('demo'); st.layout(); },
+      };
+    } });
+  }
   window.Stage = { boards, reveal };
 })();

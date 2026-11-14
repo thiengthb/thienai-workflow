@@ -51,6 +51,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: node .github/scripts/ask-prompts.test.mjs
       - run: node .github/scripts/autosave.test.mjs
+      - run: node .github/scripts/lesson-claude.test.mjs
       - run: node artifacts/kit/check-pages.mjs --out .check-pages
       - uses: actions/upload-artifact@v4
         if: always()

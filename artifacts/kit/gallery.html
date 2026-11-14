@@ -153,6 +153,45 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
       </div>
     </section>
 
+    <section class="card g-sec">
+      <h2>Claude làm mẫu</h2>
+      <p>.demo: mở sau khi tự làm xong bước; mỗi thao tác một dòng kèm lý do trong .demo-log.</p>
+      <div class="demo">
+        <button class="ai-open demo-open" type="button" disabled>Xem Claude làm</button>
+        <p class="demo-hint">Tự làm xong bước này thì xem được Claude làm một lượt, kèm lý do từng thao tác.</p>
+      </div>
+      <div class="demo">
+        <button class="ai-open demo-open" type="button">Xem Claude làm lại</button>
+        <ol class="demo-log">
+          <li><b>Màu nhấn → Xanh lá.</b><span>App tiền nên dùng màu gợi sự yên tâm.</span></li>
+          <li><b>Lượng màu → Ít màu.</b><span>Chỉ nút Chuyển tiền đặc, mắt biết ngay chỗ bấm.</span></li>
+        </ol>
+        <p class="ai-out">Ít màu thì nút chính nổi hơn. Bạn chọn Vừa cũng ổn, chỉ là số dư đang giành mắt với nút.</p>
+        <button class="btn" type="button">Trả lại cách của mình</button>
+      </div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Nghe và tình huống thêm</h2>
+      <p>.listen đọc to phần giải thích (ẩn nơi không đọc được). .extra ở bước cuối: Claude soạn một câu hỏi mới cùng ý.</p>
+      <div class="g-row">
+        <button class="listen" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Nghe</span></button>
+        <button class="listen" type="button" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Dừng</span></button>
+      </div>
+      <div class="extra" style="padding: 0">
+        <p><b>Còn sức? </b>Làm thêm một tình huống cùng ý, Claude soạn mới mỗi lần. Không bắt buộc.</p>
+        <button class="btn" type="button">Tình huống khác</button>
+        <div class="extra-q">
+          <p>App đặt xe có ba nút xanh đặc cạnh nhau: Đặt xe, Hẹn giờ, Khuyến mãi.</p>
+          <p><b>Nên sửa thế nào?</b></p>
+          <div class="q">
+            <button class="opt" type="button" disabled>Đổi cả ba sang đỏ cho nổi</button>
+            <button class="opt right" type="button" disabled>Để Đặt xe đặc, hai nút kia viền</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="card g-sec g-float">
       <h2>Thông báo</h2>
       <p>#kit-toast báo nhanh, #kit-bar là thanh của phần tự lưu. Trên trang thật cả hai nổi ở đáy màn.</p>
