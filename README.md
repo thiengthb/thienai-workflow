@@ -80,7 +80,7 @@ Chuẩn setup cho nick và cho từng project (project instructions, repo phải
    Khi mình nói "tiếp tục": làm theo profile/HANDOFF.md của repo thienai-workflow (đọc sổ bàn giao ở nhánh handoff của các repo) và làm tiếp việc dở, kể cả việc nick khác đang làm.
    ```
    Dòng thứ tư là bản ngắn của mục "Nhắc việc dở" trong `profile/PROFILE.md`; dòng cuối là luật bàn giao giữa các nick (`profile/HANDOFF.md`). Trong project thì luật nằm ở project instructions theo `profile/SETUP.md`.
-2. Nối GitHub cho tài khoản đó (Settings > Connectors > GitHub), cho phép các repo `thienai-workflow`, `sakubun`, `tiktok`. Repo này để riêng tư, nên không nối thì skill không đọc được các bước.
+2. Nối GitHub cho tài khoản đó (Settings > Connectors > GitHub), cho phép các repo `thienai-workflow`, `sakubun`, `tiktok`, `thienui`. Repo này và thienui đều riêng tư, nên không nối thì skill không đọc được các bước và AI không đọc được gu giao diện.
 3. Bật "Code execution and file creation" (Settings), rồi vào Customize > Skills, tải lên từng file zip: [start-project.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/start-project.zip), [make-slides.zip](https://github.com/thiengthb/thienai-workflow/releases/download/skills/make-slides.zip). Link mở được khi trình duyệt đang đăng nhập GitHub của thien. Các file này nằm ở release [`skills`](https://github.com/thiengthb/thienai-workflow/releases/tag/skills), do Action `Skill zips` tự đóng gói lại mỗi khi một skill đổi trên main, nên link luôn trỏ tới bản mới nhất.
 4. Mỗi project: gắn repo và dán project instructions theo `profile/SETUP.md`. Quên thì phiên đầu tiên trong project đó sẽ nhắc.
 
