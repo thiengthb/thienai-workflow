@@ -47,7 +47,7 @@ assert.deepEqual(r.fixes, []); assert.ok(r.notes.some(n => /chưa có trong chu�
 const accMd = readFileSync(new URL('../../profile/ACCOUNTS.md', import.meta.url), 'utf8');
 const accounts = parseAccounts(accMd);
 assert.ok(accounts.tnt024, 'tnt024 is in the registry'); assert.ok(accounts.tnt024.projects.includes('sakubun'));
-assert.ok(!/@gmail|@/.test(accMd.replace(/`[^`]*`/g, '')), 'no email addresses in the registry');
+assert.ok(!/[\w.+-]+@[\w-]+\.[\w.]+/.test(accMd), 'no email addresses in the registry, not even inside code');
 r = checkSetup(std, { project: 'sakubun', instructions: good, ...all, accounts });
 assert.deepEqual(r.fixes, []); assert.equal(r.nick, 'tnt024');
 r = checkSetup(std, { project: 'sakubun', instructions: instructionsFor(std, 'sakubun'), ...all, accounts });
@@ -56,6 +56,8 @@ r = checkSetup(std, { project: 'sakubun', instructions: instructionsFor(std, 'sa
 assert.ok(r.notes.some(n => /AI tự làm: nick tnt999 chưa có/.test(n)), 'unknown nick: AI adds a registry row');
 r = checkSetup(std, { project: 'sakubun', instructions: good, ...all, accounts: { tnt024: { status: 'đã nghỉ', projects: ['sakubun'] } } });
 assert.ok(r.fixes.some(f => /đã nghỉ/.test(f)), 'retired nick in use');
+r = checkSetup(std, { project: 'sakubun', instructions: good, ...all, accounts: { tnt024: { status: 'tạm nghỉ', projects: ['sakubun'] } } });
+assert.deepEqual(r.fixes, [], 'a paused nick is not retired');
 r = checkSetup(std, { project: 'sakubun', instructions: good, ...all, accounts: { tnt024: { status: 'đang dùng', projects: ['claude'] } } });
 assert.ok(r.notes.some(n => /thêm project `sakubun`/.test(n)), 'project missing from the nick row');
 

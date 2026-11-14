@@ -59,7 +59,7 @@ export function checkTask(text, name = '') {
   if (!/^# \S/m.test(text)) out.push('thiếu dòng tiêu đề "# <tên việc>"');
   if (!/^Repo: [\w.-]+\/[\w.-]+/m.test(text)) out.push('thiếu dòng "Repo: <owner/repo> · ..."');
   if (!/Cập nhật: \d{4}-\d{2}-\d{2}/.test(text)) out.push('thiếu "Cập nhật: YYYY-MM-DD..."');
-  if (/Ghi bởi: Claude <nick>/.test(text)) out.push('dòng "Ghi bởi" chưa điền tên nick (lấy ở dòng "nick:" của project instructions, ví dụ tnt024)');
+  if (!/^Ghi bởi: Claude (tnt\d{2,}\b|nick chưa rõ)/m.test(text)) out.push('dòng "Ghi bởi" phải có tên nick: "Ghi bởi: Claude tntXXX, <link thread>" (lấy ở dòng "nick:" của project instructions; instructions chưa có tên nick thì ghi "Claude nick chưa rõ" và nhắc thien dán instructions bản mới)');
   for (const h of REQUIRED) if (!text.includes(h + '\n')) out.push(`thiếu mục "${h}"`);
   const next = section(text, '## Bước tiếp theo');
   if (!next || /^\s*1\.\s*<[^>]*>\s*$/m.test(next) || !next.replace(/<!--[\s\S]*?-->/g, '').trim()) out.push('mục "Bước tiếp theo" còn trống');
@@ -98,6 +98,8 @@ const BASE = /\n?<!-- handoff-base: ([0-9a-f]+) -->\n?$/;
 export const stripBase = (text) => text.replace(BASE, '\n').replace(/\n+$/, '\n');
 export const baseOf = (text) => (text.match(BASE) || [])[1];
 export const hashOf = (text) => createHash('sha1').update(stripBase(text)).digest('hex').slice(0, 12);
+/** Sets "Cập nhật:" to now, so list order and the 24-hour claim rule use the save time. */
+export const stamp = (text, now = new Date()) => text.replace(/Cập nhật: [0-9T:-]+Z?/, `Cập nhật: ${now.toISOString().slice(0, 16)}Z`);
 export const withBase = (text) => stripBase(text) + `<!-- handoff-base: ${hashOf(text)} -->\n`;
 
 export const repoOf = (text) => (text.match(/^Repo: ([\w.-]+\/[\w.-]+)/m) || [])[1];
@@ -201,9 +203,10 @@ function main(argv) {
       fail(`Việc ${basename(a, '.md')} không còn trong sổ của ${repo} (đã \`done\` hay bị xoá từ lúc bạn đọc). Chưa ghi gì. ` +
         'Nếu việc vẫn còn dở, xoá dòng handoff-base ở cuối file rồi `save` lại để tạo lại việc.');
     }
-    writeFileSync(target, stripBase(text));
+    const saved = stamp(text, process.env.HANDOFF_NOW ? new Date(process.env.HANDOFF_NOW) : new Date()); // HANDOFF_NOW: fixed clock for tests
+    writeFileSync(target, stripBase(saved));
     const out = commitPush(dir, `handoff: update ${basename(a, '.md')}`);
-    writeFileSync(a, withBase(text)); // the next save from this copy is based on what was just written
+    writeFileSync(a, withBase(saved)); // the next save from this copy is based on what was just written
     console.log(out + `: ${repo}, nhánh ${BRANCH}, tasks/${basename(a)}`);
     return;
   }

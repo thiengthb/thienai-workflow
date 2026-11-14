@@ -86,7 +86,7 @@ export function checkSetup(standard, { project, instructions, repos = [], skills
   if (nick && NICK.test(nick) && accounts) {
     const row = accounts[nick];
     if (!row) notes.push(`AI tự làm: nick ${nick} chưa có trong profile/ACCOUNTS.md. Thêm dòng cho nó (gộp vào PR đang làm, không có thì mở PR nhỏ) và hỏi thien đây có phải nick mới không.`);
-    else if (/nghỉ/i.test(row.status)) fixes.push(`Nick ${nick} đã đánh dấu "đã nghỉ" trong profile/ACCOUNTS.md mà vẫn đang dùng. Hỏi thien: dùng lại nick này, hay project instructions ghi nhầm tên nick?`);
+    else if (/^đã nghỉ/i.test(row.status)) fixes.push(`Nick ${nick} đã đánh dấu "đã nghỉ" trong profile/ACCOUNTS.md mà vẫn đang dùng. Hỏi thien: dùng lại nick này, hay project instructions ghi nhầm tên nick?`);
     else if (want && !row.projects.includes(key)) notes.push(`AI tự làm: thêm project \`${project}\` vào dòng nick ${nick} trong profile/ACCOUNTS.md (gộp vào PR đang làm, không có thì mở PR nhỏ).`);
   }
   if (v !== null && named && want && named !== key) fixes.push(`Project instructions ghi "project: ${named}" nhưng đây là project "${project}". ${paste}`);
