@@ -104,9 +104,11 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     try {
       const { openWork, report } = await import('../../templates/check-open-work.mjs');
       const { execFileSync } = await import('node:child_process');
-      const root = (() => { try { return execFileSync('git', ['-C', dirname(resolve(file)), 'rev-parse', '--show-toplevel'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch (e) { return ''; } })();
+      // Trang mới thì thư mục của nó có thể chưa có: đi lên tới thư mục cha đã có rồi mới hỏi git.
+      let near = dirname(resolve(file)); while (!existsSync(near) && dirname(near) !== near) near = dirname(near);
+      const root = (() => { try { return execFileSync('git', ['-C', near, 'rev-parse', '--show-toplevel'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch (e) { return ''; } })();
       const paths = [`learning/${subjOpen}.md`, `learning/${subjOpen}/`], list = root && existsSync(join(root, 'learning')) ? openWork({ paths, cwd: root }) : [];
-      if (list.length) { console.error(report(list, paths) + '\nĐọc các nhánh đó (hoặc gộp vào nhánh của mình) rồi chạy lại với --ack-open.'); process.exit(1); }
+      if (list.length || list.stale) { console.error(report(list, paths) + '\nĐọc các nhánh đó (hoặc gộp vào nhánh của mình) rồi chạy lại với --ack-open.'); process.exit(1); }
     } catch (e) { console.warn('Không kiểm được nhánh chưa merge (không có git?). Tự xem PR đang mở trước khi làm.'); }
   }
   // Lần đầu: trang chưa có thì chép mẫu ra, để AI điền nội dung rồi chạy lại đúng lệnh này.

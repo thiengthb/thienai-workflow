@@ -639,7 +639,7 @@ html[data-board="on"] #board { display: flex; }
       d.onFinal(({ text }) => {
         if (!text || !text.trim()) return;
         field.value = (field.value.trim() ? field.value.trim() + ' ' : '') + text.trim();
-        field.dispatchEvent(new Event('input', { bubbles: true })); say('');
+        field.dispatchEvent(new CustomEvent('input', { bubbles: true, detail: { kitDictation: true } })); say(''); // detail: phần tự lưu chỉ nhận sự kiện thật, trừ chữ nói thay gõ
         if (onUse) onUse();
       });
       d.onState(({ state }) => { listening = state === 'listening'; btn.setAttribute('aria-pressed', String(listening)); if (!listening) say(''); });
@@ -1639,14 +1639,14 @@ function local(){try{return JSON.parse(localStorage.getItem(LK)||'null');}catch(
 function flush(now){clearTimeout(timer);timer=null;try{localStorage.setItem(LK,JSON.stringify(S));}catch(e){}
  if(!db)return Promise.resolve();if(writing){again=true;return Promise.resolve();}writing=true;
  return Promise.race([db.doc(DOC).set(S),new Promise(r=>setTimeout(r,8000))]).catch(()=>{}).then(()=>{writing=false;if(again){again=false;flush();}});}
-function save(){clearTimeout(timer);timer=setTimeout(flush,700);}
+function save(){try{localStorage.setItem(LK,JSON.stringify(S));}catch(e){}clearTimeout(timer);timer=setTimeout(flush,700);} /* ghi vào máy ngay, chỉ hoãn phần gửi lên db */
 /* tắt màn, chuyển app hay tải lại trong lúc đang chờ lưu: ghi ngay, đừng để mất lần bấm cuối */
 addEventListener('pagehide',()=>{if(timer)flush();});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&timer)flush();});
 function rec(a){if(replaying)return;acted=true;S.log.push(a);S.ts=Date.now();save();}
 document.addEventListener('click',e=>{if(!e.isTrusted)return;const b=e.target.closest('button');if(!b||b.closest('#kit-bar')||b.id==='copy')return;
  if(b.id==='finish'){acted=true;S.finished=true;S.everDone=true;S.doneAt=new Date().toISOString();S.ts=Date.now();flush(true);return;}
  const i=btns().indexOf(b);if(i>=0)rec({c:i,x:lab(b),y:ctx(b)});},true);
-document.addEventListener('input',e=>{if(replaying||!e.isTrusted)return;
+document.addEventListener('input',e=>{if(replaying||(!e.isTrusted&&!(e.detail&&e.detail.kitDictation)))return; /* chữ nói thay gõ (Kit.dictate) cũng được lưu */
  if(e.target.matches('input[type=range]')){const i=rngs().indexOf(e.target),last=S.log[S.log.length-1]; /* slider: record its value; a continuous drag keeps only the latest value */
   if(last&&last.r===i)last.v=e.target.value;else rec({r:i,v:e.target.value,id:e.target.id});acted=true;S.ts=Date.now();save();return;}
  if(e.target.tagName!=='TEXTAREA')return;const i=tas().indexOf(e.target),last=S.log[S.log.length-1];

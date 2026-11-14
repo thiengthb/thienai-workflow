@@ -1,6 +1,7 @@
 // Test for templates/check-open-work.mjs: report wording, and a real run in a temp repo with an unmerged branch.
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync, mkdirSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
@@ -21,4 +22,18 @@ assert.equal(list.length, 1); assert.equal(list[0].branch, 'other'); assert.deep
 assert.equal(openWork({ paths: ['learning/ba/'], cwd: work }).length, 0);
 g(work, 'checkout', '-qb', 'mine'); g(work, 'merge', '-q', 'other');
 assert.equal(openWork({ paths: ['learning/war/'], cwd: work, fetch: false }).length, 0, 'branch already merged into current one is not reported');
+// Clone một nhánh: fetch thường chỉ tải main, check vẫn phải thấy nhánh "other".
+const single = join(d, 'single');
+execFileSync('git', ['clone', '-q', '--single-branch', '--branch', 'main', origin, single], { stdio: 'ignore' });
+assert.deepEqual(openWork({ paths: ['learning/war/'], cwd: single }).map((w) => w.branch), ['other'], 'single-branch clone still sees other branches');
+// Không tải được từ origin: báo là chưa chắc, không im lặng nói "không có gì".
+g(single, 'remote', 'set-url', 'origin', join(d, 'missing.git'));
+const off = openWork({ paths: ['learning/ba/'], cwd: single });
+assert.equal(off.stale, true); assert.match(report(off, ['learning/ba/']), /Không tải được/);
+// make-lesson: trang mới trong thư mục chưa có (learning/war/pages/) vẫn bị chặn khi nhánh khác đã sửa môn đó.
+const fresh = join(d, 'fresh'); execFileSync('git', ['clone', '-q', origin, fresh], { stdio: 'ignore' }); mkdirSync(join(fresh, 'learning'));
+const page = join(fresh, 'learning/war/pages/new.html'), mk = fileURLToPath(new URL('../../artifacts/lesson/make-lesson.mjs', import.meta.url));
+let code = 0, err = '';
+try { execFileSync('node', [mk, page], { cwd: fresh, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }); } catch (e) { code = e.status; err = e.stderr; }
+assert.equal(code, 1, 'make-lesson stops'); assert.match(err, /other/); assert.equal(existsSync(page), false, 'no page copied');
 console.log('check-open-work: ok');

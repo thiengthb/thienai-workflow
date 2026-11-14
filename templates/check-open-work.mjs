@@ -15,10 +15,13 @@ import { fileURLToPath } from 'node:url';
 let CWD = process.cwd();
 const git = (...a) => execFileSync('git', a, { cwd: CWD, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
 
-/** Returns [{ branch, subject, date, files }] for origin branches with commits not on base, optionally only those touching paths. */
+/** Returns [{ branch, subject, date, files }] for origin branches with commits not on base, optionally only those touching paths.
+    The array has .stale = true when the fetch failed and the answer comes from old refs. */
 export function openWork({ base = 'main', paths = [], fetch = true, cwd = process.cwd() } = {}) {
   CWD = cwd;
-  if (fetch) { try { git('fetch', '-q', '--prune', 'origin'); } catch (e) { /* offline: dùng bản đã tải */ } }
+  // Ghi rõ refspec: repo clone một nhánh (--single-branch) thì fetch thường chỉ tải main, sẽ không thấy nhánh nào khác.
+  let stale = false;
+  if (fetch) { try { git('fetch', '-q', '--prune', 'origin', '+refs/heads/*:refs/remotes/origin/*'); } catch (e) { stale = true; /* offline: dùng bản đã tải, nhưng báo cho bên gọi */ } }
   let current = '';
   try { current = git('rev-parse', '--abbrev-ref', 'HEAD'); } catch (e) { /* not a repo */ }
   const branches = git('for-each-ref', '--format=%(refname:short)', 'refs/remotes/origin').split('\n')
@@ -34,10 +37,13 @@ export function openWork({ base = 'main', paths = [], fetch = true, cwd = proces
     const [date, subject] = git('log', '-1', '--format=%cs%x09%s', b).split('\t');
     out.push({ branch: b.replace(/^origin\//, ''), subject, date, ahead, files: hit });
   }
+  out.stale = stale;
   return out;
 }
 
 export function report(list, paths = []) {
+  if (list.stale) return [`Không tải được nhánh mới từ origin (mất mạng hay không có origin?), nên chưa biết chắc còn việc chưa merge.`,
+    `Tự xem trang Pull requests trước khi làm.`, ...(list.length ? [report(Object.assign([...list], { stale: false }), paths)] : [])].join('\n');
   if (!list.length) return paths.length ? `Không có nhánh chưa merge nào sửa ${paths.join(', ')}.` : 'Không có nhánh chưa merge.';
   return [paths.length ? `Có ${list.length} nhánh chưa merge sửa ${paths.join(', ')}. Đọc trước khi làm, đừng làm trùng:` : `Có ${list.length} nhánh chưa merge:`,
     ...list.map((w) => `- ${w.branch} (${w.date}, ${w.ahead} commit): ${w.subject}\n    ${w.files.slice(0, 8).join(', ')}${w.files.length > 8 ? ', …' : ''}`)].join('\n');
@@ -49,5 +55,5 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const ni = args.indexOf('--no-fetch'), fetch = ni < 0; if (ni >= 0) args.splice(ni, 1);
   const list = openWork({ base, paths: args, fetch });
   console.log(report(list, args));
-  process.exit(args.length && list.length ? 1 : 0);
+  process.exit(args.length && (list.length || list.stale) ? 1 : 0);
 }
