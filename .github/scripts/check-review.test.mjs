@@ -21,6 +21,12 @@ assert.equal(checkReview('## Review\n- Ai: agent mới, 14/11\n- Đã sửa: `Ma
 assert.equal(checkReview('## Review\n- Ai: agent mới, 14/11\n\n---\n\n- Đã sửa: A'), '', 'a --- rule inside the section does not end it');
 for (const l of ['- AI: agent mới', '- ai: agent mới', '- **Ai:** agent mới', '1. Ai: agent mới', '- Ai : agent mới', '* Bỏ qua: chỉ STATUS']) assert.equal(checkReview('## Review\n' + l), '', l);
 // Hidden or quoted sections do not count.
+assert.equal(checkReview('~~~\nlog\n~~~~\n\n## Review\n- Ai: agent mới, 14/11'), '', 'a longer closing fence closes the block');
+assert.equal(checkReview('```js\nx\n```\n## Review\n- Ai: agent mới, 14/11'), '', 'fence with an info string');
+assert.match(checkReview('```\nx\n~~~\n## Review\n- Ai: agent mới'), /chưa có mục/, 'a different fence character does not close it');
+assert.match(checkReview('## Review\n- **Ai:**'), /cần một dòng/, 'empty bold label');
+assert.match(checkReview('## Review\n- **Bỏ qua:**  '), /cần một dòng/, 'empty bold skip');
+assert.match(checkReview('## Review\n- _Ai:_ **'), /cần một dòng/, 'only formatting marks');
 assert.match(checkReview('<!--\n## Review\n- Ai: agent mới\n-->'), /chưa có mục/, 'section inside an HTML comment');
 assert.match(checkReview('```\n## Review\n- Ai: agent mới\n```'), /chưa có mục/, 'section inside a code block');
 assert.match(checkReview('## Review\n<!-- chưa review\n- Ai: agent mới'), /cần một dòng/, 'an unclosed comment hides the rest');
