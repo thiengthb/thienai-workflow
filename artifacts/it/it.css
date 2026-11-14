@@ -135,6 +135,7 @@ html[data-stage="on"] #stage { display: block; }
 
 /* Danh sách đã thử, lời nhắc lại lựa chọn trong cột bước. */
 .fb.note { background: var(--soft); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: -1px; }
 .tried { display: flex; flex-wrap: wrap; gap: 6px; }
 .tried:empty { display: none; }
 .tried span { font-size: 13px; padding: 3px 9px; border-radius: var(--r); background: var(--card); border: 1px solid var(--line); }

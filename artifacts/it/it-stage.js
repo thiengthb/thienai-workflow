@@ -115,6 +115,10 @@
       const need = +(bd.dataset.hear || 0), heard = cards.filter((x) => x.classList.contains('heard')).length;
       if (need && heard >= need) done('heard-' + id);
     }
+    // Trình đọc màn hình: mỗi thẻ nói nó đang ở ô nào; đặt thẻ thì đọc lên qua một vùng role="status" ẩn.
+    const live = document.createElement('p'); live.className = 'sr-only'; live.setAttribute('role', 'status'); bd.append(live);
+    const zoneName = (box) => (box === tray ? (tray.querySelector('.label')?.textContent || 'Chưa xếp') : (box.querySelector('span')?.textContent || box.dataset.z)).trim();
+    const cardName = (c) => c.textContent.replace(c.querySelector('i')?.textContent || '', '').trim();
     function save() { R.boards[id] = Object.assign(R.boards[id] || {}, { place: { ...st.place } }); }
     cards.forEach((c) => c.addEventListener('click', () => {
       say(c);
@@ -125,8 +129,10 @@
     }));
     zones.forEach((z) => z.addEventListener('click', () => {
       if (!st.sel || st.locked) return;
-      st.place[st.sel.dataset.c] = z.dataset.z;
+      const card = st.sel;
+      st.place[card.dataset.c] = z.dataset.z;
       st.sel.classList.remove('sel'); st.sel = null; bd.classList.remove('picking');
+      live.textContent = `${cardName(card)} → ${zoneName(z)}`;
       save(); layout();
       if (cards.every((c) => st.place[c.dataset.c])) done('placed-' + id);
     }));
@@ -145,6 +151,7 @@
           c.style.maxWidth = isTray ? '' : Math.max(110, B.width - 16) + 'px';
           const w = c.offsetWidth, h = c.offsetHeight;
           if (x > 8 && x + w > B.width - 8) { x = 8; y += rowH + gap; rowH = 0; }
+          c.setAttribute('aria-description', zoneName(box));
           c.style.transform = `translate(${Math.round(B.left - A.left + x)}px, ${Math.round(B.top - A.top + y)}px)`;
           x += w + gap; rowH = Math.max(rowH, h);
         });
