@@ -1,0 +1,29 @@
+# Paths that .github/scripts/check-links.mjs must not report as broken: they belong to another repo or to the
+# project a template is copied into, or they name something that was removed on purpose. One path per line.
+# Repo thienui
+docs/taste.md
+docs/harvest.md
+# Files a project gets when it copies the templates (not in this repo)
+docs/manual-test
+docs/ai-log.md
+docs/slides
+docs/slides/BRIEF.md
+docs/slides/OUTLINE.md
+docs/slides/SCRIPT.md
+docs/slides/QA.md
+docs/slides/DAN-Y.md
+docs/quy-trinh/giao-dien.md
+docs/quy-trinh/noi-dung.md
+docs/HISTORY.md
+docs/13-demo-runbook.md
+docs/demo-test-accounts.csv
+slides/lab3/deck.html
+slides/final/deck.html
+# Removed on purpose, named in docs/decisions/003-claude-as-reviewer.md
+profile/REVIEW.md
+# Branch name used as an example in learning/codex.md (more branch names at the end)
+learning/ba-02
+# Placeholder link in an example sentence (profile/GUIDES.md)
+link
+# Branch names written in backticks (STATUS, examples)
+docs/cross-account-handoff

@@ -16,6 +16,8 @@ import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { buildPage } from './progress-page.mjs';
 import { writePublish } from '../artifacts/kit/publish.mjs';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SELF = 'thiengthb/thienai-workflow';
@@ -69,7 +71,7 @@ async function prsFile(repos, out) {
   return file;
 }
 
-const read = (p) => (existsSync(p) ? readFileSync(p, 'utf8') : '');
+const read = (p) => (existsSync(p) ? lf(readFileSync(p, 'utf8')) : '');
 
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   const args = process.argv.slice(2);

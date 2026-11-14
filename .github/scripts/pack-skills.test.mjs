@@ -40,7 +40,22 @@ writeFileSync(join(fake, 'demo', 'refs', 'ghi-chú.md'), 'x');
 writeFileSync(join(fake, 'demo', 'STEPS.md'), 'bỏ');
 const [demo] = packAll(fake);
 writeFileSync(join(tmp, 'demo.zip'), makeZip(demo.entries));
-assert.deepEqual(unzipList(join(tmp, 'demo.zip')).sort(), ['demo/SKILL.md', 'demo/refs/ghi-chú.md']);
+// Names read straight from the zip's central directory: Info-ZIP's `unzip -Z1` on Windows prints them in the
+// console code page, so a correct UTF-8 name like "ghi-chú.md" came out garbled there.
+const zipNames = (file) => {
+  const b = readFileSync(file);
+  const end = b.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]));
+  let p = b.readUInt32LE(end + 16);
+  const names = [];
+  for (let n = b.readUInt16LE(end + 10); n > 0; n--) {
+    const len = b.readUInt16LE(p + 28), extra = b.readUInt16LE(p + 30), note = b.readUInt16LE(p + 32);
+    assert.ok(b.readUInt16LE(p + 8) & 0x800, 'UTF-8 flag set on every name');
+    names.push(b.toString('utf8', p + 46, p + 46 + len));
+    p += 46 + len + extra + note;
+  }
+  return names;
+};
+assert.deepEqual(zipNames(join(tmp, 'demo.zip')).sort(), ['demo/SKILL.md', 'demo/refs/ghi-chú.md']);
 
 // Broken SKILL.md files are refused with a reason.
 assert.deepEqual(checkSkillMd('demo', '---\nname: demo\ndescription: d\n---\n'), []);

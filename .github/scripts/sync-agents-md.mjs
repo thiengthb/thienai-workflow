@@ -6,6 +6,8 @@
 // tracked repos). DRY_RUN=1 only prints what would change.
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const MARKER = /^## Phần riêng của project\s*$/m;
 const BRANCH = 'chore/sync-agents-md';
@@ -104,8 +106,8 @@ async function main() {
     process.exit(1);
   }
   const root = new URL('../../', import.meta.url);
-  const template = readFileSync(new URL('templates/AGENTS.template.md', root), 'utf8');
-  const repos = parseTrackedRepos(readFileSync(new URL('life/tracked-repos.md', root), 'utf8'));
+  const template = lf(readFileSync(new URL('templates/AGENTS.template.md', root), 'utf8'));
+  const repos = parseTrackedRepos(lf(readFileSync(new URL('life/tracked-repos.md', root), 'utf8')));
   const sourceSha = process.env.GITHUB_SHA || 'local';
   let failed = false;
   for (const repo of repos) {

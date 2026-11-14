@@ -8,6 +8,7 @@ Luật cho mọi AI làm việc trong repo thienai-workflow (Claude, Codex, côn
 
 ## Đầu phiên
 - Làm trên máy thì `git pull` trước. Rồi đọc `docs/STATUS.md`.
+- Đọc theo việc, không đọc hết `profile/`: bảng ở `profile/MAP.md` (việc nào đọc file nào, file lớn nào chỉ dùng lệnh).
 - Xem việc chưa merge: `node templates/check-open-work.mjs` (in mọi nhánh trên origin chưa vào main, trừ nhánh `handoff`, kèm file nó sửa), hoặc trang Pull requests. PR chưa merge nghĩa là main còn thiếu việc đó: đọc nhánh đó trước, nhắc thien merge trước khi làm việc phụ thuộc vào nó. Lỗi đã gặp: 2026-11-13 dựng lại bài chiến tranh 4 từ main trong khi PR #44 đã có bài đó.
 - Luật làm việc chung (ai quyết, thế nào là xong, không được làm, cách viết, cuối phiên) là phần trên dòng "Phần riêng của project" trong `templates/AGENTS.template.md`. Áp đúng như vậy ở repo này. Link trong file đó trỏ về GitHub; ở đây mở thẳng `profile/...`.
 

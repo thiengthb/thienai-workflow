@@ -13,9 +13,10 @@ import { mkdtempSync, readFileSync, writeFileSync, existsSync, mkdirSync } from 
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { buildFixtures } from '../../artifacts/kit/check-pages.mjs';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const UPDATE = process.argv.includes('--update');
-const SNAP = new URL('../prompts/', import.meta.url).pathname;
+const SNAP = fileURLToPath(new URL('../prompts/', import.meta.url));
 const { chromium } = createRequire(import.meta.url)('playwright');
 const browser = await chromium.launch();
 const pages = Object.fromEntries((await buildFixtures(mkdtempSync(join(tmpdir(), 'ask-')), browser)).map((f) => [f.name, f.file]));
@@ -33,7 +34,7 @@ async function open(file) {
   const p = await ctx.newPage();
   const errors = [];
   p.on('pageerror', (e) => errors.push(e.message));
-  await p.goto('file://' + file);
+  await p.goto(pathToFileURL(file).href);
   await p.waitForFunction(() => document.documentElement.classList.contains('kit-ask-on'));
   await p.addStyleTag({ content: '.step{display:block!important;opacity:1!important;transform:none!important}' });
   /** Làm một việc rồi chờ đúng một lời dặn mới gửi đi. */

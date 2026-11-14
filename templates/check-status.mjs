@@ -13,6 +13,8 @@ import { fileURLToPath } from 'node:url';
 import { readFileSync, readdirSync, existsSync, realpathSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { spawnSync } from 'node:child_process';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 export const MAX_LINES = 40;
 export const MAX_WAITING = 3;
@@ -96,7 +98,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   };
   const useGit = flag('git'), usePrs = flag('prs'), cards = opt('cards');
   const file = args[0] ?? 'docs/STATUS.md';
-  const text = readFileSync(file, 'utf8');
+  const text = lf(readFileSync(file, 'utf8'));
   const problems = checkStatus(text).map((p) => `${file}: ${p}`);
   const notes = [];
   if (useGit) {
@@ -112,12 +114,12 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
       notes.push(...missingPrs(text, JSON.parse(r.stdout), self));
     } else notes.push('chưa đọc được danh sách PR (cần gh đã đăng nhập), bỏ qua phần này.');
   }
-  if (cards) notes.push(...overdueCards(readFileSync(cards, 'utf8'), new Date().toISOString().slice(0, 10)));
+  if (cards) notes.push(...overdueCards(lf(readFileSync(cards, 'utf8')), new Date().toISOString().slice(0, 10)));
   for (const n of notes) console.log(process.env.GITHUB_ACTIONS ? `::warning::${n}` : `nhắc: ${n}`);
   const plansDir = join(dirname(file), 'plans');
   if (existsSync(plansDir)) {
     for (const f of readdirSync(plansDir).filter((n) => n.endsWith('.md'))) {
-      for (const p of checkPlan(readFileSync(join(plansDir, f), 'utf8'))) problems.push(`${join(plansDir, f)}: ${p}`);
+      for (const p of checkPlan(lf(readFileSync(join(plansDir, f), 'utf8')))) problems.push(`${join(plansDir, f)}: ${p}`);
     }
   }
   for (const p of problems) console.error(p);

@@ -10,6 +10,8 @@
 import { readFileSync, readdirSync, realpathSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 /** CSS dùng chung: cả file. */
@@ -67,7 +69,7 @@ function walk(dir, out = []) {
 export function definedVars(root = ROOT) {
   const names = new Set();
   for (const f of walk(join(root, 'artifacts'))) {
-    const t = readFileSync(f, 'utf8');
+    const t = lf(readFileSync(f, 'utf8'));
     for (const m of t.matchAll(/(--[\w-]+)\s*:/g)) names.add(m[1]);
     for (const m of t.matchAll(/setProperty\(\s*['"`](--[\w-]+)/g)) names.add(m[1]);
   }
@@ -77,11 +79,11 @@ export function definedVars(root = ROOT) {
 export function checkTokens(root = ROOT) {
   const problems = [], defined = definedVars(root);
   const sources = [
-    ...CSS_FILES.map((f) => ({ f, blocks: [{ css: readFileSync(join(root, f), 'utf8'), offset: 0 }] })),
-    ...TEMPLATE_FILES.map((f) => ({ f, blocks: styleBlocks(readFileSync(join(root, f), 'utf8')) })),
+    ...CSS_FILES.map((f) => ({ f, blocks: [{ css: lf(readFileSync(join(root, f), 'utf8')), offset: 0 }] })),
+    ...TEMPLATE_FILES.map((f) => ({ f, blocks: styleBlocks(lf(readFileSync(join(root, f), 'utf8'))) })),
   ];
   for (const { f, blocks } of sources) {
-    const whole = f.endsWith('.html') ? readFileSync(join(root, f), 'utf8') : blocks[0].css;
+    const whole = f.endsWith('.html') ? lf(readFileSync(join(root, f), 'utf8')) : blocks[0].css;
     for (const { css, offset } of blocks) {
       for (const p of literalColours(css, offset, whole)) problems.push({ file: f, ...p });
       for (const v of usedVars(css)) if (!defined.has(v.name)) problems.push({ file: f, line: lineAt(whole, offset + v.index), msg: `var(${v.name}) chưa được định nghĩa ở đâu` });

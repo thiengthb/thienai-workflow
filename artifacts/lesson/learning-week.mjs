@@ -11,6 +11,8 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, realpathSync } from
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
+// Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
+const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 export const SUBJECTS = [['frontend', 'Frontend'], ['ba', 'BA'], ['war', 'Chiến tranh']];
@@ -82,9 +84,9 @@ const plain = (s) => s.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/`([^`]+)
 
 /** The four data files, each { rows, meta }. */
 export function build(dir = root, now = new Date()) {
-  const read = (p) => (existsSync(join(dir, p)) ? readFileSync(join(dir, p), 'utf8') : '');
+  const read = (p) => (existsSync(join(dir, p)) ? lf(readFileSync(join(dir, p), 'utf8')) : '');
   const files = Object.fromEntries(SUBJECTS.map(([id]) => [id, read(`learning/${id}.md`)]));
-  const code = readFileSync(fileURLToPath(import.meta.url), 'utf8');
+  const code = lf(readFileSync(fileURLToPath(import.meta.url), 'utf8'));
   const meta = (input) => [
     { label: 'learning-week.mjs', value: code, type: 'code', lang: 'javascript' },
     { label: 'Đọc từ', value: input },

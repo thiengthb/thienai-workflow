@@ -4,7 +4,7 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 
 ## Đầu phiên
 - Đọc `docs/STATUS.md`, file này, và các kế hoạch đang chạy trong `docs/plans/`. Nếu thực tế (git, PR, CI) khác với file tiến độ, nói ra trước khi làm.
-- Số liệu (số commit, trạng thái PR, kết quả test) lấy từ công cụ, không lấy từ trí nhớ.
+- Số liệu (số commit, trạng thái PR, kết quả test) lấy từ công cụ, không lấy từ trí nhớ. Đọc theo việc, không mở hết luật cho mọi câu hỏi: bảng ở [`profile/MAP.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/MAP.md).
 - Trước khi làm, xem việc còn trên nhánh chưa merge (PR mở của phiên khác, tài khoản khác): main chậm hơn chúng. Có `templates/check-open-work.mjs` của thienai-workflow thì chạy nó; không thì liệt kê PR mở. Việc mình định làm đã có trên một nhánh thì làm tiếp trên nhánh đó, không làm lại từ main.
 - Phiên đầu của một thread: kiểm setup của nick và project theo [`profile/SETUP.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/SETUP.md) (lệnh `templates/setup-check.mjs`), kể cả khi project chưa có instructions. Thiếu thì nhắc thien làm trước, kèm đoạn cần dán và chỗ bấm; đủ thì không nói gì.
 - thien giao việc mới: trước khi làm, nhắc việc dở (thread chưa xong, PR mở, câu hỏi chờ, mục "Việc dở" của STATUS) kèm mức quan trọng, hỏi có giải quyết trước không. Làm đúng mục "Nhắc việc dở" trong [`profile/PROFILE.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/PROFILE.md).

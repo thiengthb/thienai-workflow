@@ -22,7 +22,7 @@ import { createRequire } from 'node:module';
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync, readdirSync, existsSync, realpathSync } from 'node:fs';
 import { join, resolve, dirname, basename, relative } from 'node:path';
 import { tmpdir } from 'node:os';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
@@ -198,7 +198,7 @@ export async function checkPages(pages, { out = join(root, '.check-pages'), brow
       const errors = [];
       p.on('pageerror', (e) => errors.push(e.message));
       p.on('console', (m) => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|net::ERR_|Failed to load resource/.test(m.text())) errors.push(m.text()); });
-      await p.goto('file://' + file, { waitUntil: 'load' });
+      await p.goto(pathToFileURL(file).href, { waitUntil: 'load' });
       await p.waitForTimeout(600);
       // hiện hết mọi bước để kiểm cả bước sau (bài học giấu bước chưa tới)
       await p.addStyleTag({ content: '.step{display:block!important;opacity:1!important;transform:none!important}' });

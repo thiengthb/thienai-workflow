@@ -9,6 +9,7 @@ import { mkdtempSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { buildFixtures } from '../../artifacts/kit/check-pages.mjs';
+import { pathToFileURL } from 'node:url';
 
 const { chromium } = createRequire(import.meta.url)('playwright');
 const browser = await chromium.launch();
@@ -31,7 +32,7 @@ async function openPage(file) {
   const p = await ctx.newPage();
   const errors = [];
   p.on('pageerror', (e) => errors.push(e.message));
-  await p.goto('file://' + file);
+  await p.goto(pathToFileURL(file).href);
   await p.waitForFunction(() => document.documentElement.classList.contains('kit-ask-on'));
   p.errors = errors;
   return { p, ctx };

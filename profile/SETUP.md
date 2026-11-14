@@ -10,7 +10,8 @@ thien dùng 3 nick Claude (tên ngắn và việc của từng nick ở [`ACCOUN
 
 ## AI kiểm gì, lúc nào
 - Đầu phiên đầu tiên của một thread, trước khi làm việc thien giao. Chạy:
-  `node templates/setup-check.mjs --project "<tên project>" --instructions <file chứa project instructions thấy được, hoặc none> --repos <các repo đang gắn, cách nhau bằng dấu phẩy> --skills <các skill thấy được, dạng tên@số bản>`
+  `node templates/setup-check.mjs --project "<tên project>" --instructions <file chứa project instructions thấy được, none nếu project không có, unseen nếu phiên không thấy> --repos <các repo đang gắn, cách nhau bằng dấu phẩy> --skills <các skill thấy được, dạng tên@số bản> --sync "<bộ lọc đồng bộ, dạng đường-dẫn:include, cách nhau bằng dấu phẩy>"`
+- Lấy số liệu từ công cụ, không đoán: instructions và bộ lọc đồng bộ đọc bằng công cụ Projects (`project_info`) nếu phiên có; không có thì `--instructions unseen` và bỏ `--sync`, lệnh sẽ ghi là "chưa kiểm" chứ không báo thiếu. Lệnh so từng dòng của đoạn instructions, không chỉ số `vN`.
 - Số bản của skill là `(bản N)` ở cuối phần mô tả skill trong danh sách skill của phiên. Không có số thì ghi tên trơn: lệnh coi đó là bản cũ.
 - Project chưa có instructions, chưa gắn repo vẫn phải kiểm: gắn repo thienai-workflow vào phiên rồi chạy. Lỗi đã gặp 2026-11-14: project "Claude" ở nick tnt024 chưa có instructions và chưa gắn repo, nên luật kiểm (nằm trong instructions và AGENTS.md) không bao giờ chạy, AI không nhắc gì cả.
 - Dòng `nhắc: AI tự làm: ...` là việc của AI (thêm dòng vào sổ nick), không phải việc của thien.
@@ -52,10 +53,36 @@ Khi mình giao việc mới: nhắc việc còn dở trước, theo mục "Nhắ
 Trả lời bằng tiếng Việt tự nhiên.
 ```
 
+## Đồng bộ repo vào knowledge
+Project settings > GitHub (nút đồng bộ repo vào knowledge của project): chỉ tích phần chữ mà AI cần đọc. Ngày 2026-11-14 project `Claude` đồng bộ cả repo, đã dùng khoảng 69% dung lượng knowledge (1,39 triệu trên 2 triệu), phần lớn là trang HTML, JSON trận đánh, font và script. Knowledge to quá thì Claude phải tìm từng đoạn (RAG) thay vì đọc hết, dễ sót luật. Các phần dưới chỉ khoảng 12% repo; phần còn lại AI đọc bằng lệnh khi cần (`profile/MAP.md`, tầng 3).
+
+Tích:
+- `AGENTS.md`
+- `README.md`
+- `profile/`
+- `docs/`
+- `life/`
+- `learning/`
+- `artifacts/README.md`
+- `artifacts/lesson/README.md`
+- `templates/AGENTS.template.md`
+- `slides/RULES.md`
+- `skills/`
+
+Bỏ tích bên trong `learning/`:
+- bỏ `learning/frontend/pages/`
+- bỏ `learning/ba/pages/`
+- bỏ `learning/war/pages/`
+- bỏ `learning/war/battles/`
+- bỏ `learning/teaching/patterns.html`
+
+Repo khác (sakubun) cũng vậy: tích tài liệu và luật, bỏ ảnh, build, dữ liệu. Sau khi merge PR đổi luật, bấm đồng bộ lại để knowledge có bản mới; trong lúc chưa đồng bộ, đọc file trong repo (connector GitHub hay clone) chứ không tin knowledge.
+
 ## Đổi chuẩn
-- Sửa file này qua PR, **tăng số "Phiên bản chuẩn"** và số `vN` trong đoạn instructions cùng lúc (test trong CI kiểm hai số khớp nhau).
+- Đổi đoạn project instructions: sửa qua PR, **tăng số "Phiên bản chuẩn"** và số `vN` trong đoạn đó cùng lúc (test trong CI kiểm hai số khớp nhau). Đổi phần khác (bảng repo, mục đồng bộ knowledge) thì không tăng số, để thien không phải dán lại instructions y hệt ở mọi nick; `setup-check.mjs` vẫn kiểm các phần đó mỗi phiên.
 - Không cần nhớ đã sửa ở nick nào: ở mỗi nick, phiên đầu tiên sau khi merge sẽ thấy project instructions còn số cũ và nhắc thien dán bản mới.
 
 ## Lịch sử
+- 2026-11-14, vẫn v2: thêm mục "Đồng bộ repo vào knowledge"; `setup-check.mjs` so từng dòng instructions và có `--instructions unseen`, `--sync`.
 - v2 (2026-11-14): thêm tên nick vào dòng đầu (`nick: tntXXX`) và luật ghi nick vào commit, PR, sổ bàn giao; skill có số bản để biết khi nào phải tải lại; skill `start-project` bắt cả project cũ chưa setup; sổ nick `profile/ACCOUNTS.md`.
 - v1 (2026-11-14): chuẩn đầu tiên có kiểm tự động. Thêm luật "tiếp tục" (sổ bàn giao) và repo thienai-workflow cho project sakubun.

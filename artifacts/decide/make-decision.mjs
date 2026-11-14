@@ -85,7 +85,7 @@ export async function shootOptions(spec, specDir, out, shootFn = shoot) {
   if (!size) throw new Error(`shotSize không đúng dạng rộngxcao: ${spec.shotSize}`);
   mkdirSync(join(out, 'src'), { recursive: true });
   const shots = todo.map((o) => {
-    const target = /^[a-z]+:/i.test(o.shot) ? o.shot : resolve(specDir, o.shot);
+    const target = /^[a-z][a-z0-9+.-]+:/i.test(o.shot) ? o.shot : resolve(specDir, o.shot);
     return { o, url: toUrl(target), path: join(out, 'src', `${safe(o.key)}@2x.png`) };
   });
   await shootFn([size], () => shots, { wait: spec.shotWait ?? 600 });

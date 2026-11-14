@@ -30,7 +30,7 @@ const SHOW = showArg ? showArg.slice(7) : '.step';
 const pos = args.filter(a => !a.startsWith('--'));
 const file = pos[0];
 if (!file) { console.error('Thiếu đường dẫn trang'); process.exit(2); }
-const url = 'file://' + path.resolve(file);
+const url = require('url').pathToFileURL(path.resolve(file)).href; // file:///C:/... on Windows
 const outDir = pos[1] || path.join(path.dirname(path.resolve(file)), '.check');
 fs.mkdirSync(outDir, { recursive: true });
 

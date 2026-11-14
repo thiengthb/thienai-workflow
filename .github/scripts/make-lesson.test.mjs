@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fill, guessId } from '../../artifacts/lesson/make-lesson.mjs';
+import { fileURLToPath } from 'node:url';
 
 const tpl = readFileSync(new URL('../../artifacts/lesson/template.html', import.meta.url), 'utf8');
 const page = tpl.replace('"__ID__"', '"frontend-06"');
@@ -25,7 +26,7 @@ assert.ok(!/__[A-Z]+__/.test(once.replace(/__TITLE__|__SUBJECT__|__HEADLINE__/g,
   const { join } = await import('node:path');
   const { tmpdir } = await import('node:os');
   const d = mkdtempSync(join(tmpdir(), 'lesson-cli-'));
-  const cli = new URL('../../artifacts/lesson/make-lesson.mjs', import.meta.url).pathname;
+  const cli = fileURLToPath(new URL('../../artifacts/lesson/make-lesson.mjs', import.meta.url));
   const pagePath = join(d, 'learning/demo/pages/lesson-02.html');
   let r = spawnSync(process.execPath, [cli, pagePath], { encoding: 'utf8' });
   assert.equal(r.status, 0, r.stderr);
@@ -47,9 +48,9 @@ assert.ok(!/__[A-Z]+__/.test(once.replace(/__TITLE__|__SUBJECT__|__HEADLINE__/g,
   const { join } = await import('node:path');
   const { tmpdir } = await import('node:os');
   const d = mkdtempSync(join(tmpdir(), 'war-cli-'));
-  const cli = new URL('../../artifacts/lesson/make-lesson.mjs', import.meta.url).pathname;
+  const cli = fileURLToPath(new URL('../../artifacts/lesson/make-lesson.mjs', import.meta.url));
   mkdirSync(join(d, 'learning/war/battles'), { recursive: true });
-  copyFileSync(new URL('../../learning/war/battles/dien-bien-phu-1954.json', import.meta.url).pathname, join(d, 'learning/war/battles/dien-bien-phu-1954.json'));
+  copyFileSync(fileURLToPath(new URL('../../learning/war/battles/dien-bien-phu-1954.json', import.meta.url)), join(d, 'learning/war/battles/dien-bien-phu-1954.json'));
   const pagePath = join(d, 'learning/war/pages/lesson-09.html');
   let r = spawnSync(process.execPath, [cli, pagePath], { encoding: 'utf8' });
   assert.equal(r.status, 0, r.stderr);
@@ -70,7 +71,7 @@ assert.ok(!/__[A-Z]+__/.test(once.replace(/__TITLE__|__SUBJECT__|__HEADLINE__/g,
   const { join } = await import('node:path');
   const { tmpdir } = await import('node:os');
   const d = mkdtempSync(join(tmpdir(), 'it-cli-'));
-  const cli = new URL('../../artifacts/lesson/make-lesson.mjs', import.meta.url).pathname;
+  const cli = fileURLToPath(new URL('../../artifacts/lesson/make-lesson.mjs', import.meta.url));
   for (const [subj, mark] of [['frontend', 'class="pane bench"'], ['ba', 'class="pane board"']]) {
     const pagePath = join(d, `learning/${subj}/pages/lesson-07.html`);
     let r = spawnSync(process.execPath, [cli, pagePath], { encoding: 'utf8' });
