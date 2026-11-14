@@ -14,6 +14,17 @@ assert.equal(checkReview('## Review\n- Bỏ qua: chỉ sửa STATUS'), '', 'skip
 assert.equal(checkReview('## Review\r\n- Ai: agent mới, 14/11\r\n'), '', 'Windows line endings');
 assert.equal(checkReview('## Review\n### Lượt 1\n- Ai: agent mới, 14/11'), '', 'sub-headings stay inside the section');
 assert.equal(checkReview('', { draft: true }), '', 'drafts pass');
+assert.equal(checkReview(null, { draft: true }), '');
+assert.match(checkReview('', { branch: 'chore/sync-agents-md', sameRepo: false }), /chưa có mục/, 'a fork branch with the bot name is checked');
+// Real descriptions with angle brackets are not blanks.
+assert.equal(checkReview('## Review\n- Ai: agent mới, 14/11\n- Đã sửa: `Map<string, number>` và `<model>` trong code\n<details><summary>chi tiết</summary>n < 40 và m > 3<br></details>\n- Từ <noreply@anthropic.com>'), '');
+assert.equal(checkReview('## Review\n- Ai: agent mới, 14/11\n\n---\n\n- Đã sửa: A'), '', 'a --- rule inside the section does not end it');
+for (const l of ['- AI: agent mới', '- ai: agent mới', '- **Ai:** agent mới', '1. Ai: agent mới', '- Ai : agent mới', '* Bỏ qua: chỉ STATUS']) assert.equal(checkReview('## Review\n' + l), '', l);
+// Hidden or quoted sections do not count.
+assert.match(checkReview('<!--\n## Review\n- Ai: agent mới\n-->'), /chưa có mục/, 'section inside an HTML comment');
+assert.match(checkReview('```\n## Review\n- Ai: agent mới\n```'), /chưa có mục/, 'section inside a code block');
+assert.match(checkReview('## Review\n<!-- chưa review\n- Ai: agent mới'), /cần một dòng/, 'an unclosed comment hides the rest');
+assert.match(checkReview('## Review\n- Ai: agent mới, 14/11. Lượt 2 nếu có: <ai, vì sao>.'), /chưa điền/);
 assert.equal(checkReview('', { branch: 'chore/sync-agents-md' }), '', 'sync bot PRs pass');
 
 assert.match(checkReview(null), /chưa có mục/);
@@ -29,6 +40,7 @@ assert.match(checkReview('## Review\n- Ai:'), /cần một dòng/, 'empty "- Ai:
 assert.match(checkReview('## Review\n- Bỏ qua:'), /cần một dòng/, 'skip without a reason');
 assert.match(checkReview('## Review\n- Ai: agent mới trong phiên (<model>), <ngày>.'), /chưa điền/, 'pasted template');
 assert.match(checkReview('## Review\n- Ai: agent mới, 14/11\n- Không sửa: <ý>, vì <lý do>.'), /chưa điền/);
+assert.match(checkReview('## Review\n- Ai: agent mới, 14/11\n- Đã sửa: <ý> (<commit>)'), /chưa điền/);
 
 // CLI: reads the pull_request event from GITHUB_EVENT_PATH.
 const dir = mkdtempSync(join(tmpdir(), 'check-review-'));
@@ -38,11 +50,13 @@ const run = (event, args = []) => {
   try { execFileSync('node', [cli, ...args], { env: { ...process.env, GITHUB_EVENT_PATH: p }, stdio: 'pipe' }); return 0; }
   catch (e) { return e.status; }
 };
-const pr = (o) => ({ pull_request: { number: 1, draft: false, body: ok, head: { ref: 'feat/x' }, ...o } });
+const repo = { full_name: 'thiengthb/x' };
+const pr = (o) => ({ pull_request: { number: 1, draft: false, body: ok, head: { ref: 'feat/x', repo }, base: { repo }, ...o } });
 assert.equal(run(pr({})), 0);
 assert.equal(run(pr({ body: 'không có gì' })), 1);
 assert.equal(run(pr({ draft: true, body: '' })), 0);
-assert.equal(run(pr({ body: '', head: { ref: 'chore/sync-agents-md' } })), 0);
+assert.equal(run(pr({ body: '', head: { ref: 'chore/sync-agents-md', repo } })), 0);
+assert.equal(run(pr({ body: '', head: { ref: 'chore/sync-agents-md', repo: { full_name: 'other/x' } } })), 1, 'fork with the bot branch name');
 assert.equal(run({ comment: {} }), 0, 'non-PR events are skipped');
 assert.equal(run({}, ['--body']), 2, '--body without a file is a short usage error');
 console.log('check-review: ổn');

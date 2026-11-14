@@ -26,16 +26,17 @@ Không có gì đáng nêu thì nói rõ đã đọc những file nào. Viết t
 ## Mẫu mục Review trong mô tả PR
 ```markdown
 ## Review
-- Ai: agent mới trong phiên (<model>), <ngày>. Lượt 2 nếu có: <ai, vì sao>.
+- Ai: agent mới trong phiên (<model>), <ngày>.
+- Lượt 2: <ai, vì sao>. (Xoá dòng này nếu không có lượt 2.)
 - Đã sửa: <ý> (<commit>), ...
 - Không sửa: <ý>, vì <lý do>. Hoặc "không có".
 ```
-PR chỉ đổi `docs/STATUS.md` hay nhật ký học được ghi `- Bỏ qua: <lý do>`. Check cần một dòng `- Ai:` hay `- Bỏ qua:` có nội dung, không còn chỗ `<...>` chưa điền; link phiên và dòng "Generated with" ở cuối mô tả không tính. PR do bot đồng bộ AGENTS mở (`chore/sync-agents-md`) được bỏ qua.
+PR chỉ đổi `docs/STATUS.md` hay nhật ký học được ghi `- Bỏ qua: <lý do>`. Check cần một dòng `- Ai:` hay `- Bỏ qua:` có nội dung (viết hoa thường, in đậm hay đánh số đều được), không còn chỗ trống của mẫu (`<model>`, `<ngày>`, `<ý>`, `<commit>`, `<lý do>`, `<ai, vì sao>`); link phiên, dòng "Generated with", comment HTML và khối code không tính. PR do bot đồng bộ AGENTS mở (`chore/sync-agents-md`) được bỏ qua.
 
 ## `@claude` trên GitHub
 - Comment trên PR (Action chỉ thấy repo đang chạy, không đọc được thienai-workflow riêng tư, nên lời gọi phải tự đủ):
   `@claude review PR này như người ngoài: đọc AGENTS.md, CLAUDE.md; lấy diff bằng git diff origin/main...HEAD; tìm theo thứ tự mất dữ liệu hay lộ dữ liệu, sai logic hay lỗi bị nuốt, phá luật repo, truy cập, link hỏng; tối đa 10 ý, mỗi ý có mức, file:dòng, đầu vào gây lỗi, cách sửa; viết tiếng Việt; không sửa file.`
 - Chạy bằng token gói Claude của một nick (secret `CLAUDE_CODE_OAUTH_TOKEN`), trừ vào usage của nick đó; nick đó hết usage thì lượt chạy báo lỗi, không chặn merge.
-- Chỉ người có quyền ghi vào repo gọi được. Không có lượt chạy tự động, nên không tốn phút Actions khi không ai gọi.
+- Chỉ chủ repo hay cộng tác viên gọi được; comment của bot bị bỏ qua. Workflow chỉ có quyền đọc code (`contents: read`), vì việc của nó là review [chưa kiểm: token riêng của app Claude có còn đẩy commit được không; chỉ nhờ review]. Không có lượt chạy tự động, nên không tốn phút Actions khi không ai gọi.
 - Comment của AI đăng bằng tài khoản của thien, nên AI không viết chữ `@claude` trong comment trừ khi muốn gọi; nói về nó thì viết "lệnh gọi Claude".
 - Cài một lần mỗi repo: app [Claude](https://github.com/apps/claude) và secret `CLAUDE_CODE_OAUTH_TOKEN` (Settings > Secrets and variables > Actions), tạo bằng `claude setup-token` trên laptop.
