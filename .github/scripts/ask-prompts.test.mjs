@@ -27,6 +27,7 @@ async function open(file) {
   await ctx.addInitScript(() => {
     window.__prompts = [];
     const sample = async (input) => { window.__prompts.push(String(input)); return { text: 'Trả lời thử.', truncated: false }; };
+    sample.json = async (input) => { window.__prompts.push(String(input)); return null; };
     window.claude = { use: async (n) => (n === 'sample' ? sample : null) };
   });
   const p = await ctx.newPage();
@@ -59,6 +60,7 @@ async function open(file) {
   await p.ask('lesson-why-wrong', () => q.getByRole('button', { name: 'Vì sao mình chọn sai?' }).click());
   await p.locator('textarea[data-key="teach"]').fill('Mỗi màn chỉ nên có một chỗ dùng màu nhấn, phần phụ để nhạt.');
   await p.ask('lesson-teach-back', () => p.getByRole('button', { name: 'Claude nhận xét bài của mình' }).click());
+  await p.ask('lesson-extra', () => p.getByRole('button', { name: 'Cho mình một tình huống' }).click());
   assert.deepEqual(p.errors, []);
   await ctx.close();
 }
@@ -72,6 +74,15 @@ async function open(file) {
   });
   assert.deepEqual(p.errors, []);
   await ctx.close();
+}
+{ // Claude làm mẫu trên bàn thử (frontend) và trên bảng dán (BA), sau khi người học tự làm xong bước.
+  for (const [name, n, need] of [['frontend', 3, 'd1'], ['ba', 3, 'checked-who']]) {
+    const { p, ctx } = await open(pages[name]);
+    await p.evaluate(([s, k]) => { Lesson.go(s); Lesson.done(k); }, [n, need]);
+    await p.ask(name + '-demo', () => p.locator(`.step[data-s="${n}"] .demo-open`).click());
+    assert.deepEqual(p.errors, []);
+    await ctx.close();
+  }
 }
 { // Trang chọn phương án: hỏi trước khi chọn, rồi chọn A và hỏi lại.
   const { p, ctx } = await open(pages.decide);
@@ -107,6 +118,9 @@ assert.match(P['frontend-stage-ask'], /CHƯA làm xong bước này/);
 assert.match(P['decide-before-pick'], /CHƯA chọn\. Đừng nói nên chọn/);
 assert.doesNotMatch(P['decide-before-pick'], /Gọn nhất|đề xuất a/i, 'chưa chọn thì không lộ đề xuất');
 assert.match(P['decide-after-pick'], /đã chọn a\. Lúc soạn trang, Claude đề xuất a: Gọn nhất/);
+assert.match(P['frontend-demo'], /Các núm[\s\S]*đã tự làm xong bước này[\s\S]*Chỉ dùng điều có trên trang/, 'làm mẫu: chỉ sau khi tự làm, không thêm chi tiết mới');
+assert.match(P['ba-demo'], /Bản mẫu \(cách xếp đúng của bài/);
+assert.match(P['lesson-extra'], /Các câu hỏi đã có trong bài \(đừng lặp lại\)[\s\S]*đúng 3 lựa chọn[\s\S]*Trả về JSON/);
 assert.match(P['review-grade'], /Người học tự trả lời trước khi xem đáp án: "Mắt không biết chọn nút nào"/);
 assert.match(P['review-grade'], /Đáp án mẫu: Mắt không biết bấm nút nào/);
 assert.match(P['review-grade'], /không thêm chi tiết, số liệu, tên hay sự kiện mới/, 'chấm chỉ dựa trên bài (luật nguồn của TUTOR)');

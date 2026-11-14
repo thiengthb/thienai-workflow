@@ -49,6 +49,7 @@ thien muốn các trang "thông minh" hơn. Trang khai báo khả năng `sample`
 - Bài học (mọi môn, cả sa bàn và sân khấu IT): Claude nhận xét bài tự nói lại; chọn sai thì có nút "Vì sao mình chọn sai?"; mỗi bước có "Hỏi Claude về bước này", Claude biết chữ trên bước và việc đã làm trên sân khấu. Bước chưa làm xong thì Claude chỉ gợi ý, không nói đáp án.
 - Trang chọn phương án: ô hỏi về các phương án. Trước khi chọn, Claude chỉ giải thích và so sánh, không nói nên chọn gì (giữ đúng luật đề xuất ẩn).
 - Chưa gắn: trang so sánh (kết quả đằng nào cũng gửi cho Claude đọc) và trang tổng quan.
+- Từ đợt 5 (2026-11-14): sau khi tự làm xong một bước có sân khấu, nút "Xem Claude làm" cho Claude tự vặn núm, xếp thẻ, dẫn qua sa bàn, từng thao tác kèm lý do; bước cuối bài frontend và BA có "Cho mình một tình huống"; bước giải thích có nút "Nghe" (khả năng `tts`). Chi tiết trong `lesson/README.md`.
 - Câu hỏi và nhận xét ghi vào `R.ai`; tóm tắt cuối buổi có dòng "Đã hỏi Claude trong bài" để biết chỗ nào còn vướng.
 
 ## Điểm chung của các mẫu đã được khen
