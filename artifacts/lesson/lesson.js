@@ -30,9 +30,11 @@
   /** Enables every [data-need] button whose keys are all done. Review gates stay open once the lesson was finished before. */
   function gate() {
     $$('[data-need]').forEach((b) => {
+      if (b.dataset.running || (demoBusy && b.classList.contains('demo-open'))) { b.disabled = true; return; }   // a Claude demo is running (one per lesson)
       if (reviewOff() && b.hasAttribute('data-review-gate')) { b.disabled = false; return; }
       b.disabled = !b.dataset.need.split(/\s+/).filter(Boolean).every((k) => done.has(k));
     });
+    $$('.demo-open:not([data-need])').forEach((b) => { b.disabled = demoBusy; });   // demo buttons with no step gate: only the lesson-wide lock
   }
   function mark(key) { done.add(key); gate(); }
 
@@ -102,8 +104,12 @@
     if ((R.teach || '').trim()) L.push('', 'Tự nói lại: ' + R.teach.trim());
     const asked = (R.ai || []).filter((x) => x.kind === 'ask');
     if (asked.length) L.push('', 'Đã hỏi Claude trong bài: ' + asked.map((x) => `"${x.q}" (${x.step})`).join('; '));
-    const used = (R.ai || []).filter((x) => x.kind !== 'ask').map((x) => x.kind === 'teach' ? 'nhận xét bài tự nói lại' : 'giải thích câu ' + x.q);
+    const used = (R.ai || []).filter((x) => x.kind !== 'ask' && x.kind !== 'demo').map((x) => x.kind === 'teach' ? 'nhận xét bài tự nói lại' : 'giải thích câu ' + x.q);
     if (used.length) L.push('Nhờ Claude: ' + [...new Set(used)].join(', '));
+    const demos = (R.ai || []).filter((x) => x.kind === 'demo');
+    if (demos.length) L.push('Xem Claude làm mẫu: ' + [...new Set(demos.map((x) => x.step))].join(', '));
+    if ((R.extra || []).length) L.push(`Tình huống thêm: đúng ${R.extra.filter((x) => x.ok).length}/${R.extra.length}`);
+    if (R.listened) L.push(`Nghe đọc to: ${R.listened} lần`);
     const fb = Object.entries(R.feedback).filter(([k]) => k !== 'note').map(([k, v]) => (fLabel[k] || k) + ': ' + v).join('; ');
     if (fb) L.push('', 'Góp ý: ' + fb);
     if ((R.feedback.note || '').trim()) L.push('Ghi thêm: ' + R.feedback.note.trim());
@@ -150,7 +156,7 @@
   /** Chữ người học đang thấy ở một phần trang: bỏ lời giải chưa mở, bỏ phần hỏi Claude. */
   function visibleText(node, n) {
     const c = node.cloneNode(true);
-    c.querySelectorAll('.why:not(.on), .mine:not(.on), .kit-ask, .ai-out, .status, script, style').forEach((x) => x.remove());
+    c.querySelectorAll('.why:not(.on), .mine:not(.on), .kit-ask, .ai-out, .status, .listen, script, style').forEach((x) => x.remove());
     c.querySelectorAll('*').forEach((x) => x.append(' '));   // chữ của hai thẻ liền nhau không dính vào nhau
     return clip(c.textContent, n);
   }
@@ -243,7 +249,152 @@
     });
   });
 
-  window.Lesson = { go, done: mark, R, summary, extras };
+  // ---------- Nghe phần giải thích (khả năng tts, đề xuất N2) ----------
+  // Bước giải thích (không có câu hỏi, ô viết hay nút xong, đủ dài) có nút loa ngay dưới tiêu đề. data-listen="off" trên bước để tắt,
+  // data-listen trên bước khác để bật. Chỉ hiện ở Chrome và app Claude máy tính. R.listened đếm số lần nghe (learning/usage.md).
+  const heard = () => { R.listened = (R.listened || 0) + 1; };
+  if (window.Kit && Kit.listen) steps.forEach((step) => {
+    const v = step.dataset.listen;
+    if (v === 'off' || /(^|\s)review(\s|$)/.test(step.dataset.part || '')) return;
+    // Bước giải thích: không có việc phải làm (câu hỏi, ô viết, nút Tiếp chờ điều kiện).
+    const plain = !step.querySelector('.q, textarea, #finish, .choose, .ask, .next[data-need]');
+    if (v == null && !(plain && visibleText(step, 4000).length >= 60)) return;
+    const h = step.querySelector('h1, h2'), b = el('button', { type: 'button', className: 'listen', textContent: 'Nghe' });
+    (h || step.firstElementChild).after(b);
+    // Đọc chữ của bài, bỏ chữ trên các nút (Tiếp, Hỏi Claude…).
+    Kit.listen(b, () => { const c = step.cloneNode(true); c.querySelectorAll('button').forEach((x) => x.remove()); return visibleText(c, 2000); }, heard);
+  });
+
+  // ---------- Claude làm mẫu trên sân khấu (khả năng sample có tools, đề xuất T1) ----------
+  // Sân khấu (bàn thử, bảng dán, sa bàn) đăng ký bằng Lesson.demo({ match(step) }): match trả về null nếu bước không có gì để làm mẫu,
+  // hoặc { context(), tools: [{ name, description, inputSchema, execute(input) → { did, result } }], save(), restore(saved) }.
+  // Nút "Xem Claude làm" chỉ mở khi người học đã tự làm xong bước (cùng điều kiện với nút Tiếp): thử trước, xem cách khác sau.
+  // Claude gọi tools của trang từng thao tác một, kèm một câu vì sao; trang hiện thao tác đó lên sân khấu và vào danh sách.
+  // Thao tác của Claude không phải lần bấm của người học nên không vào bản tự lưu; "Trả lại cách của mình" đưa sân khấu về như trước.
+  // Mỗi lúc chỉ một lượt làm mẫu cho cả bài (demoBusy). Lần bấm kế của người học ngoài khung làm mẫu (núm, thẻ, nút Tiếp, Xong buổi)
+  // tự trả sân khấu về cách của người học trước, nên giá trị của Claude không bao giờ vào điểm, lựa chọn hay bản lưu cuối buổi.
+  const demoProviders = [];
+  let demoBusy = false, demoShown = null;   // demoShown: hàm trả lại sân khấu khi bản làm mẫu còn hiện
+  const takeBackOn = (e) => {
+    if (!demoShown || !e.isTrusted || !(e.target instanceof Element) || e.target.closest('.demo.kit-ask')) return;
+    if (e.target.closest('button, a, input, select, textarea, label, [role="button"], [data-c], [data-z], canvas')) demoShown();
+  };
+  document.addEventListener('pointerdown', takeBackOn, true);
+  document.addEventListener('click', takeBackOn, true);
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  function demo(p) { demoProviders.push(p); steps.forEach(mountDemo); gate(); }
+  function mountDemo(step) {
+    if (!canAsk() || step.querySelector('.demo') || /(^|\s)review(\s|$)/.test(step.dataset.part || '')) return;
+    const p = demoProviders.find((d) => d.match(step)); if (!p) return;
+    const box = el('div', { className: 'demo kit-ask' });
+    const open = aiBtn('Xem Claude làm', 'ai-open demo-open');
+    const next = step.querySelector('.next');
+    if (next && next.dataset.need) open.dataset.need = next.dataset.need;
+    const hint = el('p', { className: 'demo-hint', textContent: 'Tự làm xong bước này thì xem được Claude làm một lượt, kèm lý do từng thao tác.' });
+    const log = el('ol', { className: 'demo-log' }); log.setAttribute('aria-live', 'polite');
+    const out = el('p', { className: 'ai-out' }); out.setAttribute('role', 'status');
+    const undo = el('button', { type: 'button', className: 'btn', textContent: 'Trả lại cách của mình', hidden: true }); undo.dataset.noreplay = '';
+    box.append(open, hint, log, out, undo);
+    const askBox = step.querySelector('.ai-ask');
+    if (askBox) askBox.before(box); else if (next) next.before(box); else step.append(box);
+    // changed: Claude has moved the stage since the learner's own state. run: the current demo run; taking the stage back ends it,
+    // so tool calls still on their way from that run stop before they touch the stage.
+    // took: a snapshot of the learner's stage was taken (save() may return null and still change the stage, e.g. the board's demo mode).
+    let saved = null, took = false, cur = null, changed = false, run = 0;
+    const takeBack = () => { run++; if (cur && cur.restore && took) cur.restore(saved); saved = null; took = false; changed = false; undo.hidden = true; if (demoShown === takeBack) demoShown = null; };
+    open.addEventListener('click', async () => {
+      if (demoBusy) return;
+      if (demoShown && demoShown !== takeBack) demoShown();   // một bản làm mẫu khác còn hiện: trả lại trước khi chụp cách của người học
+      cur = p.match(step); if (!cur) return;
+      demoBusy = true; open.disabled = true; open.dataset.running = '1'; undo.hidden = true; log.innerHTML = ''; gate();
+      if (!took && cur.save) { saved = cur.save(); took = true; }
+      let moves = 0; const mine = ++run;
+      demoShown = takeBack;   // từ giờ, lần bấm của người học ngoài khung dừng lượt này và trả sân khấu về
+      const tools = cur.tools.map((t) => ({ name: t.name, description: t.description, inputSchema: t.inputSchema,
+        async execute(input) {
+          if (mine !== run) throw new Error('Người học đã tự làm tiếp. Dừng làm mẫu, không gọi thêm công cụ.');
+          if (moves >= 8) throw new Error('Đã đủ 8 thao tác. Dừng lại và viết câu tóm lại.');
+          const r = await t.execute(input || {});
+          moves++; if (mine === run) changed = true;
+          const li = el('li', {}, el('b', { textContent: r.did }));
+          if (input && input.why) li.append(el('span', { textContent: clip(input.why, 240) }));
+          log.append(li);
+          if (window.Stage && Stage.reveal) Stage.reveal();
+          await wait(900);   // để người học kịp thấy thao tác trên sân khấu trước thao tác kế
+          return r.result || 'Đã làm: ' + r.did;
+        } }));
+      const h = clip((step.querySelector('h1, h2') || {}).textContent || '', 120);
+      const prompt = [head(), '',
+        `Người học đang ở bước "${h}". Chữ trên bước: ${visibleText(step, 1500)}`,
+        clip(cur.context(), 5000), ...stuck(), '',
+        'Người học đã tự làm xong bước này. Giờ bạn làm mẫu trên sân khấu bằng các công cụ được cho, để người học xem một cách làm và hiểu vì sao. '
+        + 'Mỗi lần gọi công cụ là một thao tác; ghi lý do vào "why": một câu ngắn nói vì sao làm vậy, người học thấy câu này ngay cạnh thao tác. '
+        + 'Làm từ 2 đến 6 thao tác theo thứ tự hợp lý, đừng thử lung tung. Chỉ dùng điều có trên trang, không thêm chi tiết mới. '
+        + 'Xong thì viết 1 đến 2 câu tóm lại điều rút ra; nếu cách của bạn khác cách người học đã làm thì nói khác ở đâu, không chê. ' + VOICE].join('\n');
+      let a = '';
+      try { a = await Kit.ask(prompt, out, { tools }); } finally {
+        undo.hidden = !(changed && cur.restore);
+        if (!changed && mine === run) takeBack();   // Claude moved nothing: leave the demo mode, the learner's stage as it was
+        demoBusy = false; delete open.dataset.running; open.disabled = false; open.textContent = 'Xem Claude làm lại'; gate();
+      }
+      R.ai.push({ kind: 'demo', step: h, moves, a: a || '' });
+    });
+    undo.addEventListener('click', takeBack);
+  }
+
+  // ---------- Thêm một tình huống như vậy (đề xuất T3) ----------
+  // Ở bước cuối của bài frontend và BA (không có ở bài chiến tranh: chi tiết lịch sử phải có nguồn, Claude trong trang không tra được),
+  // Claude soạn một tình huống mới cùng ý với một câu hỏi ba lựa chọn. Không bắt buộc, làm bao nhiêu cũng được. Kết quả vào R.extra.
+  // Tắt cho một bài: "extra": false trong cấu hình bài.
+  R.extra = R.extra || [];
+  const finStep = fin && fin.closest('.step');
+  if (finStep && canAsk() && C.extra !== false && !$('#board')) {
+    const box = el('div', { className: 'card extra kit-ask' });
+    const intro = el('p', {}, el('b', { textContent: 'Còn sức? ' }), 'Làm thêm một tình huống cùng ý, Claude soạn mới mỗi lần. Không bắt buộc.');
+    const gen = aiBtn('Cho mình một tình huống', 'btn');
+    gen.classList.remove('kit-ask');
+    const out = el('p', { className: 'ai-out' }); out.setAttribute('role', 'status');
+    const area = el('div', { className: 'extra-q' });
+    box.append(intro, gen, out, area);
+    (finStep.querySelector('h1, h2') || finStep.firstElementChild).after(box);
+    const quizText = $$('.q[data-q]').map(questionText).filter(Boolean).join(' | ');
+    const mainIdea = () => clip([...$$('#mine'), ...steps.filter((s) => !s.querySelector('.q, textarea, #finish') && !/review/.test(s.dataset.part || '')).slice(-2)]
+      .map((x) => visibleText(x, 800)).join(' '), 1600);
+    gen.addEventListener('click', async () => {
+      gen.disabled = true; area.innerHTML = '';
+      const prompt = [head(), '',
+        `Ý chính của bài: ${mainIdea()}`,
+        quizText ? `Các câu hỏi đã có trong bài (đừng lặp lại): ${clip(quizText, 900)}` : '',
+        R.extra.length ? 'Các tình huống đã ra trước đó (ra cái khác hẳn): ' + R.extra.map((x) => clip(x.situation, 160)).join(' | ') : '',
+        ...stuck(), '',
+        'Soạn MỘT tình huống mới, đời thường, cùng ý chính với bài, để người học áp dụng chứ không nhắc lại định nghĩa. '
+        + 'Với bài giao diện thì tả một màn hình cụ thể của một app (có gì, màu gì, nằm đâu); với bài phân tích nghiệp vụ thì tả một yêu cầu hay một cuộc nói chuyện cụ thể. '
+        + 'Rồi một câu hỏi với đúng 3 lựa chọn, chỉ một lựa chọn đúng; hai lựa chọn sai phải nghe hợp lý. '
+        + 'Trả về JSON đúng dạng: {"situation": "2 đến 4 câu", "question": "một câu", "options": ["", "", ""], "answer": số thứ tự đáp án đúng tính từ 0, '
+        + '"why": "1 đến 2 câu giải thích vì sao đúng"}. ' + VOICE].join('\n');
+      const v = await Kit.askJson(prompt, out);
+      gen.disabled = false;
+      if (!v) return;
+      const text = (s) => typeof s === 'string' && s.trim() !== '';
+      const ok = v && text(v.situation) && text(v.question) && text(v.why) && Array.isArray(v.options) && v.options.length === 3
+        && v.options.every(text) && Number.isInteger(v.answer) && v.answer >= 0 && v.answer < v.options.length;
+      if (!ok) { out.textContent = 'Claude soạn chưa đúng dạng. Bấm lại để soạn tình huống khác.'; return; }
+      gen.textContent = 'Tình huống khác';
+      const st = el('p', { className: 'status', role: 'status' }), why = el('p', { className: 'why', textContent: v.why });
+      const opts = v.options.map((t) => { const o = el('button', { type: 'button', className: 'opt', textContent: t }); o.dataset.noreplay = ''; return o; });
+      area.append(el('p', { textContent: v.situation }), el('p', {}, el('b', { textContent: v.question })), el('div', { className: 'q' }, st, ...opts, why));
+      opts.forEach((o, i) => o.addEventListener('click', () => {
+        const right = i === v.answer;
+        opts.forEach((x, j) => { x.disabled = true; if (j === v.answer) x.classList.add('right'); });
+        if (!right) o.classList.add('wrong');
+        st.textContent = right ? 'Đúng.' : 'Chưa đúng. Đáp án đúng có chữ "Đúng".'; st.className = 'status ' + (right ? 'good' : 'bad');
+        why.classList.add('on');
+        R.extra.push({ situation: v.situation, question: v.question, options: v.options, answer: v.answer, pick: i, ok: right });
+      }));
+    });
+  }
+
+  window.Lesson = { go, done: mark, R, summary, extras, demo };
   const start = steps.find((s) => s.classList.contains('on')) || steps[0];
   if (start) go(start.dataset.s);
   gate();

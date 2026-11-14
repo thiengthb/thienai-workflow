@@ -78,6 +78,9 @@ export function draft({ R, html = '', subject, lessonFile = '', cards = '', toda
   const right = (o) => list(o).filter(([, v]) => v.ok).length;
   const mins = R.start && R.end ? Math.round((Date.parse(R.end) - Date.parse(R.start)) / 6e4) : null;
   const ai = R.ai || [], asks = ai.filter((x) => x.kind === 'ask'), whys = ai.filter((x) => x.kind === 'why'), teachAi = ai.filter((x) => x.kind === 'teach');
+  const demos = ai.filter((x) => x.kind === 'demo'), extra = R.extra || [];
+  // Trang có sân khấu (bàn thử, bảng dán, sa bàn) thì mới có "Xem Claude làm"; bài chiến tranh không có tình huống thêm.
+  const hasStage = !!(R.knobs || R.boards || R.choices), isWar = /^war-/.test(R.lesson || '');
   const fb = R.feedback || {};
   const fbText = Object.entries(fb).filter(([k]) => k !== 'note').map(([k, v]) => `${k} "${v}"`).join(', ');
 
@@ -89,6 +92,7 @@ export function draft({ R, html = '', subject, lessonFile = '', cards = '', toda
     const pick = q.options[v.pick], ans = q.options[q.answer];
     stuck.push(clip(`${date}, buổi ${lid.n}: ${part === 'ôn' ? 'câu ôn' : 'câu'} “${clip(q.text, 140)}” chọn “${clip(pick || '?', 80)}”${ans ? `, đúng là “${clip(ans, 80)}”` : ''}`, 360));
   }
+  for (const x of extra.filter((e) => !e.ok)) stuck.push(clip(`${date}, buổi ${lid.n}: tình huống thêm “${clip(x.question, 140)}” chọn “${clip(x.options?.[x.pick] || '?', 80)}”, đúng là “${clip(x.options?.[x.answer] || '?', 80)}”`, 360));
   for (const a of asks) stuck.push(clip(`${date}, buổi ${lid.n}: hỏi Claude ở bước “${a.step}”: “${clip(a.q, 160)}”`, 300));
 
   // Thẻ mới: mã kế tiếp của môn, gợi ý từ câu sai.
@@ -107,13 +111,15 @@ export function draft({ R, html = '', subject, lessonFile = '', cards = '', toda
     fbText ? `Góp ý: ${fbText}` : '',
     (fb.note || '').trim() ? `Ghi thêm: ${fb.note.trim()}` : '',
     teach ? `Tự nói lại${R.sawMineBeforeWriting ? ' (xem bản mẫu trước khi viết)' : ''}: "${teach}"` : 'Chưa tự nói lại',
-    `Nhờ Claude: hỏi ${asks.length}, giải thích câu sai ${whys.length}, nhận xét bài tự nói lại ${teachAi.length}; nói thay gõ ${R.spoke || 0} lần`,
+    `Nhờ Claude: hỏi ${asks.length}, giải thích câu sai ${whys.length}, nhận xét bài tự nói lại ${teachAi.length}, xem làm mẫu ${demos.length}; nói thay gõ ${R.spoke || 0} lần, nghe đọc to ${R.listened || 0} lần`,
+    extra.length ? `Tình huống thêm: đúng ${extra.filter((x) => x.ok).length}/${extra.length}` : '',
   ].filter(Boolean);
   const logRow = `| ${lid.n} | ${date} | <ý chính> (${lessonFile ? `[bài](${lessonFile})` : 'bài'}) | ${[mins != null ? `${mins} phút` : '', fbText, list(R.quiz).length ? `đúng ${right(R.quiz)}/${list(R.quiz).length}` : ''].filter(Boolean).join(', ')}. <tự nói lại có gì, thiếu gì; chỗ vướng; góp ý> |`;
   const usage = {
     // Giờ bắt đầu (giờ Việt Nam) nằm trong cột Trang: học lại cùng bài trong một ngày là một dòng riêng, không ghi đè.
     'Ngày': date, 'Trang': R.start ? `${R.lesson} lúc ${new Date(R.start).toLocaleTimeString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit' })}` : R.lesson, 'Phút': mins ?? '-', 'Hỏi Claude': asks.length, 'Claude giải thích câu sai': whys.length,
-    'Claude nhận xét, chấm': teachAi.length, 'Nói thay gõ': R.spoke || 0, 'Ghi chú': R.sawMineBeforeWriting ? 'xem bản mẫu trước khi viết' : '-',
+    'Claude nhận xét, chấm': teachAi.length, 'Nói thay gõ': R.spoke || 0,
+    'Xem Claude làm': hasStage ? demos.length : '-', 'Nghe': R.listened || 0, 'Tình huống thêm': isWar ? '-' : extra.length, 'Ghi chú': R.sawMineBeforeWriting ? 'xem bản mẫu trước khi viết' : '-',
   };
   return { date, n: lid.n, facts, stuck, cardRows, logRow, usage, statusRow: `| ${subject?.name || '?'} ${lid.n} (<tên buổi>) | ${date} | ${subject?.name || '?'} | **<buổi kế tiếp theo vòng xoay>** |` };
 }

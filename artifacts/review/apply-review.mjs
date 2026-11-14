@@ -29,7 +29,7 @@ export function reviewUsage(saved, today) {
   const v = Object.values(saved.items), r = verdicts(saved), vals = Object.values(r);
   return {
     'Ngày': today, 'Trang': 'review', 'Phút': '-', 'Hỏi Claude': '-', 'Claude giải thích câu sai': '-',
-    'Claude nhận xét, chấm': v.filter((x) => x && x.ai).length, 'Nói thay gõ': saved.spoke || 0,
+    'Claude nhận xét, chấm': v.filter((x) => x && x.ai).length, 'Nói thay gõ': saved.spoke || 0, 'Xem Claude làm': '-', 'Nghe': '-', 'Tình huống thêm': '-',
     'Ghi chú': `${vals.length} thẻ, nhớ ${vals.filter((x) => x === 'nho').length}, quên ${vals.filter((x) => x === 'quen').length}${saved.again ? ', có ôn lại thẻ quên' : ''}`,
   };
 }
