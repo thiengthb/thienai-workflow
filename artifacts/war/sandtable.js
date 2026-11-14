@@ -69,9 +69,10 @@
     stage.append(cv, labels, legend, tools, note);
     const tl = $el('div', 'st-tl'), row = $el('div', 'st-row'), play = $el('button', 'btn st-play', '▶');
     play.type = 'button'; play.setAttribute('aria-label', 'Chạy từng mốc');
-    const keysBox = $el('div', 'st-keys'), cap = $el('div', 'st-cap');
+    // Hàng mốc cuộn ngang khi màn hình hẹp, để mỗi mốc vẫn đủ 44px cho ngón tay.
+    const scroller = $el('div', 'st-scroll'), keysBox = $el('div', 'st-keys'), cap = $el('div', 'st-cap');
     cap.setAttribute('role', 'status');
-    row.append(play, keysBox); tl.append(row, cap);
+    scroller.appendChild(keysBox); row.append(play, scroller); tl.append(row, cap);
     el.append(stage, tl);
 
     // Chú thích: chỉ những thứ trận này có.
@@ -296,6 +297,7 @@
     function paint() {
       const keys = b.tracks[track].keys, lim = upto == null ? keys.length - 1 : upto;
       keyBtns.forEach((bt, i) => { bt.classList.toggle('done', i < at); bt.classList.toggle('now', i === at); bt.disabled = i > lim; bt.setAttribute('aria-current', i === at ? 'step' : 'false'); });
+      const cur = keyBtns[at]; if (cur && scroller.scrollWidth > scroller.clientWidth) scroller.scrollLeft = Math.max(0, cur.offsetLeft - (scroller.clientWidth - cur.offsetWidth) / 2);
       keysBox.style.setProperty('--fill', keys.length > 1 ? at / (keys.length - 1) : 1);
       el.classList.toggle('locked', upto != null && upto === at && lim === 0);
       play.disabled = at >= lim;

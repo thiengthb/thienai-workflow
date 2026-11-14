@@ -197,13 +197,15 @@ html[data-board="on"] #board { display: flex; }
 .st-ico.ln { height: 3px; width: 14px; vertical-align: 2px; border-radius: 2px; }
 .st-views { position: absolute; right: 8px; top: 8px; background: color-mix(in srgb, var(--soft) 92%, transparent); }
 .st-note { position: absolute; left: 8px; bottom: 8px; pointer-events: none; }
-.st-tl { padding: 8px 12px 12px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+.st-tl { padding: 8px 12px 12px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
 .st-row { display: flex; align-items: center; gap: 10px; }
 .st-play { width: 44px; min-height: 44px; padding: 0; flex: none; }
-.st-keys { --fill: 0; flex: 1; display: flex; justify-content: space-between; position: relative; min-width: 0; }
-.st-keys::before, .st-keys::after { content: ""; position: absolute; left: 14px; right: 14px; top: 12px; height: 4px; border-radius: 99px; background: var(--soft); }
-.st-keys::after { right: auto; width: calc((100% - 28px) * var(--fill)); background: var(--accent); }
-.st-key { position: relative; z-index: 1; background: none; border: 0; padding: 4px 0 2px; min-width: 40px; min-height: 44px; display: grid; justify-items: center; gap: 3px;
+.st-scroll { flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.st-scroll::-webkit-scrollbar { display: none; }
+.st-keys { --fill: 0; display: flex; justify-content: space-between; gap: 2px; position: relative; width: max-content; min-width: 100%; }
+.st-keys::before, .st-keys::after { content: ""; position: absolute; left: 22px; right: 22px; top: 12px; height: 4px; border-radius: 99px; background: var(--soft); }
+.st-keys::after { right: auto; width: calc((100% - 44px) * var(--fill)); background: var(--accent); }
+.st-key { position: relative; z-index: 1; background: none; border: 0; padding: 4px 0 2px; min-width: 44px; min-height: 44px; display: grid; justify-items: center; gap: 3px;
   font: 500 11px/1.1 var(--font); color: var(--muted); cursor: pointer; white-space: nowrap; }
 .st-key i { width: 12px; height: 12px; border-radius: 99px; background: var(--card); border: 2px solid var(--line); margin-top: 2px; }
 .st-key.done i { background: var(--accent); border-color: var(--accent); }
@@ -706,9 +708,10 @@ html[data-board="on"] #board { display: flex; }
     stage.append(cv, labels, legend, tools, note);
     const tl = $el('div', 'st-tl'), row = $el('div', 'st-row'), play = $el('button', 'btn st-play', '▶');
     play.type = 'button'; play.setAttribute('aria-label', 'Chạy từng mốc');
-    const keysBox = $el('div', 'st-keys'), cap = $el('div', 'st-cap');
+    // Hàng mốc cuộn ngang khi màn hình hẹp, để mỗi mốc vẫn đủ 44px cho ngón tay.
+    const scroller = $el('div', 'st-scroll'), keysBox = $el('div', 'st-keys'), cap = $el('div', 'st-cap');
     cap.setAttribute('role', 'status');
-    row.append(play, keysBox); tl.append(row, cap);
+    scroller.appendChild(keysBox); row.append(play, scroller); tl.append(row, cap);
     el.append(stage, tl);
 
     // Chú thích: chỉ những thứ trận này có.
@@ -933,6 +936,7 @@ html[data-board="on"] #board { display: flex; }
     function paint() {
       const keys = b.tracks[track].keys, lim = upto == null ? keys.length - 1 : upto;
       keyBtns.forEach((bt, i) => { bt.classList.toggle('done', i < at); bt.classList.toggle('now', i === at); bt.disabled = i > lim; bt.setAttribute('aria-current', i === at ? 'step' : 'false'); });
+      const cur = keyBtns[at]; if (cur && scroller.scrollWidth > scroller.clientWidth) scroller.scrollLeft = Math.max(0, cur.offsetLeft - (scroller.clientWidth - cur.offsetWidth) / 2);
       keysBox.style.setProperty('--fill', keys.length > 1 ? at / (keys.length - 1) : 1);
       el.classList.toggle('locked', upto != null && upto === at && lim === 0);
       play.disabled = at >= lim;
