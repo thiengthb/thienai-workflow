@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZHoNMKXiYgZeiGW53 · Cập nhật: 2026-11-15T11:13Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZHoNMKXiYgZeiGW53 · Cập nhật: 2026-11-15T11:24Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -29,6 +29,7 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 - Settings 18:10: phiên 2%, tuần 44% sau khoảng 11 lượt từ lúc reset (khoảng 300 nghìn quy đổi): 1% phiên khoảng 120–200 nghìn. Đã thêm một dòng "Thang Settings" vào bảng, cùng PR #85. PR #85 đã merge theo lời thien (18:13).
 
 ## Bước tiếp theo
+0. **Chat mới kế tiếp là thí nghiệm 3 (connector) kiêm thí nghiệm 1 bản đủ số Settings.** thien đã tắt Figma, Claude in Chrome, sakubun (bản trên claude.ai) lúc 18:24; giữ GitHub, sakubun-v2 (local dev, của app desktop). Ngay sau khi nhận việc xong: chạy `explain-usage` trước mọi việc khác, ghi số lượt, đọc lại trung bình mỗi lượt, phần % của instructions; xin thien ảnh Settings sau. So với thí nghiệm 1 lần 2 (3 lượt, đọc lại 0,42 triệu, hướng dẫn hệ thống 78%). Ghi vào bảng "Kết quả đo" (gộp vài kết quả vào một PR cho đỡ lượt). Sau đó nhắc thien bật lại connector nếu cần.
 1. Khi tiện: thí nghiệm 1 thêm một lần có đủ số Settings (chụp trước khi mở chat mới, chạy `explain-usage` ngay sau khi nhận việc, chụp lại); lần 2 của thí nghiệm 2 (dừng hơn 65 phút); thí nghiệm 3 (connector), 4 (sau buổi học).
 
 ## Đang chờ thien
