@@ -6,7 +6,7 @@
 // Everything is printed even when the setup check finds something missing; the exit code is 1 then.
 //
 //   node templates/start-session.mjs --project <tên> --instructions "<đoạn instructions>"|none|unseen
-//        --repos a/b,c/d --skills start-project@1,make-slides@1 --sync "<bộ lọc của project_info>"
+//        --repos a/b,c/d --skills start-project@1,make-slides@1 --sync "<bộ lọc của project_info: JSON dán nguyên, hay /path:include,...>"
 //        [--claim "Claude tnt697, <link chat>"] [--task <owner/repo>:<việc>]
 //
 // --claim: thien said "tiếp tục". Sets "Ghi bởi" of the task to this value and saves it right away (profile/HANDOFF.md,

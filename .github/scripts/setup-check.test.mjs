@@ -1,7 +1,7 @@
 // Tests for templates/setup-check.mjs, run in CI by .github/workflows/test.yml.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { parseSetup, checkStandard, checkSetup, instructionsFor, parseAccounts, skillVersion, SKILLS, missingLines, checkSync } from '../../templates/setup-check.mjs';
+import { parseSetup, checkStandard, checkSetup, instructionsFor, parseAccounts, skillVersion, SKILLS, missingLines, checkSync, parseSyncArg } from '../../templates/setup-check.mjs';
 
 const md = readFileSync(new URL('../../profile/SETUP.md', import.meta.url), 'utf8');
 assert.deepEqual(checkStandard(md), [], 'profile/SETUP.md itself must pass (version numbers in step)');
@@ -101,3 +101,12 @@ assert.ok(r.fixes.some(f => /thiếu "project: sakubun"/.test(f)), 'missing proj
 }
 
 console.log('setup-check ok');
+
+// --sync takes the JSON project_info prints as well as "/path:mode" pairs (2026-11-15 a pasted JSON was read as one path).
+const pairs = parseSyncArg('/docs/:include,/learning/war/pages/:exclude');
+assert.deepEqual(pairs, [{ path: '/docs/', mode: 'include' }, { path: '/learning/war/pages/', mode: 'exclude' }]);
+const map = { '/docs/': 'include', '/learning/war/pages/': 'exclude' };
+for (const form of [map, { filters: map }, { filters: { filters: map } }, { type: 'github', config: { filters: { filters: map } } }, [{ type: 'github', config: { filters: { filters: map } } }]])
+  assert.deepEqual(parseSyncArg(JSON.stringify(form)), pairs, 'JSON form ' + JSON.stringify(form).slice(0, 40));
+const jsonGood = JSON.stringify({ filters: { filters: Object.fromEntries(good2.map(f => ['/' + f.path.replace(/^\//, ''), f.mode])) } });
+assert.deepEqual(checkSync(std, parseSyncArg(jsonGood)), [], 'the good filters as JSON give no note');

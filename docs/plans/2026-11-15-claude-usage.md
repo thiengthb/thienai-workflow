@@ -1,11 +1,11 @@
 # Dùng Claude tốn ít usage hơn: đo trước, đổi sau
 
-Trạng thái: đang chạy · Duyệt: chưa (chờ thien) · Cập nhật: 2026-11-15 · nick tnt697 (đo thí nghiệm 1, 2; checkpoint 2) · Đầu vào: câu hỏi của thien 2026-11-15, số đo ở `docs/usage-log.md`
+Trạng thái: đang chạy · Duyệt: chưa (chờ thien) · Cập nhật: 2026-11-15 · nick tnt697 (đo thí nghiệm 1, 2; checkpoint 2 xong) · Đầu vào: câu hỏi của thien 2026-11-15, số đo ở `docs/usage-log.md`
 
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 (đo): thí nghiệm 1 và 2 có lần 1 (bảng "Kết quả đo"). Checkpoint 2: lệnh `start-session.mjs` đã vào main (thien nhờ merge thẳng 2026-11-15), chờ thien dán instructions v3 rồi đo lại. Checkpoint 3 xong. Chưa đổi luật `profile/CHATS.md`.
+- Đang ở: checkpoint 1 (đo): thí nghiệm 1 và 2 có lần 1 (bảng "Kết quả đo"). Checkpoint 2 xong: khởi động theo v3 còn 3 lượt (đo 2026-11-15 16:49). Checkpoint 3 xong. Chưa đổi luật `profile/CHATS.md`.
 - Còn thiếu: lần 2 của thí nghiệm 1, 2; thí nghiệm 3, 4.
 - thien cần làm: duyệt kế hoạch; khi mở chat mới thì để AI chạy `explain-usage` ở những chỗ ghi trong thí nghiệm.
 
@@ -40,6 +40,7 @@ Số của `explain-usage` (cộng dồn cả chat) và Settings > Usage (số t
 | Thí nghiệm | Lần | Đo được | Settings | Kết luận |
 |---|---|---|---|---|
 | 1. Giá khởi động | 1 | 12 lượt tới lúc nhận việc xong; đọc lại 1,83 triệu, ghi cache 46 nghìn, viết ra 3,9 nghìn; quy đổi khoảng 295 nghìn (khoảng 25 nghìn mỗi lượt); hướng dẫn hệ thống 76% | không có mốc trước (phiên đang gộp chat khác) | 12 lượt, cần còn tối đa 4 (checkpoint 2) |
+| 1. Giá khởi động | 2 (lệnh `start-session.mjs`, chuẩn v3) | 3 lượt tới lúc nhận việc xong (chat mới 16:49, có `--claim`); đọc lại 0,42 triệu, ghi cache 26 nghìn, viết ra 1,8 nghìn; quy đổi khoảng 103 nghìn (khoảng 34 nghìn mỗi lượt); hướng dẫn hệ thống 78%, lệnh khởi động 6%, gắn repo 4% (gắn 2 lần vì xin quyền ghi bị chặn) | trước: phiên 84%, tuần 43% (16:49); sau: chưa chụp | đạt: 12 → 3 lượt, usage quy đổi giảm khoảng 65%. Mỗi lượt đắt hơn (34 so với 25 nghìn) vì lệnh in nhiều chữ một lần |
 | 2. Dừng khoảng 10 phút | 1 | dừng 11 phút (14:51–15:02): 3 lượt quanh lần dừng, ghi cache chỉ tăng 3,7 nghìn; lịch sử khoảng 180 nghìn token vẫn đọc từ cache | 71% → 72% qua khoảng 5 lượt | không đắt thêm |
 | 2. Dừng hơn 65 phút | 1 | dừng 68 phút (15:07–16:15): 3 lượt quanh lần dừng, ghi cache chỉ tăng 3,7 nghìn; lịch sử khoảng 195 nghìn token vẫn đọc từ cache | 72% → 73% qua 3 lượt | không đắt thêm; cache sống ít nhất 68 phút ở phiên này |
 
@@ -66,7 +67,7 @@ Xong khi: bảng trong file này có số của cả 4 thí nghiệm, mỗi cái
 
 ### 2. Khởi động rẻ
 Xong khi: thí nghiệm 1 lặp lại cho thấy khởi động còn tối đa 4 lượt.
-- [ ] lệnh mới `start-session.mjs` (chưa có, sẽ để trong `templates/`) và test, rồi làm lại thí nghiệm 1 với lệnh này; sửa đoạn project instructions (tăng số chuẩn setup) để đi thẳng tới clone và lệnh này. Đã có lệnh, test và chuẩn setup v3 (nhánh `feat/start-session`); còn đo lại sau khi thien dán v3.
+- [x] lệnh mới `start-session.mjs` (chưa có, sẽ để trong `templates/`) và test, rồi làm lại thí nghiệm 1 với lệnh này; sửa đoạn project instructions (tăng số chuẩn setup) để đi thẳng tới clone và lệnh này. Đã có lệnh, test và chuẩn setup v3 (nhánh `feat/start-session`); Đo lại 2026-11-15 16:49: 3 lượt (bảng "Kết quả đo").
 
 ### 3. Bỏ Codex khỏi luồng học
 Xong khi: không file nào trong luồng học còn trỏ tới learning/codex.md; CI xanh.

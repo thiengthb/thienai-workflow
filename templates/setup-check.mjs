@@ -79,6 +79,23 @@ export function checkSync(standard, filters) {
 }
 
 /** Problems with SETUP.md itself (CI keeps the two version numbers in step). */
+/**
+ * The --sync value as filters [{ path, mode }]. Takes "/docs/:include,/x/:exclude", or the JSON project_info prints
+ * (the whole sync source, its "filters" object, or the inner {"/path": "include"} map), pasted as is.
+ * Lỗi đã gặp 2026-11-15: JSON dán nguyên vào --sync bị đọc thành một đường dẫn, nên báo nhầm "knowledge chưa đồng bộ".
+ */
+export function parseSyncArg(arg) {
+  const text = String(arg).trim();
+  if (text.startsWith('{') || text.startsWith('[')) {
+    let o = JSON.parse(text);
+    if (Array.isArray(o)) o = o.find(x => x && x.config) || o[0] || {};
+    if (o.config) o = o.config;
+    while (o && typeof o.filters === 'object' && o.filters !== null) o = o.filters;
+    return Object.entries(o || {}).map(([path, mode]) => ({ path, mode: String(mode) }));
+  }
+  return text.split(',').map(x => x.trim()).filter(Boolean).map(x => { const i = x.lastIndexOf(':'); return { path: i < 0 ? x : x.slice(0, i), mode: i < 0 ? 'include' : x.slice(i + 1) }; });
+}
+
 export function checkStandard(md) {
   const s = parseSetup(md);
   const out = [];
@@ -193,7 +210,7 @@ function main(argv) {
   // Only report what was actually seen: unseen instructions are "not checked", never "missing".
   const fixes = unseen ? r.fixes.filter(f => !/^Project (này chưa có|instructions)/.test(f)) : r.fixes;
   const notes = [...(unseen ? ['Phiên này không thấy project instructions nên chưa kiểm phần đó (cả tên nick).'] : []), ...r.notes];
-  if (syncArg !== undefined) notes.push(...checkSync(standard, syncArg.split(',').map(x => x.trim()).filter(Boolean).map(x => { const i = x.lastIndexOf(':'); return { path: i < 0 ? x : x.slice(0, i), mode: i < 0 ? 'include' : x.slice(i + 1) }; })));
+  if (syncArg !== undefined) notes.push(...checkSync(standard, parseSyncArg(syncArg)));
   else notes.push('Không có --sync nên chưa kiểm bộ lọc đồng bộ knowledge (xem bằng project_info).');
   for (const n of notes) console.log('nhắc: ' + n);
   if (!fixes.length) { console.log(`ổn: project "${project}" đúng chuẩn setup v${standard.version}${unseen ? ' ở những phần đã kiểm (chưa kiểm instructions)' : ''}`); return 0; }
