@@ -36,7 +36,7 @@ Rút ra (còn phải kiểm bằng thí nghiệm):
 
 ## Hướng đề xuất (giả thuyết, đổi luật chỉ sau khi đo)
 - **Một chat cho một giai đoạn làm liền mạch**, không phải cho một việc nhỏ. Giữ chat khi đang làm liên tục và bước sau cần những gì đã có trong chat. Đổi chat khi sắp dừng lâu (đi học trên trang, đi ngủ, sang ngày khác), khi bước sau gần như không cần lịch sử, hay khi chat đã rất dài (Claude bắt đầu tự tóm tắt).
-- **Khởi động trong 2–3 lượt thay vì 17:** một lệnh `templates/start-session.mjs` làm trong một lần gọi: kiểm setup, đọc sổ, chọn và nhận việc mới nhất, in STATUS, PR đang mở. Project instructions bỏ bước đọc file qua Project (luôn lỗi), đi thẳng tới clone. Đây là thứ làm cho việc đổi chat đáng làm.
+- **Khởi động trong 2–3 lượt thay vì 17:** một lệnh lệnh mới `start-session.mjs` (chưa có, sẽ để trong `templates/`) làm trong một lần gọi: kiểm setup, đọc sổ, chọn và nhận việc mới nhất, in STATUS, PR đang mở. Project instructions bỏ bước đọc file qua Project (luôn lỗi), đi thẳng tới clone. Đây là thứ làm cho việc đổi chat đáng làm.
 - **Ít lượt hơn trong lúc làm:** gộp lệnh vào một lần gọi khi chúng không phụ thuộc nhau, dùng script thay cho nhiều lần đọc file.
 - **Tắt connector không dùng** khi học hay khi sửa repo (Figma, sakubun, Chrome…), nếu thí nghiệm 3 cho thấy phần nền giảm.
 - **Bỏ Codex khỏi luồng học.** Làm cho gọn, không phải để tiết kiệm: Claude vốn không đọc `learning/codex.md`.
@@ -57,7 +57,7 @@ Xong khi: bảng trong file này có số của cả 4 thí nghiệm, mỗi cái
 
 ### 2. Khởi động rẻ
 Xong khi: thí nghiệm 1 lặp lại cho thấy khởi động còn tối đa 4 lượt.
-- [ ] `templates/start-session.mjs` và test; sửa đoạn project instructions (tăng số chuẩn setup) để đi thẳng tới clone và lệnh này
+- [ ] lệnh mới `start-session.mjs` (chưa có, sẽ để trong `templates/`) và test; sửa đoạn project instructions (tăng số chuẩn setup) để đi thẳng tới clone và lệnh này
 
 ### 3. Bỏ Codex khỏi luồng học
 Xong khi: không file nào trong luồng học còn trỏ tới `learning/codex.md`; CI xanh.
