@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
-Repo: thiengthb/thienai-workflow · Nhánh: feat/start-session, feat/drop-codex-learning · PR: chờ thien mở
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXa9oobQMtaPoFn5rm · Cập nhật: 2026-11-15T09:26Z
+Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không (thien nhờ merge thẳng vào main 2026-11-15)
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXa9oobQMtaPoFn5rm · Cập nhật: 2026-11-15T09:46Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -20,11 +20,11 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 - Checkpoint 3: nhánh `feat/drop-codex-learning` commit 4bb6fd1, dòng usage-log của chat này ở commit sau đó, xếp chồng trên `feat/start-session`. Mọi test CI qua.
 
 ## Bước tiếp theo
-1. Khi thien đã mở hai PR: ghi số PR vào sổ. Sau khi merge: thien dán project instructions v3 ở 3 nick (`profile/SETUP.md`), rồi ở một chat mới đo lại thí nghiệm 1 với `start-session.mjs` (mục tiêu tối đa 4 lượt), nhớ chụp Settings trước khi mở chat.
+1. Checkpoint 2 và 3 đã vào main (commit 51f4924 và commit sửa STATUS sau đó). Ở chat mới sau khi thien dán instructions v3: chạy khởi động theo v3, rồi đo lại thí nghiệm 1 bằng `explain-usage` ngay khi nhận việc xong (mục tiêu tối đa 4 lượt), so với 12 lượt; ghi vào bảng "Kết quả đo" của kế hoạch (PR) và tick checkpoint 2 nếu đạt.
 2. Lần 2 của thí nghiệm 2 (dừng 10 phút, hơn 65 phút) khi tiện; thí nghiệm 3 (connector), 4 (sau buổi học).
 
 ## Đang chờ thien
-- Mở PR checkpoint 2 (base main) và PR checkpoint 3 (base `feat/start-session`) bằng hai link đã gửi trong chat; merge PR 2 trước.
+- Dán project instructions v3 (`profile/SETUP.md`) ở 3 nick, chụp Settings > Usage rồi mở chat mới nói "tiếp tục".
 
 ## Lưu ý
 - Làm ở chat mới (luật `profile/CHATS.md`), không gộp với buổi học BA 3.
