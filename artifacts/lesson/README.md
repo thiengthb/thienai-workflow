@@ -48,7 +48,7 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 | `lesson.css`, `lesson.js` | Khung: bước, câu hỏi, góp ý, kết thúc |
 | `make-lesson.mjs` | Chép mẫu ra trang mới; dựng bản đầy đủ (gắn `../kit/kit.css`, `../kit/kit.js`, khung, phần tự lưu, chỗ còn vướng) ra `build/`, giữ nguồn gọn, kiểm trang, ghi `publish.json` |
 | `learning-week.mjs`, `learning-week.html` | Bảng học tuần (xem dưới) |
-| `after-lesson.mjs` | Sau buổi: soạn nháp nhật ký, chỗ còn vướng, thẻ, dòng "Trạng thái" từ bản lưu của trang; `--write` ghi chỗ còn vướng và dòng `learning/usage.md`; `--check` kiểm đã ghi đủ. Test: `.github/scripts/after-lesson.test.mjs` |
+| `after-lesson.mjs` | Sau buổi: soạn nháp nhật ký, chỗ còn vướng, thẻ, dòng "Trạng thái" từ bản lưu của trang; `--write` ghi chỗ còn vướng (câu ôn môn khác vào đúng môn đó), dòng nhật ký nháp, chuyển nhật ký cũ sang `learning/<môn>/log.md` (giữ 3 dòng) và dòng `learning/usage.md`; `--check` kiểm đã ghi đủ; `--trim-log` chỉ chuyển nhật ký cũ. Test: `.github/scripts/after-lesson.test.mjs` |
 
 ## Bảng học tuần
 

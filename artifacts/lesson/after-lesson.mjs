@@ -4,15 +4,20 @@
 //
 //   node artifacts/lesson/after-lesson.mjs <session.json> [--page <trang.html>] [--today YYYY-MM-DD] [--write]
 //       In nháp: số liệu, dòng nhật ký, chỗ còn vướng, thẻ mới, dòng "Trạng thái".
-//       --write: ghi luôn hai phần máy làm được: thêm dòng vào mục "Chỗ còn vướng" của learning/<môn>.md
-//       và một dòng vào learning/usage.md. Phần còn lại (nhật ký, thẻ, Trạng thái, roadmap) AI viết từ nháp.
+//       --write: ghi luôn phần máy làm được: thêm dòng vào mục "Chỗ còn vướng" của learning/<môn>.md (câu ôn sai
+//       của môn khác thì vào file của môn đó), thêm dòng nhật ký nháp (AI sửa phần <…>), chuyển nhật ký cũ sang
+//       learning/<môn>/log.md để file môn chỉ giữ 3 dòng, và một dòng vào learning/usage.md.
+//       Phần còn lại (thẻ, Trạng thái, roadmap) AI viết từ nháp.
 //   node artifacts/lesson/after-lesson.mjs --check <lesson-id>
-//       Kiểm đã ghi đủ chưa: dòng nhật ký, file bài, thẻ mới, Trạng thái, roadmap, dòng usage. Thiếu thì thoát mã 1.
+//       Kiểm đã ghi đủ chưa: dòng nhật ký, file bài, thẻ mới, Trạng thái, roadmap, dòng usage, file môn gọn. Thiếu thì thoát mã 1.
 //   node artifacts/lesson/after-lesson.mjs --check-all
-//       CI: mọi bài trong learning/<môn>/lessons/ đều có dòng nhật ký, có thẻ, có trong roadmap.
+//       CI: mọi bài trong learning/<môn>/lessons/ đều có dòng nhật ký, có thẻ, có trong roadmap; file môn nào cũng gọn
+//       (tối đa 3 dòng nhật ký, 6 dòng chỗ còn vướng, không còn chỗ <…> chưa viết).
+//   node artifacts/lesson/after-lesson.mjs --trim-log
+//       Chuyển nhật ký cũ của mọi môn sang learning/<môn>/log.md, giữ 3 dòng gần nhất.
 //
 // <session.json>: bản ArtifactData đọc được ở sessions/<id>-<thời điểm> (R của lesson.js), lưu ra file.
-import { readFileSync, writeFileSync, readdirSync, existsSync, realpathSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync, realpathSync, mkdirSync } from 'node:fs';
 import { join, dirname, resolve, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { addUsage, usageRows } from '../kit/usage.mjs';
@@ -23,9 +28,92 @@ const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 export { stuckPoints, STUCK };
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+// Đường dẫn in cho người đọc luôn dùng /, cả trên Windows (relative() ở đó trả về \).
+const rel = (root, p) => relative(root, p).replace(/\\/g, '/');
 const strip = (s) => String(s || '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
 const clip = (s, n = 200) => (s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s);
 const addDays = (d, n) => new Date(Date.parse(d + 'T00:00:00Z') + n * 864e5).toISOString().slice(0, 10);
+
+// Hồ sơ nóng (docs/plans/2026-11-15-lean-learning.md): file môn là thứ AI đọc mỗi buổi, nên giữ kích thước cố định.
+// Nhật ký cũ chuyển sang learning/<môn>/log.md, chỉ đọc khi cần xem lại một buổi cũ.
+export const LOG = 'Nhật ký', KEEP_LOG = 3, MAX_STUCK = 6;
+/** Chỗ AI chưa viết trong dòng nhật ký nháp. */
+export const PLACEHOLDER = /<ý chính>|<tự nói lại[^>]*>/;
+// Một dòng nhật ký bắt đầu bằng số buổi: "| 4 |", cả "| 4, phần 2 |" (buổi học tiếp trong ngày khác).
+const ROW = /^\| \d+(?:[^|\d][^|]*)? \|/;
+const rowN = (l) => +((l.match(/^\| (\d+)/) || [])[1] ?? NaN);
+const rowKey = (l) => (l.match(/^\|([^|]*)\|/) || [])[1]?.trim();
+
+/** Vị trí mục "## Nhật ký" trong các dòng của file: { start, end } (end là dòng "## " kế tiếp hay cuối file), hoặc null. */
+function logSection(lines) {
+  const start = lines.findIndex((l) => new RegExp(`^## ${LOG}\\s*$`).test(l));
+  if (start < 0) return null;
+  let end = lines.findIndex((l, i) => i > start && /^## /.test(l));
+  return { start, end: end < 0 ? lines.length : end };
+}
+
+/** Dòng nhật ký trong mục "## Nhật ký": [{ n, line }]. */
+export function logRows(md) {
+  const lines = md.split('\n'), sec = logSection(lines);
+  return sec ? lines.slice(sec.start + 1, sec.end).filter((l) => ROW.test(l)).map((line) => ({ n: rowN(line), key: rowKey(line), line })) : [];
+}
+
+/** Thêm một dòng nhật ký vào cuối bảng (tạo mục trước "## Chỗ còn vướng" hay "## Buổi tiếp theo" nếu chưa có). Đã có buổi đó thì bỏ. */
+export function addLogRow(md, row) {
+  if (logRows(md).some((r) => r.key === rowKey(row))) return md;
+  const lines = md.split('\n');
+  let sec = logSection(lines);
+  if (!sec) {
+    let at = lines.findIndex((l) => new RegExp(`^## (${STUCK}|Buổi tiếp theo)`).test(l));
+    if (at < 0) { while (lines.length && lines[lines.length - 1] === '') lines.pop(); lines.push(''); at = lines.length; }
+    lines.splice(at, 0, `## ${LOG}`, '| Buổi | Ngày | Ý chính | Kết quả |', '|---|---|---|---|', '');
+    sec = logSection(lines);
+  }
+  let last = -1;
+  for (let i = sec.start + 1; i < sec.end; i++) if (/^\|/.test(lines[i])) last = i;
+  if (last < 0) { lines.splice(sec.start + 1, 0, '| Buổi | Ngày | Ý chính | Kết quả |', '|---|---|---|---|'); last = sec.start + 2; }
+  lines.splice(last + 1, 0, row);
+  return lines.join('\n');
+}
+
+/** Link tương đối từ learning/ (file môn) đổi thành tương đối từ learning/<môn>/ (file log). */
+const rebase = (line) => line.replace(/\]\((?![a-z][a-z0-9+.-]*:|#|\/)([^)\s]+)\)/gi, '](../$1)');
+
+/**
+ * Giữ `keep` dòng nhật ký mới nhất (số buổi lớn nhất) trong file môn, chuyển các dòng cũ hơn sang log.
+ * dir: thư mục môn (frontend), name: tên môn (Frontend). Trả về { md, log, moved }.
+ */
+export function trimLog(md, log, { dir, name, keep = KEEP_LOG } = {}) {
+  const rows = logRows(md);
+  if (rows.length <= keep) return { md, log, moved: 0 };
+  // Mới nhất là số buổi lớn nhất; cùng số buổi ("5", "5, phần 2") thì dòng nằm sau trong bảng là mới hơn.
+  const newest = new Set(rows.map((r, i) => ({ r, i })).sort((a, b) => b.r.n - a.r.n || b.i - a.i).slice(0, keep).map((x) => x.r.line));
+  const old = rows.filter((r) => !newest.has(r.line));
+  const lines = md.split('\n'), sec = logSection(lines);
+  const drop = new Set(old.map((r) => r.line));
+  const head = lines.slice(sec.start + 1, sec.end).filter((l) => /^\|/.test(l) && !ROW.test(l)).slice(0, 2);
+  let body = lines.slice(sec.start + 1, sec.end).filter((l) => !drop.has(l));
+  const pointer = `Nhật ký cũ hơn ở [${dir}/log.md](${dir}/log.md).`;
+  if (!body.some((l) => l.includes(`(${dir}/log.md)`))) body = [pointer, '', ...body.filter((l, i) => !(i === 0 && l === ''))];
+  const out = [...lines.slice(0, sec.start + 1), ...body, ...lines.slice(sec.end)].join('\n');
+
+  let L = lf(log || '');
+  if (!logRows(L).length && !logSection(L.split('\n'))) {
+    L = `# Nhật ký cũ: ${name || dir}\n\nCác buổi cũ, chuyển từ mục "${LOG}" của [${dir}.md](../${dir}.md) khi ở đó quá ${keep} dòng (\`artifacts/lesson/after-lesson.mjs\`). AI không đọc file này mỗi buổi; mở khi cần xem lại một buổi cũ.\n\n## ${LOG}\n${(head.length === 2 ? head : ['| Buổi | Ngày | Ý chính | Kết quả |', '|---|---|---|---|']).join('\n')}\n`;
+  }
+  for (const r of old) L = addLogRow(L, rebase(r.line));
+  return { md: out, log: L.replace(/\n*$/, '\n'), moved: old.length };
+}
+
+/** Kiểm file môn gọn: tối đa KEEP_LOG dòng nhật ký, MAX_STUCK dòng chỗ còn vướng, không còn chỗ <…> chưa viết. */
+export function subjectChecks(md, file) {
+  const rows = logRows(md), stuck = stuckPoints(md, Infinity), todo = rows.filter((r) => PLACEHOLDER.test(r.line)).map((r) => r.n);
+  return [
+    { ok: rows.length <= KEEP_LOG, what: `tối đa ${KEEP_LOG} dòng nhật ký trong learning/${file} (đang có ${rows.length}; chạy after-lesson.mjs --trim-log)` },
+    { ok: stuck.length <= MAX_STUCK, what: `tối đa ${MAX_STUCK} dòng "${STUCK}" trong learning/${file} (đang có ${stuck.length}; gộp hay xóa dòng thien đã làm đúng)` },
+    { ok: !todo.length, what: `dòng nhật ký trong learning/${file} đã viết xong, không còn chỗ <…>${todo.length ? ` (buổi ${todo.join(', ')})` : ''}` },
+  ];
+}
 
 /** Môn đang học, từ bảng "Môn đang học" của learning/README.md: { dir: { name, file, prefix } }. */
 export function subjects(readme, cards = '') {
@@ -72,7 +160,7 @@ export function addStuck(md, lines) {
 }
 
 /** Số liệu và nháp mọi thứ cần ghi sau một buổi. */
-export function draft({ R, html = '', subject, lessonFile = '', cards = '', today }) {
+export function draft({ R, html = '', subject, lessonFile = '', cards = '', today, all = {} }) {
   const lid = lessonOf(R.lesson) || { n: '?' };
   const date = today || String(R.end || R.start || '').slice(0, 10) || new Date().toISOString().slice(0, 10);
   const Q = pageQuestions(html);
@@ -87,12 +175,22 @@ export function draft({ R, html = '', subject, lessonFile = '', cards = '', toda
   const fbText = Object.entries(fb).filter(([k]) => k !== 'note').map(([k, v]) => `${k} "${v}"`).join(', ');
 
   // Chỗ còn vướng: câu chọn sai (cả câu ôn), câu đã hỏi Claude.
-  const stuck = [];
+  // Phần ôn trộn thẻ của mọi môn: câu ôn sai của thẻ môn khác (mã thẻ B2 khi đang học Frontend) là chỗ vướng của môn đó,
+  // nên vào others[thư mục môn đó], không vào file của môn đang học (lỗi gặp ở buổi Frontend 6, thẻ B2 của BA).
+  const stuck = [], others = {};
+  const ownerOf = (k) => {
+    const p = (String(k).match(/^([A-Z]+)\d+$/) || [])[1];
+    if (!p || p === subject?.prefix) return null;
+    return Object.entries(all).find(([, s]) => s.prefix === p)?.[0] || null;
+  };
   const wrong = [...list(R.review).map(([k, v]) => [k, v, 'ôn']), ...list(R.quiz).map(([k, v]) => [k, v, 'bài'])].filter(([, v]) => !v.ok);
   for (const [k, v, part] of wrong) {
     const q = Q[k] || { text: k, options: [] };
     const pick = q.options[v.pick], ans = q.options[q.answer];
-    stuck.push(clip(`${date}, buổi ${lid.n}: ${part === 'ôn' ? 'câu ôn' : 'câu'} “${clip(q.text, 140)}” chọn “${clip(pick || '?', 80)}”${ans ? `, đúng là “${clip(ans, 80)}”` : ''}`, 360));
+    const owner = part === 'ôn' ? ownerOf(k) : null;
+    const where = owner ? `ôn ở buổi ${subject?.name || '?'} ${lid.n}` : `buổi ${lid.n}`;
+    const line = clip(`${date}, ${where}: ${part === 'ôn' ? `câu ôn${owner ? ` ${k}` : ''}` : 'câu'} “${clip(q.text, 140)}” chọn “${clip(pick || '?', 80)}”${ans ? `, đúng là “${clip(ans, 80)}”` : ''}`, 360);
+    if (owner) (others[owner] ||= []).push(line); else stuck.push(line);
   }
   for (const x of extra.filter((e) => !e.ok)) stuck.push(clip(`${date}, buổi ${lid.n}: tình huống thêm “${clip(x.question, 140)}” chọn “${clip(x.options?.[x.pick] || '?', 80)}”, đúng là “${clip(x.options?.[x.answer] || '?', 80)}”`, 360));
   for (const a of asks) stuck.push(clip(`${date}, buổi ${lid.n}: hỏi Claude ở bước “${a.step}”: “${clip(a.q, 160)}”`, 300));
@@ -123,18 +221,20 @@ export function draft({ R, html = '', subject, lessonFile = '', cards = '', toda
     'Claude nhận xét, chấm': teachAi.length, 'Nói thay gõ': R.spoke || 0,
     'Xem Claude làm': hasStage ? demos.length : '-', 'Nghe': R.listened || 0, 'Tình huống thêm': isWar ? '-' : extra.length, 'Ghi chú': R.sawMineBeforeWriting ? 'xem bản mẫu trước khi viết' : '-',
   };
-  return { date, n: lid.n, facts, stuck, cardRows, logRow, usage, statusRow: `| ${subject?.name || '?'} ${lid.n} (<tên buổi>) | ${date} | ${subject?.name || '?'} | **<buổi kế tiếp theo vòng xoay>** |` };
+  return { date, n: lid.n, facts, stuck, others, cardRows, logRow, usage, statusRow: `| ${subject?.name || '?'} ${lid.n} (<tên buổi>) | ${date} | ${subject?.name || '?'} | **<buổi kế tiếp theo vòng xoay>** |` };
 }
 
 export function draftText(d, { subjectFile = '' } = {}) {
   return [
     `# Sau buổi ${d.n} (${d.date})`, '',
     '## Số liệu', ...d.facts.map((f) => '- ' + f), '',
-    `## Dòng nhật ký (nháp, sửa phần <…> rồi thêm vào ${subjectFile || 'learning/<môn>.md'})`, d.logRow, '',
+    `## Dòng nhật ký (nháp; --write đã thêm vào ${subjectFile || 'learning/<môn>.md'} và chuyển dòng cũ sang log.md, AI sửa phần <…>)`, d.logRow, '',
     `## ${STUCK} (thêm vào mục cùng tên của file môn; --write đã thêm sẵn)`, ...(d.stuck.length ? d.stuck.map((s) => '- ' + s) : ['- Không có câu sai hay câu hỏi nào. Xem bài tự nói lại để tìm chỗ còn thiếu.']), '',
+    ...Object.entries(d.others || {}).flatMap(([dir, ls]) => [`## ${STUCK} của môn khác: learning/${dir}.md (câu ôn sai; --write đã thêm sẵn)`, ...ls.map((s) => '- ' + s), '']),
     '## Thẻ mới (nháp, viết lại thành câu tự trả lời được, 2–3 thẻ, thêm vào learning/cards.md)', ...d.cardRows, '',
     '## Dòng "Trạng thái" (learning/README.md)', d.statusRow, '',
-    '## Còn phải làm', '- Lưu bài vào learning/<môn>/lessons/, tick chặng và thêm link trong learning/roadmap.md, viết mục "Buổi tiếp theo".',
+    '## Còn phải làm', '- Viết phần <…> của dòng nhật ký, gọn mục "Chỗ còn vướng" (tối đa 6 dòng).',
+    '- Lưu bài vào learning/<môn>/lessons/, tick chặng và thêm link trong learning/roadmap.md, viết mục "Buổi tiếp theo".',
     `- Kiểm: node artifacts/lesson/after-lesson.mjs --check <lesson-id>`, '',
   ].join('\n');
 }
@@ -144,14 +244,15 @@ export function checkAfter(root, dir, n, { strict = true } = {}) {
   const read = (p) => (existsSync(join(root, p)) ? lf(readFileSync(join(root, p), 'utf8')) : '');
   const readme = read('learning/README.md'), cards = read('learning/cards.md'), subj = subjects(readme, cards)[dir];
   if (!subj) return [{ ok: false, what: `môn "${dir}" không có trong bảng "Môn đang học" của learning/README.md` }];
-  const md = read('learning/' + subj.file);
+  const md = read('learning/' + subj.file), old = read(`learning/${dir}/log.md`);
+  const row = [...logRows(md), ...logRows(old)].find((x) => x.n === n);
   const nn = String(n).padStart(2, '0');
   const lessonDir = join(root, 'learning', dir, 'lessons');
   const lesson = existsSync(lessonDir) ? readdirSync(lessonDir).find((f) => f.startsWith(nn + '-') && f.endsWith('.md')) : null;
   const linked = lesson ? [...cards.matchAll(new RegExp(`\\(${dir}/lessons/${lesson.replace(/\./g, '\\.')}\\)`, 'g'))].length : 0;
   const road = (read('learning/roadmap.md').match(new RegExp(`^## ${subj.name}\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'm')) || [])[1] || '';
   const r = [
-    { ok: new RegExp(`^\\| ${n} \\|`, 'm').test(md), what: `dòng nhật ký buổi ${n} trong learning/${subj.file}` },
+    { ok: !!row && !PLACEHOLDER.test(row.line), what: `dòng nhật ký buổi ${n} trong learning/${subj.file} (hay learning/${dir}/log.md), đã viết xong phần <…>` },
     { ok: !!lesson, what: `file bài learning/${dir}/lessons/${nn}-<tên>.md` },
     { ok: linked >= (strict ? 2 : 1), what: `${strict ? 'ít nhất 2 thẻ' : 'thẻ'} trỏ tới bài này trong learning/cards.md (đang có ${linked})` },
     { ok: new RegExp(`buổi ${n}(?!\\d)`, 'i').test(road), what: `buổi ${n} trong phần ${subj.name} của learning/roadmap.md` },
@@ -159,6 +260,7 @@ export function checkAfter(root, dir, n, { strict = true } = {}) {
   if (strict) {
     r.push({ ok: new RegExp(`\\| ${subj.name} ${n}(?!\\d)`).test(readme), what: `bảng "Trạng thái" của learning/README.md ghi ${subj.name} ${n}` });
     r.push({ ok: usageRows(read('learning/usage.md')).some((x) => lessonOf(x['Trang'])?.dir === dir && lessonOf(x['Trang'])?.n === n), what: 'dòng của buổi này trong learning/usage.md (after-lesson --write)' });
+    r.push(...subjectChecks(md, subj.file));
   }
   return r;
 }
@@ -169,11 +271,31 @@ export function checkAll(root) {
   const subs = subjects(read('learning/README.md'), read('learning/cards.md'));
   const out = [];
   for (const dir of Object.keys(subs)) {
+    for (const c of subjectChecks(read('learning/' + subs[dir].file), subs[dir].file)) if (!c.ok) out.push(`${dir}: chưa đạt ${c.what}`);
     const ld = join(root, 'learning', dir, 'lessons');
     if (!existsSync(ld)) continue;
     for (const f of readdirSync(ld).filter((x) => /^\d+-.*\.md$/.test(x))) {
       for (const c of checkAfter(root, dir, parseInt(f, 10), { strict: false })) if (!c.ok) out.push(`${dir} buổi ${parseInt(f, 10)}: thiếu ${c.what}`);
     }
+  }
+  return out;
+}
+
+/** Chuyển nhật ký cũ của mọi môn (hay chỉ môn dirs) sang learning/<môn>/log.md. Trả về [{ dir, moved }]. */
+export function trimAll(root, dirs) {
+  const read = (p) => (existsSync(join(root, p)) ? lf(readFileSync(join(root, p), 'utf8')) : '');
+  const subs = subjects(read('learning/README.md'), read('learning/cards.md'));
+  const out = [];
+  for (const dir of dirs || Object.keys(subs)) {
+    const s = subs[dir]; if (!s || !existsSync(join(root, 'learning', s.file))) continue;
+    const t = trimLog(read('learning/' + s.file), read(`learning/${dir}/log.md`), { dir, name: s.name });
+    if (t.moved) {
+      // Ghi log trước: lỗi giữa chừng thì dòng cũ còn ở file môn, không mất.
+      mkdirSync(join(root, 'learning', dir), { recursive: true });
+      writeFileSync(join(root, 'learning', dir, 'log.md'), t.log);
+      writeFileSync(join(root, 'learning', s.file), t.md);
+    }
+    out.push({ dir, moved: t.moved });
   }
   return out;
 }
@@ -203,6 +325,10 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     console.log('after-lesson: mọi bài đã có nhật ký, thẻ và roadmap');
     process.exit(0);
   }
+  if (flag('trim-log')) {
+    for (const t of trimAll(root)) console.log(`${t.dir}: ${t.moved ? `chuyển ${t.moved} dòng sang learning/${t.dir}/log.md` : 'đã gọn'}`);
+    process.exit(0);
+  }
   const checkId = opt('check');
   if (checkId) {
     const l = lessonOf(checkId);
@@ -219,20 +345,26 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const l = lessonOf(R.lesson);
   if (!l) { console.error(`Bản lưu không có "lesson" dạng frontend-06 (đang là ${JSON.stringify(R.lesson)})`); process.exit(2); }
   const read = (p) => (existsSync(join(root, p)) ? lf(readFileSync(join(root, p), 'utf8')) : '');
-  const cards = read('learning/cards.md'), subject = subjects(read('learning/README.md'), cards)[l.dir];
+  const cards = read('learning/cards.md'), all = subjects(read('learning/README.md'), cards), subject = all[l.dir];
   if (!subject) { console.error(`Môn "${l.dir}" không có trong bảng "Môn đang học" của learning/README.md`); process.exit(2); }
   const pagePath = page || findPage(root, R.lesson, l.dir);
   const html = pagePath && existsSync(pagePath) ? lf(readFileSync(pagePath, 'utf8')) : '';
   const ld = join(root, 'learning', l.dir, 'lessons');
   const lessonName = existsSync(ld) ? readdirSync(ld).find((f) => f.startsWith(String(l.n).padStart(2, '0') + '-')) : null;
-  const d = draft({ R, html, subject, lessonFile: lessonName ? `${l.dir}/lessons/${lessonName}` : '', cards, today });
+  const d = draft({ R, html, subject, lessonFile: lessonName ? `${l.dir}/lessons/${lessonName}` : '', cards, today, all });
   if (!html) console.error(`Không thấy trang của ${R.lesson}: câu sai chỉ ghi được khóa câu. Truyền --page <trang.html> để có chữ câu hỏi.`);
   console.log(draftText(d, { subjectFile: 'learning/' + subject.file }));
   if (write) {
     const sp = join(root, 'learning', subject.file);
-    writeFileSync(sp, addStuck(lf(readFileSync(sp, 'utf8')), d.stuck));
+    writeFileSync(sp, addLogRow(addStuck(lf(readFileSync(sp, 'utf8')), d.stuck), d.logRow));
+    const [t] = trimAll(root, [l.dir]);
+    const notes = [];
+    for (const [dir, ls] of Object.entries(d.others)) {
+      const op = join(root, 'learning', all[dir].file);
+      if (existsSync(op)) { writeFileSync(op, addStuck(lf(readFileSync(op, 'utf8')), ls)); notes.push(`${ls.length} dòng vào "${STUCK}" của ${rel(root, op)}`); }
+    }
     const up = join(root, 'learning/usage.md');
     writeFileSync(up, addUsage(lf(readFileSync(up, 'utf8')), d.usage));
-    console.log(`Đã ghi: ${d.stuck.length} dòng vào "${STUCK}" của ${relative(root, sp)}, một dòng vào ${relative(root, up)}.`);
+    console.log(`Đã ghi: ${d.stuck.length} dòng vào "${STUCK}" của ${rel(root, sp)}, ${notes.length ? notes.join(', ') + ', ' : ''}dòng nhật ký nháp buổi ${d.n}${t?.moved ? ` (chuyển ${t.moved} dòng cũ sang learning/${l.dir}/log.md)` : ''}, một dòng vào ${rel(root, up)}.`);
   }
 }
