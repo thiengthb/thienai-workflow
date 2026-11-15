@@ -3,8 +3,10 @@
 //
 //   node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html [lesson-id] [--out <thư-mục>] [--no-check]
 //
-// Trang chưa có: chép mẫu ra rồi dừng. Trang đã có: gắn khung, chạy learning/teaching/check-page.cjs,
-// qua thì ghi <out>/publish.json (mặc định thư mục tạm lesson-<id>) để đăng bằng một lần gọi Artifact.
+// Trang chưa có: chép mẫu ra rồi dừng. Trang đã có: dựng bản đầy đủ (gắn khung) ra <out>/lesson-NN.html, chạy
+// learning/teaching/check-page.cjs trên bản đó, qua thì ghi <out>/publish.json (mặc định thư mục tạm lesson-<id>)
+// để đăng bằng một lần gọi Artifact. File trong repo là nguồn: thẻ kit để rỗng, không chép kit và dữ liệu trận vào
+// (kế hoạch docs/plans/2026-11-15-lean-learning.md). Nguồn còn kit đã điền (bài trước 2026-11-15) thì script tự làm rỗng.
 // Trang phải có các thẻ rỗng (hoặc bản cũ) với id: kit-css, lesson-css (style), kit-js, lesson-js, lesson-kit (script).
 // lesson-id: tham số, hoặc "id" trong <script id="lesson">, hoặc đoán từ đường dẫn (frontend-06).
 import { readFileSync, writeFileSync, realpathSync, existsSync, mkdirSync, copyFileSync } from 'node:fs';
@@ -95,6 +97,40 @@ export function fill(html, id, file = '', { stuck } = {}) {
   return html;
 }
 
+/** Thẻ kit và dữ liệu trận mà fill() điền vào, có trong trang này. */
+function filledParts(html) {
+  return [...Object.entries(PARTS), ...Object.entries(OPTIONAL)].map(([part, [tag]]) => ({ part, tag, re: new RegExp(`(<${tag} id="${part}">)([\\s\\S]*?)(</${tag}>)`) }))
+    .filter((x) => x.re.test(html));
+}
+const NEW_FRAME = /<script id="kit-js">/;
+const BATTLE = /(<script type="application\/json" id="battle" data-src="[^"]+">)([\s\S]*?)(<\/script>)/;
+
+/** Nguồn của trang: bỏ mọi thứ fill() sinh ra (kit, dữ liệu trận, chỗ còn vướng, meta lesson-id), giữ nội dung bài. */
+export function strip(html) {
+  html = lf(html);
+  if (!NEW_FRAME.test(html)) return html; // trang khung cũ (trước 2026-11-14): giữ nguyên, đóng băng
+  for (const { re } of filledParts(html)) html = html.replace(re, (m, a, b, c) => a + c);
+  html = html.replace(BATTLE, (m, a, b, c) => a + c);
+  const conf = html.match(/<script type="application\/json" id="lesson">([\s\S]*?)<\/script>/);
+  if (conf) {
+    try {
+      const obj = JSON.parse(conf[1]);
+      if ('stuck' in obj) { delete obj.stuck; html = html.replace(conf[0], () => `<script type="application/json" id="lesson">${JSON.stringify(obj).replace(/</g, '\\u003c')}</script>`); }
+    } catch (e) { /* cấu hình hỏng: để fill() báo lỗi */ }
+  }
+  return html.replace(/<meta name="lesson-id"[^>]*>\n?/, '');
+}
+
+/** Tên các phần đã điền sẵn trong nguồn (CI chặn: nguồn trong repo không được mang kit). Trang khung cũ không có thẻ kit thì trả []. */
+export function filledIn(html) {
+  html = lf(html);
+  if (!NEW_FRAME.test(html)) return [];
+  const out = filledParts(html).filter(({ re }) => html.match(re)[2].trim()).map(({ part }) => part);
+  const b = html.match(BATTLE);
+  if (b && b[2].trim()) out.push('battle');
+  return out;
+}
+
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   const args = process.argv.slice(2);
   const flag = (n) => { const i = args.indexOf('--' + n); return i >= 0 ? args.splice(i, 2)[1] : undefined; };
@@ -128,14 +164,19 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   let lid = id || conf.id;
   if (!lid || /^__/.test(lid)) lid = guessId(file);
   const sf = subjectFile(file), stuck = sf && existsSync(sf) ? stuckPoints(lf(readFileSync(sf, 'utf8'))) : [];
-  writeFileSync(file, fill(html, lid, file, { stuck }));
-  console.log(`Đã gắn bộ khung vào ${file} (id ${lid})${stuck.length ? `, kèm ${stuck.length} chỗ còn vướng từ ${sf}` : ''}.`);
   const out = resolve(outArg || join(tmpdir(), `lesson-${lid}`));
+  mkdirSync(out, { recursive: true });
+  // Bản đầy đủ ra thư mục out; file trong repo giữ là nguồn (không kit, không dữ liệu trận chép lần hai).
+  const built = join(out, basename(file));
+  writeFileSync(built, fill(html, lid, file, { stuck }));
+  const src = strip(html);
+  if (src !== html) { writeFileSync(file, src); console.log(`Đã làm gọn nguồn ${file}: bỏ kit đã điền, ${Math.round(html.length / 1024)} KB còn ${Math.round(src.length / 1024)} KB.`); }
+  console.log(`Đã dựng ${built} (id ${lid})${stuck.length ? `, kèm ${stuck.length} chỗ còn vướng từ ${sf}` : ''}. Mở file này để xem, đừng mở nguồn.`);
   if (!noCheck) {
     // Kiểm luôn trên điện thoại và laptop (chữ giữ chỗ, lỗi JS, tràn ngang, vùng bấm, nút bấm không đổi gì).
-    const r = spawnSync(process.execPath, [join(here, '../../learning/teaching/check-page.cjs'), file, join(out, 'check')], { stdio: 'inherit' });
-    if (r.status !== 0) { console.error('Trang chưa qua bài kiểm, sửa rồi chạy lại. Chưa ghi publish.json.'); process.exit(1); }
+    const r = spawnSync(process.execPath, [join(here, '../../learning/teaching/check-page.cjs'), built, join(out, 'check')], { stdio: 'inherit' });
+    if (r.status !== 0) { console.error('Trang chưa qua bài kiểm, sửa nguồn rồi chạy lại. Chưa ghi publish.json.'); process.exit(1); }
   }
   const title = conf.title && !/^__/.test(conf.title) ? conf.title : lid;
-  for (const l of writePublish(out, { file_path: resolve(file), capabilities: CAPABILITIES, icon: 'book', description: title })) console.log(l);
+  for (const l of writePublish(out, { file_path: built, capabilities: CAPABILITIES, icon: 'book', description: title })) console.log(l);
 }

@@ -22,8 +22,9 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 
 1. `node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html`: trang chưa có thì script chép `template.html` ra đó rồi dừng. Trước đó script tải nhánh mới nhất và dừng nếu có nhánh chưa merge (PR của phiên khác) sửa `learning/<môn>.md` hay `learning/<môn>/`: đọc nhánh đó, gộp vào nhánh của mình nếu cần, rồi chạy lại với `--ack-open`.
 2. Thay mọi chỗ `__…__` (id dạng `frontend-06`, tên môn, tên buổi, tiêu đề) và nội dung mẫu. Phần riêng của bài (sơ đồ, mô phỏng) viết trong `<style>` và `<script>` cuối trang; ghi kết quả vào `R`, gọi `Lesson.done('<khóa>')` khi một việc xong. Chỉ đổi `R` và gọi `Lesson.done` trong lúc bấm nút hay gõ chữ: phần tự lưu chỉ ghi lại lần bấm và chữ đã gõ, tải lại thì bấm lại đúng thứ tự, nên thứ gì sinh ra từ đó đều tự về. Kéo thả hay hẹn giờ thì không về được, cần thì đổi thành nút.
-3. Chạy lại đúng lệnh ở bước 1. Script chép lõi chung và khung vào trang (chạy lại được, thay bản cũ), tự chạy `learning/teaching/check-page.cjs` trên điện thoại và laptop, qua thì ghi `publish.json` vào thư mục tạm `lesson-<id>` (hoặc `--out <thư-mục>`). Chưa qua thì sửa rồi chạy lại.
-4. Gọi Artifact với đúng tham số trong `publish.json` (trang, `capabilities` `{"db": {}, "comments": {}, "sample": {}, "dictation": {}, "tts": {}}`).
+3. Chạy lại đúng lệnh ở bước 1. Script dựng bản đầy đủ (lõi chung, khung, dữ liệu trận) ra thư mục tạm `lesson-<id>/lesson-NN.html` (hoặc `--out <thư-mục>`), tự chạy `learning/teaching/check-page.cjs` trên bản đó ở điện thoại và laptop, qua thì ghi `publish.json` cạnh nó. Chưa qua thì sửa nguồn rồi chạy lại.
+   File trong `learning/<môn>/pages/` là **nguồn**: chỉ có phần riêng của bài, các thẻ kit để rỗng. Đừng mở nguồn để xem bài, mở bản dựng. Nguồn còn kit đã điền (bài trước 2026-11-15) thì script tự làm gọn. CI chặn nguồn mang kit (`.github/scripts/check-lesson-sources.mjs`), và chỉ mở lại trong trình duyệt những trang bài có đổi trong PR: bài đã học là bài đóng băng, bản đăng là bản thật (`docs/plans/2026-11-15-lean-learning.md`).
+4. Gọi Artifact với đúng tham số trong `publish.json` (bản dựng, `capabilities` `{"db": {}, "comments": {}, "sample": {}, "dictation": {}, "tts": {}}`).
 5. Khi thien gửi: đọc comment (ArtifactComments) và `sessions/` (ArtifactData), lưu bản đó ra file JSON, rồi làm đúng mục "Sau buổi" trong `learning/README.md`: `node artifacts/lesson/after-lesson.mjs <file.json> --write` soạn nháp và ghi chỗ còn vướng, `--check <lesson-id>` kiểm đã ghi đủ.
 
 ## Quy ước trong trang
@@ -45,7 +46,7 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 |---|---|
 | `template.html` | Buổi mẫu đủ 8 màn, chép ra làm buổi mới |
 | `lesson.css`, `lesson.js` | Khung: bước, câu hỏi, góp ý, kết thúc |
-| `make-lesson.mjs` | Chép mẫu ra trang mới; chép `../kit/kit.css`, `../kit/kit.js`, khung và phần tự lưu vào trang, đưa chỗ còn vướng vào cấu hình, kiểm trang, ghi `publish.json` |
+| `make-lesson.mjs` | Chép mẫu ra trang mới; dựng bản đầy đủ (gắn `../kit/kit.css`, `../kit/kit.js`, khung, phần tự lưu, chỗ còn vướng) ra thư mục tạm, giữ nguồn gọn, kiểm trang, ghi `publish.json` |
 | `learning-week.mjs`, `learning-week.html` | Bảng học tuần (xem dưới) |
 | `after-lesson.mjs` | Sau buổi: soạn nháp nhật ký, chỗ còn vướng, thẻ, dòng "Trạng thái" từ bản lưu của trang; `--write` ghi chỗ còn vướng và dòng `learning/usage.md`; `--check` kiểm đã ghi đủ. Test: `.github/scripts/after-lesson.test.mjs` |
 
