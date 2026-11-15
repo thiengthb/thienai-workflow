@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZHoNMKXiYgZeiGW53 · Cập nhật: 2026-11-15T10:35Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZHoNMKXiYgZeiGW53 · Cập nhật: 2026-11-15T10:51Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -24,6 +24,7 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 - Nhánh `docs/measure-start-session` đã vào main (commit 7cfaa68, f60c04a); nhánh đã xoá trên origin. Kiểm 2026-11-15 17:25.
 - Chat 17:20: `--claim` có ngoặc bị báo nhầm là sổ sai mẫu. Đã sửa `start-session.mjs` và thêm test, ghi vào "Lỗi gặp" của kế hoạch: nhánh `fix/claim-format`, PR #84. Test node chạy trên máy đều qua. CodeRabbit góp 2 ý: sửa 1 (commit trên nhánh), giữ 1 (đã trả lời trên PR). Đã merge theo lời thien (squash cf82f16), nhánh tự xoá.
 - Thí nghiệm 2 lần 2, dừng khoảng 10 phút, mốc trước (17:3x, chat session_01WXAvBZ…): `explain-usage` 27 lượt, ghi cache 76.782, đọc lại 4.867.157, viết ra 17.361 (quy đổi khoảng 727 nghìn). Chưa có số Settings.
+- Thí nghiệm 2 lần 2, mốc trước sau reset phiên (17:51): Settings phiên 0%, tuần 44%. `explain-usage` 31 lượt, ghi cache 80.788, đọc lại 5.696.100, viết ra 20.707 (quy đổi khoảng 835 nghìn). Từ mốc 27 lượt tới đây (4 lượt, có hai lần dừng khoảng 6 và 12 phút) ghi cache chỉ tăng 4.006. thien bắt đầu dừng khoảng 10 phút sau tin này.
 
 ## Bước tiếp theo
 1. thien gửi số Settings > Usage (phiên, tuần), dừng hẳn khoảng 10 phút, rồi gửi tin ngắn kèm số Settings mới; chạy `explain-usage` lại, so phần ghi cache tăng, ghi vào bảng "Kết quả đo" của kế hoạch (qua PR).
