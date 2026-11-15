@@ -28,6 +28,8 @@ const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 export { stuckPoints, STUCK };
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+// Đường dẫn in cho người đọc luôn dùng /, cả trên Windows (relative() ở đó trả về \).
+const rel = (root, p) => relative(root, p).replace(/\\/g, '/');
 const strip = (s) => String(s || '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
 const clip = (s, n = 200) => (s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s);
 const addDays = (d, n) => new Date(Date.parse(d + 'T00:00:00Z') + n * 864e5).toISOString().slice(0, 10);
@@ -357,10 +359,10 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     const notes = [];
     for (const [dir, ls] of Object.entries(d.others)) {
       const op = join(root, 'learning', all[dir].file);
-      if (existsSync(op)) { writeFileSync(op, addStuck(lf(readFileSync(op, 'utf8')), ls)); notes.push(`${ls.length} dòng vào "${STUCK}" của ${relative(root, op)}`); }
+      if (existsSync(op)) { writeFileSync(op, addStuck(lf(readFileSync(op, 'utf8')), ls)); notes.push(`${ls.length} dòng vào "${STUCK}" của ${rel(root, op)}`); }
     }
     const up = join(root, 'learning/usage.md');
     writeFileSync(up, addUsage(lf(readFileSync(up, 'utf8')), d.usage));
-    console.log(`Đã ghi: ${d.stuck.length} dòng vào "${STUCK}" của ${relative(root, sp)}, ${notes.length ? notes.join(', ') + ', ' : ''}dòng nhật ký nháp buổi ${d.n}${t?.moved ? ` (chuyển ${t.moved} dòng cũ sang learning/${l.dir}/log.md)` : ''}, một dòng vào ${relative(root, up)}.`);
+    console.log(`Đã ghi: ${d.stuck.length} dòng vào "${STUCK}" của ${rel(root, sp)}, ${notes.length ? notes.join(', ') + ', ' : ''}dòng nhật ký nháp buổi ${d.n}${t?.moved ? ` (chuyển ${t.moved} dòng cũ sang learning/${l.dir}/log.md)` : ''}, một dòng vào ${rel(root, up)}.`);
   }
 }
