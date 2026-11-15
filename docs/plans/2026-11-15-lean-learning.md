@@ -5,7 +5,7 @@ Trạng thái: đang chạy · Duyệt: 2026-11-15 · Cập nhật: 2026-11-15 �
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 1 xong (PR #77, #78; thien mở lại hai bài sa bàn trên điện thoại, học được, 2026-11-15). Đợt 0 làm cùng buổi Frontend 6.
+- Đang ở: đợt 1 xong (PR #77, #78; thien mở lại hai bài sa bàn trên điện thoại, học được, 2026-11-15). Đợt 0 có số đo đầu (mục 0), còn thiếu một lần "sau buổi" ở chat riêng.
 - Còn thiếu: đo buổi Frontend 6 (đợt 0), rồi đợt 2.
 - thien cần làm: merge PR #78. PR #76 (chiến tranh 5) để tới khi học xong bài đó mới merge, như mọi bài khác. Buổi tới nhắn "học" như thường.
 - Khi học chiến tranh 5: AI rebase nhánh của PR #76 lên main, chạy `make-lesson.mjs` trên trang `lesson-05.html` của môn chiến tranh (nguồn tự gọn), thêm chữ "kit" vào tiêu đề PR #76 vì nó có sửa `sandtable.js` (câu 3: giữ nguyên, không tách).
@@ -98,8 +98,20 @@ Một mẹo thử ở đợt 0: hội thoại dài thì tốn usage hơn, nên p
 
 ### 0. Đo một buổi thật (Frontend 6)
 Xong khi: thien thấy một bảng trong file này ghi số token của buổi Frontend 6 chia theo đọc luật, đọc mẫu, viết trang, sửa lỗi, đăng, sau buổi; kèm mức Settings > Usage trước và sau.
-- [ ] Dựng Frontend 6 như hiện nay, cuối phiên chạy `explain-usage`, ghi số
-- [ ] Làm phần "sau buổi" ở chat mới, ghi số để so
+- [x] Dựng Frontend 6 như hiện nay, cuối phiên chạy `explain-usage`, ghi số (2026-11-15, bảng dưới; số lẫn cả việc khác, xem ghi chú)
+- [ ] Làm phần "sau buổi" ở chat mới, ghi số để so (lần này chưa được: thien bấm "Xong buổi học" trong chính chat đã dựng bài, nên phần sau buổi chạy luôn ở đó; thử lại ở buổi sau)
+
+Số đo đầu tiên (`explain-usage`, 2026-11-15, nick tnt697). Một chat làm cả ba việc: đề xuất kế hoạch này và PR #77, #78; mở lại bài chiến tranh 3, 4; dựng và ghi buổi Frontend 6. Nên chưa tách được riêng một buổi học.
+
+| Nhóm | Phần usage |
+|---|---|
+| Hướng dẫn và ngữ cảnh đọc lại mỗi lượt | 55% |
+| Lệnh và file (Bash, Write) | 30% |
+| Tìm trên web | 8% |
+| Lời của thien và Claude | 4% |
+| GitHub, Artifact, Docs, memory | 3% |
+
+157 lượt gọi; 44,8 triệu token đọc lại từ cache, 0,87 triệu ghi cache, 0,12 triệu token viết ra. Điều rút ra: hơn một nửa là phần đọc lại mỗi lượt, và phần đó lớn dần theo độ dài chat, nên chat càng dài thì mỗi lệnh sau càng đắt. Ở phiên này, tách mỗi việc lớn (kế hoạch, buổi học, sau buổi) ra một chat riêng có lợi hơn mọi tối ưu file đọc. Luồng "học" của repo cũng lên 79,9 KB sau buổi này (+1,2 KB ở `frontend.md`), đúng như mục "Vì sao càng học càng nặng" dự đoán.
 
 ### 1. Repo hết nặng thêm (chỉ máy, không đổi trải nghiệm) ✓ 2026-11-15
 Xong khi: PR thêm một bài mới chỉ thêm khoảng 20–35 KB; job `pages` không chạy lại bài cũ; thien mở lại 2 link bài cũ trên điện thoại vẫn học được.
