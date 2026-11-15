@@ -32,4 +32,5 @@ jobs:
           node artifacts/lesson/after-lesson.mjs --check-all || fail=1
           node templates/check-status.mjs docs/STATUS.md || fail=1
           node .github/scripts/check-links.mjs || fail=1
+          node .github/scripts/check-lesson-sources.mjs || fail=1
           exit $fail

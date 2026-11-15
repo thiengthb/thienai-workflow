@@ -50,6 +50,7 @@ AI ghi sau mỗi buổi (nháp từ `artifacts/lesson/after-lesson.mjs`), xóa d
 
 - 2026-11-12, buổi 2: nghe người dùng kể xong thì đưa giải pháp ra hỏi (bẫy gợi sẵn giải pháp ở chặng 2), chưa hỏi tiếp về chuyện đã xảy ra
 - 2026-11-12, buổi 2: tự nói lại chưa có hai ý “hỏi về một lần cụ thể” và “tránh dẫn dắt”
+- 2026-11-15, ôn ở buổi Frontend 6: thẻ B2 “"Thêm thông báo đẩy lúc 8 giờ tối" là nhu cầu hay giải pháp?” chọn “Nhu cầu”, đúng là “Giải pháp” (sai lần hai, sau 2026-11-13)
 
 ## Buổi tiếp theo
 - Đầu buổi BA 3 dành nhiều chỗ hơn để ôn BA 2, vì thien học buổi làm lại lúc đã mệt và tự nói "không theo được nữa": một vòng phỏng vấn ngắn chỉ để tập hỏi tiếp sau khi người dùng kể, không đưa giải pháp ra hỏi (thẻ B6), và để thien tự nói lại cách hỏi về một lần cụ thể. Nếu thien vẫn thấy chưa chắc thì cho thien chọn học lại BA 2 thay vì sang ý mới.

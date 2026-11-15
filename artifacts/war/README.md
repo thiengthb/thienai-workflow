@@ -19,8 +19,8 @@ Vì sao hợp cách học đã chọn (`learning/war.md`, mục "Cách dạy mô
    `node artifacts/war/fetch-terrain.mjs learning/war/battles/<trận>.json`
    Script tải ô độ cao miễn phí (AWS Terrain Tiles, không cần khóa), ghi lưới độ cao vào file, và kéo các điểm có `"snap"` về đúng đỉnh đồi (`high`) hay chỗ trũng (`low`, cho sông). Trận đã có file thì bỏ qua bước này.
 2. **Trang:** `node artifacts/lesson/make-lesson.mjs learning/war/pages/lesson-NN.html`. Trang trong `learning/war/pages/` chưa có thì script chép mẫu chiến tranh (`template.html`, có sẵn sa bàn và bài mẫu Điện Biên Phủ) ra rồi dừng.
-3. Thay mọi chỗ `__…__` và nội dung mẫu, trỏ `data-src` của `<script id="battle">` tới file trận. Chạy lại đúng lệnh ở bước 2: script chép kit, khung, sa bàn và dữ liệu trận vào trang, tự kiểm trên điện thoại và laptop, ghi `publish.json`.
-4. Gọi Artifact với đúng tham số trong `publish.json`. Khi thien gửi: làm như bước 5 trong `../lesson/README.md`; kết quả có thêm `R.choices`, `R.seen`, `R.viewed`, `R.notice`.
+3. Thay mọi chỗ `__…__` và nội dung mẫu, trỏ `data-src` của `<script id="battle">` tới file trận. Chạy lại đúng lệnh ở bước 2: script dựng bản đầy đủ (kit, khung, sa bàn, dữ liệu trận) ra `build/`, tự kiểm trên điện thoại và laptop, ghi `publish.json`. Nguồn trong repo không chép dữ liệu trận lần hai.
+4. Gọi Artifact với đúng tham số trong `publish.json`. Bài cần khả năng sa bàn chưa có (sửa `sandtable.js`, `war-lesson.js`) thì mở PR kit riêng có test trước, CI chặn PR vừa sửa bài vừa sửa kit. Khi thien gửi: làm như bước 5 trong `../lesson/README.md`; kết quả có thêm `R.choices`, `R.seen`, `R.viewed`, `R.notice`.
 
 ## Quy ước trong trang
 

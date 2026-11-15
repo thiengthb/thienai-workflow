@@ -2,7 +2,7 @@
 
 File này cho biết buổi tới học môn gì. Khi thien nhắn "học" (tài khoản nào, model nào cũng vậy), AI đọc file này trước, mở buổi cho môn kế tiếp trong vòng, rồi cập nhật bảng "Trạng thái" sau buổi.
 
-Học ở Codex hay công cụ khác Claude (ví dụ khi hết quota) thì vẫn theo file này, đọc thêm [codex.md](codex.md) cho phần khác. Trước khi mở buổi, ở công cụ nào cũng vậy, chạy `node templates/check-open-work.mjs learning/`: nhánh nào chưa merge mà có buổi học thì bảng "Trạng thái" dưới đây còn thiếu buổi đó, đọc nhánh đó trước. `make-lesson.mjs` tự kiểm việc này cho môn của trang và dừng nếu có nhánh chưa merge sửa bài của môn đó (sau lỗi 2026-11-13: dựng lại bài chiến tranh 4 trong khi PR #44 đã có).
+thien chỉ học bằng Claude (từ 2026-11-15, vì chỉ trang học artifact của Claude vừa ý), nên luồng học không còn phần cho Codex hay công cụ khác. Trước khi mở buổi, chạy `node templates/check-open-work.mjs learning/`: nhánh nào chưa merge mà có buổi học thì bảng "Trạng thái" dưới đây còn thiếu buổi đó, đọc nhánh đó trước. `make-lesson.mjs` tự kiểm việc này cho môn của trang và dừng nếu có nhánh chưa merge sửa bài của môn đó (sau lỗi 2026-11-13: dựng lại bài chiến tranh 4 trong khi PR #44 đã có).
 
 Kế hoạch đầy đủ và lý do nằm ở tài liệu "Kế hoạch học nhiều lĩnh vực song song" (https://claude.ai/artifact/QJwWL3z4pTjZerq5U3Fb9G), thien đồng ý ngày 2026-11-12.
 
@@ -42,11 +42,11 @@ Bảng học tuần (số buổi mỗi tuần, thẻ đến hạn, chỗ còn v�
 
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
-| Chiến tranh 4, phần 2 (hậu cần trên sa bàn 3D) | 2026-11-14 | Chiến tranh | **Frontend 6 (chọn màu cho app)**, rồi BA 3 (các bên liên quan), rồi Frontend 7, rồi Chiến tranh 5 (địa hình và thời tiết) |
+| Frontend 6 (chọn màu cho cả app) | 2026-11-15 | Frontend | **BA 3 (các bên liên quan)**, rồi Frontend 7, rồi Chiến tranh 5 (địa hình và thời tiết, trang đã dựng ở PR #76) |
 
 ## Khung một buổi, chung cho mọi môn
 
-1. **Ôn trộn (2 phút):** 3 thẻ đến hạn trong [cards.md](cards.md), môn nào cũng được. thien trả lời trước rồi mới lật. Các thẻ đến hạn còn lại ôn ở [trang ôn thẻ](https://claude.ai/artifact/L612hHx2vHUokcPBgH7RPu) lúc nào cũng được, không chờ buổi học: trước khi mở buổi, AI dựng lại trang đó từ `cards.md` và ghi kết quả ôn lần trước (xem [`artifacts/review/`](../artifacts/review/README.md)).
+1. **Ôn trộn (2 phút):** 3 thẻ đến hạn trong [cards.md](cards.md), môn nào cũng được; thiếu thẻ đến hạn thì thêm thẻ hạn sớm nhất của môn khác. thien trả lời trước rồi mới lật. Các thẻ đến hạn còn lại ôn ở [trang ôn thẻ](https://claude.ai/artifact/L612hHx2vHUokcPBgH7RPu) lúc nào cũng được, không chờ buổi học: trước khi mở buổi, AI dựng lại trang đó từ `cards.md` và ghi kết quả ôn lần trước (xem [`artifacts/review/`](../artifacts/review/README.md)).
 2. **Nhớ lại buổi trước của môn này (1 phút):** một hình, một câu.
 
 Hai phần ôn này chỉ dành cho lần học đầu: trong trang, bọc chúng bằng `data-part="review"`, nút đi tiếp bị khóa bởi chúng thì thêm `data-review-gate`. Học xong, lần mở sau trang tự ẩn phần ôn, chỉ còn nội dung và câu hỏi của chính bài đó (thien yêu cầu 2026-11-12). Xem "Bộ khung chung" trong [teaching/README.md](teaching/README.md).
@@ -59,11 +59,11 @@ Hai phần ôn này chỉ dành cho lần học đầu: trong trang, bọc chún
 Trang dựng từ mẫu `artifacts/lesson/`: bấm "Xong buổi học" là kết quả được lưu và gửi cho Claude.
 
 **Sau buổi**, theo thứ tự:
-1. Đọc kết quả trong db của trang (`sessions/<id>-<thời điểm>`), lưu ra file JSON, rồi chạy `node artifacts/lesson/after-lesson.mjs <file.json> --write`. Lệnh in nháp (số liệu, dòng nhật ký, chỗ còn vướng, thẻ mới, dòng "Trạng thái") và tự ghi hai thứ: các dòng mới vào mục "Chỗ còn vướng" của `learning/<môn>.md`, một dòng vào [usage.md](usage.md).
-2. Từ nháp, viết: nhật ký trong `learning/<môn>.md` (chỗ thien đổi cách nhìn, không ghi như bảng điểm), file bài trong `learning/<môn>/lessons/`, 2–3 thẻ trong `cards.md`, bảng "Trạng thái" ở trên, tick chặng trong [roadmap.md](roadmap.md) kèm link bài, mục "Buổi tiếp theo". Đọc lại mục "Chỗ còn vướng": gọn lại, xóa dòng thien đã làm đúng ở buổi này.
-3. `node artifacts/lesson/after-lesson.mjs --check <lesson-id>` phải ra toàn ✓, rồi mở PR để thien merge. CI chạy `--check-all` để bài nào cũng có nhật ký, thẻ và roadmap.
+1. Đọc kết quả trong db của trang (`sessions/<id>-<thời điểm>`), lưu ra file JSON, rồi chạy `node artifacts/lesson/after-lesson.mjs <file.json> --write`. Lệnh in nháp (số liệu, dòng nhật ký, chỗ còn vướng, thẻ mới, dòng "Trạng thái") và tự ghi: các dòng mới vào mục "Chỗ còn vướng" của `learning/<môn>.md` (câu ôn sai của thẻ môn khác thì vào file của môn đó), dòng nhật ký nháp, một dòng vào [usage.md](usage.md). File môn chỉ giữ 3 dòng nhật ký gần nhất: dòng cũ hơn lệnh tự chuyển sang `learning/<môn>/log.md`, file AI không đọc mỗi buổi.
+2. Từ nháp, viết: phần `<…>` của dòng nhật ký trong `learning/<môn>.md` (chỗ thien đổi cách nhìn, không ghi như bảng điểm), file bài trong `learning/<môn>/lessons/`, 2–3 thẻ trong `cards.md`, bảng "Trạng thái" ở trên, tick chặng trong [roadmap.md](roadmap.md) kèm link bài, mục "Buổi tiếp theo". Đọc lại mục "Chỗ còn vướng": gọn lại (tối đa 6 dòng), xóa dòng thien đã làm đúng ở buổi này.
+3. `node artifacts/lesson/after-lesson.mjs --check <lesson-id>` phải ra toàn ✓, rồi mở PR để thien merge. CI chạy `--check-all` để bài nào cũng có nhật ký, thẻ và roadmap, và file môn nào cũng gọn (tối đa 3 dòng nhật ký, 6 dòng chỗ còn vướng).
 
-Buổi học ngoài Claude thì ghi tên công cụ vào nhật ký, ví dụ "(Codex)"; không có bản lưu trong db thì dán kết quả thien chép vào file JSON (phần trong khối json của tin nhắn). Luật dạy chung ở `profile/TUTOR.md`.
+Trang không lưu được vào db thì dán kết quả thien chép (nút "Chép kết quả") vào file JSON (phần trong khối json của tin nhắn). Luật dạy chung ở `profile/TUTOR.md`.
 
 **Chỗ còn vướng** ở cuối mỗi file môn là cầu nối giữa các buổi: AI dùng nó cho phần "Nhớ lại" và "Thử trước" của buổi sau, và `make-lesson.mjs` đưa 6 dòng mới nhất vào trang để Claude trong trang biết khi thien hỏi hay nhờ nhận xét.
 

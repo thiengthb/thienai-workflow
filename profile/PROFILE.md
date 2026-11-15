@@ -21,7 +21,7 @@ Mình hay hết usage giữa tuần, phiên sau quay lại thì quên việc đa
 1. Gom việc dở bằng công cụ, không theo trí nhớ: thread chưa xong trong project (đang chờ mình, chờ duyệt, đang làm, lỗi), PR còn mở của mình, câu hỏi và thẻ quyết định chưa trả lời, mục "Việc dở" và "Đang chờ thien" trong `docs/STATUS.md`. Chỗ nào không đọc được thì nói ra.
 2. Liệt kê tối đa 5 việc, mỗi việc một dòng: việc gì (kèm link), dở từ ngày nào, mức quan trọng kèm một lý do, mình cần làm gì. **Cao**: đang chặn việc khác, sắp tới hạn, hoặc để lâu sẽ phải làm lại (PR bị conflict, STATUS cũ đi). **Vừa**: cần làm nhưng chờ được vài ngày. **Thấp**: bỏ hẳn cũng không sao; AI đề xuất bỏ luôn.
 3. Hỏi một câu: "Giải quyết việc nào trước, hay làm việc mới luôn?" Có thẻ quyết định thì dùng thẻ. Trong lúc chờ, AI được đọc và lên kế hoạch cho việc mới, chưa sửa gì.
-4. Không có việc dở thì nói một dòng "Không còn việc dở". Mình đã chọn làm việc mới luôn thì trong ngày đó không hỏi lại về đúng những việc ấy. Trong Claude Projects, coordinator làm bước này trước khi mở thread; thread được mở thì không hỏi lại.
+4. Không có việc dở thì nói một dòng "Không còn việc dở". Mình đã chọn làm việc mới luôn thì trong ngày đó không hỏi lại về đúng những việc ấy. Project bản beta: chat điều phối làm bước này trước khi mở thread, thread không hỏi lại; project bản cũ: chat đầu tiên của việc làm (kiểu project của từng nick ở `profile/ACCOUNTS.md`).
 5. Dừng giữa chừng (hết phiên, chờ mình): ghi việc dở vào mục "Việc dở" của `docs/STATUS.md`, project không có repo thì ghi vào memory của project, để lần sau gom được.
 
 ## Cách làm việc với AI khi ra quyết định
@@ -47,7 +47,7 @@ Mình hay hết usage giữa tuần, phiên sau quay lại thì quên việc đa
 - Slide thuyết trình: theo `slides/RULES.md` và skill `make-slides` của repo thienai-workflow.
 
 ## Gu UI
-- Mọi thứ về giao diện nằm ở repo `thiengthb/thienui`: gu chi tiết (`docs/taste.md`), token, luật, component, block và skill. Mỗi project có giao diện dùng thienui trước khi tự làm component; thứ dùng lại được thì gom về thienui (`docs/harvest.md`).
+- Mọi thứ về giao diện nằm ở repo `thiengthb/thienui` (riêng tư, không đưa nội dung ra chỗ công khai; cách chuyển ở `docs/plans/2026-11-14-thienui-private.md`): gu chi tiết (`docs/taste.md`), token, luật, component, block và skill. Mỗi project có giao diện dùng thienui trước khi tự làm component; thứ dùng lại được thì gom về thienui (`docs/harvest.md`).
 - Khi làm màn hình: AI đưa 2 đến 3 bố cục trong gu của mình, mình chọn trước, rồi AI giải thích vì sao bố cục đó hợp (người dùng nào, xu hướng nào). Mục đích là để mình học.
 - Gốc: đồng bộ trước, đẹp sau, nhưng luật chỉ giữ chi tiết đồng bộ. Trước khi nói xong một màn, AI chụp cả màn ở đúng cỡ thiết bị và tự chê bố cục (skill `new-screen` của thienui).
 

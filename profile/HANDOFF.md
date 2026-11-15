@@ -31,18 +31,20 @@ Dùng `--out <file>` thay cho `> file`: trên Windows PowerShell 5, `>` ghi file
 - Xong hẳn (PR merge, hay thien nói thôi): `done`.
 
 ## Khi thien nói "tiếp tục"
+Bước 1 và 3 nằm sẵn trong lệnh khởi động: `node templates/start-session.mjs ... --claim "Claude tntXXX, <link chat>"` (cách gọi ở `profile/SETUP.md`) đọc sổ mọi repo, nhận việc mới nhất (hay việc ghi ở `--task <owner/repo>:<việc>`), in nó ra và so nhánh với sổ. Lệnh báo "Chưa nhận được" thì dừng hỏi thien như bước 3.
+
 1. Chạy `list`. Repo nào phiên chưa đọc được thì lệnh báo tên; gắn repo đó vào phiên rồi chạy lại. Một việc thì làm luôn; nhiều việc thì kể ra (mới nhất trước, kèm việc nào đang chờ thien) và làm việc mới nhất, trừ khi thien nói việc khác.
 2. `show` việc đó, gắn repo và nhánh ghi trong sổ, `git pull`, đọc `docs/STATUS.md` của repo đó. So sổ với git: commit cuối của nhánh (`git log -1`) và PR có khớp "Đã xong" không. Nhánh đi trước sổ (nick cũ hết usage sau khi đẩy, trước khi `save`) thì tin nhánh và sửa sổ; sổ ghi commit mà nhánh không có thì commit đó chưa đẩy, coi như mất.
-3. Nhận việc trước khi làm: "Ghi bởi" là nick khác và cập nhật trong 24 giờ qua thì làm theo mục "Nhiều nick" ở dưới. Rồi sửa "Ghi bởi" thành nick và thread của mình ("Claude nick chưa rõ" khi project instructions chưa có dòng `nick:`) và `save` ngay; `save` tự ghi giờ hiện tại vào "Cập nhật", nên mốc 24 giờ tính từ lúc nhận. `save` bị từ chối vì sổ vừa đổi nghĩa là một nick khác cũng vừa nhận việc này: dừng lại hỏi thien.
+3. Nhận việc trước khi làm: "Ghi bởi" là nick khác và cập nhật trong 24 giờ qua thì làm theo mục "Nhiều nick" ở dưới. Rồi sửa "Ghi bởi" thành nick và link thread của mình (project cũ không có thread thì ghi link chat; "Claude nick chưa rõ" khi project instructions chưa có dòng `nick:`) và `save` ngay; `save` tự ghi giờ hiện tại vào "Cập nhật", nên mốc 24 giờ tính từ lúc nhận. `save` bị từ chối vì sổ vừa đổi nghĩa là một nick khác cũng vừa nhận việc này: dừng lại hỏi thien.
 4. Việc đang chờ thien chọn trên trang: link cũ chỉ mở được ở nick cũ. Chạy lệnh dựng lại ghi trong sổ, đăng thành trang mới, gửi thien link mới, ghi link mới vào sổ. Lựa chọn thien đã bấm mà chưa gửi trên trang cũ thì mất; thien bấm lại.
 5. Làm tiếp từ "Bước tiếp theo", và ghi sổ sau mỗi bước như trên.
 
 ## Nhiều nick
-- Dòng "Ghi bởi" luôn có tên nick (`Ghi bởi: Claude tnt024, <link thread>`), và link trang ghi "(mở ở nick tntXXX)". `list` in nick của từng việc.
+- Dòng "Ghi bởi" luôn có tên nick (`Ghi bởi: Claude tnt024, <link thread hoặc link chat>`), và link trang ghi "(mở ở nick tntXXX)". `list` in nick của từng việc.
 - Việc mà nick khác ghi trong 24 giờ qua: hỏi thien trước khi nhận, trừ khi thien đã nói "tiếp tục". Luật đủ ở [`ACCOUNTS.md`](ACCOUNTS.md).
 
 ## Giới hạn
 - Hết usage giữa chừng thì mất phần chưa commit và đẩy. Sổ có thể chậm hơn nhánh một bước (đã đẩy nhưng chưa kịp `save`), nên nick sau luôn so với git như bước 2 ở trên.
 - Sổ chống ghi đè lên chính nó, không khóa code: hai nick vẫn có thể cùng sửa một nhánh nếu bỏ qua bước nhận việc.
-- Chỉ việc làm ở nơi có quyền đẩy lên repo (project có gắn repo, Claude Code, Codex) mới ghi sổ được. Chat thường trên claude.ai không ghi được.
+- Ghi sổ được ở mọi phiên chạy được lệnh và có quyền đẩy lên repo: thread của project beta, chat trong project cũ có chạy lệnh (như nick tnt697), Claude Code, Codex. Phiên chỉ đọc repo mà không chạy được lệnh thì không ghi được: nói với thien việc đang dở và bước tiếp theo để thien mở phiên khác ghi.
 - Trang tổng quan và các trang link cố định: nick khác đăng lại thì ra link mới. Muốn giữ một link cho mọi nick thì thien mời các nick vào trang đó (Share, mời email, quyền sửa); phần dùng Claude trên trang không chạy ở nick được mời.

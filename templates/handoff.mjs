@@ -136,6 +136,8 @@ export function allRepos() {
 // Every clone this tool makes is a throwaway temp dir, removed when the command ends (see main).
 const temps = [];
 function tempDir() { const d = mkdtempSync(join(tmpdir(), 'handoff-')); temps.push(d); return d; }
+/** Removes the temp clones; scripts that import readOnly/checkout (start-session.mjs) call it when done. */
+export function cleanup() { while (temps.length) rmSync(temps.pop(), { recursive: true, force: true }); }
 
 /**
  * Clone of the handoff branch for reading. Returns the dir, 'none' when the repo has no handoff branch yet,
@@ -268,6 +270,6 @@ function main(argv) {
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   let code = 0;
   try { main(process.argv.slice(2)); } catch (e) { console.error(e.message); code = 1; }
-  finally { for (const d of temps) rmSync(d, { recursive: true, force: true }); }
+  finally { cleanup(); }
   process.exitCode = code;
 }

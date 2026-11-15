@@ -17,6 +17,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # check-lesson-sources --pr compares with the PR base
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -30,14 +32,22 @@ jobs:
       - run: node .github/scripts/publish-progress.test.mjs
       - run: node .github/scripts/make-review.test.mjs
       - run: node .github/scripts/after-lesson.test.mjs
+      - run: node .github/scripts/prepare-lesson.test.mjs
       - run: node .github/scripts/learning-week.test.mjs
       - run: node .github/scripts/check-open-work.test.mjs
       - run: node .github/scripts/handoff.test.mjs
       - run: node .github/scripts/setup-check.test.mjs
+      - run: node .github/scripts/start-session.test.mjs
       - run: node .github/scripts/check-tokens.test.mjs
       - run: node .github/scripts/pack-skills.test.mjs
       - run: node .github/scripts/crlf.test.mjs
       - run: node .github/scripts/check-links.test.mjs
+      - run: node .github/scripts/check-lesson-sources.test.mjs
+      # Lesson pages in the repo are sources (no kit filled in); a PR doesn't mix a lesson with a kit change.
+      - run: node .github/scripts/check-lesson-sources.mjs ${BASE:+--pr "$BASE" --title "$TITLE"}
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          TITLE: ${{ github.event.pull_request.title }}
       - run: node .github/scripts/check-links.mjs
       - run: node .github/scripts/reading-cost.test.mjs
       - run: node .github/scripts/reading-cost.mjs   # fails when one task needs more than the budget in that file
@@ -46,14 +56,18 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-  # Opens every lesson page, one page built from each artifact template and the component gallery in a real browser
-  # (3 widths, dark and light), and checks the prompts pages send to Claude. Screenshots are
+  # Opens the lesson pages changed in the PR (every page on main), one page built from each artifact template and the
+  # component gallery in a real browser (3 widths, dark and light), and checks the prompts pages send to Claude.
+  # Finished lessons are frozen: their published page is the record, so they are not re-checked against a new kit.
+  # Screenshots are
   # attached to the run as "page-screenshots". axe-core adds WCAG 2.1 AA checks (serious and critical fail the run).
   pages:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # check-pages --changed compares with the PR base
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -62,7 +76,9 @@ jobs:
       - run: node .github/scripts/ask-prompts.test.mjs
       - run: node .github/scripts/autosave.test.mjs
       - run: node .github/scripts/lesson-claude.test.mjs
-      - run: node artifacts/kit/check-pages.mjs --out .check-pages
+      - run: node artifacts/kit/check-pages.mjs --out .check-pages ${BASE:+--changed "$BASE"}
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

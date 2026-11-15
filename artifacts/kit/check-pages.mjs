@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 // Mở từng trang trong trình duyệt và bắt lỗi trước khi thien thấy. CI chạy file này ở mọi PR (.github/workflows/test.yml).
 //
-//   node artifacts/kit/check-pages.mjs [trang.html ...] [--out <thư-mục-ảnh>]
+//   node artifacts/kit/check-pages.mjs [trang.html ...] [--changed <git-ref>] [--out <thư-mục-ảnh>]
 //
 // Không đưa trang nào: kiểm mọi trang bài trong learning/*/pages/ và một trang mẫu dựng từ mỗi mẫu trong artifacts/
 // (bài thường, bài chiến tranh, bài frontend, bài BA, trang chọn phương án, trang so sánh, trang ôn thẻ, trang mẫu thành phần).
+// --changed <ref> (CI dùng ở PR): chỉ kiểm trang bài đổi so với ref, cộng các trang mẫu. Bài đã học là bài đóng băng:
+// bản đăng là bản thật, không kiểm lại với kit mới (docs/plans/2026-11-15-lean-learning.md). Sửa kit thì trang mẫu bắt lỗi.
+// Trang bài trong repo là nguồn (thẻ kit rỗng): script dựng bản đầy đủ vào thư mục tạm rồi mới mở.
 // Mỗi trang mở ở 3 khổ (1180x760 khung xem trên claude.ai, 820x1180 máy tính bảng, 390x844 điện thoại), cả tối lẫn sáng,
 // hiện hết mọi bước, giả có Claude để hiện cả các ô hỏi Claude. Báo LỖI khi:
 //   1. Có lỗi JavaScript.
@@ -22,6 +25,7 @@ import { createRequire } from 'node:module';
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync, readdirSync, existsSync, realpathSync } from 'node:fs';
 import { join, resolve, dirname, basename, relative } from 'node:path';
 import { tmpdir } from 'node:os';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -39,6 +43,23 @@ export function repoPages() {
   const base = join(root, 'learning');
   return readdirSync(base, { withFileTypes: true }).filter((d) => d.isDirectory() && existsSync(join(base, d.name, 'pages')))
     .flatMap((d) => readdirSync(join(base, d.name, 'pages')).filter((f) => f.endsWith('.html')).sort().map((f) => join(base, d.name, 'pages', f)));
+}
+
+/** Trang bài đổi so với ref (git diff ref...HEAD, cộng thay đổi chưa commit). */
+export function changedPages(ref) {
+  const git = (...a) => execFileSync('git', ['-C', root, ...a], { encoding: 'utf8' }).split('\n').filter(Boolean);
+  const names = new Set([...git('diff', '--name-only', `${ref}...HEAD`), ...git('diff', '--name-only', 'HEAD')]);
+  return [...names].filter((f) => /^learning\/[^/]+\/pages\/[^/]+\.html$/.test(f)).map((f) => join(root, f)).filter(existsSync).sort();
+}
+
+/** Nguồn trang bài → bản đầy đủ trong dir (trang khung cũ, không có thẻ kit, giữ nguyên). */
+export async function buildRepoPage(file, dir) {
+  const { fill } = await import('../lesson/make-lesson.mjs');
+  const html = readFileSync(file, 'utf8');
+  if (!/<script id="kit-js">/.test(html)) return file;
+  const out = join(dir, relative(join(root, 'learning'), file).replace(/[\\/]/g, '-'));
+  writeFileSync(out, fill(html, '', file));
+  return out;
 }
 
 /** Dựng một trang mẫu từ mỗi mẫu trong artifacts/ vào dir. Trả về [{ name, file }]. */
@@ -225,14 +246,20 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const args = process.argv.slice(2);
   const oi = args.indexOf('--out');
   const out = resolve(oi >= 0 ? args.splice(oi, 2)[1] : join(root, '.check-pages'));
+  const ci = args.indexOf('--changed');
+  const ref = ci >= 0 ? args.splice(ci, 2)[1] : '';
   const { chromium } = createRequire(import.meta.url)('playwright');
   const browser = await chromium.launch();
+  const tmp = mkdtempSync(join(tmpdir(), 'check-pages-'));
+  const asRepo = async (f) => ({ name: relative(join(root, 'learning'), f).replace(/[\\/]pages[\\/]/, '-').replace(/\.html$/, ''), file: await buildRepoPage(f, tmp), own: true });
   let pages;
-  if (args.length) pages = args.map((f) => ({ name: basename(f, '.html'), file: resolve(f), own: true }));
+  const inRepo = (f) => /[\\/]learning[\\/][^\\/]+[\\/]pages[\\/][^\\/]+\.html$/.test(f) && f.startsWith(root);
+  if (args.length) pages = await Promise.all(args.map(resolve).map(async (f) => ({ name: basename(f, '.html'), file: inRepo(f) ? await buildRepoPage(f, tmp) : f, own: true })));
   else {
-    const fx = await buildFixtures(mkdtempSync(join(tmpdir(), 'check-pages-')), browser);
-    pages = [...fx.map((f) => ({ ...f, name: 'mau-' + f.name })),
-      ...repoPages().map((f) => ({ name: relative(join(root, 'learning'), f).replace(/\/pages\//, '-').replace(/\.html$/, ''), file: f, own: true }))];
+    const fx = await buildFixtures(tmp, browser);
+    const repo = ref ? changedPages(ref) : repoPages();
+    if (ref) console.log(`Chỉ kiểm trang bài đổi so với ${ref}: ${repo.length ? repo.map((f) => relative(root, f)).join(', ') : 'không có'}; bài khác đóng băng.`);
+    pages = [...fx.map((f) => ({ ...f, name: 'mau-' + f.name })), ...(await Promise.all(repo.map(asRepo)))];
   }
   const { fails, warns } = await checkPages(pages, { out, browser });
   await browser.close();

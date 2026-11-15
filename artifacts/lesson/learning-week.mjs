@@ -10,7 +10,6 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, realpathSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { tmpdir } from 'node:os';
 // Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
 const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
@@ -102,7 +101,7 @@ export function build(dir = root, now = new Date()) {
 
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   const k = process.argv.indexOf('--out');
-  const out = resolve(k > 0 ? process.argv[k + 1] : join(tmpdir(), 'learning-week'));
+  const out = resolve(k > 0 ? process.argv[k + 1] : join(root, 'build/learning-week'));
   mkdirSync(out, { recursive: true });
   for (const [name, data] of Object.entries(build())) {
     writeFileSync(join(out, name), JSON.stringify(data));
