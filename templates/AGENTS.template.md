@@ -35,6 +35,7 @@ Luật cho mọi AI làm việc trong repo này (Claude, Codex, Gemini...). Ph�
 - Gắn nhãn khi khẳng định điều gì: [Fact] có nguồn, [Suy luận], [Đề xuất], [Chưa kiểm].
 
 ## Cuối phiên
+- Một chat, một mục tiêu: câu trả lời đầu ghi mục tiêu của chat; xong mục tiêu thì tự đo usage (skill `explain-usage`), ghi một dòng vào `docs/usage-log.md` trong PR của việc đó, rồi báo thien mở chat mới và nhắn "tiếp tục". Việc lớn mới trong chat đã xong mục tiêu thì ghi vào sổ bàn giao và nhắc mở chat mới. Đủ ở [`profile/CHATS.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/CHATS.md).
 - Cập nhật `docs/STATUS.md` (đang ở đâu, việc dở, vừa xong, việc tiếp theo, đang chờ ai). Việc dở vẫn commit và push, và ghi vào mục "Việc dở" kèm nhánh hoặc PR.
 - Kế hoạch đang chạy: tick việc đã có bằng chứng, ghi bước đã đổi và lỗi gặp, sửa mục "Đang ở đâu". Luật và mẫu ở [`profile/PLANNING.md`](https://github.com/thiengthb/thienai-workflow/blob/main/profile/PLANNING.md).
 - Thứ tự merge: sửa STATUS thì gộp vào PR của tính năng đang làm; PR chỉ sửa STATUS thì nhắc thien merge ngay, vì để lâu là nó cũ và bị conflict. PR phải merge sau PR khác thì mô tả ghi "Merge sau #N", PR đã gộp luôn PR cũ thì ghi "gộp luôn PR #N": trang tổng quan đọc hai câu này (và nhánh chồng lên nhánh) để xếp thứ tự merge cho thien.

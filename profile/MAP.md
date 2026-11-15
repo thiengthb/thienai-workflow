@@ -11,6 +11,7 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 | thien nói hay việc là | Đọc | Chạy | Ghi khi xong |
 |---|---|---|---|
 | Giao việc mới | `profile/PROFILE.md` mục "Nhắc việc dở" | `templates/check-open-work.mjs`, `templates/handoff.mjs list`, danh sách PR | (chưa ghi gì tới khi thien chọn) |
+| Xong mục tiêu của chat, hay việc lớn mới trong chat đã xong mục tiêu | `profile/CHATS.md` | skill `explain-usage` | một dòng `docs/usage-log.md` trong PR của việc đó |
 | "tiếp tục" | `profile/HANDOFF.md`, `profile/ACCOUNTS.md` khi việc do nick khác ghi | `templates/handoff.mjs list`, `show`, rồi `git log` nhánh làm việc | sổ bàn giao sau mỗi bước |
 | "học" | `learning/README.md` (mục "Trạng thái", "Khung một buổi"), `learning/<môn>.md` (mục "Cách dạy môn này", "Chỗ còn vướng", "Buổi tiếp theo"), `learning/cards.md`, `profile/TUTOR.md`, `artifacts/lesson/README.md`; không phải Claude thì thêm `learning/codex.md` | `artifacts/lesson/make-lesson.mjs`, `artifacts/review/make-review.mjs` | mục "Sau buổi" của `learning/README.md` (`after-lesson.mjs`), rồi PR |
 | Dạy hay giải thích để thien học | `profile/TUTOR.md` | | |
