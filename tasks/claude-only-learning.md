@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo từ main) · PR: #82 đã merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXa9oobQMtaPoFn5rm · Cập nhật: 2026-11-15T08:07Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXa9oobQMtaPoFn5rm · Cập nhật: 2026-11-15T09:15Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -14,10 +14,10 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 - Thí nghiệm 2, mốc trước (14:50, 2026-11-15): Settings phiên 71%, tuần 40%. Mốc 68% lúc 14:45 bỏ, vì lúc đó chat ở project sakubun cùng nick vẫn đang chạy (thien đã dừng). `explain-usage` lúc này: 18 lượt, ghi cache 54.233, đọc lại 2.887.571, viết ra 8.718 token (quy đổi khoảng 441 nghìn). Bước kế: thien dừng tới sau 15:00, không dùng Claude ở đâu, gửi tin ngắn kèm ảnh Settings, chạy `explain-usage` lại và so phần ghi cache tăng.
 - Thí nghiệm 2, dừng khoảng 11 phút (14:51 tới 15:02), lần 1: `explain-usage` sau khi quay lại là 21 lượt, ghi cache 57.957, đọc lại 3.437.747, viết ra 11.122. So mốc trước: 3 lượt (2 trước khi dừng, 1 sau), ghi cache chỉ tăng 3.724 (lịch sử khoảng 180 nghìn token không bị ghi lại), mỗi lượt vẫn khoảng 25 nghìn quy đổi. Nghĩa là bộ nhớ tạm sống qua 11 phút, nên claude.ai nhiều khả năng giữ cache 1 giờ [chưa kiểm: cần lần 2 và lần dừng hơn 65 phút]. Settings lúc 15:04: phiên 72%, tuần 41% (từ 71% / 40% lúc 14:50, qua khoảng 5 lượt gồm cả lượt đo; số làm tròn nên 1% phiên chỉ ước được rất thô, khoảng vài lượt).
 - Thí nghiệm 2, dừng hơn 65 phút, mốc trước (15:06): `explain-usage` 26 lượt, ghi cache 63.357, đọc lại 4.384.048, viết ra 15.476 (quy đổi khoảng 643 nghìn). Settings gần nhất 72% / 41% lúc 15:04. thien nghỉ khoảng 1 tiếng.
+- Thí nghiệm 2, dừng khoảng 68 phút (15:07 tới 16:15), lần 1: 29 lượt, ghi cache 67.014, đọc lại 4.967.928, viết ra 18.000. So mốc 15:06: 3 lượt, ghi cache chỉ tăng 3.657, lịch sử khoảng 195 nghìn token vẫn được đọc lại từ cache, không bị ghi lại. Settings 16:15: phiên 73%, tuần 41% (từ 72% / 41%). Nghĩa là dừng 68 phút cũng không đắt; giả thuyết 4 của kế hoạch (dừng lâu mới đắt) sai ở mốc này. Khoản ghi cache 0,87 triệu của chat A (dừng 311 phút) cần giải thích khác [chưa kiểm]. Lưu ý: số đo lấy từ phiên chạy kiểu Claude Code trên cloud gắn với project, chính sách cache của chat thường trên claude.ai có thể khác.
 
 ## Bước tiếp theo
-1. Khi thien quay lại (sau 16:15): chạy `explain-usage` ngay lượt đầu, so ghi cache với mốc 15:06 (lịch sử khoảng 170 nghìn token; bị ghi lại cả thì cache hết hạn), kèm ảnh Settings. Ghi vào sổ.
-2. Rồi checkpoint 2 (lệnh `start-session.mjs`) và checkpoint 3 (bỏ Codex), mỗi cái một PR; gộp số thí nghiệm 1 và 2 vào bảng của kế hoạch trong một PR.
+1. Checkpoint 2 (lệnh `start-session.mjs`) và checkpoint 3 (bỏ Codex), mỗi cái một PR; gộp số thí nghiệm 1 và 2 vào bảng của kế hoạch trong một PR.
 
 ## Đang chờ thien
 Không.
