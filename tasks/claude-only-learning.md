@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
-Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không (thien nhờ merge thẳng vào main 2026-11-15)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaTiwVbajAKjvsBg5W · Cập nhật: 2026-11-15T09:49Z
+Repo: thiengthb/thienai-workflow · Nhánh: docs/measure-start-session · PR: chưa mở (thien mở bằng link)
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaTiwVbajAKjvsBg5W · Cập nhật: 2026-11-15T10:03Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -19,12 +19,16 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 - Checkpoint 2: nhánh `feat/start-session` commit 2eb17e5 (lệnh, test, CI, chuẩn setup v3, HANDOFF/MAP/AGENTS.template/README/STATUS, số thí nghiệm 1–2 trong kế hoạch). Mọi test CI qua ở máy. Chưa có PR (gh không đăng nhập được; thien mở bằng link).
 - Checkpoint 3: nhánh `feat/drop-codex-learning` commit 4bb6fd1, dòng usage-log của chat này ở commit sau đó, xếp chồng trên `feat/start-session`. Mọi test CI qua.
 
+- Thí nghiệm 1, lần 2 (chat mới 2026-11-15 16:49, nick tnt697, chuẩn v3, `--claim`): 3 lượt tới lúc nhận việc xong, quy đổi khoảng 103 nghìn (từ 12 lượt, 295 nghìn). Settings trước: phiên 84%, tuần 43%. Đã ghi vào bảng "Kết quả đo", tick checkpoint 2, sửa STATUS: nhánh `docs/measure-start-session`.
+- Cùng nhánh: `setup-check.mjs` đọc được `--sync` dạng JSON dán nguyên từ project_info (trước đó báo nhầm "knowledge chưa đồng bộ"); knowledge của project Claude đã đúng chuẩn.
+
 ## Bước tiếp theo
-1. Checkpoint 2 và 3 đã vào main (commit 51f4924 và commit sửa STATUS sau đó). Ở chat mới sau khi thien dán instructions v3: chạy khởi động theo v3, rồi đo lại thí nghiệm 1 bằng `explain-usage` ngay khi nhận việc xong (mục tiêu tối đa 4 lượt), so với 12 lượt; ghi vào bảng "Kết quả đo" của kế hoạch (PR) và tick checkpoint 2 nếu đạt.
+1. thien mở PR nhánh `docs/measure-start-session` rồi merge.
 2. Lần 2 của thí nghiệm 2 (dừng 10 phút, hơn 65 phút) khi tiện; thí nghiệm 3 (connector), 4 (sau buổi học).
 
 ## Đang chờ thien
-- Dán project instructions v3 (`profile/SETUP.md`) ở 3 nick, chụp Settings > Usage rồi mở chat mới nói "tiếp tục".
+- Mở PR và merge nhánh `docs/measure-start-session`: https://github.com/thiengthb/thienai-workflow/pull/new/docs/measure-start-session
+- Dán instructions v3 ở 2 nick còn lại (tnt024, tnt628) nếu chưa dán.
 
 ## Lưu ý
 - Làm ở chat mới (luật `profile/CHATS.md`), không gộp với buổi học BA 3.
