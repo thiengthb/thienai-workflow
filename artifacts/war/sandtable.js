@@ -163,9 +163,13 @@
           const m = new THREE.Mesh(new THREE.BoxGeometry(.12, .02, len), new THREE.MeshLambertMaterial({ color: COLORS.airfield }));
           m.position.set((a[0] + c[0]) / 2, G.hAt((a[0] + c[0]) / 2, (a[1] + c[1]) / 2) + .012, (a[1] + c[1]) / 2); m.rotation.y = Math.atan2(c[0] - a[0], c[1] - a[1]); scene.add(m);
         } else if (f.kind === 'place') { // địa danh: chỉ có tên, không vẽ gì
-        } else if (f.kind === 'marsh') { // đồng lầy: mỗi điểm một đĩa phẳng bán kính r km, đặt sát mặt đất
+        } else if (f.kind === 'marsh') { // đồng lầy: mỗi điểm một đĩa bán kính r km, phủ theo mặt đất
           const mat = new THREE.MeshLambertMaterial({ color: COLORS.marsh, transparent: true, opacity: .62, depthWrite: false });
-          f.pts.map(G.xz).forEach(([x, z]) => { const m = new THREE.Mesh(new THREE.CircleGeometry(f.r || .25, 28), mat); m.rotation.x = -Math.PI / 2; m.position.set(x, G.hAt(x, z) + .01, z); m.renderOrder = 1; scene.add(m); });
+          f.pts.map(G.xz).forEach(([x, z]) => { // đĩa chia vòng, mỗi đỉnh bám độ cao địa hình để không bị dốc che mất
+            const g = new THREE.RingGeometry(0, f.r || .25, 28, 6); g.rotateX(-Math.PI / 2); g.translate(x, 0, z);
+            const pos = g.attributes.position; for (let i = 0; i < pos.count; i++) pos.setY(i, G.hAt(pos.getX(i), pos.getZ(i)) + .01);
+            g.computeVertexNormals(); const m = new THREE.Mesh(g, mat); m.renderOrder = 1; scene.add(m);
+          });
         } else scene.add(tube(f.pts, f.kind === 'river' ? COLORS.river : COLORS.road, f.kind === 'river' ? .045 : .028, .012));
       });
       unitGroup = new THREE.Group(); lineGroup = new THREE.Group(); scene.add(unitGroup, lineGroup);
