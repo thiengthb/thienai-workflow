@@ -24,7 +24,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Thử CodeRabbit CLI gói Free (3 lần mỗi giờ) | quyết định 002 | 2026-11-14 | Sau 24/11; [chưa kiểm] chạy không cần trình duyệt có cần Agentic API key và Usage-based add-on không |
 
 ## Vừa xong
-- Gói buổi `artifacts/lesson/prepare-lesson.mjs` thay cho việc đọc cả README, file môn và thẻ khi nhắn "học"; file môn chỉ giữ 3 dòng nhật ký, dòng cũ sang `learning/<môn>/log.md`. Luồng "học" 78,7 KB còn 63,1 KB và không tăng theo số buổi (đợt 2, chờ thien merge trước buổi BA 3)
+- Gói buổi `artifacts/lesson/prepare-lesson.mjs` thay cho việc đọc cả README, file môn và thẻ khi nhắn "học"; file môn chỉ giữ 3 dòng nhật ký, dòng cũ sang `learning/<môn>/log.md`. Luồng "học" 78,7 KB còn 64,0 KB và không tăng theo số buổi (đợt 2, chờ thien merge trước buổi BA 3)
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: BA 3 (các bên liên quan), dựng từ mẫu bảng dán `artifacts/it/template-ba.html` (nội dung mẫu chính là nháp buổi này). Buổi đầu dùng gói buổi: AI chạy `prepare-lesson.mjs` thay vì đọc cả các file. Mở chat mới cho buổi học, rồi chat mới nữa cho phần sau buổi (đợt 0 của kế hoạch học nhẹ dần).

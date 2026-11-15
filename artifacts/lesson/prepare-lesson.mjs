@@ -2,7 +2,7 @@
 // Gói buổi (docs/plans/2026-11-15-lean-learning.md, đợt 2): khi thien nhắn "học", AI chạy lệnh này thay vì mở cả
 // learning/README.md, file môn và learning/cards.md. Lệnh chỉ đọc, không ghi gì, và in một bản ngắn có kích thước gần như
 // cố định dù đã học bao nhiêu buổi:
-//   - buổi kế tiếp (bảng "Trạng thái"), luật TikTok, phần "Khung một buổi" của learning/README.md (nguyên văn, trừ "Sau buổi");
+//   - buổi kế tiếp (bảng "Trạng thái"), luật TikTok, "Vòng xoay", phần "Khung một buổi" của learning/README.md (nguyên văn, trừ "Sau buổi");
 //   - hồ sơ môn learning/<môn>.md nguyên văn, trừ nhật ký (chỉ dòng gần nhất) và chỗ còn vướng (6 dòng mới nhất);
 //   - 3 thẻ đến hạn trong learning/cards.md, kèm đáp án tìm trong mục "Tự kiểm" của file bài;
 //   - nhánh chưa merge đụng môn đó; đường dẫn các luật phải đọc nguyên văn (profile/TUTOR.md…), không tóm.
@@ -124,6 +124,8 @@ export function packet({ root, dir, n, label, today, open = null }) {
   L.push('## Buổi này', `- Môn: ${s.name}, buổi ${num} (hồ sơ: learning/${s.file}; nhật ký đã có tới buổi ${done || 'chưa có'}).`);
   if (statusRows.length) L.push('- Bảng "Trạng thái" (learning/README.md):', '', ...statusRows, '');
   if (tiktok) L.push('Luật TikTok (learning/README.md, mục "Môn đang học", nguyên văn):', '', tiktok, '');
+  const rot = find(readme, 'Vòng xoay');
+  if (rot) L.push(`${rot.head.replace(/^## /, '### ')} (learning/README.md, nguyên văn)`, '', rot.body, '');
 
   L.push('## Luật đọc nguyên văn (mở file, gói không chép)', ...RULES.map((r) => `- \`${r}\``),
     '- Không phải Claude trên claude.ai thì thêm `learning/codex.md`.',
@@ -160,8 +162,10 @@ export function packetBytes(root) {
   const read = (p) => (existsSync(join(root, p)) ? lf(readFileSync(join(root, p), 'utf8')) : '');
   const subs = subjects(read('learning/README.md'), read('learning/cards.md'));
   const stale = Object.assign([], { stale: true });
+  // Thẻ chọn ra đổi theo ngày (đến hạn, hay thẻ bù của môn khác): đo cả hôm nay lẫn ngày mọi thẻ đã đến hạn, lấy số lớn hơn.
+  const days = ['9999-12-31', new Date().toISOString().slice(0, 10)];
   return Math.max(0, ...Object.keys(subs).filter((d) => existsSync(join(root, 'learning', subs[d].file)))
-    .map((dir) => Buffer.byteLength(packet({ root, dir, today: '9999-12-31', open: stale }))));
+    .flatMap((dir) => days.map((today) => Buffer.byteLength(packet({ root, dir, today, open: stale })))));
 }
 
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {

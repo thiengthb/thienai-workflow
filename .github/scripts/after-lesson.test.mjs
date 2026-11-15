@@ -60,6 +60,9 @@ const t2 = trimLog(addLogRow(t.md, row(6)), t.log, { dir: 'frontend', name: 'Fro
 assert.equal(t2.md.match(/frontend\/log\.md\)/g).length, 1, 'chỉ một dòng trỏ tới log');
 assert.deepEqual(logRows(t2.log).map((r) => r.n), [1, 2, 3, 4]);
 assert.deepEqual(trimLog(t2.md, t2.log, { dir: 'frontend' }).moved, 0);
+assert.match(trimLog(hot.replace('| Ý 1 (', '| Ý 1 [gu](../docs/taste.md) ('), '', { dir: 'frontend' }).log, /\(\.\.\/\.\.\/docs\/taste\.md\)/, 'link ../ cũng đổi theo chỗ mới');
+const parts = '# M\n\n## Nhật ký\n| Buổi | Ngày |\n|---|---|\n| 5 | a |\n| 5, phần 2 | b |\n| 5, phần 3 | c |\n| 5, phần 4 | d |\n';
+assert.deepEqual(logRows(trimLog(parts, '', { dir: 'x' }).md).map((r) => r.key), ['5, phần 2', '5, phần 3', '5, phần 4'], 'cùng số buổi thì giữ các phần sau cùng');
 assert.match(addLogRow('# Môn\n\n## Buổi tiếp theo\n- x\n', row(1)), /## Nhật ký\n\| Buổi[^\n]*\n\|---[^\n]*\n\| 1 \|[^\n]*\n\n## Buổi tiếp theo/, 'chưa có mục thì tạo trước "Buổi tiếp theo"');
 const sc = (md) => subjectChecks(md, 'frontend.md').filter((c) => !c.ok).map((c) => c.what.split(' ')[0] + ' ' + c.what.split(' ')[1]);
 assert.deepEqual(sc(t2.md), []);

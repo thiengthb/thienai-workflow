@@ -59,6 +59,7 @@ for (const dir of Object.keys(real)) {
   assert.ok(p.includes(teach.body), `${dir}: "Cách dạy môn này" chép nguyên văn`);
   assert.ok(stuckPoints(subj).every((l) => p.includes(l)), `${dir}: đủ chỗ còn vướng`);
   assert.ok(p.includes(frame(readme).body), `${dir}: khung một buổi nguyên văn`);
+  assert.ok(p.includes(sections(readme).find((x) => x.head.startsWith('## Vòng xoay')).body), `${dir}: vòng xoay nguyên văn`);
   assert.ok(!p.includes('**Sau buổi**'), `${dir}: không chép khối "Sau buổi"`);
   assert.ok(p.includes('`profile/TUTOR.md`') && !p.includes(read('profile/TUTOR.md').split('\n').find((l) => l.length > 80)), `${dir}: TUTOR.md chỉ trỏ tới, không tóm hay chép`);
   assert.match(p, /## Nhánh chưa merge đụng môn này\nchưa kiểm:/, `${dir}: không so được nhánh thì ghi "chưa kiểm"`);

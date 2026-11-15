@@ -12,7 +12,7 @@
 // Sizes are bytes of the files as they are in the repo. Tokens are an estimate (about 3 bytes per token for this
 // mix of Vietnamese and code); no tokenizer is run, so treat them as a rough scale, not a count.
 import { readFileSync, existsSync, statSync, readdirSync, realpathSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join, dirname, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
@@ -47,6 +47,7 @@ export function parseMap(md) {
 
 /** Bytes a script prints for the AI to read: `node <script> --reading-cost` prints that number (worst case over subjects). */
 function printed(root, p) {
+  root = resolve(root);
   const f = join(root, p);
   if (!existsSync(f)) return { path: p + ' (phần in ra)', bytes: 0, missing: true };
   const r = spawnSync(process.execPath, [f, '--reading-cost'], { cwd: root, encoding: 'utf8', env: { ...process.env, REPO_ROOT: root } });
@@ -88,7 +89,7 @@ const tok = (b) => '~' + Math.round(b / BYTES_PER_TOKEN / 100) / 10 + 'k token';
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   const args = process.argv.slice(2);
   const ri = args.indexOf('--root');
-  const root = ri >= 0 ? args[ri + 1] : join(dirname(fileURLToPath(import.meta.url)), '../..');
+  const root = resolve(ri >= 0 ? args[ri + 1] : join(dirname(fileURLToPath(import.meta.url)), '../..'));
   const m = measure(root);
   if (args.includes('--json')) { console.log(JSON.stringify(m, null, 2)); process.exit(0); }
   console.log(`Tầng 1 (mọi phiên): ${kb(m.tier1.bytes)} ${tok(m.tier1.bytes)}`);

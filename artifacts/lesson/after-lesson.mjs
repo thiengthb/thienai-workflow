@@ -77,7 +77,7 @@ export function addLogRow(md, row) {
 }
 
 /** Link tương đối từ learning/ (file môn) đổi thành tương đối từ learning/<môn>/ (file log). */
-const rebase = (line) => line.replace(/\]\((?![a-z][a-z0-9+.-]*:|#|\/|\.\.\/)([^)\s]+)\)/gi, '](../$1)');
+const rebase = (line) => line.replace(/\]\((?![a-z][a-z0-9+.-]*:|#|\/)([^)\s]+)\)/gi, '](../$1)');
 
 /**
  * Giữ `keep` dòng nhật ký mới nhất (số buổi lớn nhất) trong file môn, chuyển các dòng cũ hơn sang log.
@@ -86,7 +86,8 @@ const rebase = (line) => line.replace(/\]\((?![a-z][a-z0-9+.-]*:|#|\/|\.\.\/)([^
 export function trimLog(md, log, { dir, name, keep = KEEP_LOG } = {}) {
   const rows = logRows(md);
   if (rows.length <= keep) return { md, log, moved: 0 };
-  const newest = new Set([...rows].sort((a, b) => b.n - a.n).slice(0, keep).map((r) => r.line));
+  // Mới nhất là số buổi lớn nhất; cùng số buổi ("5", "5, phần 2") thì dòng nằm sau trong bảng là mới hơn.
+  const newest = new Set(rows.map((r, i) => ({ r, i })).sort((a, b) => b.r.n - a.r.n || b.i - a.i).slice(0, keep).map((x) => x.r.line));
   const old = rows.filter((r) => !newest.has(r.line));
   const lines = md.split('\n'), sec = logSection(lines);
   const drop = new Set(old.map((r) => r.line));
@@ -289,9 +290,10 @@ export function trimAll(root, dirs) {
     const s = subs[dir]; if (!s || !existsSync(join(root, 'learning', s.file))) continue;
     const t = trimLog(read('learning/' + s.file), read(`learning/${dir}/log.md`), { dir, name: s.name });
     if (t.moved) {
-      writeFileSync(join(root, 'learning', s.file), t.md);
+      // Ghi log trước: lỗi giữa chừng thì dòng cũ còn ở file môn, không mất.
       mkdirSync(join(root, 'learning', dir), { recursive: true });
       writeFileSync(join(root, 'learning', dir, 'log.md'), t.log);
+      writeFileSync(join(root, 'learning', s.file), t.md);
     }
     out.push({ dir, moved: t.moved });
   }

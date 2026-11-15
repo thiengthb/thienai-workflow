@@ -119,10 +119,10 @@ Xong khi: PR thêm một bài mới chỉ thêm khoảng 20–35 KB; job `pages`
 - [x] `check-pages.mjs --changed` chỉ kiểm trang đổi trong PR cộng trang mẫu mỗi loại (PR #77: 10 trang thay vì 21)
 - [x] `check-lesson-sources.mjs` chặn nguồn có kit đã điền, chặn PR vừa sửa bài vừa sửa kit (PR #77, bắt đúng chính PR đó ở lần chạy đầu)
 
-### 2. Hồ sơ nóng cố định và gói buổi ✓ 2026-11-15 (63,1 KB thay vì khoảng 50, xem "Đã đổi")
+### 2. Hồ sơ nóng cố định và gói buổi ✓ 2026-11-15 (64,0 KB thay vì khoảng 50, xem "Đã đổi")
 Xong khi: `reading-cost.mjs` in luồng "học" khoảng 50 KB; thêm 10 buổi giả trong test mà con số không tăng; gói buổi in đúng 3 thẻ đến hạn so với `cards.md`.
 - [x] Chuyển nhật ký cũ sang `learning/<môn>/log.md`, giữ 3 dòng (`after-lesson --write` tự chuyển, `--trim-log` chỉ chuyển; `--check-all` chặn quá 3 dòng nhật ký, quá 6 chỗ vướng, còn `<…>`). Đã chuyển frontend 1–3, chiến tranh 1–2. Kèm sửa lỗi câu ôn sai của thẻ môn khác (B2 ở buổi Frontend 6) giờ vào đúng môn đó
-- [x] `prepare-lesson.mjs` và test; sửa bảng "học" trong `profile/MAP.md`, bước "học" trong `AGENTS.md`. `reading-cost.mjs` đo cả phần lệnh in ra (`--reading-cost`). Luồng "học" 78,7 KB còn 63,1 KB; test 10 buổi giả: 64 976 → 64 985 byte (chỉ số buổi dài thêm); gói in đúng 3 thẻ đến hạn ở cả 3 môn
+- [x] `prepare-lesson.mjs` và test; sửa bảng "học" trong `profile/MAP.md`, bước "học" trong `AGENTS.md`. `reading-cost.mjs` đo cả phần lệnh in ra (`--reading-cost`). Luồng "học" 78,7 KB còn 64,0 KB; test 10 buổi giả: 65 956 → 65 965 byte (chỉ số buổi dài thêm); gói in đúng 3 thẻ đến hạn ở cả 3 môn
 
 ### 3. Khung tự sinh, thử với một bài Frontend
 Xong khi: thien học một bài dựng theo cách mới và chấm độ dài, độ khó, độ thú vị không kém các buổi trước; số token phần dựng thấp hơn đợt 0 ở ít nhất 2 lần đo.
@@ -151,7 +151,7 @@ Chỗ dễ sa lầy: đợt 3, nếu cứ muốn phần khung tự sinh phủ h�
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
 | 2026-11-15 | Làm đợt 1 trước đợt 0 | Đợt 1 chỉ đổi phần máy, không đụng trải nghiệm học, nên không cần số đo của đợt 0 để quyết. Đợt 0 vẫn đo ở buổi Frontend 6 |
-| 2026-11-15 | Đợt 2 dừng ở 63,1 KB, không ép xuống 50 | Gói chép nguyên văn mọi mục luật của file môn (cả "Cách một buổi chạy", "Các kiểu buổi để luân phiên" của frontend), vì kế hoạch ghi không tóm luật. Con số gồm 6,5 KB `learning/codex.md` mà Claude trên claude.ai không đọc, nên ở Claude là khoảng 56,6 KB. Phần lớn còn lại là phần cố định (tầng 1 23,2 KB, `TUTOR.md`, `artifacts/lesson/README.md` 10 KB); đợt 3 bỏ việc đọc mẫu nên sẽ giảm tiếp. Điều quan trọng hơn đã đạt: số không tăng theo số buổi |
+| 2026-11-15 | Đợt 2 dừng ở 64,0 KB, không ép xuống 50 | Gói chép nguyên văn mọi mục luật của file môn (cả "Cách một buổi chạy", "Các kiểu buổi để luân phiên" của frontend), vì kế hoạch ghi không tóm luật. Con số gồm 6,5 KB `learning/codex.md` mà Claude trên claude.ai không đọc, nên ở Claude là khoảng 57,5 KB. Phần lớn còn lại là phần cố định (tầng 1 23,2 KB, `TUTOR.md`, `artifacts/lesson/README.md` 10 KB); đợt 3 bỏ việc đọc mẫu nên sẽ giảm tiếp. Điều quan trọng hơn đã đạt: số không tăng theo số buổi |
 | 2026-11-15 | Thứ tự merge: PR #77 trước, PR #76 sau khi học xong | Ban đầu định merge #76 trước. Nhưng bài chưa học thì CI của #76 đỏ sẵn (`after-lesson --check-all` cần thẻ và dòng roadmap của bài), merge vào sẽ làm main đỏ. Nên #76 chờ học như mọi bài; khi rebase thì làm gọn nguồn và thêm chữ "kit" vào tiêu đề, vẫn giữ câu 3 là không tách |
 
 ## Lỗi gặp
