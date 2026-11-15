@@ -13,6 +13,7 @@ Trạng thái học, nhật ký và kế hoạch buổi sau nằm ở [`../front
 | 3 | Gần nhau là một nhóm; giữa nhóm gấp 2–3 lần trong nhóm | [03-spacing-groups.md](lessons/03-spacing-groups.md) | [lesson-03.html](pages/lesson-03.html) |
 | 4 | Sửa theo mục đích của màn; bản đẹp hơn chưa chắc đúng | [04-fix-a-whole-screen.md](lessons/04-fix-a-whole-screen.md) | [lesson-04.html](pages/lesson-04.html) |
 | 5 | Một màu nhấn cho mỗi màn; màu khác chỉ khi mang nghĩa, để nhạt | [05-one-accent-colour.md](lessons/05-one-accent-colour.md) | [lesson-05.html](pages/lesson-05.html) |
+| 6 | Chọn màu nhấn sau khi biết màn đã dùng màu mang nghĩa nào; lượng màu theo người dùng | [06-colour-for-a-whole-app.md](lessons/06-colour-for-a-whole-app.md) | [lesson-06.html](pages/lesson-06.html) |
 
 ## Ôn lại thế nào
 

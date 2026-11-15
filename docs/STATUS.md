@@ -14,7 +14,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 |---|---|---|
 | [Sửa công cụ kiểm tra báo thành công khi chưa kiểm gì](plans/2026-11-12-silent-tools-fix.md) | 1/2: chờ thien chạy thử trên laptop | 5/5 |
 | [Chuyển repo thienui sang riêng tư](plans/2026-11-14-thienui-private.md) | 3/3: xong, chờ merge PR | 4/5 |
-| [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 1/6: xong; tiếp là đợt 0, đo buổi Frontend 6 | 3/12 |
+| [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 1/6 xong; đợt 0 có số đo đầu (Frontend 6) | 4/12 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
@@ -27,7 +27,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 - Trang bài trong repo chỉ còn là nguồn (kit dựng ra thư mục tạm), CI chỉ kiểm trang bài đổi, chặn PR vừa sửa bài vừa sửa kit (PR #77)
 
 ## Việc tiếp theo
-1. Buổi học kế tiếp: Frontend 6 (chọn màu cho app), dựng từ mẫu bàn thử `artifacts/it/` (bài mẫu trong đó chính là nháp buổi 6). Cuối phiên chạy skill `explain-usage` và ghi số vào đợt 0 của kế hoạch học nhẹ dần.
+1. Buổi học kế tiếp: BA 3 (các bên liên quan), dựng từ mẫu bảng dán `artifacts/it/template-ba.html` (nội dung mẫu chính là nháp buổi này). Mở chat mới cho buổi học, rồi chat mới nữa cho phần sau buổi (đợt 0 của kế hoạch học nhẹ dần).
 2. Dùng mẫu so sánh mới cho vòng duyệt giao diện kế tiếp ở sakubun, ghi lại chỗ còn vướng.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 

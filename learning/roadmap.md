@@ -14,7 +14,7 @@ Xong khi: bài so sánh mù ngày 2026-11-22, thien chấm lại các màn cũ v
 - [x] Khoảng cách là cách nhóm (buổi 3, 2026-11-11)
 - [x] Sửa theo mục đích của màn (buổi 4, 2026-11-11)
 - [x] Một màu nhấn, màu khác chỉ khi mang nghĩa (buổi 5, 2026-11-12)
-- [ ] Chọn màu cho cả một app theo loại app, người dùng, độ tuổi (buổi 6)
+- [x] Chọn màu cho cả một app theo loại app, người dùng, độ tuổi (buổi 6, 2026-11-15)
 - [ ] So sánh mù các màn đã xem (2026-11-22)
 
 ### Chặng 2: Áp vào app của mình
@@ -28,9 +28,10 @@ Chưa chốt. Ở mốc 2026-11-22 sẽ chọn học phần nào trước trong:
 - [ ] Chốt thứ tự ở mốc 2026-11-22
 
 ### Bài đã học
-- Bài 1 đến 5: đọc nhanh và làm lại ở [frontend/README.md](frontend/README.md)
+- Bài 1 đến 6: đọc nhanh và làm lại ở [frontend/README.md](frontend/README.md)
 - Trang buổi 1: [Một điểm nhấn](https://claude.ai/artifact/A3nqpsF7j3wnNaYpfdmoKC)
 - Trang buổi 5: [Màu](https://claude.ai/artifact/Gn4VUaqRzfT7jBDFz9GZ5z)
+- Buổi 6: [bài](frontend/lessons/06-colour-for-a-whole-app.md), [trang ở nick tnt697](https://claude.ai/artifact/M1nUVofKUZmF9etaFYNFBt)
 - Thẻ ôn của mọi môn: [cards.md](cards.md)
 
 ### Nguồn học

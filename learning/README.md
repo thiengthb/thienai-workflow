@@ -42,7 +42,7 @@ Bảng học tuần (số buổi mỗi tuần, thẻ đến hạn, chỗ còn v�
 
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
-| Chiến tranh 4, phần 2 (hậu cần trên sa bàn 3D) | 2026-11-14 | Chiến tranh | **Frontend 6 (chọn màu cho app)**, rồi BA 3 (các bên liên quan), rồi Frontend 7, rồi Chiến tranh 5 (địa hình và thời tiết) |
+| Frontend 6 (chọn màu cho cả app) | 2026-11-15 | Frontend | **BA 3 (các bên liên quan)**, rồi Frontend 7, rồi Chiến tranh 5 (địa hình và thời tiết, trang đã dựng ở PR #76) |
 
 ## Khung một buổi, chung cho mọi môn
 
