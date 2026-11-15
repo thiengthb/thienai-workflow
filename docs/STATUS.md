@@ -14,17 +14,17 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 |---|---|---|
 | [Sửa công cụ kiểm tra báo thành công khi chưa kiểm gì](plans/2026-11-12-silent-tools-fix.md) | 1/2: chờ thien chạy thử trên laptop | 5/5 |
 | [Chuyển repo thienui sang riêng tư](plans/2026-11-14-thienui-private.md) | 3/3: xong, chờ merge PR | 4/5 |
-| [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 2/6 xong; đợt 2 (gói buổi, nhật ký 3 dòng) chờ merge | 6/12 |
+| [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 2/6 xong; đợt 2 (gói buổi, nhật ký 3 dòng) đã merge (PR #81) | 6/12 |
+| [Dùng Claude tốn ít usage hơn: đo trước, đổi sau](plans/2026-11-15-claude-usage.md) | 1/4: chờ thien duyệt, rồi đo | 0/7 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
 |---|---|---|---|
-| Cài dòng Settings mới cho từng tài khoản Claude | README, bước 1 | 2026-11-12 | thien tự làm, AI không kiểm được |
 | Xoá nhánh `docs/cross-account-handoff` | PR #60 đã đóng, phần cần đã vào #62 | 2026-11-14 | thien bấm Delete branch; còn thì `check-open-work` cứ báo là việc chưa merge |
 | Thử CodeRabbit CLI gói Free (3 lần mỗi giờ) | quyết định 002 | 2026-11-14 | Sau 24/11; [chưa kiểm] chạy không cần trình duyệt có cần Agentic API key và Usage-based add-on không |
 
 ## Vừa xong
-- Gói buổi `artifacts/lesson/prepare-lesson.mjs` thay cho việc đọc cả README, file môn và thẻ khi nhắn "học"; file môn chỉ giữ 3 dòng nhật ký, dòng cũ sang `learning/<môn>/log.md`. Luồng "học" 78,7 KB còn 64,0 KB và không tăng theo số buổi (đợt 2, chờ thien merge trước buổi BA 3)
+- Gói buổi `artifacts/lesson/prepare-lesson.mjs` thay cho việc đọc cả README, file môn và thẻ khi nhắn "học"; file môn chỉ giữ 3 dòng nhật ký, dòng cũ sang `learning/<môn>/log.md`. Luồng "học" 78,7 KB còn 64,0 KB và không tăng theo số buổi (đợt 2, PR #81)
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: BA 3 (các bên liên quan), dựng từ mẫu bảng dán `artifacts/it/template-ba.html` (nội dung mẫu chính là nháp buổi này). Buổi đầu dùng gói buổi: AI chạy `prepare-lesson.mjs` thay vì đọc cả các file. Mở chat mới cho buổi học, rồi chat mới nữa cho phần sau buổi (đợt 0 của kế hoạch học nhẹ dần).
