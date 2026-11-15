@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: feat/start-session, feat/drop-codex-learning · PR: chờ thien mở
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXa9oobQMtaPoFn5rm · Cập nhật: 2026-11-15T09:25Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXa9oobQMtaPoFn5rm · Cập nhật: 2026-11-15T09:26Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -17,7 +17,7 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 - Thí nghiệm 2, dừng khoảng 68 phút (15:07 tới 16:15), lần 1: 29 lượt, ghi cache 67.014, đọc lại 4.967.928, viết ra 18.000. So mốc 15:06: 3 lượt, ghi cache chỉ tăng 3.657, lịch sử khoảng 195 nghìn token vẫn được đọc lại từ cache, không bị ghi lại. Settings 16:15: phiên 73%, tuần 41% (từ 72% / 41%). Nghĩa là dừng 68 phút cũng không đắt; giả thuyết 4 của kế hoạch (dừng lâu mới đắt) sai ở mốc này. Khoản ghi cache 0,87 triệu của chat A (dừng 311 phút) cần giải thích khác [chưa kiểm]. Lưu ý: số đo lấy từ phiên chạy kiểu Claude Code trên cloud gắn với project, chính sách cache của chat thường trên claude.ai có thể khác.
 
 - Checkpoint 2: nhánh `feat/start-session` commit 2eb17e5 (lệnh, test, CI, chuẩn setup v3, HANDOFF/MAP/AGENTS.template/README/STATUS, số thí nghiệm 1–2 trong kế hoạch). Mọi test CI qua ở máy. Chưa có PR (gh không đăng nhập được; thien mở bằng link).
-- Checkpoint 3: nhánh `feat/drop-codex-learning` commit 4bb6fd1, xếp chồng trên `feat/start-session`. Mọi test CI qua.
+- Checkpoint 3: nhánh `feat/drop-codex-learning` commit 4bb6fd1, dòng usage-log của chat này ở commit sau đó, xếp chồng trên `feat/start-session`. Mọi test CI qua.
 
 ## Bước tiếp theo
 1. Khi thien đã mở hai PR: ghi số PR vào sổ. Sau khi merge: thien dán project instructions v3 ở 3 nick (`profile/SETUP.md`), rồi ở một chat mới đo lại thí nghiệm 1 với `start-session.mjs` (mục tiêu tối đa 4 lượt), nhớ chụp Settings trước khi mở chat.
