@@ -9,7 +9,7 @@
 (() => {
   const $el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const COLORS = { river: '#3f7fb5', road: '#8a5a2b', airfield: '#7d786c', hit: '#d8402b', lost: '#7c7a74', retreat: '#d9917f' };
+  const COLORS = { river: '#3f7fb5', road: '#8a5a2b', airfield: '#7d786c', marsh: '#6b7c4f', hit: '#d8402b', lost: '#7c7a74', retreat: '#d9917f' };
   // Màu đất theo độ cao so với đáy lòng chảo (mét): ruộng cát nhạt, sườn cỏ, đồi rừng, đỉnh núi nâu. Dùng chung cho 3D và bản phẳng.
   const LAND = [[0, '#ece3c2'], [15, '#e3dcb4'], [120, '#b9c48f'], [400, '#7f945c'], [800, '#66744a'], [1100, '#7a6a4c']];
   const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16) / 255);
@@ -93,10 +93,12 @@
     // Chú thích: chỉ những thứ trận này có.
     const has = (k) => b.features.some((f) => f.kind === k);
     const shapeOf = (s) => { const u = b.units.find((x) => x.side === s); return !u ? (s === 'vn' ? 'tri' : 'sq') : u.kind === 'gun' ? 'tri' : u.kind === 'depot' ? 'dot' : 'sq'; };
-    const L = [['fr', shapeOf('fr'), b.sides.fr ? b.sides.fr.name : 'Bên kia'], ['vn', shapeOf('vn'), b.sides.vn ? b.sides.vn.name : 'Quân ta']];
+    // Hai bên theo thứ tự trong file trận (khóa "vn" là quân ta, khóa còn lại là bên kia, ví dụ "fr" hay "ming").
+    const L = Object.keys(b.sides).map((s) => [s, shapeOf(s), b.sides[s].name]);
     const lineKinds = new Set(); Object.values(b.tracks).forEach((tr) => tr.keys.forEach((k) => (k.lines || []).forEach((l) => lineKinds.add(l.kind))));
     legend.innerHTML = L.map(([s, sh, n]) => `<span class="chip"><i class="st-ico ${sh}" style="background:${b.sides[s] ? b.sides[s].color : '#888'}"></i>${esc(n)}</span>`).join('')
-      + (has('road') ? `<span class="chip"><i class="st-ico ln" style="background:${COLORS.road}"></i>Đường tiếp tế</span>` : '')
+      + (has('road') ? `<span class="chip"><i class="st-ico ln" style="background:${COLORS.road}"></i>${esc(b.roadLabel || 'Đường tiếp tế')}</span>` : '')
+      + (has('marsh') ? `<span class="chip"><i class="st-ico dot" style="background:${COLORS.marsh}"></i>Đồng lầy</span>` : '')
       + (['attack', 'trench', 'retreat'].some((k) => lineKinds.has(k)) ? `<span class="chip"><i class="st-ico ln" style="background:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Hào, hướng đánh</span>` : '')
       + (lineKinds.has('supply') ? `<span class="chip"><i class="st-ico ln" style="background:${b.sides.vn ? b.sides.vn.color : '#b23a2a'}"></i>Hướng chở hàng</span>` : '')
       // Trạng thái vẽ bằng ký hiệu, nên chú thích nói một lần ở đây thay vì ghi chữ cạnh từng đơn vị.
@@ -160,6 +162,14 @@
           const [a, c] = f.pts.map(G.xz), len = Math.hypot(c[0] - a[0], c[1] - a[1]);
           const m = new THREE.Mesh(new THREE.BoxGeometry(.12, .02, len), new THREE.MeshLambertMaterial({ color: COLORS.airfield }));
           m.position.set((a[0] + c[0]) / 2, G.hAt((a[0] + c[0]) / 2, (a[1] + c[1]) / 2) + .012, (a[1] + c[1]) / 2); m.rotation.y = Math.atan2(c[0] - a[0], c[1] - a[1]); scene.add(m);
+        } else if (f.kind === 'place') { // địa danh: chỉ có tên, không vẽ gì
+        } else if (f.kind === 'marsh') { // đồng lầy: mỗi điểm một đĩa bán kính r km, phủ theo mặt đất
+          const mat = new THREE.MeshLambertMaterial({ color: COLORS.marsh, transparent: true, opacity: .62, depthWrite: false });
+          f.pts.map(G.xz).forEach(([x, z]) => { // đĩa chia vòng, mỗi đỉnh bám độ cao địa hình để không bị dốc che mất
+            const g = new THREE.RingGeometry(0, f.r || .25, 28, 6); g.rotateX(-Math.PI / 2); g.translate(x, 0, z);
+            const pos = g.attributes.position; for (let i = 0; i < pos.count; i++) pos.setY(i, G.hAt(pos.getX(i), pos.getZ(i)) + .01);
+            g.computeVertexNormals(); const m = new THREE.Mesh(g, mat); m.renderOrder = 1; scene.add(m);
+          });
         } else scene.add(tube(f.pts, f.kind === 'river' ? COLORS.river : COLORS.road, f.kind === 'river' ? .045 : .028, .012));
       });
       unitGroup = new THREE.Group(); lineGroup = new THREE.Group(); scene.add(unitGroup, lineGroup);
@@ -236,7 +246,11 @@
       const [px0, pz0] = flatProj(-G.wk / 2, -G.hk / 2), [px1, pz1] = flatProj(G.wk / 2, G.hk / 2);
       ctx.imageSmoothingEnabled = true; ctx.drawImage(flat.img, px0, pz0, px1 - px0, pz1 - pz0);
       const path = (pts, color, w, dash) => { ctx.beginPath(); pts.map(G.xz).forEach(([x, z], i) => { const [px, pz] = flatProj(x, z); i ? ctx.lineTo(px, pz) : ctx.moveTo(px, pz); }); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.setLineDash(dash || []); ctx.stroke(); ctx.setLineDash([]); };
-      b.features.forEach((f) => path(f.pts, COLORS[f.kind] || '#888', f.kind === 'airfield' ? 5 : f.kind === 'river' ? 3 : 2, f.kind === 'road' ? [6, 4] : null));
+      b.features.forEach((f) => {
+        if (f.kind === 'place') return;
+        if (f.kind === 'marsh') { f.pts.map(G.xz).forEach(([x, z]) => { const [px, pz] = flatProj(x, z), [qx] = flatProj(x + (f.r || .25), z); ctx.beginPath(); ctx.arc(px, pz, qx - px, 0, Math.PI * 2); ctx.fillStyle = 'rgba(107,124,79,.55)'; ctx.fill(); }); return; }
+        path(f.pts, COLORS[f.kind] || '#888', f.kind === 'airfield' ? 5 : f.kind === 'river' ? 3 : 2, f.kind === 'road' ? [6, 4] : null);
+      });
       (S.zones || []).forEach((zn) => { const [px, pz] = flatProj(zn.x, zn.z), [qx] = flatProj(zn.x + zn.r, zn.z); ctx.beginPath(); ctx.arc(px, pz, qx - px, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(178,58,42,.16)'; ctx.fill(); ctx.setLineDash([5, 4]); ctx.strokeStyle = 'rgba(178,58,42,.7)'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.setLineDash([]); });
       if (vs) { const [px, pz] = flatProj(vs.x, vs.z); ctx.beginPath(); ctx.arc(px, pz, 6, 0, Math.PI * 2); ctx.fillStyle = '#1d1d1b'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); }
@@ -394,7 +408,7 @@
     }
     // Chạm vào ký hiệu (hay nhãn của nó): hiện tên đầy đủ, bên nào và đang ra sao ở mốc này. Chạm chỗ trống thì đóng.
     function unitFacts(u, S) {
-      const side = b.sides[u.side] ? b.sides[u.side].name : '', kind = u.kind === 'gun' ? 'trận địa pháo' : u.kind === 'depot' ? 'kho, điểm trung chuyển' : 'cứ điểm';
+      const side = b.sides[u.side] ? b.sides[u.side].name : '', kind = u.kind === 'gun' ? 'trận địa pháo' : u.kind === 'depot' ? 'kho, điểm trung chuyển' : u.kind === 'troop' ? 'đạo quân' : 'cứ điểm';
       const state = S.lose.has(u.id) ? 'đã mất' : S.hit.has(u.id) ? 'đang bị đánh' : '';
       return [side, kind, state].filter(Boolean).join(' · ');
     }
