@@ -5,8 +5,8 @@ Trạng thái: đang chạy · Duyệt: chưa (chờ thien) · Cập nhật: 202
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 (đo): thí nghiệm 1 có 2 lần (lần 1 thiếu số Settings trước); thí nghiệm 2 dừng 10 phút có 2 lần, dừng hơn 65 phút có 1 lần (bảng "Kết quả đo"). Checkpoint 2 xong: khởi động theo v3 còn 3 lượt (đo 2026-11-15 16:49). Checkpoint 3 xong. Chưa đổi luật `profile/CHATS.md`.
-- Còn thiếu: một lần thí nghiệm 1 có đủ số Settings trước và sau (lần 1 thiếu số trước, nên chưa tính); lần 2 của thí nghiệm 2 (dừng hơn 65 phút); thí nghiệm 3, 4.
+- Đang ở: checkpoint 1 (đo): thí nghiệm 1 có 2 lần (lần 1 thiếu số Settings trước); thí nghiệm 2 dừng 10 phút có 2 lần, dừng hơn 65 phút có 1 lần; thí nghiệm 3 có 1 lần (bảng "Kết quả đo"). Checkpoint 2 xong: khởi động theo v3 còn 3 lượt (đo 2026-11-15 16:49). Checkpoint 3 xong. Chưa đổi luật `profile/CHATS.md`.
+- Còn thiếu: lần 2 của thí nghiệm 2 (dừng hơn 65 phút); lần 2 của thí nghiệm 3 (connector); thí nghiệm 4. Thí nghiệm 1 đã có một lần đủ số Settings (2026-11-15 18:25, cùng lần thí nghiệm 3).
 - thien cần làm: duyệt kế hoạch; khi mở chat mới thì để AI chạy `explain-usage` ở những chỗ ghi trong thí nghiệm.
 
 ## thien hỏi gì
@@ -45,6 +45,7 @@ Số của `explain-usage` (cộng dồn cả chat) và Settings > Usage (số t
 | 2. Dừng khoảng 10 phút | 2 | chat 17:20 (nick tnt697, cùng phiên kiểu Claude Code trên cloud), dừng 11 phút (17:52–18:03) ngay sau lúc phiên Settings reset: 3 lượt quanh lần dừng, ghi cache chỉ tăng 3,4 nghìn; đọc lại khoảng 212 nghìn mỗi lượt, gần như toàn bộ lịch sử vẫn đọc từ cache; quy đổi khoảng 27 nghìn mỗi lượt, bằng trung bình cả chat. Trước đó trong cùng chat, hai lần dừng khoảng 6 và 12 phút (4 lượt) ghi cache cũng chỉ tăng 4 nghìn | trước: phiên 0% (vừa reset), tuần 44% (17:51); sau: 0%, 44% (18:03) | không đắt thêm; lần 2 khớp lần 1 |
 | Thang Settings (phụ) | 1 | chat 17:20, từ lúc phiên Settings reset (khoảng 17:50) tới 18:10: khoảng 11 lượt (đo, mở PR #85, chờ CodeRabbit, sửa, ghi sổ), quy đổi khoảng 300 nghìn (ước từ hai lần `explain-usage` 17:51 và 18:03 cộng các lượt sau) | phiên 0% → 2%, tuần 44% → 44% | 1% phiên khoảng 120–200 nghìn quy đổi, tức khoảng 5–7 lượt ở chat cỡ này [chưa kiểm: Settings làm tròn, hệ số quy đổi của claude.ai chưa biết] |
 | 2. Dừng hơn 65 phút | 1 | dừng 68 phút (15:07–16:15): 3 lượt quanh lần dừng, ghi cache chỉ tăng 3,7 nghìn; lịch sử khoảng 195 nghìn token vẫn đọc từ cache | 72% → 73% qua 3 lượt | không đắt thêm; cache sống ít nhất 68 phút ở phiên này |
+| 3. Connector (tắt Figma, Claude in Chrome, sakubun bản claude.ai; giữ GitHub, sakubun-v2) | 1 | chat mới 18:25 (nick tnt697, chuẩn v3, `--claim`), đo ngay sau khi nhận việc: 3 lượt; đọc lại 0,42 triệu (khoảng 140 nghìn mỗi lượt), ghi cache 24 nghìn, viết ra 1,9 nghìn; quy đổi khoảng 98 nghìn (khoảng 33 nghìn mỗi lượt); hướng dẫn hệ thống 77%, lệnh khởi động 7%, gắn repo 5% (vẫn gắn 2 lần vì xin quyền ghi bị chặn) | trước: phiên 4%, tuần 45% (18:25); sau: 5%, 45% (18:28), gồm cả lượt `explain-usage` | gần như bằng thí nghiệm 1 lần 2 lúc còn bật connector (0,42 triệu, 78%): tắt connector không làm phần nền nhỏ đi thấy được. Có thể vì công cụ connector vốn nạp hoãn, chỉ tốn tên [chưa kiểm]. Lần này cũng là thí nghiệm 1 có đủ số Settings: khởi động 3 lượt tốn khoảng 1% phiên |
 
 ## Hướng đề xuất (giả thuyết, đổi luật chỉ sau khi đo)
 - **Một chat cho một giai đoạn làm liền mạch**, không phải cho một việc nhỏ. Giữ chat khi đang làm liên tục và bước sau cần những gì đã có trong chat. Đổi chat khi sắp dừng lâu (đi học trên trang, đi ngủ, sang ngày khác), khi bước sau gần như không cần lịch sử, hay khi chat đã rất dài (Claude bắt đầu tự tóm tắt).
