@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: docs/measure-pause-10min-2 · PR: #85
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZHoNMKXiYgZeiGW53 · Cập nhật: 2026-11-15T11:04Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZHoNMKXiYgZeiGW53 · Cập nhật: 2026-11-15T11:09Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -25,11 +25,11 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 - Chat 17:20: `--claim` có ngoặc bị báo nhầm là sổ sai mẫu. Đã sửa `start-session.mjs` và thêm test, ghi vào "Lỗi gặp" của kế hoạch: nhánh `fix/claim-format`, PR #84. Test node chạy trên máy đều qua. CodeRabbit góp 2 ý: sửa 1 (commit trên nhánh), giữ 1 (đã trả lời trên PR). Đã merge theo lời thien (squash cf82f16), nhánh tự xoá.
 - Thí nghiệm 2 lần 2, dừng khoảng 10 phút, mốc trước (17:3x, chat session_01WXAvBZ…): `explain-usage` 27 lượt, ghi cache 76.782, đọc lại 4.867.157, viết ra 17.361 (quy đổi khoảng 727 nghìn). Chưa có số Settings.
 - Thí nghiệm 2 lần 2, mốc trước sau reset phiên (17:51): Settings phiên 0%, tuần 44%. `explain-usage` 31 lượt, ghi cache 80.788, đọc lại 5.696.100, viết ra 20.707 (quy đổi khoảng 835 nghìn). Từ mốc 27 lượt tới đây (4 lượt, có hai lần dừng khoảng 6 và 12 phút) ghi cache chỉ tăng 4.006. thien bắt đầu dừng khoảng 10 phút sau tin này.
-- Thí nghiệm 2 lần 2, dừng 11 phút (17:52–18:03): 34 lượt, ghi cache 84.223 (chỉ tăng 3.435 qua 3 lượt), đọc lại 6.332.028, viết ra 22.953. Settings 18:03: phiên 0%, tuần 44%. Đã ghi vào bảng "Kết quả đo": nhánh `docs/measure-pause-10min-2`, PR #85.
+- Thí nghiệm 2 lần 2, dừng 11 phút (17:52–18:03): 34 lượt, ghi cache 84.223 (chỉ tăng 3.435 qua 3 lượt), đọc lại 6.332.028, viết ra 22.953. Settings 18:03: phiên 0%, tuần 44%. Đã ghi vào bảng "Kết quả đo": nhánh `docs/measure-pause-10min-2`, PR #85. CodeRabbit góp 1 ý (thí nghiệm 1 lần 1 thiếu số Settings trước), đã sửa; CI xanh.
 
 ## Bước tiếp theo
-1. Chờ CodeRabbit ở PR #85, xử lý từng ý, rồi thien merge.
-2. Lần 2 của thí nghiệm 2 (dừng hơn 65 phút) khi tiện; thí nghiệm 3 (connector), 4 (sau buổi học).
+1. thien merge PR #85.
+2. Khi tiện: thí nghiệm 1 thêm một lần có đủ số Settings (chụp trước khi mở chat mới, chạy `explain-usage` ngay sau khi nhận việc, chụp lại); lần 2 của thí nghiệm 2 (dừng hơn 65 phút); thí nghiệm 3 (connector), 4 (sau buổi học).
 
 ## Đang chờ thien
 - Merge PR #85: https://github.com/thiengthb/thienai-workflow/pull/85
