@@ -15,7 +15,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | [Sửa công cụ kiểm tra báo thành công khi chưa kiểm gì](plans/2026-11-12-silent-tools-fix.md) | 1/2: chờ thien chạy thử trên laptop | 5/5 |
 | [Chuyển repo thienui sang riêng tư](plans/2026-11-14-thienui-private.md) | 3/3: xong, chờ merge PR | 4/5 |
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 2/6 xong; đợt 2 (gói buổi, nhật ký 3 dòng) đã merge (PR #81) | 6/12 |
-| [Dùng Claude tốn ít usage hơn: đo trước, đổi sau](plans/2026-11-15-claude-usage.md) | 1/4 đang đo (thí nghiệm 2 xong: dừng 10 hay hơn 65 phút đều không đắt thêm; 1 và 3 có một lần đủ số: tắt connector không thấy giảm, mới một lần với số làm tròn); 2/4 xong (khởi động còn 3 lượt, từ 12); 3/4 bỏ Codex xong | 3/7 |
+| [Dùng Claude tốn ít usage hơn: đo trước, đổi sau](plans/2026-11-15-claude-usage.md) | 1/4 đang đo (thí nghiệm 2 xong: dừng 10 hay hơn 65 phút, lịch sử chat vẫn không bị ghi lại; 1 và 3 có một lần đủ số: tắt connector không thấy giảm, mới một lần với số làm tròn); 2/4 xong (khởi động còn 3 lượt, từ 12); 3/4 bỏ Codex xong | 3/7 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
