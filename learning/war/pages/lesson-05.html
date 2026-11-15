@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi" data-board="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chiến tranh 5: ải Chi Lăng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style id="kit-css"></style>
+<style id="lesson-css"></style>
+<style id="war-css"></style>
+<style>
+/* Bài 5: nút chọn điều lo nhất, hai câu tầng đặt cạnh nhau */
+.g4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 10px 0; }
+.g4 button { font: 500 15px/1.3 var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: var(--r); min-height: 48px; padding: 8px 10px; cursor: pointer; text-align: left; -webkit-tap-highlight-color: transparent; }
+.g4 button[aria-pressed="true"] { border-color: var(--ink); border-width: 2px; font-weight: 600; }
+.g4 button[aria-pressed="true"]::before { content: "Bạn chọn · "; font-weight: 700; }
+.g4 button[disabled] { cursor: default; color: var(--ink); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 560px) { .g4, .pair { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<script type="application/json" id="lesson">{"id":"war-05","subject":"Chiến tranh","title":"Buổi 5: Địa hình và thời tiết ở ải Chi Lăng","extra":false}</script>
+<script type="application/json" id="battle" data-src="../battles/chi-lang-1427.json"></script>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>Chiến tranh · Buổi 5: Địa hình và thời tiết ở ải Chi Lăng</span><span id="cnt">1/9</span></div><div class="bar"><span id="bar"></span></div></div>
+  <div id="board"></div>
+
+  <!-- 0. Mở bài: nhìn địa hình trước, chưa hỏi gì -->
+  <section class="step on" data-s="0" data-board="real@0">
+    <h1>Một đoạn đường giữa hai dãy núi</h1>
+    <p>Đây là địa hình thật của ải Chi Lăng (Lạng Sơn), trên con đường từ biên giới phía bắc về kinh thành. Quân Minh đang kéo xuống từ góc trên bên phải.</p>
+    <p>Trước khi đọc gì, nhìn sa bàn một lúc. Bấm nút <b>"Đứng dưới lòng ải"</b> ở góc trên để thấy chỗ này từ dưới đáy, rồi <b>"Từ sườn núi nhìn xuống"</b>. Chạm vào một chỗ đất trống trên sườn núi: phần sáng là những gì đứng đó nhìn thấy được.</p>
+    <p class="small muted">Khoảng 15 phút.</p>
+    <button class="btn primary next" type="button" data-go="1">Bắt đầu</button>
+  </section>
+
+  <!-- 1. Ôn, chỉ lần học đầu -->
+  <section class="step" data-s="1" data-part="review">
+    <h2>Ôn nhanh</h2>
+    <p class="small muted">Trả lời theo trí nhớ, đừng lật lại bài cũ.</p>
+    <div class="card">
+      <p><b>1.</b> Buổi trước: gánh bộ đường xa, 1 kg gạo tới mặt trận thì 24 kg đã ăn dọc đường. Xe đạp thồ làm con số đó nhỏ lại chủ yếu nhờ đâu?</p>
+      <div class="q" data-q="W12" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Nhờ đi lọt những đoạn đường hẹp mà ô tô không vào được</button>
+        <button class="opt" type="button">Nhờ một người đẩy xe chở 200 đến 300 kg, gấp hơn 10 lần một người gánh, mà vẫn chỉ ăn như một người</button>
+        <button class="opt" type="button">Nhờ xe đạp đi nhanh hơn nên ít ngày đường hơn</button>
+        <p class="why">Đi đường hẹp là đúng, nhưng cái làm phép trừ nhỏ lại là chở nhiều: phần ăn dọc đường của một người chia cho 200 đến 300 kg thay vì vài chục kg (Học viện Quốc phòng).</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Buổi 1: vì sao Ngô Quyền không đem thuyền ra chặn thẳng quân Nam Hán ở cửa biển Bạch Đằng?</p>
+      <div class="q" data-q="W2" data-a="2" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Vì quân ta không có thuyền</button>
+        <button class="opt" type="button">Vì cửa biển quá xa kinh thành</button>
+        <button class="opt" type="button">Vì ra cửa biển là đánh vào đúng chỗ mạnh nhất của Nam Hán là chiến thuyền; ông dụ họ vào chỗ địa hình làm thuyền thành cái bẫy</button>
+        <p class="why">Hôm nay là cùng một ý, trên đất liền: không đánh ở chỗ địch mạnh, mà chọn chỗ địa hình làm cái mạnh của địch thành gánh nặng.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="2" data-need="W12 W2" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 2. Thử trước: cảm nhận địa hình từ phía bên kia -->
+  <section class="step" data-s="2" data-board="real@0">
+    <h2>Thử đứng ở phía quân Minh</h2>
+    <p>Giả sử bạn dẫn một đạo quân rất đông, nhiều ngựa, đi theo đường cái quan (đường nâu đứt nét) xuyên qua lòng ải này. Bấm "Đứng dưới lòng ải" để nhìn từ chỗ người lính sẽ đứng.</p>
+    <p><b>Đi qua đây, bạn lo nhất điều gì?</b> Không có đáp án đúng, chọn theo cảm giác.</p>
+    <div class="g4" id="worry" role="group" aria-label="Điều lo nhất khi đi qua ải">
+      <button type="button" data-g="0" aria-pressed="false">Hai bên núi cao, ai núp trên đó mình không thấy</button>
+      <button type="button" data-g="1" aria-pressed="false">Đường hẹp, quân đông phải đi thành hàng dài</button>
+      <button type="button" data-g="2" aria-pressed="false">Đáy ải có đồng lầy, ngựa khó đi</button>
+      <button type="button" data-g="3" aria-pressed="false">Không lo lắm, quân mình đông</button>
+    </div>
+    <p class="fb" id="worryFb" role="status"></p>
+    <button class="btn primary next" type="button" data-go="3" data-need="worry" disabled>Tiếp: đổi sang phía bên kia</button>
+  </section>
+
+  <!-- 3. Quyết định -->
+  <section class="step" data-s="3" data-board="real@0">
+    <h2>Giờ bạn là Bình Định vương Lê Lợi</h2>
+    <p class="small muted">Cuối tháng 9/1427. Đây là những gì Bình Định vương biết lúc đó (theo Đại Việt sử ký toàn thư):</p>
+    <ul class="know">
+      <li>Quân Minh còn cố thủ trong thành Đông Quan. Nhiều tướng khuyên đánh thành; Bình Định vương cho rằng "đánh thành là hạ sách", chọn đợi đánh viện binh.</li>
+      <li>Hai đạo viện binh sắp tới: Tổng binh Liễu Thăng vào cửa Pha Lũy (Lạng Sơn), Kiềm quốc công Mộc Thạnh vào cửa Lê Hoa. Đạo Liễu Thăng đông hơn.</li>
+      <li>Bình Định vương nhận định: "lấy mạnh nạt yếu, lấy nhiều lấn ít" là lẽ thường, nhưng quân đi cứu nguy cấp phải đi gấp, đường xa thì mỏi mệt.</li>
+      <li>Thành Xương Giang trên đường viện binh đã bị ta hạ ngày 28/9.</li>
+      <li>Từ Pha Lũy về Đông Quan, đoạn đầu khoảng 60 km là núi; Chi Lăng là ải hiểm nhất trên đường đó (sa bàn bên cạnh).</li>
+    </ul>
+    <p><b>Bạn đánh đạo quân Liễu Thăng ở đâu?</b> Bấm "Xem" để thấy mỗi cách trên sa bàn trước khi chọn.</p>
+    <div class="choose" data-c="d1" data-real="B" data-same="Giống cách thật. Để ý xem chuyện thật làm thêm điều gì để quân Minh chịu đi vào đúng chỗ đó." data-diff="Người thật chọn B. Xem chuyện thật rồi so với cách của bạn.">
+      <div class="row"><button class="opt" type="button" data-v="A"><span><b>A.</b> Chặn ngay cửa bắc ải: đắp lũy ở chỗ đường hẹp nhất, đánh thẳng khi quân Minh tới</span></button><button class="btn" type="button" data-plan="A">Xem</button></div>
+      <div class="row"><button class="opt" type="button" data-v="B"><span><b>B.</b> Phục binh trên sườn núi hai bên lòng ải, để quân Minh đi sâu vào rồi mới đánh</span></button><button class="btn" type="button" data-plan="real">Xem</button></div>
+      <div class="row"><button class="opt" type="button" data-v="C"><span><b>C.</b> Bỏ vùng núi, rút về đồng bằng gần Đông Quan, dồn sức đánh một trận lớn ở chỗ rộng</span></button><button class="btn" type="button" data-plan="C">Xem</button></div>
+    </div>
+    <button class="btn primary next" type="button" data-go="4" data-need="d1" disabled>Xem chuyện gì xảy ra</button>
+  </section>
+
+  <!-- 4. Xem chuyện thật, tự để ý -->
+  <section class="step" data-s="4" data-board="real">
+    <h2>Chuyện gì đã xảy ra</h2>
+    <p class="fb" data-echo="d1"></p>
+    <p>Bấm từng mốc dưới sa bàn, hoặc nút <b>Tiếp ›</b>. Ở mốc "Lui, rồi giả thua", thử nút "Mắt quân Minh". Xong thì xem hai cách còn lại (mô phỏng).</p>
+    <div class="tracks"><button class="btn" type="button" data-track="real">Chuyện thật</button><button class="btn" type="button" data-track="A">Nếu chặn ở cửa bắc</button><button class="btn" type="button" data-track="C">Nếu rút về đồng bằng</button></div>
+    <div class="card"><p>Ở mốc "Trận núi Mã Yên", nhìn chỗ Liễu Thăng bị đánh (khối xám cắm cờ) và chỗ đại quân Minh (vòng đỏ). So với mốc đầu, khi quân Minh còn ở Ải Lưu: giờ hai phần của đạo quân cách nhau bao xa, và giữa chúng có gì? Một câu thôi.</p><textarea data-key="notice" data-min="3" placeholder="Mình thấy..."></textarea></div>
+    <button class="btn primary next" type="button" data-go="5" data-need="seen-real notice" disabled>Tiếp: vì sao</button>
+  </section>
+
+  <!-- 5. Ý chính, nguồn -->
+  <section class="step" data-s="5" data-board="real">
+    <h2>Địa hình biến cái mạnh của địch thành gánh nặng</h2>
+    <p class="fb" id="echo5"></p>
+    <div class="card">
+      <p><b>1. Lòng ải làm số đông mất tác dụng.</b> Trên sa bàn, đáy ải chỉ rộng chừng 1 km, hai bên núi cao hơn đáy 200 đến 400 m, dài 4 đến 5 km. Đạo quân lớn phải đi thành hàng dài: đầu bị đánh thì đuôi còn ngoài ải, không lên kịp. Đồng lầy và cây cầu thắt lại thêm một lần nữa; Minh sử chép cầu gãy, quân sau không theo được. Người phục trên sườn nhìn thấy cả lòng ải, người dưới đáy không thấy họ. (Suy luận từ độ cao thật và hai bộ sử.)</p>
+      <p><b>2. Địa hình chỉ có ích khi địch chịu đi vào, và đi trong lúc vội.</b> Bình Định vương tính trước: quân cứu viện phải đi gấp, đường xa thì mỏi. Trần Lựu lui mấy lần rồi giả thua; Liễu Thăng thấy thắng dễ nên phi lên trước với hơn trăm kỵ (Minh sử). Thiếu phần này thì lòng ải chỉ là một đoạn đường khó đi. Lừa địch sẽ có một buổi riêng.</p>
+      <p><b>3. Thời tiết: cùng một trận mưa, bên mất chỗ dựa chịu nặng hơn.</b> Trong cả đợt đánh, sử chỉ chép thời tiết một lần, ở Xương Giang: mưa to gió lớn, người ngựa không nhích được. Lúc đó quân Minh đã mất thành Xương Giang, bị chặn đường lương, phải đóng giữa cánh đồng. Đây là chỗ thời tiết gặp hậu cần của buổi 4. (Phần nối này là suy luận.)</p>
+    </div>
+    <div class="card small"><p><b>Nguồn</b></p>
+      <p><i>Đại Việt sử ký toàn thư</i>, Bản kỷ quyển X, tờ 39a–42a (bản dịch Viện Sử học, NXB Khoa học Xã hội, 1993; <a href="https://www.tuvienquangduc.com.au/lichsu/lichsuvietnam/Daivietsukytoanthu.pdf" target="_blank" rel="noopener">bản PDF</a>, trang 349–351): lời "đánh thành là hạ sách"; nhận định về quân đi gấp, mỏi mệt; ngày quân Minh vào Pha Lũy; 1 vạn quân, 5 voi mai phục ở Chi Lăng; Trần Lựu lui, giả thua; Liễu Thăng bị chém ở núi Mã Yên; Cần Trạm, Phố Cát; Xương Giang bị hạ ngày mùng 8 tháng 9; mưa to gió lớn; chú thích về núi Mã Yên và cánh đồng lầy.</p>
+      <p><i>Minh sử</i>, <a href="https://zh.wikisource.org/wiki/%E6%98%8E%E5%8F%B2/%E5%8D%B7154" target="_blank" rel="noopener">quyển 154, truyện Liễu Thăng</a>: 7 vạn quân; quân Lam Sơn giữ chỗ hiểm, thua liền mấy lần; lời can "kiêu là điều nhà binh kỵ"; hơn trăm kỵ qua cầu, cầu gãy, sa lầy, trúng lao.</p>
+      <p>Cỡ lòng ải: <a href="https://baotanglichsu.vn/vi/Articles/3097/15231/chien-thang-chi-lang-xuong-giang-8-10-djen-3-11-1427.html" target="_blank" rel="noopener">Bảo tàng Lịch sử quốc gia</a> ghi dài khoảng 4 km, rộng gần 1 km; tài liệu khác ghi dài 5 km, rộng 3 km. Đổi ngày âm sang dương và mốc 27 ngày: GS Lê Văn Lan, <a href="https://sknc.qdnd.vn/chuyen-xua-nay/chien-dich-chi-lang-xuong-giang-da-dien-ra-nhu-the-nao-500761" target="_blank" rel="noopener">Sự kiện và Nhân chứng, báo Quân đội nhân dân</a> (2017).</p>
+      <p>Chỗ các nguồn chép khác nhau: quân Minh hơn 10 vạn và 2 vạn ngựa (Toàn thư) hay 7 vạn (Minh sử); Lương Minh bị chém tại trận (Toàn thư) hay chết bệnh (Minh sử); Liễu Thăng xông lên với hơn trăm kỵ (Minh sử) hay cả cánh tiên phong hơn 1 vạn (bài của GS Lê Văn Lan).</p>
+      <p>Không lấy từ sử: cách A và C (mô phỏng); vị trí các ải, núi Mã Yên, đồng lầy, quân hai bên trên sa bàn (ước lượng); phần giải thích (suy luận của Claude). Địa hình: độ cao thật từ AWS Terrain Tiles.</p>
+    </div>
+    <button class="btn primary next" type="button" data-go="6">Tiếp</button>
+  </section>
+
+  <!-- 6. Câu hỏi nhanh: hai tầng dưới đặt cạnh nhau, và thời tiết gặp hậu cần -->
+  <section class="step" data-s="6">
+    <h2>Câu hỏi nhanh</h2>
+    <p class="small">Hai câu đầu đặt cạnh nhau cho dễ so. Mẹo tách "một trận" với "một đợt đánh": <b>có mấy chỗ, kéo dài bao lâu.</b></p>
+    <div class="pair">
+      <div class="card">
+        <p><b>1.</b> Trận ở núi Mã Yên, ngày 10/10/1427</p>
+        <div class="q" data-q="t1" data-a="0"><p class="status" role="status"></p>
+          <button class="opt" type="button">Một trận</button>
+          <button class="opt" type="button">Một đợt đánh</button>
+          <button class="opt" type="button">Cả cuộc chiến</button>
+          <p class="why">Một chỗ, một ngày: một trận.</p>
+        </div>
+      </div>
+      <div class="card">
+        <p><b>2.</b> Chi Lăng – Xương Giang, từ 8/10 đến 3/11/1427</p>
+        <div class="q" data-q="t2" data-a="1"><p class="status" role="status"></p>
+          <button class="opt" type="button">Một trận</button>
+          <button class="opt" type="button">Một đợt đánh</button>
+          <button class="opt" type="button">Cả cuộc chiến</button>
+          <p class="why">Nhiều trận (Chi Lăng, Cần Trạm, Phố Cát, Xương Giang), gần một tháng, dọc khoảng 100 km đường, cùng một mục tiêu là phá đạo viện binh: một đợt đánh. Giống hệt "phá Khâm, Liêm rồi vây Ung" năm 1075.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> Toàn thư chép ở Xương Giang "mưa to gió lớn, người ngựa không nhích được". Vì sao trận mưa đó đè nặng lên quân Minh hơn?</p>
+      <div class="q" data-q="q3" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Vì quân Minh không quen mưa miền nam</button>
+        <button class="opt" type="button">Vì họ đã mất thành Xương Giang, bị chặn đường lương, phải đóng giữa cánh đồng: không chỗ trú, không lương mới</button>
+        <button class="opt" type="button">Vì mưa làm súng của quân Minh không bắn được</button>
+        <p class="why">Trời mưa như nhau cho cả hai bên. Bên mất chỗ dựa và đường lương thì một trận mưa thành thêm một gánh nặng. Hai lựa chọn kia không có nguồn nào chép. (Suy luận, từ các chi tiết Toàn thư chép.)</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="7" data-need="t1 t2 q3" disabled>Tiếp</button>
+  </section>
+
+  <!-- 7. Tự nói lại -->
+  <section class="step" data-s="7">
+    <h2>Tự nói lại</h2>
+    <p>Viết 1–2 câu: ở Chi Lăng, địa hình giúp bên ít quân đánh bên đông quân bằng cách nào, và vì sao chỉ có địa hình thôi thì chưa đủ?</p>
+    <textarea data-key="teach" data-min="5" placeholder="Vì..."></textarea>
+    <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Lòng ải hẹp giữa hai dãy núi, có đồng lầy và cầu, nên đạo quân đông phải đi thành hàng dài: phục binh trên sườn đánh vào đầu, đuôi không lên kịp, số đông không dùng được. Nhưng địa hình chỉ có ích khi địch chịu đi vào đúng chỗ đó và đi trong lúc vội, nên còn cần tính trước tâm thế của địch (quân cứu viện phải đi gấp) và dụ họ vào (Trần Lựu lui, giả thua).</div></div>
+    <button class="btn primary next" type="button" data-go="8" data-need="teach" disabled>Tiếp</button>
+  </section>
+
+  <!-- 8. Góp ý -->
+  <section class="step" data-s="8">
+    <h2>Góp ý buổi này</h2>
+    <div class="card">
+      <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
+      <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Bước "đứng ở phía quân Minh" trước khi làm chỉ huy</b><div class="seg full" data-f="method"><button type="button" data-v="giúp hiểu hơn" aria-pressed="false">Giúp hiểu hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="thừa" aria-pressed="false">Thừa</button></div></div>
+      <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+    </div>
+    <button class="btn primary next" type="button" id="finish">Xong buổi học</button>
+    <p class="done-msg" id="done-msg" role="status"></p>
+    <button class="btn next hide" type="button" id="copy">Chép kết quả</button>
+  </section>
+</div>
+
+<script id="kit-js"></script>
+<script id="lesson-js"></script>
+<script id="war-js"></script>
+<script>
+/* Bài 5: chọn điều lo nhất khi đi qua ải (không có đúng sai), nhắc lại ở bước ý chính cùng lựa chọn của người học. */
+(() => {
+  const say = [
+    'Bạn lo bị phục trên núi. Đó đúng là điều quân Minh không thấy được: thử nút "Từ sườn núi nhìn xuống" để xem phía bên kia thấy gì.',
+    'Bạn lo đội hình bị kéo dài. Giữ ý này, nó là chìa khóa của buổi hôm nay.',
+    'Bạn lo đồng lầy. Giữ ý này, lát nữa sử sẽ nhắc tới nó.',
+    'Bạn tin vào số đông. Giữ ý này, lát nữa xem số đông giúp được tới đâu trong lòng ải.'];
+  const bs = [...document.querySelectorAll('#worry button')];
+  bs.forEach((b) => b.addEventListener('click', () => {
+    if (R.worry !== undefined) return;
+    R.worry = b.textContent; const g = +b.dataset.g; R.worryIdx = g;
+    bs.forEach((x) => { x.disabled = true; x.setAttribute('aria-pressed', String(x === b)); });
+    document.getElementById('worryFb').textContent = say[g];
+    Lesson.done('worry');
+  }));
+  const echo = () => {
+    const e = document.getElementById('echo5'), c = R.choices && R.choices.d1, v = c && c.pick, w = R.worryIdx;
+    const a = v === 'B' ? 'Bạn chọn B, giống cách thật.' : v === 'A' ? 'Bạn chọn A, đánh ở cửa ải.' : v === 'C' ? 'Bạn chọn C, rút về đồng bằng.' : '';
+    const b = w === 1 ? ' Lúc đứng ở phía quân Minh, bạn lo đội hình bị kéo dài: đó đúng là ý 1 dưới đây.'
+      : w === 0 ? ' Lúc đứng ở phía quân Minh, bạn lo bị phục trên núi: ý 1 dưới đây nói vì sao phục ở đó lại có lợi.'
+      : w === 2 ? ' Lúc đứng ở phía quân Minh, bạn lo đồng lầy: Minh sử chép Liễu Thăng chết đúng ở chỗ sa lầy.'
+      : w === 3 ? ' Lúc đứng ở phía quân Minh, bạn tin vào số đông: ý 1 dưới đây là chỗ số đông mất tác dụng.' : '';
+    e.textContent = a + b;
+  };
+  document.querySelectorAll('.choose[data-c="d1"] .opt').forEach((o) => o.addEventListener('click', () => setTimeout(echo, 0)));
+  bs.forEach((b) => b.addEventListener('click', () => setTimeout(echo, 0)));
+})();
+</script>
+<script id="lesson-kit"></script>
+</body>
+</html>
