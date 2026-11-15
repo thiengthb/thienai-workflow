@@ -28,11 +28,12 @@ const battle = {
   terrain: { cols, rows, min: 50, max: 400, widthKm: 8.3, heightKm: 6.6, h: Buffer.from(u16.buffer).toString('base64') },
 };
 const dir = mkdtempSync(join(tmpdir(), 'sandtable-'));
-const file = join(dir, 'p.html');
-writeFileSync(file, `<!doctype html><meta charset="utf-8"><style>${rd('../../artifacts/kit/kit.css')}${rd('../../artifacts/war/war.css')}</style>
+const page = (bt, name) => { const f = join(dir, name); writeFileSync(f, `<!doctype html><meta charset="utf-8"><style>${rd('../../artifacts/kit/kit.css')}${rd('../../artifacts/war/war.css')}</style>
 <body><div id="board" style="display:flex;width:900px;height:600px"></div>
 <script>${rd('../../artifacts/war/sandtable.js')}</script>
-<script>window.st = Sandtable.mount(document.getElementById('board'), ${JSON.stringify(battle)}, {}); st.show('real', { at: 0 });</script></body>`);
+<script>window.st = Sandtable.mount(document.getElementById('board'), ${JSON.stringify(bt)}, {}); st.show('real', { at: 0 });</script></body>`); return f; };
+const file = page(battle, 'p.html');
+const noMarsh = page({ ...battle, features: battle.features.filter((f) => f.kind !== 'marsh') }, 'q.html');
 
 const { chromium } = createRequire(import.meta.url)('playwright');
 const browser = await chromium.launch();
@@ -44,6 +45,13 @@ const legend = await p.locator('.st-legend').innerText();
 for (const t of ['Quân Minh', 'Quân Lam Sơn', 'Đường cái quan', 'Đồng lầy']) assert.ok(legend.includes(t), `chú thích có "${t}": ${legend}`);
 assert.ok(!legend.includes('Đường tiếp tế'), 'roadLabel thay chữ mặc định');
 assert.ok(await p.locator('.st-lbl.feat.place', { hasText: 'núi Thử' }).count(), 'địa danh kiểu place có nhãn');
+// Đồng lầy phải được vẽ lên bản đồ, không chỉ có trong chú thích: so khung vẽ với bản bỏ marsh.
+const shot = async (pg) => pg.evaluate(() => document.querySelector('#board canvas').toDataURL());
+const withMarsh = await shot(p);
+const q = await browser.newPage({ viewport: { width: 1000, height: 700 } });
+await q.goto(pathToFileURL(noMarsh).href); await q.waitForTimeout(400);
+assert.notEqual(withMarsh, await shot(q), 'đồng lầy có vẽ trên bản đồ phẳng');
+await q.close();
 await p.evaluate(() => st.show('real', { at: 1 }));
 await p.waitForTimeout(200);
 assert.deepEqual(errors, [], 'không lỗi khi vẽ marsh, place, troop');
