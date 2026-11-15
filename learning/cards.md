@@ -30,12 +30,15 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | W8 | Chiến tranh | Vì sao Đại tướng Võ Nguyên Giáp hoãn trận đánh Điện Biên Phủ ngày 26/1/1954? | [bài 3](war/lessons/03-three-levels-dien-bien-phu.md) | 2 | 2026-11-18 |
 | W9 | Chiến tranh | Vì sao "hoãn vài ngày rồi đánh theo kế hoạch cũ" vẫn chưa đủ? | [bài 3](war/lessons/03-three-levels-dien-bien-phu.md) | 1 | 2026-11-13 |
 | W10 | Chiến tranh | Khi đổi sang "đánh chắc tiến chắc", đạn và gạo tăng bao nhiêu lần? Thứ nào tăng mạnh hơn, vì sao? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 2 | 2026-11-17 |
-| W12 | Chiến tranh | Gánh bộ đường xa, để 1 kg gạo tới mặt trận thì dọc đường ăn mất bao nhiêu? Xe đạp thồ giảm con số đó bằng cách nào? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 1 | 2026-11-15 |
+| W12 | Chiến tranh | Gánh bộ đường xa, để 1 kg gạo tới mặt trận thì dọc đường ăn mất bao nhiêu? Xe đạp thồ giảm con số đó bằng cách nào? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 2 | 2026-11-18 |
 | W13 | Chiến tranh | Chỉ huy Pháp tính sai điều gì về hậu cần của bên ta ở Điện Biên Phủ? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 1 | 2026-11-15 |
+| W14 | Chiến tranh | Ở ải Chi Lăng năm 1427, lòng ải hẹp làm đạo quân đông của Liễu Thăng bất lợi ở điểm nào? | [bài 5](war/lessons/05-terrain-chi-lang-1427.md) | 1 | 2026-11-16 |
+| W15 | Chiến tranh | Vì sao chỉ có địa hình hiểm thôi thì chưa đủ để thắng ở Chi Lăng? | [bài 5](war/lessons/05-terrain-chi-lang-1427.md) | 1 | 2026-11-16 |
+| W16 | Chiến tranh | Ở Xương Giang có mưa to gió lớn. Vì sao trận mưa đè nặng lên quân Minh hơn quân ta? | [bài 5](war/lessons/05-terrain-chi-lang-1427.md) | 1 | 2026-11-16 |
 | W11 | Chiến tranh | Vì sao hậu cần Điện Biên Phủ không dồn hết vào xe ô tô? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 1 | 2026-11-13 |
 | F9 | Frontend | Ngoài khối màu to, hai thứ nhỏ nào cũng hay giành mắt mà dễ bị bỏ sót? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 2 | 2026-11-18 |
 | W1 | Chiến tranh | Theo Toàn thư, vì sao thuyền Nam Hán bị lật ở Bạch Đằng năm 938? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
-| W2 | Chiến tranh | Vì sao Ngô Quyền không đem thuyền ra chặn thẳng ở cửa biển? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
+| W2 | Chiến tranh | Vì sao Ngô Quyền không đem thuyền ra chặn thẳng ở cửa biển? | [bài 1](war/lessons/01-bach-dang-938.md) | 2 | 2026-11-18 |
 | W3 | Chiến tranh | Toàn thư và sử Trung Quốc chép khác nhau thế nào về cái chết của Hoằng Tháo? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
 | B4 | BA | Hỏi thế nào để biết người dùng đã xử lý việc quên ôn ra sao? | [BA bài 2](ba/lessons/02-user-interviews.md) | 1 | 2026-11-13 |
 | B5 | BA | Vì sao tránh hỏi “bạn cũng thấy thông báo là tốt nhất đúng không?” | [BA bài 2](ba/lessons/02-user-interviews.md) | 1 | 2026-11-13 |

@@ -1,6 +1,6 @@
 # Bài 5: Địa hình và thời tiết (ải Chi Lăng, 1427)
 
-Trang: [`../pages/lesson-05.html`](../pages/lesson-05.html) · [bản đăng](https://claude.ai/artifact/78bt9y5mACF7uRi1AjyYxt) (tnt024) · Dữ liệu sa bàn: [`../battles/chi-lang-1427.json`](../battles/chi-lang-1427.json) (địa hình thật; vị trí các ải, núi Mã Yên, đồng lầy, quân hai bên là ước lượng)
+Học ngày 2026-11-15 · Trang: [`../pages/lesson-05.html`](../pages/lesson-05.html) · [bản đăng](https://claude.ai/artifact/78bt9y5mACF7uRi1AjyYxt) (tnt024) · Dữ liệu sa bàn: [`../battles/chi-lang-1427.json`](../battles/chi-lang-1427.json) (địa hình thật; vị trí các ải, núi Mã Yên, đồng lầy, quân hai bên là ước lượng)
 
 ## Chuyện thật
 
@@ -39,3 +39,7 @@ Theo *Đại Việt sử ký toàn thư* (Bản kỷ quyển X, tờ 39a–42a) 
 - [Bảo tàng Lịch sử quốc gia, "Chiến thắng Chi Lăng – Xương Giang"](https://baotanglichsu.vn/vi/Articles/3097/15231/chien-thang-chi-lang-xuong-giang-8-10-djen-3-11-1427.html).
 - GS Lê Văn Lan, ["Chiến dịch Chi Lăng – Xương Giang đã diễn ra như thế nào?"](https://sknc.qdnd.vn/chuyen-xua-nay/chien-dich-chi-lang-xuong-giang-da-dien-ra-nhu-the-nao-500761), Sự kiện và Nhân chứng (2017).
 - Không lấy từ sử: cách A (chặn ở cửa bắc) và C (rút về đồng bằng) là mô phỏng.
+
+## Bạn đã nói
+
+> vì địa hình là vách núi 2 bên, đường hẹp, quân địch phải dàn dài ra để hành quân, nên đánh đầu thì đuôi không thấy, và thêm nữa quân ta đột kích từ 2 bên đồi, ta nhìn thấy địch nhưng địch không nhìn thấy ta. Thêm cả yếu tố đường lầy, và quân địch đang vội nên đi vào. Nhung chung quy ta dùng địa hình biến điểm mạnh thành điểm yếu của họ.
