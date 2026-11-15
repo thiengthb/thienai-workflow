@@ -7,3 +7,4 @@ Dùng ở mốc 2026-12-13 (xem "Mốc kiểm tra" trong [README.md](README.md))
 | Ngày | Trang | Phút | Hỏi Claude | Claude giải thích câu sai | Claude nhận xét, chấm | Nói thay gõ | Xem Claude làm | Nghe | Tình huống thêm | Ghi chú |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 2026-11-14 | war-04-sandtable lúc 15:27 | 27 | 1 | 0 | 1 | 0 | - | - | - | - |
+| 2026-11-15 | frontend-06 lúc 07:50 | 311 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | xem bản mẫu trước khi viết |
