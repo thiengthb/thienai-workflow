@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
-Repo: thiengthb/thienai-workflow · Nhánh: feat/start-session · PR: #82 đã merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXa9oobQMtaPoFn5rm · Cập nhật: 2026-11-15T09:20Z
+Repo: thiengthb/thienai-workflow · Nhánh: feat/start-session, feat/drop-codex-learning · PR: chờ thien mở
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXa9oobQMtaPoFn5rm · Cập nhật: 2026-11-15T09:25Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -16,13 +16,15 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 - Thí nghiệm 2, dừng hơn 65 phút, mốc trước (15:06): `explain-usage` 26 lượt, ghi cache 63.357, đọc lại 4.384.048, viết ra 15.476 (quy đổi khoảng 643 nghìn). Settings gần nhất 72% / 41% lúc 15:04. thien nghỉ khoảng 1 tiếng.
 - Thí nghiệm 2, dừng khoảng 68 phút (15:07 tới 16:15), lần 1: 29 lượt, ghi cache 67.014, đọc lại 4.967.928, viết ra 18.000. So mốc 15:06: 3 lượt, ghi cache chỉ tăng 3.657, lịch sử khoảng 195 nghìn token vẫn được đọc lại từ cache, không bị ghi lại. Settings 16:15: phiên 73%, tuần 41% (từ 72% / 41%). Nghĩa là dừng 68 phút cũng không đắt; giả thuyết 4 của kế hoạch (dừng lâu mới đắt) sai ở mốc này. Khoản ghi cache 0,87 triệu của chat A (dừng 311 phút) cần giải thích khác [chưa kiểm]. Lưu ý: số đo lấy từ phiên chạy kiểu Claude Code trên cloud gắn với project, chính sách cache của chat thường trên claude.ai có thể khác.
 
-- Checkpoint 2 dở: nhánh `feat/start-session` commit 4ab261e (WIP): `templates/start-session.mjs` + test + CI, `templates/handoff.mjs` export `cleanup`, SETUP lên v3. Test start-session, handoff, setup-check chạy qua.
+- Checkpoint 2: nhánh `feat/start-session` commit 2eb17e5 (lệnh, test, CI, chuẩn setup v3, HANDOFF/MAP/AGENTS.template/README/STATUS, số thí nghiệm 1–2 trong kế hoạch). Mọi test CI qua ở máy. Chưa có PR (gh không đăng nhập được; thien mở bằng link).
+- Checkpoint 3: nhánh `feat/drop-codex-learning` commit 4bb6fd1, xếp chồng trên `feat/start-session`. Mọi test CI qua.
 
 ## Bước tiếp theo
-1. Checkpoint 2 còn: sửa `profile/HANDOFF.md` (bước 1–3 dùng `start-session --claim`), `profile/MAP.md` dòng 7/13/15, `templates/AGENTS.template.md` dòng 9 và 47, README bảng lệnh, STATUS (chờ thien dán v3), kế hoạch (số thí nghiệm 1, 2); chạy hết test CI rồi mở PR. Sau đó checkpoint 2 (phần đo lại) và checkpoint 3 (bỏ Codex), mỗi cái một PR; gộp số thí nghiệm 1 và 2 vào bảng của kế hoạch trong một PR.
+1. Khi thien đã mở hai PR: ghi số PR vào sổ. Sau khi merge: thien dán project instructions v3 ở 3 nick (`profile/SETUP.md`), rồi ở một chat mới đo lại thí nghiệm 1 với `start-session.mjs` (mục tiêu tối đa 4 lượt), nhớ chụp Settings trước khi mở chat.
+2. Lần 2 của thí nghiệm 2 (dừng 10 phút, hơn 65 phút) khi tiện; thí nghiệm 3 (connector), 4 (sau buổi học).
 
 ## Đang chờ thien
-Không.
+- Mở PR checkpoint 2 (base main) và PR checkpoint 3 (base `feat/start-session`) bằng hai link đã gửi trong chat; merge PR 2 trước.
 
 ## Lưu ý
 - Làm ở chat mới (luật `profile/CHATS.md`), không gộp với buổi học BA 3.
