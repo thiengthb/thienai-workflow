@@ -13,7 +13,6 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, realpathSyn
 import { dirname, join, resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { tmpdir } from 'node:os';
 import { buildPage } from './progress-page.mjs';
 import { writePublish } from '../artifacts/kit/publish.mjs';
 // Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
@@ -79,7 +78,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const bool = (n) => { const i = args.indexOf('--' + n); return i >= 0 ? (args.splice(i, 1), true) : false; };
   const outArg = flag('out'), fresh = bool('new');
   const kind = args[0] || 'overview';
-  const out = resolve(outArg || join(tmpdir(), `progress-${kind}`));
+  const out = resolve(outArg || join(root, 'build', `progress-${kind}`));
   mkdirSync(out, { recursive: true });
   let pageArgs, url, capabilities = { db: {} }, description;
   if (kind === 'overview') {

@@ -23,7 +23,7 @@ Bài mẫu đã đăng (2026-11-14): [Frontend 6, màu cho app](https://claude.a
 ## Cách AI soạn một bài
 
 1. `node artifacts/lesson/make-lesson.mjs learning/frontend/pages/lesson-NN.html` (hoặc `learning/ba/pages/…`). Trang chưa có thì script chép mẫu có sân khấu ra rồi dừng: `template-frontend.html` (nội dung mẫu là Frontend 6, màu cho app) hay `template-ba.html` (BA 3, các bên liên quan).
-2. Thay mọi chỗ `__…__` và nội dung. Màn app của bàn thử viết thẳng trong `.screen`, CSS của màn đặt trong `<style>` của trang, dùng biến và `data-*` do núm đổi. Chạy lại đúng lệnh ở bước 1: script dựng bản đầy đủ (kit, khung, sân khấu) ra thư mục tạm, tự kiểm trên điện thoại và laptop, ghi `publish.json`. Cần núm hay kiểu bảng mới trong `it-stage.js` thì mở PR kit riêng trước.
+2. Thay mọi chỗ `__…__` và nội dung. Màn app của bàn thử viết thẳng trong `.screen`, CSS của màn đặt trong `<style>` của trang, dùng biến và `data-*` do núm đổi. Chạy lại đúng lệnh ở bước 1: script dựng bản đầy đủ (kit, khung, sân khấu) ra `build/`, tự kiểm trên điện thoại và laptop, ghi `publish.json`. Cần núm hay kiểu bảng mới trong `it-stage.js` thì mở PR kit riêng trước.
 3. Gọi Artifact với đúng tham số trong `publish.json`. Khi thien gửi: làm như bước 5 trong `../lesson/README.md`; kết quả có thêm `R.tried`, `R.picks`, `R.knobs`, `R.boards`, `R.heard`, `R.match`, `R.peeked`, `R.asked`, `R.ffwd`, và tóm tắt gửi Claude có sẵn các dòng đó.
 
 ## Quy ước trong trang
