@@ -36,7 +36,7 @@ Rút ra (còn phải kiểm bằng thí nghiệm):
 
 ## Hướng đề xuất (giả thuyết, đổi luật chỉ sau khi đo)
 - **Một chat cho một giai đoạn làm liền mạch**, không phải cho một việc nhỏ. Giữ chat khi đang làm liên tục và bước sau cần những gì đã có trong chat. Đổi chat khi sắp dừng lâu (đi học trên trang, đi ngủ, sang ngày khác), khi bước sau gần như không cần lịch sử, hay khi chat đã rất dài (Claude bắt đầu tự tóm tắt).
-- **Khởi động trong 2–3 lượt thay vì 17:** một lệnh lệnh mới `start-session.mjs` (chưa có, sẽ để trong `templates/`) làm trong một lần gọi: kiểm setup, đọc sổ, chọn và nhận việc mới nhất, in STATUS, PR đang mở. Project instructions bỏ bước đọc file qua Project (luôn lỗi), đi thẳng tới clone. Đây là thứ làm cho việc đổi chat đáng làm.
+- **Khởi động trong 2–3 lượt thay vì 17:** lệnh mới `start-session.mjs` (chưa có, sẽ để trong `templates/`) làm trong một lần gọi: kiểm setup, đọc sổ, chọn và nhận việc mới nhất, in STATUS, PR đang mở. Project instructions bỏ bước đọc file qua Project (luôn lỗi), đi thẳng tới clone. Đây là thứ làm cho việc đổi chat đáng làm.
 - **Ít lượt hơn trong lúc làm:** gộp lệnh vào một lần gọi khi chúng không phụ thuộc nhau, dùng script thay cho nhiều lần đọc file.
 - **Tắt connector không dùng** khi học hay khi sửa repo (Figma, sakubun, Chrome…), nếu thí nghiệm 3 cho thấy phần nền giảm.
 - **Bỏ Codex khỏi luồng học.** Làm cho gọn, không phải để tiết kiệm: Claude vốn không đọc `learning/codex.md`.
@@ -49,15 +49,15 @@ Rút ra (còn phải kiểm bằng thí nghiệm):
 ## Checkpoint
 
 ### 1. Đo (4 thí nghiệm, mỗi cái ít nhất 2 lần)
-Xong khi: bảng trong file này có số của cả 4 thí nghiệm, mỗi cái ít nhất 2 lần, kèm mức Settings > Usage trước và sau khi có thể.
-- [ ] Thí nghiệm 1, giá khởi động: ở chat mới, ngay sau khi nhận việc xong thì chạy `explain-usage`, ghi số lượt và usage quy đổi. Làm lại sau khi có `start-session.mjs` để so.
-- [ ] Thí nghiệm 2, dừng lâu: trong một chat đang làm, chạy `explain-usage`, đợi hơn 10 phút, gửi một tin ngắn, chạy lại; phần ghi cache tăng bao nhiêu so với lịch sử của chat.
+Xong khi: bảng trong file này có số của cả 4 thí nghiệm, mỗi cái ít nhất 2 lần. Mỗi lần có **mức Settings > Usage trước và sau** (số thật của claude.ai, vì hệ số quy đổi của `explain-usage` chưa chắc đúng ở claude.ai), cộng số của `explain-usage` để biết phần nào tốn. Hai số xếp hạng khác nhau thì tin Settings > Usage.
+- [ ] Thí nghiệm 1, giá khởi động: ở chat mới, ngay sau khi nhận việc xong thì chạy `explain-usage`, ghi số lượt và usage quy đổi. (Lần đo lại với lệnh khởi động mới nằm ở checkpoint 2.)
+- [ ] Thí nghiệm 2, dừng lâu: trong một chat đang làm, chạy `explain-usage`, rồi dừng hẳn (không gửi gì trong chat đó, không chạy việc khác ở project đó), gửi một tin ngắn, chạy lại; phần ghi cache tăng bao nhiêu so với lịch sử của chat. Làm với hai khoảng dừng: khoảng 10 phút và hơn 65 phút, vì claude.ai có thể dùng cache 5 phút hay 1 giờ.
 - [ ] Thí nghiệm 3, connector: cùng một việc khởi động khi bật và khi tắt các connector không dùng; so phần đọc lại trung bình mỗi lượt.
 - [ ] Thí nghiệm 4, sau buổi học: hai buổi làm "sau buổi" ngay trong chat dựng bài, hai buổi làm ở chat mới; so usage quy đổi và chất lượng ghi (thien chấm bản ghi có đủ ý không).
 
 ### 2. Khởi động rẻ
 Xong khi: thí nghiệm 1 lặp lại cho thấy khởi động còn tối đa 4 lượt.
-- [ ] lệnh mới `start-session.mjs` (chưa có, sẽ để trong `templates/`) và test; sửa đoạn project instructions (tăng số chuẩn setup) để đi thẳng tới clone và lệnh này
+- [ ] lệnh mới `start-session.mjs` (chưa có, sẽ để trong `templates/`) và test, rồi làm lại thí nghiệm 1 với lệnh này; sửa đoạn project instructions (tăng số chuẩn setup) để đi thẳng tới clone và lệnh này
 
 ### 3. Bỏ Codex khỏi luồng học
 Xong khi: không file nào trong luồng học còn trỏ tới `learning/codex.md`; CI xanh.
@@ -70,6 +70,7 @@ Xong khi: `profile/CHATS.md` ghi luật mới kèm số đo làm căn cứ, thie
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-15 | Checkpoint 1 cần số Settings > Usage; đo lại khởi động chuyển sang checkpoint 2; thí nghiệm 2 thêm khoảng dừng hơn 65 phút | Góp ý của CodeRabbit ở PR #82: hệ số quy đổi chưa chắc đúng ở claude.ai; checkpoint 1 không được phụ thuộc lệnh của checkpoint 2; cache có thể sống 1 giờ |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
