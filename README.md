@@ -42,6 +42,7 @@ docs/         Tiến độ và kế hoạch đang chạy của chính repo này
 | | `test-accounts.template.csv` | Mẫu danh sách tài khoản test, chỉ mật khẩu giả |
 | | `AI-LOG.template.md` | Mẫu nhật ký dùng AI cho đồ án, môn học, project nhóm, trong `docs/ai-log.md` |
 | | `handoff.mjs` | Sổ bàn giao giữa các nick: `new`, `save`, `list`, `show`, `done`. Luật ở `profile/HANDOFF.md` |
+| | `start-session.mjs` | Khởi động phiên trong một lệnh: kiểm setup, in `AGENTS.md`, sổ bàn giao (nhận việc với `--claim`), STATUS, nhánh chưa merge. Cách gọi ở `profile/SETUP.md` |
 | | `setup-check.mjs` | Kiểm project đang mở có đúng chuẩn `profile/SETUP.md` không (instructions từng dòng, repo, skill, bộ lọc đồng bộ knowledge) |
 | | `check-open-work.mjs` | In nhánh trên origin chưa merge vào main, kèm file nó sửa, để không làm trùng việc phiên khác |
 | `.github/` | `workflows/test.yml` | Chạy test của mọi script, kiểm link nội bộ (`scripts/check-links.mjs`), kiểm STATUS, và mở từng trang học trong trình duyệt ở mỗi PR, để lỗi bị chặn trước khi merge |

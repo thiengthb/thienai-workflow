@@ -15,7 +15,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | [Sửa công cụ kiểm tra báo thành công khi chưa kiểm gì](plans/2026-11-12-silent-tools-fix.md) | 1/2: chờ thien chạy thử trên laptop | 5/5 |
 | [Chuyển repo thienui sang riêng tư](plans/2026-11-14-thienui-private.md) | 3/3: xong, chờ merge PR | 4/5 |
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 2/6 xong; đợt 2 (gói buổi, nhật ký 3 dòng) đã merge (PR #81) | 6/12 |
-| [Dùng Claude tốn ít usage hơn: đo trước, đổi sau](plans/2026-11-15-claude-usage.md) | 1/4: chờ thien duyệt, rồi đo | 0/7 |
+| [Dùng Claude tốn ít usage hơn: đo trước, đổi sau](plans/2026-11-15-claude-usage.md) | 1/4 đang đo (thí nghiệm 1, 2 có lần 1); 2/4 lệnh `start-session.mjs` chờ merge | 0/7 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
@@ -33,7 +33,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 ## Đang chờ thien
 - Trên laptop Windows: làm mục "Máy Windows (làm một lần)" trong `README.md`, lệnh cuối in "ổn" là xong.
-- Ở từng nick (tnt024, tnt628, tnt697): dán project instructions bản v2 có tên nick, gắn repo, tải lại 2 skill, và chọn lại phần đồng bộ knowledge, theo `profile/SETUP.md`.
+- Ở từng nick (tnt024, tnt628, tnt697): dán project instructions bản v3 (khởi động 3 lượt) có tên nick, gắn repo, tải lại 2 skill, và chọn lại phần đồng bộ knowledge, theo `profile/SETUP.md`.
 - Merge sakubun PR #301 (luật AGENTS mới).
 
 ## Đang vướng

@@ -31,6 +31,8 @@ Dùng `--out <file>` thay cho `> file`: trên Windows PowerShell 5, `>` ghi file
 - Xong hẳn (PR merge, hay thien nói thôi): `done`.
 
 ## Khi thien nói "tiếp tục"
+Bước 1 và 3 nằm sẵn trong lệnh khởi động: `node templates/start-session.mjs ... --claim "Claude tntXXX, <link chat>"` (cách gọi ở `profile/SETUP.md`) đọc sổ mọi repo, nhận việc mới nhất (hay việc ghi ở `--task <owner/repo>:<việc>`), in nó ra và so nhánh với sổ. Lệnh báo "Chưa nhận được" thì dừng hỏi thien như bước 3.
+
 1. Chạy `list`. Repo nào phiên chưa đọc được thì lệnh báo tên; gắn repo đó vào phiên rồi chạy lại. Một việc thì làm luôn; nhiều việc thì kể ra (mới nhất trước, kèm việc nào đang chờ thien) và làm việc mới nhất, trừ khi thien nói việc khác.
 2. `show` việc đó, gắn repo và nhánh ghi trong sổ, `git pull`, đọc `docs/STATUS.md` của repo đó. So sổ với git: commit cuối của nhánh (`git log -1`) và PR có khớp "Đã xong" không. Nhánh đi trước sổ (nick cũ hết usage sau khi đẩy, trước khi `save`) thì tin nhánh và sửa sổ; sổ ghi commit mà nhánh không có thì commit đó chưa đẩy, coi như mất.
 3. Nhận việc trước khi làm: "Ghi bởi" là nick khác và cập nhật trong 24 giờ qua thì làm theo mục "Nhiều nick" ở dưới. Rồi sửa "Ghi bởi" thành nick và link thread của mình (project cũ không có thread thì ghi link chat; "Claude nick chưa rõ" khi project instructions chưa có dòng `nick:`) và `save` ngay; `save` tự ghi giờ hiện tại vào "Cập nhật", nên mốc 24 giờ tính từ lúc nhận. `save` bị từ chối vì sổ vừa đổi nghĩa là một nick khác cũng vừa nhận việc này: dừng lại hỏi thien.
