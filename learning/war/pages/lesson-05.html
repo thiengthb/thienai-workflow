@@ -208,7 +208,7 @@
     Lesson.done('worry');
   }));
   const echo = () => {
-    const e = document.getElementById('echo5'), v = R.choices && R.choices.d1, w = R.worryIdx;
+    const e = document.getElementById('echo5'), c = R.choices && R.choices.d1, v = c && c.pick, w = R.worryIdx;
     const a = v === 'B' ? 'Bạn chọn B, giống cách thật.' : v === 'A' ? 'Bạn chọn A, đánh ở cửa ải.' : v === 'C' ? 'Bạn chọn C, rút về đồng bằng.' : '';
     const b = w === 1 ? ' Lúc đứng ở phía quân Minh, bạn lo đội hình bị kéo dài: đó đúng là ý 1 dưới đây.'
       : w === 0 ? ' Lúc đứng ở phía quân Minh, bạn lo bị phục trên núi: ý 1 dưới đây nói vì sao phục ở đó lại có lợi.'
