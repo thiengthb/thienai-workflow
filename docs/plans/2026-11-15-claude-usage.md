@@ -6,7 +6,7 @@ Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đ�
 
 ## Đang ở đâu
 - Đang ở: checkpoint 1 (đo): thí nghiệm 1 có 2 lần (lần 1 thiếu số Settings trước); thí nghiệm 2 dừng 10 phút có 2 lần, dừng hơn 65 phút có 1 lần; thí nghiệm 3 có 1 lần (bảng "Kết quả đo"). Checkpoint 2 xong: khởi động theo v3 còn 3 lượt (đo 2026-11-15 16:49). Checkpoint 3 xong. Chưa đổi luật `profile/CHATS.md`.
-- Còn thiếu: lần 2 của thí nghiệm 2 (dừng hơn 65 phút); lần 2 của thí nghiệm 3 (connector); thí nghiệm 4. Thí nghiệm 1 đã có một lần đủ số Settings (2026-11-15 18:25, cùng lần thí nghiệm 3).
+- Còn thiếu: thêm một lần thí nghiệm 1 có đủ số Settings trước và sau, tách khỏi việc làm sau đó (lần đầu đủ số là 2026-11-15 18:25, cùng lần thí nghiệm 3); lần 2 của thí nghiệm 2 (dừng hơn 65 phút); lần 2 của thí nghiệm 3 (connector); thí nghiệm 4.
 - thien cần làm: duyệt kế hoạch; khi mở chat mới thì để AI chạy `explain-usage` ở những chỗ ghi trong thí nghiệm.
 
 ## thien hỏi gì
