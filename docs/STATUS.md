@@ -14,7 +14,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 |---|---|---|
 | [Sửa công cụ kiểm tra báo thành công khi chưa kiểm gì](plans/2026-11-12-silent-tools-fix.md) | 1/2: chờ thien chạy thử trên laptop | 5/5 |
 | [Chuyển repo thienui sang riêng tư](plans/2026-11-14-thienui-private.md) | 3/3: xong, chờ merge PR | 4/5 |
-| [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 1/6: tách nguồn bài khỏi bản dựng, chờ merge PR #77 | 0/12 |
+| [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 1/6: xong; tiếp là đợt 0, đo buổi Frontend 6 | 3/12 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |

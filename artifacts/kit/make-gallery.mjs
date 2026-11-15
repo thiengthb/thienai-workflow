@@ -6,7 +6,6 @@
 // Sửa kit.css, lesson.css, it.css hay war.css xong thì dựng lại và đăng đè (--url) để xem mọi thành phần một lượt.
 import { readFileSync, writeFileSync, mkdirSync, realpathSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
-import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { writePublish } from './publish.mjs';
 // Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
@@ -34,7 +33,7 @@ export function build(out) {
 
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   const args = process.argv.slice(2), opt = (n) => { const i = args.indexOf('--' + n); return i < 0 ? undefined : args.splice(i, 2)[1]; };
-  const out = resolve(opt('out') || join(tmpdir(), 'kit-gallery')), url = opt('url');
+  const out = resolve(opt('out') || join(here, '../../build/kit-gallery')), url = opt('url');
   build(out);
   console.log(`Đã dựng trang mẫu thành phần vào ${out}/index.html`);
   for (const l of writePublish(out, { url, capabilities: {}, icon: 'palette', description: 'Mọi thành phần dùng chung của trang học, sáng và tối' })) console.log(l);

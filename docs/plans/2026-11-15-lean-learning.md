@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-15 · Cập nhật: 2026-11-15 �
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 1 đã làm xong trong PR #77 (chờ merge). Đợt 0 làm cùng buổi Frontend 6.
+- Đang ở: đợt 1 xong (PR #77, #78; thien mở lại hai bài sa bàn trên điện thoại, học được, 2026-11-15). Đợt 0 làm cùng buổi Frontend 6.
 - Còn thiếu: đo buổi Frontend 6 (đợt 0), rồi đợt 2.
-- thien cần làm: merge PR #77. PR #76 (chiến tranh 5) để tới khi học xong bài đó mới merge, như mọi bài khác. Buổi tới nhắn "học" như thường.
+- thien cần làm: merge PR #78. PR #76 (chiến tranh 5) để tới khi học xong bài đó mới merge, như mọi bài khác. Buổi tới nhắn "học" như thường.
 - Khi học chiến tranh 5: AI rebase nhánh của PR #76 lên main, chạy `make-lesson.mjs` trên trang `lesson-05.html` của môn chiến tranh (nguồn tự gọn), thêm chữ "kit" vào tiêu đề PR #76 vì nó có sửa `sandtable.js` (câu 3: giữ nguyên, không tách).
 
 ## Mục tiêu
@@ -49,7 +49,7 @@ Có bốn thứ tăng theo số buổi, và một thứ nặng ở mỗi lần d
 | Bản ghi buổi | `learning/<môn>/sessions/NN.json`: kết quả thô từ db trang, cộng nhận xét của AI (chỗ thien đổi cách nhìn, thẻ mới kèm lựa chọn) | AI sau buổi | một file mới mỗi buổi, không sửa file chung |
 | Hồ sơ nóng | `learning/<môn>.md` chỉ giữ: mục tiêu, cách dạy, bản đồ ý, **3 dòng nhật ký gần nhất**, chỗ còn vướng (tối đa 6), buổi tiếp theo | AI sau buổi | cố định, CI chặn khi phình |
 | Lưu trữ | `learning/<môn>/log.md` (nhật ký cũ), các bài và bản ghi cũ | script chuyển sang | tăng, nhưng không ai đọc mặc định |
-| Sinh ra | trang đã dựng (thư mục tạm, rồi lên Artifact), bảng "Trạng thái", "Bài đã học" trong roadmap, hạn ôn của thẻ, `usage.md` | script | không commit, hoặc script tự ghi |
+| Sinh ra | trang đã dựng (`build/`, rồi lên Artifact), bảng "Trạng thái", "Bài đã học" trong roadmap, hạn ôn của thẻ, `usage.md` | script | không commit, hoặc script tự ghi |
 
 Hai điều không đổi: trang học vẫn là một trang HTML tương tác trên claude.ai, và link bản đăng vẫn ghi trong file bài như bây giờ. Bài đã học xong coi là **đóng băng**: bản đăng là bản thật, không cần chạy được với kit mới. Muốn học lại bài cũ thì dựng lại lúc đó.
 
@@ -57,7 +57,7 @@ Hai điều không đổi: trang học vẫn là một trang HTML tương tác t
 
 1. **Gói buổi** (`prepare-lesson`, lệnh mới, chỉ đọc). In ra một bản ngắn: môn và buổi kế tiếp, mục tiêu, chỗ còn vướng, 3 thẻ đến hạn (đã kèm câu ôn có sẵn), nhánh hay PR chưa merge đụng môn đó, kiểu tương tác của môn, và đường dẫn tới từng luật. Luật dạy (`profile/TUTOR.md`) vẫn đọc nguyên văn, không tóm. Chỗ nào script không chắc (không đọc được nhánh, thẻ thiếu lựa chọn) thì in "chưa kiểm", không đoán. Ước tính luồng "học" còn khoảng 50 KB thay vì 77,6 KB, và không tăng theo số buổi.
 2. **AI soạn phần lõi**: thử trước, hiểu sau, câu hỏi, bản tự nói lại mẫu, và cấu hình sân khấu hay sa bàn. Phần ôn 3 thẻ, nhớ lại, góp ý, kết thúc do script tự sinh từ gói buổi, vì chúng giống nhau ở mọi bài. AI không cần mở mẫu 20–30 KB nữa.
-3. **Dựng, kiểm, đăng** như hiện nay (`make-lesson.mjs` rồi `publish_files`), chỉ khác là bản dựng ra thư mục tạm, không ghi đè nguồn.
+3. **Dựng, kiểm, đăng** như hiện nay (`make-lesson.mjs` rồi `publish_files`), chỉ khác là bản dựng ra `build/` (không vào git), không ghi đè nguồn.
 4. **Sau buổi** AI đọc kết quả thật, viết một bản ghi buổi và sửa hồ sơ nóng của đúng môn đó. Script sinh phần còn lại (bảng "Trạng thái", tick roadmap, hạn ôn, `usage.md`) và kiểm đủ. PR buổi học chủ yếu là file mới, nên hai nick học hai môn không còn đụng nhau.
 5. **Sửa kit tách khỏi bài.** Bài cần một khả năng mà sa bàn hay sân khấu chưa có thì mở PR "kit" riêng có test, bài chỉ dùng nó. PR #76 là ví dụ nên tách.
 
@@ -101,11 +101,11 @@ Xong khi: thien thấy một bảng trong file này ghi số token của buổi 
 - [ ] Dựng Frontend 6 như hiện nay, cuối phiên chạy `explain-usage`, ghi số
 - [ ] Làm phần "sau buổi" ở chat mới, ghi số để so
 
-### 1. Repo hết nặng thêm (chỉ máy, không đổi trải nghiệm)
+### 1. Repo hết nặng thêm (chỉ máy, không đổi trải nghiệm) ✓ 2026-11-15
 Xong khi: PR thêm một bài mới chỉ thêm khoảng 20–35 KB; job `pages` không chạy lại bài cũ; thien mở lại 2 link bài cũ trên điện thoại vẫn học được.
-- [ ] `make-lesson.mjs` ghi bản dựng ra thư mục tạm, giữ nguồn rỗng thẻ kit; chạy trên nguồn cũ thì tự làm gọn; đã làm gọn hai trang sa bàn (210 và 185 KB còn 14 và 21 KB) (chờ merge PR #77)
-- [ ] `check-pages.mjs --changed` chỉ kiểm trang đổi trong PR cộng trang mẫu mỗi loại (chờ merge PR #77)
-- [ ] `check-lesson-sources.mjs` chặn nguồn có kit đã điền, chặn PR vừa sửa bài vừa sửa kit (chờ merge PR #77)
+- [x] `make-lesson.mjs` ghi bản dựng ra `build/`, giữ nguồn rỗng thẻ kit; chạy trên nguồn cũ thì tự làm gọn; đã làm gọn hai trang sa bàn (210 và 185 KB còn 14 và 21 KB) (PR #77 đã merge; sửa thư mục mặc định ở PR sau)
+- [x] `check-pages.mjs --changed` chỉ kiểm trang đổi trong PR cộng trang mẫu mỗi loại (PR #77: 10 trang thay vì 21)
+- [x] `check-lesson-sources.mjs` chặn nguồn có kit đã điền, chặn PR vừa sửa bài vừa sửa kit (PR #77, bắt đúng chính PR đó ở lần chạy đầu)
 
 ### 2. Hồ sơ nóng cố định và gói buổi
 Xong khi: `reading-cost.mjs` in luồng "học" khoảng 50 KB; thêm 10 buổi giả trong test mà con số không tăng; gói buổi in đúng 3 thẻ đến hạn so với `cards.md`.
@@ -144,3 +144,4 @@ Chỗ dễ sa lầy: đợt 3, nếu cứ muốn phần khung tự sinh phủ h�
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
 |---|---|---|
+| 2026-11-15 | PR #77 để bản dựng mặc định ở `/tmp`, nhưng `publish_files` của claude.ai không nhận file ở `/tmp`. Lỗi lộ ra khi mở lại bài 3, 4 ở nick tnt697 | Mặc định chuyển sang `build/` trong repo (đã gitignore) cho `make-lesson`, `make-review`, `make-gallery`, `learning-week`, `publish-progress` |

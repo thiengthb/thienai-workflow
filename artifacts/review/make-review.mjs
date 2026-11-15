@@ -9,7 +9,6 @@
 // --url: đăng đè lên trang ôn thẻ đã có (giữ một link cố định); link ghi trong README.md.
 import { readFileSync, writeFileSync, mkdirSync, existsSync, realpathSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
-import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { writePublish } from '../kit/publish.mjs';
 // Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
@@ -132,7 +131,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const args = process.argv.slice(2), opt = (n) => { const i = args.indexOf('--' + n); return i < 0 ? undefined : args.splice(i, 2)[1]; };
   const today = opt('today') || new Date().toISOString().slice(0, 10);
   const max = +(opt('max') || 10), url = opt('url');
-  const out = resolve(opt('out') || join(tmpdir(), 'review-' + today));
+  const out = resolve(opt('out') || join(here, '../../build/review-' + today));
   const cardsFile = args[0] || 'learning/cards.md';
   const review = build(cardsFile, out, { today, max });
   const noAnswer = review.items.filter((x) => !x.answer).map((x) => x.id);

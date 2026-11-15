@@ -4,14 +4,13 @@
 //   node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html [lesson-id] [--out <thư-mục>] [--no-check]
 //
 // Trang chưa có: chép mẫu ra rồi dừng. Trang đã có: dựng bản đầy đủ (gắn khung) ra <out>/lesson-NN.html, chạy
-// learning/teaching/check-page.cjs trên bản đó, qua thì ghi <out>/publish.json (mặc định thư mục tạm lesson-<id>)
+// learning/teaching/check-page.cjs trên bản đó, qua thì ghi <out>/publish.json (mặc định build/lesson-<id> trong repo, đã gitignore; công cụ đăng của claude.ai không nhận file ở /tmp)
 // để đăng bằng một lần gọi Artifact. File trong repo là nguồn: thẻ kit để rỗng, không chép kit và dữ liệu trận vào
 // (kế hoạch docs/plans/2026-11-15-lean-learning.md). Nguồn còn kit đã điền (bài trước 2026-11-15) thì script tự làm rỗng.
 // Trang phải có các thẻ rỗng (hoặc bản cũ) với id: kit-css, lesson-css (style), kit-js, lesson-js, lesson-kit (script).
 // lesson-id: tham số, hoặc "id" trong <script id="lesson">, hoặc đoán từ đường dẫn (frontend-06).
 import { readFileSync, writeFileSync, realpathSync, existsSync, mkdirSync, copyFileSync } from 'node:fs';
 import { dirname, join, basename, resolve } from 'node:path';
-import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { writePublish } from '../kit/publish.mjs';
 import { fileURLToPath } from 'node:url';
@@ -164,7 +163,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   let lid = id || conf.id;
   if (!lid || /^__/.test(lid)) lid = guessId(file);
   const sf = subjectFile(file), stuck = sf && existsSync(sf) ? stuckPoints(lf(readFileSync(sf, 'utf8'))) : [];
-  const out = resolve(outArg || join(tmpdir(), `lesson-${lid}`));
+  const out = resolve(outArg || join(here, '../../build', `lesson-${lid}`));
   mkdirSync(out, { recursive: true });
   // Bản đầy đủ ra thư mục out; file trong repo giữ là nguồn (không kit, không dữ liệu trận chép lần hai).
   const built = join(out, basename(file));
