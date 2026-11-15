@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
-Repo: thiengthb/thienai-workflow · Nhánh: main (không còn nhánh làm việc) · PR: không
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZHoNMKXiYgZeiGW53 · Cập nhật: 2026-11-15T10:24Z
+Repo: thiengthb/thienai-workflow · Nhánh: fix/claim-format · PR: #84
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZHoNMKXiYgZeiGW53 · Cập nhật: 2026-11-15T10:26Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -22,11 +22,14 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 - Thí nghiệm 1, lần 2 (chat mới 2026-11-15 16:49, nick tnt697, chuẩn v3, `--claim`): 3 lượt tới lúc nhận việc xong, quy đổi khoảng 103 nghìn (từ 12 lượt, 295 nghìn). Settings trước: phiên 84%, tuần 43%. Đã ghi vào bảng "Kết quả đo", tick checkpoint 2, sửa STATUS: nhánh `docs/measure-start-session`.
 - Cùng nhánh: `setup-check.mjs` đọc được `--sync` dạng JSON dán nguyên từ project_info (trước đó báo nhầm "knowledge chưa đồng bộ"); knowledge của project Claude đã đúng chuẩn.
 - Nhánh `docs/measure-start-session` đã vào main (commit 7cfaa68, f60c04a); nhánh đã xoá trên origin. Kiểm 2026-11-15 17:25.
+- Chat 17:20: `--claim` có ngoặc bị báo nhầm là sổ sai mẫu. Đã sửa `start-session.mjs` và thêm test, ghi vào "Lỗi gặp" của kế hoạch: nhánh `fix/claim-format`, PR #84. Test node chạy trên máy đều qua.
 
 ## Bước tiếp theo
-1. Lần 2 của thí nghiệm 2 (dừng 10 phút, hơn 65 phút) khi tiện; thí nghiệm 3 (connector), 4 (sau buổi học).
+1. thien merge PR #84.
+2. Lần 2 của thí nghiệm 2 (dừng 10 phút, hơn 65 phút) khi tiện; thí nghiệm 3 (connector), 4 (sau buổi học).
 
 ## Đang chờ thien
+- Merge PR #84: https://github.com/thiengthb/thienai-workflow/pull/84
 - Dán instructions v3 ở 2 nick còn lại (tnt024, tnt628) nếu chưa dán.
 
 ## Lưu ý
