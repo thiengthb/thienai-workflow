@@ -86,6 +86,7 @@ Xong khi: `profile/CHATS.md` ghi luật mới kèm số đo làm căn cứ, thie
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
 |---|---|---|
+| 2026-11-15 | Chat 17:20 (nick tnt697): AI chép nguyên dấu ngoặc của project instructions vào `--claim "Claude (tnt697), …"`; lệnh báo "Sổ bàn giao chưa đúng mẫu… một nick khác có thể vừa nhận việc", nên dừng hỏi thien dù sổ không sai. Tốn thêm 2 lượt | `start-session.mjs` nhận dạng có ngoặc, `--claim` thiếu nick thì báo rõ và không đụng sổ; lỗi mẫu không còn bị báo là nick khác (nhánh `fix/claim-format`) |
 | 2026-11-15 | Bản clone `--depth 1` mới, lần fetch nhánh đầu tiên trong `start-session.mjs` báo không so được nhánh chưa merge; chạy lại thì được | `start-session.mjs` thử lại một lần sau 5 giây |
 
 ## Nguồn (đọc 2026-11-15)

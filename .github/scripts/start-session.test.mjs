@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { statusParts, claimText, otherNickNote, branchOf } from '../../templates/start-session.mjs';
+import { statusParts, claimText, claimBy, otherNickNote, branchOf } from '../../templates/start-session.mjs';
 import { skeleton } from '../../templates/handoff.mjs';
 
 // STATUS: only the parts a new session needs, history left out.
@@ -23,6 +23,14 @@ const task = skeleton('a/b', 'x', 'Việc X', new Date('2026-11-15T07:00:00Z')).
 const claimed = claimText(task, 'Claude tnt697, https://new');
 assert.match(claimed, /^Ghi bởi: Claude tnt697, https:\/\/new · Cập nhật: 2026-11-15T07:00Z$/m);
 assert.equal(claimed.replace(/^Ghi bởi:.*$/m, ''), task.replace(/^Ghi bởi:.*$/m, ''), 'only the author line changes');
+
+// --claim: placeholders in brackets as project instructions write them are taken; no nick is refused.
+assert.equal(claimBy('Claude tnt697, https://x'), 'Claude tnt697, https://x');
+assert.equal(claimBy('Claude (tnt697), https://x'), 'Claude tnt697, https://x');
+assert.equal(claimBy('Claude (tnt697), (https://x)'), 'Claude tnt697, https://x');
+assert.equal(claimBy('Claude (nick chưa rõ), https://x'), 'Claude nick chưa rõ, https://x');
+assert.equal(claimBy('Claude, https://x'), '');
+assert.equal(claimBy('Claude (nick ở dòng đầu), (link chat)'), '');
 
 // Another nick within 24 hours: said out loud; same nick or older: nothing.
 const row = { nick: 'tnt024', updated: '2026-11-15T07:00Z' };
@@ -69,6 +77,12 @@ assert.match(r.stdout, /Nhánh feat\/gone không còn trên origin/);
 assert.match(readFileSync(join(work, 'new.md'), 'utf8'), /^Ghi bởi: Claude tnt697, https:\/\/new/m, 'working copy carries the claim');
 const show = spawnSync('node', [handoff, 'show', 'a/b', 'new', '--remote', bare], { encoding: 'utf8', env });
 assert.match(show.stdout, /^Ghi bởi: Claude tnt697, https:\/\/new/m, 'the book has the claim');
+
+// A --claim with no nick leaves the book alone and says how to write it.
+r = start('--claim', 'Claude, https://new');
+assert.equal(r.status, 1);
+assert.match(r.stdout, /thiếu tên nick/);
+assert.doesNotMatch(r.stdout, /Một nick khác/, 'a wrong --claim is not reported as another nick');
 
 // --task picks another task; claiming it with a stale copy elsewhere is still guarded by save.
 r = start('--claim', 'Claude tnt697, https://new', '--task', 'a/b:old');
