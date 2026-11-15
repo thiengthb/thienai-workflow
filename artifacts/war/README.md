@@ -55,6 +55,8 @@ Vì sao hợp cách học đã chọn (`learning/war.md`, mục "Cách dạy mô
 - `preview`: mốc hiện khi bấm "Xem" ở bước chọn (mặc định 1, là kế hoạch, chưa phải kết cục).
 - `symbolScale`: phóng ký hiệu và đường (mặc định 1, hợp với vùng khoảng 15 km); vùng rộng vài chục km thì đặt 3 đến 4.
 - `exaggerate`: phóng độ cao cho dễ thấy đồi; trang tự ghi "độ cao ×2" ở góc sa bàn.
+- `troop` (một đạo quân, trận xưa) vẽ thành khối vuông như cứ điểm, khi chạm thì ghi "đạo quân". Khóa của bên kia trong `sides` đặt tùy ý (`fr`, `ming`…), chú thích theo thứ tự trong file; `vn` là quân ta.
+- Đường kiểu `marsh` (đồng lầy): mỗi điểm trong `pts` là một vùng tròn bán kính `r` km. Kiểu `place`: chỉ hiện tên (núi, cửa ải, hướng đi ra ngoài sa bàn), không vẽ gì. `roadLabel` đổi chữ "Đường tiếp tế" trong chú thích (ví dụ "Đường cái quan").
 - `depot` (kho, điểm trung chuyển) vẽ thành khối tròn; đường `supply` (hướng chở hàng) có mũi tên, `color` đổi màu cho hàng của bên kia. Dùng cho bài hậu cần.
 - `fog`: mốc nào có thì sa bàn hiện nút mang tên `who`. `zoneLabel` thay chữ trong vùng nghi ngờ (mặc định "Pháo Việt Minh ở đâu?"). Bấm vào, các ký hiệu trong `hide` biến thành vùng nghi ngờ rộng, kèm đoạn `text` và nguồn. Dùng để người học thấy bên kia biết gì lúc đó; chỉ ghi điều có nguồn.
 - `short` của sông, đường, sân bay hiện thành tên nằm trên địa hình.
