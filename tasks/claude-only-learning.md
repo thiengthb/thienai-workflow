@@ -10,9 +10,10 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 ## Đã xong
 - PR #81 đã merge (đợt 2 học nhẹ dần).
 - Kế hoạch `docs/plans/2026-11-15-claude-usage.md` (PR #82): điều đã biết, số đo, 4 thí nghiệm, hướng đề xuất. Bỏ Codex là checkpoint 3 của kế hoạch đó.
+- Thí nghiệm 1, lần 1 (chat mới 2026-11-15 14:40, nick tnt697): khởi động tới lúc nhận việc xong là 12 lượt; đọc lại 1,83 triệu token (khoảng 153 nghìn mỗi lượt), ghi cache 46 nghìn, viết ra 3,9 nghìn; quy đổi khoảng 295 nghìn (khoảng 25 nghìn mỗi lượt). Hướng dẫn hệ thống chiếm 76%. Thiếu số Settings > Usage trước khi mở chat. Chưa ghi vào kế hoạch (cần PR).
 
 ## Bước tiếp theo
-1. PR #82 đã merge 2026-11-15. Làm checkpoint 1 (đo) theo kế hoạch; thí nghiệm 1 làm ngay đầu chat mới đó (chạy `explain-usage` sau khi nhận việc xong).
+1. Ghi số thí nghiệm 1 lần 1 vào bảng của kế hoạch (PR). Làm thí nghiệm 2 ở chính chat này: chạy `explain-usage`, thien dừng 10 phút rồi gửi tin ngắn, chạy lại. Thí nghiệm 1 lần 2 ở chat mới sau, nhớ ghi Settings > Usage trước khi mở.
 2. Rồi checkpoint 2 (lệnh khởi động một lần gọi) và 3 (bỏ Codex), mỗi cái một PR.
 
 ## Đang chờ thien
