@@ -59,9 +59,9 @@ Hai phần ôn này chỉ dành cho lần học đầu: trong trang, bọc chún
 Trang dựng từ mẫu `artifacts/lesson/`: bấm "Xong buổi học" là kết quả được lưu và gửi cho Claude.
 
 **Sau buổi**, theo thứ tự:
-1. Đọc kết quả trong db của trang (`sessions/<id>-<thời điểm>`), lưu ra file JSON, rồi chạy `node artifacts/lesson/after-lesson.mjs <file.json> --write`. Lệnh in nháp (số liệu, dòng nhật ký, chỗ còn vướng, thẻ mới, dòng "Trạng thái") và tự ghi hai thứ: các dòng mới vào mục "Chỗ còn vướng" của `learning/<môn>.md`, một dòng vào [usage.md](usage.md).
-2. Từ nháp, viết: nhật ký trong `learning/<môn>.md` (chỗ thien đổi cách nhìn, không ghi như bảng điểm), file bài trong `learning/<môn>/lessons/`, 2–3 thẻ trong `cards.md`, bảng "Trạng thái" ở trên, tick chặng trong [roadmap.md](roadmap.md) kèm link bài, mục "Buổi tiếp theo". Đọc lại mục "Chỗ còn vướng": gọn lại, xóa dòng thien đã làm đúng ở buổi này.
-3. `node artifacts/lesson/after-lesson.mjs --check <lesson-id>` phải ra toàn ✓, rồi mở PR để thien merge. CI chạy `--check-all` để bài nào cũng có nhật ký, thẻ và roadmap.
+1. Đọc kết quả trong db của trang (`sessions/<id>-<thời điểm>`), lưu ra file JSON, rồi chạy `node artifacts/lesson/after-lesson.mjs <file.json> --write`. Lệnh in nháp (số liệu, dòng nhật ký, chỗ còn vướng, thẻ mới, dòng "Trạng thái") và tự ghi: các dòng mới vào mục "Chỗ còn vướng" của `learning/<môn>.md` (câu ôn sai của thẻ môn khác thì vào file của môn đó), dòng nhật ký nháp, một dòng vào [usage.md](usage.md). File môn chỉ giữ 3 dòng nhật ký gần nhất: dòng cũ hơn lệnh tự chuyển sang `learning/<môn>/log.md`, file AI không đọc mỗi buổi.
+2. Từ nháp, viết: phần `<…>` của dòng nhật ký trong `learning/<môn>.md` (chỗ thien đổi cách nhìn, không ghi như bảng điểm), file bài trong `learning/<môn>/lessons/`, 2–3 thẻ trong `cards.md`, bảng "Trạng thái" ở trên, tick chặng trong [roadmap.md](roadmap.md) kèm link bài, mục "Buổi tiếp theo". Đọc lại mục "Chỗ còn vướng": gọn lại (tối đa 6 dòng), xóa dòng thien đã làm đúng ở buổi này.
+3. `node artifacts/lesson/after-lesson.mjs --check <lesson-id>` phải ra toàn ✓, rồi mở PR để thien merge. CI chạy `--check-all` để bài nào cũng có nhật ký, thẻ và roadmap, và file môn nào cũng gọn (tối đa 3 dòng nhật ký, 6 dòng chỗ còn vướng).
 
 Buổi học ngoài Claude thì ghi tên công cụ vào nhật ký, ví dụ "(Codex)"; không có bản lưu trong db thì dán kết quả thien chép vào file JSON (phần trong khối json của tin nhắn). Luật dạy chung ở `profile/TUTOR.md`.
 

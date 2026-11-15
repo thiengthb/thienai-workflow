@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync, mkdtempSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
-import { subjects, lessonOf, pageQuestions, stuckPoints, addStuck, draft, checkAfter, checkAll } from '../../artifacts/lesson/after-lesson.mjs';
+import { subjects, lessonOf, pageQuestions, stuckPoints, addStuck, draft, checkAfter, checkAll, logRows, addLogRow, trimLog, subjectChecks, trimAll } from '../../artifacts/lesson/after-lesson.mjs';
 import { fill, subjectFile } from '../../artifacts/lesson/make-lesson.mjs';
 import { addUsage, usageRows, usageSummary } from '../../artifacts/kit/usage.mjs';
 import { reviewUsage } from '../../artifacts/review/apply-review.mjs';
@@ -39,6 +39,34 @@ assert.deepEqual(stuckPoints(addStuck(m2, ['d', 'e', 'f', 'g', 'h'])), ['c', 'd'
 assert.deepEqual(stuckPoints('# Không có mục\n'), []);
 assert.match(addStuck('# Môn\n', ['x']), /# Môn\n\n## Chỗ còn vướng[\s\S]*- x\n/, 'không có "Buổi tiếp theo" thì thêm cuối file');
 
+// Nhật ký: thêm dòng, giữ 3 dòng mới nhất, dòng cũ sang log.md (link đổi cho đúng chỗ mới), chạy lại không đổi gì
+const row = (n, x = '') => `| ${n} | 2026-11-1${n % 10} | Ý ${n}${x} ([bài](frontend/lessons/0${n}-x.md)) | Kết quả ${n} |`;
+let hot = '# Frontend\n\n## Nhật ký\n| Buổi | Ngày | Ý chính | Kết quả |\n|---|---|---|---|\n' + [1, 2, 3, 4].map((n) => row(n)).join('\n') + '\n\n## Chỗ còn vướng\n- a\n\n## Buổi tiếp theo\n- 5\n';
+assert.deepEqual(logRows(hot).map((r) => r.n), [1, 2, 3, 4]);
+assert.equal(addLogRow(hot, row(4)), hot, 'đã có buổi 4 thì không thêm');
+hot = addLogRow(hot, row(5));
+assert.deepEqual(logRows(hot).map((r) => r.n), [1, 2, 3, 4, 5]);
+hot = addLogRow(hot, '| 5, phần 2 | 2026-11-16 | Tiếp | x |');
+assert.deepEqual(logRows(hot).map((r) => r.key), ['1', '2', '3', '4', '5', '5, phần 2'], 'buổi học tiếp ở ngày khác là dòng riêng');
+let t = trimLog(hot, '', { dir: 'frontend', name: 'Frontend' });
+assert.equal(t.moved, 3);
+assert.deepEqual(logRows(t.md).map((r) => r.key), ['4', '5', '5, phần 2']);
+assert.deepEqual(logRows(t.log).map((r) => r.n), [1, 2, 3]);
+assert.match(t.md, /## Nhật ký\nNhật ký cũ hơn ở \[frontend\/log\.md\]\(frontend\/log\.md\)\.\n\n\| Buổi/);
+assert.match(t.log, /^# Nhật ký cũ: Frontend\n[\s\S]*\[frontend\.md\]\(\.\.\/frontend\.md\)/);
+assert.match(t.log, /\| 1 \| [^\n]*\(\.\.\/frontend\/lessons\/01-x\.md\)/, 'link tương đối đổi theo chỗ mới');
+assert.match(t.md, /## Chỗ còn vướng\n- a\n\n## Buổi tiếp theo/, 'phần khác của file giữ nguyên');
+const t2 = trimLog(addLogRow(t.md, row(6)), t.log, { dir: 'frontend', name: 'Frontend' });
+assert.equal(t2.md.match(/frontend\/log\.md\)/g).length, 1, 'chỉ một dòng trỏ tới log');
+assert.deepEqual(logRows(t2.log).map((r) => r.n), [1, 2, 3, 4]);
+assert.deepEqual(trimLog(t2.md, t2.log, { dir: 'frontend' }).moved, 0);
+assert.match(addLogRow('# Môn\n\n## Buổi tiếp theo\n- x\n', row(1)), /## Nhật ký\n\| Buổi[^\n]*\n\|---[^\n]*\n\| 1 \|[^\n]*\n\n## Buổi tiếp theo/, 'chưa có mục thì tạo trước "Buổi tiếp theo"');
+const sc = (md) => subjectChecks(md, 'frontend.md').filter((c) => !c.ok).map((c) => c.what.split(' ')[0] + ' ' + c.what.split(' ')[1]);
+assert.deepEqual(sc(t2.md), []);
+assert.equal(sc(hot).length, 1, 'quá 3 dòng nhật ký');
+assert.equal(sc(addStuck(t2.md, ['b', 'c', 'd', 'e', 'f', 'g'])).length, 1, 'quá 6 dòng chỗ còn vướng');
+assert.deepEqual(sc(trimLog(addLogRow(t2.md, '| 7 | 2026-11-17 | <ý chính> (bài) | 9 phút. <tự nói lại có gì, thiếu gì; chỗ vướng; góp ý> |'), '', { dir: 'frontend' }).md), ['dòng nhật'], 'còn chỗ <…> chưa viết');
+
 // Nháp sau buổi
 const R = {
   lesson: 'frontend-06', start: '2026-11-15T12:00:00Z', end: '2026-11-15T12:14:00Z',
@@ -63,6 +91,13 @@ const d2 = draft({ R: { ...R, knobs: {}, listened: 3, ai: [...R.ai, { kind: 'dem
 assert.deepEqual([d2.usage['Xem Claude làm'], d2.usage['Nghe'], d2.usage['Tình huống thêm']], [1, 3, 1]);
 assert.match(d2.stuck.join('\n'), /tình huống thêm “Nút nào nổi\?” chọn “A”, đúng là “C”/);
 assert.equal(draft({ R: { ...R, lesson: 'war-04', choices: {} }, html: tpl, subject: subs.war, cards }).usage['Tình huống thêm'], '-');
+// Câu ôn sai của thẻ môn khác (B2 khi học Frontend) vào chỗ vướng của môn đó, không vào môn đang học (lỗi buổi Frontend 6)
+const d3 = draft({ R: { ...R, review: { B2: { pick: 0, ok: false }, F3: { pick: 1, ok: false } }, quiz: {}, ai: [] }, html: tpl, subject: subs.frontend, cards, all: subs });
+assert.deepEqual(Object.keys(d3.others), ['ba']);
+assert.match(d3.others.ba[0], /^2026-11-15, ôn ở buổi Frontend 6: câu ôn B2 /);
+assert.equal(d3.stuck.length, 1, 'thẻ F3 của chính môn vẫn ghi vào môn đang học');
+assert.match(d3.stuck[0], /^2026-11-15, buổi 6: câu ôn “/);
+assert.deepEqual(draft({ R: { ...R, review: { B2: { pick: 0, ok: false } }, quiz: {}, ai: [] }, html: tpl, subject: subs.frontend, cards }).others, {}, 'không biết các môn thì giữ như cũ');
 
 // Bảng tính năng được dùng
 const head = '# x\n\n| Ngày | Trang | Phút | Hỏi Claude | Claude giải thích câu sai | Claude nhận xét, chấm | Nói thay gõ | Xem Claude làm | Nghe | Tình huống thêm | Ghi chú |\n|---|---|---|---|---|---|---|---|---|---|---|\n';
@@ -93,29 +128,39 @@ assert.deepEqual(checkAll(ROOT), []);
 // CLI trên một repo nhỏ: --write ghi chỗ còn vướng và dòng usage, --check báo thiếu rồi báo đủ
 const T = mkdtempSync(join(tmpdir(), 'after-'));
 for (const p of ['learning/frontend/lessons', 'learning/frontend/pages']) mkdirSync(join(T, p), { recursive: true });
-writeFileSync(join(T, 'learning/README.md'), '| Môn | Vai | File môn | Trạng thái |\n|---|---|---|---|\n| Frontend | Môn chính | [frontend.md](frontend.md) | 5 buổi |\n\n## Trạng thái\n| Frontend 6 (màu) | 2026-11-15 | Frontend | BA 3 |\n');
-writeFileSync(join(T, 'learning/frontend.md'), '# Frontend\n\n## Nhật ký\n| Buổi | Ngày |\n|---|---|\n\n## Buổi tiếp theo\n- Buổi 7\n');
-writeFileSync(join(T, 'learning/cards.md'), cards);
+writeFileSync(join(T, 'learning/README.md'), '| Môn | Vai | File môn | Trạng thái |\n|---|---|---|---|\n| Frontend | Môn chính | [frontend.md](frontend.md) | 5 buổi |\n| BA | Môn mở rộng | [ba.md](ba.md) | 2 buổi |\n\n## Trạng thái\n| Frontend 6 (màu) | 2026-11-15 | Frontend | BA 3 |\n');
+writeFileSync(join(T, 'learning/frontend.md'), '# Frontend\n\n## Nhật ký\n| Buổi | Ngày | Ý chính | Kết quả |\n|---|---|---|---|\n' + [3, 4, 5].map((n) => row(n)).join('\n') + '\n\n## Buổi tiếp theo\n- Buổi 7\n');
+writeFileSync(join(T, 'learning/ba.md'), '# BA\n\n## Buổi tiếp theo\n- Buổi 3\n');
+writeFileSync(join(T, 'learning/cards.md'), cards + '| B2 | BA | y | z | 1 | 2026-11-13 |\n');
 writeFileSync(join(T, 'learning/roadmap.md'), '# Lộ trình\n\n## Frontend\n- [ ] Màu\n');
 writeFileSync(join(T, 'learning/usage.md'), head);
 writeFileSync(join(T, 'learning/frontend/pages/lesson-06.html'), fill(tplFilled, 'frontend-06', ''));
-writeFileSync(join(T, 's.json'), JSON.stringify({ data: R }));
+writeFileSync(join(T, 's.json'), JSON.stringify({ data: { ...R, review: { ...R.review, B2: { pick: 0, ok: false } } } }));
 const cli = (...a) => spawnSync(process.execPath, [join(ROOT, 'artifacts/lesson/after-lesson.mjs'), ...a], { encoding: 'utf8', env: { ...process.env, REPO_ROOT: T } });
 let r = cli(join(T, 's.json'), '--write');
 assert.equal(r.status, 0, r.stderr);
 assert.match(r.stdout, /## Thẻ mới[\s\S]*\| F10 \| Frontend \| Màn đặt lịch/);
-assert.match(r.stdout, /Đã ghi: 2 dòng vào "Chỗ còn vướng"/);
+assert.match(r.stdout, /Đã ghi: 2 dòng vào "Chỗ còn vướng" của learning\/frontend\.md, 1 dòng vào "Chỗ còn vướng" của learning\/ba\.md, dòng nhật ký nháp buổi 6 \(chuyển 1 dòng cũ sang learning\/frontend\/log\.md\)/);
 assert.equal(stuckPoints(readFileSync(join(T, 'learning/frontend.md'), 'utf8')).length, 2);
+assert.match(stuckPoints(readFileSync(join(T, 'learning/ba.md'), 'utf8'))[0], /ôn ở buổi Frontend 6: câu ôn B2/);
+assert.deepEqual(logRows(readFileSync(join(T, 'learning/frontend.md'), 'utf8')).map((x) => x.n), [4, 5, 6]);
+assert.deepEqual(logRows(readFileSync(join(T, 'learning/frontend/log.md'), 'utf8')).map((x) => x.n), [3]);
+assert.equal(cli(join(T, 's.json'), '--write').status, 0);
+assert.equal(logRows(readFileSync(join(T, 'learning/frontend.md'), 'utf8')).length, 3, 'chạy lại --write không thêm dòng trùng');
+assert.equal(stuckPoints(readFileSync(join(T, 'learning/ba.md'), 'utf8')).length, 1);
 assert.equal(usageRows(readFileSync(join(T, 'learning/usage.md'), 'utf8'))[0]['Trang'], 'frontend-06 lúc 19:00', 'giờ bắt đầu theo giờ Việt Nam');
 r = cli('--check', 'frontend-06');
 assert.equal(r.status, 1);
-assert.match(r.stdout, /✗ dòng nhật ký buổi 6[\s\S]*✓ bảng "Trạng thái"[\s\S]*✓ dòng của buổi này trong learning\/usage\.md/);
+assert.match(r.stdout, /✗ dòng nhật ký buổi 6[^\n]*đã viết xong phần <…>[\s\S]*✓ bảng "Trạng thái"[\s\S]*✓ dòng của buổi này trong learning\/usage\.md[\s\S]*✓ tối đa 3 dòng nhật ký[\s\S]*✗ dòng nhật ký trong learning\/frontend\.md đã viết xong, không còn chỗ <…> \(buổi 6\)/);
+assert.match(cli('--check', 'frontend-03').stdout, /✓ dòng nhật ký buổi 3/, 'dòng đã chuyển sang log.md vẫn tính');
 writeFileSync(join(T, 'learning/frontend/lessons/06-app-colours.md'), '# Bài 6\n');
-writeFileSync(join(T, 'learning/frontend.md'), readFileSync(join(T, 'learning/frontend.md'), 'utf8').replace('|---|---|\n', '|---|---|\n| 6 | 2026-11-15 |\n'));
+writeFileSync(join(T, 'learning/frontend.md'), readFileSync(join(T, 'learning/frontend.md'), 'utf8').replace(/^\| 6 \|.*$/m, row(6)));
 writeFileSync(join(T, 'learning/cards.md'), cards + d.cardRows.join('\n') + '\n');
 writeFileSync(join(T, 'learning/roadmap.md'), '# Lộ trình\n\n## Frontend\n- [x] Màu (buổi 6, 2026-11-15)\n');
 r = cli('--check', 'frontend-06');
 assert.equal(r.status, 0, r.stdout);
 assert.equal(cli('--check').status, 2, '--check thiếu mã bài thì thoát mã 2');
+assert.match(cli('--trim-log').stdout, /frontend: đã gọn\nba: đã gọn/);
+assert.deepEqual(trimAll(T), [{ dir: 'frontend', moved: 0 }, { dir: 'ba', moved: 0 }]);
 
 console.log('ok after-lesson');
