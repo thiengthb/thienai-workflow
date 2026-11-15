@@ -15,9 +15,8 @@ Luật cho mọi AI làm việc trong repo thienai-workflow (Claude, Codex, côn
 ## Khi thien nhắn "học" (hay "học tiếp", "dạy mình")
 1. Chạy `node artifacts/lesson/prepare-lesson.mjs` (thêm `<môn>` nếu thien chọn môn khác) và đọc gói buổi nó in: buổi kế tiếp, khung một buổi, hồ sơ môn, 3 thẻ đến hạn kèm đáp án, nhánh chưa merge đụng môn đó. Gói thay cho việc mở cả `learning/README.md`, file môn và `learning/cards.md`; luật trong đó chép nguyên văn.
 2. Đọc nguyên văn `profile/TUTOR.md` (luật dạy) và `artifacts/lesson/README.md`. Chỗ gói ghi "chưa kiểm" thì mở file nó trỏ tới.
-3. Không phải Claude trên claude.ai thì đọc thêm `learning/codex.md` và làm đúng các bước ở đó.
-4. Một buổi học là **một trang HTML tương tác** chứa đủ khung 7 bước, dựng từ mẫu `artifacts/lesson/` (xem README ở đó). Không dạy từng câu trong chat. Câu trả lời đầu tiên cho thien là trang đã dựng xong, kèm cách mở; chỉ dạy bằng chat khi thien tự xin.
-5. Sau buổi ghi đủ các file như mục "Sau buổi" trong `learning/README.md`, rồi mở PR.
+3. Một buổi học là **một trang HTML tương tác** chứa đủ khung 7 bước, dựng từ mẫu `artifacts/lesson/` (xem README ở đó). Không dạy từng câu trong chat. Câu trả lời đầu tiên cho thien là trang đã dựng xong, kèm cách mở; chỉ dạy bằng chat khi thien tự xin.
+4. Sau buổi ghi đủ các file như mục "Sau buổi" trong `learning/README.md`, rồi mở PR.
 
 ## Sửa repo
 - Mọi thay đổi qua nhánh và PR, thien merge. Tên nhánh, tên file, thư mục, commit viết tiếng Anh; nội dung cho thien đọc viết tiếng Việt tự nhiên theo `profile/VOICE.md`.

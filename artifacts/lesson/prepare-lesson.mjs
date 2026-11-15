@@ -89,7 +89,7 @@ export function profile(md, { dir, file }) {
 
 /**
  * REVIEW_CARDS thẻ đến hạn, mỗi thẻ kèm đáp án trong mục "Tự kiểm" của bài (null nếu không thấy).
- * Thiếu thẻ đến hạn thì thêm thẻ hạn sớm nhất của môn khác `subject` (learning/codex.md), đánh dấu filler: true.
+ * Thiếu thẻ đến hạn thì thêm thẻ hạn sớm nhất của môn khác `subject` (learning/README.md, "Khung một buổi"), đánh dấu filler: true.
  */
 export function reviewCards(cardsText, base, today, max = REVIEW_CARDS, subject = '') {
   const all = parseCards(cardsText), due = dueCards(all, today, max);
@@ -128,7 +128,6 @@ export function packet({ root, dir, n, label, today, open = null }) {
   if (rot) L.push(`${rot.head.replace(/^## /, '### ')} (learning/README.md, nguyên văn)`, '', rot.body, '');
 
   L.push('## Luật đọc nguyên văn (mở file, gói không chép)', ...RULES.map((r) => `- \`${r}\``),
-    '- Không phải Claude trên claude.ai thì thêm `learning/codex.md`.',
     `- Mở khi cần: \`learning/teaching/README.md\` (chọn kiểu bài), \`learning/${dir}/log.md\` (nhật ký cũ), \`learning/roadmap.md\`. Sau buổi: mục "Sau buổi" của \`learning/README.md\`.`, '');
 
   if (fr) L.push(`${fr.head} (learning/README.md, nguyên văn, trừ khối "Sau buổi")`, '', fr.body, '');

@@ -48,7 +48,7 @@ Số của `explain-usage` (cộng dồn cả chat) và Settings > Usage (số t
 - **Khởi động trong 2–3 lượt thay vì 17:** lệnh mới `start-session.mjs` (chưa có, sẽ để trong `templates/`) làm trong một lần gọi: kiểm setup, đọc sổ, chọn và nhận việc mới nhất, in STATUS, PR đang mở. Project instructions bỏ bước đọc file qua Project (luôn lỗi), đi thẳng tới clone. Đây là thứ làm cho việc đổi chat đáng làm.
 - **Ít lượt hơn trong lúc làm:** gộp lệnh vào một lần gọi khi chúng không phụ thuộc nhau, dùng script thay cho nhiều lần đọc file.
 - **Tắt connector không dùng** khi học hay khi sửa repo (Figma, sakubun, Chrome…), nếu thí nghiệm 3 cho thấy phần nền giảm.
-- **Bỏ Codex khỏi luồng học.** Làm cho gọn, không phải để tiết kiệm: Claude vốn không đọc `learning/codex.md`.
+- **Bỏ Codex khỏi luồng học.** Làm cho gọn, không phải để tiết kiệm: Claude vốn không đọc learning/codex.md.
 
 ## Không làm
 - Không đổi luật `profile/CHATS.md` trước khi có số đo của checkpoint 1.
@@ -69,8 +69,8 @@ Xong khi: thí nghiệm 1 lặp lại cho thấy khởi động còn tối đa 4
 - [ ] lệnh mới `start-session.mjs` (chưa có, sẽ để trong `templates/`) và test, rồi làm lại thí nghiệm 1 với lệnh này; sửa đoạn project instructions (tăng số chuẩn setup) để đi thẳng tới clone và lệnh này. Đã có lệnh, test và chuẩn setup v3 (nhánh `feat/start-session`); còn đo lại sau khi thien dán v3.
 
 ### 3. Bỏ Codex khỏi luồng học
-Xong khi: không file nào trong luồng học còn trỏ tới `learning/codex.md`; CI xanh.
-- [ ] Xóa `learning/codex.md`, bước 3 của "học" trong `AGENTS.md`, phần Codex ở `profile/MAP.md`, gói buổi, `learning/README.md`
+Xong khi: không file nào trong luồng học còn trỏ tới learning/codex.md; CI xanh.
+- [x] Xóa learning/codex.md, bước 3 của "học" trong `AGENTS.md`, phần Codex ở `profile/MAP.md`, gói buổi, `learning/README.md` (cả `learning/frontend.md`, bảng README); luật thẻ bù chuyển vào "Khung một buổi" của `learning/README.md`. Bài và trang cũ học ở Codex giữ nguyên làm lịch sử.
 
 ### 4. Đổi luật chat theo số đo
 Xong khi: `profile/CHATS.md` ghi luật mới kèm số đo làm căn cứ, thien duyệt.

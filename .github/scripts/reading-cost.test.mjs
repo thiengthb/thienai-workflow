@@ -15,7 +15,7 @@ const real = measure(root);
 assert.ok(real.tasks.length >= 10, 'every row of the MAP table is measured');
 const learn = real.tasks.find((t) => t.task.includes('học') && t.task.startsWith('"'));
 assert.ok(learn.files.some((f) => f.path === 'artifacts/lesson/prepare-lesson.mjs (phần in ra)' && f.bytes > 0), 'a script in the "Đọc" column counts what it prints (session packet)');
-assert.ok(!learn.files.some((f) => /^learning\/[a-z]+\.md$/.test(f.path) && f.path !== 'learning/codex.md'), '"học" reads the packet, not whole subject files');
+assert.ok(!learn.files.some((f) => /^learning\/[a-z]+\.md$/.test(f.path)), '"học" reads the packet, not whole subject files');
 const withScript = parseMap(sample.replace('`learning/<môn>.md`', 'gói `a/pack.mjs`'));
 assert.deepEqual(withScript.tasks[0].scripts, ['a/pack.mjs']);
 const subjects = readdirSync(join(root, 'learning')).filter((d) => statSync(join(root, 'learning', d)).isDirectory() && existsSync(join(root, 'learning', d + '.md')));

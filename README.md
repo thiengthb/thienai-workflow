@@ -53,7 +53,6 @@ docs/         Tiến độ và kế hoạch đang chạy của chính repo này
 | | `make-slides/` | Skill làm slide: tóm tắt bài, dàn ý, dựng, kiểm, tập dượt, đăng. `SKILL.md` chỉ trỏ tới `STEPS.md` |
 | `slides/` | `RULES.md` | Bộ quy tắc làm slide (S1 đến S48), đọc trước mọi bài thuyết trình |
 | | `BRIEF.template.md`, `starter/` | Mẫu tóm tắt bài và khung slide web có máy kiểm tra, chép vào project. Xem `slides/README.md` |
-| `learning/` | `codex.md` | Học ở Codex hay công cụ khác khi hết quota Claude: chỗ nào khác, đưa trang và lấy kết quả thế nào, ghi lại ra sao |
 | | `README.md` | Vòng xoay nhiều môn: buổi tới học môn gì, khung một buổi, cách bắt đầu môn mới, mốc kiểm tra. thien nhắn "học" thì AI đọc file này trước |
 | | `roadmap.md` | Lộ trình học từng môn: các chặng từ người mới đến khá, đã học tới đâu, bài đã học, nguồn học, lộ trình đã đổi |
 | | `cards.md` | Thẻ ôn của mọi môn, hỏi 3 thẻ đến hạn ở đầu mỗi buổi |

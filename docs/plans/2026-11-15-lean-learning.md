@@ -151,7 +151,7 @@ Chỗ dễ sa lầy: đợt 3, nếu cứ muốn phần khung tự sinh phủ h�
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
 | 2026-11-15 | Làm đợt 1 trước đợt 0 | Đợt 1 chỉ đổi phần máy, không đụng trải nghiệm học, nên không cần số đo của đợt 0 để quyết. Đợt 0 vẫn đo ở buổi Frontend 6 |
-| 2026-11-15 | Đợt 2 dừng ở 64,0 KB, không ép xuống 50 | Gói chép nguyên văn mọi mục luật của file môn (cả "Cách một buổi chạy", "Các kiểu buổi để luân phiên" của frontend), vì kế hoạch ghi không tóm luật. Con số gồm 6,5 KB `learning/codex.md` mà Claude trên claude.ai không đọc, nên ở Claude là khoảng 57,5 KB. Phần lớn còn lại là phần cố định (tầng 1 23,2 KB, `TUTOR.md`, `artifacts/lesson/README.md` 10 KB); đợt 3 bỏ việc đọc mẫu nên sẽ giảm tiếp. Điều quan trọng hơn đã đạt: số không tăng theo số buổi |
+| 2026-11-15 | Đợt 2 dừng ở 64,0 KB, không ép xuống 50 | Gói chép nguyên văn mọi mục luật của file môn (cả "Cách một buổi chạy", "Các kiểu buổi để luân phiên" của frontend), vì kế hoạch ghi không tóm luật. Con số gồm 6,5 KB learning/codex.md (đã xoá ở checkpoint 3) mà Claude trên claude.ai không đọc, nên ở Claude là khoảng 57,5 KB. Phần lớn còn lại là phần cố định (tầng 1 23,2 KB, `TUTOR.md`, `artifacts/lesson/README.md` 10 KB); đợt 3 bỏ việc đọc mẫu nên sẽ giảm tiếp. Điều quan trọng hơn đã đạt: số không tăng theo số buổi |
 | 2026-11-15 | Thứ tự merge: PR #77 trước, PR #76 sau khi học xong | Ban đầu định merge #76 trước. Nhưng bài chưa học thì CI của #76 đỏ sẵn (`after-lesson --check-all` cần thẻ và dòng roadmap của bài), merge vào sẽ làm main đỏ. Nên #76 chờ học như mọi bài; khi rebase thì làm gọn nguồn và thêm chữ "kit" vào tiêu đề, vẫn giữ câu 3 là không tách |
 
 ## Lỗi gặp

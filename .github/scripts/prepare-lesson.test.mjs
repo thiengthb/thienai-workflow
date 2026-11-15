@@ -38,7 +38,7 @@ const pr = profile(hot, { dir: 'x', file: 'x.md' });
 assert.match(pr, /^Đọc hết\.\n\n## Cách dạy môn này\nLuật 1\.\n\n## Nhật ký: buổi gần nhất \(1 dòng trước đó ở learning\/x\.md, cũ hơn ở learning\/x\/log\.md\)\n\| Buổi[^\n]*\n\|---[^\n]*\n\| 2 \| d \| c \| e \|\n\n## Chỗ còn vướng \(6 dòng mới nhất trong 8\)\n- v3\n[\s\S]*- v8\n\n## Buổi tiếp theo\n- Buổi 3$/);
 assert.ok(!pr.includes('| 1 | d |'), 'dòng nhật ký cũ không vào gói');
 
-// Thẻ ôn: đúng các thẻ đến hạn, thiếu thì thêm thẻ hạn sớm nhất của môn khác (learning/codex.md)
+// Thẻ ôn: đúng các thẻ đến hạn, thiếu thì thêm thẻ hạn sớm nhất của môn khác (learning/README.md)
 const cards = '| Thẻ | Môn | Câu hỏi | Đáp án ở | Hộp | Hỏi lại |\n|---|---|---|---|---|---|\n| F1 | Frontend | q1 | [b](x.md) | 1 | 2026-11-10 |\n| B1 | BA | q2 | [b](x.md) | 1 | 2026-11-20 |\n| F2 | Frontend | q3 | [b](x.md) | 1 | 2026-11-19 |\n| W1 | Chiến tranh | q4 | [b](x.md) | 1 | 2026-11-30 |\n';
 assert.deepEqual(reviewCards(cards, '/nowhere', '2026-11-15', 3, 'Frontend').map((c) => [c.id, !!c.filler]), [['F1', false], ['B1', true], ['W1', true]]);
 assert.equal(reviewCards(cards, '/nowhere', '2026-11-15', 3, 'Frontend')[0].answer, null, 'không thấy bài thì không đoán đáp án');
