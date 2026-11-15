@@ -1,7 +1,7 @@
 # Học nhẹ dần: đợt 2 (hồ sơ nóng cố định và gói buổi)
 
 Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo từ main) · PR: chưa có
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYS98dTrAPyBZBnWkp · Cập nhật: 2026-11-15T06:45Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXNLQf4kZZBQiEFV6R · Cập nhật: 2026-11-15T06:47Z
 
 ## thien muốn gì
 "merge xong rồi mình sẽ sang chat mới tiếp tục công việc tối ưu" (2026-11-15): làm tiếp kế hoạch `docs/plans/2026-11-15-lean-learning.md` ở chat mới.
