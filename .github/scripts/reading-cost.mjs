@@ -6,10 +6,14 @@
 //
 //   node .github/scripts/reading-cost.mjs [--root <dir>] [--json]
 //
+// A script written in the "Đọc" column (prepare-lesson.mjs) is a packet the AI reads instead of whole files: it is run
+// with --reading-cost and must print how many bytes it would print at most.
+//
 // Sizes are bytes of the files as they are in the repo. Tokens are an estimate (about 3 bytes per token for this
 // mix of Vietnamese and code); no tokenizer is run, so treat them as a rough scale, not a count.
 import { readFileSync, existsSync, statSync, readdirSync, realpathSync } from 'node:fs';
 import { join, dirname } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 export const BUDGET_KB = 120;     // one task, tier 1 included
@@ -20,6 +24,8 @@ const lf = (s) => s.replace(/^﻿/, '').replace(/\r\n?/g, '\n');
 /** Markdown files written in backticks: what the AI reads. Scripts (`.mjs`) in the same cells are run, not read. */
 const paths = (md) => [...md.matchAll(/`([^`\s]+)`/g)].map((m) => m[1].replace(/[),.:;]+$/, ''))
   .filter((p) => p.endsWith('.md') && (p.includes('/') || /^[A-Z]+\.md$/.test(p)));
+/** Scripts in the "Đọc" column (a session packet such as prepare-lesson.mjs): the AI reads what they print. */
+const scripts = (md) => [...md.matchAll(/`([^`\s]+\.mjs)`/g)].map((m) => m[1]);
 
 /** { tier1: [paths], tasks: [{ task, files: [paths] }] } from the text of profile/MAP.md. */
 export function parseMap(md) {
@@ -33,9 +39,20 @@ export function parseMap(md) {
     // "`a.md` hay `b.md`": the AI reads one of the two, so only the larger one counts (worst case, no double count).
     const alts = [...cells[2].matchAll(/`([^`\s]+\.md)` hay `([^`\s]+\.md)`/g)].map((m) => [m[1], m[2]]);
     const files = paths(cells[2]).filter((p) => !alts.some(([, second]) => second === p));
-    tasks.push({ task: cells[1].replace(/`/g, ''), files, alts: alts.map(([x, y]) => [x, y]) });
+    const run = scripts(cells[2]);
+    tasks.push({ task: cells[1].replace(/`/g, ''), files, alts: alts.map(([x, y]) => [x, y]), ...(run.length ? { scripts: run } : {}) });
   }
   return { tier1, tasks };
+}
+
+/** Bytes a script prints for the AI to read: `node <script> --reading-cost` prints that number (worst case over subjects). */
+function printed(root, p) {
+  const f = join(root, p);
+  if (!existsSync(f)) return { path: p + ' (phần in ra)', bytes: 0, missing: true };
+  const r = spawnSync(process.execPath, [f, '--reading-cost'], { cwd: root, encoding: 'utf8', env: { ...process.env, REPO_ROOT: root } });
+  const n = Number(String(r.stdout).trim());
+  if (r.status !== 0 || !Number.isFinite(n)) throw new Error(`${p} --reading-cost không in ra số byte: ${r.stderr || r.stdout}`);
+  return { path: p + ' (phần in ra)', bytes: n };
 }
 
 /** Bytes of one path; "<môn>" means the largest subject file, so the number is the worst case. */
@@ -56,9 +73,9 @@ export function measure(root) {
   const baseBytes = base.reduce((n, f) => n + f.bytes, 0);
   return {
     tier1: { files: base, bytes: baseBytes },
-    tasks: tasks.map(({ task, files, alts }) => {
+    tasks: tasks.map(({ task, files, alts, scripts: run = [] }) => {
       const pick = (p) => { const alt = (alts || []).find(([x]) => x === p); if (!alt) return size(root, p); const [x, y] = alt.map((q) => size(root, q)); return x.bytes >= y.bytes ? x : y; };
-      const own = [...new Set(files)].filter((p) => !tier1.includes(p)).map(pick);
+      const own = [...[...new Set(files)].filter((p) => !tier1.includes(p)).map(pick), ...[...new Set(run)].map((p) => printed(root, p))];
       const bytes = baseBytes + own.reduce((n, f) => n + f.bytes, 0);
       return { task, files: own, bytes, biggest: [...own].sort((a, b) => b.bytes - a.bytes)[0] };
     }),

@@ -5,3 +5,4 @@ Mỗi chat xong mục tiêu thì AI ghi một dòng, theo [`profile/CHATS.md`](.
 | Ngày | Nick | Mục tiêu | Lượt gọi | Đọc lại (triệu) | Ghi cache (triệu) | Viết ra (nghìn) | Ngữ cảnh % | Lệnh, file % | Web % | Ghi chú |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 2026-11-15 | tnt697 | Ba việc trong một chat: kế hoạch học nhẹ dần và PR #77, #78; mở lại bài chiến tranh 3, 4; dựng và ghi buổi Frontend 6 (PR #79) | 157 | 44,8 | 0,87 | 121 | 55 | 30 | 8 | Số đo đầu tiên, trước khi có luật một chat một mục tiêu |
+| 2026-11-15 | tnt697 | Đợt 2 học nhẹ dần: gói buổi `prepare-lesson.mjs`, nhật ký 3 dòng (một việc, một PR) | 51 | 11,4 | 0,18 | 67 | 57 | 38 | 0 | Chat một mục tiêu đầu tiên: khoảng 1/4 chat đo lần đầu |
