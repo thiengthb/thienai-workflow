@@ -5,7 +5,7 @@ Trạng thái: đang chạy · Duyệt: chưa (chờ thien) · Cập nhật: 202
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 (đo): thí nghiệm 1 và 2 có lần 1 (bảng "Kết quả đo"). Checkpoint 2: lệnh `start-session.mjs` xong, chờ merge rồi đo lại. Chưa đổi luật `profile/CHATS.md`.
+- Đang ở: checkpoint 1 (đo): thí nghiệm 1 và 2 có lần 1 (bảng "Kết quả đo"). Checkpoint 2: lệnh `start-session.mjs` đã vào main (thien nhờ merge thẳng 2026-11-15), chờ thien dán instructions v3 rồi đo lại. Checkpoint 3 xong. Chưa đổi luật `profile/CHATS.md`.
 - Còn thiếu: lần 2 của thí nghiệm 1, 2; thí nghiệm 3, 4.
 - thien cần làm: duyệt kế hoạch; khi mở chat mới thì để AI chạy `explain-usage` ở những chỗ ghi trong thí nghiệm.
 
