@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-15 · Cập nhật: 2026-11-15 �
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 1 đã merge (PR #77), còn chờ thien mở lại hai bài sa bàn trên điện thoại. Đợt 0 làm cùng buổi Frontend 6.
+- Đang ở: đợt 1 xong (PR #77, #78; thien mở lại hai bài sa bàn trên điện thoại, học được, 2026-11-15). Đợt 0 làm cùng buổi Frontend 6.
 - Còn thiếu: đo buổi Frontend 6 (đợt 0), rồi đợt 2.
-- thien cần làm: mở hai link bài sa bàn mà nick tnt697 vừa đăng lại, báo còn học được không. PR #76 (chiến tranh 5) để tới khi học xong bài đó mới merge, như mọi bài khác. Buổi tới nhắn "học" như thường.
+- thien cần làm: merge PR #78. PR #76 (chiến tranh 5) để tới khi học xong bài đó mới merge, như mọi bài khác. Buổi tới nhắn "học" như thường.
 - Khi học chiến tranh 5: AI rebase nhánh của PR #76 lên main, chạy `make-lesson.mjs` trên trang `lesson-05.html` của môn chiến tranh (nguồn tự gọn), thêm chữ "kit" vào tiêu đề PR #76 vì nó có sửa `sandtable.js` (câu 3: giữ nguyên, không tách).
 
 ## Mục tiêu
@@ -101,7 +101,7 @@ Xong khi: thien thấy một bảng trong file này ghi số token của buổi 
 - [ ] Dựng Frontend 6 như hiện nay, cuối phiên chạy `explain-usage`, ghi số
 - [ ] Làm phần "sau buổi" ở chat mới, ghi số để so
 
-### 1. Repo hết nặng thêm (chỉ máy, không đổi trải nghiệm)
+### 1. Repo hết nặng thêm (chỉ máy, không đổi trải nghiệm) ✓ 2026-11-15
 Xong khi: PR thêm một bài mới chỉ thêm khoảng 20–35 KB; job `pages` không chạy lại bài cũ; thien mở lại 2 link bài cũ trên điện thoại vẫn học được.
 - [x] `make-lesson.mjs` ghi bản dựng ra `build/`, giữ nguồn rỗng thẻ kit; chạy trên nguồn cũ thì tự làm gọn; đã làm gọn hai trang sa bàn (210 và 185 KB còn 14 và 21 KB) (PR #77 đã merge; sửa thư mục mặc định ở PR sau)
 - [x] `check-pages.mjs --changed` chỉ kiểm trang đổi trong PR cộng trang mẫu mỗi loại (PR #77: 10 trang thay vì 21)
