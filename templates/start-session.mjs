@@ -73,8 +73,9 @@ function run(args, opts = {}) { return spawnSync(process.execPath, args, { encod
 function main(argv) {
   const opt = (k) => { const i = argv.indexOf(k); if (i < 0) return undefined; const v = argv[i + 1]; argv.splice(i, 2); return v; };
   const flag = (k) => { const i = argv.indexOf(k); if (i < 0) return false; argv.splice(i, 1); return true; };
+  const claimGiven = argv.includes('--claim');
   const rawBy = opt('--claim');
-  const by = rawBy === undefined ? undefined : claimBy(rawBy);
+  const by = claimGiven ? claimBy(rawBy) : undefined;
   const pick = opt('--task');
   const mapArg = opt('--remote-map');
   const taskDir = opt('--task-dir') || dirname(here);
@@ -119,9 +120,9 @@ function main(argv) {
 
   // 3. With --claim: take the task and print it in full.
   let task;
-  if (rawBy !== undefined && !by) {
+  if (claimGiven && !by) {
     code = 1;
-    console.log(`\n## Nhận việc\nChưa nhận: --claim "${rawBy}" thiếu tên nick. Viết dạng --claim "Claude tnt697, <link chat>" (nick ở dòng "nick:" của project instructions) rồi chạy lại. Sổ không bị đụng tới.`);
+    console.log(`\n## Nhận việc\nChưa nhận: --claim "${rawBy ?? ''}" thiếu tên nick. Viết dạng --claim "Claude tnt697, <link chat>" (nick ở dòng "nick:" của project instructions) rồi chạy lại. Sổ không bị đụng tới.`);
   }
   if (by) {
     console.log('\n## Nhận việc');

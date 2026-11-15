@@ -83,6 +83,9 @@ r = start('--claim', 'Claude, https://new');
 assert.equal(r.status, 1);
 assert.match(r.stdout, /thiếu tên nick/);
 assert.doesNotMatch(r.stdout, /Một nick khác/, 'a wrong --claim is not reported as another nick');
+r = start('--claim');
+assert.equal(r.status, 1, '--claim with no value is refused, not skipped');
+assert.match(r.stdout, /thiếu tên nick/);
 
 // --task picks another task; claiming it with a stale copy elsewhere is still guarded by save.
 r = start('--claim', 'Claude tnt697, https://new', '--task', 'a/b:old');
