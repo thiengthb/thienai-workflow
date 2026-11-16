@@ -56,6 +56,9 @@ body { font-size: 16px; line-height: 1.55; -webkit-text-size-adjust: 100%; }
 .mine.on { display: block; }
 .say { padding: 12px 14px; border-radius: var(--r); background: var(--accent-soft); color: var(--ink); font-size: 15px; }
 .say b { display: block; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 4px; }
+/* Tin của người hỏi ở bước tự nói lại theo tình huống: viền, không nền màu, để khác bản của Claude. */
+.say.ask-from { background: var(--card); border: 1px solid var(--line); margin: 4px 0 12px; }
+.say.ask-from b { color: var(--muted); }
 textarea { min-height: 88px; resize: vertical; }
 
 /* Góp ý cuối buổi. */

@@ -115,6 +115,7 @@ assert.doesNotMatch(P['frontend-stage-ask'], /còn vướng/, 'bài không có c
 assert.match(P['lesson-why-wrong'], /Đáp án đúng: \(1\)/);
 assert.match(P['lesson-teach-back'], /Mỗi màn chỉ nên có một chỗ dùng màu nhấn/, 'gửi đúng bài người học viết');
 assert.match(P['lesson-teach-back'], /không kèm đáp án/);
+assert.match(P['lesson-teach-back'], /Đề là một tình huống: người học trả lời Minh[\s\S]*Nhìn trơn quá[\s\S]*chưa gắn vào tình huống/, 'tự nói lại theo tình huống: nêu người hỏi, tin nhắn và cách chấm (phương án C)');
 assert.match(P['frontend-stage-ask'], /CHƯA làm xong bước này/);
 assert.match(P['decide-before-pick'], /CHƯA chọn\. Đừng nói nên chọn/);
 assert.doesNotMatch(P['decide-before-pick'], /Gọn nhất|đề xuất a/i, 'chưa chọn thì không lộ đề xuất');

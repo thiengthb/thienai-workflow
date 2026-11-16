@@ -6,7 +6,7 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 
 - Mỗi màn một bước, đầu trang có tên buổi, số bước ("3/8") và thanh tiến độ. Nút "Tiếp" mờ tới khi làm xong bước đó.
 - Câu hỏi một lựa chọn chấm ngay: chữ "Bạn chọn", "Đúng" và lời giải thích hiện cùng lúc, không chỉ đổi màu.
-- Ô tự nói lại, bản của Claude ẩn tới khi bấm xem (ghi lại là xem trước hay sau khi tự viết).
+- Ô tự nói lại theo tình huống: một người cụ thể nhắn hỏi về chính màn hay tình huống vừa làm (hộp `.ask-from`), người học trả lời người đó. Bản của Claude ẩn tới khi bấm xem (ghi lại là xem trước hay sau khi tự viết). Đổi từ câu hỏi chung chung theo lựa chọn của thien 2026-11-17 (phương án C, `learning/frontend.md`): câu chung chung làm bí, tình huống cụ thể giúp tự tổng hợp.
 - Góp ý độ dài, độ khó, cách học so với các buổi trước bằng nhóm nút (nút đã chọn tô đen), ô ghi thêm.
 - **Xong buổi học**: lưu toàn bộ kết quả vào db của trang ở `sessions/<id>-<thời điểm>`, rồi gửi tóm tắt cho Claude bằng comment (Claude đang theo dõi trang thì tự thức dậy, thien không cần nhắn "xong"). Gửi không được thì hiện nút "Chép kết quả".
 - Tự lưu chỗ đang học (`../kit/autosave.js`): tải lại, tắt màn, mở trên máy khác, hay mở bản AI vừa sửa đều về đúng chỗ, vì phần tự lưu nhớ nút theo tên chứ không theo thứ tự. Học lại thì bỏ phần ôn.
@@ -36,6 +36,7 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 | Nút đi tiếp | `<button class="btn primary next" data-go="N" data-need="khóa1 khóa2" disabled>`; nút bị phần ôn khóa thêm `data-review-gate` |
 | Câu hỏi | `<div class="q" data-q="khóa" data-a="chỉ số đúng" [data-kind="review"]>` chứa `.status`, các `.opt`, `.why` |
 | Ô viết | `<textarea data-key="teach" data-min="5">`; nút xem bản mẫu `data-show="mine"`, hộp `#mine.mine` |
+| Tình huống tự nói lại | `<div class="say ask-from" data-who="Minh, bạn cùng nhóm"><b>Minh nhắn</b>tin nhắn</div>` đặt trước ô viết; `lesson.js` gửi người hỏi và tin nhắn cho Claude khi nhận xét. Bản mẫu `#mine` trả lời đúng người đó |
 | Góp ý | `<div class="crit"><b>Tên tiêu chí</b><div class="seg full" data-f="len">` với nút `data-v`; ô `#note`. Tóm tắt lấy tên trong `<b>` |
 | Kết thúc | `#finish`, `#done-msg`, `#copy.hide` |
 | Phản hồi | `.fb`, `.fb.good`, `.fb.bad` |

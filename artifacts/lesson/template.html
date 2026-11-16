@@ -115,13 +115,16 @@
     <button class="btn primary next" type="button" data-go="6" data-need="q1" disabled>Tiếp</button>
   </section>
 
-  <!-- 6. Tự nói lại rồi mới xem bản của Claude -->
+  <!-- 6. Tự nói lại theo tình huống (phương án C, thien chọn 2026-11-17): một người cụ thể hỏi về chính màn hay tình huống
+       vừa làm, người học trả lời người đó. Đừng hỏi chung chung kiểu "chọn màu thế nào?": câu chung chung làm bí.
+       Hộp .ask-from là tin của người hỏi (data-who: người đó là ai, gửi cho Claude khi nhận xét); bản của Claude cũng trả lời đúng người đó. -->
   <section class="step" data-s="6">
     <h2>Tự nói lại</h2>
-    <p>Viết 1–2 câu: chọn màu cho một màn thế nào? Viết như đang nói với bạn cùng nhóm.</p>
-    <textarea data-key="teach" data-min="5" placeholder="Mình sẽ..."></textarea>
+    <div class="say ask-from" data-who="Minh, bạn cùng nhóm"><b>Minh, bạn cùng nhóm, nhắn</b>Sao màn đặt lịch bạn bỏ hết màu xanh ở nút tim với nút phụ vậy? Nhìn trơn quá.</div>
+    <p>Trả lời Minh 2–3 câu: vì sao bạn đổi như vậy, dựa vào chính màn vừa sửa.</p>
+    <textarea data-key="teach" data-min="5" placeholder="Minh ơi, mình đổi vì..."></textarea>
     <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
-    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Chọn một màu nhấn và chỉ để nó thành khối đặc ở việc chính của màn. Màu khác chỉ khi mang nghĩa, như lỗi hay cảnh báo, và luôn có chữ đi kèm.</div></div>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Người dùng mở màn này để đặt lịch, nên mình để màu xanh đặc chỉ ở nút "Đặt lịch" cho mắt thấy nó trước. Tim là việc phụ nên để viền nhạt, vẫn hiểu được mà không giành mắt. Màu khác mình chỉ dùng khi mang nghĩa, như báo lỗi, và luôn có chữ đi kèm.</div></div>
     <button class="btn primary next" type="button" data-go="7" data-need="teach" disabled>Tiếp</button>
   </section>
 
