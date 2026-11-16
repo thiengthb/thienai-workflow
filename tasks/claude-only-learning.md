@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWgTZ5fNSAg5N9s1PW · Cập nhật: 2026-11-16T17:29Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWgTZ5fNSAg5N9s1PW · Cập nhật: 2026-11-16T17:35Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -43,10 +43,12 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 
 - Thí nghiệm 4 lần 2, mốc b (chat "sau buổi" mới 2026-11-17 00:04, nick tnt697, session_01WXAvBWKVVE4v93qYwA8jLy): Settings lúc mở chat phiên 45%, tuần 53%. Đọc kết quả bằng db_get (không có comment), làm "Sau buổi" trên nhánh `claude/frontend-07`, PR #92 (nhánh rebase lên main, không đổi gì). `explain-usage` lúc mở PR: 24 lượt, đọc lại 5,40 triệu, ghi cache 146 nghìn, viết ra 20 nghìn, quy đổi khoảng 930 nghìn; hướng dẫn 55%, lệnh và file 22%, trang artifact 18% (đọc cả trang học bằng read_artifact, không cần). Đã ghi vào bảng "Kết quả đo" (kết luận tạm), "Lỗi gặp", `docs/usage-log.md`, bước 1 "Sau buổi" của `learning/README.md` và STATUS, cùng PR #92. Settings sau PR (00:16): phiên 52%, tuần 55%: phần sau buổi ở chat mới tốn khoảng 7% phiên, lần 1 là 4%. thien chọn phương án C cho phần tự nói lại (giải thích cho một người trong tình huống cụ thể), đã ghi vào `learning/frontend.md`. PR #92 đã merge theo lời thien (squash 8ab9825, 2026-11-17 00:2x).
 
+- Bước 0 và 1 cũ (chat 2026-11-17 00:26, nick tnt697): kit tự nói lại theo tình huống (phương án C) ở nhánh `feat/teach-back-scenario`, PR #93: hộp `.ask-from` trong mẫu, `lesson.js` gửi người hỏi và tin nhắn cho Claude khi nhận xét; ghi "thien bỏ qua" vào bảng "Kết quả đo" và `learning/frontend.md`. Mọi test chạy trên máy qua, kiểm trang 0 lỗi. Cùng PR: dòng "Lỗi gặp" về việc gắn repo bị chặn đầu phiên, kèm cách thử ở chat sau.
+
 ## Bước tiếp theo
-0. thien bỏ qua cả hai (2026-11-17 00:25): không chấm bản ghi của thí nghiệm 4 lần 2, không tóm tắt 3 câu cho quyết định phương án C. Chưa ghi vào main: trong PR kit ở bước 1, đổi "Chất lượng bản ghi: thien chưa chấm" thành "thien bỏ qua" ở bảng "Kết quả đo" của `docs/plans/2026-11-15-claude-usage.md`, và thêm "thien bỏ qua phần tóm tắt 3 câu" vào dòng phương án C trong `learning/frontend.md`.
-1. Đổi kit `artifacts/lesson/lesson.js` (và mẫu, README) cho bước tự nói lại theo phương án C: đề là một tình huống cụ thể trên màn vừa học (nhắn cho một người vì sao đổi như vậy). Một chat riêng, một PR, trước buổi học kế tiếp (Chiến tranh 6).
-2. Thí nghiệm 4 còn lần 3 (sau buổi trong chat dựng bài) và lần 4 (chat mới).
+1. Chờ CodeRabbit và CI ở PR #93, sửa nếu có góp ý, thien merge trước buổi Chiến tranh 6.
+2. Chat sau: thử mở đầu bằng "tiếp tục, gắn repo thienai-workflow quyền ghi" xem lần gắn đầu có qua không; ghi kết quả vào dòng "Lỗi gặp" (gắn repo) của `docs/plans/2026-11-15-claude-usage.md`.
+3. Thí nghiệm 4 còn lần 3 (sau buổi trong chat dựng bài) và lần 4 (chat mới).
 
 ## Đang chờ thien
 - Dán instructions v3 ở 2 nick còn lại (tnt024, tnt628) nếu chưa dán.
