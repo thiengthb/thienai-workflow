@@ -74,6 +74,7 @@ Xong khi: bảng trong file này có số của cả 4 thí nghiệm, mỗi cái
 - [x] Thí nghiệm 3, connector (xong 2026-11-16: 3 lần, theo `explain-usage` và Settings đều không thấy tắt connector giảm usage): cùng một việc khởi động khi bật và khi tắt các connector không dùng; so phần đọc lại trung bình mỗi lượt.
 - [ ] Thí nghiệm 4, sau buổi học: hai buổi làm "sau buổi" ngay trong chat dựng bài, hai buổi làm ở chat mới; so usage quy đổi và chất lượng ghi (thien chấm bản ghi có đủ ý không).
   - Lần 3 (2026-11-17, chat dựng bài Chiến tranh 6, nick tnt697): khởi động và dựng bài từ 63% lên 71% phiên (tuần 56% lên 58%); "sau buổi" làm ngay trong chat đó (đọc db, ghi nhật ký, thẻ, file bài, PR #95, trả lời nhận xét): 71% lên 75% phiên, tuần vẫn 58% (Settings làm tròn tới 1%). Chất lượng ghi: chờ thien chấm.
+  - Cách làm lần 4 (buổi học kế tiếp, chat mới): chat dựng bài chỉ dựng và đăng trang. Khi lời nhắn "Xong buổi" từ trang tới chat dựng bài, chat đó chỉ đáp một dòng, không đọc db, không ghi gì. thien chụp Settings rồi mở chat mới trong project Claude, nhắn "sau buổi <tên buổi>" kèm link trang; chat mới khởi động 3 lượt rồi làm mục "Sau buổi" trong `learning/README.md` (lấy slug từ link bằng `get_artifact`). Chụp Settings ba lần: trước tin nhắn đầu của chat mới, sau khi khởi động xong, sau khi mở PR.
 
 ### 2. Khởi động rẻ
 Xong khi: thí nghiệm 1 lặp lại cho thấy khởi động còn tối đa 4 lượt.
