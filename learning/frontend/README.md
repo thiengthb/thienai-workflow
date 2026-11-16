@@ -15,11 +15,12 @@ Trạng thái học, nhật ký và kế hoạch buổi sau nằm ở [`../front
 | 5 | Một màu nhấn cho mỗi màn; màu khác chỉ khi mang nghĩa, để nhạt | [05-one-accent-colour.md](lessons/05-one-accent-colour.md) | [lesson-05.html](pages/lesson-05.html) |
 | 6 | Chọn màu nhấn sau khi biết màn đã dùng màu mang nghĩa nào; lượng màu theo người dùng | [06-colour-for-a-whole-app.md](lessons/06-colour-for-a-whole-app.md) | [lesson-06.html](pages/lesson-06.html) |
 | 7 | Hỏi trước người dùng mở màn để làm gì, rồi sửa điểm nhấn, bậc chữ, khoảng cách, màu theo câu đó | [07-fix-four-mistakes.md](lessons/07-fix-four-mistakes.md) | [lesson-07.html](pages/lesson-07.html) |
+| 8 | Chép lại một màn bằng mắt: trong nhỏ hơn ngoài, mỗi tầng gấp ít nhất 2 lần, số lấy từ thang 4, 8, 16, 24, 32 | [08-copy-a-screen-spacing-scale.md](lessons/08-copy-a-screen-spacing-scale.md) | [lesson-08.html](pages/lesson-08.html) |
 
 ## Ôn lại thế nào
 
 - **Nhanh, khoảng 2 phút:** mở file bài, đọc ý chính, tự trả lời mục "Tự kiểm" trước rồi mới bấm xem đáp án. Tự nhớ lại giúp nhớ lâu hơn đọc lại.
-- **Làm lại cả buổi:** nhắn Claude "mở lại bài 3" (tài khoản nào cũng được). Claude đăng lại trang từ thư mục `pages/` để bạn làm trên điện thoại. Hoặc tải file `.html` về và mở bằng trình duyệt; khi đó kết quả không tự lưu, bấm nút chép kết quả nếu muốn gửi.
+- **Làm lại cả buổi:** nhắn Claude "mở lại bài 3" (tài khoản nào cũng được). Claude đăng lại trang từ thư mục `pages/` để bạn làm trên điện thoại. Bài 1–5: có thể tải file `.html` về và mở bằng trình duyệt. Từ bài 6, file trong `pages/` chỉ là nguồn (phần script dùng chung để trống), tải về sẽ không bấm được: mở bản đăng (link trong file bài) hoặc nhờ Claude dựng lại. Mở file tải về thì khi đó kết quả không tự lưu, bấm nút chép kết quả nếu muốn gửi.
 - Mục "Bạn đã nói" trong mỗi bài là câu bạn tự viết lúc học. Đọc lại để thấy cách nhìn của mình đổi thế nào.
 
 ## Thêm bài mới

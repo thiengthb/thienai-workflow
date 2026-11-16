@@ -21,7 +21,7 @@ Xong khi: bài so sánh mù ngày 2026-11-22, thien chấm lại các màn cũ v
 ### Chặng 2: Áp vào app của mình
 Xong khi: thien tự sửa được một màn của sakubun hoặc todo và viết được 3 luật cho thienui. Bắt đầu sau mốc 2026-11-22.
 - [ ] Soi một màn của app mình dùng hằng ngày, chọn một chỗ sửa
-- [ ] Chép lại một màn tốt theo đúng con số, rồi nói ra mẹo vừa thấy
+- [x] Chép lại một màn tốt theo đúng con số, rồi nói ra mẹo vừa thấy (làm sớm ở buổi 8, 2026-11-17, trên màn tự dựng, [bài](frontend/lessons/08-copy-a-screen-spacing-scale.md); chặng 2 làm lại với màn thật)
 - [ ] Viết luật đầu tiên cho thienui, kiểm bằng hai màn thật
 
 ### Chặng 3: Phần kỹ thuật nền
@@ -29,11 +29,12 @@ Chưa chốt. Ở mốc 2026-11-22 sẽ chọn học phần nào trước trong:
 - [ ] Chốt thứ tự ở mốc 2026-11-22
 
 ### Bài đã học
-- Bài 1 đến 7: đọc nhanh và làm lại ở [frontend/README.md](frontend/README.md)
+- Bài 1 đến 8: đọc nhanh và làm lại ở [frontend/README.md](frontend/README.md)
 - Trang buổi 1: [Một điểm nhấn](https://claude.ai/artifact/A3nqpsF7j3wnNaYpfdmoKC)
 - Trang buổi 5: [Màu](https://claude.ai/artifact/Gn4VUaqRzfT7jBDFz9GZ5z)
 - Buổi 6: [bài](frontend/lessons/06-colour-for-a-whole-app.md), [trang ở nick tnt697](https://claude.ai/artifact/M1nUVofKUZmF9etaFYNFBt)
 - Buổi 7: [bài](frontend/lessons/07-fix-four-mistakes.md), [trang ở nick tnt697](https://claude.ai/artifact/4vZj2LZp7fGnZ1qDaa1ZC6)
+- Buổi 8: [bài](frontend/lessons/08-copy-a-screen-spacing-scale.md), [trang ở nick tnt697](https://claude.ai/artifact/SNn544T5RTNcd6APZtHnCd)
 - Thẻ ôn của mọi môn: [cards.md](cards.md)
 
 ### Nguồn học

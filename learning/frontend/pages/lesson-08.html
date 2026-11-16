@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buổi 8: Chép lại một màn, đo khoảng cách bằng mắt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style id="kit-css"></style>
+<style id="lesson-css"></style>
+<style id="it-css"></style>
+<style>
+/* Phần riêng của bài: màn "Sách của tôi" của app thư viện trường, trên bàn thử có bản thiết kế để chép.
+   Bốn núm, đều là khoảng cách, đặt biến CSS trên .screen: --g0 (các dòng trong một cuốn), --g1 (giữa các cuốn),
+   --g2 (giữa hai nhóm), --pad (lề màn). Bản nháp lúc mở: 10, 6, 14, 10 (chọn tùy hứng).
+   Bản thiết kế: 4, 16, 32, 16 (thang 4, 8, 16, 24, 32; mỗi tầng gấp ít nhất 2 lần tầng bên trong).
+   Giá trị mặc định đặt trên .screen, không đặt trên .lib, để núm và bản thiết kế ghi đè được. */
+.bench[data-pane="lib"] .screen { --g0: 10px; --g1: 6px; --g2: 14px; --pad: 10px; }
+.lib { min-height: 100%; display: flex; flex-direction: column; gap: var(--g2); padding: var(--pad) var(--pad) 0; background: #fff; color: #1b1b1a; }
+.lib .hd { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 8px; }
+.lib .hd b { font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+.lib .hd small { font-size: 12px; color: #6b6862; }
+.lib .sec { display: flex; flex-direction: column; gap: var(--g1); }
+.lib .lb { font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: #6b6862; }
+.lib .bk { display: flex; flex-direction: column; gap: var(--g0); }
+.lib .bk .t { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 16px; font-weight: 600; }
+.lib .bk .t span { flex: none; font-size: 12px; font-weight: 600; }
+.lib .au { font-size: 13px; color: #6b6862; }
+.lib .soon { color: #c2410c; } .lib .ok { color: #15803d; } .lib .far { color: #6b6862; }
+.lib .cta { align-self: stretch; text-align: center; padding: 11px 0; border-radius: 8px; background: #2563eb; color: #fff; font-weight: 600; font-size: 14px; }
+.lib .nav { margin: auto calc(-1 * var(--pad)) 0; display: flex; justify-content: space-around; border-top: 1px solid #eee; padding: 8px 0 10px; font-size: 10.5px; color: #8a877f; }
+.lib .nav .cur { color: #2563eb; font-weight: 600; }
+.srcs { list-style: none; padding: 0; margin: 8px 0 0; } .srcs a { display: block; padding: 12px 0; min-height: 44px; box-sizing: border-box; }
+.kinds { display: grid; gap: 4px; margin: 0; padding-left: 18px; }
+.nums { display: grid; grid-template-columns: auto 1fr 1fr; gap: 6px 14px; margin: 6px 0 0; font-size: 14px; }
+.nums b { font-weight: 600; } .nums .h { color: var(--muted, #6b6862); font-size: 12px; }
+</style>
+</head>
+<body>
+<script type="application/json" id="lesson">{ "id": "frontend-08", "subject": "Frontend", "title": "Buổi 8: Chép lại một màn, đo khoảng cách bằng mắt" }</script>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>Frontend · Buổi 8: Chép lại một màn</span><span id="cnt">1/10</span></div><div class="bar"><span id="bar"></span></div></div>
+
+  <div id="stage">
+    <!-- Bàn thử: app thư viện trường (tự dựng), màn "Sách của tôi". Màn chính là bản Vy dựng với số tùy hứng;
+         bản nhỏ là bản thiết kế đã duyệt. Bốn núm chỉ có khoảng cách, chữ và màu giữ nguyên để mắt chỉ phải đo khoảng trắng. -->
+    <div class="pane bench" data-pane="lib" data-target='{"g0":"4px","g1":"16px","g2":"32px","pad":"16px"}'>
+      <div class="phone"><div class="screen">
+        <div class="lib">
+          <div class="hd"><b>Sách của tôi</b><small>Thư viện trường</small></div>
+          <div class="sec">
+            <div class="lb">Đang mượn · 2</div>
+            <div class="bk"><div class="t">Mắt biếc<span class="soon">Trả trước 20/11</span></div><span class="au">Nguyễn Nhật Ánh</span></div>
+            <div class="bk"><div class="t">Clean Code<span class="far">Trả trước 02/12</span></div><span class="au">Robert C. Martin</span></div>
+          </div>
+          <div class="sec">
+            <div class="lb">Đặt trước · 1</div>
+            <div class="bk"><div class="t">Đắc nhân tâm<span class="ok">Đã có sách</span></div><span class="au">Dale Carnegie · nhận trước 19/11</span></div>
+          </div>
+          <div class="cta">Gia hạn sách đang mượn</div>
+          <div class="nav"><span class="cur">Sách của tôi</span><span>Tìm sách</span><span>Phòng học</span><span>Tôi</span></div>
+        </div>
+      </div></div>
+      <div class="side">
+        <div class="knobs">
+          <div class="knob" data-knob="g0" data-var="--g0" data-min="2"><span class="label">Dòng trong một cuốn</span>
+            <div class="seg"><button type="button" data-val="2px" data-name="2">2</button><button type="button" data-val="4px" data-name="4">4</button><button type="button" data-val="10px" data-name="10" aria-pressed="true">10</button></div></div>
+          <div class="knob" data-knob="g1" data-var="--g1" data-min="2"><span class="label">Giữa các cuốn</span>
+            <div class="seg"><button type="button" data-val="6px" data-name="6" aria-pressed="true">6</button><button type="button" data-val="16px" data-name="16">16</button><button type="button" data-val="24px" data-name="24">24</button></div></div>
+          <div class="knob" data-knob="g2" data-var="--g2" data-min="2"><span class="label">Giữa hai nhóm</span>
+            <div class="seg"><button type="button" data-val="14px" data-name="14" aria-pressed="true">14</button><button type="button" data-val="32px" data-name="32">32</button><button type="button" data-val="48px" data-name="48">48</button></div></div>
+          <div class="knob" data-knob="pad" data-var="--pad" data-min="2"><span class="label">Lề màn</span>
+            <div class="seg"><button type="button" data-val="10px" data-name="10" aria-pressed="true">10</button><button type="button" data-val="16px" data-name="16">16</button><button type="button" data-val="32px" data-name="32">32</button></div></div>
+          <div class="meter" role="status"><span></span></div>
+        </div>
+        <pre class="code"><span class="c">/* đổi theo núm */</span><span data-line="g0"><span class="k">.cuon</span> { gap: <span data-v="g0"></span> }</span><span data-line="g1"><span class="k">.nhom</span> { gap: <span data-v="g1"></span> }</span><span data-line="g2"><span class="k">.man</span> { gap: <span data-v="g2"></span> }</span><span data-line="pad"><span class="k">.man</span> { padding: <span data-v="pad"></span> }</span></pre>
+      </div>
+      <div class="target"><span class="label">Bản thiết kế</span><div class="phone mini"><div class="screen"></div></div></div>
+      <pre class="code"><span data-line="g0"><span class="k">.cuon</span> { gap: <span data-v="g0"></span> }</span><span data-line="g1"><span class="k">.nhom</span> { gap: <span data-v="g1"></span> }</span><span data-line="g2"><span class="k">.man</span> { gap: <span data-v="g2"></span> }</span><span data-line="pad"><span class="k">.man</span> { padding: <span data-v="pad"></span> }</span></pre>
+    </div>
+  </div>
+
+  <!-- 0. Mở bài: nhìn hai bản, chưa hỏi gì. -->
+  <section class="step on" data-s="0" data-stage="lib">
+    <h1>Hai bản cùng chữ, cùng màu. Sao bản nhỏ dễ đọc hơn?</h1>
+    <p>Vy, bạn cùng nhóm, dựng màn "Sách của tôi" cho app thư viện trường. Bản to là bản Vy dựng. Bản nhỏ là bản thiết kế đã duyệt. Chữ và màu giống hệt nhau, chỉ khác các khoảng trắng.</p>
+    <p>Hôm nay bạn chép lại bản thiết kế bằng mắt, không ai cho số. Đây là bài tập người dạy thiết kế giao diện hay giao cho người mới: chép đúng từng con số của một màn tốt, rồi nói ra mẹo mình vừa thấy.</p>
+    <button class="btn primary next" type="button" data-go="1">Bắt đầu</button>
+  </section>
+
+  <!-- 1. Ôn trộn: 3 thẻ đến hạn trong learning/cards.md (B5, F1, F2). Chỉ lần học đầu. -->
+  <section class="step" data-s="1" data-part="review">
+    <h2>Ôn nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Đi phỏng vấn người dùng, vì sao tránh hỏi "bạn cũng thấy thông báo là tốt nhất đúng không?"</p>
+      <div class="q" data-q="B5" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Vì câu hỏi dài quá, người ta ngại trả lời</button>
+        <button class="opt" type="button">Vì câu này gợi sẵn câu trả lời và cả giải pháp, người ta dễ gật đầu thay vì kể chuyện thật</button>
+        <p class="why">Hỏi về một lần làm thật ("lần gần nhất bạn quên lịch là lúc nào?") mới nghe được chuyện thực tế.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Hai nút cùng cỡ, cùng màu đặt cạnh nhau thì sao?</p>
+      <div class="q" data-q="F1" data-a="0" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Mắt phải dừng lại để chọn, điểm nhấn bị chia đôi</button>
+        <button class="opt" type="button">Không sao, cân đối là đẹp</button>
+        <p class="why">Hai thứ bằng nhau thì không thứ nào là "thứ nhất".</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> Muốn nút chính nổi hơn mà không thêm màu mới thì làm gì?</p>
+      <div class="q" data-q="F2" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Thêm bóng và làm to cả hai nút</button>
+        <button class="opt" type="button">Hạ nút phụ xuống: nút viền nhạt hoặc một dòng chữ</button>
+        <p class="why">Làm to hay thêm bóng cho cả hai thì chúng vẫn ngang nhau.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="2" data-need="B5 F1 F2" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 2. Nhớ lại buổi 7: hai chỗ còn vướng. -->
+  <section class="step" data-s="2" data-part="review">
+    <h2>Nhớ lại buổi 7</h2>
+    <div class="card">
+      <p>Màn giỏ hàng: "Xóa giỏ hàng" và "Thanh toán" là hai nút đặc, cùng màu cam. Buổi trước bạn gọi đây là lỗi màu. Nhìn lại thì là lỗi gì?</p>
+      <div class="q" data-q="recall" data-a="0" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Điểm nhấn: hai nút đặc là hai điểm nhấn tranh nhau</button>
+        <button class="opt" type="button">Màu mang nghĩa: cam là màu cảnh báo</button>
+        <p class="why">Đổi "Xóa giỏ hàng" sang màu khác thì vẫn còn hai nút đặc. Phải hạ nó xuống thành chữ, vì xóa là việc phụ và không quay lại được.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p>Gặp một màn cấn mắt, câu hỏi đầu tiên trước khi kiểm bốn ý là gì?</p>
+      <div class="q" data-q="first" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Màn này dùng mấy màu?</button>
+        <button class="opt" type="button">Người dùng mở màn này để làm gì?</button>
+        <p class="why">Ở màn hôm nay: người mở app thư viện để xem cuốn nào sắp phải trả. Giữ câu này trong đầu khi chép.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="3" data-need="recall first" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 3. Thử trước: chép bản thiết kế bằng mắt. -->
+  <section class="step" data-s="3" data-stage="lib">
+    <h2>Chép bản thiết kế</h2>
+    <p>Vặn bốn núm cho màn của Vy giống hệt bản thiết kế. Trước mỗi lần vặn, nhìn bản nhỏ và đoán số trước, rồi mới bấm. Thanh dưới núm báo giống bao nhiêu.</p>
+    <p class="stage-hint"><span class="pc">Núm ở bên phải màn app, bản thiết kế ở cạnh đó.</span><span class="ph">Núm ở cạnh màn app phía trên, bản thiết kế nằm dưới núm.</span></p>
+    <p class="fb" data-echo="match-lib" data-same="Giống hệt: 4 trong một cuốn, 16 giữa các cuốn, 32 giữa hai nhóm, lề 16."></p>
+    <button class="btn primary next" type="button" data-go="4" data-need="match-lib" disabled>Tiếp</button>
+  </section>
+
+  <!-- 4. Nói ra mẹo (vẫn chưa giải thích): đoán quy luật từ chính các số vừa chép. -->
+  <section class="step" data-s="4" data-stage="lib">
+    <h2>Mẹo nằm ở đâu?</h2>
+    <div class="card small">
+      <div class="nums">
+        <span class="h"></span><span class="h">Vy chọn</span><span class="h">Bản thiết kế</span>
+        <b>Trong một cuốn</b><span>10</span><span>4</span>
+        <b>Giữa các cuốn</b><span>6</span><span>16</span>
+        <b>Giữa hai nhóm</b><span>14</span><span>32</span>
+        <b>Lề màn</b><span>10</span><span>16</span>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>1.</b> Các số của bản thiết kế có điểm chung gì mà số của Vy không có?</p>
+      <div class="q" data-q="m1" data-a="2"><p class="status" role="status"></p>
+        <button class="opt" type="button">Đều là số chẵn</button>
+        <button class="opt" type="button">Đều lớn hơn số của Vy</button>
+        <button class="opt" type="button">Đều nằm trong một thang: 4, 8, 16, 24, 32</button>
+        <p class="why">Số của Vy cũng chẵn cả, nên chẵn không phải mẹo. Và "trong một cuốn" của bản thiết kế còn nhỏ hơn của Vy (4 so với 10). Mẹo là số được lấy từ một thang có sẵn, không nghĩ ra từng chỗ.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Đi từ trong ra ngoài: 4, rồi 16, rồi 32. Mỗi tầng so với tầng bên trong nó thế nào?</p>
+      <div class="q" data-q="m2" data-a="0"><p class="status" role="status"></p>
+        <button class="opt" type="button">Gấp ít nhất 2 lần: thứ càng thuộc về nhau thì càng gần</button>
+        <button class="opt" type="button">Cộng thêm một khoảng như nhau mỗi tầng</button>
+        <button class="opt" type="button">Không có quy luật, chỉ cần nhìn thoáng</button>
+        <p class="why">16 gấp 4 lần 4, 32 gấp 2 lần 16. Bản của Vy thì ngược: dòng trong một cuốn (10) xa hơn khoảng giữa hai cuốn (6).</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="5" data-need="m1 m2" disabled>Tiếp</button>
+  </section>
+
+  <!-- 5. Hiểu sau: nhắc lại số đã chép, tự thấy hậu quả của bản Vy. -->
+  <section class="step" data-s="5" data-stage="lib">
+    <h2>Càng thuộc về nhau càng gần</h2>
+    <p class="fb" data-echo="match-lib" data-prefix="Bạn đã chép: "></p>
+    <p>Mắt đọc khoảng trắng trước khi đọc chữ. Hai thứ gần nhau thì mắt coi là một nhóm. Nên khoảng cách phải nói đúng màn có mấy tầng:</p>
+    <div class="card small">
+      <ol class="kinds">
+        <li><b>4</b>: tên sách và tác giả là một cuốn, dính sát.</li>
+        <li><b>16</b>: các cuốn trong cùng nhóm "Đang mượn", tách rõ nhưng vẫn chung nhóm.</li>
+        <li><b>32</b>: giữa hai nhóm "Đang mượn" và "Đặt trước".</li>
+        <li><b>16</b>: lề màn, bằng khoảng giữa các cuốn, để mép màn không cướp chỗ của nhóm.</li>
+      </ol>
+    </div>
+    <p>Các số đều lấy từ thang 4, 8, 16, 24, 32. Lấy từ thang thì hai số cạnh nhau luôn khác rõ (8 và 16, không phải 14 và 16), và cả màn, cả app dùng chung một nhịp.</p>
+    <p><b>Tự thấy.</b> Bấm nút dưới: Claude đặt lại hai số trong cùng của Vy (10 trong một cuốn, 6 giữa các cuốn), giữ nguyên hai số còn lại. Nhìn dòng "Nguyễn Nhật Ánh".</p>
+    <button class="btn" type="button" data-set="lib" data-vals="g0=10px; g1=6px; g2=32px; pad=16px" data-done="saw-vy">Hai số trong cùng của Vy</button>
+    <div class="q" data-q="see" data-a="1" data-wait="saw-vy"><p class="status" role="status"></p>
+      <button class="opt" type="button">Vẫn rõ là tác giả của "Mắt biếc"</button>
+      <button class="opt" type="button">Trông như đi với "Clean Code" bên dưới, vì nó gần cuốn dưới hơn cuốn của mình</button>
+      <p class="why">Tên tác giả cách sách của mình 10 nhưng cách cuốn dưới chỉ 6. Mắt ghép theo khoảng cách, không theo ý người dựng. Lỗi này không sửa bằng cách chọn số đẹp hơn, mà bằng cách giữ đúng thứ tự: trong nhỏ hơn ngoài.</p>
+    </div>
+    <button class="btn" type="button" data-set="lib" data-vals="g0=4px; g1=16px; g2=32px; pad=16px" data-done="saw-back">Trả lại bản thiết kế</button>
+    <button class="btn primary next" type="button" data-go="6" data-need="see" disabled>Tiếp</button>
+  </section>
+
+  <!-- 6. Câu hỏi nhanh: trộn các ý đã học (khoảng cách, bậc chữ, điểm nhấn). -->
+  <section class="step" data-s="6">
+    <h2>Bốn màn khác</h2>
+    <div class="card">
+      <p><b>1.</b> Danh sách tin nhắn: tên người và dòng tin cách nhau 8, hai người cũng cách nhau 8. Sửa thành bao nhiêu?</p>
+      <div class="q" data-q="k1" data-a="0"><p class="status" role="status"></p>
+        <button class="opt" type="button">4 trong một người, 16 giữa hai người</button>
+        <button class="opt" type="button">Đều 12 cho thoáng</button>
+        <button class="opt" type="button">10 trong một người, 8 giữa hai người</button>
+        <p class="why">Trong một người phải nhỏ hơn giữa hai người, và lấy số trong thang. Đều 12 thoáng hơn mà vẫn không thấy tin nào của ai.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Một bạn dùng bốn khoảng cách 13, 15, 17, 19 trên cùng một màn. Vì sao nên đổi?</p>
+      <div class="q" data-q="k2" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Vì số lẻ không chia đều được cho màn</button>
+        <button class="opt" type="button">Vì các số sát nhau quá, mắt không thấy khác: lấy từ thang 4, 8, 16, 24 thì mỗi bậc khác rõ</button>
+        <p class="why">Bốn số mà trông như một số thì màn không có tầng nào. Thang có bậc cách xa nhau để mỗi bậc nói một điều.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> App giao đồ ăn: "Hủy đơn" và "Theo dõi đơn" là hai nút đặc màu cam, cùng cỡ. Đây là lỗi gì?</p>
+      <div class="q" data-q="k3" data-a="0"><p class="status" role="status"></p>
+        <button class="opt" type="button">Điểm nhấn</button>
+        <button class="opt" type="button">Khoảng cách</button>
+        <button class="opt" type="button">Màu mang nghĩa</button>
+        <p class="why">Người mở màn này để theo dõi đơn. "Theo dõi đơn" đặc, "Hủy đơn" thành chữ nhỏ và hỏi lại trước khi hủy.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>4.</b> Màn này: tên sách 16. Nếu tên tác giả cũng để 15 thì sao?</p>
+      <div class="q" data-q="k4" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Ổn, dễ đọc hơn 13</button>
+        <button class="opt" type="button">Hai bậc gần như bằng nhau, mắt không biết đọc dòng nào trước. Bậc dưới khoảng 13 (16 chia 1,25)</button>
+        <p class="why">Bậc chữ cũng như khoảng cách: hai bậc cạnh nhau phải khác rõ, khoảng 1,2–1,3 lần.</p>
+      </div>
+    </div>
+    <details class="card small">
+      <summary><b>Nguồn và mức chắc chắn</b></summary>
+      <p><b>Có nghiên cứu</b>: mắt gom những thứ ở gần nhau thành một nhóm (luật gần nhau của tâm lý học Gestalt). Kỹ năng nhìn lên nhanh nhờ nhiều lượt chọn ngắn có phản hồi ngay (Kellman và cộng sự).</p>
+      <p><b>Quy ước nghề</b> (cách làm phổ biến, không phải định luật): thang khoảng cách theo bội số 4 và 8 (Material Design); thang có bậc cách xa nhau thay vì chọn từng số (Refactoring UI); thang cỡ chữ mỗi bậc khoảng 1,2–1,3 lần.</p>
+      <p><b>Cách học</b>: chép lại từng con số của một màn tốt rồi nói ra mẹo là bài tập của Erik Kennedy (Learn UI Design). Màn thư viện và bản của Vy là màn tự dựng.</p>
+      <ul class="srcs">
+        <li><a href="https://learnui.design/blog/5-practical-exercises-learn-ui-design-free.html">Erik Kennedy: 5 bài tập học UI</a></li>
+        <li><a href="https://m2.material.io/design/layout">Material Design: lưới 8dp và 4dp</a></li>
+        <li><a href="https://www.refactoringui.com/">Refactoring UI</a></li>
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/25163790/">Kellman, Massey và Son (2010): học nhận biết</a></li>
+      </ul>
+    </details>
+    <button class="btn primary next" type="button" data-go="7" data-need="k1 k2 k3 k4" disabled>Tiếp</button>
+  </section>
+
+  <!-- 7. Tự nói lại theo tình huống: Vy hỏi về chính màn vừa chép. -->
+  <section class="step" data-s="7">
+    <h2>Tự nói lại</h2>
+    <div class="say ask-from" data-who="Vy, bạn cùng nhóm dựng màn thư viện"><b>Vy nhắn</b>Mình để 10, 6, 14 cho dễ nhìn mà. Sao bạn bảo đổi sang 4, 16, 32? Nhìn có khác mấy đâu.</div>
+    <p>Trả lời Vy 2–3 câu, dựa vào chính màn vừa chép. Có số thì càng tốt.</p>
+    <textarea data-key="teach" data-min="5" placeholder="Vy ơi, khác ở chỗ..."></textarea>
+    <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Vy ơi, người dùng mở màn này để xem cuốn nào sắp phải trả, nên mắt cần thấy ngay từng cuốn và từng nhóm. Bản của bạn để tên tác giả cách sách của nó 10 mà cách cuốn dưới chỉ 6, nên "Nguyễn Nhật Ánh" trông như đi với "Clean Code". Mình lấy số từ thang 4, 8, 16, 24, 32 và cho mỗi tầng gấp ít nhất 2 lần tầng trong: 4 trong một cuốn, 16 giữa các cuốn, 32 giữa hai nhóm.</div></div>
+    <button class="btn primary next" type="button" data-go="8" data-need="teach" disabled>Tiếp</button>
+  </section>
+
+  <!-- 8. Góp ý, xong buổi -->
+  <section class="step" data-s="8">
+    <h2>Góp ý buổi này</h2>
+    <div class="card">
+      <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
+      <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Chép lại một màn, so với sửa lỗi như buổi 7</b><div class="seg full" data-f="method"><button type="button" data-v="thích hơn" aria-pressed="false">Thích hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="kém hơn" aria-pressed="false">Kém hơn</button></div></div>
+      <div class="crit"><b>Tự nói lại bằng cách trả lời Vy, so với câu hỏi chung như buổi 7</b><div class="seg full" data-f="teachback"><button type="button" data-v="dễ hơn" aria-pressed="false">Dễ hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="khó hơn" aria-pressed="false">Khó hơn</button></div></div>
+      <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+    </div>
+    <button class="btn primary next" type="button" id="finish">Xong buổi học</button>
+    <p class="done-msg" id="done-msg" role="status"></p>
+    <button class="btn next hide" type="button" id="copy">Chép kết quả</button>
+  </section>
+</div>
+
+<script id="kit-js"></script>
+<script id="lesson-js"></script>
+<script id="it-js"></script>
+<script id="lesson-kit"></script>
+</body>
+</html>

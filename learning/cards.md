@@ -53,3 +53,5 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | F13 | Frontend | Màn giỏ hàng có "Xóa giỏ hàng" và "Thanh toán" là hai nút đặc cùng màu, cùng cỡ. Lỗi gì, sửa thế nào? | [bài 7](frontend/lessons/07-fix-four-mistakes.md) | 1 | 2026-11-18 |
 | F14 | Frontend | Gặp một màn cấn mắt, câu hỏi đầu tiên trước khi kiểm điểm nhấn, chữ, khoảng cách, màu là gì? | [bài 7](frontend/lessons/07-fix-four-mistakes.md) | 1 | 2026-11-18 |
 | F15 | Frontend | Danh bạ: tên và số của một người cách nhau 16, hai người cũng cách nhau 16. Sửa thành bao nhiêu? | [bài 7](frontend/lessons/07-fix-four-mistakes.md) | 1 | 2026-11-18 |
+| F16 | Frontend | Tên tác giả cách sách của nó 10, cách cuốn bên dưới 6. Mắt thấy gì, sửa theo luật nào? | [bài 8](frontend/lessons/08-copy-a-screen-spacing-scale.md) | 1 | 2026-11-18 |
+| F17 | Frontend | Một màn dùng bốn khoảng 13, 15, 17, 19. Vì sao nên đổi, đổi thế nào? | [bài 8](frontend/lessons/08-copy-a-screen-spacing-scale.md) | 1 | 2026-11-18 |
