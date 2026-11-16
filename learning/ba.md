@@ -58,4 +58,5 @@ AI ghi sau mỗi buổi (nháp từ `artifacts/lesson/after-lesson.mjs`), xóa d
 - Buổi BA 4: user story. Mở đầu bằng một câu ôn ý 3 theo kiểu "ai chặn được", không theo "ai dùng nhiều" (thẻ B7), vì cả câu hỏi nhanh lẫn chỗ xếp IT ở buổi 3 đều vướng đúng chỗ này.
 - Bẫy gợi sẵn giải pháp chỉ vững ở câu quen. Phần thử trước của buổi 4 cho một người dùng mới kể chuyện, thien chọn câu hỏi tiếp trước khi viết story, để tập lại trong bối cảnh lạ.
 - Bài tự nói lại: thien xem bản mẫu trước khi viết ở cả buổi 3 lẫn Frontend 6. Buổi sau để nút "Xem bản của Claude" chỉ mở sau khi đã viết.
+- thien trả lời (2026-11-16): nội dung buổi BA giờ "khá ổn"; thien đang dồn sức cho kế hoạch tối ưu usage nên chưa góp ý sâu được, AI cứ sáng tạo thêm. Bố cục trang "ok nhưng chưa thỏa mãn", cần trau chuốt hơn. Lỗi cụ thể: tên trục của lưới ("Quyền quyết", "Quan tâm tới app") đè lên thẻ đã dán, trông rất khó chịu (sửa ở kit `artifacts/it/`, xem mục "Chưa làm" ở README đó).
 - Giữ khoảng 15 phút. thien thấy buổi 3 "khó" và bảng dán "như nhau" so với trang cũ. Câu "điều gì làm buổi BA hấp dẫn hơn" chưa có trả lời: hỏi trong chat lúc gửi trang, không để thành ô không bắt buộc.
