@@ -1,13 +1,13 @@
 # Sửa công cụ kiểm tra báo thành công khi chưa kiểm gì
 
-Trạng thái: đang chạy · Duyệt: 2026-11-12 · Cập nhật: 2026-11-12 (sau PR #43) · Thread: Cải thiện workflow AI từ review của Codex
+Trạng thái: xong · Duyệt: 2026-11-12 · Cập nhật: 2026-11-17 (thien chạy thử trên laptop) · Thread: Cải thiện workflow AI từ review của Codex
 
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: PR #43 đã merge, CI xanh, checkpoint 2 xong. Checkpoint 1 chờ thien chạy thử trên laptop.
-- Còn thiếu: thien chạy thử trên laptop Windows.
-- thien cần làm: trên laptop chạy `node templates/check-status.mjs docs/STATUS.md` và thấy dòng "ổn".
+- Đang ở: xong cả 2 checkpoint. 2026-11-17 02:16, thien chạy trên laptop Windows (PowerShell, bản clone `Documents\Codex\2026-11-14\...\work\repo`, sau `git pull` và đọc lại file theo mục "Máy Windows" của `README.md`): `docs/STATUS.md: ổn`.
+- Còn thiếu: không.
+- thien cần làm: không.
 
 ## Mục tiêu
 Công cụ kiểm tra không bao giờ báo thành công khi chưa kiểm gì (từ review thứ hai của Codex, commit a7421d0).
