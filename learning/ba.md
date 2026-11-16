@@ -14,7 +14,7 @@ Thứ tự học. 3 ý đầu do thien chọn ở buổi 1; 7 ý sau AI xếp th
 |---|---|---|---|
 | 1 | Yêu cầu và nhu cầu | Tìm vấn đề thật đằng sau điều người ta nhờ | Đã học buổi 1 |
 | 2 | Hỏi chuyện người dùng | Hỏi sao cho họ kể chuyện thật, không nói điều họ nghĩ bạn muốn nghe | Đã học buổi 2 |
-| 3 | Các bên liên quan | Ai dùng, ai trả tiền, ai quyết định, ai bị ảnh hưởng | |
+| 3 | Các bên liên quan | Ai dùng, ai trả tiền, ai quyết định, ai bị ảnh hưởng | Đã học buổi 3 |
 | 4 | User story | Viết một nhu cầu thành câu "Là…, tôi muốn…, để…" | |
 | 5 | Điều kiện hoàn thành | Thế nào thì coi là xong, để không ai cãi nhau lúc nghiệm thu | |
 | 6 | Vẽ luồng công việc | Các bước người dùng đi qua, chỗ nào hay tắc | |
@@ -44,16 +44,18 @@ Lấy tình huống từ việc thật của thien khi có thể: đồ án caps
 |---|---|---|---|
 | 1 | 2026-11-12 | Làm quen, yêu cầu và nhu cầu (nút xuất Excel trong nhóm capstone) | 13 phút, độ dài và độ khó "vừa". Ôn frontend đúng 3/3. Chọn đúng câu hỏi lại "để làm gì", xếp đúng 5/5 thẻ nhu cầu và giải pháp, câu hỏi đúng 2/2. Tự nói lại có ý "vấn đề nằm sâu trong nhu cầu, giải pháp không hẳn là thứ họ muốn", chưa nhắc tới cách làm là hỏi "để làm gì" vài lần. Thấy BA "bình thường". Trang lỗi nút chọn không đổi màu lần đầu, đã sửa trong buổi |
 | 2 | 2026-11-12 | Hỏi chuyện người dùng, phỏng vấn sakubun mô phỏng (Codex) | Khoảng 6 phút; nhớ lại đúng, chọn câu về lần cụ thể và câu hỏi tiếp, đúng câu hỏi nhanh. Tự nói lại: "bạn bị mắc vấn đề gì, tại sao lại vậy"; chưa nhắc đến một lần cụ thể và tránh dẫn dắt. Thấy hơi dài, độ khó vừa; nhiều chữ, ít hình, dẫn dắt kém, không biết luồng đi. thien chê giao diện trang của Codex kém hơn các trang trước (không theo khung chung, không theo thienui), nên Claude làm lại trang ([lesson-02.html](ba/pages/lesson-02.html), bản Codex giữ ở [lesson-02-codex.html](ba/pages/lesson-02-codex.html)): bản đồ 4 chặng phỏng vấn, sổ ghi chép dữ kiện thật và lời đoán, 5 cái bẫy khi hỏi, bắt lỗi một đoạn phỏng vấn. Buổi làm lại (Claude, 25 phút): ôn đúng 3/3. Phỏng vấn đúng chặng 1 và 3, nhưng chặng 2 rơi vào bẫy gợi sẵn giải pháp; có bấm thử một câu khác để xem lời đáp. Bắt lỗi đoạn phỏng vấn được 2/3 chỗ, câu hỏi nhanh đúng 2/2. Tự nói lại chỉ còn "bạn mắc vấn đề gì", ngắn hơn bản ở Codex. thien thấy bản này tốt hơn bản Codex, độ dài và độ khó vừa, mạch "tạm được", hứng thú "bình thường", nhưng nói thẳng: "hôm nay học quá nhiều nên không theo được nữa" (cùng ngày đã học BA 1, BA 2 bản Codex rồi bản làm lại). Chỗ cần chắc lại: nghe người dùng kể xong thì hỏi tiếp về chuyện đã xảy ra, chưa đưa giải pháp ra hỏi. |
+| 3 | 2026-11-16 | Các bên liên quan: lưới quyền và quan tâm cho app điểm danh của trường ([bài](ba/lessons/03-stakeholders.md)) | 15 phút, độ dài "vừa", độ khó "khó", bảng dán "như nhau" so với trang cũ. Ôn đúng 3/3, kể cả B6 (bẫy gợi sẵn giải pháp của BA 2), và hỏi phòng đào tạo chọn ngay câu về lần xét cấm thi gần nhất, mở ra phòng công tác SV. Xếp đúng 5/7: IT vào "Bàn kỹ" thay vì "Giữ hài lòng", phòng công tác SV vào "Báo tin đều" thay vì "Bàn kỹ"; có bấm xem Claude làm mẫu. Câu hỏi nhanh chọn sinh viên "vì dùng nhiều nhất" thay vì IT: thien đang xếp theo ai dùng nhiều, ai hay xuất hiện, chưa theo ai chặn được. Tình huống thêm (thu ngân quán cà phê) lại chọn câu gợi sẵn giải pháp: tránh được bẫy ở câu quen, sang bối cảnh mới thì chưa. Tự nói lại có "dựa trên quan tâm và quyền lực, gặp sớm người có quyền chặn" (xem bản mẫu trước khi viết), chưa có cách tìm ra người bị sót. Không trả lời câu "điều gì làm buổi BA hấp dẫn hơn" |
 
 ## Chỗ còn vướng
 AI ghi sau mỗi buổi (nháp từ `artifacts/lesson/after-lesson.mjs`), xóa dòng khi thien đã làm đúng ở buổi sau. Trang buổi tới đưa các dòng này cho Claude khi thien hỏi, và AI dùng chúng cho phần nhớ lại.
 
-- 2026-11-12, buổi 2: nghe người dùng kể xong thì đưa giải pháp ra hỏi (bẫy gợi sẵn giải pháp ở chặng 2), chưa hỏi tiếp về chuyện đã xảy ra
 - 2026-11-12, buổi 2: tự nói lại chưa có hai ý “hỏi về một lần cụ thể” và “tránh dẫn dắt”
 - 2026-11-15, ôn ở buổi Frontend 6: thẻ B2 “"Thêm thông báo đẩy lúc 8 giờ tối" là nhu cầu hay giải pháp?” chọn “Nhu cầu”, đúng là “Giải pháp” (sai lần hai, sau 2026-11-13)
+- 2026-11-16, buổi 3: câu “Capstone của bạn cần nối vào cổng đăng nhập của trường. Ai cần gặp sớm nhất?” chọn “Sinh viên, vì họ dùng nhiều nhất”, đúng là “IT trường, vì họ chặn được việc nối”
+- 2026-11-16, buổi 3: tình huống thêm “Để lộ ra bên mà chưa ai nhắc tới, bạn nên hỏi anh thu ngân câu nào?” chọn “Anh thấy nếu app tự đẩy đơn thẳng vào máy tính tiền thì có tiện hơn không?”, đúng là “Anh kể giúp em buổi sáng hôm qua lúc đông khách: đơn đến từ đâu, anh nhập vào m…”
 
 ## Buổi tiếp theo
-- Đầu buổi BA 3 dành nhiều chỗ hơn để ôn BA 2, vì thien học buổi làm lại lúc đã mệt và tự nói "không theo được nữa": một vòng phỏng vấn ngắn chỉ để tập hỏi tiếp sau khi người dùng kể, không đưa giải pháp ra hỏi (thẻ B6), và để thien tự nói lại cách hỏi về một lần cụ thể. Nếu thien vẫn thấy chưa chắc thì cho thien chọn học lại BA 2 thay vì sang ý mới.
-- Không xếp hai buổi BA trong một ngày. Buổi làm lại dài 25 phút là quá tải; buổi BA sau giữ khoảng 15 phút, ít bước hơn.
-- Buổi BA 3: các bên liên quan. Dùng sơ đồ người liên quan trong capstone; thể hiện rõ bước hiện tại và đích của luồng, ít chữ, tình huống trực quan. Nhắc lại cách hỏi về một lần cụ thể và tránh gợi sẵn đáp án.
-- Tình huống nên lấy từ đồ án capstone hoặc sakubun, vì sau buổi 1 thien thấy BA "bình thường". Hỏi thêm một câu ngắn ở cuối buổi: điều gì làm buổi BA hấp dẫn hơn.
+- Buổi BA 4: user story. Mở đầu bằng một câu ôn ý 3 theo kiểu "ai chặn được", không theo "ai dùng nhiều" (thẻ B7), vì cả câu hỏi nhanh lẫn chỗ xếp IT ở buổi 3 đều vướng đúng chỗ này.
+- Bẫy gợi sẵn giải pháp chỉ vững ở câu quen. Phần thử trước của buổi 4 cho một người dùng mới kể chuyện, thien chọn câu hỏi tiếp trước khi viết story, để tập lại trong bối cảnh lạ.
+- Bài tự nói lại: thien xem bản mẫu trước khi viết ở cả buổi 3 lẫn Frontend 6. Buổi sau để nút "Xem bản của Claude" chỉ mở sau khi đã viết.
+- Giữ khoảng 15 phút. thien thấy buổi 3 "khó" và bảng dán "như nhau" so với trang cũ. Câu "điều gì làm buổi BA hấp dẫn hơn" chưa có trả lời: hỏi trong chat lúc gửi trang, không để thành ô không bắt buộc.
