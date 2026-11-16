@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKVVE4v93qYwA8jLy · Cập nhật: 2026-11-16T17:08Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKVVE4v93qYwA8jLy · Cập nhật: 2026-11-16T17:20Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -41,14 +41,15 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 
 - Thí nghiệm 4 lần 2, mốc a (chat 2026-11-16 23:38, nick tnt697, session_01WXAvBYmGaLMttmVV2YAz9B): Settings lúc mở chat học (23:38) phiên 35%, tuần 52%. Lần gắn repo đầu lại bị bộ kiểm quyền chặn, thien cho gắn lại. Trang Frontend 7 đã đăng: https://claude.ai/artifact/4vZj2LZp7fGnZ1qDaa1ZC6 (nguồn ở nhánh `claude/frontend-07`, commit đầu là nguồn trang). `explain-usage` lúc gửi trang: 30 lượt, ghi cache 130.913, đọc lại 6.311.695, viết ra 34.987, quy đổi khoảng 1,07 triệu; hướng dẫn 53,5%, file và lệnh 32,5%. Settings sau khi nhận trang (23:47): phiên 43%, tuần 53%; phần soạn bài tốn khoảng 8% phiên (lần 1 là 4%, 640 nghìn quy đổi), nặng gần gấp đôi lần 1 [chưa kiểm: có chat khác cùng nick chạy cùng lúc không].
 
-- Thí nghiệm 4 lần 2, mốc b (chat "sau buổi" mới 2026-11-17 00:04, nick tnt697, session_01WXAvBWKVVE4v93qYwA8jLy): Settings lúc mở chat phiên 45%, tuần 53%. Đọc kết quả bằng db_get (không có comment), làm "Sau buổi" trên nhánh `claude/frontend-07`, PR #92 (nhánh rebase lên main, không đổi gì). `explain-usage` lúc mở PR: 24 lượt, đọc lại 5,40 triệu, ghi cache 146 nghìn, viết ra 20 nghìn, quy đổi khoảng 930 nghìn; hướng dẫn 55%, lệnh và file 22%, trang artifact 18% (đọc cả trang học bằng read_artifact, không cần). Đã ghi vào bảng "Kết quả đo" (kết luận tạm), "Lỗi gặp", `docs/usage-log.md`, bước 1 "Sau buổi" của `learning/README.md` và STATUS, cùng PR #92.
+- Thí nghiệm 4 lần 2, mốc b (chat "sau buổi" mới 2026-11-17 00:04, nick tnt697, session_01WXAvBWKVVE4v93qYwA8jLy): Settings lúc mở chat phiên 45%, tuần 53%. Đọc kết quả bằng db_get (không có comment), làm "Sau buổi" trên nhánh `claude/frontend-07`, PR #92 (nhánh rebase lên main, không đổi gì). `explain-usage` lúc mở PR: 24 lượt, đọc lại 5,40 triệu, ghi cache 146 nghìn, viết ra 20 nghìn, quy đổi khoảng 930 nghìn; hướng dẫn 55%, lệnh và file 22%, trang artifact 18% (đọc cả trang học bằng read_artifact, không cần). Đã ghi vào bảng "Kết quả đo" (kết luận tạm), "Lỗi gặp", `docs/usage-log.md`, bước 1 "Sau buổi" của `learning/README.md` và STATUS, cùng PR #92. Settings sau PR (00:16): phiên 52%, tuần 55%: phần sau buổi ở chat mới tốn khoảng 7% phiên, lần 1 là 4%. thien chọn phương án C cho phần tự nói lại (giải thích cho một người trong tình huống cụ thể), đã ghi vào `learning/frontend.md`. PR #92 đã merge theo lời thien (squash 8ab9825, 2026-11-17 00:2x).
 
 ## Bước tiếp theo
-0. **Thí nghiệm 4 lần 2, chốt**: thien gửi ảnh Settings sau PR #92 và chấm bản ghi ở chat mới có đủ ý như lần 1 không. Ghi hai số đó vào dòng "4. Sau buổi ở chat mới (Frontend 7)" của bảng "Kết quả đo" (thay "chờ ảnh của thien"), cùng PR #92 nếu chưa merge. Rồi còn lần 3 (trong chat dựng bài) và lần 4 (chat mới) mới tick thí nghiệm 4.
-1. thien chọn cách mới cho phần tự nói lại (phương án trong chat sau buổi Frontend 7); đổi kit `lesson.js` ở PR riêng.
+0. thien chấm bản ghi của chat mới (file bài 7 và dòng nhật ký buổi 7) so với bản ghi BA 3 làm ngay trong chat dựng bài: đủ ý hay thiếu gì. Ghi vào ô "Chất lượng bản ghi" của dòng "4. Sau buổi ở chat mới (Frontend 7)" ở bảng "Kết quả đo" (PR nhỏ). thien vội thì ghi "bỏ qua".
+1. Đổi kit `artifacts/lesson/lesson.js` (và mẫu, README) cho bước tự nói lại theo phương án C: đề là một tình huống cụ thể trên màn vừa học (nhắn cho một người vì sao đổi như vậy). Một chat riêng, một PR, trước buổi học kế tiếp (Chiến tranh 6).
+2. Thí nghiệm 4 còn lần 3 (sau buổi trong chat dựng bài) và lần 4 (chat mới).
 
 ## Đang chờ thien
-- Thí nghiệm 4 lần 2: ảnh Settings sau PR #92, và chấm bản ghi. Merge PR #92.
+- Chấm bản ghi thí nghiệm 4 lần 2 (hay ghi bỏ qua).
 - Dán instructions v3 ở 2 nick còn lại (tnt024, tnt628) nếu chưa dán.
 
 ## Lưu ý
