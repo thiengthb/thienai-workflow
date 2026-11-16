@@ -14,6 +14,7 @@ thien dùng 3 nick Claude (tên ngắn và việc của từng nick ở [`ACCOUN
 - Lấy số liệu từ công cụ, không đoán: instructions và bộ lọc đồng bộ đọc bằng công cụ Projects (`project_info`) nếu phiên có; không có thì `--instructions unseen` và bỏ `--sync`, lệnh sẽ ghi là "chưa kiểm" chứ không báo thiếu. Lệnh so từng dòng của đoạn instructions, không chỉ số `vN`.
 - Số bản của skill là `(bản N)` ở cuối phần mô tả skill trong danh sách skill của phiên. Không có số thì ghi tên trơn: lệnh coi đó là bản cũ.
 - Project chưa có instructions, chưa gắn repo vẫn phải kiểm: gắn repo thienai-workflow vào phiên rồi chạy. Lỗi đã gặp 2026-11-14: project "Claude" ở nick tnt024 chưa có instructions và chưa gắn repo, nên luật kiểm (nằm trong instructions và AGENTS.md) không bao giờ chạy, AI không nhắc gì cả.
+- Tin mở đầu khi muốn làm tiếp: "tiếp tục, gắn repo thienai-workflow quyền ghi" (có tên repo và quyền). Chỉ "tiếp tục" thì lần gắn repo đầu hay bị bộ duyệt quyền chặn, tốn thêm 1–2 lượt; tin có tên repo đã qua ngay lần đầu một lần, chưa đủ để chắc lần nào cũng qua (chat 2026-11-17 00:42, nick tnt697; xem "Lỗi gặp" trong `docs/plans/2026-11-15-claude-usage.md`).
 - Dòng `nhắc: AI tự làm: ...` là việc của AI (thêm dòng vào sổ nick), không phải việc của thien.
 - Thiếu gì thì nói với thien **trước khi làm việc**, kèm đúng đoạn cần dán và chỗ bấm. thien làm xong (hay nói "bỏ qua") thì làm tiếp. Đủ rồi thì không nói gì.
 - Project chưa có trong bảng dưới: hỏi thien có thêm vào chuẩn không (qua PR sửa bảng này).
