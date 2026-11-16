@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buổi 7: Sửa một màn có bốn lỗi cùng lúc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style id="kit-css"></style>
+<style id="lesson-css"></style>
+<style id="it-css"></style>
+<style>
+/* Phần riêng của bài: màn app nộp bài tập trên bàn thử. Bốn núm, mỗi núm một ý đã học:
+   accent (--a, màu nhấn), btn (điểm nhấn), type (bậc chữ), space (khoảng cách). Mỗi núm có một giá trị lỗi (lúc mở),
+   một giá trị đúng và một giá trị "đẹp hơn mà sai" (ý của buổi 4). Đừng đặt lại --a trong màn. */
+.hw { min-height: 100%; display: flex; flex-direction: column; gap: var(--g2); padding: 14px 14px 0; background: #fff; color: #1b1b1a; }
+.hw .hd { display: flex; justify-content: space-between; align-items: baseline; }
+.hw .hd small { color: #6b6862; font-size: 11px; }
+.hw .grp { display: flex; flex-direction: column; gap: var(--g1); }
+.hw .hero { border-radius: 8px; padding: 12px; background: #f6f5f2; }
+.hw .course, .hw .title, .hw .name { display: block; }
+.hw .late { color: #dc2626; } .hw .soon { color: #c2410c; } .hw .done { color: #15803d; }
+.hw .acts { display: flex; gap: 6px; margin-top: 4px; }
+.hw .acts span { flex: 1; text-align: center; padding: 8px 0; border-radius: 8px; font-weight: 600; font-size: 12px; white-space: nowrap; border: 1.5px solid transparent; }
+.hw .lb { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: #6b6862; }
+.hw .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-bottom: var(--g1); border-bottom: 1px solid #eee; }
+.hw .tag { flex: none; }
+.hw .nav { margin: auto -14px 0; display: flex; justify-content: space-around; border-top: 1px solid #eee; padding: 8px 0 10px; font-size: 10.5px; color: #8a877f; }
+.hw .nav .cur { color: var(--a); font-weight: 600; }
+/* Khoảng cách: g1 trong nhóm, g2 giữa nhóm. */
+.screen[data-space="deu"] { --g1: 12px; --g2: 12px; }
+.screen[data-space="nhom"] { --g1: 8px; --g2: 24px; }
+.screen[data-space="thoang"] { --g1: 20px; --g2: 20px; }
+/* Điểm nhấn: ba = ba nút đặc; dung = một đặc, một viền, một chữ; diu = ba nút nhạt đều nhau. */
+.screen[data-btn="ba"] .acts span { background: var(--a); color: #fff; }
+.screen[data-btn="dung"] .acts .b1 { background: var(--a); color: #fff; }
+.screen[data-btn="dung"] .acts .b2 { border-color: var(--a); color: var(--a); background: #fff; }
+.screen[data-btn="dung"] .acts .b3 { color: #6b6862; font-weight: 500; text-decoration: underline; }
+.screen[data-btn="diu"] .acts span { background: color-mix(in srgb, var(--a) 12%, #fff); color: var(--a); }
+/* Bậc chữ: loan = nhiều cỡ, chữ nào cũng đậm, hạn nộp nhỏ; bac = 3 cỡ 13 · 16 · 20; bia = tên môn to như bìa tạp chí. */
+.screen[data-type="loan"] .hd b { font-size: 18px; } .screen[data-type="loan"] .hero .course { font-size: 15px; font-weight: 700; }
+.screen[data-type="loan"] .title { font-size: 14px; font-weight: 700; } .screen[data-type="loan"] .due { font-size: 11px; }
+.screen[data-type="loan"] .lb { font-weight: 700; } .screen[data-type="loan"] .row .course { font-size: 12px; font-weight: 700; }
+.screen[data-type="loan"] .name { font-size: 15px; font-weight: 700; } .screen[data-type="loan"] .tag { font-size: 11px; font-weight: 700; }
+.screen[data-type="bac"] .hd b { font-size: 16px; } .screen[data-type="bac"] .hero .course { font-size: 13px; color: #6b6862; }
+.screen[data-type="bac"] .title { font-size: 20px; font-weight: 700; letter-spacing: -.01em; } .screen[data-type="bac"] .due { font-size: 16px; font-weight: 700; }
+.screen[data-type="bac"] .lb { font-weight: 600; } .screen[data-type="bac"] .row .course { font-size: 13px; color: #6b6862; }
+.screen[data-type="bac"] .name { font-size: 16px; font-weight: 600; } .screen[data-type="bac"] .tag { font-size: 13px; font-weight: 600; }
+.screen[data-type="bia"] .hd b { font-size: 13px; font-weight: 500; } .screen[data-type="bia"] .hero .course { font-size: 30px; font-weight: 300; letter-spacing: -.02em; line-height: 1.1; }
+.screen[data-type="bia"] .title { font-size: 13px; } .screen[data-type="bia"] .due { font-size: 11px; color: #8a877f; }
+.screen[data-type="bia"] .lb { font-weight: 500; } .screen[data-type="bia"] .row .course { font-size: 11px; color: #8a877f; }
+.screen[data-type="bia"] .name { font-size: 13px; } .screen[data-type="bia"] .tag { font-size: 11px; }
+.srcs { list-style: none; padding: 0; margin: 8px 0 0; } .srcs a { display: block; padding: 12px 0; min-height: 44px; box-sizing: border-box; }
+.kinds { display: grid; gap: 4px; margin: 0; padding-left: 18px; }
+</style>
+</head>
+<body>
+<script type="application/json" id="lesson">{ "id": "frontend-07", "subject": "Frontend", "title": "Buổi 7: Sửa một màn có bốn lỗi cùng lúc" }</script>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>Frontend · Buổi 7: Sửa một màn có bốn lỗi cùng lúc</span><span id="cnt">1/10</span></div><div class="bar"><span id="bar"></span></div></div>
+
+  <div id="stage">
+    <!-- Bàn thử: app nộp bài tập của sinh viên (tự dựng). Lúc mở cả bốn núm đều ở giá trị lỗi:
+         màu nhấn đỏ trùng màu "trễ hạn", ba nút đặc, chữ loạn bậc, khoảng cách đều 12px. -->
+    <div class="pane bench" data-pane="fix">
+      <div class="phone"><div class="screen" data-btn="ba" data-type="loan" data-space="deu">
+        <div class="hw">
+          <div class="hd"><b>Bài tập tuần này</b><small>Thứ hai, 16/11</small></div>
+          <div class="grp hero">
+            <span class="course">Lập trình Web</span>
+            <span class="title">Lab 4: Form đăng ký</span>
+            <span class="due late">Trễ 1 ngày · nộp muộn trừ 10%</span>
+            <div class="acts"><span class="b1" data-soi>Nộp bài</span><span class="b2" data-soi>Xem đề</span><span class="b3" data-soi="ba diu">Hỏi thầy</span></div>
+          </div>
+          <div class="grp">
+            <div class="lb">Sắp tới</div>
+            <div class="row"><div><span class="course">Toán rời rạc</span><span class="name">Bài tập chương 3</span></div><span class="tag soon">Còn 2 ngày</span></div>
+            <div class="row"><div><span class="course">Tiếng Nhật</span><span class="name">Kanji tuần 6</span></div><span class="tag">Còn 5 ngày</span></div>
+            <div class="row"><div><span class="course">Kỹ năng mềm</span><span class="name">Bài phản tư</span></div><span class="tag done">Đã nộp</span></div>
+          </div>
+          <div class="nav"><span class="cur" data-soi>Bài tập</span><span>Lịch</span><span>Điểm</span><span>Tôi</span></div>
+        </div>
+      </div><div class="cover">Màn đang che.<br>Lát nữa bạn chỉ được nhìn 5 giây.</div></div>
+      <div class="side">
+        <div class="knobs">
+          <div class="knob" data-knob="accent" data-var="--a" data-min="2"><span class="label">Màu nhấn</span>
+            <div class="row">
+              <button class="sw" type="button" data-val="#dc2626" data-name="Đỏ" aria-label="Đỏ" aria-pressed="true" style="--sw:#dc2626"></button>
+              <button class="sw" type="button" data-val="#ea580c" data-name="Cam" aria-label="Cam" style="--sw:#ea580c"></button>
+              <button class="sw" type="button" data-val="#15803d" data-name="Xanh lá" aria-label="Xanh lá" style="--sw:#15803d"></button>
+              <button class="sw" type="button" data-val="#2563eb" data-name="Xanh dương" aria-label="Xanh dương" style="--sw:#2563eb"></button>
+              <button class="sw" type="button" data-val="#7c3aed" data-name="Tím" aria-label="Tím" style="--sw:#7c3aed"></button>
+            </div><span class="now"></span></div>
+          <div class="knob" data-knob="btn" data-min="2"><span class="label">Ba nút</span>
+            <div class="seg"><button type="button" data-val="ba" data-name="Ba nút đặc" data-code="3 nút đặc" aria-pressed="true">Đặc cả 3</button><button type="button" data-val="dung" data-name="Một đặc, một viền, một chữ" data-code="1 đặc · 1 viền · 1 chữ">Đặc, viền, chữ</button><button type="button" data-val="diu" data-name="Ba nút nhạt" data-code="3 nút nhạt đều nhau">Nhạt cả 3</button></div></div>
+          <div class="knob" data-knob="type" data-min="2"><span class="label">Chữ</span>
+            <div class="seg"><button type="button" data-val="loan" data-name="Chữ nào cũng đậm" data-code="6 cỡ, chữ nào cũng đậm" aria-pressed="true">Đậm hết</button><button type="button" data-val="bac" data-name="3 cỡ" data-code="3 cỡ: 13 · 16 · 20">3 cỡ</button><button type="button" data-val="bia" data-name="Tên môn thật to" data-code="tên môn 30px, hạn 11px">Tên môn to</button></div></div>
+          <div class="knob" data-knob="space" data-min="2"><span class="label">Khoảng cách</span>
+            <div class="seg"><button type="button" data-val="deu" data-name="Đều 12" data-code="12px; /* khắp nơi */" aria-pressed="true">Đều 12</button><button type="button" data-val="nhom" data-name="8 trong nhóm, 24 giữa nhóm" data-code="8px; /* giữa nhóm 24px */">8 và 24</button><button type="button" data-val="thoang" data-name="Đều 20" data-code="20px; /* khắp nơi */">Đều 20</button></div></div>
+          <button class="soi-btn" type="button" data-soi-toggle aria-pressed="false">Soi chỗ dùng màu nhấn</button>
+          <span class="soi-count" data-text="Màu nhấn đang nằm ở {n} chỗ"></span>
+        </div>
+        <pre class="code"><span class="c">/* đổi theo núm */</span><span data-line="accent"><span class="k">--accent</span>: <span data-v="accent"></span>;</span><span data-line="btn"><span class="c">/* nút: </span><span data-v="btn" class="c"></span><span class="c"> */</span></span><span data-line="type"><span class="c">/* chữ: </span><span data-v="type" class="c"></span><span class="c"> */</span></span><span data-line="space"><span class="k">gap</span>: <span data-v="space"></span></span></pre>
+      </div>
+      <pre class="code"><span data-line="accent"><span class="k">--accent</span>: <span data-v="accent"></span>;</span><span data-line="btn"><span class="c">/* nút: </span><span data-v="btn" class="c"></span><span class="c"> */</span></span><span data-line="type"><span class="c">/* chữ: </span><span data-v="type" class="c"></span><span class="c"> */</span></span><span data-line="space"><span class="k">gap</span>: <span data-v="space"></span></span></pre>
+    </div>
+  </div>
+
+  <!-- 0. Mở bài -->
+  <section class="step on" data-s="0" data-stage="fix@cover">
+    <h1>Minh trễ hạn một bài. Màn này có giúp Minh không?</h1>
+    <p>Minh là sinh viên năm 2. Sáng nay Minh mở app bài tập để xem còn nợ bài nào. Màn đang che, lát nữa bạn chỉ được nhìn 5 giây.</p>
+    <p>Hôm nay không học ý mới. Bạn dùng cả bốn ý đã học (điểm nhấn, bậc chữ, khoảng cách, màu) trên cùng một màn.</p>
+    <button class="btn primary next" type="button" data-go="1">Bắt đầu</button>
+  </section>
+
+  <!-- 1. Ôn trộn: 3 thẻ đến hạn trong learning/cards.md. Chỉ lần học đầu. -->
+  <section class="step" data-s="1" data-part="review">
+    <h2>Ôn nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Thắng trận và đạt mục tiêu chính trị khác nhau thế nào?</p>
+      <div class="q" data-q="W6" data-a="0" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Thắng trận là đánh bại một đạo quân; mục tiêu chính trị là điều cả cuộc chiến muốn có</button>
+        <button class="opt" type="button">Như nhau: thắng hết các trận là đạt mục tiêu</button>
+        <p class="why">Nhà Lý năm 1077 không vượt sông đánh tan quân Tống. Mục tiêu là giữ nước và kết thúc chiến tranh; đánh tan một đạo quân dễ làm nhà Tống mất mặt rồi đem quân sang lần nữa.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Vì sao "hoãn vài ngày rồi đánh theo kế hoạch cũ" vẫn chưa đủ?</p>
+      <div class="q" data-q="W9" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Vì bộ đội cần thêm thời gian nghỉ</button>
+        <button class="opt" type="button">Ba khó khăn vẫn còn, còn Pháp có thêm thời gian củng cố</button>
+        <p class="why">Phải đổi cách đánh ở tầng chiến dịch, không chỉ đổi giờ.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> Vì sao hậu cần Điện Biên Phủ không dồn hết vào xe ô tô?</p>
+      <div class="q" data-q="W11" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Vì bộ đội không có chiếc ô tô nào</button>
+        <button class="opt" type="button">Chỉ có 628 xe, đường hư và bị máy bay Pháp đánh phá</button>
+        <p class="why">Sức người, xe đạp thồ, ngựa, thuyền bè đi được nhiều tuyến hơn.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="2" data-need="W6 W9 W11" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 2. Nhớ lại buổi 6 -->
+  <section class="step" data-s="2" data-part="review">
+    <h2>Nhớ lại buổi 6</h2>
+    <div class="card">
+      <p>Trước khi chọn màu nhấn cho một app, phải xem gì trên màn trước?</p>
+      <div class="q" data-q="recall" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Màu logo của app</button>
+        <button class="opt" type="button">Những màu đang mang nghĩa: lỗi, tiền ra, thành công</button>
+        <button class="opt" type="button">Màu người dùng thích nhất</button>
+        <p class="why">Màu nhấn trùng màu mang nghĩa thì cả hai cùng mất nghĩa. Lát nữa có một màn để thử lại ý này.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="3" data-need="recall" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 3. Nhìn 5 giây trên màn lỗi -->
+  <section class="step" data-s="3" data-stage="fix@cover">
+    <h2>Nhìn 5 giây</h2>
+    <p>Bạn là Minh. Nhìn 5 giây rồi trả lời: bài nào phải làm ngay?</p>
+    <button class="btn" type="button" data-peek="fix" data-sec="5" data-after="Đã xem 5 giây">Xem 5 giây</button>
+    <div class="q" data-q="peek" data-a="0" data-wait="peek-fix"><p class="status" role="status"></p>
+      <button class="opt" type="button">Lab 4 Lập trình Web</button>
+      <button class="opt" type="button">Bài tập chương 3 Toán rời rạc</button>
+      <button class="opt" type="button">Không kịp thấy</button>
+      <p class="why">Lab 4 đã trễ 1 ngày. Nhưng chữ "Trễ 1 ngày" chỉ cỡ 11, còn ba nút đỏ đặc ngay dưới nó cùng một màu đỏ. Trong 5 giây mắt dừng ở ba nút, không ở chữ trễ hạn.</p>
+    </div>
+    <button class="btn" type="button" data-uncover="fix" data-need="peek" disabled>Bỏ che</button>
+    <button class="btn primary next" type="button" data-go="4" data-need="uncover-fix" disabled>Cho mình sửa</button>
+  </section>
+
+  <!-- 4. Thử trước: tự sửa cả bốn núm, rồi chốt. -->
+  <section class="step" data-s="4" data-stage="fix">
+    <h2>Sửa màn cho Minh</h2>
+    <p>Mỗi núm thử ít nhất 2 kiểu. Bật Soi để thấy màu nhấn đang nằm ở đâu. Sửa tới khi bạn thấy Minh nhìn là biết ngay phải làm gì, rồi chốt.</p>
+    <p class="stage-hint"><span class="pc">Núm ở bên phải màn app.</span><span class="ph">Núm ở cạnh màn app phía trên.</span></p>
+    <div class="tried" data-tried="fix.accent"></div>
+    <button class="btn" type="button" data-pick="d1" data-of="fix" data-need="tried-fix.accent tried-fix.btn tried-fix.type tried-fix.space" disabled>Chốt bản sửa này</button>
+    <p class="fb" data-echo="d1"></p>
+    <button class="btn primary next" type="button" data-go="5" data-need="d1" disabled>Tiếp</button>
+  </section>
+
+  <!-- 5. Hiểu sau: nhắc lựa chọn, đi qua từng ý với con số. -->
+  <section class="step" data-s="5" data-stage="fix">
+    <h2>Bốn ý, một câu hỏi</h2>
+    <p class="fb" data-echo="d1" data-prefix="Bạn đã chốt: "></p>
+    <p>Bốn ý đều trả lời cùng một câu hỏi của buổi 4: <b>người dùng mở màn này để làm gì?</b> Minh mở để nộp bài đang trễ. Vậy:</p>
+    <div class="card small">
+      <ol class="kinds">
+        <li><b>Điểm nhấn.</b> Một màn một nút đặc cho việc chính: "Nộp bài" đặc, "Xem đề" viền, "Hỏi thầy" là chữ.</li>
+        <li><b>Bậc chữ.</b> Một màn 3–4 cỡ, mỗi bậc lớn hơn khoảng 1,2–1,3 lần: 13, 16, 20. Tên bài và hạn nộp đậm, tên môn nhạt xuống.</li>
+        <li><b>Khoảng cách.</b> Chọn số theo một thang (4, 8, 16, 24, 32), không chọn tùy hứng. Trong nhóm 8, giữa nhóm 24, gấp 3 lần, nên mắt thấy ngay hai nhóm: bài trễ và bài sắp tới.</li>
+        <li><b>Màu.</b> Màn này đã có ba màu mang nghĩa: đỏ là trễ, cam là sắp hạn, xanh lá là đã nộp. Màu nhấn chỉ còn xanh dương hoặc tím.</li>
+      </ol>
+    </div>
+    <p><b>Tự thấy.</b> Bấm nút dưới: Claude đặt cả bốn núm theo bản sửa ở trên, chỉ giữ màu nhấn xanh lá. Nhìn dòng "Đã nộp".</p>
+    <button class="btn" type="button" data-set="fix" data-vals="accent=#15803d; btn=dung; type=bac; space=nhom" data-done="saw-green">Bản sửa, màu nhấn xanh lá</button>
+    <div class="q" data-q="green" data-a="1" data-wait="saw-green"><p class="status" role="status"></p>
+      <button class="opt" type="button">Ổn: xanh lá dịu mắt, hợp với app học</button>
+      <button class="opt" type="button">Nút "Nộp bài" và chữ "Đã nộp" cùng màu: nhìn như bài này đã nộp xong</button>
+      <p class="why">Đúng chỗ buổi 6 với app ngân hàng: xanh lá đã nghĩa là "tiền vào". Ở đây nó nghĩa là "xong rồi", đặt lên nút của bài chưa xong.</p>
+    </div>
+    <button class="btn primary next" type="button" data-go="6" data-need="green" disabled>Tiếp</button>
+  </section>
+
+  <!-- 6. Bản đẹp hơn mà sai (ý buổi 4). -->
+  <section class="step" data-s="6" data-stage="fix">
+    <h2>Bản đẹp hơn chưa chắc đúng</h2>
+    <p>Một bạn khác sửa màn này: nút nhạt đều nhau, tên môn to như bìa tạp chí, khoảng cách rộng đều 20, màu tím.</p>
+    <button class="btn" type="button" data-set="fix" data-vals="accent=#7c3aed; btn=diu; type=bia; space=thoang" data-done="saw-pretty">Xem bản của bạn ấy</button>
+    <p>Nhìn dịu mắt hơn bản gốc nhiều. Minh dùng bản này có nộp bài kịp không?</p>
+    <div class="q" data-q="pretty" data-a="1" data-wait="saw-pretty"><p class="status" role="status"></p>
+      <button class="opt" type="button">Kịp: màn thoáng và ít màu nên dễ nhìn</button>
+      <button class="opt" type="button">Khó: hạn nộp nhạt và nhỏ 11px, ba nút đều nhau nên không biết bấm nút nào</button>
+      <p class="why">Màu tím thì đúng, nhưng ba ý còn lại làm mờ đúng thứ Minh cần. Khoảng đều 20 thoáng hơn mà vẫn không thấy nhóm, vì trong nhóm và giữa nhóm bằng nhau.</p>
+    </div>
+    <button class="btn" type="button" data-set="fix" data-vals="accent=#2563eb; btn=dung; type=bac; space=nhom" data-done="saw-claude">Xem bản Claude sửa</button>
+    <button class="btn primary next" type="button" data-go="7" data-need="pretty" disabled>Tiếp</button>
+  </section>
+
+  <!-- 7. Câu hỏi nhanh: gọi đúng tên lỗi (xen kẽ các ý trong một môn). -->
+  <section class="step" data-s="7">
+    <h2>Lỗi này thuộc ý nào?</h2>
+    <p>Bốn màn khác, mỗi màn một lỗi. Gọi đúng tên lỗi là bước đầu để sửa.</p>
+    <div class="card">
+      <p><b>1.</b> Màn đặt vé xe: tên nhà xe cỡ 28 đậm, giá vé cỡ 13 chữ thường.</p>
+      <div class="q" data-q="k1" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Điểm nhấn</button>
+        <button class="opt" type="button">Bậc chữ</button>
+        <button class="opt" type="button">Khoảng cách</button>
+        <button class="opt" type="button">Màu mang nghĩa</button>
+        <p class="why">Thứ người dùng cần so (giá) nằm ở bậc thấp nhất, thứ ít cần (tên nhà xe) ở bậc cao nhất.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Màn giỏ hàng: "Xóa giỏ hàng" và "Thanh toán" là hai nút đặc cùng màu, cùng cỡ.</p>
+      <div class="q" data-q="k2" data-a="0"><p class="status" role="status"></p>
+        <button class="opt" type="button">Điểm nhấn</button>
+        <button class="opt" type="button">Bậc chữ</button>
+        <button class="opt" type="button">Khoảng cách</button>
+        <button class="opt" type="button">Màu mang nghĩa</button>
+        <p class="why">Hai nút đặc là hai điểm nhấn. "Xóa giỏ hàng" không quay lại được nên để dạng chữ nhỏ và hỏi lại.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> App thời tiết: nút "Xem chi tiết" màu đỏ, ngay trên dòng "Cảnh báo bão" cũng đỏ.</p>
+      <div class="q" data-q="k3" data-a="3"><p class="status" role="status"></p>
+        <button class="opt" type="button">Điểm nhấn</button>
+        <button class="opt" type="button">Bậc chữ</button>
+        <button class="opt" type="button">Khoảng cách</button>
+        <button class="opt" type="button">Màu mang nghĩa</button>
+        <p class="why">Đỏ đã là cảnh báo. Nút đỏ làm cảnh báo bớt nổi.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>4.</b> Danh bạ: tên và số điện thoại của một người cách nhau 16, hai người cũng cách nhau 16.</p>
+      <div class="q" data-q="k4" data-a="2"><p class="status" role="status"></p>
+        <button class="opt" type="button">Điểm nhấn</button>
+        <button class="opt" type="button">Bậc chữ</button>
+        <button class="opt" type="button">Khoảng cách</button>
+        <button class="opt" type="button">Màu mang nghĩa</button>
+        <p class="why">Trong nhóm bằng giữa nhóm thì không thấy số nào của ai. Thu trong nhóm còn 4–8, giữ giữa nhóm 16–24.</p>
+      </div>
+    </div>
+    <details class="card small">
+      <summary><b>Nguồn và mức chắc chắn</b></summary>
+      <p><b>Chắc</b> (chuẩn): màu không được là cách duy nhất mang nghĩa (WCAG 1.4.1), nên các nhãn trong màn đều có chữ "Trễ", "Còn 2 ngày", "Đã nộp". Vùng bấm tối thiểu: Apple 44pt, Android 48dp; màn trên bàn thử là bản thu nhỏ nên nút trông thấp hơn.</p>
+      <p><b>Quy ước nghề</b> (cách làm phổ biến, không phải định luật): thang khoảng cách theo bội số 4 và 8 (Material Design); thang cỡ chữ mỗi bậc khoảng 1,2–1,3 lần.</p>
+      <p><b>Có nghiên cứu</b>: kỹ năng nhìn lên nhanh nhờ nhiều lượt phân loại ngắn có phản hồi ngay, như 4 câu ở trên (Kellman và cộng sự).</p>
+      <ul class="srcs">
+        <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html">WCAG 1.4.1: không dùng màu một mình</a></li>
+        <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html">WCAG 2.5.8: cỡ vùng bấm</a></li>
+        <li><a href="https://m2.material.io/design/layout">Material Design: lưới 8dp và 4dp</a></li>
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/25163790/">Kellman, Massey và Son (2010): học nhận biết</a></li>
+      </ul>
+    </details>
+    <button class="btn primary next" type="button" data-go="8" data-need="k1 k2 k3 k4" disabled>Tiếp</button>
+  </section>
+
+  <!-- 8. Tự nói lại -->
+  <section class="step" data-s="8">
+    <h2>Tự nói lại</h2>
+    <p>Lần sau gặp một màn cấn mắt, bạn kiểm những gì, theo thứ tự nào? Viết 1–2 câu bằng lời của bạn.</p>
+    <p class="stage-hint">Viết xong rồi hãy mở bản của Claude. Buổi 6 mở trước nên câu viết ra giống hệt bản mẫu.</p>
+    <textarea data-key="teach" data-min="5" placeholder="Mình sẽ hỏi trước..."></textarea>
+    <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Hỏi trước: người dùng mở màn này để làm gì. Rồi kiểm bốn chỗ: việc chính có phải nút đặc duy nhất không; thứ cần đọc có ở bậc chữ cao không; trong nhóm có gần hơn giữa nhóm không; màu nhấn có trùng màu đang mang nghĩa không.</div></div>
+    <button class="btn primary next" type="button" data-go="9" data-need="teach" disabled>Tiếp</button>
+  </section>
+
+  <!-- 9. Góp ý, xong buổi -->
+  <section class="step" data-s="9">
+    <h2>Góp ý buổi này</h2>
+    <div class="card">
+      <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
+      <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Sửa bốn lỗi trên một màn, so với học từng ý một</b><div class="seg full" data-f="method"><button type="button" data-v="thích hơn" aria-pressed="false">Thích hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="kém hơn" aria-pressed="false">Kém hơn</button></div></div>
+      <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+    </div>
+    <button class="btn primary next" type="button" id="finish">Xong buổi học</button>
+    <p class="done-msg" id="done-msg" role="status"></p>
+    <button class="btn next hide" type="button" id="copy">Chép kết quả</button>
+  </section>
+</div>
+
+<script id="kit-js"></script>
+<script id="lesson-js"></script>
+<script id="it-js"></script>
+<script id="lesson-kit"></script>
+</body>
+</html>
