@@ -14,7 +14,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 |---|---|---|
 | [Chuyển repo thienui sang riêng tư](plans/2026-11-14-thienui-private.md) | 3/3: xong, chờ merge PR | 4/5 |
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 2/6 xong; đợt 2 (gói buổi, nhật ký 3 dòng) đã merge (PR #81) | 6/12 |
-| [Dùng Claude tốn ít usage hơn: đo trước, đổi sau](plans/2026-11-15-claude-usage.md) | 1/4 đang đo, thí nghiệm 4 đủ 4 lần, chờ thien chấm bản ghi và số Settings lần 4 (1 xong: khởi động 3–4 lượt, khoảng 1% phiên; 2 xong: dừng 10 hay hơn 65 phút, lịch sử chat vẫn không bị ghi lại; 3 xong: tắt connector không làm usage giảm thấy được, cả theo `explain-usage` lẫn Settings (Settings làm tròn tới 1%)); 2/4 xong (khởi động còn 3 lượt, từ 12); 3/4 bỏ Codex xong | 5/7 |
+| [Dùng Claude tốn ít usage hơn: đo trước, đổi sau](plans/2026-11-15-claude-usage.md) | 1/4 đang đo, thí nghiệm 4 đủ 4 lần, theo Settings làm sau buổi trong chat dựng bài rẻ hơn (4% so với 6–7% phiên), chờ thien chấm bản ghi (1 xong: khởi động 3–4 lượt, khoảng 1% phiên; 2 xong: dừng 10 hay hơn 65 phút, lịch sử chat vẫn không bị ghi lại; 3 xong: tắt connector không làm usage giảm thấy được, cả theo `explain-usage` lẫn Settings (Settings làm tròn tới 1%)); 2/4 xong (khởi động còn 3 lượt, từ 12); 3/4 bỏ Codex xong | 5/7 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
