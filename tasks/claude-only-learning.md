@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaBthJ6GiVht9SkWYK · Cập nhật: 2026-11-16T15:58Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZJjRnqdLcZoauKCyW · Cập nhật: 2026-11-16T16:30Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -37,13 +37,15 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 
 - Thí nghiệm 3 lần 3, nửa tắt connector (chat mới 2026-11-16 22:45, nick tnt697; phiên không có công cụ Chrome, Figma, sakubun): 3 lượt, quy đổi khoảng 92 nghìn (31 nghìn mỗi lượt); Settings 20% → 21%, tuần 49%. Cả hai nửa tăng 1% phiên: tắt connector không giảm thấy được. Đã ghi vào bảng, tick thí nghiệm 1 và 3, sửa STATUS (5/7): nhánh `docs/measure-connectors-3` commit 65463b2, PR #90. CodeRabbit góp 1 ý (đừng viết "tốn như nhau", chỉ nói không giảm thấy được), đã sửa ở 90345cc và trả lời. CI xanh; đã merge theo lời thien (squash b8e4764, 2026-11-16 22:5x), nhánh tự xoá.
 
+- Thí nghiệm 4 lần 1, "sau buổi trong chat dựng bài" (chat BA 3, 2026-11-16 22:59, nick tnt697): (a) lúc gửi trang, 22 lượt, quy đổi khoảng 640 nghìn, Settings 24% → 28%; (b) lúc mở PR sau buổi, 41 lượt, quy đổi khoảng 1,26 triệu, Settings 33% (tuần 50% → 51%). Phần sau buổi (19 lượt) khoảng 616 nghìn, khoảng 4% phiên, gần bằng phần soạn bài. Đã ghi vào bảng "Kết quả đo" và `docs/usage-log.md` trong PR #91, đã merge theo lời thien (squash). Cùng PR sửa test `make-review` hỏng khi hạn thẻ thật đổi.
+
 ## Bước tiếp theo
-0. **Thí nghiệm 4 lần 1, kiểu "sau buổi trong chat dựng bài"** (thien học BA 3 tối 2026-11-16 ở chat mới, nhắn "học" kèm ảnh Settings): chat học chạy `explain-usage` ở 2 mốc, (a) ngay sau khi gửi trang học, (b) sau khi ghi xong "sau buổi" và mở PR; mỗi mốc xin ảnh Settings. Ghi số vào bảng "Kết quả đo" của `docs/plans/2026-11-15-claude-usage.md` trong chính PR sau buổi, kèm dòng `docs/usage-log.md`. Lần sau (lần 2) làm kiểu "sau buổi ở chat mới" để so.
+0. **Thí nghiệm 4 lần 2, kiểu "sau buổi ở chat mới"** (buổi học kế tiếp, Frontend 7): chat học chạy `explain-usage` lúc gửi trang (mốc a) và xin ảnh Settings, rồi dừng. thien mở chat mới, nhắn "sau buổi" cùng link trang; chat mới đọc kết quả, ghi, mở PR, chạy `explain-usage` (mốc b) và xin ảnh Settings. So với lần 1: phần sau buổi tốn khoảng 616 nghìn quy đổi và 4% phiên. Chấm thêm: bản ghi ở chat mới có đủ ý như lần 1 không (thien chấm).
 
 ## Đang chờ thien
-- Thí nghiệm 4: thien chụp Settings lúc mở chat học, sau khi nhận trang, và sau PR sau buổi.
+- Thí nghiệm 4 lần 2: chụp Settings lúc mở chat học, sau khi nhận trang, lúc mở chat "sau buổi" và sau PR.
 - Dán instructions v3 ở 2 nick còn lại (tnt024, tnt628) nếu chưa dán.
 
 ## Lưu ý
-- Làm ở chat mới (luật `profile/CHATS.md`), không gộp với buổi học BA 3.
+- Khởi động ở chat BA 3: lần gắn repo đầu bị bộ kiểm quyền chặn, phải nhờ thien bảo gắn lại; số lượt khởi động của lần 1 vì vậy cao hơn bình thường.
 - Đừng hứa con số tiết kiệm trước khi đo một buổi thật theo giai đoạn.
