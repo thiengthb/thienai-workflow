@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX2hDEbKVazBMSsDf2 · Cập nhật: 2026-11-16T14:54Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX2hDEbKVazBMSsDf2 · Cập nhật: 2026-11-16T15:00Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -30,10 +30,12 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 
 - Thí nghiệm 3 lần 1 (chat mới 18:25, connector Figma, Claude in Chrome, sakubun bản claude.ai đã tắt): 3 lượt, đọc lại 0,42 triệu, quy đổi khoảng 98 nghìn, hướng dẫn hệ thống 77%; Settings phiên 4% → 5%, tuần 45%. Gần như bằng lúc bật connector: tắt không giúp thấy được. Đã ghi vào bảng "Kết quả đo" và STATUS: nhánh `docs/measure-connectors`, PR #86. CodeRabbit góp 2 ý (ghi rõ "không thấy giảm, mới một lần"; thêm một lần thí nghiệm 1 đủ số vào phần còn thiếu), đã sửa cả hai. Đã merge theo lời thien (squash ab948ea) lúc 18:3x.- Thí nghiệm 2 lần 2, dừng hơn 65 phút, mốc trước (18:3x, chat session_01WXAvBW5weWV4ugkXKSFq8g bắt đầu 18:25): `explain-usage` 19 lượt, ghi cache 56.928, đọc lại 3.191.933, viết ra 13.389 (quy đổi khoảng 500 nghìn). Settings 18:40: phiên 8%, tuần 45%. Thêm 2 lượt (ghi sổ, trả lời) trước khi thien bắt đầu nghỉ khoảng 18:41.
 - Thí nghiệm 2 lần 2, dừng khoảng 79 phút (18:41–20:00, quay lại từ app điện thoại): 24 lượt, ghi cache 61.787 (chỉ tăng 4.859 qua 5 lượt), đọc lại 4.130.460, viết ra 15.783. Settings 20:00: phiên 8%, tuần 45% (không đổi). Đã ghi vào bảng, tick thí nghiệm 2, sửa STATUS: nhánh `docs/measure-pause-65min-2`, PR #87, CI xanh. CodeRabbit góp 1 ý (ghi kết luận hẹp lại: chỉ nói lịch sử không bị ghi lại), đã sửa và trả lời. Lần chạy đầu, kiểm trang `pages` báo lỗi tương phản ở trang mau-frontend dù PR chỉ sửa .md; chạy lại thì qua (lỗi chập chờn). Đã merge theo lời thien (squash a9b3294, 2026-11-16 21:5x).
+- Thí nghiệm 3 lần 2 (chat mới 2026-11-16 21:54, bật lại connector, nick tnt697): 2 lượt, đọc lại 0,27 triệu, ghi cache 20 nghìn, viết ra 1,7 nghìn, quy đổi khoảng 75 nghìn (37 nghìn mỗi lượt), hướng dẫn 74%. Settings phiên 8% → 12%, tuần 47% → 48% (21:58). Hai cách đo cho kết quả khác nhau: `explain-usage` thấy bằng lần 1, Settings thấy 4% so với 1%. Chưa tick, cần lần 3. Đã ghi vào bảng và STATUS: nhánh `docs/measure-connectors-2`, PR #88. Đã hỏi thien lúc 21:54–21:58 có chat nào khác cùng nick đang chạy không.
 
 ## Bước tiếp theo
-0. **Thí nghiệm 3 lần 2 kiêm thí nghiệm 1 lần đủ số thứ hai:** thien bật lại connector (Figma, Claude in Chrome; sakubun bản claude.ai tuỳ thien), chụp Settings, mở chat mới ở project Claude rồi nói "tiếp tục". Ngay khi nhận việc xong: chạy `explain-usage` trước mọi việc khác, xin ảnh Settings sau, so với lần 1 (tắt connector: 3 lượt, đọc lại 0,42 triệu, hướng dẫn 77%, phiên 4% → 5%).
-1. Khi tiện: thí nghiệm 4 (sau buổi học).
+0. Nghe thien trả lời có chat khác chạy cùng lúc không, rồi ghi thêm vào hàng thí nghiệm 3 lần 2 trên nhánh `docs/measure-connectors-2` (PR #88). Chờ CodeRabbit rồi sửa theo góp ý.
+1. **Thí nghiệm 3 lần 3:** trong cùng một ngày, đo một chat mới lúc tắt connector rồi một chat mới lúc bật (hay ngược lại). Chắc chắn không chat nào khác cùng nick đang chạy, chụp Settings trước và sau, dừng đo ở cùng một lượt (ngay sau `explain-usage`).
+2. Khi tiện: thí nghiệm 4 (sau buổi học).
 
 ## Đang chờ thien
 - Các lần đo còn lại cần thien chụp Settings (xem Bước tiếp theo).
