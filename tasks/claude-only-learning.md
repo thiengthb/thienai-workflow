@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBY2FTX2K7kvD5fU42p · Cập nhật: 2026-11-16T17:43Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBY2FTX2K7kvD5fU42p · Cập nhật: 2026-11-16T17:44Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -45,11 +45,14 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 
 - Bước 0 và 1 cũ (chat 2026-11-17 00:26, nick tnt697): kit tự nói lại theo tình huống (phương án C) ở nhánh `feat/teach-back-scenario`, PR #93: hộp `.ask-from` trong mẫu, `lesson.js` gửi người hỏi và tin nhắn cho Claude khi nhận xét; ghi "thien bỏ qua" vào bảng "Kết quả đo" và `learning/frontend.md`. Mọi test chạy trên máy qua, kiểm trang 0 lỗi. Cùng PR: dòng "Lỗi gặp" về việc gắn repo bị chặn đầu phiên, kèm cách thử ở chat sau. CI xanh, CodeRabbit không góp ý; đã merge theo lời thien (squash c43451b, 2026-11-17 00:4x), nhánh tự xoá.
 
+- Gắn repo đầu phiên (chat 2026-11-17 00:42, nick tnt697, session_01WXAvBY2FTX2K7kvD5fU42p): mở đầu bằng "tiếp tục, gắn repo thienai-workflow quyền ghi", lần gắn quyền ghi đầu tiên qua ngay, khởi động 3 lượt. Settings lúc mở chat: phiên 60%, tuần 56%. Đã ghi vào dòng "Lỗi gặp" của kế hoạch và tin mở đầu vào `profile/SETUP.md`: nhánh `docs/attach-repo-opening`, PR #94. Test chạy trên máy qua.
+
 ## Bước tiếp theo
-1. Chat sau: thử mở đầu bằng "tiếp tục, gắn repo thienai-workflow quyền ghi" xem lần gắn đầu có qua không; ghi kết quả vào dòng "Lỗi gặp" (gắn repo) của `docs/plans/2026-11-15-claude-usage.md`.
+1. Chờ CI và CodeRabbit ở PR #94, sửa nếu có góp ý, rồi thien merge.
 2. Thí nghiệm 4 còn lần 3 (sau buổi trong chat dựng bài) và lần 4 (chat mới).
 
 ## Đang chờ thien
+- Merge PR #94 sau khi CI xanh.
 - Dán instructions v3 ở 2 nick còn lại (tnt024, tnt628) nếu chưa dán.
 
 ## Lưu ý
