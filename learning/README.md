@@ -53,7 +53,7 @@ Hai phần ôn này chỉ dành cho lần học đầu: trong trang, bọc chún
 3. **Thử trước (5–6 phút):** bấm, kéo, chọn, sắp xếp. Chưa có lý thuyết. Chọn kiểu bài trong [teaching/README.md](teaching/README.md).
 4. **Hiểu sau (3 phút):** giải thích ý chính, có số liệu hoặc ví dụ cụ thể, nhắc lại đúng lựa chọn thien vừa làm.
 5. **Câu hỏi nhanh (2 phút).**
-6. **Tự nói lại ý chính** rồi mới xem bản của AI.
+6. **Tự nói lại ý chính** rồi mới xem bản của AI. Đề là một tình huống cụ thể: một người hỏi về chính màn hay tình huống vừa làm, thien trả lời người đó (thien chọn 2026-11-17, cách viết ở `artifacts/lesson/README.md`). Đừng hỏi chung chung.
 7. **Góp ý** độ dài và độ khó.
 
 Trang dựng từ mẫu `artifacts/lesson/`: bấm "Xong buổi học" là kết quả được lưu và gửi cho Claude.

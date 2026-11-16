@@ -199,12 +199,17 @@
     b.addEventListener('click', async () => {
       b.disabled = true;
       const step = teach.closest('.step'), mine = $('#mine');
+      // Đề theo tình huống (phương án C, 2026-11-17): hộp .ask-from là tin của một người cụ thể, người học trả lời người đó.
+      const from = step.querySelector('.ask-from');
       const prompt = [head(), '',
-        `Đề bài người học đang làm: ${visibleText(step, 300)}`,
+        `Đề bài người học đang làm: ${visibleText(step, 600)}`,
+        from ? `Đề là một tình huống: người học trả lời ${clip(from.dataset.who || 'một người', 80)}, người vừa nhắn: "${clip([...from.childNodes].filter((n) => n.nodeName !== 'B').map((n) => n.textContent).join(' '), 400)}". `
+          + 'Xem thêm câu trả lời có nói với đúng người đó và dùng chi tiết của chính tình huống không, hay chỉ nhắc luật chung.' : '',
         mine ? `Ý chính của bài (bản mẫu, người học ${mine.classList.contains('on') ? 'đã' : 'chưa'} xem): ${clip(mine.textContent, 800)}` : '',
         `Người học tự viết: "${clip(teach.value, 1500)}"`, ...stuck(), '',
         'Nhận xét bài viết của người học trong tối đa 3 câu. Câu 1: một điều họ đã nắm đúng, dẫn lại ý của chính họ. '
-        + 'Câu 2: một điều còn thiếu hay chưa chính xác so với ý chính (nếu đủ ý rồi thì nói vậy). '
+        + 'Câu 2: một điều còn thiếu hay chưa chính xác so với ý chính (nếu đủ ý rồi thì nói vậy)'
+        + (from ? ', hoặc chỗ còn nói chung chung chưa gắn vào tình huống. ' : '. ')
         + 'Câu 3: một câu hỏi ngắn giúp họ tự nghĩ tiếp, không kèm đáp án. ' + VOICE].join('\n');
       const a = await Kit.ask(prompt, out);
       if (a) R.ai.push({ kind: 'teach', a });
