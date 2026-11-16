@@ -44,7 +44,7 @@ Học ngày 2026-11-17 · Trang tương tác: [`../pages/lesson-08.html`](../pag
 
 Viết trước khi mở bản của Claude. Đã nói được thang số (chỗ vướng từ buổi 3 và buổi 7). Còn thiếu lý do "trong nhỏ hơn ngoài" và chuyện cụ thể trên màn: tên tác giả trông như thuộc cuốn bên dưới. Bản của Claude: người dùng mở màn để xem cuốn nào sắp phải trả; bản của Vy để tác giả cách sách 10 mà cách cuốn dưới 6, nên "Nguyễn Nhật Ánh" như đi với "Clean Code"; lấy số từ thang, mỗi tầng gấp ít nhất 2 lần tầng trong: 4, 16, 32.
 
-Trên bàn thử: đạt 100% giống bản thiết kế sau 21 lần vặn (buổi 6: 4 lần), có thử 2, 10, 24, 48 trước khi về đúng số.
+Trên bàn thử: đạt 100% giống bản thiết kế sau 21 lần vặn (buổi 6: 4 lần), có thử 2, 24, 48 và lề 32 trước khi về đúng số.
 
 ## Nguồn và mức chắc chắn
 
