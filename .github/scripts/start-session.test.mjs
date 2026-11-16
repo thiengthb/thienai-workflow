@@ -57,7 +57,8 @@ const save = (name, text, at) => {
 save('old.md', task.replace('# Việc X', '# Việc cũ'), '2026-11-14T01:00:00Z');
 save('new.md', task.replace('Nhánh: <nhánh làm việc>', 'Nhánh: feat/gone'), '2026-11-15T08:00:00Z');
 const work = mkdtempSync(join(root, 'work-'));
-const start = (...a) => spawnSync('node', [cli, '--remote-map', 'a/b=' + bare, '--task-dir', work, '--no-fetch', ...a], { encoding: 'utf8', env });
+// Fixed clock, one hour after the newest save: the 24-hour note must not depend on the day CI runs.
+const start = (...a) => spawnSync('node', [cli, '--remote-map', 'a/b=' + bare, '--task-dir', work, '--no-fetch', ...a], { encoding: 'utf8', env: { ...env, HANDOFF_NOW: '2026-11-15T09:00:00Z' } });
 
 let r = start();
 assert.equal(r.status, 0, r.stderr);
