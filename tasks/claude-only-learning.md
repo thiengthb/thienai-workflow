@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZJsrbwQ4Fwmq6YmEH · Cập nhật: 2026-11-16T15:40Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZJsrbwQ4Fwmq6YmEH · Cập nhật: 2026-11-16T15:43Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -33,8 +33,10 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 - Thí nghiệm 3 lần 2 (chat mới 2026-11-16 21:54, bật lại connector, nick tnt697): 2 lượt, đọc lại 0,27 triệu, ghi cache 20 nghìn, viết ra 1,7 nghìn, quy đổi khoảng 75 nghìn (37 nghìn mỗi lượt), hướng dẫn 74%. Settings phiên 8% → 12%, tuần 47% → 48% (21:58). Hai cách đo cho kết quả khác nhau: `explain-usage` thấy bằng lần 1, Settings thấy 4% so với 1%. Chưa tick, cần lần 3. Đã ghi vào bảng và STATUS: nhánh `docs/measure-connectors-2`, PR #88. thien cho biết lúc đó có một chat khác cùng nick chạy ở ngoài project (đã tắt). Kiểm lại: 21:58 → 22:02, khoảng 10 lượt ở chat này đưa phiên từ 12% lên 14%, khớp thang cũ, nên phần tăng 4% chủ yếu do chat kia. Đã ghi vào PR #88. CodeRabbit không góp ý; đã merge theo lời thien (squash 4cddd24, 2026-11-16 22:1x), nhánh tự xoá. CI `test` đỏ vì lỗi có sẵn trên main, không do PR này.
 - PR #89: sửa test `start-session` hỏng sau 24 giờ (dòng kiểm "nick khác chưa quá 24 giờ" đọc giờ thật), làm CI đỏ trên main từ a9b3294. CI xanh, CodeRabbit không góp ý; đã merge theo lời thien (squash, 2026-11-16 22:2x).
 
+- Thí nghiệm 3 lần 3, nửa bật connector (chat mới 2026-11-16 22:39, nick tnt697, chuẩn v3, `--claim`; Figma, Claude in Chrome, Filesystem, GitHub, sakubun đều bật; thien xác nhận không chat nào khác cùng nick chạy): đo ngay sau khi nhận việc, 4 lượt; đọc lại 564.553, ghi cache 32.612, viết ra 2.783; quy đổi khoảng 136 nghìn (khoảng 34 nghìn mỗi lượt); hướng dẫn 62%, tin của thien 15% (2 ảnh), lệnh 14%, gắn repo 6% (gắn 2 lần vì xin quyền ghi bị chặn). Settings trước: phiên 18%, tuần 49% (22:39); sau: 19%, 49% (22:43), tính cả lượt `explain-usage` và lượt trả lời. Chưa ghi vào bảng (chờ nửa tắt connector để ghi chung một PR).
+
 ## Bước tiếp theo
-0. **Thí nghiệm 3 lần 3:** trong cùng một ngày, đo một chat mới lúc tắt connector rồi một chat mới lúc bật (hay ngược lại). Chắc chắn không chat nào khác cùng nick đang chạy, chụp Settings trước và sau, dừng đo ở cùng một lượt (ngay sau `explain-usage`).
+0. **Thí nghiệm 3 lần 3, nửa tắt connector:** chat mới, tắt Figma, Claude in Chrome, sakubun; thien gửi "tiếp tục" kèm ảnh Settings trước; đo ngay sau khi nhận việc bằng `explain-usage`, rồi xin ảnh Settings sau. Ghi cả hai nửa (nửa bật ở "Đã xong") vào bảng "Kết quả đo" và STATUS, tick thí nghiệm 3 nếu số khớp, mở PR.
 1. Khi tiện: thí nghiệm 4 (sau buổi học).
 
 ## Đang chờ thien
