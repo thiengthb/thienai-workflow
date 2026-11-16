@@ -20,7 +20,7 @@ Trạng thái học, nhật ký và kế hoạch buổi sau nằm ở [`../front
 ## Ôn lại thế nào
 
 - **Nhanh, khoảng 2 phút:** mở file bài, đọc ý chính, tự trả lời mục "Tự kiểm" trước rồi mới bấm xem đáp án. Tự nhớ lại giúp nhớ lâu hơn đọc lại.
-- **Làm lại cả buổi:** nhắn Claude "mở lại bài 3" (tài khoản nào cũng được). Claude đăng lại trang từ thư mục `pages/` để bạn làm trên điện thoại. Hoặc tải file `.html` về và mở bằng trình duyệt; khi đó kết quả không tự lưu, bấm nút chép kết quả nếu muốn gửi.
+- **Làm lại cả buổi:** nhắn Claude "mở lại bài 3" (tài khoản nào cũng được). Claude đăng lại trang từ thư mục `pages/` để bạn làm trên điện thoại. Bài 1–5: có thể tải file `.html` về và mở bằng trình duyệt. Từ bài 6, file trong `pages/` chỉ là nguồn (phần script dùng chung để trống), tải về sẽ không bấm được: mở bản đăng (link trong file bài) hoặc nhờ Claude dựng lại. Mở file tải về thì khi đó kết quả không tự lưu, bấm nút chép kết quả nếu muốn gửi.
 - Mục "Bạn đã nói" trong mỗi bài là câu bạn tự viết lúc học. Đọc lại để thấy cách nhìn của mình đổi thế nào.
 
 ## Thêm bài mới
