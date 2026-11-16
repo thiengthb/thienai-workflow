@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYmGaLMttmVV2YAz9B · Cập nhật: 2026-11-16T17:02Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKVVE4v93qYwA8jLy · Cập nhật: 2026-11-16T17:08Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -41,11 +41,14 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 
 - Thí nghiệm 4 lần 2, mốc a (chat 2026-11-16 23:38, nick tnt697, session_01WXAvBYmGaLMttmVV2YAz9B): Settings lúc mở chat học (23:38) phiên 35%, tuần 52%. Lần gắn repo đầu lại bị bộ kiểm quyền chặn, thien cho gắn lại. Trang Frontend 7 đã đăng: https://claude.ai/artifact/4vZj2LZp7fGnZ1qDaa1ZC6 (nguồn ở nhánh `claude/frontend-07`, commit đầu là nguồn trang). `explain-usage` lúc gửi trang: 30 lượt, ghi cache 130.913, đọc lại 6.311.695, viết ra 34.987, quy đổi khoảng 1,07 triệu; hướng dẫn 53,5%, file và lệnh 32,5%. Settings sau khi nhận trang (23:47): phiên 43%, tuần 53%; phần soạn bài tốn khoảng 8% phiên (lần 1 là 4%, 640 nghìn quy đổi), nặng gần gấp đôi lần 1 [chưa kiểm: có chat khác cùng nick chạy cùng lúc không].
 
+- Thí nghiệm 4 lần 2, mốc b (chat "sau buổi" mới 2026-11-17 00:04, nick tnt697, session_01WXAvBWKVVE4v93qYwA8jLy): Settings lúc mở chat phiên 45%, tuần 53%. Đọc kết quả bằng db_get (không có comment), làm "Sau buổi" trên nhánh `claude/frontend-07`, PR #92 (nhánh rebase lên main, không đổi gì). `explain-usage` lúc mở PR: 24 lượt, đọc lại 5,40 triệu, ghi cache 146 nghìn, viết ra 20 nghìn, quy đổi khoảng 930 nghìn; hướng dẫn 55%, lệnh và file 22%, trang artifact 18% (đọc cả trang học bằng read_artifact, không cần). Đã ghi vào bảng "Kết quả đo" (kết luận tạm), "Lỗi gặp", `docs/usage-log.md`, bước 1 "Sau buổi" của `learning/README.md` và STATUS, cùng PR #92.
+
 ## Bước tiếp theo
-0. **Thí nghiệm 4 lần 2, mốc b**: thien học xong trang Frontend 7 (00:02 2026-11-17), kết quả đã lưu ở db trang `sessions/frontend-07-1794848484963`; thien bấm "Don't allow" ở hỏi quyền gửi comment nên không có comment, đọc bằng db_get. Lỗi kit: hộp thoại xin quyền comment hiện trước khi lưu, và nút "Chép kết quả" không chép tự động được. thien mở chat mới, nhắn "sau buổi" cùng link trang. Chat mới đọc kết quả (db `sessions/` và comment), làm mục "Sau buổi" trên nhánh `claude/frontend-07`, mở PR, chạy `explain-usage` và xin ảnh Settings. (Cách làm gốc: chat học chạy `explain-usage` lúc gửi trang (mốc a) và xin ảnh Settings, rồi dừng. thien mở chat mới, nhắn "sau buổi" cùng link trang; chat mới đọc kết quả, ghi, mở PR, chạy `explain-usage` (mốc b) và xin ảnh Settings. So với lần 1: phần sau buổi tốn khoảng 616 nghìn quy đổi và 4% phiên. Chấm thêm: bản ghi ở chat mới có đủ ý như lần 1 không (thien chấm).
+0. **Thí nghiệm 4 lần 2, chốt**: thien gửi ảnh Settings sau PR #92 và chấm bản ghi ở chat mới có đủ ý như lần 1 không. Ghi hai số đó vào dòng "4. Sau buổi ở chat mới (Frontend 7)" của bảng "Kết quả đo" (thay "chờ ảnh của thien"), cùng PR #92 nếu chưa merge. Rồi còn lần 3 (trong chat dựng bài) và lần 4 (chat mới) mới tick thí nghiệm 4.
+1. thien chọn cách mới cho phần tự nói lại (phương án trong chat sau buổi Frontend 7); đổi kit `lesson.js` ở PR riêng.
 
 ## Đang chờ thien
-- Thí nghiệm 4 lần 2: chụp Settings lúc mở chat học, sau khi nhận trang, lúc mở chat "sau buổi" và sau PR.
+- Thí nghiệm 4 lần 2: ảnh Settings sau PR #92, và chấm bản ghi. Merge PR #92.
 - Dán instructions v3 ở 2 nick còn lại (tnt024, tnt628) nếu chưa dán.
 
 ## Lưu ý
