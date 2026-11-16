@@ -1,6 +1,6 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-17 · Claude nick tnt697 (project Claude, chat học Chiến tranh 6) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
+Cập nhật lần cuối: 2026-11-17 · Claude nick tnt697 (project Claude, chat sau buổi Frontend 8) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu. Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
 
@@ -14,7 +14,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 |---|---|---|
 | [Chuyển repo thienui sang riêng tư](plans/2026-11-14-thienui-private.md) | 3/3: xong, chờ merge PR | 4/5 |
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 2/6 xong; đợt 2 (gói buổi, nhật ký 3 dòng) đã merge (PR #81) | 6/12 |
-| [Dùng Claude tốn ít usage hơn: đo trước, đổi sau](plans/2026-11-15-claude-usage.md) | 1/4 đang đo, còn thí nghiệm 4 (1 xong: khởi động 3–4 lượt, khoảng 1% phiên; 2 xong: dừng 10 hay hơn 65 phút, lịch sử chat vẫn không bị ghi lại; 3 xong: tắt connector không làm usage giảm thấy được, cả theo `explain-usage` lẫn Settings (Settings làm tròn tới 1%)); 2/4 xong (khởi động còn 3 lượt, từ 12); 3/4 bỏ Codex xong | 5/7 |
+| [Dùng Claude tốn ít usage hơn: đo trước, đổi sau](plans/2026-11-15-claude-usage.md) | 1/4 đang đo, thí nghiệm 4 đủ 4 lần, chờ thien chấm bản ghi và số Settings lần 4 (1 xong: khởi động 3–4 lượt, khoảng 1% phiên; 2 xong: dừng 10 hay hơn 65 phút, lịch sử chat vẫn không bị ghi lại; 3 xong: tắt connector không làm usage giảm thấy được, cả theo `explain-usage` lẫn Settings (Settings làm tròn tới 1%)); 2/4 xong (khởi động còn 3 lượt, từ 12); 3/4 bỏ Codex xong | 5/7 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
@@ -26,7 +26,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 - Gói buổi `artifacts/lesson/prepare-lesson.mjs` thay cho việc đọc cả README, file môn và thẻ khi nhắn "học"; file môn chỉ giữ 3 dòng nhật ký, dòng cũ sang `learning/<môn>/log.md`. Luồng "học" 78,7 KB còn 64,0 KB và không tăng theo số buổi (đợt 2, PR #81)
 
 ## Việc tiếp theo
-1. Buổi học kế tiếp: Frontend 8 (so sánh mù, mốc 2026-11-22), rồi BA 4. Chiến tranh 6 đã học 2026-11-17 (đợt 1 Điện Biên Phủ), sau buổi ở PR nhánh `claude/war-06`. Frontend 7 đã học, sau buổi ở PR #92. Phần tự nói lại đổi sang giải thích cho một người trong tình huống cụ thể (thien chọn 2026-11-17, xem "Buổi tiếp theo" trong `learning/frontend.md`): kit đã đổi ở nhánh `feat/teach-back-scenario`, merge trước buổi học kế tiếp.
+1. Buổi học kế tiếp: BA 4, rồi Frontend 9 (so sánh mù, mốc 2026-11-22). Frontend 8 (chép lại một màn, thang khoảng cách) đã học 2026-11-17, nguồn trang và sau buổi cùng ở PR nhánh `claude/frontend-08-after`. Chiến tranh 6 sau buổi ở PR nhánh `claude/war-06`. Frontend 7 sau buổi ở PR #92. Tự nói lại theo tình huống: thien thấy dễ hơn câu hỏi chung (buổi 8); kit ở nhánh `feat/teach-back-scenario`, merge trước buổi học kế tiếp.
 2. Dùng mẫu so sánh mới cho vòng duyệt giao diện kế tiếp ở sakubun, ghi lại chỗ còn vướng.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
