@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYmGaLMttmVV2YAz9B · Cập nhật: 2026-11-16T16:39Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYmGaLMttmVV2YAz9B · Cập nhật: 2026-11-16T16:46Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -39,8 +39,10 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 
 - Thí nghiệm 4 lần 1, "sau buổi trong chat dựng bài" (chat BA 3, 2026-11-16 22:59, nick tnt697): (a) lúc gửi trang, 22 lượt, quy đổi khoảng 640 nghìn, Settings 24% → 28%; (b) lúc mở PR sau buổi, 41 lượt, quy đổi khoảng 1,26 triệu, Settings 33% (tuần 50% → 51%). Phần sau buổi (19 lượt) khoảng 616 nghìn, khoảng 4% phiên, gần bằng phần soạn bài. Đã ghi vào bảng "Kết quả đo" và `docs/usage-log.md` trong PR #91, đã merge theo lời thien (squash). Cùng PR sửa test `make-review` hỏng khi hạn thẻ thật đổi.
 
+- Thí nghiệm 4 lần 2, mốc a (chat 2026-11-16 23:38, nick tnt697, session_01WXAvBYmGaLMttmVV2YAz9B): Settings lúc mở chat học (23:38) phiên 35%, tuần 52%. Lần gắn repo đầu lại bị bộ kiểm quyền chặn, thien cho gắn lại. Trang Frontend 7 đã đăng: https://claude.ai/artifact/4vZj2LZp7fGnZ1qDaa1ZC6 (nguồn ở nhánh `claude/frontend-07`, commit đầu là nguồn trang). `explain-usage` lúc gửi trang: 30 lượt, ghi cache 130.913, đọc lại 6.311.695, viết ra 34.987, quy đổi khoảng 1,07 triệu; hướng dẫn 53,5%, file và lệnh 32,5%. Chờ ảnh Settings sau khi nhận trang.
+
 ## Bước tiếp theo
-0. **Thí nghiệm 4 lần 2, kiểu "sau buổi ở chat mới"** (buổi học kế tiếp, Frontend 7): chat học chạy `explain-usage` lúc gửi trang (mốc a) và xin ảnh Settings, rồi dừng. thien mở chat mới, nhắn "sau buổi" cùng link trang; chat mới đọc kết quả, ghi, mở PR, chạy `explain-usage` (mốc b) và xin ảnh Settings. So với lần 1: phần sau buổi tốn khoảng 616 nghìn quy đổi và 4% phiên. Chấm thêm: bản ghi ở chat mới có đủ ý như lần 1 không (thien chấm).
+0. **Thí nghiệm 4 lần 2, mốc b**: thien học xong trang Frontend 7, mở chat mới, nhắn "sau buổi" cùng link trang. Chat mới đọc kết quả (db `sessions/` và comment), làm mục "Sau buổi" trên nhánh `claude/frontend-07`, mở PR, chạy `explain-usage` và xin ảnh Settings. (Cách làm gốc: chat học chạy `explain-usage` lúc gửi trang (mốc a) và xin ảnh Settings, rồi dừng. thien mở chat mới, nhắn "sau buổi" cùng link trang; chat mới đọc kết quả, ghi, mở PR, chạy `explain-usage` (mốc b) và xin ảnh Settings. So với lần 1: phần sau buổi tốn khoảng 616 nghìn quy đổi và 4% phiên. Chấm thêm: bản ghi ở chat mới có đủ ý như lần 1 không (thien chấm).
 
 ## Đang chờ thien
 - Thí nghiệm 4 lần 2: chụp Settings lúc mở chat học, sau khi nhận trang, lúc mở chat "sau buổi" và sau PR.
