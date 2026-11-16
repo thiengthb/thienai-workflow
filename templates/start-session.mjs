@@ -129,7 +129,7 @@ function main(argv) {
     task = pick ? rows.find((r) => `${r.repo}:${r.slug}` === pick) : rows[0];
     if (!task) console.log(pick ? `Không thấy việc ${pick} trong sổ.` : 'Không có việc nào để nhận.');
     else {
-      const note = otherNickNote(task, by);
+      const note = otherNickNote(task, by, process.env.HANDOFF_NOW ? new Date(process.env.HANDOFF_NOW) : new Date()); // HANDOFF_NOW: fixed clock for tests
       if (note) console.log('nhắc: ' + note);
       if (rows.length > 1 && !pick) console.log(`nhắc: sổ có ${rows.length} việc; nhận việc mới nhất. Kể các việc kia cho thien (mục trên).`);
       const file = join(taskDir, task.slug + '.md');
