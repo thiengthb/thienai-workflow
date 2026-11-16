@@ -98,11 +98,12 @@ Xong khi: không file nào trong luồng học còn trỏ tới learning/codex.m
 
 ### 4. Đổi luật chat theo số đo
 Xong khi: `profile/CHATS.md` ghi luật mới kèm số đo làm căn cứ, thien duyệt.
-- [ ] Sửa `profile/CHATS.md`
+- [x] Sửa `profile/CHATS.md` (2026-11-17, PR #97, chờ thien merge): thien chọn B, đổi chat theo ngưỡng bằng số ("nếu ước lượng được bằng số thì cũng sẽ dễ căn hơn"); AI cũng chọn B, sửa thêm: tra số lượt theo loại việc trong bảng thay vì ước bằng cảm giác. Phương án bị bỏ: A giữ luật cũ (không có ngưỡng, AI đoán), C một chat cho cả giai đoạn (chat 157 lượt đắt hơn khoảng 20% mỗi lượt, dễ sai hơn), tách mọi bước ra chat riêng (thí nghiệm 4 cho thấy đắt hơn). thien bỏ qua phần tóm tắt 3 câu. Xem lại: sau 10 dòng mới trong `docs/usage-log.md` hoặc 2026-12-01
 
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-17 | Bỏ ý "đổi chat khi sắp dừng lâu" khỏi hướng đề xuất; luật mới theo ngưỡng số lượt | Thí nghiệm 2: dừng lâu không tốn thêm; thí nghiệm 4: sau buổi trong chat dựng bài rẻ hơn |
 | 2026-11-15 | Giả thuyết 4 (dừng lâu mới đắt) gạch đi; làm checkpoint 2 trong lúc chờ lần đo thứ hai | Thí nghiệm 2 lần 1: dừng 68 phút không phải ghi lại lịch sử. Checkpoint 2 không phụ thuộc số đo |
 | 2026-11-15 | Checkpoint 1 cần số Settings > Usage; đo lại khởi động chuyển sang checkpoint 2; thí nghiệm 2 thêm khoảng dừng hơn 65 phút | Góp ý của CodeRabbit ở PR #82: hệ số quy đổi chưa chắc đúng ở claude.ai; checkpoint 1 không được phụ thuộc lệnh của checkpoint 2; cache có thể sống 1 giờ |
 
