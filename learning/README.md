@@ -42,7 +42,7 @@ Bảng học tuần (số buổi mỗi tuần, thẻ đến hạn, chỗ còn v�
 
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
-| Chiến tranh 5 (địa hình và thời tiết ở ải Chi Lăng) | 2026-11-15 | Chiến tranh | **BA 3 (các bên liên quan)**, rồi Frontend 7, rồi Chiến tranh 6 (đánh chỗ yếu, tránh chỗ mạnh) |
+| BA 3 (các bên liên quan) | 2026-11-16 | BA | **Frontend 7**, rồi Chiến tranh 6 (đánh chỗ yếu, tránh chỗ mạnh), rồi Frontend 8 |
 
 ## Khung một buổi, chung cho mọi môn
 

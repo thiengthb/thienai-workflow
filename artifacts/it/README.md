@@ -63,6 +63,8 @@ Bài mẫu đã đăng (2026-11-14): [Frontend 6, màu cho app](https://claude.a
 
 ## Chưa làm, để sau khi thien học thử
 
+- Lưới 2×2 (`.zones.grid2`): tên trục đè lên thẻ đã dán vào ô sát trục (thien chê sau BA 3, 2026-11-16). Cần chừa lề riêng cho tên trục. Bố cục trang cũng cần trau chuốt hơn: thien thấy "ok nhưng chưa thỏa mãn".
+
 - Khi nhìn N giây, phần tự lưu không giữ đồng hồ: tải lại trang giữa 5 giây thì coi như đã xem.
 - Nối hai thẻ bằng đường (sơ đồ ai nói với ai), làn bơi nhiều người cho luồng việc.
 - Ô gõ CSS thật (hướng C ở vòng chọn) cho phần cuối buổi khi thien đã quen.

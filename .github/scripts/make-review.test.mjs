@@ -31,7 +31,8 @@ assert.match(matchAnswer('Thẻ trạng thái "Đã thanh toán" nên đặc hay
 assert.equal(matchAnswer('Chiến dịch Điện Biên Phủ kéo dài bao lâu?', checks), null, 'câu không liên quan thì không ghép bừa');
 assert.ok(!/Học ngày|Tự kiểm|Đáp án/.test(lessonExcerpt(md)), 'đoạn bài bỏ dòng ngày học và phần tự kiểm');
 
-const review = buildReview(real, fileURLToPath(new URL('../../learning/', import.meta.url)), '2026-11-14', 10);
+// Ngày xa để thẻ nào cũng đến hạn: thẻ thật đổi hạn sau mỗi buổi ôn, test không được phụ thuộc vào đó.
+const review = buildReview(real, fileURLToPath(new URL('../../learning/', import.meta.url)), '2099-01-01', 10);
 assert.equal(review.items.length, 10);
 assert.ok(review.items.filter((x) => x.answer).length >= 7, 'phần lớn thẻ tìm được đáp án trong bài');
 assert.ok(review.items.every((x) => x.ref), 'thẻ nào cũng có đoạn bài để Claude chấm');

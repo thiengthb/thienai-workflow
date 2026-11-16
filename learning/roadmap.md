@@ -46,7 +46,7 @@ Môn mở rộng, khoảng một buổi mỗi tuần. Đích sau 6 tháng: làm 
 Xong khi: học đủ 10 ý trên bản đồ, mỗi ý một buổi; thứ tự do thien xếp ở buổi 1.
 - [x] Yêu cầu và nhu cầu (buổi 1, 2026-11-12)
 - [x] Hỏi chuyện người dùng (buổi 2, 2026-11-12)
-- [ ] Các bên liên quan
+- [x] Các bên liên quan (buổi 3, 2026-11-16, [bài](ba/lessons/03-stakeholders.md))
 - [ ] User story
 - [ ] Điều kiện hoàn thành
 - [ ] Vẽ luồng công việc
