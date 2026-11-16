@@ -42,7 +42,7 @@ Bảng học tuần (số buổi mỗi tuần, thẻ đến hạn, chỗ còn v�
 
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
-| Frontend 7 (sửa một màn có bốn lỗi cùng lúc) | 2026-11-17 | Frontend | **Chiến tranh 6** (đánh chỗ yếu, tránh chỗ mạnh), rồi Frontend 8 (so sánh mù, mốc 2026-11-22), rồi BA 4 |
+| Chiến tranh 6 (đánh chỗ yếu, tránh chỗ mạnh) | 2026-11-17 | Chiến tranh | **Frontend 8** (so sánh mù, mốc 2026-11-22), rồi BA 4 |
 
 ## Khung một buổi, chung cho mọi môn
 

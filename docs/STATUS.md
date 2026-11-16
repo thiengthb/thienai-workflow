@@ -1,6 +1,6 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-17 · Claude nick tnt697 (project Claude, chat đổi kit tự nói lại) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
+Cập nhật lần cuối: 2026-11-17 · Claude nick tnt697 (project Claude, chat học Chiến tranh 6) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu. Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
 
@@ -27,7 +27,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 - Gói buổi `artifacts/lesson/prepare-lesson.mjs` thay cho việc đọc cả README, file môn và thẻ khi nhắn "học"; file môn chỉ giữ 3 dòng nhật ký, dòng cũ sang `learning/<môn>/log.md`. Luồng "học" 78,7 KB còn 64,0 KB và không tăng theo số buổi (đợt 2, PR #81)
 
 ## Việc tiếp theo
-1. Buổi học kế tiếp: Chiến tranh 6 (đánh chỗ yếu, tránh chỗ mạnh), rồi Frontend 8 (so sánh mù, mốc 2026-11-22). Frontend 7 đã học, sau buổi ở PR #92. Phần tự nói lại đổi sang giải thích cho một người trong tình huống cụ thể (thien chọn 2026-11-17, xem "Buổi tiếp theo" trong `learning/frontend.md`): kit đã đổi ở nhánh `feat/teach-back-scenario`, merge trước buổi học kế tiếp.
+1. Buổi học kế tiếp: Frontend 8 (so sánh mù, mốc 2026-11-22), rồi BA 4. Chiến tranh 6 đã học 2026-11-17 (đợt 1 Điện Biên Phủ), sau buổi ở PR nhánh `claude/war-06`. Frontend 7 đã học, sau buổi ở PR #92. Phần tự nói lại đổi sang giải thích cho một người trong tình huống cụ thể (thien chọn 2026-11-17, xem "Buổi tiếp theo" trong `learning/frontend.md`): kit đã đổi ở nhánh `feat/teach-back-scenario`, merge trước buổi học kế tiếp.
 2. Dùng mẫu so sánh mới cho vòng duyệt giao diện kế tiếp ở sakubun, ghi lại chỗ còn vướng.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 

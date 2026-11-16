@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi" data-board="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chiến tranh 6: đánh chỗ yếu ở Điện Biên Phủ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style id="kit-css"></style>
+<style id="lesson-css"></style>
+<style id="war-css"></style>
+<style>
+/* Bài 6: không có phần riêng, dùng đủ khung chung và sa bàn. */
+</style>
+</head>
+<body>
+<script type="application/json" id="lesson">{"id":"war-06","subject":"Chiến tranh","title":"Buổi 6: Đánh chỗ yếu, tránh chỗ mạnh","extra":false}</script>
+<script type="application/json" id="battle" data-src="../battles/dien-bien-phu-1954.json"></script>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>Chiến tranh · Buổi 6: Đánh chỗ yếu, tránh chỗ mạnh</span><span id="cnt">1/8</span></div><div class="bar"><span id="bar"></span></div></div>
+  <div id="board"></div>
+
+  <!-- 0. Mở bài: nhìn sa bàn, chưa hỏi gì -->
+  <section class="step on" data-s="0" data-board="p1@0">
+    <h1>Đánh chỗ nào trước?</h1>
+    <p>Lòng chảo Điện Biên Phủ, đầu tháng 3/1954. Khối xanh là cứ điểm Pháp, khối đỏ là pháo của ta.</p>
+    <p>Xoay sa bàn một lúc. Để ý cứ điểm nào đứng gần nhau, cứ điểm nào đứng lẻ.</p>
+    <p class="small muted">Khoảng 10 phút, ít chữ hơn buổi trước.</p>
+    <button class="btn primary next" type="button" data-go="1">Bắt đầu</button>
+  </section>
+
+  <!-- 1. Ôn trộn và nhớ lại, chỉ lần học đầu -->
+  <section class="step" data-s="1" data-part="review">
+    <h2>Ôn nhanh</h2>
+    <p class="small muted">Trả lời theo trí nhớ.</p>
+    <div class="card">
+      <p><b>1.</b> Theo Toàn thư, vì sao thuyền Nam Hán bị lật ở Bạch Đằng năm 938?</p>
+      <div class="q" data-q="W1" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Gió bão lớn làm thuyền lật</button>
+        <button class="opt" type="button">Nước triều rút rất gấp, thuyền mắc vào cọc mà lật úp</button>
+        <button class="opt" type="button">Quân ta lặn xuống đục thủng thuyền</button>
+        <p class="why">Toàn thư chép nước triều rút gấp, thuyền vướng cọc mà lật.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Sử ta và sử Trung Quốc chép khác nhau thế nào về cái chết của Hoằng Tháo?</p>
+      <div class="q" data-q="W3" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Đều chép là chết đuối</button>
+        <button class="opt" type="button">Toàn thư chép bị bắt rồi bị giết; sử Trung Quốc chỉ chép là chết, có sách chép chết đuối</button>
+        <button class="opt" type="button">Toàn thư chép trốn được về nước</button>
+        <p class="why">Tư trị thông giám, Tân ngũ đại sử chỉ chép là chết; Thập quốc xuân thu chép chết đuối.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> BA: hỏi thế nào để biết người dùng đã xử lý việc quên ôn ra sao?</p>
+      <div class="q" data-q="B4" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">"Bạn có hay quên ôn không?"</button>
+        <button class="opt" type="button">Hỏi lần gần nhất họ nhớ ra cần ôn thì đã làm gì, rồi hỏi tiếp điều họ kể</button>
+        <button class="opt" type="button">"Có app nhắc ôn thì bạn có dùng không?"</button>
+        <p class="why">Hỏi chuyện đã xảy ra thật, không hỏi thói quen chung hay tương lai.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>4.</b> Buổi trước: sử chép mưa bão ở Xương Giang. Vì sao trận mưa đè nặng lên quân Minh hơn?</p>
+      <div class="q" data-q="R5" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Vì quân Minh không quen mưa miền núi</button>
+        <button class="opt" type="button">Vì họ đã mất thành Xương Giang, bị chặn đường lương, phải đóng giữa đồng</button>
+        <button class="opt" type="button">Vì mưa chỉ rơi ở chỗ quân Minh đóng</button>
+        <p class="why">Cùng một trận mưa, bên mất chỗ dựa chịu nặng hơn (suy luận từ Toàn thư). Hôm nay mưa còn xuất hiện một lần nữa.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="2" data-need="W1 W3 B4 R5" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 2. Làm chỉ huy -->
+  <section class="step" data-s="2" data-board="p1@0">
+    <h2>Bạn là Đại tướng Võ Nguyên Giáp</h2>
+    <p>Bạn đã đổi sang "đánh chắc, tiến chắc" (buổi 3). Giờ chọn chỗ mở màn.</p>
+    <ul class="know">
+      <li>49 cứ điểm, ba phân khu: Bắc, Trung tâm (Mường Thanh), Nam (Hồng Cúm).</li>
+      <li>Pháo Pháp ở Mường Thanh và Hồng Cúm; 3 tiểu đoàn cơ động chờ ứng cứu.</li>
+      <li>Him Lam (cụm 3 đồi) nằm bên đường 41, đường quân ta tới.</li>
+    </ul>
+    <p><b>Mở màn ở đâu?</b> Bấm "Xem" trước khi chọn.</p>
+    <div class="choose" data-c="d1" data-real="B" data-same="Giống quyết định thật." data-diff="Đại tướng chọn khác. Xem chuyện thật rồi so với cách của bạn.">
+      <div class="row"><button class="opt" type="button" data-v="A"><span><b>A.</b> Đánh thẳng Mường Thanh, nơi có sở chỉ huy</span></button><button class="btn" type="button" data-plan="p1A">Xem</button></div>
+      <div class="row"><button class="opt" type="button" data-v="B"><span><b>B.</b> Đánh cụm phía bắc trước: Him Lam, Độc Lập, Bản Kéo</span></button><button class="btn" type="button" data-plan="p1">Xem</button></div>
+      <div class="row"><button class="opt" type="button" data-v="C"><span><b>C.</b> Vòng xuống đánh Hồng Cúm, cụm lẻ ở cực nam</span></button><button class="btn" type="button" data-plan="p1C">Xem</button></div>
+    </div>
+    <button class="btn primary next" type="button" data-go="3" data-need="d1" disabled>Xem chuyện gì xảy ra</button>
+  </section>
+
+  <!-- 3. Xem chuyện thật, tự để ý -->
+  <section class="step" data-s="3" data-board="p1">
+    <h2>Chuyện gì đã xảy ra</h2>
+    <p class="fb" data-echo="d1"></p>
+    <p>Bấm từng mốc dưới sa bàn. Xong thì xem thử hai cách còn lại.</p>
+    <div class="tracks"><button class="btn" type="button" data-track="p1">Chuyện thật</button><button class="btn" type="button" data-track="p1A">Nếu chọn A</button><button class="btn" type="button" data-track="p1C">Nếu chọn C</button></div>
+    <div class="card"><p>Dùng thước tỷ lệ ở góc sa bàn: Him Lam cách Mường Thanh bao xa, so với cách khối pháo đỏ gần nó nhất? Điều đó giúp ai, bên nào? Một câu thôi.</p><textarea data-key="notice" data-min="3" placeholder="Mình thấy..."></textarea></div>
+    <button class="btn primary next" type="button" data-go="4" data-need="seen-p1 notice" disabled>Tiếp: vì sao</button>
+  </section>
+
+  <!-- 4. Hiểu sau -->
+  <section class="step" data-s="4" data-board="p1">
+    <h2>Chỗ yếu là chỗ mình mạnh hơn hẳn</h2>
+    <p class="fb" data-echo="d1"></p>
+    <div class="card">
+      <p>Him Lam không yếu: sử gọi nó là cụm rất kiên cố, do lính lê dương giữ. Nó yếu <b>trong cả hệ thống</b>: đứng lẻ, cách trung tâm vài km, nên ta dồn được 40 khẩu pháo và cả một đại đoàn vào một tiểu đoàn.</p>
+      <p>Mường Thanh là chỗ mạnh: sở chỉ huy, pháo, quân cơ động. Hồng Cúm cũng lẻ, nhưng xa phía ta tới (suy luận).</p>
+      <p>Mất phân khu Bắc, cửa xuống lòng chảo mở. Rồi ta "bóc vỏ" từng lớp, từ ngoài vào trong.</p>
+    </div>
+    <div class="card small"><p><b>Nguồn</b></p>
+      <p>Nhân Dân, <a href="https://special.nhandan.vn/ngay13_3_1954_chiendichdienbienphu_moman/index.html" target="_blank" rel="noopener">"Ngày 13/3/1954: Chiến dịch Điện Biên Phủ mở màn"</a>: Him Lam 3 đồi bên đường 41, Tiểu đoàn 3, Bán lữ đoàn lê dương 13; nổ súng 17h05, xong 23h30.</p>
+      <p>Nhân Dân, <a href="https://special.nhandan.vn/ngay-14-3-1954-dien-tien-Chien-dich-Dien-Bien-Phu/index.html" target="_blank" rel="noopener">"Ngày 14/3/1954"</a>: Him Lam "rất kiên cố"; Độc Lập do Tiểu đoàn 5/7 Angiêri giữ; mưa làm pháo tới chậm. Dòng thời gian của trang: 15/3 chiếm Độc Lập, 17/3 bức hàng Bản Kéo.</p>
+      <p>Nhân Dân, <a href="https://special.nhandan.vn/bai-hoc-ve-xay-dung-tran-dia-tien-cong-trong-chien-dich-Dien-Bien-Phu/index.html" target="_blank" rel="noopener">"Bài học về xây dựng trận địa tiến công"</a>: 49 cứ điểm, ba phân khu, 3 tiểu đoàn cơ động, pháo ở Mường Thanh và Hồng Cúm.</p>
+      <p>Tạp chí Tòa án nhân dân, <a href="https://tapchitoaan.vn/chien-dich-dien-bien-phu-ba-dot-tan-cong-ac-liet10812.html" target="_blank" rel="noopener">"Ba đợt tấn công ác liệt"</a>, theo hồi ký Đại tướng: 40 khẩu pháo 75 đến 120 ly bắn vào Him Lam.</p>
+      <p>Nhân Dân, <a href="https://special.nhandan.vn/Dai-doan-308-trong-chien-dich-Dien-Bien-Phu/index.html" target="_blank" rel="noopener">"Đại đoàn 308..."</a>: Đại đoàn 312 diệt Him Lam; Độc Lập đêm 14 rạng 15/3.</p>
+      <p>Báo Lào Cai, <a href="https://baolaocai.vn/cung-co-phat-trien-the-tran-va-bo-tri-luc-luong-chuan-bi-tien-cong-dot-2-post381590.html" target="_blank" rel="noopener">đợt 1 (13–17/3)</a>: mở đường xuống lòng chảo. Viettimes, <a href="https://viettimes.vn/dien-bien-phu-mot-chien-thang-co-tam-voc-thoi-dai-post26873.html" target="_blank" rel="noopener">đợt 2 từ 30/3</a> đánh các đồi phía đông. Báo Lâm Đồng, <a href="https://baolamdong.vn/print/210067.html" target="_blank" rel="noopener">lời Đại tá Nguyễn Danh Phương</a>: bóc vỏ từ ngoài vào trong.</p>
+      <p><b>Sử chép khác:</b> sử ta chép Bản Kéo bị bức hàng ngày 17/3; trang <a href="https://www.cheminsdememoire.gouv.fr/en/battle-dien-bien-phu" target="_blank" rel="noopener">Chemins de mémoire</a> của Bộ Quân lực Pháp chép ngày 16/3 hai đại đội đã bỏ một phần Bản Kéo (tên Pháp: Anne-Marie).</p>
+      <p><b>Không lấy từ sử:</b> hai cách A và C là mô phỏng; vị trí trên sa bàn là ước lượng, chỉ địa hình là thật.</p>
+    </div>
+    <button class="btn primary next" type="button" data-go="5">Tiếp</button>
+  </section>
+
+  <!-- 5. Câu hỏi nhanh -->
+  <section class="step" data-s="5">
+    <h2>Câu hỏi nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Him Lam là cụm rất kiên cố. Vậy vì sao vẫn là "chỗ yếu" để đánh trước?</p>
+      <div class="q" data-q="q1" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Vì thật ra Him Lam ít công sự, sách nói quá lên</button>
+        <button class="opt" type="button">Vì nó đứng lẻ, xa trung tâm: ta dồn được sức mạnh hơn hẳn ngay tại đó, còn trung tâm khó cứu kịp</button>
+        <button class="opt" type="button">Vì Him Lam do lính Thái giữ nên dễ hàng</button>
+        <p class="why">Yếu hay mạnh là so với sức mình dồn được tại chỗ đó, lúc đó. Lính Thái là ở Bản Kéo, không phải Him Lam.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Chọn đánh hết phân khu Bắc trước (13–17/3), rồi mới tới dãy đồi phía đông. Đó là quyết định ở tầng nào?</p>
+      <div class="q" data-q="q2" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Chiến lược</button>
+        <button class="opt" type="button">Chiến dịch</button>
+        <button class="opt" type="button">Chiến thuật</button>
+        <p class="why">Đây là xếp thứ tự các trận trong một đợt đánh. Đánh Him Lam đêm 13/3 ra sao là chiến thuật; vì sao chọn mở mặt trận ở Điện Biên Phủ là chiến lược.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="6" data-need="q1 q2" disabled>Tiếp</button>
+  </section>
+
+  <!-- 6. Tự nói lại theo tình huống -->
+  <section class="step" data-s="6">
+    <h2>Tự nói lại</h2>
+    <div class="say ask-from" data-who="Lan, em họ đang ôn sử lớp 12"><b>Lan nhắn</b>Anh ơi, sách ghi Him Lam là cứ điểm kiên cố lắm. Thế sao Đại tướng lại đánh nó đầu tiên, không chọn chỗ dễ hơn?</div>
+    <p>Trả lời Lan 2–3 câu, như nhắn tin.</p>
+    <textarea data-key="teach" data-min="5" placeholder="Vì..."></textarea>
+    <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Kiên cố thật, nhưng Him Lam đứng lẻ ở phía bắc, cách trung tâm vài km, lại chặn đúng đường quân mình vào. Đánh nó thì mình dồn được 40 khẩu pháo và cả một đại đoàn vào một tiểu đoàn, trung tâm cứu không kịp. Chỗ yếu không phải chỗ ít lính nhất, mà là chỗ mình mạnh hơn hẳn ngay tại đó. Mất cụm phía bắc thì cửa xuống lòng chảo mở, rồi bóc dần từ ngoài vào.</div></div>
+    <button class="btn primary next" type="button" data-go="7" data-need="teach" disabled>Tiếp</button>
+  </section>
+
+  <!-- 7. Góp ý, xong buổi -->
+  <section class="step" data-s="7">
+    <h2>Góp ý buổi này</h2>
+    <div class="card">
+      <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
+      <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Ít chữ hơn buổi 5</b><div class="seg full" data-f="method"><button type="button" data-v="thích hơn" aria-pressed="false">Thích hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="kém hơn" aria-pressed="false">Kém hơn</button></div></div>
+      <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+    </div>
+    <button class="btn primary next" type="button" id="finish">Xong buổi học</button>
+    <p class="done-msg" id="done-msg" role="status"></p>
+    <button class="btn next hide" type="button" id="copy">Chép kết quả</button>
+  </section>
+</div>
+
+<script id="kit-js"></script>
+<script id="lesson-js"></script>
+<script id="war-js"></script>
+<script>
+/* Bài 6 không có phần riêng. */
+</script>
+<script id="lesson-kit"></script>
+</body>
+</html>

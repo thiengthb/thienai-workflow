@@ -412,6 +412,193 @@
      "keepLines": true
     }
    ]
+  },
+  "p1": {
+   "label": "Chuyện thật",
+   "tag": "real",
+   "preview": 1,
+   "keys": [
+    {
+     "date": "đầu 3/1954",
+     "title": "Trước giờ nổ súng",
+     "text": "49 cứ điểm chia ba phân khu: Bắc (Him Lam, Độc Lập, Bản Kéo), Trung tâm (Mường Thanh), Nam (Hồng Cúm). Pháo Pháp đặt ở Mường Thanh và Hồng Cúm, có 3 tiểu đoàn cơ động sẵn sàng ứng cứu.",
+     "src": "Nhân Dân, \"Bài học về xây dựng trận địa tiến công\"",
+     "show": [
+      "hq",
+      "a1",
+      "himlam",
+      "doclap",
+      "bankeo",
+      "hongcum",
+      "gE",
+      "gNE",
+      "gN",
+      "gW"
+     ]
+    },
+    {
+     "date": "kế hoạch",
+     "title": "Đánh cụm phía bắc trước",
+     "text": "Mở màn bằng Him Lam, rồi Độc Lập, rồi Bản Kéo. Chưa đụng tới trung tâm.",
+     "src": "Nhân Dân, \"Ngày 13/3/1954: Chiến dịch Điện Biên Phủ mở màn\"",
+     "lines": [
+      {
+       "kind": "attack",
+       "pts": [[21.428,103.05],[21.41,103.038]]
+      },
+      {
+       "kind": "attack",
+       "pts": [[21.455,103.03],[21.437,103.023]]
+      },
+      {
+       "kind": "attack",
+       "pts": [[21.42,102.982],[21.41,102.994]]
+      }
+     ]
+    },
+    {
+     "date": "13/3, 17h05",
+     "title": "Him Lam",
+     "text": "40 khẩu pháo bắn cùng lúc vào Him Lam, cụm 3 đồi do một tiểu đoàn lê dương giữ. 23h30 thì xong.",
+     "src": "Nhân Dân 13/3; Tạp chí Tòa án nhân dân, theo hồi ký Đại tướng Võ Nguyên Giáp",
+     "hit": [
+      "himlam"
+     ],
+     "lose": [
+      "himlam"
+     ],
+     "lines": [
+      {
+       "kind": "attack",
+       "pts": [[21.428,103.05],[21.41,103.038]]
+      }
+     ],
+     "focus": [21.407,103.036]
+    },
+    {
+     "date": "đêm 14 rạng 15/3",
+     "title": "Độc Lập",
+     "text": "Trời mưa, pháo kéo từ Him Lam sang tới chậm nên phải hoãn giờ xung phong. Rạng sáng 15/3 ta chiếm Độc Lập.",
+     "src": "Nhân Dân, \"Ngày 14/3/1954\"",
+     "lose": [
+      "doclap"
+     ],
+     "lines": [
+      {
+       "kind": "attack",
+       "pts": [[21.455,103.03],[21.437,103.023]]
+      }
+     ],
+     "focus": [21.434,103.021]
+    },
+    {
+     "date": "17/3",
+     "title": "Bản Kéo",
+     "text": "Bản Kéo, do lính Thái giữ, hàng mà không cần đánh lớn. Phân khu Bắc mất hết.",
+     "src": "Nhân Dân (dòng thời gian 17/3); nguồn Pháp chép ngày khác, xem mục Nguồn",
+     "lose": [
+      "bankeo"
+     ],
+     "focus": [21.408,102.996]
+    },
+    {
+     "date": "sau 17/3",
+     "title": "Cửa phía bắc đã mở",
+     "text": "Đường xuống lòng chảo thông. Đợt 2 (từ 30/3) đánh dãy đồi phía đông, sát trung tâm.",
+     "src": "Báo Lào Cai; Viettimes",
+     "lines": [
+      {
+       "kind": "attack",
+       "pts": [[21.395,103.045],[21.386,103.024]]
+      }
+     ],
+     "focus": [21.39,103.02]
+    }
+   ]
+  },
+  "p1A": {
+   "label": "Nếu đánh thẳng Mường Thanh",
+   "tag": "sim",
+   "preview": 1,
+   "keys": [
+    {
+     "same": "p1:0"
+    },
+    {
+     "date": "kế hoạch",
+     "title": "Đánh thẳng trung tâm",
+     "text": "Mô phỏng. Hai mũi từ bắc và đông đổ xuống Mường Thanh, bỏ qua cụm phía bắc.",
+     "src": "Không có trong sử, chỉ là lựa chọn để so",
+     "lines": [
+      {
+       "kind": "attack",
+       "pts": [[21.445,103.014],[21.393,103.016]]
+      },
+      {
+       "kind": "attack",
+       "pts": [[21.397,103.048],[21.388,103.021]]
+      }
+     ]
+    },
+    {
+     "date": "phỏng đoán",
+     "title": "Lọt giữa ba phía",
+     "text": "Phỏng đoán: quân ta qua cánh đồng trống, bị pháo cả Mường Thanh lẫn Hồng Cúm bắn, cụm phía bắc còn nguyên sau lưng, 3 tiểu đoàn cơ động ra phản kích.",
+     "src": "Suy luận từ bố trí trong Nhân Dân, \"Bài học về xây dựng trận địa tiến công\"",
+     "hit": [
+      "hq"
+     ],
+     "lines": [
+      {
+       "kind": "attack",
+       "pts": [[21.445,103.014],[21.393,103.016]]
+      },
+      {
+       "kind": "retreat",
+       "pts": [[21.393,103.016],[21.425,103.014]]
+      }
+     ],
+     "focus": [21.39,103.016]
+    }
+   ]
+  },
+  "p1C": {
+   "label": "Nếu đánh Hồng Cúm trước",
+   "tag": "sim",
+   "preview": 1,
+   "keys": [
+    {
+     "same": "p1:0"
+    },
+    {
+     "date": "kế hoạch",
+     "title": "Vòng xuống phía nam",
+     "text": "Mô phỏng. Đi vòng qua phía tây lòng chảo để đánh Hồng Cúm, cụm lẻ ở cực nam.",
+     "src": "Không có trong sử, chỉ là lựa chọn để so",
+     "lines": [
+      {
+       "kind": "attack",
+       "pts": [[21.44,102.975],[21.38,102.972],[21.342,103]]
+      }
+     ]
+    },
+    {
+     "date": "phỏng đoán",
+     "title": "Lẻ, nhưng xa mình",
+     "text": "Phỏng đoán: Hồng Cúm cũng đứng lẻ, nhưng ở xa phía quân ta tới. Đường đi và đường tiếp tế dài, cụm phía bắc vẫn chặn đường 41 sau lưng, pháo Hồng Cúm vẫn bắn được.",
+     "src": "Suy luận từ vị trí các phân khu (Nhân Dân)",
+     "hit": [
+      "hongcum"
+     ],
+     "lines": [
+      {
+       "kind": "attack",
+       "pts": [[21.44,102.975],[21.38,102.972],[21.342,103]]
+      }
+     ],
+     "focus": [21.35,103]
+    }
+   ]
   }
  },
  "sources": [
