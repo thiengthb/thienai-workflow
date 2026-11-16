@@ -60,7 +60,7 @@ AI ghi sau mỗi buổi (nháp từ `artifacts/lesson/after-lesson.mjs`), xóa d
 
 ## Buổi tiếp theo
 - Buổi 8 (sau Chiến tranh 6): AI đề xuất, thien chưa chọn. Chặng 1 chỉ còn bài so sánh mù, nên buổi 8 làm luôn bài đó nếu rơi vào khoảng 2026-11-22: chấm lại các màn đã xem ở buổi 1–7 và nói vì sao bằng các ý đã học. Phần nhớ lại nên hỏi lại đúng hai chỗ vướng của buổi 7: hai nút đặc là lỗi gì, và câu hỏi đầu tiên trước khi sửa một màn.
-- Phần tự nói lại: thien thấy khó và tốn thời gian (buổi 7), muốn thử cách khác. AI đã đưa các phương án trong chat sau buổi 7 ngày 2026-11-17; chờ thien chọn. Đổi cách là đổi kit (`lesson.js`), dùng cho mọi môn, nên làm ở PR kit riêng. Lưu ý: tự nhớ ra tốn sức là có chủ ý (tự trả lời giúp nhớ hơn đọc lại, xem `README.md`), nên cách mới phải bớt khó ở chỗ bắt đầu, không bỏ hẳn phần tự nhớ.
+- Phần tự nói lại, cách mới (thien chọn 2026-11-17, phương án C): giải thích cho một người trong tình huống cụ thể trên màn vừa sửa (ví dụ nhắn Minh vì sao màn đổi như vậy), thay cho câu hỏi chung chung. Lý do của thien: "câu hỏi chung chung đúng là làm mình bí thật, tình huống cụ thể sẽ làm mình tự tổng hợp kiến thức nhanh hơn". Các phương án bị bỏ: câu mở đầu có chỗ trống (gợi sẵn nửa đáp án), sắp thẻ rồi viết một câu (chỉ nhận ra, không tự nhớ ra), nói thay gõ (mic chưa chạy trên điện thoại). Đổi kit `lesson.js` cho mọi môn ở PR riêng, chưa làm.
 - Khóa nút "Xem bản của Claude" tới khi đã viết: buổi 7 thien tự viết trước mà không cần khóa, nên chưa cần làm.
 - Giữ: bàn thử, nhìn 5 giây, bản "đẹp hơn mà sai", 4 câu gọi tên lỗi trộn các ý, mục nguồn và mức chắc chắn.
 - Chủ nhật 2026-11-22: 15 phút so sánh mù lại các màn đã xem, chốt thử nghiệm, và đề xuất mở rộng đường học frontend sang phần kỹ thuật.

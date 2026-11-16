@@ -27,7 +27,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 - Gói buổi `artifacts/lesson/prepare-lesson.mjs` thay cho việc đọc cả README, file môn và thẻ khi nhắn "học"; file môn chỉ giữ 3 dòng nhật ký, dòng cũ sang `learning/<môn>/log.md`. Luồng "học" 78,7 KB còn 64,0 KB và không tăng theo số buổi (đợt 2, PR #81)
 
 ## Việc tiếp theo
-1. Buổi học kế tiếp: Chiến tranh 6 (đánh chỗ yếu, tránh chỗ mạnh), rồi Frontend 8 (so sánh mù, mốc 2026-11-22). Frontend 7 đã học, sau buổi ở PR #92. thien chọn cách mới cho phần tự nói lại (phương án trong chat sau buổi Frontend 7), rồi đổi kit ở PR riêng.
+1. Buổi học kế tiếp: Chiến tranh 6 (đánh chỗ yếu, tránh chỗ mạnh), rồi Frontend 8 (so sánh mù, mốc 2026-11-22). Frontend 7 đã học, sau buổi ở PR #92. Phần tự nói lại đổi sang giải thích cho một người trong tình huống cụ thể (thien chọn 2026-11-17, xem "Buổi tiếp theo" trong `learning/frontend.md`): đổi kit ở PR riêng, trước buổi học kế tiếp.
 2. Dùng mẫu so sánh mới cho vòng duyệt giao diện kế tiếp ở sakubun, ghi lại chỗ còn vướng.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
