@@ -43,7 +43,7 @@ Tìm hiểu ngày 2026-11-12, trước buổi làm quen.
 | 2 | Ba tầng: chiến lược, chiến dịch, chiến thuật | Cả cuộc chiến, một đợt đánh, một trận | Đã học ở buổi 3 |
 | 3 | Địa hình và thời tiết | Sông, núi, mùa, thủy triều quyết định đánh ở đâu, lúc nào | Đã học ở buổi 5 (chạm ở buổi 1) |
 | 4 | Hậu cần | Lương thực, đạn dược, đường tiếp tế; quân đói thì không đánh được | Đã học ở buổi 4 |
-| 5 | Đánh chỗ yếu, tránh chỗ mạnh | Dùng điểm mạnh của mình vào điểm yếu của bên kia | Đã chạm ở buổi 1 |
+| 5 | Đánh chỗ yếu, tránh chỗ mạnh | Dùng điểm mạnh của mình vào điểm yếu của bên kia | Đã học ở buổi 6 (chạm ở buổi 1) |
 | 6 | Bất ngờ và lừa địch | Giả thua, giấu quân, đánh lúc không ai ngờ | Đã chạm ở buổi 1 |
 | 7 | Tinh thần | Quân bỏ chạy thường vì sợ chứ không phải vì hết người | |
 | 8 | Vũ khí và công nghệ | Cung nỏ, thuốc súng, xe tăng, máy bay đổi cách đánh thế nào | |
@@ -55,23 +55,22 @@ Nhật ký cũ hơn ở [war/log.md](war/log.md).
 
 | Buổi | Ngày | Ý chính | Kết quả |
 |---|---|---|---|
-| 4 | 2026-11-12 | Hậu cần, buổi nhẹ: đoán đánh chắc cần thêm bao nhiêu đạn, gạo; chọn cách lo hậu cần cho mặt trận Điện Biên Phủ ([bài](war/lessons/04-logistics-dien-bien-phu.md)) | 6 phút, độ dài và độ khó "vừa". thien chọn để học sang buổi khác vì đã học nhiều trong ngày, rồi vẫn học ngay tối đó. Đúng câu nhớ lại (đã nối được "bại thì hết vốn") và câu hỏi. Đoán ngược: gạo ×5,5, đạn ×1,5 (thật là đạn gần ×3,5, gạo gần ×2), nên chỗ học được là "đánh chắc thì đạn phình to nhất". Chọn đúng cách thật (huy động sức dân) và mở cả hai mô phỏng. Tự nói lại đúng ý: đánh lâu thì ngày nào cũng nuôi người và nã pháo. Hỏi sau buổi: học xong 10 ý thì học gì tiếp; đã phác chặng 2 trong `roadmap.md` với 4 hướng, đang chờ thien chọn |
 | 4, phần 2 | 2026-11-14 | Hậu cần trên sa bàn 3D: đoán gạo ăn dọc đường khi gánh bộ, chọn cách chở hàng trên đoạn Tuần Giáo đến Điện Biên Phủ ([bài](war/lessons/04-logistics-dien-bien-phu.md)) | 27 phút, độ dài và độ khó "vừa", sa bàn 3D "thích hơn" sơ đồ phẳng; tự thấy hình và nội dung tốt hơn, khó hơn một chút. Đoán đúng "hơn 10 kg" (thật là 24 kg). Đúng câu nhớ lại (đạn tăng mạnh hơn gạo vì ngày nào pháo cũng bắn) và 2/2 câu hỏi. Vẫn xếp "phá Khâm, Liêm, vây Ung" là một trận: chỗ vướng ở hai tầng dưới còn đó. Chọn A (dồn vào ô tô), mở hết cả ba hướng. Tự nói lại đủ lõi: thêm người gánh là thêm miệng ăn; ghép nhiều cách, ô tô làm chính, đoạn khó dùng xe thồ, thêm thuyền bè và lấy tại chỗ. Còn thiếu: xe thồ không chỉ để đi đoạn khó mà còn chở gấp hơn 10 lần một người gánh, và việc mở rộng đường. Thấy câu hỏi "để ý gì về 82 km cuối" thiếu bối cảnh: đã hỏi Claude trong bài, và đã sửa câu đó trên trang |
 | 5 | 2026-11-15 | Địa hình và thời tiết: đứng ở phía quân Minh nhìn lòng ải, rồi làm Bình Định vương Lê Lợi chọn chỗ đánh viện binh Liễu Thăng ở ải Chi Lăng 1427 ([bài](war/lessons/05-terrain-chi-lang-1427.md)) | Thấy "dài" và "khó", nặng hơn các buổi khác: "khá dài và nhiều chữ, mình học lịch sử là nhiều, nhưng cũng có học được sơ sơ tư duy". Thời gian thật không rõ (trang để mở qua đêm). Đúng 2/2 câu ôn (lần này nói đúng xe đạp thồ chở gấp hơn 10 lần, và câu Ngô Quyền), đúng 3/3 câu hỏi, kể cả tách "một trận" với "một đợt đánh" khi hai việc đặt cạnh nhau. Ở phía quân Minh, lo nhất bị phục trên núi. Chọn đúng cách thật (B, phục trong lòng ải), xem hết cả ba hướng. Câu để ý: "cách nhau khoảng 30 km" (trên sa bàn chỉ vài km, đọc nhầm thước tỷ lệ hoặc nhầm với quãng đường thật) và "giữa là vách núi hẹp". Tự nói lại đủ cả ba lớp: đội hình kéo dài nên đánh đầu thì đuôi không thấy, ta thấy địch mà địch không thấy ta, đồng lầy, địch vội nên chịu đi vào; tự rút ra "dùng địa hình biến điểm mạnh thành điểm yếu". Chưa nhắc tới thời tiết (mưa bão ở Xương Giang) |
+| 6 | 2026-11-17 | Đánh chỗ yếu, tránh chỗ mạnh: làm Đại tướng Võ Nguyên Giáp chọn chỗ mở màn đợt 1 Điện Biên Phủ, 13–17/3/1954 ([bài](war/lessons/06-weak-point-dien-bien-phu.md)) | 14 phút, độ dài và độ khó "vừa", ít chữ hơn buổi 5 "thích hơn" ("bài hôm nay đỡ hơn một xíu"). Đúng 4/4 câu ôn, kể cả câu mưa ở Xương Giang; đúng 2/2 câu hỏi, kể cả câu tầng không kèm mẹo (chọn đúng "chiến dịch"). Chọn đúng cách thật (B), xem trước và xem hết cả ba hướng. Câu để ý lần này đọc thước: Him Lam cách Mường Thanh "khoảng 2 cây số hơn", pháo ta "khoảng 1 cây" (trên sa bàn khoảng 3 km và 2 km, lệch ít nhưng so đúng chiều), tự rút ra ta tới dễ, Pháp cứu khó. Tự nói lại có "đứng lẻ, xa trung tâm" và thứ tự từ ngoài vào, chưa nói ta dồn được lực mạnh hơn hẳn ngay tại đó (40 khẩu pháo, một đại đoàn đánh một tiểu đoàn); Claude trong trang đã chỉ ra vế thiếu này. Không xem bản mẫu trước khi viết |
 
 ## Chỗ còn vướng
 AI ghi sau mỗi buổi (nháp từ `artifacts/lesson/after-lesson.mjs`), xóa dòng khi thien đã làm đúng ở buổi sau. Trang buổi tới đưa các dòng này cho Claude khi thien hỏi, và AI dùng chúng cho phần nhớ lại.
 
-- 2026-11-14, buổi 4: câu hỏi mở kiểu “bạn để ý thấy gì” mà không nói rõ nhìn vào đâu, so với cái gì thì thien không biết trả lời gì (“câu hỏi khó hiểu, thiếu context”). Câu mở phải chỉ rõ chỗ nhìn và gợi một cách so sánh
-- 2026-11-15, buổi 5: đọc khoảng cách trên sa bàn là "khoảng 30 km" trong khi trên đó chỉ vài km (thước tỷ lệ ở góc dưới). Câu để ý có hỏi về khoảng cách thì nhắc nhìn thước
-- 2026-11-15, buổi 5: tự nói lại chưa nhắc thời tiết; ý "cùng một trận mưa, bên mất chỗ dựa chịu nặng hơn" mới chỉ đúng ở câu trắc nghiệm
-- 2026-11-15, buổi 5: thấy bài dài, nhiều chữ, nặng hơn các buổi khác. Buổi chiến tranh sau: ít chữ hơn hẳn (mỗi mốc ngắn, bớt một bước), để hình và ký hiệu nói
+- 2026-11-15, buổi 5: tự nói lại chưa nhắc thời tiết; ý "cùng một trận mưa, bên mất chỗ dựa chịu nặng hơn" mới chỉ đúng ở câu trắc nghiệm (buổi 6 đúng lại ở câu ôn)
+- 2026-11-17, buổi 6: tự nói lại nói đúng "đứng lẻ, xa trung tâm" nhưng chưa nói ta được gì: dồn được lực mạnh hơn hẳn ngay tại đó. "Chỗ yếu" còn đang hiểu là vị trí, chưa là so sánh lực lượng hai bên tại một chỗ
+- 2026-11-17, buổi 6: đọc thước tỷ lệ đã gần đúng nhưng ước khoảng cách ngắn hơn thật (2 km so với khoảng 3 km). Câu để ý có khoảng cách thì vẫn nhắc nhìn thước
 
 ## Buổi tiếp theo
-- Buổi 6: ý 5 "Đánh chỗ yếu, tránh chỗ mạnh" (thien chọn học riêng ngày 2026-11-14). Gợi ý một trận Việt Nam chưa dùng, có nguồn gốc tốt. Kiểm nguồn theo luật 10, gọi tên theo luật 12.
-- **Làm nhẹ hơn buổi 5:** thien thấy buổi 5 dài, nhiều chữ, nặng. Mỗi mốc trên sa bàn tối đa 2–3 câu, phần "Biết lúc đó" tối đa 3 dòng, bớt bước "đứng ở phía bên kia" (thien chấm "như nhau"), chi tiết sử chép khác nhau dồn xuống mục "Nguồn". Mục tiêu khoảng 10 phút.
-- Câu nhớ lại (đặt trong `data-part="review"`): ở Xương Giang, vì sao cùng một trận mưa mà quân Minh chịu nặng hơn (mất thành, bị chặn đường lương), vì buổi 5 tự nói lại chưa nhắc thời tiết.
-- Hai tầng dưới: buổi 5 đã tách đúng khi đặt cạnh nhau kèm mẹo "mấy chỗ, bao lâu". Buổi sau hỏi một câu không kèm mẹo để xem đã tự dùng được chưa.
-- Câu "để ý thấy gì" có liên quan khoảng cách thì nhắc nhìn thước tỷ lệ ở góc sa bàn.
-- Còn lại của chặng 1 sau buổi 6: ý 6 bất ngờ và lừa địch, ý 7 tinh thần, 8 vũ khí và công nghệ, 9 sương mù chiến tranh, 10 chiến tranh nhân dân và du kích. Xong chặng 1 thì sang chặng 2: đi sâu một chiến dịch từ đầu đến cuối (thien chọn 2026-11-12, xem `roadmap.md`).
+- Buổi 7: ý 6 "Bất ngờ và lừa địch" (theo thứ tự thien xếp). Gợi ý một trận Việt Nam chưa dùng, có nguồn gốc tốt. Kiểm nguồn theo luật 10, gọi tên theo luật 12.
+- Trận mới cần độ cao thật: máy cloud không tải được AWS Terrain Tiles (s3.amazonaws.com bị chặn, 2026-11-17). Chạy `artifacts/war/fetch-terrain.mjs` trên laptop của thien, hoặc thien mở tên miền đó trong Settings > Capabilities, hoặc dùng lại địa hình có sẵn (Bạch Đằng không có; có Chi Lăng, Điện Biên Phủ). Buổi 6 dùng lại Điện Biên Phủ.
+- **Giữ độ dài như buổi 6** (thien chấm "thích hơn", 14 phút): 8 màn, mỗi mốc 2–3 câu, "Biết lúc đó" tối đa 3 dòng, chi tiết sử chép khác nhau dồn xuống "Nguồn".
+- Câu nhớ lại (đặt trong `data-part="review"`): Him Lam kiên cố mà vẫn là chỗ yếu, vì ở đó ta dồn được gì so với quân giữ (vế buổi 6 tự nói lại còn thiếu).
+- Tự nói lại tiếp tục kiểu một người nhắn hỏi trong tình huống cụ thể; câu để ý chỉ rõ chỗ nhìn và cách so sánh như buổi 6.
+- Còn lại của chặng 1 sau buổi 7: ý 7 tinh thần, 8 vũ khí và công nghệ, 9 sương mù chiến tranh, 10 chiến tranh nhân dân và du kích. Xong chặng 1 thì sang chặng 2: đi sâu một chiến dịch từ đầu đến cuối (thien chọn 2026-11-12, xem `roadmap.md`).
 - Không xếp quá 2 buổi một ngày: hôm 2026-11-12 thien học 4 buổi chiến tranh cộng BA 2 và tự nói là không theo kịp.

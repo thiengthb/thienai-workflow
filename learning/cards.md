@@ -37,10 +37,12 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | W16 | Chiến tranh | Ở Xương Giang có mưa to gió lớn. Vì sao trận mưa đè nặng lên quân Minh hơn quân ta? | [bài 5](war/lessons/05-terrain-chi-lang-1427.md) | 1 | 2026-11-16 |
 | W11 | Chiến tranh | Vì sao hậu cần Điện Biên Phủ không dồn hết vào xe ô tô? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 2 | 2026-11-20 |
 | F9 | Frontend | Ngoài khối màu to, hai thứ nhỏ nào cũng hay giành mắt mà dễ bị bỏ sót? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 2 | 2026-11-18 |
-| W1 | Chiến tranh | Theo Toàn thư, vì sao thuyền Nam Hán bị lật ở Bạch Đằng năm 938? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
+| W1 | Chiến tranh | Theo Toàn thư, vì sao thuyền Nam Hán bị lật ở Bạch Đằng năm 938? | [bài 1](war/lessons/01-bach-dang-938.md) | 2 | 2026-11-20 |
 | W2 | Chiến tranh | Vì sao Ngô Quyền không đem thuyền ra chặn thẳng ở cửa biển? | [bài 1](war/lessons/01-bach-dang-938.md) | 2 | 2026-11-18 |
-| W3 | Chiến tranh | Toàn thư và sử Trung Quốc chép khác nhau thế nào về cái chết của Hoằng Tháo? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
-| B4 | BA | Hỏi thế nào để biết người dùng đã xử lý việc quên ôn ra sao? | [BA bài 2](ba/lessons/02-user-interviews.md) | 1 | 2026-11-13 |
+| W3 | Chiến tranh | Toàn thư và sử Trung Quốc chép khác nhau thế nào về cái chết của Hoằng Tháo? | [bài 1](war/lessons/01-bach-dang-938.md) | 2 | 2026-11-20 |
+| W17 | Chiến tranh | Him Lam là cụm rất kiên cố. Vì sao Đại tướng Võ Nguyên Giáp vẫn chọn đánh nó đầu tiên ở Điện Biên Phủ? | [bài 6](war/lessons/06-weak-point-dien-bien-phu.md) | 1 | 2026-11-18 |
+| W18 | Chiến tranh | Đợt 1 Điện Biên Phủ (13–17/3/1954) đánh những cứ điểm nào, và mở ra được gì? | [bài 6](war/lessons/06-weak-point-dien-bien-phu.md) | 1 | 2026-11-18 |
+| B4 | BA | Hỏi thế nào để biết người dùng đã xử lý việc quên ôn ra sao? | [BA bài 2](ba/lessons/02-user-interviews.md) | 2 | 2026-11-20 |
 | B5 | BA | Vì sao tránh hỏi “bạn cũng thấy thông báo là tốt nhất đúng không?” | [BA bài 2](ba/lessons/02-user-interviews.md) | 1 | 2026-11-13 |
 | B6 | BA | Người dùng vừa kể bỏ ôn 4 ngày. Hỏi tiếp “có nút ôn nhanh 5 phút thì bạn dùng không?” sai ở đâu, và nên hỏi gì? | [BA bài 2](ba/lessons/02-user-interviews.md) | 2 | 2026-11-19 |
 | B7 | BA | Capstone cần nối vào cổng đăng nhập của trường. Ai cần gặp sớm nhất, vì sao? | [BA bài 3](ba/lessons/03-stakeholders.md) | 1 | 2026-11-17 |

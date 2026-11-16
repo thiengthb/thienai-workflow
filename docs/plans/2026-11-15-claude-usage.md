@@ -73,6 +73,7 @@ Xong khi: bảng trong file này có số của cả 4 thí nghiệm, mỗi cái
 - [x] Thí nghiệm 2, dừng lâu (xong 2026-11-15: dừng khoảng 10 phút 2 lần, hơn 65 phút 2 lần; ở cả 4 lần, ghi cache cho thấy lịch sử không bị ghi lại sau khi dừng): trong một chat đang làm, chạy `explain-usage`, rồi dừng hẳn (không gửi gì trong chat đó, không chạy việc khác ở project đó), gửi một tin ngắn, chạy lại; phần ghi cache tăng bao nhiêu so với lịch sử của chat. Làm với hai khoảng dừng: khoảng 10 phút và hơn 65 phút, vì claude.ai có thể dùng cache 5 phút hay 1 giờ.
 - [x] Thí nghiệm 3, connector (xong 2026-11-16: 3 lần, theo `explain-usage` và Settings đều không thấy tắt connector giảm usage): cùng một việc khởi động khi bật và khi tắt các connector không dùng; so phần đọc lại trung bình mỗi lượt.
 - [ ] Thí nghiệm 4, sau buổi học: hai buổi làm "sau buổi" ngay trong chat dựng bài, hai buổi làm ở chat mới; so usage quy đổi và chất lượng ghi (thien chấm bản ghi có đủ ý không).
+  - Lần 3 (2026-11-17, chat dựng bài Chiến tranh 6, nick tnt697): khởi động và dựng bài từ 63% lên 71% phiên (tuần 56% lên 58%); "sau buổi" làm ngay trong chat đó, bắt đầu từ 71%, số sau đó chờ thien gửi ảnh Settings.
 
 ### 2. Khởi động rẻ
 Xong khi: thí nghiệm 1 lặp lại cho thấy khởi động còn tối đa 4 lượt.
