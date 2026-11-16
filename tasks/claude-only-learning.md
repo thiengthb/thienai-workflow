@@ -1,7 +1,7 @@
 # Học chỉ bằng Claude: bỏ phần Codex, kế hoạch tối ưu usage cho Claude
 
 Repo: thiengthb/thienai-workflow · Nhánh: main · PR: không
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaBthJ6GiVht9SkWYK · Cập nhật: 2026-11-16T15:49Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaBthJ6GiVht9SkWYK · Cập nhật: 2026-11-16T15:56Z
 
 ## thien muốn gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi, vì chỉ có mỗi claude làm thỏa mãn phần giao diện artifact cho mình. Nên bạn lên kế hoạch có thể tập trung tối ưu phần này. Và chắc chắn bạn đã nghiên cứu và lên phương án đủ kĩ để tối ưu chưa" (2026-11-15)
@@ -35,14 +35,13 @@ Tiếp đó: "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiê
 
 - Thí nghiệm 3 lần 3, nửa bật connector (chat mới 2026-11-16 22:39, nick tnt697, chuẩn v3, `--claim`; Figma, Claude in Chrome, Filesystem, GitHub, sakubun đều bật; thien xác nhận không chat nào khác cùng nick chạy): đo ngay sau khi nhận việc, 4 lượt; đọc lại 564.553, ghi cache 32.612, viết ra 2.783; quy đổi khoảng 136 nghìn (khoảng 34 nghìn mỗi lượt); hướng dẫn 62%, tin của thien 15% (2 ảnh), lệnh 14%, gắn repo 6% (gắn 2 lần vì xin quyền ghi bị chặn). Settings trước: phiên 18%, tuần 49% (22:39); sau: 19%, 49% (22:43), tính cả lượt `explain-usage` và lượt trả lời. Chưa ghi vào bảng (chờ nửa tắt connector để ghi chung một PR).
 
-- Thí nghiệm 3 lần 3, nửa tắt connector (chat mới 2026-11-16 22:45, nick tnt697; phiên không có công cụ Chrome, Figma, sakubun): 3 lượt, quy đổi khoảng 92 nghìn (31 nghìn mỗi lượt); Settings 20% → 21%, tuần 49%. Cả hai nửa tăng 1% phiên: tắt connector không giảm thấy được. Đã ghi vào bảng, tick thí nghiệm 1 và 3, sửa STATUS (5/7): nhánh `docs/measure-connectors-3` commit 65463b2, PR #90. Chờ CodeRabbit và thien merge.
+- Thí nghiệm 3 lần 3, nửa tắt connector (chat mới 2026-11-16 22:45, nick tnt697; phiên không có công cụ Chrome, Figma, sakubun): 3 lượt, quy đổi khoảng 92 nghìn (31 nghìn mỗi lượt); Settings 20% → 21%, tuần 49%. Cả hai nửa tăng 1% phiên: tắt connector không giảm thấy được. Đã ghi vào bảng, tick thí nghiệm 1 và 3, sửa STATUS (5/7): nhánh `docs/measure-connectors-3` commit 65463b2, PR #90. CodeRabbit góp 1 ý (đừng viết "tốn như nhau", chỉ nói không giảm thấy được), đã sửa ở 90345cc và trả lời. CI xanh; đã merge theo lời thien (squash b8e4764, 2026-11-16 22:5x), nhánh tự xoá.
 
 ## Bước tiếp theo
-0. Xem góp ý CodeRabbit ở PR #90 (sửa hay trả lời), rồi thien merge.
-1. Khi tiện: thí nghiệm 4 (sau buổi học), việc cuối của checkpoint 1; sau đó mới tính đổi luật `profile/CHATS.md`.
+0. Khi tiện: thí nghiệm 4 (sau buổi học), việc cuối của checkpoint 1; sau đó mới tính đổi luật `profile/CHATS.md`.
 
 ## Đang chờ thien
-- Merge PR #90 (thí nghiệm 3 lần 3). Thí nghiệm 4 vẫn cần thien chụp Settings trước và sau.
+- Thí nghiệm 4 cần thien chụp Settings trước và sau.
 - Dán instructions v3 ở 2 nick còn lại (tnt024, tnt628) nếu chưa dán.
 
 ## Lưu ý
