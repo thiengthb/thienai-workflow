@@ -25,17 +25,17 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | F8 | Frontend | Thẻ trạng thái "Đã thanh toán" nên đặc hay nhạt, vì sao? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 2 | 2026-11-18 |
 | W4 | Chiến tranh | Theo Tống sử, vì sao Quách Quỳ rút quân năm 1077? | [bài 2](war/lessons/02-ly-song-war-1075-1077.md) | 2 | 2026-11-15 |
 | W5 | Chiến tranh | Quảng Nguyên về lại với Đại Việt bằng cách nào? | [bài 2](war/lessons/02-ly-song-war-1075-1077.md) | 2 | 2026-11-19 |
-| W6 | Chiến tranh | Thắng trận và đạt mục tiêu chính trị khác nhau thế nào? Cho một ví dụ. | [bài 2](war/lessons/02-ly-song-war-1075-1077.md) | 1 | 2026-11-13 |
+| W6 | Chiến tranh | Thắng trận và đạt mục tiêu chính trị khác nhau thế nào? Cho một ví dụ. | [bài 2](war/lessons/02-ly-song-war-1075-1077.md) | 2 | 2026-11-20 |
 | W7 | Chiến tranh | Phá Khâm, Liêm rồi vây thành Ung hơn 40 ngày là tầng chiến lược, chiến dịch hay chiến thuật? | [bài 3](war/lessons/03-three-levels-dien-bien-phu.md) | 1 | 2026-11-15 |
 | W8 | Chiến tranh | Vì sao Đại tướng Võ Nguyên Giáp hoãn trận đánh Điện Biên Phủ ngày 26/1/1954? | [bài 3](war/lessons/03-three-levels-dien-bien-phu.md) | 2 | 2026-11-18 |
-| W9 | Chiến tranh | Vì sao "hoãn vài ngày rồi đánh theo kế hoạch cũ" vẫn chưa đủ? | [bài 3](war/lessons/03-three-levels-dien-bien-phu.md) | 1 | 2026-11-13 |
+| W9 | Chiến tranh | Vì sao "hoãn vài ngày rồi đánh theo kế hoạch cũ" vẫn chưa đủ? | [bài 3](war/lessons/03-three-levels-dien-bien-phu.md) | 2 | 2026-11-20 |
 | W10 | Chiến tranh | Khi đổi sang "đánh chắc tiến chắc", đạn và gạo tăng bao nhiêu lần? Thứ nào tăng mạnh hơn, vì sao? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 2 | 2026-11-17 |
 | W12 | Chiến tranh | Gánh bộ đường xa, để 1 kg gạo tới mặt trận thì dọc đường ăn mất bao nhiêu? Xe đạp thồ giảm con số đó bằng cách nào? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 2 | 2026-11-18 |
 | W13 | Chiến tranh | Chỉ huy Pháp tính sai điều gì về hậu cần của bên ta ở Điện Biên Phủ? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 1 | 2026-11-15 |
 | W14 | Chiến tranh | Ở ải Chi Lăng năm 1427, lòng ải hẹp làm đạo quân đông của Liễu Thăng bất lợi ở điểm nào? | [bài 5](war/lessons/05-terrain-chi-lang-1427.md) | 1 | 2026-11-16 |
 | W15 | Chiến tranh | Vì sao chỉ có địa hình hiểm thôi thì chưa đủ để thắng ở Chi Lăng? | [bài 5](war/lessons/05-terrain-chi-lang-1427.md) | 1 | 2026-11-16 |
 | W16 | Chiến tranh | Ở Xương Giang có mưa to gió lớn. Vì sao trận mưa đè nặng lên quân Minh hơn quân ta? | [bài 5](war/lessons/05-terrain-chi-lang-1427.md) | 1 | 2026-11-16 |
-| W11 | Chiến tranh | Vì sao hậu cần Điện Biên Phủ không dồn hết vào xe ô tô? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 1 | 2026-11-13 |
+| W11 | Chiến tranh | Vì sao hậu cần Điện Biên Phủ không dồn hết vào xe ô tô? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 2 | 2026-11-20 |
 | F9 | Frontend | Ngoài khối màu to, hai thứ nhỏ nào cũng hay giành mắt mà dễ bị bỏ sót? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 2 | 2026-11-18 |
 | W1 | Chiến tranh | Theo Toàn thư, vì sao thuyền Nam Hán bị lật ở Bạch Đằng năm 938? | [bài 1](war/lessons/01-bach-dang-938.md) | 1 | 2026-11-13 |
 | W2 | Chiến tranh | Vì sao Ngô Quyền không đem thuyền ra chặn thẳng ở cửa biển? | [bài 1](war/lessons/01-bach-dang-938.md) | 2 | 2026-11-18 |
@@ -48,3 +48,6 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | F10 | Frontend | App ngân hàng có tiền vào màu xanh lá, tiền ra màu đỏ. Màu nhấn nên tránh màu nào, vì sao? | [bài 6](frontend/lessons/06-colour-for-a-whole-app.md) | 1 | 2026-11-16 |
 | F11 | Frontend | Người mù màu đỏ-lục phân biệt tiền vào và tiền ra nhờ gì? Chuẩn nào bắt điều đó? | [bài 6](frontend/lessons/06-colour-for-a-whole-app.md) | 1 | 2026-11-16 |
 | F12 | Frontend | Thiết kế cho người 70 tuổi, cặp màu nào dễ lẫn và nên làm gì? | [bài 6](frontend/lessons/06-colour-for-a-whole-app.md) | 1 | 2026-11-16 |
+| F13 | Frontend | Màn giỏ hàng có "Xóa giỏ hàng" và "Thanh toán" là hai nút đặc cùng màu, cùng cỡ. Lỗi gì, sửa thế nào? | [bài 7](frontend/lessons/07-fix-four-mistakes.md) | 1 | 2026-11-18 |
+| F14 | Frontend | Gặp một màn cấn mắt, câu hỏi đầu tiên trước khi kiểm điểm nhấn, chữ, khoảng cách, màu là gì? | [bài 7](frontend/lessons/07-fix-four-mistakes.md) | 1 | 2026-11-18 |
+| F15 | Frontend | Danh bạ: tên và số của một người cách nhau 16, hai người cũng cách nhau 16. Sửa thành bao nhiêu? | [bài 7](frontend/lessons/07-fix-four-mistakes.md) | 1 | 2026-11-18 |
