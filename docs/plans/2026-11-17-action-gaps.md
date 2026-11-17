@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-17 · Cập nhật: 2026-11-17 �
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 1 đã merge (PR #104), đang kiểm ở 3 chat kế tiếp. Đợt 2: lệnh, bảng file đích, bù thuật ngữ đã merge (PR #106); PR sau buổi Chiến tranh 7 (#107) qua kiểm "Từ mới"; gu đã duyệt, chờ merge thienui PR #8.
-- Còn thiếu: kiểm đợt 1 ở 3 chat kế tiếp; đợt 2: thienui PR #8 merge, sửa lỗi tên trục trước BA 5; đợt 3 ở mốc 2026-12-01.
-- thien cần làm: merge thienui PR #8 (3 dòng gu vào `taste.md`).
+- Đang ở: đợt 1 đã merge (PR #104), đang kiểm ở 3 chat kế tiếp. Đợt 2: lệnh, bảng file đích, bù thuật ngữ đã merge (PR #106); PR sau buổi Chiến tranh 7 (#107) qua kiểm "Từ mới"; gu đã vào thienui `taste.md` (PR #8). Còn sửa lỗi tên trục trước BA 5.
+- Còn thiếu: kiểm đợt 1 ở 3 chat kế tiếp; đợt 2: sửa lỗi tên trục trước BA 5; đợt 3 ở mốc 2026-12-01.
+- thien cần làm: không có.
 
 ## Mục tiêu
 Những gì thien nói với AI (chê, khen, chọn, giao việc) đi tới đúng file và được làm, mà thien không phải nhắc lại hay duyệt thêm.
@@ -52,7 +52,7 @@ Xong khi: ở 3 chat kế tiếp có PR thuộc dòng đầu của `profile/DELE
 Xong khi: PR sau buổi kế tiếp có dòng bảng thuật ngữ (hay "không có từ mới"), thiếu thì `after-lesson --check` báo; lệnh in câu gu của buổi và nơi ghi (hàng chờ gom 2 tuần một PR vào thienui, không có lệnh kiểm); thien mở `taste.md` thấy mục "Đang thử" có gu từ các buổi frontend.
 - [x] `after-lesson.mjs`: in câu gu của buổi và nơi ghi; `--check` đòi file bài có dòng "Từ mới:" và các từ đó có trong `glossary.md`. Ghi một dòng vào "Đã đổi" của [`2026-11-15-lean-learning.md`](2026-11-15-lean-learning.md) để checkpoint 4 ở đó giữ phần kiểm này (PR #106; test trong `.github/scripts/after-lesson.test.mjs`)
 - [x] `learning/README.md` mục Sau buổi thêm bước "từ mới vào bảng thuật ngữ, câu gu vào hàng chờ thienui"; `profile/MAP.md` thêm dòng "Góp ý của thien" trỏ bảng file đích (PR #106; bảng nằm ngay trong `MAP.md`)
-- [ ] Bù một lần: từ mới của 18 buổi vào `glossary.md` (6 từ, PR #106); gu từ nhật ký frontend 1–9 vào `taste.md` mục "Đang thử" qua một PR vào thienui (thien duyệt từng dòng): thien duyệt 5 dòng (2026-11-17): bỏ 1, gộp 2, còn 3 dòng vào thienui PR #8 (chờ merge); buổi 6–9 không có câu gu trong file bài
+- [x] Bù một lần: từ mới của 18 buổi vào `glossary.md` (6 từ, PR #106); gu từ nhật ký frontend 1–9 vào `taste.md` mục "Đang thử" qua một PR vào thienui (thien duyệt từng dòng): thien duyệt 5 dòng (2026-11-17): bỏ 1, gộp 2, còn 3 dòng vào thienui PR #8 (đã merge 2026-11-17); buổi 6–9 không có câu gu trong file bài
 - [ ] Trước buổi BA 5: sửa lỗi tên trục đè thẻ ở lưới 2×2 (PR kit riêng)
 
 ### 3. Cho luật "mỗi milestone" một ngày thật (mốc 2026-12-01)
