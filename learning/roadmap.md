@@ -20,7 +20,7 @@ Xong khi: bài so sánh mù ngày 2026-11-22, thien chấm lại các màn cũ v
 
 ### Chặng 2: Áp vào app của mình
 Xong khi: thien tự sửa được một màn của sakubun hoặc todo và viết được 3 luật cho thienui. Bắt đầu sau mốc 2026-11-22.
-- [ ] Soi một màn của app mình dùng hằng ngày, chọn một chỗ sửa
+- [ ] Soi một màn của app mình dùng hằng ngày, chọn một chỗ sửa (bắt đầu ở buổi 10, 2026-11-17, màn "Xong buổi ôn" của sakubun, [bài](frontend/lessons/10-pick-a-fix-session-summary.md): thấy đúng chỗ cấn nhưng chọn bản đẹp mà sai mục đích; thien muốn xem thêm các màn khác trước khi sửa thật)
 - [x] Chép lại một màn tốt theo đúng con số, rồi nói ra mẹo vừa thấy (làm sớm ở buổi 8, 2026-11-17, trên màn tự dựng, [bài](frontend/lessons/08-copy-a-screen-spacing-scale.md); chặng 2 làm lại với màn thật)
 - [ ] Viết luật đầu tiên cho thienui, kiểm bằng hai màn thật
 

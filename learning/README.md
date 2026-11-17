@@ -42,7 +42,7 @@ Bảng học tuần (số buổi mỗi tuần, thẻ đến hạn, chỗ còn v�
 
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
-| BA 5 (điều kiện hoàn thành cho story của Hà) | 2026-11-17 | BA | **Frontend 10**, rồi Chiến tranh 8 |
+| Frontend 10 (chọn bản sửa cho màn "Xong buổi ôn" của sakubun) | 2026-11-17 | Frontend | **Chiến tranh 8**, rồi Frontend 11 |
 
 ## Khung một buổi, chung cho mọi môn
 
