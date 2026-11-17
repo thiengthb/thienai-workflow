@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync, mkdtempSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
-import { reviewResults, lessonDay, subjects, lessonOf, pageQuestions, stuckPoints, addStuck, draft, checkAfter, checkAll, logRows, addLogRow, trimLog, subjectChecks, trimAll } from '../../artifacts/lesson/after-lesson.mjs';
+import { reviewResults, lessonDay, subjects, lessonOf, pageQuestions, stuckPoints, addStuck, draft, checkAfter, checkAll, logRows, addLogRow, trimLog, subjectChecks, trimAll, newWords, glossaryTerms, draftText } from '../../artifacts/lesson/after-lesson.mjs';
 import { fill as fill0, subjectFile, SAMPLE_CARDS } from '../../artifacts/lesson/make-lesson.mjs';
 const fill = (h, id, file, o = {}) => fill0(h, id, file, { cards: SAMPLE_CARDS, ...o });
 import { addUsage, usageRows, usageSummary } from '../../artifacts/kit/usage.mjs';
@@ -117,6 +117,22 @@ assert.deepEqual(draft({ R: { ...R, review: { B2: { pick: 0, ok: false } }, quiz
   assert.match(dq.stuck[0], /câu ôn “Màu nhấn nên dùng mấy chỗ\?” chọn “Khắp nơi”, đúng là “Một vài chỗ”/);
 }
 
+// Góp ý của thien: câu gu của buổi frontend vào hàng chờ thienui, ghi thêm theo bảng trong MAP.md (kế hoạch action-gaps, đợt 2)
+const d4 = draft({ R: { ...R, notice: 'Mình thích bản thoáng hơn' }, html: tpl, subject: subs.frontend, cards });
+assert.deepEqual([d4.taste, d4.notes], [['Mình thích bản thoáng hơn'], ['hơi dài']]);
+assert.match(draftText(d4), /Câu gu \(chép câu nào là gu vào learning\/frontend\/taste-queue\.md[^\n]*\n- Mình thích bản thoáng hơn/);
+assert.match(draftText(d4), /Ghi thêm của thien[^\n]*\n- hơi dài/);
+assert.deepEqual(draft({ R: { ...R, lesson: 'war-07', notice: 'pháo ở sườn trong' }, html: tpl, subject: subs.war, cards }).taste, [], 'câu để ý của bài chiến tranh không phải gu');
+assert.match(draftText(draft({ R: { ...R, feedback: {} }, html: tpl, subject: subs.war, cards })), /- Không có câu gu trong bản lưu\.\n- Từ mới: file bài cần dòng "Từ mới: a, b"/);
+
+// Từ mới trong file bài và bảng thuật ngữ
+assert.equal(newWords('# Bài 7\n'), null, 'chưa có dòng');
+assert.deepEqual(newWords('Từ mới: không có\n'), []);
+assert.deepEqual(newWords('- **Từ mới:** focal point, user story (câu ba phần).\n'), ['focal point', 'user story']);
+assert.deepEqual(newWords('Từ mới: `_blank`, PR (pull request, yêu cầu gộp); state\n'), ['_blank', 'PR', 'state'], 'giữ dấu _ trong từ, không tách trong ngoặc');
+const gl = glossaryTerms('| Từ | Nghĩa |\n|---|---|\n| PR (pull request) | x |\n| User story | y |\n');
+assert.ok(gl.has('pr') && gl.has('pull request') && gl.has('user story') && !gl.has('từ'));
+
 // Bảng tính năng được dùng
 const head = '# x\n\n| Ngày | Trang | Phút | Hỏi Claude | Claude giải thích câu sai | Claude nhận xét, chấm | Nói thay gõ | Xem Claude làm | Nghe | Tình huống thêm | Ghi chú |\n|---|---|---|---|---|---|---|---|---|---|---|\n';
 let u = addUsage(head, d.usage);
@@ -176,7 +192,7 @@ r = cli('--check', 'frontend-06');
 assert.equal(r.status, 1);
 assert.match(r.stdout, /✗ dòng nhật ký buổi 6[^\n]*đã viết xong phần <…>[\s\S]*✓ bảng "Trạng thái"[\s\S]*✓ dòng của buổi này trong learning\/usage\.md[\s\S]*✓ tối đa 3 dòng nhật ký[\s\S]*✗ dòng nhật ký trong learning\/frontend\.md đã viết xong, không còn chỗ <…> \(buổi 6\)/);
 assert.match(cli('--check', 'frontend-03').stdout, /✓ dòng nhật ký buổi 3/, 'dòng đã chuyển sang log.md vẫn tính');
-writeFileSync(join(T, 'learning/frontend/lessons/06-app-colours.md'), '# Bài 6\n');
+writeFileSync(join(T, 'learning/frontend/lessons/06-app-colours.md'), '# Bài 6\n\nTừ mới: palette\n');
 writeFileSync(join(T, 'learning/frontend.md'), readFileSync(join(T, 'learning/frontend.md'), 'utf8').replace(/^\| 6 \|.*$/m, row(6)));
 writeFileSync(join(T, 'learning/cards.md'), HEAD + cards + d.cardRows.join('\n') + '\n');
 r = cli('--check', 'frontend-06');
@@ -184,6 +200,10 @@ assert.equal(r.status, 1);
 assert.match(r.stdout, /✗ câu trắc nghiệm trong learning\/cards-quiz\.json cho mọi thẻ của bài này \(thiếu F10, F11\)/);
 writeFileSync(join(T, 'learning/cards-quiz.json'), JSON.stringify({ F10: { opts: ['a', 'b'], a: 0, why: 'w' }, F11: { opts: ['a', 'b', 'c'], a: 2, why: 'w' } }));
 writeFileSync(join(T, 'learning/roadmap.md'), '# Lộ trình\n\n## Frontend\n- [x] Màu (buổi 6, 2026-11-15)\n');
+r = cli('--check', 'frontend-06');
+assert.equal(r.status, 1, 'từ mới chưa có trong bảng thuật ngữ');
+assert.match(r.stdout, /✓ file bài có dòng "Từ mới:"[^\n]*\n✗ từ mới của bài đã có trong learning\/glossary\.md \(thiếu: palette\)/);
+writeFileSync(join(T, 'learning/glossary.md'), '| Từ | Nghĩa ngắn | Gặp lần đầu | Đã quen |\n|---|---|---|---|\n| palette | bảng màu | 15/11/2026, Frontend 6 | |\n');
 r = cli('--check', 'frontend-06');
 assert.equal(r.status, 0, r.stdout);
 assert.equal(cli('--check').status, 2, '--check thiếu mã bài thì thoát mã 2');
