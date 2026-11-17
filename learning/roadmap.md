@@ -52,7 +52,7 @@ Xong khi: học đủ 10 ý trên bản đồ, mỗi ý một buổi; thứ tự
 - [x] Hỏi chuyện người dùng (buổi 2, 2026-11-12)
 - [x] Các bên liên quan (buổi 3, 2026-11-16, [bài](ba/lessons/03-stakeholders.md))
 - [x] User story (buổi 4, 2026-11-17, [bài](ba/lessons/04-user-stories.md))
-- [ ] Điều kiện hoàn thành
+- [x] Điều kiện hoàn thành (buổi 5, 2026-11-17, [bài](ba/lessons/05-acceptance-criteria.md))
 - [ ] Vẽ luồng công việc
 - [ ] Xếp ưu tiên
 - [ ] Use case

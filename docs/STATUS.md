@@ -28,7 +28,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 - Kế hoạch dùng Claude tốn ít usage hơn: xong cả 4 checkpoint, luật đổi chat theo số lượt (PR #97), xem lại 2026-12-01.
 
 ## Việc tiếp theo
-1. BA 5 (điều kiện hoàn thành) đã dựng, chờ thien học: [trang](https://claude.ai/artifact/AhriFJ3Yo1QixeRKFG7FB7), nhánh `claude/ba-05-acceptance-criteria`; học xong thì làm sau buổi trên nhánh đó. Kế tiếp Frontend 10 mở chặng 2. BA 5 là lần đo bước ôn tự sinh còn lại (checkpoint 3 của kế hoạch học gọn); chat dựng bài có thêm 2 lượt vì lần gắn repo đầu bị chặn. Trước buổi chiến tranh kế tiếp: sửa "Xem Claude làm" lấy nhầm track của bài khác (`learning/war.md`).
+1. Buổi học kế tiếp: Frontend 10 mở chặng 2, rồi Chiến tranh 8. BA 5 đã học (PR của nhánh `claude/ba-05-acceptance-criteria`, chờ thien merge); BA 6 cần ngắn lại (BA 5 tốn 60 phút, "dài", "khó"). BA 5 là lần đo bước ôn tự sinh còn lại (checkpoint 3 của kế hoạch học gọn): ôn 3 thẻ tự sinh chạy đúng, đúng 3/3. Trước buổi chiến tranh kế tiếp: sửa "Xem Claude làm" lấy nhầm track của bài khác (`learning/war.md`).
 2. Dùng mẫu so sánh cho vòng duyệt giao diện kế tiếp ở sakubun, ghi lại chỗ còn vướng.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 

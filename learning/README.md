@@ -42,7 +42,7 @@ Bảng học tuần (số buổi mỗi tuần, thẻ đến hạn, chỗ còn v�
 
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
-| Chiến tranh 7 (bất ngờ và lừa địch, giấu pháo ở Điện Biên Phủ) | 2026-11-17 | Chiến tranh | **BA 5**, rồi Frontend 10 |
+| BA 5 (điều kiện hoàn thành cho story của Hà) | 2026-11-17 | BA | **Frontend 10**, rồi Chiến tranh 8 |
 
 ## Khung một buổi, chung cho mọi môn
 
