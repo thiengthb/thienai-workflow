@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>User story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style id="kit-css"></style>
+<style id="lesson-css"></style>
+<style id="it-css"></style>
+<style>
+/* Bảng 2×2 không có trục, nên bỏ lề chừa cho tên trục (tránh lỗi tên trục đè thẻ ở BA 3). */
+.zones.grid2.story { margin: 0; }
+.story-line { font-size: 15px; line-height: 1.55; }
+.story-line b { color: var(--accent-ink); }
+.src { font-size: 12.5px; line-height: 1.9; }
+.src a { display: inline-block; padding: 5px 0; }
+</style>
+</head>
+<body>
+<!-- BA 4: user story. Bảng 2×2 không trục: Là / Tôi muốn / Để / Bỏ ra. Tình huống mới (người dùng sakubun) để tập lại bẫy gợi sẵn giải pháp ở bối cảnh lạ (learning/ba.md, "Buổi tiếp theo"). -->
+<script type="application/json" id="lesson">{ "id": "ba-04", "subject": "BA", "title": "User story" }</script>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>BA · User story</span><span id="cnt">1/8</span></div><div class="bar"><span id="bar"></span></div></div>
+
+  <div id="stage">
+    <!-- Bảng ghép story. data-answer: thẻ → ô của bản mẫu. Thẻ "de" ẩn tới khi hỏi đúng câu ở bước phỏng vấn. -->
+    <div class="pane board" data-pane="story" data-hear="3"
+      data-answer='{"ha":"z1","nguoi":"z4","muon":"z2","nut":"z4","de":"z3","dep":"z4","mau":"z4"}'>
+      <div class="bd-area">
+        <div class="zones grid2 story">
+          <button class="zone" type="button" data-z="z1" data-reset><span>Là…</span></button>
+          <button class="zone" type="button" data-z="z2" data-reset><span>Tôi muốn…</span></button>
+          <button class="zone key" type="button" data-z="z3" data-reset><span>Để…</span></button>
+          <button class="zone" type="button" data-z="z4" data-reset><span>Bỏ ra ngoài</span></button>
+        </div>
+        <div class="tray"><span class="label">Các mảnh ghi được</span></div>
+        <button class="bd-card" type="button" data-c="ha" style="--c:#7c3aed"
+          data-say="Ghi từ lời Hà: đi làm cả ngày, tối con ngủ rồi mới học, nằm cạnh con trong phòng tắt đèn."
+          data-why="&quot;Người đi làm, học lúc tối muộn trong phòng tối&quot; nói rõ ai và trong hoàn cảnh nào. Hoàn cảnh này quyết định giải pháp."
+          data-react-z4="Bỏ tôi ra thì story chỉ còn &quot;người dùng&quot;. Ai đọc cũng không biết tôi học lúc nào, ở đâu."><i>1</i>Người đi làm, học lúc tối muộn trong phòng tối</button>
+        <button class="bd-card" type="button" data-c="nguoi" style="--c:#64748b"
+          data-say="Mẫu story nhóm hay chép: &quot;Là người dùng…&quot;."
+          data-why="&quot;Người dùng&quot; ai cũng đúng nên không giúp chọn gì. Thay bằng người cụ thể và hoàn cảnh của họ."
+          data-react-z1="Tôi là &quot;người dùng&quot;. Tôi là ai, học lúc nào? Không ai biết."><i>2</i>Người dùng</button>
+        <button class="bd-card" type="button" data-c="muon" style="--c:#2563eb"
+          data-say="Ghi từ lời Hà: muốn học tiếp được khi phòng đã tắt đèn mà màn không chói."
+          data-why="&quot;Học được khi phòng tối mà màn không chói&quot; là điều Hà muốn làm được, chưa chốt cách làm."
+          data-react-z4="Bỏ phần này thì story không còn việc gì để làm."><i>3</i>Học được khi phòng tắt đèn mà màn không chói</button>
+        <button class="bd-card" type="button" data-c="nut" style="--c:#dc2626"
+          data-say="Lời nhắn đầu tiên của Hà: &quot;App thêm chế độ tối đi.&quot;"
+          data-why="&quot;Thêm nút chế độ tối&quot; là một giải pháp Hà nghĩ ra. Viết nó vào story là chốt cách làm trước khi hiểu vấn đề."
+          data-react-z2="Nhóm làm xong chế độ tối. Hà vẫn thấy chói vì màn đang để sáng hết cỡ, và con vẫn thức."><i>4</i>Thêm nút chế độ tối</button>
+        <button class="bd-card" type="button" data-c="de" data-hidden style="--c:#0f766e"
+          data-say="Hà kể: &quot;Màn sáng là con cựa mình, mình phải tắt máy giữa chừng.&quot;"
+          data-why="&quot;Xong bài 15 phút mà con không thức giấc&quot; là lý do thật. Chỉ lộ ra khi hỏi về một tối cụ thể."
+          data-react-z4="Bỏ tôi thì không ai biết vì sao cần làm, cũng không biết thế nào là xong."><i>5</i>Xong bài 15 phút mà con không thức giấc</button>
+        <button class="bd-card" type="button" data-c="dep" style="--c:#ca8a04"
+          data-say="Một bạn trong nhóm đoán: chắc Hà muốn app đẹp hơn."
+          data-why="&quot;Để app đẹp hơn&quot; là nhóm đoán, Hà không nói vậy. Lý do đoán thì đừng ghi vào story."
+          data-react-z3="Hà không nói tới chuyện đẹp. Nhóm làm giao diện đẹp hơn, Hà vẫn tắt máy giữa chừng."><i>6</i>Để app đẹp hơn</button>
+        <button class="bd-card" type="button" data-c="mau" style="--c:#475569"
+          data-say="Một bạn frontend góp: dùng nền #121212 như Material."
+          data-why="Mã màu là chi tiết làm, quyết sau khi đã chọn cách. Story nói chuyện của người dùng, không nói chuyện code."
+          data-react-z2="Story giờ là việc của frontend, Hà đọc không hiểu, cũng không biết có đúng ý mình không."><i>7</i>Nền màu #121212</button>
+      </div>
+      <div class="say-bar"></div>
+    </div>
+  </div>
+
+  <!-- 0. Mở bài: nghe các mảnh ghi được. Chưa có câu hỏi. -->
+  <section class="step on" data-s="0" data-stage="story@listen">
+    <h1>Hà nhắn: "App thêm chế độ tối đi"</h1>
+    <p class="small muted">Mô phỏng: Hà là một người dùng mới của sakubun. Đích của buổi: biến một lời nhờ thành một user story, câu "Là…, tôi muốn…, để…".</p>
+    <p>Dưới bảng là các mảnh nhóm đã ghi lại. Bấm từng mảnh để nghe nó từ đâu ra. Nghe ít nhất 3 mảnh.</p>
+    <p class="stage-hint"><span class="pc">Bảng ở bên trái.</span><span class="ph">Bảng ở phía trên.</span></p>
+    <button class="btn primary next" type="button" data-go="1" data-need="heard-story" disabled>Bắt đầu</button>
+  </section>
+
+  <!-- 1. Ôn trộn 3 thẻ đến hạn (B5, F1, F2) và nhớ lại BA 3 theo kiểu "ai chặn được" (thẻ B7, learning/ba.md). Chỉ lần học đầu. -->
+  <section class="step" data-s="1" data-part="review">
+    <h2>Ôn nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Nhớ lại BA 3. App đặt phòng lab cần lấy danh sách lớp từ hệ thống của trường. IT trường bảo: "App đó tôi không quan tâm." Gặp IT lúc nào?</p>
+      <div class="q" data-q="B7" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Cuối dự án, lúc cần nối dữ liệu</button>
+        <button class="opt" type="button">Ngay từ đầu, vì họ chặn được việc lấy dữ liệu</button>
+        <button class="opt" type="button">Không cần, họ đã nói không quan tâm</button>
+        <p class="why">Ít quan tâm không có nghĩa là ít quyền. Người chặn được việc thì gặp sớm, kể cả khi họ không dùng app.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Vì sao tránh hỏi "bạn cũng thấy thông báo là tốt nhất đúng không?"</p>
+      <div class="q" data-q="B5" data-a="0" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Câu này gợi sẵn câu trả lời và giải pháp, người ta dễ gật</button>
+        <button class="opt" type="button">Vì hỏi dài quá, người ta ngại trả lời</button>
+        <p class="why">Câu gợi sẵn nhận được cái gật đầu, không nhận được chuyện thật. Lát nữa bạn gặp lại bẫy này với Hà.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> Hai nút cùng cỡ, cùng màu đặt cạnh nhau thì sao?</p>
+      <div class="q" data-q="F1" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Cân đối, nhìn gọn mắt</button>
+        <button class="opt" type="button">Mắt phải dừng lại để chọn, điểm nhấn bị chia đôi</button>
+        <p class="why">Hai thứ bằng nhau thì không thứ nào là "thứ nhất".</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>4.</b> Muốn nút chính nổi hơn mà không thêm màu mới thì làm gì?</p>
+      <div class="q" data-q="F2" data-a="0" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Hạ nút phụ xuống: nút viền nhạt hoặc một dòng chữ</button>
+        <button class="opt" type="button">Làm cả hai nút to hơn và thêm bóng</button>
+        <p class="why">Làm to hay thêm bóng cho cả hai thì chúng vẫn ngang nhau. Hạ cái phụ là cái chính tự nổi.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="2" data-need="B7 B5 F1 F2" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 2. Phỏng vấn trong bối cảnh lạ: hỏi đúng câu thì lộ ra lý do thật (thẻ "Để"). -->
+  <section class="step" data-s="2" data-stage="story@listen">
+    <h2>Hỏi Hà một câu</h2>
+    <p>Hà chỉ nhắn "thêm chế độ tối đi". Trước khi viết gì, bạn hỏi Hà câu nào? Hỏi mấy câu cũng được, xem lời đáp đổi ra sao.</p>
+    <div class="ask" data-ask="ha" data-of="story">
+      <button class="opt" type="button" data-reply="Ừ, có thì tốt. Nhiều app có rồi mà.">"Chị thấy chế độ tối là cách tốt nhất đúng không?"</button>
+      <button class="opt" type="button" data-reply="Màu gì tối tối là được, em chọn đi.">"Chị muốn nền màu đen hay xám đậm?"</button>
+      <button class="opt" type="button" data-reveal="de" data-reply="Tối qua 11 giờ, con ngủ rồi chị mới mở app, nằm cạnh con. Màn sáng quá, con cựa mình, chị phải tắt máy giữa chừng. Bài 15 phút mà chưa xong.">"Lần gần nhất chị học, hôm đó chị học ở đâu, lúc mấy giờ?"</button>
+      <p class="reply" role="status"></p>
+    </div>
+    <button class="btn primary next" type="button" data-go="3" data-need="reveal-de" disabled>Tiếp</button>
+  </section>
+
+  <!-- 3. Thử trước: tự ghép story trên bảng, chưa có lý thuyết. -->
+  <section class="step" data-s="3" data-stage="story">
+    <h2>Ghép thành một story</h2>
+    <p>Mỗi ô "Là", "Tôi muốn", "Để" chỉ cần một mảnh. Mảnh nào không nên nằm trong story thì để vào "Bỏ ra ngoài". Bấm một mảnh, rồi bấm ô muốn đặt.</p>
+    <button class="btn" type="button" data-check="story" data-need="placed-story" disabled>Kiểm tra</button>
+    <p class="fb" data-echo="story" data-same="Khớp hết với bản mẫu."></p>
+    <button class="btn primary next" type="button" data-go="4" data-need="checked-story" disabled>Tiếp</button>
+  </section>
+
+  <!-- 4. Hiểu sau: bản mẫu trên chính bảng, rồi ý chính. -->
+  <section class="step" data-s="4" data-stage="story">
+    <h2>Ý chính</h2>
+    <button class="btn" type="button" data-answer-of="story">Xem bản mẫu</button>
+    <div class="card">
+      <p class="story-line"><b>Là</b> người đi làm, học lúc tối muộn trong phòng tối, <b>tôi muốn</b> học được khi phòng tắt đèn mà màn không chói, <b>để</b> xong bài 15 phút mà con không thức giấc.</p>
+    </div>
+    <div class="card small">
+      <p>User story là một câu ba phần: ai, muốn làm được gì, để được gì. Phần "tôi muốn" nói điều người dùng làm được, chưa nói nút nào, màu nào. Phần "để" là lý do thật, và thường chỉ lộ ra khi hỏi về một lần cụ thể, như bạn vừa hỏi Hà.</p>
+      <p>Có phần "để" rồi, nhóm mới so được nhiều cách: chế độ tối, tự giảm độ sáng sau 10 giờ tối, hay một chế độ nghe không cần nhìn màn. Chọn cách rẻ nhất mà vẫn đạt "để". Nếu ghi sẵn "thêm nút chế độ tối" thì nhóm mất hết các lựa chọn đó.</p>
+      <p>Story không phải bản đặc tả. Nó là lời nhắc để nói chuyện tiếp với người dùng, rồi chốt "thế nào thì coi là xong". Phần chốt đó là buổi BA sau.</p>
+    </div>
+    <p class="src muted">Nguồn: câu mẫu "Là…, tôi muốn…, để…" phổ biến qua sách <a href="https://www.mountaingoatsoftware.com/books/user-stories-applied" target="_blank" rel="noopener">User Stories Applied</a> của Mike Cohn (2004). Story là lời nhắc để nói chuyện: Ron Jeffries, <a href="https://ronjeffries.com/xprog/articles/expcardconversationconfirmation/" target="_blank" rel="noopener">Card, Conversation, Confirmation</a> (2001). Hà và sakubun trong bài là mô phỏng.</p>
+    <button class="btn primary next" type="button" data-go="5">Tiếp</button>
+  </section>
+
+  <!-- 5. Câu hỏi nhanh: một câu chọn story tốt, một câu tìm giải pháp nằm lẫn trong story (thẻ B2 sai hai lần). -->
+  <section class="step" data-s="5">
+    <h2>Câu hỏi nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Story nào giúp nhóm capstone nhiều nhất?</p>
+      <div class="q" data-q="q1" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">"Là người dùng, tôi muốn có nút xuất Excel, để tiện hơn."</button>
+        <button class="opt" type="button">"Là giảng viên, tôi muốn gửi danh sách vắng cho phòng đào tạo ngay sau giờ dạy, để không phải gõ lại từ sổ."</button>
+        <button class="opt" type="button">"Là giảng viên, tôi muốn app viết bằng React và có nút màu xanh."</button>
+        <p class="why">Câu thứ hai có người cụ thể, việc họ muốn làm được, và lý do đo được. Câu đầu là "người dùng" với một giải pháp. Câu cuối là chuyện của nhóm làm, không phải của giảng viên.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> "Là sinh viên, tôi muốn nhận thông báo đẩy lúc 8 giờ tối, để không quên ôn bài." Phần nào là giải pháp đã chốt sẵn?</p>
+      <div class="q" data-q="q2" data-a="0"><p class="status" role="status"></p>
+        <button class="opt" type="button">"Nhận thông báo đẩy lúc 8 giờ tối"</button>
+        <button class="opt" type="button">"Để không quên ôn bài"</button>
+        <button class="opt" type="button">"Là sinh viên"</button>
+        <p class="why">Thông báo đẩy lúc 8 giờ là một cách làm. Điều sinh viên muốn là nhớ ôn đúng lúc rảnh, có khi là email, có khi là giờ khác. Sửa: "tôi muốn được nhắc ôn vào lúc tôi hay rảnh".</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="6" data-need="q1 q2" disabled>Tiếp</button>
+  </section>
+
+  <!-- 6. Tự nói lại theo tình huống. Nút xem bản của Claude chỉ mở sau khi đã viết (learning/ba.md). -->
+  <section class="step" data-s="6">
+    <h2>Trả lời Nam</h2>
+    <div class="say ask-from" data-who="Nam, bạn cùng nhóm làm sakubun"><b>Nam nhắn</b>Hà bảo thêm chế độ tối thì mình làm chế độ tối thôi. Viết story làm gì cho mất công?</div>
+    <p>Trả lời Nam 1–2 câu, dựa vào chuyện của Hà.</p>
+    <textarea data-key="teach" data-min="5" placeholder="Nam ơi, ..."></textarea>
+    <button class="btn ghost" type="button" data-show="mine" data-need="teach" disabled>Xem bản của Claude</button>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Nam ơi, chế độ tối là cách Hà tự nghĩ ra thôi. Hỏi lại thì Hà học lúc 11 giờ đêm cạnh con, cái Hà cần là màn không chói để con không thức. Viết story "tôi muốn học được khi phòng tắt đèn mà màn không chói, để xong bài mà con không thức" thì mình còn chọn được cách rẻ hơn như tự giảm sáng, và biết lúc nào thì coi là xong.</div></div>
+    <button class="btn primary next" type="button" data-go="7" data-need="teach" disabled>Tiếp</button>
+  </section>
+
+  <!-- 7. Góp ý, xong buổi. -->
+  <section class="step" data-s="7">
+    <h2>Góp ý buổi này</h2>
+    <div class="card">
+      <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
+      <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Tình huống app sakubun so với app điểm danh ở buổi 3</b><div class="seg full" data-f="method"><button type="button" data-v="thích hơn" aria-pressed="false">Thích hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="kém hơn" aria-pressed="false">Kém hơn</button></div></div>
+      <div class="crit"><b>Ghi thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+    </div>
+    <button class="btn primary next" type="button" id="finish">Xong buổi học</button>
+    <p class="done-msg" id="done-msg" role="status"></p>
+    <button class="btn next hide" type="button" id="copy">Chép kết quả</button>
+  </section>
+</div>
+
+<script id="kit-js"></script>
+<script id="lesson-js"></script>
+<script id="it-js"></script>
+<script>
+/* Bài này không cần phần riêng. */
+</script>
+<script id="lesson-kit"></script>
+</body>
+</html>
