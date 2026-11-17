@@ -86,6 +86,7 @@ Chỗ dễ sa lầy: bảng ủy quyền phình thành danh sách từng trườ
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
 |---|---|---|
+| 2026-11-17 | Kiểm đợt 1, chat Frontend 10 (nick tnt697): PR #117 chỉ có `learning/`, CI xanh, đủ điều kiện tự merge, nhưng AI để PR chờ và báo "chờ bạn merge"; thien phải nhắn "merge giúp mình". Lỗi của AI, không phải công cụ (lệnh merge chạy được ngay sau đó) | Đã merge #117. Chat này tính là trượt lần kiểm này |
 | 2026-11-17 | Gắn repo quyền push lại bị bộ duyệt quyền chặn ở chat Chiến tranh 7, dù project instructions có tên repo | thien nhắn cho phép, gắn lại |
 | 2026-11-17 | Kiểm đợt 1, chat thứ nhất: PR #107 (chỉ `learning/`, STATUS, CI xanh, bot không góp ý) đủ điều kiện tự merge, nhưng lệnh merge bị bộ duyệt quyền của Claude chặn. Bảng ủy quyền đúng, công cụ không cho làm | Báo thien merge tay; xem ở 2 chat kiểm còn lại có lặp không, nếu lặp thì ghi vào bước kiểm đợt 1 là "tự merge" cần thien cho phép trong chat |
 | 2026-11-17 | Lần gắn repo đầu bị bộ duyệt quyền chặn vì tin mở đầu không có tên repo; báo cáo nháp đầu dựa trên bản đồng bộ knowledge chậm hơn main khoảng 2 ngày | thien cho phép gắn repo; viết lại báo cáo trên main `e83e308` |

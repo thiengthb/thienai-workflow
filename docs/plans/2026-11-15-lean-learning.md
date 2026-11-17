@@ -128,6 +128,7 @@ Xong khi: thien học một bài dựng theo cách mới và chấm độ dài, 
 - [x] Thẻ lưu sẵn câu hỏi, lựa chọn, lời giải thích (viết một lần khi tạo thẻ): `learning/cards-quiz.json`, 23/48 thẻ lấy lại từ các trang học cũ; thẻ còn lại AI viết khi thẻ đến hạn (`make-lesson.mjs` in sẵn dòng cần thêm), thẻ mới viết lúc sau buổi (`after-lesson.mjs --check` đòi)
 - [x] Script sinh phần ôn (`make-lesson.mjs`, bước `data-auto="cards"`), sau buổi tự ghi kết quả ôn vào `cards.md` (`after-lesson.mjs --write`). Góp ý và kết thúc vốn đã có sẵn trong mẫu; phần nhớ lại buổi trước vẫn để AI viết, vì nó dựa vào chỗ còn vướng của thien, không sinh máy móc được
 - [ ] Hai buổi học thật dựng theo cách mới: thien chấm không kém, số lượt dựng bài thấp hơn
+  - Số đo (2026-11-17): BA 5 ôn tự sinh chạy đúng 3/3 nhưng thien chấm "dài", "khó"; Frontend 10 (nick tnt697, project Claude) ôn tự sinh chạy đúng 5/5, thien chấm "vừa", "vừa", nhưng dựng bài khoảng 65 lượt gọi (BA 4: 35, Frontend 9: 43), vì chặng 2 phải clone sakubun và đọc code để dựng lại màn thật, cộng hai lượt chạy thử trang bằng Playwright. Bước ôn tự sinh không làm buổi kém đi; số lượt chưa thấp hơn. Chưa tick, xét lại ở mốc 2026-12-01
 
 ### 4. Sau buổi chỉ ghi file mới (bỏ 2026-11-17, lý do ở "Đã đổi")
 Định làm: bản ghi buổi `sessions/NN.json`; bảng "Trạng thái", "Bài đã học", hạn ôn, `usage.md` sinh từ bản ghi. Mở lại nếu PR buổi học phải gộp lại vì đụng nhau từ 2 lần trở lên.
