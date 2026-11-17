@@ -12,7 +12,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
-| [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–2 xong (PR #98); 3: đã đo BA 4, còn một buổi | 15/18 |
+| [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–2 xong (PR #98); 3: đã đếm lượt BA 4 (chờ số token), còn một buổi | 14/18 |
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 2/6 xong; đợt 3–4 chỉ làm khi số đo buổi học cho thấy đáng | 6/12 |
 
 ## Việc dở

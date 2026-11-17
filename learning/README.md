@@ -20,7 +20,7 @@ Tối đa 3 môn cùng lúc. Thêm một môn thì phải cho một môn nghỉ.
 | Môn | Vai | File môn | Trạng thái |
 |---|---|---|---|
 | Frontend | Môn chính, một nửa số buổi | [frontend.md](frontend.md) | Đã học 8 buổi |
-| BA | Môn mở rộng | [ba.md](ba.md) | Đã học 3 buổi |
+| BA | Môn mở rộng | [ba.md](ba.md) | Đã học 4 buổi |
 | Chiến tranh | Môn mở rộng | [war.md](war.md) | Đã học 5 buổi |
 
 Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakubun nên không nằm trong vòng.
