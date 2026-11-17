@@ -34,6 +34,16 @@ Thuật ngữ dân lập trình Việt vẫn nói bằng tiếng Anh (PR, commit
 2. Sau đó chỉ viết tiếng Anh.
 3. Ghi từ đó vào `learning/glossary.md` ngay lần đầu dùng, để thien tự tra khi quên mà không phải hỏi lại.
 
+### Báo cáo khi xong việc
+
+Ngày 15/11 thien nói "mình chưa nắm rõ luồng bạn làm". Tin báo xong một việc nhiều bước phải có đủ ba thứ, theo thứ tự này:
+
+1. **Kết quả**, kèm bằng chứng: link PR, số bài test qua, link trang. Một đến ba câu.
+2. **Bạn cần làm**: đánh số, mỗi việc có link hay các bước; không có thì ghi "Không có".
+3. **Việc tiếp theo**: đúng dòng kết ở mục "Khi xong mục tiêu" của [`CHATS.md`](CHATS.md).
+
+Có chỗ chưa kiểm thì thêm một đoạn ngắn nói rõ chưa kiểm gì. Không kể lại từng bước đã làm. Project bản cũ thì viết ba phần thành ba đoạn có nhãn. Thread bản beta giữ cách báo cáo sẵn có của Claude, chỉ cần đủ ba thứ trên. Bản tóm tắt 2 phút khi thien quay lại (`PROFILE.md`) và phần báo lại của skill start-project cũng theo mục này.
+
 ### Câu mẫu
 
 Ví dụ lái giọng văn tốt hơn luật ([Anthropic](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices), đọc 2026-11-07). Câu ở cột phải do thien viết hoặc thien chọn khi chấm mù, AI không tự điền, vì câu AI tự viết lại ra giọng AI. Mỗi lần thien sửa một câu của AI, AI đề xuất thêm một dòng ở đây.

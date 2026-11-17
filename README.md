@@ -28,6 +28,7 @@ docs/         Tiến độ và kế hoạch đang chạy của chính repo này
 | | `PLANNING.md` | Cách AI viết kế hoạch gửi thien duyệt, rồi ghi và cập nhật kế hoạch trong repo |
 | | `SETUP.md` | Chuẩn setup chung cho mọi nick và project Claude, có số phiên bản; AI tự kiểm đầu phiên và nhắc khi thiếu |
 | | `HANDOFF.md` | Sổ bàn giao giữa các nick Claude: ghi việc dở ở các mốc khó khôi phục, nick khác nghe "tiếp tục" là làm tiếp |
+| | `DELEGATION.md` | AI được tự làm gì, làm rồi báo, hay phải hỏi trước, theo từng vùng việc (merge PR, xoá nhánh, đổi kế hoạch) |
 | | `TUTOR.md` | Cách AI dạy thien ở mọi môn: thử trước, giải thích sau, ghi nhật ký; đứng đúng vai khi làm việc |
 | `templates/` | `AGENTS.template.md` | Mẫu `AGENTS.md` cho mỗi project, đọc được bởi Claude, Codex, Gemini. Mỗi project có thêm `CLAUDE.md` chỉ một dòng `@AGENTS.md` |
 | | `STATUS.template.md` | Mẫu `docs/STATUS.md`: project đang ở đâu, việc tiếp theo, đang chờ ai |
