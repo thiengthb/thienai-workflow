@@ -138,6 +138,132 @@
    "short": "Pháo",
    "at": [21.4,102.972],
    "rank": 1
+  },
+  {
+   "id": "fMT",
+   "side": "fr",
+   "kind": "gun",
+   "name": "Pháo Pháp ở Mường Thanh (105 và 155 ly)",
+   "short": "Pháo Pháp",
+   "at": [21.3835,103.0105],
+   "rank": 2
+  },
+  {
+   "id": "fHC",
+   "side": "fr",
+   "kind": "gun",
+   "name": "Pháo Pháp ở Hồng Cúm",
+   "short": "Pháo Pháp",
+   "at": [21.333,103.0025],
+   "rank": 2
+  },
+  {
+   "id": "vTL",
+   "side": "vn",
+   "kind": "gun",
+   "name": "Lựu pháo trên núi Tà Lùng, phía đông (vị trí ước lượng)",
+   "short": "Tà Lùng",
+   "at": [21.386,103.07],
+   "rank": 1
+  },
+  {
+   "id": "vNL",
+   "side": "vn",
+   "kind": "gun",
+   "name": "Pháo ở Nà Lời, cạnh đường 41, sát Him Lam (vị trí ước lượng)",
+   "short": "Nà Lời",
+   "at": [21.428,103.055],
+   "rank": 1
+  },
+  {
+   "id": "vBT",
+   "side": "vn",
+   "kind": "gun",
+   "name": "Pháo ở cánh đồng Bản Tấu, phía bắc (vị trí ước lượng)",
+   "short": "Bản Tấu",
+   "at": [21.462,103.02],
+   "rank": 1
+  },
+  {
+   "id": "vS",
+   "side": "vn",
+   "kind": "gun",
+   "name": "Pháo phía nam, khống chế Hồng Cúm (vị trí ước lượng)",
+   "short": "Pháo",
+   "at": [21.35,103.055],
+   "rank": 1
+  },
+  {
+   "id": "dk1",
+   "side": "vn",
+   "kind": "gun",
+   "name": "Trận địa giả",
+   "short": "Giả",
+   "at": [21.402,103.066],
+   "rank": 1
+  },
+  {
+   "id": "dk2",
+   "side": "vn",
+   "kind": "gun",
+   "name": "Trận địa giả",
+   "short": "Giả",
+   "at": [21.444,103.032],
+   "rank": 1
+  },
+  {
+   "id": "dk3",
+   "side": "vn",
+   "kind": "gun",
+   "name": "Trận địa giả",
+   "short": "Giả",
+   "at": [21.366,103.062],
+   "rank": 1
+  },
+  {
+   "id": "rA1",
+   "side": "vn",
+   "kind": "gun",
+   "name": "Pháo sau núi, sườn khuất (mô phỏng)",
+   "short": "Sau núi",
+   "at": [21.456,103.057],
+   "rank": 1
+  },
+  {
+   "id": "rA2",
+   "side": "vn",
+   "kind": "gun",
+   "name": "Pháo sau núi, sườn khuất (mô phỏng)",
+   "short": "Sau núi",
+   "at": [21.352,103.098],
+   "rank": 1
+  },
+  {
+   "id": "oB1",
+   "side": "vn",
+   "kind": "gun",
+   "name": "Pháo đặt trống trên sườn (mô phỏng)",
+   "short": "Đặt trống",
+   "at": [21.396,103.06],
+   "rank": 1
+  },
+  {
+   "id": "oB2",
+   "side": "vn",
+   "kind": "gun",
+   "name": "Pháo đặt trống trên sườn (mô phỏng)",
+   "short": "Đặt trống",
+   "at": [21.44,103.025],
+   "rank": 1
+  },
+  {
+   "id": "oB3",
+   "side": "vn",
+   "kind": "gun",
+   "name": "Pháo đặt trống trên sườn (mô phỏng)",
+   "short": "Đặt trống",
+   "at": [21.37,103.056],
+   "rank": 1
   }
  ],
  "views": {
@@ -599,6 +725,224 @@
      "focus": [21.35,103]
     }
    ]
+  },
+  "p7": {
+   "label": "Chuyện thật",
+   "tag": "real",
+   "preview": 1,
+   "keys": [
+    {
+     "date": "đầu 3/1954",
+     "title": "Pháp chờ pháo ta lộ mặt",
+     "text": "Pháo Pháp đặt ở Mường Thanh và Hồng Cúm. Pháp tin pháo ta tới gần là bị máy bay, đài quan sát phát hiện, rồi bị pháo hay máy bay diệt.",
+     "src": "Đại tướng Võ Nguyên Giáp, \"Điện Biên Phủ\" (trích trên Nhân Dân); Nhân Dân, \"Bài học về xây dựng trận địa tiến công\"",
+     "show": [
+      "hq",
+      "a1",
+      "himlam",
+      "doclap",
+      "bankeo",
+      "hongcum",
+      "fMT",
+      "fHC"
+     ],
+     "focus": [21.39,103.03]
+    },
+    {
+     "date": "kế hoạch",
+     "title": "Vào hầm ở sườn trong",
+     "text": "Pháo lên sườn núi quanh lòng chảo: \"lên cao, vào gần, bắn thẳng\". Mỗi khẩu một hầm, vách gỗ dày 30 cm, nóc phủ đất dày 3 m. Bên cạnh có trận địa giả để làm lạc hướng địch.",
+     "src": "Thiếu tướng Đỗ Quốc Ân (Nhân Dân); Quân đội nhân dân; Đại tướng Võ Nguyên Giáp, \"Điện Biên Phủ\" (trích trên Nhân Dân)",
+     "add": [
+      "vTL",
+      "vNL",
+      "vBT",
+      "vS",
+      "dk1",
+      "dk2",
+      "dk3"
+     ]
+    },
+    {
+     "date": "13/3, 17h05",
+     "title": "Sấm rền",
+     "text": "Trung đoàn 45 bắn phát mở màn. Pháo ta bắn vào Him Lam và vào trận địa pháo Pháp; lựu pháo lúc đó rất ít đạn.",
+     "src": "Thiếu tướng Đỗ Quốc Ân (Nhân Dân); Đại tá Nguyễn Thế Vỵ (Tạp chí Quốc phòng toàn dân)",
+     "hit": [
+      "himlam",
+      "fMT",
+      "fHC"
+     ],
+     "focus": [21.4,103.035],
+     "lines": [
+      {
+       "kind": "attack",
+       "pts": [[21.426,103.052],[21.409,103.038]]
+      },
+      {
+       "kind": "attack",
+       "pts": [[21.387,103.066],[21.384,103.014]]
+      },
+      {
+       "kind": "attack",
+       "pts": [[21.349,103.051],[21.335,103.006]]
+      }
+     ],
+     "fog": {
+      "who": "Mắt quân Pháp",
+      "hide": [
+       "vTL",
+       "vNL",
+       "vBT",
+       "vS",
+       "dk1",
+       "dk2",
+       "dk3"
+      ],
+      "text": "Pháo bắn từ nhiều sườn đồi, có cả trận địa thật lẫn giả. Đại tướng viết trận địa nghi binh làm địch lạc hướng, phân tán hỏa lực, tốn bom đạn.",
+      "src": "Đại tướng Võ Nguyên Giáp, \"Điện Biên Phủ\" (trích trên Nhân Dân)"
+     }
+    },
+    {
+     "date": "15/3",
+     "title": "Chỉ huy pháo Pháp tự sát",
+     "text": "Him Lam mất đêm 13/3, Độc Lập rạng sáng 15/3. Charles Piroth, chỉ huy pháo binh Pháp, từng cam đoan pháo đối phương không đáng lo; ngày 15/3 ông tự sát bằng lựu đạn.",
+     "src": "Geoffrey Norman, HistoryNet (Military History, 2010); Đại tá Nguyễn Thế Vỵ",
+     "lose": [
+      "himlam",
+      "doclap"
+     ],
+     "hit": [
+      "fMT"
+     ],
+     "keepLines": true,
+     "fog": {
+      "who": "Mắt quân Pháp",
+      "hide": [
+       "vTL",
+       "vNL",
+       "vBT",
+       "vS",
+       "dk1",
+       "dk2",
+       "dk3"
+      ],
+      "text": "Pháo Pháp vẫn không dập được các khẩu bắn từ sườn đồi.",
+      "src": "Geoffrey Norman, HistoryNet"
+     }
+    },
+    {
+     "date": "cả chiến dịch",
+     "title": "Pháo ta bắn tới cuối",
+     "text": "Đợt một có 234 khẩu pháo, cối các loại; đợt ba lên tới 261. Pháp không dập được pháo ta, bằng pháo hay máy bay.",
+     "src": "Thiếu tướng Đỗ Quốc Ân (Nhân Dân); Geoffrey Norman, HistoryNet",
+     "lose": [
+      "bankeo"
+     ],
+     "keepLines": true
+    }
+   ]
+  },
+  "p7A": {
+   "label": "Nếu đặt sau núi",
+   "tag": "sim",
+   "preview": 1,
+   "keys": [
+    {
+     "same": "p7:0"
+    },
+    {
+     "date": "kế hoạch",
+     "title": "Sườn ngoài, bắn vòng qua đỉnh",
+     "text": "Mô phỏng. Pháo đặt ở sườn quay ra ngoài, từ lòng chảo không thấy. Người chỉnh bắn đứng trên đỉnh, gọi điện về báo trúng trượt.",
+     "src": "Không có trong sử, chỉ là lựa chọn để so",
+     "show": [
+      "hq",
+      "a1",
+      "himlam",
+      "doclap",
+      "bankeo",
+      "hongcum",
+      "fMT",
+      "fHC",
+      "rA1",
+      "rA2"
+     ],
+     "focus": [21.41,103.06]
+    },
+    {
+     "date": "phỏng đoán",
+     "title": "An toàn, nhưng xa và không thấy mục tiêu",
+     "text": "Phỏng đoán: pháo xa hơn, không nhìn thấy cứ điểm, phải nhờ đài quan sát chỉnh từng phát. Lúc đạn ít, bắn cứ điểm nhỏ trên đồi thì trượt nhiều hơn; pháo Pháp vẫn rảnh tay bắn bộ binh ta.",
+     "src": "Suy luận; ít đạn lúc mở màn theo Đại tá Nguyễn Thế Vỵ",
+     "hit": [
+      "himlam"
+     ],
+     "lines": [
+      {
+       "kind": "attack",
+       "pts": [[21.454,103.054],[21.41,103.038]]
+      },
+      {
+       "kind": "attack",
+       "pts": [[21.353,103.094],[21.385,103.016]]
+      }
+     ],
+     "focus": [21.41,103.06]
+    }
+   ]
+  },
+  "p7B": {
+   "label": "Nếu đặt trống",
+   "tag": "sim",
+   "preview": 1,
+   "keys": [
+    {
+     "same": "p7:0"
+    },
+    {
+     "date": "kế hoạch",
+     "title": "Lên sườn trống, bắn ngay",
+     "text": "Mô phỏng, gần với cách đặt pháo trước khi hoãn đánh ở buổi 3. Bắn thẳng được ngay, không mất nhiều tuần đào hầm.",
+     "src": "Không có trong sử, chỉ là lựa chọn để so",
+     "show": [
+      "hq",
+      "a1",
+      "himlam",
+      "doclap",
+      "bankeo",
+      "hongcum",
+      "fMT",
+      "fHC",
+      "oB1",
+      "oB2",
+      "oB3"
+     ]
+    },
+    {
+     "date": "phỏng đoán",
+     "title": "Đúng điều Pháp chờ",
+     "text": "Phỏng đoán: máy bay trinh sát thấy trận địa, mỗi phát bắn lại lộ chỗ. Đó chính là cách Pháp đã tính: tìm ra rồi diệt bằng pháo 105, 155 ly và máy bay.",
+     "src": "Suy luận từ điều Pháp tin (Đại tướng Võ Nguyên Giáp, \"Điện Biên Phủ\" (trích trên Nhân Dân))",
+     "hit": [
+      "oB1",
+      "oB2",
+      "oB3"
+     ],
+     "lines": [
+      {
+       "kind": "attack",
+       "pts": [[21.384,103.014],[21.395,103.057]],
+       "color": "#2f5f96"
+      },
+      {
+       "kind": "attack",
+       "pts": [[21.385,103.012],[21.438,103.026]],
+       "color": "#2f5f96"
+      }
+     ]
+    }
+   ]
   }
  },
  "sources": [
@@ -621,6 +965,26 @@
   {
    "name": "Độ cao: AWS Terrain Tiles (gộp SRTM và các nguồn khác)",
    "url": "https://registry.opendata.aws/terrain-tiles/"
+  },
+  {
+   "name": "Đại tướng Võ Nguyên Giáp, \"Điện Biên Phủ\", NXB Chính trị quốc gia, 2004, tr. 192–204 (trích trên Nhân Dân, \"Đẩy mạnh công tác chuẩn bị cho chiến dịch Điện Biên Phủ\")",
+   "url": "https://special.nhandan.vn/daymanhcongtacchuanbi/index.html"
+  },
+  {
+   "name": "Thiếu tướng Đỗ Quốc Ân, \"Pháo binh trong Chiến dịch Điện Biên Phủ\" (Nhân Dân)",
+   "url": "https://special.nhandan.vn/phao-binh-trong-chien-dich-Dien-Bien-Phu/index.html"
+  },
+  {
+   "name": "\"Nghệ thuật sử dụng pháo binh trong Chiến dịch Điện Biên Phủ\" (Quân đội nhân dân, đăng lại trên Giáo dục Việt Nam, 2017)",
+   "url": "https://giaoduc.net.vn/tieu-diem/nghe-thuat-su-dung-phao-binh-trong-chien-dich-dien-bien-phu-post176399.gd"
+  },
+  {
+   "name": "Đại tá Nguyễn Thế Vỵ, \"Sử dụng lực lượng pháo binh trong chiến dịch Điện Biên Phủ\" (Tạp chí Quốc phòng toàn dân, đăng lại trên VietTimes, 2016)",
+   "url": "https://viettimes.vn/su-dung-luc-luong-phao-binh-trong-chien-dich-dien-bien-phu-post26869.html"
+  },
+  {
+   "name": "Geoffrey Norman, \"What the French Lost at Dien Bien Phu\", HistoryNet (Military History, 1/2010)",
+   "url": "https://historynet.com/what-the-french-lost-at-dien-bien-phu/"
   }
  ],
  "terrain": {
