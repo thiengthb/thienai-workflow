@@ -61,6 +61,15 @@ for (const vp of [{ width: 390, height: 844 }, { width: 768, height: 1024 }, { w
   for (const [label, place] of Object.entries(plans)) {
     const p = await open(withAxes, vp);
     await put(p, place);
+    // Thẻ phải nằm đúng ô đã xếp, nếu không ca "dồn hết vào ô góc" không còn là ca khó.
+    const where = await p.evaluate(() => {
+      const r = (e) => e.getBoundingClientRect(), bd = document.querySelector('[data-pane="who"]');
+      return Object.fromEntries([...bd.querySelectorAll('.bd-card')].filter((c) => c.offsetParent).map((c) => {
+        const C = r(c), z = [...bd.querySelectorAll('.zone')].find((z) => { const Z = r(z); return C.left >= Z.left - 0.5 && C.right <= Z.right + 0.5 && C.top >= Z.top - 0.5 && C.bottom <= Z.bottom + 0.5; });
+        return [c.dataset.c, z?.dataset.z];
+      }));
+    });
+    assert.deepEqual(where, place, `${vp.width}px, ${label}: thẻ nằm đúng ô đã xếp`);
     const m = await p.evaluate(measure);
     assert.equal(m.axes.length, 2, 'trang mẫu có hai trục');
     for (const ax of m.axes) {
