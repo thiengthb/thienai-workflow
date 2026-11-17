@@ -44,7 +44,7 @@ Bài mẫu đã đăng (2026-11-14): [Frontend 6, màu cho app](https://claude.a
 | Câu hỏi chờ sân khấu | `<div class="q" data-wait="peek-food">`: các lựa chọn khóa tới khi khóa đó xong |
 | Làm theo bản thiết kế | Bàn có `data-target='{"accent":"#0f766e","amount":"it"}'`; thêm `<div class="target"><span class="label">Bản thiết kế</span><div class="phone mini"><div class="screen"></div></div></div>` (tự chép màn chính) và `<div class="meter" role="status"><span></span></div>`; nhắc vào `[data-echo="match-<pane>"]` với `data-same` |
 | Bảng dán | `<div class="pane board" data-pane="who" data-answer='{"thẻ":"ô"}' [data-hear="4"]>` chứa `.bd-area` (gồm `.zones`, `.tray`, các thẻ) và `.say-bar` |
-| Ô | `.zones.grid2` (lưới 2×2, thêm `.axis.y`, `.axis.x`) hay `.zones.flow` (các bước nối mũi tên); mỗi ô `<button class="zone" data-z="z1" data-reset>`, ô chính thêm `key` |
+| Ô | `.zones.grid2` (lưới 2×2, thêm `.axis.y`, `.axis.x` nếu cần tên trục: tên trục nằm trong lề riêng ngoài ô, chỉ chừa lề khi có trục) hay `.zones.flow` (các bước nối mũi tên); mỗi ô `<button class="zone" data-z="z1" data-reset>`, ô chính thêm `key` |
 | Thẻ | `<button class="bd-card" data-c="ph" style="--c:#be185d" data-say="lời họ nói" data-why="giải thích khi xếp khác bản mẫu"><i>PH</i>Phụ huynh</button>` |
 | Thẻ lên tiếng, tua 3 tháng | Trên thẻ: `data-react="lời khi bị xếp sai"`, `data-later="Tháng 2\|chuyện xảy ra"`; theo ô bị đặt: `data-react-z2`, `data-later-z2`. Trong bảng: `<div class="ffwd"><span class="label">Mô phỏng · …</span><ol></ol></div>`; nút `<button data-ffwd="who" data-need="checked-who" data-label data-back data-good="khi không sai gì">` |
 | Thẻ ẩn, phỏng vấn | Thẻ thêm `data-hidden`. `<div class="ask" data-ask="pdt" data-of="who">` chứa `<button class="opt" data-reply="lời đáp" [data-reveal="ctsv"]>câu hỏi</button>` và `<p class="reply" role="status">` |
@@ -63,7 +63,7 @@ Bài mẫu đã đăng (2026-11-14): [Frontend 6, màu cho app](https://claude.a
 
 ## Chưa làm, để sau khi thien học thử
 
-- Lưới 2×2 (`.zones.grid2`): tên trục đè lên thẻ đã dán vào ô sát trục (thien chê sau BA 3, 2026-11-16). Cần chừa lề riêng cho tên trục. Bố cục trang cũng cần trau chuốt hơn: thien thấy "ok nhưng chưa thỏa mãn".
+- Bố cục trang bảng dán cần trau chuốt hơn: thien thấy "ok nhưng chưa thỏa mãn" (sau BA 3, 2026-11-16). Lỗi tên trục đè thẻ ở cùng lần chê đã sửa 2026-11-17 (test `.github/scripts/grid2-axis.test.mjs`).
 
 - Khi nhìn N giây, phần tự lưu không giữ đồng hồ: tải lại trang giữa 5 giây thì coi như đã xem.
 - Nối hai thẻ bằng đường (sơ đồ ai nói với ai), làn bơi nhiều người cho luồng việc.
