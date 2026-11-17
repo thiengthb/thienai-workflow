@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-17 (thien: "ok mình duyệt và
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 0, 1, 2 làm xong trong PR #98 (chờ merge).
-- Còn thiếu: thien merge PR; dán instructions v4 ở từng project; xoá 5 nhánh cũ. Đợt 3 chạy cùng hai buổi học kế tiếp.
-- thien cần làm: merge PR #98, rồi dán instructions theo `profile/SETUP.md`.
+- Đang ở: đợt 0, 1, 2 xong, PR #98 merge 2026-11-17; sakubun nhận phần chung mới qua PR #327 (merge cùng ngày).
+- Còn thiếu: thien dán instructions v4 ở từng project và xoá 5 nhánh cũ. Đợt 3 chạy cùng hai buổi học kế tiếp.
+- thien cần làm: dán instructions theo `profile/SETUP.md`; xoá 5 nhánh cũ (danh sách trong PR #98).
 
 ## Mục tiêu
 Bộ quy trình đúng và gọn hơn mà không mất luật nào: sửa chỗ ghi sai, luật áp theo điều kiện thay vì áp mọi lúc, có đường riêng cho project bản beta, và bám tính năng có sẵn của Claude thay vì tự làm lại.
@@ -25,26 +25,26 @@ Bám tính năng có sẵn của Claude và cập nhật theo nó; không làm l
 
 ### 0. Dọn sự thật, không đổi luật
 Xong khi: thien đọc STATUS thấy đúng; `start-session --claim` không nhận việc đã xong.
-- [ ] STATUS viết lại theo trạng thái 2026-11-17 (bỏ PR đã merge, nhánh đã merge, sakubun #301 cũ thành #326)
-- [ ] Đầu 3 kế hoạch cũ đúng trạng thái; `handoff.mjs done` việc `claude-only-learning` (đã xoá khỏi sổ 2026-11-17)
-- [ ] Con trỏ cũ "đọc `learning/README.md` trước" ở `TUTOR.md`, `learning/README.md`, `MAP.md` đổi thành gói buổi
-- [ ] Lấy lại cách gắn repo qua ô Project knowledge của PR #74 cho project bản cũ
+- [x] STATUS viết lại theo trạng thái 2026-11-17 (bỏ PR đã merge, nhánh đã merge, sakubun #301 cũ thành #326) (PR #98)
+- [x] Đầu 3 kế hoạch cũ đúng trạng thái; `handoff.mjs done` việc `claude-only-learning` (đã xoá khỏi sổ 2026-11-17) (PR #98)
+- [x] Con trỏ cũ "đọc `learning/README.md` trước" ở `TUTOR.md`, `learning/README.md`, `MAP.md` đổi thành gói buổi (PR #98)
+- [x] Lấy lại cách gắn repo qua ô Project knowledge của PR #74 cho project bản cũ (PR #98)
 - [ ] Xoá 5 nhánh cũ (thien làm, AI không có quyền xoá)
 
 ### 1. Luật theo điều kiện áp dụng (chỉ sửa chữ)
 Xong khi: đọc bộ tình huống dưới với luật mới thì mỗi ca ra đúng một hành vi; câu hỏi đơn giản không phải chờ kiểm việc dở.
-- [ ] Nhắc việc dở ba mức (chặn / không chặn / hỏi đáp), file chủ `PROFILE.md`
-- [ ] Phương án đã xét chỉ bắt buộc với quyết định khó sửa lại hay có đánh đổi thật; STATUS sửa khi trạng thái đổi
-- [ ] Sổ bàn giao ghi ở mốc có nghĩa, không sau từng bước
-- [ ] `CHATS.md`: ngưỡng là hướng dẫn đang thử, chỉ cho project bản cũ; đo usage chỉ khi đang có thí nghiệm, bỏ khỏi phần chung
-- [ ] Giới hạn số dòng đổi thành nguyên tắc kèm cỡ KB; câu hỏi thứ tư "luật này xem lại khi nào"
+- [x] Nhắc việc dở ba mức (chặn / không chặn / hỏi đáp), file chủ `PROFILE.md` (PR #98)
+- [x] Phương án đã xét chỉ bắt buộc với quyết định khó sửa lại hay có đánh đổi thật; STATUS sửa khi trạng thái đổi (PR #98)
+- [x] Sổ bàn giao ghi ở mốc có nghĩa, không sau từng bước (PR #98)
+- [x] `CHATS.md`: ngưỡng là hướng dẫn đang thử, chỉ cho project bản cũ; đo usage chỉ khi đang có thí nghiệm, bỏ khỏi phần chung (PR #98)
+- [x] Giới hạn số dòng đổi thành nguyên tắc kèm cỡ KB; câu hỏi thứ tư "luật này xem lại khi nào" (PR #98)
 
 ### 2. Đường beta và bớt báo động giả (sửa script có sẵn)
 Xong khi: thread beta mới khởi động không gọi `project_info`, không clone lại, không báo thiếu setup sai; `check-open-work` ghi rõ nhánh nào đã có PR đóng.
-- [ ] `SETUP.md` v4: hai đoạn instructions (project beta và project cũ), chỗ bấm đúng cho từng loại
-- [ ] `start-session.mjs`: chế độ beta không in lại `AGENTS.md`; báo lỗi khi gặp tham số lạ; cảnh báo khi STATUS bảo chờ một PR đã đóng
-- [ ] `check-open-work.mjs` ghi PR của từng nhánh (đang mở, đã đóng, chưa có)
-- [ ] `reading-cost.mjs` ghi rõ đây là cỡ tài liệu, không phải usage
+- [x] `SETUP.md` v4: hai đoạn instructions (project beta và project cũ), chỗ bấm đúng cho từng loại (PR #98)
+- [x] `start-session.mjs`: chế độ beta không in lại `AGENTS.md`; báo lỗi khi gặp tham số lạ; cảnh báo khi STATUS bảo chờ một PR đã đóng (PR #98)
+- [x] `check-open-work.mjs` ghi PR của từng nhánh (đang mở, đã đóng, chưa có) (PR #98)
+- [x] `reading-cost.mjs` ghi rõ đây là cỡ tài liệu, không phải usage (PR #98)
 
 ### 3. Đo buổi học (chạy cùng hai buổi học kế tiếp)
 Xong khi: có tổng số lượt của chat dựng bài và chat sau buổi ở hai buổi, kèm một câu "bước nào lâu nhất"; ở beta thêm số token của thread trong Project settings > Usage.
@@ -55,6 +55,7 @@ Xong khi: có tổng số lượt của chat dựng bài và chat sau buổi ở
 Ngưỡng và cách làm ở checkpoint 3, 4 của `2026-11-15-lean-learning.md`.
 
 ### 5. Chiều bớt (làm sau lần xem lại 2026-12-01)
+- [ ] Phần chung `AGENTS.template.md`, dòng xem nhánh chưa merge: khi không có `check-open-work.mjs` thì xem cả nhánh chưa có PR và sổ bàn giao (góp ý đúng của CodeRabbit trên sakubun PR #327). Gộp vào lần sửa mẫu kế tiếp, để không sinh thêm một PR đồng bộ chỉ vì một dòng
 - [ ] Kế hoạch xong chuyển vào thư mục `done` trong `docs/plans/`; bảng "luật nằm ở đâu" kèm mốc xem lại; đối chiếu phần tự làm với tính năng mới của Claude
 
 ## Bộ tình huống mẫu (kiểm đợt 1 bằng cách đọc)
