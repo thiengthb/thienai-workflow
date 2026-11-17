@@ -20,7 +20,7 @@ Tối đa 3 môn cùng lúc. Thêm một môn thì phải cho một môn nghỉ.
 | Môn | Vai | File môn | Trạng thái |
 |---|---|---|---|
 | Frontend | Môn chính, một nửa số buổi | [frontend.md](frontend.md) | Đã học 8 buổi |
-| BA | Môn mở rộng | [ba.md](ba.md) | Đã học 3 buổi |
+| BA | Môn mở rộng | [ba.md](ba.md) | Đã học 4 buổi |
 | Chiến tranh | Môn mở rộng | [war.md](war.md) | Đã học 5 buổi |
 
 Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakubun nên không nằm trong vòng.
@@ -42,7 +42,7 @@ Bảng học tuần (số buổi mỗi tuần, thẻ đến hạn, chỗ còn v�
 
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
-| Frontend 8 (chép lại một màn, thang khoảng cách) | 2026-11-17 | Frontend | **BA 4**, rồi Frontend 9 (so sánh mù, mốc 2026-11-22) |
+| BA 4 (user story) | 2026-11-17 | BA | **Frontend 9** (so sánh mù, mốc 2026-11-22), rồi Chiến tranh |
 
 ## Khung một buổi, chung cho mọi môn
 
@@ -50,7 +50,7 @@ Bảng học tuần (số buổi mỗi tuần, thẻ đến hạn, chỗ còn v�
 2. **Nhớ lại buổi trước của môn này (1 phút):** một hình, một câu.
 
 Hai phần ôn này chỉ dành cho lần học đầu: trong trang, bọc chúng bằng `data-part="review"`, nút đi tiếp bị khóa bởi chúng thì thêm `data-review-gate`. Học xong, lần mở sau trang tự ẩn phần ôn, chỉ còn nội dung và câu hỏi của chính bài đó (thien yêu cầu 2026-11-12). Xem "Bộ khung chung" trong [teaching/README.md](teaching/README.md).
-3. **Thử trước (5–6 phút):** bấm, kéo, chọn, sắp xếp. Chưa có lý thuyết. Chọn kiểu bài trong [teaching/README.md](teaching/README.md).
+3. **Thử trước (5–6 phút):** bấm, kéo, chọn, sắp xếp. Chưa có lý thuyết. Ý hoàn toàn mới (thien chưa biết hay chỉ "nghe qua", xem hồ sơ môn) thì mở bằng một đoạn giới thiệu khoảng 1 phút: nó là gì, một ví dụ, việc sắp làm; chưa giải thích vì sao (thien xin sau BA 4, 2026-11-17: vào thử ngay một thứ chưa biết thì ngượng, không biết phải làm gì). Chọn kiểu bài trong [teaching/README.md](teaching/README.md).
 4. **Hiểu sau (3 phút):** giải thích ý chính, có số liệu hoặc ví dụ cụ thể, nhắc lại đúng lựa chọn thien vừa làm.
 5. **Câu hỏi nhanh (2 phút).**
 6. **Tự nói lại ý chính** rồi mới xem bản của AI. Đề là một tình huống cụ thể: một người hỏi về chính màn hay tình huống vừa làm, thien trả lời người đó (thien chọn 2026-11-17, cách viết ở `artifacts/lesson/README.md`). Đừng hỏi chung chung.

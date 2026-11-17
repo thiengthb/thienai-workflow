@@ -48,7 +48,7 @@ Xong khi: thread beta mới khởi động không gọi `project_info`, không c
 
 ### 3. Đo buổi học (chạy cùng hai buổi học kế tiếp)
 Xong khi: có tổng số lượt của chat dựng bài và chat sau buổi ở hai buổi, kèm một câu "bước nào lâu nhất"; ở beta thêm số token của thread trong Project settings > Usage.
-- [ ] Buổi 1
+- [ ] Buổi 1: BA 4 (2026-11-17, nick tnt628, project beta, một thread cho cả dựng bài và sau buổi). Dựng bài khoảng 35 lượt gọi trong 9 phút, sau buổi khoảng 18 lượt. Lâu nhất là dựng trang (khoảng 18 lượt: đọc kit `artifacts/it/` và bài BA 3 làm mẫu, viết trang, sửa hai lỗi bài kiểm). Lượt phí: 3 lần chạy lại `start-session.mjs` vì truyền thiếu `--instructions`, 4 lượt tìm công cụ đăng trang (`publish_files`, khai khả năng, `watch` không bật được nên trang không tự báo về thread). Còn chờ số token theo thread (Project settings > Usage) mới tick
 - [ ] Buổi 2
 
 ### 4. Tự động hoá phần học, chỉ khi đợt 3 cho thấy đáng

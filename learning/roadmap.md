@@ -50,7 +50,7 @@ Xong khi: học đủ 10 ý trên bản đồ, mỗi ý một buổi; thứ tự
 - [x] Yêu cầu và nhu cầu (buổi 1, 2026-11-12)
 - [x] Hỏi chuyện người dùng (buổi 2, 2026-11-12)
 - [x] Các bên liên quan (buổi 3, 2026-11-16, [bài](ba/lessons/03-stakeholders.md))
-- [ ] User story
+- [x] User story (buổi 4, 2026-11-17, [bài](ba/lessons/04-user-stories.md))
 - [ ] Điều kiện hoàn thành
 - [ ] Vẽ luồng công việc
 - [ ] Xếp ưu tiên

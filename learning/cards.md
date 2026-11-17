@@ -12,8 +12,8 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 
 | Thẻ | Môn | Câu hỏi | Đáp án ở | Hộp | Hỏi lại |
 |---|---|---|---|---|---|
-| F1 | Frontend | Hai nút cùng cỡ, cùng màu đặt cạnh nhau thì sao? | [bài 1](frontend/lessons/01-one-focal-point.md) | 2 | 2026-11-15 |
-| F2 | Frontend | Muốn nút chính nổi hơn mà không thêm màu mới thì làm gì? | [bài 1](frontend/lessons/01-one-focal-point.md) | 2 | 2026-11-15 |
+| F1 | Frontend | Hai nút cùng cỡ, cùng màu đặt cạnh nhau thì sao? | [bài 1](frontend/lessons/01-one-focal-point.md) | 3 | 2026-11-24 |
+| F2 | Frontend | Muốn nút chính nổi hơn mà không thêm màu mới thì làm gì? | [bài 1](frontend/lessons/01-one-focal-point.md) | 3 | 2026-11-24 |
 | F3 | Frontend | Ngoài cỡ chữ, màu và thứ tự, còn hai cách nào để tạo bậc chữ? | [bài 2](frontend/lessons/02-type-hierarchy.md) | 2 | 2026-11-15 |
 | F4 | Frontend | Trong nhóm các dòng cách nhau 8px. Giữa hai nhóm nên bao nhiêu? | [bài 3](frontend/lessons/03-spacing-groups.md) | 2 | 2026-11-15 |
 | F5 | Frontend | Vì sao nhiều design system chỉ cho dùng 4, 8, 12, 16, 24, 32? | [bài 3](frontend/lessons/03-spacing-groups.md) | 2 | 2026-11-15 |
@@ -43,10 +43,12 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | W17 | Chiến tranh | Him Lam là cụm rất kiên cố. Vì sao Đại tướng Võ Nguyên Giáp vẫn chọn đánh nó đầu tiên ở Điện Biên Phủ? | [bài 6](war/lessons/06-weak-point-dien-bien-phu.md) | 1 | 2026-11-18 |
 | W18 | Chiến tranh | Đợt 1 Điện Biên Phủ (13–17/3/1954) đánh những cứ điểm nào, và mở ra được gì? | [bài 6](war/lessons/06-weak-point-dien-bien-phu.md) | 1 | 2026-11-18 |
 | B4 | BA | Hỏi thế nào để biết người dùng đã xử lý việc quên ôn ra sao? | [BA bài 2](ba/lessons/02-user-interviews.md) | 2 | 2026-11-20 |
-| B5 | BA | Vì sao tránh hỏi “bạn cũng thấy thông báo là tốt nhất đúng không?” | [BA bài 2](ba/lessons/02-user-interviews.md) | 1 | 2026-11-13 |
+| B5 | BA | Vì sao tránh hỏi “bạn cũng thấy thông báo là tốt nhất đúng không?” | [BA bài 2](ba/lessons/02-user-interviews.md) | 2 | 2026-11-20 |
 | B6 | BA | Người dùng vừa kể bỏ ôn 4 ngày. Hỏi tiếp “có nút ôn nhanh 5 phút thì bạn dùng không?” sai ở đâu, và nên hỏi gì? | [BA bài 2](ba/lessons/02-user-interviews.md) | 2 | 2026-11-19 |
-| B7 | BA | Capstone cần nối vào cổng đăng nhập của trường. Ai cần gặp sớm nhất, vì sao? | [BA bài 3](ba/lessons/03-stakeholders.md) | 1 | 2026-11-17 |
+| B7 | BA | Capstone cần nối vào cổng đăng nhập của trường. Ai cần gặp sớm nhất, vì sao? | [BA bài 3](ba/lessons/03-stakeholders.md) | 1 | 2026-11-18 |
 | B8 | BA | Làm sao tìm ra một bên liên quan mà chưa ai nhắc tới? | [BA bài 3](ba/lessons/03-stakeholders.md) | 1 | 2026-11-17 |
+| B9 | BA | Người dùng nhắn "thêm chế độ tối đi". Viết thẳng "tôi muốn có nút chế độ tối" vào story thì mất gì? | [BA bài 4](ba/lessons/04-user-stories.md) | 1 | 2026-11-18 |
+| B10 | BA | Ba phần của một user story là gì, và phần nào thường chỉ lộ ra khi hỏi về một lần cụ thể? | [BA bài 4](ba/lessons/04-user-stories.md) | 1 | 2026-11-18 |
 | F10 | Frontend | App ngân hàng có tiền vào màu xanh lá, tiền ra màu đỏ. Màu nhấn nên tránh màu nào, vì sao? | [bài 6](frontend/lessons/06-colour-for-a-whole-app.md) | 1 | 2026-11-16 |
 | F11 | Frontend | Người mù màu đỏ-lục phân biệt tiền vào và tiền ra nhờ gì? Chuẩn nào bắt điều đó? | [bài 6](frontend/lessons/06-colour-for-a-whole-app.md) | 1 | 2026-11-16 |
 | F12 | Frontend | Thiết kế cho người 70 tuổi, cặp màu nào dễ lẫn và nên làm gì? | [bài 6](frontend/lessons/06-colour-for-a-whole-app.md) | 1 | 2026-11-16 |
