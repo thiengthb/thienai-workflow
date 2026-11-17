@@ -14,7 +14,7 @@ export function writePublish(out, { file_path, url, files, capabilities, icon, d
   return [
     `Đăng: gọi Artifact với đúng các tham số trong ${join(out, 'publish.json')} (${url ? 'cập nhật trang cũ ' + url : 'artifact mới'}).`,
     // Project bản beta không có công cụ Artifact, đăng bằng các lệnh của server claude-artifacts (đo 2026-11-17, buổi BA 4 mất 4 lượt đi tìm).
-    `Project bản beta: publish_files với files [{as: "index.html", path: "${params.file_path}"}]${url ? ', slug và base_version của trang cũ (get_artifact)' : `, title "${description}", icon "${icon}"`}, rồi read_declaration và declare_capabilities với capabilities trong publish.json.`,
+    `Project bản beta: publish_files với files ${JSON.stringify([{ as: 'index.html', path: params.file_path }, ...Object.entries(params.files || {}).map(([as, path]) => ({ as, path }))])}${url ? ', slug lấy từ link trang cũ, base_version từ get_artifact (gọi list_files trước)' : `, title "${description}", icon "${icon}"`}, rồi read_declaration và declare_capabilities với capabilities trong publish.json.`,
     ...(file_path ? [] : [`Mở thử trên máy: ${join(out, 'preview.html')}`]),
   ];
 }
