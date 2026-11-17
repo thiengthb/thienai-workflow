@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-17 · Cập nhật: 2026-11-17 �
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 1 trong PR này (merge sau PR #103).
+- Đang ở: đợt 1 đã merge (PR #104); đang kiểm ở 3 chat kế tiếp.
 - Còn thiếu: kiểm đợt 1 ở 3 chat kế tiếp; đợt 2 cùng buổi học kế tiếp; đợt 3 ở mốc 2026-12-01.
-- thien cần làm: merge PR #103 rồi PR này; chọn một trong hai câu mẫu báo cáo ở mô tả PR.
+- thien cần làm: không có. Đợt 2 làm cùng buổi học kế tiếp.
 
 ## Mục tiêu
 Những gì thien nói với AI (chê, khen, chọn, giao việc) đi tới đúng file và được làm, mà thien không phải nhắc lại hay duyệt thêm.
@@ -45,7 +45,7 @@ Xong khi: ở 3 chat kế tiếp có PR thuộc dòng đầu của `profile/DELE
 - [ ] `profile/DELEGATION.md`; `AGENTS.md` mục Sửa repo trỏ tới nó; một dòng ở `profile/MAP.md` (chờ merge PR này)
 - [ ] `profile/CHATS.md` mục Đầu chat: dòng mục tiêu ba phần cho việc nhiều bước, chỉ hỏi lại khi câu trả lời đổi thứ sẽ ra (chờ merge PR này)
 - [ ] `profile/VOICE.md` mục "Báo cáo khi xong việc"; `PROFILE.md` (bản tóm tắt 2 phút) và `skills/start-project/STEPS.md` trỏ tới mục đó (chờ merge PR này)
-- [ ] thien chọn một câu mẫu báo cáo, thêm vào bảng câu mẫu của `VOICE.md`
+- [x] thien chọn câu mẫu A (2026-11-17), đã thêm vào bảng câu mẫu của `VOICE.md` (PR #104)
 - [ ] Kiểm ở 3 chat kế tiếp
 
 ### 2. Đường chảy cho góp ý (cùng buổi học kế tiếp)

@@ -59,6 +59,7 @@ Ví dụ lái giọng văn tốt hơn luật ([Anthropic](https://platform.claud
 | Cách này chắc chắn sẽ chạy nhanh hơn. | Cách này chắc sẽ chạy nhanh hơn, nhưng mình chưa đo. |
 | Mình đã gửi yêu cầu gộp code, bạn xem lại rồi gộp vào nhánh chính giúp mình nhé. | Mình đã mở PR, bạn review rồi merge giúp mình nhé. |
 | Nguyên nhân: cache cũ. Cách sửa: xoá cache + tải lại. | Lỗi này do trình duyệt còn giữ bản cũ. Bạn xoá cache rồi tải lại trang là hết. |
+| Mình đã hoàn thành việc cập nhật các file theo kế hoạch: đã tạo DELEGATION.md, đã sửa CHATS.md, VOICE.md, PROFILE.md, STEPS.md, MAP.md, README.md, đã chạy test, đã đẩy nhánh và mở PR. Bạn xem giúp mình nhé. | Xong đợt 1 rồi nhé: PR #104, test chạy qua hết. Bạn merge #103 trước rồi tới PR này. Việc tiếp theo là đợt 2, làm cùng buổi học tới. (thien chọn, 2026-11-17) |
 
 ### Từ mình đã chê
 
