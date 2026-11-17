@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buổi 9: Buổi mốc, nhìn lại 8 buổi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style id="kit-css"></style>
+<style id="lesson-css"></style>
+<style id="it-css"></style>
+<style>
+/* Phần riêng của bài 9 (buổi mốc, so sánh mù).
+   1. Hai ảnh chụp thật của buổi 1 (TickTick, Todoist, 2026-11-07), đổi thứ tự so với buổi 1, nén WebP.
+   2. Năm cặp màn tự dựng (.mk), mỗi cặp lấy từ một ý đã học; bản tốt đặt xen kẽ A, B.
+   3. Bàn thử "court": màn xác nhận đặt sân cầu lông (tự dựng, chưa gặp), ba núm cho ba ý:
+      nút phụ (data-nut: dac, vien, chu), cỡ chữ tổng tiền (--tong), khoảng giữa hai nhóm (--g). Lúc mở: dac, 15, 8.
+      Bản của Claude: chu, 20, 24. */
+.shots2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.shots2 figure { margin: 0; display: grid; gap: 8px; align-content: start; }
+.shots2 img { width: 100%; max-width: 240px; height: auto; border: 1px solid var(--line); border-radius: 8px; display: block; }
+.shots2 figcaption { font-weight: 600; font-size: 14px; }
+.rate { display: grid; gap: 4px; }
+.rate > span { font-size: 13px; color: var(--muted); }
+.rate .seg.full { gap: 4px; }
+.rate .seg.full button { min-width: 0; padding: 0; font-size: 14px; }
+.seg.full.wrap { flex-wrap: wrap; } .seg.full.wrap button { flex: 1 1 40%; }
+.q.two { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.q.two > .status, .q.two > .why { grid-column: 1 / -1; }
+.q.two > .opt { min-width: 0; }
+.ideas { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.ideas li { font-size: 13.5px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; }
+.todo { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pair > div { display: grid; gap: 6px; align-content: start; }
+.pair .tag { font-weight: 700; font-size: 14px; }
+.mk { background: #fff; color: #1b1b1a; border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 11px; line-height: 1.35; min-height: 210px; display: flex; flex-direction: column; overflow: hidden; }
+.mk .mut { color: #6b6862; }
+.mk .lb { font-size: 9px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #6b6862; }
+.mk .row { display: flex; justify-content: space-between; gap: 6px; }
+.mk .b { display: block; text-align: center; border-radius: 6px; padding: 6px 0; font-weight: 600; font-size: 11px; }
+.mk .b.fill { background: #2563eb; color: #fff; }
+.mk .b.or { background: #ea580c; color: #fff; }
+.mk .b.txt { color: #6b6862; font-weight: 500; }
+.mk .bx { display: flex; gap: 4px; } .mk .bx .b { flex: 1; font-size: 10px; white-space: nowrap; padding: 6px 2px; }
+/* cặp 1: bậc chữ */
+.p1a .t1, .p1a .t2 { font-size: 13px; font-weight: 600; } .p1a .f { font-size: 12px; font-weight: 500; }
+.p1b .t1 { font-size: 9px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #6b6862; }
+.p1b .t2 { white-space: nowrap; font-size: 20px; font-weight: 700; letter-spacing: -.01em; } .p1b .t2 small { font-size: 11px; font-weight: 500; color: #6b6862; }
+.p1b .f { font-size: 11px; color: #3f3d39; }
+/* cặp 2: khoảng cách */
+.p2a { gap: 22px; } .p2a .grp { display: grid; gap: 4px; }
+.p2b { gap: 10px; } .p2b .grp { display: contents; }
+/* cặp 4: màu */
+.p4b .hd { background: #7c3aed; color: #fff; margin: -10px -10px 0; padding: 8px 10px; font-weight: 600; }
+.p4b .dr { color: #7c3aed; font-weight: 600; }
+.mk .chip { display: inline-block; font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 99px; }
+.mk .slots { display: flex; gap: 4px; flex-wrap: wrap; }
+.mk .slot { font-size: 10px; padding: 3px 6px; border-radius: 5px; border: 1px solid #d6d3cd; color: #3f3d39; }
+.mk .slot.on { background: #2563eb; border-color: #2563eb; color: #fff; }
+/* cặp 5: mục đích của màn */
+.p5a .hero { margin: -10px -10px 0; height: 54px; background: linear-gradient(135deg, #f9a8d4, #c4b5fd 60%, #93c5fd); display: flex; align-items: end; padding: 6px 10px; color: #1b1b1a; font-weight: 700; font-size: 13px; }
+.p5a .b.cancel { background: linear-gradient(90deg, #ef4444, #db2777); color: #fff; box-shadow: 0 2px 6px rgb(219 39 119 / .35); }
+
+/* Bàn thử: màn xác nhận đặt sân */
+.bench[data-pane="court"] .screen { --tong: 15px; --g: 8px; }
+.court { min-height: 100%; display: flex; flex-direction: column; gap: var(--g); padding: 16px 16px 14px; background: #fff; color: #1b1b1a; font-size: 15px; }
+.court .hd { font-size: 20px; font-weight: 700; letter-spacing: -.01em; margin-bottom: 8px; }
+.court .sec { display: flex; flex-direction: column; gap: 8px; }
+.court .lb { font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: #6b6862; }
+.court .row { display: flex; justify-content: space-between; gap: 8px; }
+.court .mut { color: #6b6862; }
+.court .tot { font-size: var(--tong); font-weight: 700; align-items: baseline; }
+.court .tot span:first-child { font-size: 15px; font-weight: 600; }
+.court .acts { margin-top: auto; display: grid; gap: 8px; }
+.court .b { text-align: center; padding: 12px 0; border-radius: 8px; font-weight: 600; font-size: 15px; border: 1px solid transparent; }
+.court .b.main { background: #2563eb; color: #fff; }
+.court .b.alt { background: #2563eb; color: #fff; }
+.screen[data-nut="vien"] .court .b.alt { background: #fff; color: #1b1b1a; border-color: #c9c6bf; }
+.screen[data-nut="chu"] .court .b.alt { background: none; color: #2563eb; padding: 6px 0; }
+
+.cmp { width: 100%; border-collapse: collapse; font-size: 14px; }
+.cmp th, .cmp td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.cmp th { font-weight: 600; color: var(--muted); font-size: 12.5px; }
+.cmp td b { font-weight: 700; }
+.map { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.dirs { display: grid; gap: 8px; }
+.dirs .opt { flex-direction: column; align-items: flex-start; gap: 2px; }
+.dirs .opt span { font-size: 13px; color: var(--muted); }
+#dir-claude { display: none; } #dir-claude.on { display: block; }
+.srcs { list-style: none; padding: 0; margin: 8px 0 0; } .srcs a { display: block; padding: 12px 0; min-height: 44px; box-sizing: border-box; }
+</style>
+</head>
+<body>
+<script type="application/json" id="lesson">{ "id": "frontend-09", "subject": "Frontend", "title": "Buổi 9: Buổi mốc, nhìn lại 8 buổi" }</script>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>Frontend · Buổi 9: Nhìn lại 8 buổi</span><span id="cnt">1/12</span></div><div class="bar"><span id="bar"></span></div></div>
+
+  <div id="stage">
+    <!-- Bàn thử: app đặt sân cầu lông (tự dựng), màn "Xác nhận đặt sân". Chưa gặp ở buổi nào. Ba núm, mỗi núm một ý đã học. -->
+    <div class="pane bench" data-pane="court">
+      <div class="phone"><div class="screen" data-nut="dac">
+        <div class="court">
+          <div class="hd">Xác nhận đặt sân</div>
+          <div class="sec">
+            <div class="lb">Sân</div>
+            <div class="row"><span>Sân 3 · Cầu lông</span><span class="mut">Nhà thi đấu B</span></div>
+            <div class="row"><span>Thứ Sáu 21/11</span><span class="mut">19:00–20:00</span></div>
+          </div>
+          <div class="sec">
+            <div class="lb">Thanh toán</div>
+            <div class="row"><span>Giá thuê 1 giờ</span><span>120.000đ</span></div>
+            <div class="row"><span>Mã SV10</span><span class="mut">−12.000đ</span></div>
+            <div class="row tot"><span>Tổng</span><span>108.000đ</span></div>
+          </div>
+          <div class="acts">
+            <div class="b main">Đặt sân</div>
+            <div class="b alt">Đổi giờ</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="side">
+        <div class="knobs">
+          <div class="knob" data-knob="nut" data-min="2"><span class="label">Nút "Đổi giờ"</span>
+            <div class="seg"><button type="button" data-val="dac" data-name="Đặc" data-code="background: #2563eb" aria-pressed="true">Đặc</button><button type="button" data-val="vien" data-name="Viền" data-code="border: 1px solid #c9c6bf">Viền</button><button type="button" data-val="chu" data-name="Chữ" data-code="background: none">Chữ</button></div></div>
+          <div class="knob" data-knob="tong" data-var="--tong" data-min="2"><span class="label">Cỡ chữ tổng tiền</span>
+            <div class="seg"><button type="button" data-val="15px" data-name="15" aria-pressed="true">15</button><button type="button" data-val="20px" data-name="20">20</button><button type="button" data-val="36px" data-name="36">36</button></div></div>
+          <div class="knob" data-knob="nhom" data-var="--g" data-min="2"><span class="label">Giữa hai nhóm</span>
+            <div class="seg"><button type="button" data-val="8px" data-name="8" aria-pressed="true">8</button><button type="button" data-val="24px" data-name="24">24</button><button type="button" data-val="48px" data-name="48">48</button></div></div>
+        </div>
+        <pre class="code"><span class="c">/* đổi theo núm */</span><span data-line="nut"><span class="k">.doi-gio</span> { <span data-v="nut"></span> }</span><span data-line="tong"><span class="k">.tong</span> { font-size: <span data-v="tong"></span> }</span><span data-line="nhom"><span class="k">.man</span> { gap: <span data-v="nhom"></span> }</span></pre>
+      </div>
+      <pre class="code"><span data-line="nut"><span class="k">.doi-gio</span> { <span data-v="nut"></span> }</span><span data-line="tong"><span class="k">.tong</span> { font-size: <span data-v="tong"></span> }</span><span data-line="nhom"><span class="k">.man</span> { gap: <span data-v="nhom"></span> }</span></pre>
+    </div>
+  </div>
+
+  <!-- 0. Mở bài: giới thiệu khoảng 1 phút (kiểu bài mới: so sánh mù), chưa giải thích vì sao. -->
+  <section class="step on" data-s="0">
+    <h1>Buổi mốc: nhìn lại 8 buổi</h1>
+    <p>Hôm nay không có ý mới. Bạn gặp lại các màn đã xem từ buổi 1 tới buổi 8, nhưng không có lời giải thích bên cạnh: tự chọn, tự chấm, tự gọi tên chỗ cấn mắt. Người dạy thiết kế gọi kiểu này là so sánh mù.</p>
+    <p>Ví dụ: hai bản giỏ hàng đặt cạnh nhau. Bạn chọn bản tốt hơn, rồi chọn vì sao, trong năm ý đã học:</p>
+    <ul class="ideas"><li>Điểm nhấn</li><li>Bậc chữ</li><li>Khoảng cách</li><li>Màu</li><li>Mục đích của màn</li></ul>
+    <div class="card small">
+      <b>Việc sắp làm, khoảng 15 phút</b>
+      <ol class="todo">
+        <li>Ôn 3 thẻ, nhớ lại buổi 8</li>
+        <li>Chấm lại hai màn thật của buổi 1</li>
+        <li>Năm cặp màn: chọn bản tốt hơn và gọi tên ý</li>
+        <li>Một màn chưa gặp: tự sửa trên bàn thử</li>
+        <li>So với chính bạn ngày 7/11</li>
+      </ol>
+    </div>
+    <p>Chọn khác Claude là chuyện bình thường. Phần giải thích để sau khi bạn đã chọn xong.</p>
+    <button class="btn primary next" type="button" data-go="1">Bắt đầu</button>
+  </section>
+
+  <!-- 1. Ôn trộn: 3 thẻ đến hạn trong learning/cards.md (F3, F4, F5). Chỉ lần học đầu. -->
+  <section class="step" data-s="1" data-part="review">
+    <h2>Ôn nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Ngoài cỡ chữ, màu và thứ tự, còn hai cách nào để tạo bậc chữ?</p>
+      <div class="q" data-q="F3" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Đổi kiểu chữ và gạch chân</button>
+        <button class="opt" type="button">Độ đậm và khoảng cách quanh chữ</button>
+        <p class="why">Một tiêu đề cùng cỡ với chữ thường vẫn thành bậc trên nếu đậm hơn và có khoảng trống quanh nó.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Trong nhóm, các dòng cách nhau 8px. Giữa hai nhóm nên bao nhiêu?</p>
+      <div class="q" data-q="F4" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">10px, lớn hơn một chút là đủ</button>
+        <button class="opt" type="button">Khoảng 24px</button>
+        <button class="opt" type="button">8px cho đều</button>
+        <p class="why">10px so với 8px thì mắt gần như không thấy khác. Gấp 2–3 lần mới thấy rõ hai nhóm.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> Vì sao nhiều design system chỉ cho dùng 4, 8, 12, 16, 24, 32?</p>
+      <div class="q" data-q="F5" data-a="0" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Để các khoảng lặp lại có nhịp, và hai khoảng khác nhau thì khác hẳn, không lưng chừng</button>
+        <button class="opt" type="button">Vì màn điện thoại nào cũng rộng chia hết cho 4</button>
+        <p class="why">Thang có bậc cách xa nhau để mỗi bậc nói một điều, cả app dùng chung một nhịp.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="2" data-need="F3 F4 F5" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 2. Nhớ lại buổi 8: hai chỗ còn vướng (lý do "trong nhỏ hơn ngoài", trả lời có chuyện cụ thể trên màn). -->
+  <section class="step" data-s="2" data-part="review">
+    <h2>Nhớ lại buổi 8</h2>
+    <div class="card">
+      <p>Màn "Sách của tôi" của Vy: tên tác giả cách sách của nó 10, cách cuốn bên dưới 6. Vì sao "Nguyễn Nhật Ánh" trông như tác giả của cuốn dưới?</p>
+      <div class="q" data-q="recall" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Vì chữ tác giả màu xám, nhạt quá</button>
+        <button class="opt" type="button">Vì mắt ghép thứ ở gần thành một nhóm, mà nó gần cuốn dưới hơn cuốn của mình</button>
+        <button class="opt" type="button">Vì 10 và 6 không nằm trong thang 4, 8, 16</button>
+        <p class="why">Thang chỉ giúp hai số khác nhau rõ. Gốc của lỗi là thứ tự: khoảng bên trong phải nhỏ hơn khoảng bên ngoài. Buổi 8 bạn chọn đúng câu này nhưng chưa tự nói ra; cuối buổi hôm nay thử nói ra.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p>Vy hỏi "sao phải đổi số?". Câu trả lời nào làm Vy chịu đổi?</p>
+      <div class="q" data-q="convince" data-a="0" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Người dùng mở màn để xem cuốn nào sắp phải trả, mà giờ tên tác giả trông như thuộc cuốn dưới</button>
+        <button class="opt" type="button">Vì 4, 16, 32 là số chuẩn, ai làm giao diện cũng dùng</button>
+        <p class="why">Câu thuyết phục có hai thứ: người dùng mở màn để làm gì, và một chuyện thấy được trên chính màn đó. "Số chuẩn" là luật chung, Vy chưa thấy vì sao.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="3" data-need="recall convince" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 3. Thử: chấm lại hai màn thật của buổi 1, đổi thứ tự. Không chấm đúng sai; so ở bước 8. -->
+  <section class="step" data-s="3">
+    <h2>Chấm lại hai màn thật của buổi 1</h2>
+    <p>Ngày 7/11 bạn đã chấm hai trang chủ này. Tên app vẫn thấy ở góc, không sao: chấm theo mắt hôm nay, đừng cố nhớ điểm cũ. 1 là rất kém, 5 là rất tốt.</p>
+    <div class="shots2">
+      <figure>
+        <figcaption>Màn 1</figcaption>
+        <img alt="Màn 1: trang chủ một app việc cần làm trên điện thoại, tiêu đề lớn, hai nút cạnh nhau, ảnh app thu nhỏ, bốn huy hiệu giải thưởng" src="data:image/webp;base64,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" width="360" height="800">
+        <div class="rate"><span>Điểm nhấn: biết ngay nhìn và bấm vào đâu</span>
+          <div class="seg full" data-rate="m1-focus"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button></div></div>
+        <div class="rate"><span>Điểm chung cả màn</span>
+          <div class="seg full" data-rate="m1-overall"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button></div></div>
+      </figure>
+      <figure>
+        <figcaption>Màn 2</figcaption>
+        <img alt="Màn 2: trang chủ một app việc cần làm trên điện thoại, tiêu đề lớn, một nút đỏ, ảnh app phóng to" src="data:image/webp;base64,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" width="360" height="800">
+        <div class="rate"><span>Điểm nhấn: biết ngay nhìn và bấm vào đâu</span>
+          <div class="seg full" data-rate="m2-focus"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button></div></div>
+        <div class="rate"><span>Điểm chung cả màn</span>
+          <div class="seg full" data-rate="m2-overall"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button></div></div>
+      </figure>
+    </div>
+    <p class="fb" id="rate-note"></p>
+    <button class="btn primary next" type="button" data-go="4" data-need="rescore" disabled>Tiếp</button>
+  </section>
+
+  <!-- 4. Thử: cặp 1–3. Mỗi cặp: chọn bản tốt hơn, rồi gọi tên ý. Bản tốt: B, A, B. -->
+  <section class="step" data-s="4">
+    <h2>Năm cặp màn (1–3)</h2>
+    <p>Mỗi cặp là cùng một màn, hai bản. Chọn bản làm tốt việc của màn hơn, rồi chọn vì sao.</p>
+
+    <div class="card">
+      <b>Cặp 1 · Gói trả phí của app ghi chú</b>
+      <div class="pair">
+        <div><span class="tag">A</span><div class="mk p1a" style="gap:8px">
+          <span class="t1">Gói Pro</span><span class="t2">99.000đ / tháng</span>
+          <span class="f">Không giới hạn ghi chú</span><span class="f">Nhóm tới 10 người</span><span class="f">Đồng bộ mọi máy</span>
+          <span class="b fill" style="margin-top:auto">Chọn gói</span></div></div>
+        <div><span class="tag">B</span><div class="mk p1b" style="gap:8px">
+          <span class="t1">Gói Pro</span><span class="t2">99.000đ <small>/ tháng</small></span>
+          <span class="f">Không giới hạn ghi chú</span><span class="f">Nhóm tới 10 người</span><span class="f">Đồng bộ mọi máy</span>
+          <span class="b fill" style="margin-top:auto">Chọn gói</span></div></div>
+      </div>
+      <div class="q two" data-q="p1" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">A tốt hơn</button><button class="opt" type="button">B tốt hơn</button>
+        <p class="why">Bản tốt hơn là B. Câu dưới hỏi vì sao.</p>
+      </div>
+      <div class="q two" data-q="p1i" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Điểm nhấn</button><button class="opt" type="button">Bậc chữ</button><button class="opt" type="button">Khoảng cách</button><button class="opt" type="button">Màu</button><button class="opt" type="button">Mục đích của màn</button>
+        <p class="why">Bậc chữ (buổi 2). Ở A, tên gói, giá và các dòng đều khoảng 12–13, đậm như nhau, nên mắt không biết đọc gì trước. B chỉ có ba bậc khác hẳn nhau: tên gói nhỏ và xám, giá 24 đậm, các dòng 11. Màu và nút ở hai bản giống hệt.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <b>Cặp 2 · Màn cài đặt</b>
+      <div class="pair">
+        <div><span class="tag">A</span><div class="mk p2a">
+          <div class="grp"><span class="lb">Tài khoản</span><span>Hồ sơ</span><span>Mật khẩu</span><span>Đăng nhập bằng Google</span></div>
+          <div class="grp"><span class="lb">Thông báo</span><span>Nhắc lịch học</span><span>Tin nhắn nhóm</span></div></div></div>
+        <div><span class="tag">B</span><div class="mk p2b">
+          <div class="grp"><span class="lb">Tài khoản</span><span>Hồ sơ</span><span>Mật khẩu</span><span>Đăng nhập bằng Google</span></div>
+          <div class="grp"><span class="lb">Thông báo</span><span>Nhắc lịch học</span><span>Tin nhắn nhóm</span></div></div></div>
+      </div>
+      <div class="q two" data-q="p2" data-a="0"><p class="status" role="status"></p>
+        <button class="opt" type="button">A tốt hơn</button><button class="opt" type="button">B tốt hơn</button>
+        <p class="why">Bản tốt hơn là A. Câu dưới hỏi vì sao.</p>
+      </div>
+      <div class="q two" data-q="p2i" data-a="2"><p class="status" role="status"></p>
+        <button class="opt" type="button">Điểm nhấn</button><button class="opt" type="button">Bậc chữ</button><button class="opt" type="button">Khoảng cách</button><button class="opt" type="button">Màu</button><button class="opt" type="button">Mục đích của màn</button>
+        <p class="why">Khoảng cách (buổi 3 và 8). Ở B mọi dòng cách nhau 9, kể cả chỗ chuyển sang nhóm "Thông báo", nên trông như một danh sách dài. A để 6 trong nhóm, 20 giữa hai nhóm (hơn 3 lần), mắt thấy ngay hai phần trước khi đọc chữ.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <b>Cặp 3 · Giỏ hàng</b>
+      <div class="pair">
+        <div><span class="tag">A</span><div class="mk" style="gap:8px">
+          <div class="row"><span>Áo thun trắng ×2</span><span>280.000đ</span></div>
+          <div class="row"><span>Mũ lưỡi trai</span><span>150.000đ</span></div>
+          <div class="row" style="font-weight:700"><span>Tổng</span><span>430.000đ</span></div>
+          <div class="bx" style="margin-top:auto"><span class="b or">Xóa giỏ hàng</span><span class="b or">Thanh toán</span></div></div></div>
+        <div><span class="tag">B</span><div class="mk" style="gap:8px">
+          <div class="row"><span>Áo thun trắng ×2</span><span>280.000đ</span></div>
+          <div class="row"><span>Mũ lưỡi trai</span><span>150.000đ</span></div>
+          <div class="row" style="font-weight:700"><span>Tổng</span><span>430.000đ</span></div>
+          <span class="b or" style="margin-top:auto">Thanh toán</span><span class="b txt" style="padding:2px 0">Xóa giỏ hàng</span></div></div>
+      </div>
+      <div class="q two" data-q="p3" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">A tốt hơn</button><button class="opt" type="button">B tốt hơn</button>
+        <p class="why">Bản tốt hơn là B. Câu dưới hỏi vì sao.</p>
+      </div>
+      <div class="q two" data-q="p3i" data-a="0"><p class="status" role="status"></p>
+        <button class="opt" type="button">Điểm nhấn</button><button class="opt" type="button">Bậc chữ</button><button class="opt" type="button">Khoảng cách</button><button class="opt" type="button">Màu</button><button class="opt" type="button">Mục đích của màn</button>
+        <p class="why">Điểm nhấn (buổi 1 và 7). Hai nút đặc cùng cỡ, cùng màu thì không nút nào là thứ nhất, mắt phải dừng lại chọn. Đây là lỗi buổi 7 bạn gọi là lỗi màu: đổi màu nút Xóa thì vẫn còn hai nút đặc. B hạ "Xóa giỏ hàng" thành chữ xám.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="5" data-need="p1 p1i p2 p2i p3 p3i" disabled>Tiếp</button>
+  </section>
+
+  <!-- 5. Thử: cặp 4–5. Bản tốt: A, B. -->
+  <section class="step" data-s="5">
+    <h2>Năm cặp màn (4–5)</h2>
+
+    <div class="card">
+      <b>Cặp 4 · Đặt lịch khám</b>
+      <div class="pair">
+        <div><span class="tag">A</span><div class="mk" style="gap:8px">
+          <b style="font-size:12px">Đặt lịch khám</b>
+          <span style="font-weight:600">BS. Lê Thu Hà</span><span class="mut">Da liễu · Còn 2 chỗ hôm nay</span>
+          <div class="slots"><span class="slot">8:00</span><span class="slot on">9:30</span><span class="slot">14:00</span></div>
+          <span class="mut">Giảm 20% lần đầu</span>
+          <span class="b fill" style="margin-top:auto">Đặt lịch 9:30</span></div></div>
+        <div><span class="tag">B</span><div class="mk p4b" style="gap:8px">
+          <div class="hd">Đặt lịch khám</div>
+          <div class="row"><span class="dr">BS. Lê Thu Hà</span><span style="color:#dc2626">♥</span></div>
+          <span><span class="mut">Da liễu · </span><span class="chip" style="background:#f97316;color:#fff">Còn 2 chỗ</span></span>
+          <div class="slots"><span class="slot">8:00</span><span class="slot on">9:30</span><span class="slot">14:00</span></div>
+          <span><span class="chip" style="background:#dc2626;color:#fff">Giảm 20%</span></span>
+          <span class="b fill" style="margin-top:auto">Đặt lịch 9:30</span></div></div>
+      </div>
+      <div class="q two" data-q="p4" data-a="0"><p class="status" role="status"></p>
+        <button class="opt" type="button">A tốt hơn</button><button class="opt" type="button">B tốt hơn</button>
+        <p class="why">Bản tốt hơn là A. Câu dưới hỏi vì sao.</p>
+      </div>
+      <div class="q two" data-q="p4i" data-a="3"><p class="status" role="status"></p>
+        <button class="opt" type="button">Điểm nhấn</button><button class="opt" type="button">Bậc chữ</button><button class="opt" type="button">Khoảng cách</button><button class="opt" type="button">Màu</button><button class="opt" type="button">Mục đích của màn</button>
+        <p class="why">Màu (buổi 5). B có năm khối màu đặc giành mắt: đầu trang tím, tên bác sĩ tím, nhãn cam, nhãn đỏ, tim đỏ. Buổi 5 bạn bắt được khối màu to nhưng sót chữ tím và trái tim nhỏ, hôm nay thử nhìn lại hai chỗ đó. A giữ một màu nhấn xanh cho giờ đã chọn và nút đặt, còn lại xám.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <b>Cặp 5 · Chi tiết đơn hàng đang giao</b>
+      <div class="pair">
+        <div><span class="tag">A</span><div class="mk p5a" style="gap:8px">
+          <div class="hero">Đơn #2041 · Đang giao</div>
+          <div class="row"><span>Tai nghe không dây</span><span class="mut">1</span></div>
+          <div class="row mut"><span>Tổng</span><span>245.000đ</span></div>
+          <span class="b cancel" style="margin-top:auto">Hủy đơn</span><span class="b txt" style="padding:2px 0">Theo dõi đơn</span></div></div>
+        <div><span class="tag">B</span><div class="mk" style="gap:8px">
+          <b style="font-size:12px">Đơn #2041 · Đang giao</b>
+          <div class="row"><span>Tai nghe không dây</span><span class="mut">1</span></div>
+          <div class="row" style="font-weight:700;font-size:14px"><span>Tổng</span><span>245.000đ</span></div>
+          <span class="b fill" style="margin-top:auto">Theo dõi đơn</span><span class="b txt" style="padding:2px 0">Hủy đơn</span></div></div>
+      </div>
+      <div class="q two" data-q="p5" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">A tốt hơn</button><button class="opt" type="button">B tốt hơn</button>
+        <p class="why">Bản tốt hơn là B. Câu dưới hỏi vì sao.</p>
+      </div>
+      <div class="q two" data-q="p5i" data-a="4"><p class="status" role="status"></p>
+        <button class="opt" type="button">Điểm nhấn</button><button class="opt" type="button">Bậc chữ</button><button class="opt" type="button">Khoảng cách</button><button class="opt" type="button">Màu</button><button class="opt" type="button">Mục đích của màn</button>
+        <p class="why">Mục đích của màn (buổi 4). A đẹp hơn và cũng có đúng một điểm nhấn, chỉ là đặt vào "Hủy đơn", việc người mở màn hiếm khi cần, còn tổng tiền thì mờ đi. Nên nếu bạn chọn "Điểm nhấn" thì cũng đúng một nửa: gốc là quên hỏi người dùng mở màn để làm gì (theo dõi đơn, xem lại số tiền). Bản đẹp hơn chưa chắc đúng.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="6" data-need="p4 p4i p5 p5i" disabled>Tiếp</button>
+  </section>
+
+  <!-- 6. Thử: màn chưa gặp trên bàn thử, ba núm ba ý, không có bản thiết kế. -->
+  <section class="step" data-s="6" data-stage="court">
+    <h2>Một màn chưa gặp</h2>
+    <p>App đặt sân cầu lông, màn xác nhận trước khi đặt. Lần này không có bản thiết kế để chép: vặn ba núm tới khi bạn thấy màn làm tốt việc của nó, rồi bấm chốt.</p>
+    <p>Trước khi vặn, tự hỏi: người mở màn này để làm gì?</p>
+    <p class="stage-hint"><span class="pc">Núm ở bên phải màn app.</span><span class="ph">Núm ở ngay dưới màn app phía trên.</span></p>
+    <button class="btn" type="button" data-pick="d1" data-of="court" data-need="tried-court.nut tried-court.tong tried-court.nhom" disabled>Chốt bản này</button>
+    <p class="fb" data-echo="d1"></p>
+    <button class="btn primary next" type="button" data-go="7" data-need="d1" disabled>Tiếp</button>
+  </section>
+
+  <!-- 7. Hiểu sau: bản của Claude trên cùng bàn, nhắc lại lựa chọn vừa chốt. -->
+  <section class="step" data-s="7" data-stage="court">
+    <h2>Ba núm, ba ý</h2>
+    <p class="fb" data-echo="d1" data-prefix="Bạn chốt: "></p>
+    <p>Người mở màn này để xem lại giờ, số tiền, rồi bấm đặt. Claude chốt <b>Chữ, 20, 24</b>:</p>
+    <div class="card small">
+      <ol class="map">
+        <li><b>Nút "Đổi giờ" thành chữ</b> (điểm nhấn). Hai nút đặc thì mắt phải chọn giữa "Đặt sân" và "Đổi giờ". Viền cũng được, nhưng vẫn là một khối to ngang nút chính.</li>
+        <li><b>Tổng tiền 20</b> (bậc chữ). 15 thì bằng mọi dòng, không thấy. 20 khác rõ, khoảng 1,3 lần. 36 to hơn cả tiêu đề màn, thành điểm nhấn thứ hai giành với nút "Đặt sân".</li>
+        <li><b>Giữa hai nhóm 24</b> (khoảng cách). 8 thì bằng khoảng giữa các dòng, "Sân" và "Thanh toán" dính thành một danh sách. 24 gấp 3 lần 8. 48 cũng tách được, nhưng phần thanh toán trôi xa khỏi phần sân.</li>
+      </ol>
+    </div>
+    <p><b>Tự thấy.</b> Bấm để đặt bản của Claude lên màn, so với bản bạn vừa chốt. Muốn xem lại bản của mình thì vặn lại núm.</p>
+    <button class="btn" type="button" data-set="court" data-vals="nut=chu; tong=20px; nhom=24px" data-done="saw-claude">Đặt bản của Claude</button>
+    <button class="btn primary next" type="button" data-go="8" data-need="saw-claude" disabled>Tiếp</button>
+  </section>
+
+  <!-- 8. Hiểu sau: so với chính mình ngày 7/11, và tổng năm cặp. Nội dung điền bằng script cuối trang. -->
+  <section class="step" data-s="8">
+    <h2>Bạn ngày 7/11 và bạn hôm nay</h2>
+    <div class="card small">
+      <table class="cmp">
+        <thead><tr><th>Điểm nhấn</th><th>Màn 1 (TickTick)</th><th>Màn 2 (Todoist)</th></tr></thead>
+        <tbody>
+          <tr><td>Bạn, ngày 7/11</td><td>5</td><td>3</td></tr>
+          <tr><td>Bạn, hôm nay</td><td><b id="now1">–</b></td><td><b id="now2">–</b></td></tr>
+          <tr><td>Claude, ngày 7/11</td><td>2</td><td>5</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="fb" id="rescore-say"></p>
+    <p>Vì sao Claude chấm TickTick thấp: "Get Started" và "Download" đứng cạnh nhau, cùng cỡ, cùng màu xanh (một nút đặc, một nút viền), nên mắt phải dừng lại chọn. Ảnh máy tính thu nhỏ tới mức không đọc được, thêm bốn huy hiệu giải thưởng cũng xin được nhìn. Todoist chỉ có một thứ vừa to, vừa đậm, vừa khác màu: nút đỏ "Start for free".</p>
+    <p class="fb" id="pairs-say"></p>
+    <div class="card small">
+      <b>Năm ý của chặng 1, mỗi ý một câu</b>
+      <ol class="map">
+        <li><b>Điểm nhấn</b> (buổi 1, 7): một màn một chỗ nhìn trước; muốn nó nổi thì hạ thứ khác xuống.</li>
+        <li><b>Bậc chữ</b> (buổi 2): ít bậc, mỗi bậc khác hẳn nhau về cỡ, độ đậm, màu, khoảng trống.</li>
+        <li><b>Khoảng cách</b> (buổi 3, 8): trong nhỏ hơn ngoài, mỗi tầng gấp ít nhất 2 lần, số lấy từ thang.</li>
+        <li><b>Màu</b> (buổi 5, 6): một màu nhấn; màu khác chỉ khi mang nghĩa và để nhạt.</li>
+        <li><b>Mục đích của màn</b> (buổi 4, 7): hỏi trước người dùng mở màn để làm gì, rồi mới sửa bốn ý trên.</li>
+      </ol>
+    </div>
+    <button class="btn primary next" type="button" data-go="9">Tiếp</button>
+  </section>
+
+  <!-- 9. Câu hỏi nhanh: 2 câu kiến thức (đúng hai chỗ vướng buổi 8) + 1 câu chọn hướng sau mốc (không đúng sai). -->
+  <section class="step" data-s="9">
+    <h2>Câu hỏi nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Vì sao khoảng trong một nhóm phải nhỏ hơn khoảng giữa hai nhóm?</p>
+      <div class="q" data-q="k1" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Để màn có nhịp đều cho đẹp</button>
+        <button class="opt" type="button">Vì mắt ghép thứ ở gần thành một nhóm: khoảng cách nói cho mắt cái gì thuộc về cái gì</button>
+        <button class="opt" type="button">Để màn chứa được nhiều dòng hơn</button>
+        <p class="why">Đặt sai thứ tự thì mắt ghép nhầm, như tên tác giả của Vy, hay "Sân" và "Thanh toán" dính nhau lúc khoảng giữa nhóm là 8.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Bạn nhận một màn vừa có hai nút đặc tranh nhau, vừa có năm màu. Việc đầu tiên là gì?</p>
+      <div class="q" data-q="k2" data-a="2"><p class="status" role="status"></p>
+        <button class="opt" type="button">Bỏ bớt màu cho còn một màu nhấn</button>
+        <button class="opt" type="button">Làm nút đẹp hơn thì đỡ tranh nhau</button>
+        <button class="opt" type="button">Hỏi người dùng mở màn để làm gì, rồi giữ một nút đặc và màu nhấn cho đúng việc đó</button>
+        <p class="why">Bỏ màu trước mà chưa biết việc chính thì có thể giữ nhầm màu cho nút phụ. Câu "mở màn để làm gì" quyết định nút nào đặc, màu nhấn rơi vào đâu.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> Không có đúng sai. Sau mốc này, chặng 2 (áp vào app của mình) bắt đầu. Song song, bạn muốn học phần kỹ thuật nào trước?</p>
+      <div class="dirs">
+        <button class="opt" type="button" data-dir="a11y">Dễ truy cập (a11y)<span>Màn dùng được cho người nhìn kém, dùng bàn phím, dùng trình đọc màn hình</span></button>
+        <button class="opt" type="button" data-dir="test">Test<span>Viết bài kiểm để sửa code không làm hỏng chỗ khác</span></button>
+        <button class="opt" type="button" data-dir="browser">Trình duyệt và mạng<span>Trang tải thế nào, request là gì, vì sao chậm</span></button>
+        <button class="opt" type="button" data-dir="ts">TypeScript<span>Ghi rõ kiểu dữ liệu để code ít lỗi</span></button>
+        <button class="opt" type="button" data-dir="arch">Kiến trúc<span>Chia component, giữ dữ liệu ở đâu</span></button>
+        <button class="opt" type="button" data-dir="perf">Hiệu năng<span>Đo và làm trang nhanh hơn</span></button>
+        <button class="opt" type="button" data-dir="none">Chưa, chỉ làm chặng 2 trước<span>Ở lại phần nhìn, áp vào sakubun và todo</span></button>
+      </div>
+      <div class="fb" id="dir-claude"><b>Claude gợi ý: dễ truy cập.</b> Nó nối thẳng với con mắt đang luyện (độ tương phản, cỡ chữ, cỡ chỗ bấm, thứ tự đọc), và repo đã có công cụ kiểm a11y tự động để thực hành. Lý do mạnh nhất để không chọn: ít đụng tới code logic. Thứ hai là test, hợp đích 6 tháng của bạn, nhưng testing đang nằm trong hàng chờ môn học, có thể gộp. Đây là Claude suy ra, bạn chọn khác thì theo bạn.</div>
+    </div>
+    <button class="btn primary next" type="button" data-go="10" data-need="k1 k2 dir" disabled>Tiếp</button>
+  </section>
+
+  <!-- 10. Tự nói lại theo tình huống: Khoa hỏi về chính màn đặt sân, đòi lý do. -->
+  <section class="step" data-s="10">
+    <h2>Tự nói lại</h2>
+    <div class="say ask-from" data-who="Khoa, bạn cùng nhóm capstone làm màn đặt sân"><b>Khoa nhắn</b>Màn xác nhận đặt sân của mình, mình chỉ định làm tổng tiền to lên cho nổi. Sao bạn bảo phải sửa cả nút "Đổi giờ" với khoảng cách nữa? Sửa thế thì người dùng được gì?</div>
+    <p>Trả lời Khoa 2–3 câu. Mỗi chỗ sửa nói kèm vì sao, dựa vào chính màn đặt sân. Có số thì càng tốt.</p>
+    <textarea data-key="teach" data-min="5" placeholder="Khoa ơi, người ta mở màn này để..."></textarea>
+    <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Khoa ơi, người ta mở màn này để xem lại giờ, số tiền rồi bấm đặt. Hai nút đặc thì mắt phải dừng lại chọn giữa "Đặt sân" và "Đổi giờ", nên mình hạ "Đổi giờ" thành chữ để chỉ còn một chỗ bấm. Tổng tiền 15 thì bằng mọi dòng, 20 là đủ khác (khoảng 1,3 lần) mà không to hơn tiêu đề. Còn "Sân" và "Thanh toán" đang cách nhau 8, bằng khoảng giữa các dòng, nên trông như một danh sách dài; để 24 giữa hai nhóm thì mắt thấy ngay hai phần, vì mắt ghép thứ ở gần thành một nhóm.</div></div>
+    <button class="btn primary next" type="button" data-go="11" data-need="teach" disabled>Tiếp</button>
+  </section>
+
+  <!-- 11. Góp ý, xong buổi. Có thêm câu kiểu buổi muốn giữ (thử nghiệm frontend kết thúc ở mốc này). -->
+  <section class="step" data-s="11">
+    <h2>Góp ý buổi này</h2>
+    <div class="card">
+      <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
+      <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Buổi so sánh mù, so với các buổi học ý mới</b><div class="seg full" data-f="method"><button type="button" data-v="thích hơn" aria-pressed="false">Thích hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="kém hơn" aria-pressed="false">Kém hơn</button></div></div>
+      <div class="crit"><b>Sau mốc, kiểu buổi muốn gặp nhiều nhất</b><div class="seg full wrap" data-f="keep"><button type="button" data-v="chọn bản sửa" aria-pressed="false">Chọn bản sửa</button><button type="button" data-v="bàn thử, chép lại" aria-pressed="false">Bàn thử</button><button type="button" data-v="tìm chỗ khác" aria-pressed="false">Tìm chỗ khác</button><button type="button" data-v="chấm hai màn thật" aria-pressed="false">Chấm màn thật</button></div></div>
+      <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+    </div>
+    <button class="btn primary next" type="button" id="finish">Xong buổi học</button>
+    <p class="done-msg" id="done-msg" role="status"></p>
+    <button class="btn next hide" type="button" id="copy">Chép kết quả</button>
+  </section>
+</div>
+
+<script id="kit-js"></script>
+<script id="lesson-js"></script>
+<script id="it-js"></script>
+<script id="lesson-kit"></script>
+<script>
+/* Phần riêng của bài 9: chấm lại hai màn (R.rescore), chọn hướng sau mốc (R.direction), bảng so sánh ở bước 8. */
+(() => {
+  const R = window.R, L = window.Lesson;
+  const $ = (s) => document.querySelector(s), $$ = (s) => [...document.querySelectorAll(s)];
+  R.rescore = R.rescore || {};
+  const OLD = { m1: 5, m2: 3 }, CLAUDE = { m1: 2, m2: 5 };   // buổi 1: m1 = TickTick, m2 = Todoist
+  const NAMES = ['Điểm nhấn', 'Bậc chữ', 'Khoảng cách', 'Màu', 'Mục đích của màn'];
+
+  $$('[data-rate]').forEach((g) => g.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+    g.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    R.rescore[g.dataset.rate] = +b.dataset.v;
+    if (['m1-focus', 'm1-overall', 'm2-focus', 'm2-overall'].every((k) => R.rescore[k])) {
+      L.done('rescore');
+      $('#rate-note').textContent = 'Đã chấm xong. So với điểm ngày 7/11 ở cuối buổi.';
+    }
+    paint();
+  })));
+
+  $$('[data-dir]').forEach((b) => b.addEventListener('click', () => {
+    $$('[data-dir]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    R.direction = b.dataset.dir;
+    $('#dir-claude').classList.add('on');
+    L.done('dir');
+  }));
+
+  function paint() {
+    const f1 = R.rescore['m1-focus'], f2 = R.rescore['m2-focus'];
+    $('#now1').textContent = f1 || '–'; $('#now2').textContent = f2 || '–';
+    const say = $('#rescore-say');
+    if (f1 && f2) {
+      say.textContent = f2 > f1
+        ? `Hôm nay bạn thấy Todoist rõ điểm nhấn hơn TickTick (${f2} so với ${f1}). Ngày 7/11 thì ngược lại (3 so với 5). Mắt bạn đã đổi.`
+        : f2 === f1
+          ? `Hôm nay bạn chấm hai màn bằng nhau (${f1}). Ngày 7/11 bạn cho TickTick 5, Todoist 3. Đã gần Claude hơn, thử nhìn lại hai nút cạnh nhau của TickTick.`
+          : `Hôm nay bạn vẫn thấy TickTick rõ điểm nhấn hơn (${f1} so với ${f2}). Khác Claude là chuyện bình thường; nhìn lại hai nút cạnh nhau và bốn huy hiệu ở dưới, rồi tự hỏi mắt dừng ở đâu trước.`;
+      say.className = 'fb';
+    }
+    const pairs = [1, 2, 3, 4, 5].map((i) => ({ pick: R.quiz['p' + i], idea: R.quiz['p' + i + 'i'] }));
+    const done = pairs.filter((p) => p.pick && p.idea);
+    if (done.length === 5) {
+      const pk = done.filter((p) => p.pick.ok).length, id = done.filter((p) => p.idea.ok).length;
+      const miss = pairs.map((p, i) => (p.idea.ok ? '' : `cặp ${i + 1} bạn gọi là "${NAMES[p.idea.pick]}"`)).filter(Boolean);
+      $('#pairs-say').textContent = `Năm cặp: chọn đúng bản tốt hơn ${pk}/5, gọi đúng tên ý ${id}/5.` + (miss.length ? ' Khác Claude: ' + miss.join('; ') + '. Xem lại lời giải thích của cặp đó bằng nút Quay lại.' : '');
+    }
+  }
+  document.addEventListener('click', () => setTimeout(paint, 0));
+
+  L.extras.push((r) => {
+    const s = r.rescore || {}, lines = [];
+    if (s['m1-focus']) lines.push(`Chấm lại buổi 1 (điểm nhấn / điểm chung): TickTick ${s['m1-focus']}/${s['m1-overall']}, Todoist ${s['m2-focus']}/${s['m2-overall']} (ngày 7/11 điểm nhấn: TickTick 5, Todoist 3; Claude 2 và 5)`);
+    const ps = [1, 2, 3, 4, 5].map((i) => [r.quiz['p' + i], r.quiz['p' + i + 'i']]);
+    if (ps.every(([a, b]) => a && b)) lines.push(`Năm cặp: bản tốt ${ps.filter(([a]) => a.ok).length}/5, tên ý ${ps.filter(([, b]) => b.ok).length}/5; tên ý đã chọn: ` + ps.map(([, b], i) => `cặp ${i + 1} ${NAMES[b.pick]}`).join(', '));
+    if (r.direction) lines.push('Hướng kỹ thuật sau mốc: ' + r.direction);
+    return lines.join('\n');
+  });
+})();
+</script>
+</body>
+</html>
