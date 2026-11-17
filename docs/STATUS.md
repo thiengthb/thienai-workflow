@@ -12,7 +12,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
-| [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–3 xong: đo BA 4 (15,8 triệu token) và Frontend 9 (23,1 triệu), đã sửa các lượt phí tìm ra; 4 chờ thien chọn | 19/21 |
+| [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–3 xong: đo BA 4 (15,8 triệu token) và Frontend 9 (23,1 triệu), đã sửa các lượt phí tìm ra (PR #103); 4 và 5 để tới 2026-12-01 | 19/21 |
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 2/6 xong; đợt 3–4 chỉ làm khi số đo buổi học cho thấy đáng | 6/12 |
 
 ## Việc dở
@@ -32,7 +32,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- Chọn làm đợt 4 của kế hoạch review (tự sinh khung bài học) ngay, hay để tới lần xem lại 2026-12-01: thẻ hỏi trong thread "Review sâu và tối ưu thienai-workflow".
+- Không có.
 
 ## Đang vướng
 - Không có. Trang tổng quan đọc sakubun bằng bản clone công khai.

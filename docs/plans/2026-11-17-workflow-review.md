@@ -6,8 +6,8 @@ Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đ�
 
 ## Đang ở đâu
 - Đang ở: đợt 0, 1, 2 xong, PR #98 merge 2026-11-17; sakubun nhận phần chung mới qua PR #327 (merge cùng ngày).
-- Còn thiếu: đợt 3 xong (BA 4: 15,8 triệu token; Frontend 9: 23,1 triệu). Đã sửa các lượt phí đợt 3 tìm ra (xem "Kết luận đợt 3"); đợt 4 chờ thien chọn làm ngay hay để tới 2026-12-01.
-- thien cần làm: chọn cách xử lý đợt 4 (thẻ hỏi trong thread).
+- Còn thiếu: đợt 3 xong (BA 4: 15,8 triệu token; Frontend 9: 23,1 triệu). Đã sửa các lượt phí đợt 3 tìm ra (xem "Kết luận đợt 3"). Đợt 4 để tới lần xem lại 2026-12-01 (thien chọn 2026-11-17).
+- thien cần làm: không có.
 
 ## Mục tiêu
 Bộ quy trình đúng và gọn hơn mà không mất luật nào: sửa chỗ ghi sai, luật áp theo điều kiện thay vì áp mọi lúc, có đường riêng cho project bản beta, và bám tính năng có sẵn của Claude thay vì tự làm lại.
@@ -57,6 +57,7 @@ Kết luận đợt 3 (2026-11-17): mỗi buổi khoảng 50–60 lượt gọi.
 - [x] Trang không tự báo về thread ở bản beta (hai buổi đều vậy, `watch` báo `no_address`): `artifacts/lesson/README.md` dặn khi đưa trang thì bảo thien nhắn "xong" trong thread. [Chưa kiểm] vì sao không tự thức; tài liệu công cụ nói đăng bằng `publish_files` là đã tự theo dõi trang
 
 ### 4. Tự động hoá phần học, chỉ khi đợt 3 cho thấy đáng
+Kết quả (2026-11-17, thien bấm trên thẻ hỏi "Làm đợt 4 (tự sinh khung bài học) ngay, hay để tới 1/12?"): "Để tới 1/12 (đề xuất)". Lý do của đề xuất: dựng trang chỉ khoảng một phần ba số lượt mỗi buổi, sửa lượt phí gần như không tốn gì, và kế hoạch của nick tnt697 cũng đề xuất ngừng thêm luật tới 2026-12-01. Ngày 2026-12-01 xem số đo các buổi sau PR #103 rồi mới quyết.
 Ngưỡng và cách làm ở checkpoint 3, 4 của `2026-11-15-lean-learning.md`.
 
 ### 5. Chiều bớt (làm sau lần xem lại 2026-12-01)
