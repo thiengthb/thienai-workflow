@@ -19,7 +19,7 @@
 <script type="application/json" id="lesson">{"id":"war-07","subject":"Chiến tranh","title":"Buổi 7: Bất ngờ và lừa địch","extra":false}</script>
 <script type="application/json" id="battle" data-src="../battles/dien-bien-phu-1954.json"></script>
 <div class="wrap">
-  <div class="top"><div class="meta"><span>Chiến tranh · Buổi 7: Bất ngờ và lừa địch</span><span id="cnt">1/8</span></div><div class="bar"><span id="bar"></span></div></div>
+  <div class="top"><div class="meta"><span>Chiến tranh · Buổi 7: Bất ngờ và lừa địch</span><span id="cnt">1/9</span></div><div class="bar"><span id="bar"></span></div></div>
   <div id="board"></div>
 
   <!-- 0. Mở bài: giới thiệu ý mới khoảng 1 phút, nhìn sa bàn, chưa hỏi gì -->
@@ -32,51 +32,28 @@
     <button class="btn primary next" type="button" data-go="1">Bắt đầu</button>
   </section>
 
-  <!-- 1. Ôn trộn và nhớ lại, chỉ lần học đầu -->
-  <section class="step" data-s="1" data-part="review">
-    <h2>Ôn nhanh</h2>
-    <p class="small muted">Trả lời theo trí nhớ.</p>
+  <!-- 1. Ôn 3 thẻ: make-lesson.mjs tự sinh. Chỉ lần học đầu. -->
+  <section class="step" data-s="1" data-part="review" data-auto="cards">
+    <!-- Ôn 3 thẻ: make-lesson.mjs tự sinh lúc dựng từ learning/cards.md và learning/cards-quiz.json. Để trống. -->
+  </section>
+
+  <!-- 2. Nhớ lại buổi trước, chỉ lần học đầu -->
+  <section class="step" data-s="2" data-part="review">
+    <h2>Nhớ lại buổi 6</h2>
     <div class="card">
-      <p><b>1.</b> Màn thanh toán có hai nút đặc "Thanh toán" và "Thêm mã giảm giá". Sửa thế nào?</p>
-      <div class="q" data-q="F6" data-a="1" data-kind="review"><p class="status" role="status"></p>
-        <button class="opt" type="button">Đổi nút mã giảm giá sang màu khác cho nổi</button>
-        <button class="opt" type="button">Giữ "Thanh toán" là nút đặc, đổi nút mã giảm giá thành nút viền hoặc dòng chữ</button>
-        <button class="opt" type="button">Cho hai nút to bằng nhau, đứng cạnh nhau</button>
-        <p class="why">Đổi màu nút phụ cho nổi là tạo thêm điểm nhấn thứ hai. Một màn chỉ một nút đặc.</p>
-      </div>
-    </div>
-    <div class="card">
-      <p><b>2.</b> Khách nhờ "thêm nút xuất Excel". Câu nào nên hỏi đầu tiên?</p>
-      <div class="q" data-q="B1" data-a="1" data-kind="review"><p class="status" role="status"></p>
-        <button class="opt" type="button">"Cần xuất những cột nào?"</button>
-        <button class="opt" type="button">"Lấy file đó ra để làm gì?"</button>
-        <button class="opt" type="button">"Bao giờ cần xong?"</button>
-        <p class="why">Hỏi cột nào, bao giờ xong là hỏi sau, vì những câu đó đã chọn sẵn giải pháp.</p>
-      </div>
-    </div>
-    <div class="card">
-      <p><b>3.</b> Thanh đầu trang cùng màu đặc với nút chính thì sao?</p>
-      <div class="q" data-q="F7" data-a="1" data-kind="review"><p class="status" role="status"></p>
-        <button class="opt" type="button">Không sao, cùng màu nhìn đồng bộ hơn</button>
-        <button class="opt" type="button">Mắt không biết khối nào là chỗ bấm, đầu trang to hơn nên còn giành mắt. Để đầu trang nền trắng hoặc xám rất nhạt</button>
-        <button class="opt" type="button">Đổi nút chính sang màu đậm hơn đầu trang là đủ</button>
-        <p class="why">Hai khối cùng màu đặc tranh nhau một chỗ nhìn; khối to hơn thắng.</p>
-      </div>
-    </div>
-    <div class="card">
-      <p><b>4.</b> Buổi trước: Him Lam rất kiên cố mà vẫn là chỗ yếu. Ở đó ta có gì so với quân giữ?</p>
+      <p>Him Lam rất kiên cố mà vẫn là chỗ yếu. Ở đó ta có gì so với quân giữ?</p>
       <div class="q" data-q="R6" data-a="1" data-kind="review"><p class="status" role="status"></p>
         <button class="opt" type="button">Ta có nhiều lính hơn Pháp trong cả lòng chảo</button>
         <button class="opt" type="button">Ta dồn được 40 khẩu pháo và cả một đại đoàn vào một tiểu đoàn, trung tâm cứu không kịp</button>
         <button class="opt" type="button">Him Lam không có công sự</button>
-        <p class="why">Chỗ yếu là chỗ mình mạnh hơn hẳn ngay tại đó, lúc đó. Hôm nay vẫn là chuyện pháo: muốn dồn pháo được thì pháo phải sống sót tới giờ bắn.</p>
+        <p class="why">Chỗ yếu là chỗ mình mạnh hơn hẳn ngay tại đó, lúc đó. Hôm nay vẫn là chuyện pháo: muốn dồn pháo được thì pháo phải sống tới giờ bắn.</p>
       </div>
     </div>
-    <button class="btn primary next" type="button" data-go="2" data-need="F6 B1 F7 R6" data-review-gate disabled>Tiếp</button>
+    <button class="btn primary next" type="button" data-go="3" data-need="R6" data-review-gate disabled>Tiếp</button>
   </section>
 
-  <!-- 2. Làm chỉ huy -->
-  <section class="step" data-s="2" data-board="p7@0">
+  <!-- 3. Làm chỉ huy -->
+  <section class="step" data-s="3" data-board="p7@0">
     <h2>Bạn là Đại tướng Võ Nguyên Giáp</h2>
     <p>Sau lần hoãn đánh ở buổi 3, pháo đã kéo ra. Giờ đưa pháo vào lại. Đặt ở đâu?</p>
     <ul class="know">
@@ -90,21 +67,21 @@
       <div class="row"><button class="opt" type="button" data-v="B"><span><b>B.</b> Đặt trên sườn trống nhìn xuống lòng chảo, bắn thẳng được ngay, không phải đào lâu</span></button><button class="btn" type="button" data-plan="p7B">Xem</button></div>
       <div class="row"><button class="opt" type="button" data-v="C"><span><b>C.</b> Đào hầm cho từng khẩu ở sườn nhìn xuống lòng chảo, thêm vài trận địa giả. Tốn nhiều tuần đào</span></button><button class="btn" type="button" data-plan="p7">Xem</button></div>
     </div>
-    <button class="btn primary next" type="button" data-go="3" data-need="d1" disabled>Xem chuyện gì xảy ra</button>
+    <button class="btn primary next" type="button" data-go="4" data-need="d1" disabled>Xem chuyện gì xảy ra</button>
   </section>
 
-  <!-- 3. Xem chuyện thật, tự để ý -->
-  <section class="step" data-s="3" data-board="p7">
+  <!-- 4. Xem chuyện thật, tự để ý -->
+  <section class="step" data-s="4" data-board="p7">
     <h2>Chuyện gì đã xảy ra</h2>
     <p class="fb" data-echo="d1"></p>
     <p>Bấm từng mốc dưới sa bàn. Xong thì xem thử hai cách còn lại.</p>
     <div class="tracks"><button class="btn" type="button" data-track="p7">Chuyện thật</button><button class="btn" type="button" data-track="p7A">Nếu chọn A</button><button class="btn" type="button" data-track="p7B">Nếu chọn B</button></div>
     <div class="card"><p>Ở mốc 13/3 của chuyện thật, bấm nút "Mắt quân Pháp". Rồi chạm vào đất trống cạnh Mường Thanh: sa bàn tô những chỗ nhìn thấy được từ đó. Pháo ta nằm ở chỗ Pháp thấy được hay không? Nếu thấy được, vì sao Pháp vẫn không diệt được? Một câu thôi.</p><textarea data-key="notice" data-min="3" placeholder="Mình thấy..."></textarea></div>
-    <button class="btn primary next" type="button" data-go="4" data-need="seen-p7 notice" disabled>Tiếp: vì sao</button>
+    <button class="btn primary next" type="button" data-go="5" data-need="seen-p7 notice" disabled>Tiếp: vì sao</button>
   </section>
 
-  <!-- 4. Hiểu sau -->
-  <section class="step" data-s="4" data-board="p7">
+  <!-- 5. Hiểu sau -->
+  <section class="step" data-s="5" data-board="p7">
     <h2>Làm hỏng đúng bước bên kia cần</h2>
     <p class="fb" data-echo="d1"></p>
     <div class="card">
@@ -121,11 +98,11 @@
       <p><b>Sử chép khác:</b> sách Việt thường gọi Piroth là đại tá; HistoryNet gọi Colonel, một số sách Pháp, Anh ghi trung tá. Bài này chỉ ghi chức vụ.</p>
       <p><b>Không lấy từ sử:</b> hai cách A và B là mô phỏng; vị trí pháo, trận địa giả trên sa bàn là ước lượng, chỉ địa hình là thật.</p>
     </div>
-    <button class="btn primary next" type="button" data-go="5">Tiếp</button>
+    <button class="btn primary next" type="button" data-go="6">Tiếp</button>
   </section>
 
-  <!-- 5. Câu hỏi nhanh -->
-  <section class="step" data-s="5">
+  <!-- 6. Câu hỏi nhanh -->
+  <section class="step" data-s="6">
     <h2>Câu hỏi nhanh</h2>
     <div class="card">
       <p><b>1.</b> Pháo ta nằm ở sườn quay vào lòng chảo, chỗ Pháp nhìn lên được. Vì sao Pháp vẫn không diệt được?</p>
@@ -145,22 +122,22 @@
         <p class="why">Hầm và ngụy trang cũng đánh vào bước này. Đánh trúng bước mà cả cách tính dựa vào thì cả cách tính đổ.</p>
       </div>
     </div>
-    <button class="btn primary next" type="button" data-go="6" data-need="q1 q2" disabled>Tiếp</button>
+    <button class="btn primary next" type="button" data-go="7" data-need="q1 q2" disabled>Tiếp</button>
   </section>
 
-  <!-- 6. Tự nói lại theo tình huống -->
-  <section class="step" data-s="6">
+  <!-- 7. Tự nói lại theo tình huống -->
+  <section class="step" data-s="7">
     <h2>Tự nói lại</h2>
     <div class="say ask-from" data-who="Huy, bạn cùng lớp hay chơi game chiến thuật"><b>Huy nhắn</b>Ông bảo ở Điện Biên Phủ pháo mình đặt ngay sườn núi nhìn xuống, Pháp nhìn lên là thấy mà. Sao không giấu hẳn ra sau núi cho an toàn?</div>
     <p>Trả lời Huy 2–3 câu, như nhắn tin.</p>
     <textarea data-key="teach" data-min="5" placeholder="Vì..."></textarea>
     <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
     <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Sau núi thì an toàn, nhưng mình cũng không thấy cứ điểm, phải nhờ người chỉnh từng phát, mà lúc đó đạn ít. Ở sườn trong thì bắn thẳng, gần, trúng hơn. Cái giá là dễ bị thấy, nên mỗi khẩu nằm trong hầm nóc đất dày 3 m, ngụy trang kín, thêm trận địa giả. Pháp tính "bắn là lộ, lộ là bị diệt"; mình làm hỏng đúng bước "lộ" đó.</div></div>
-    <button class="btn primary next" type="button" data-go="7" data-need="teach" disabled>Tiếp</button>
+    <button class="btn primary next" type="button" data-go="8" data-need="teach" disabled>Tiếp</button>
   </section>
 
-  <!-- 7. Góp ý, xong buổi -->
-  <section class="step" data-s="7">
+  <!-- 8. Góp ý, xong buổi -->
+  <section class="step" data-s="8">
     <h2>Góp ý buổi này</h2>
     <div class="card">
       <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
