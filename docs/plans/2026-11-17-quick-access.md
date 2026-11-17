@@ -5,8 +5,8 @@ Trạng thái: đang chạy · Duyệt: 2026-11-17 (thien: "ok", theo cả 3 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: 1–4 xong (PR #116, #118); thien đã mở tab "Mở nhanh" trên điện thoại 2026-11-17.
-- Còn thiếu: hai lối tắt trên màn hình chính (tuỳ thien, chưa báo); xem lại sơ đồ ở mốc 2026-12-01.
+- Đang ở: 1, 2, 4 xong (PR #116); 2026-11-17 thien mở tab "Mở nhanh" trên điện thoại và bấm link kế hoạch mở đúng file. 3: sơ đồ đã vào README (PR #118), thien duyệt qua ảnh chụp cỡ điện thoại, chưa xem README trên điện thoại thật.
+- Còn thiếu: thien xem sơ đồ trong README trên điện thoại (gộp vào mốc xem lại 2026-12-01); hai lối tắt trên màn hình chính (tuỳ thien, chưa báo).
 - thien cần làm: không bắt buộc; muốn thì thêm hai lối tắt (cách ở mục "Mở nhanh" của `README.md`).
 
 ## Mục tiêu
@@ -35,7 +35,7 @@ Xong khi: thanh bên claude.ai của nick tnt628 có trang Tổng quan và Lộ 
 
 ### 3. Sơ đồ hệ thống
 Xong khi: thien mở README trên điện thoại và thấy hình, không phải chữ Mermaid.
-- [x] Sơ đồ tầng lớn trong `README.md`: bản Mermaid ở PR #116 thien chê xấu, vẽ lại thành sơ đồ khối trơn SVG (PR #118, thien: "tạm được")
+- [x] Sơ đồ tầng lớn trong `README.md`: bản Mermaid ở PR #116 thien chê xấu, vẽ lại thành sơ đồ khối trơn SVG (PR #118, thien: "tạm được" khi xem ảnh chụp cỡ điện thoại)
 - [ ] Xem lại 2026-12-01: nếu thien vẫn hay hỏi "cái này nằm đâu" thì đề xuất sơ đồ tự sinh từ `profile/MAP.md`
 
 ### 4. Dọn bản chép cũ
