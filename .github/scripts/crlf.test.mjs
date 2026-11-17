@@ -10,7 +10,7 @@ import { tmpdir } from 'node:os';
 import { spawnSync, execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { checkTask, summarize, readText } from '../../templates/handoff.mjs';
-import { fill } from '../../artifacts/lesson/make-lesson.mjs';
+import { fill, SAMPLE_CARDS } from '../../artifacts/lesson/make-lesson.mjs';
 import { SKILLS } from '../../templates/setup-check.mjs'; // the skill list setup-check expects, so this test follows it
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
@@ -58,9 +58,9 @@ assert.ok(checkTask(task.replace('Thử.', 'token ghp_abcdefghijklmnopqrstuvwxyz
 
 // 5. make-lesson on a CRLF page: one kind of line ending out, and running it again changes nothing.
 const tpl = crlf(readFileSync(join(ROOT, 'artifacts/lesson/template.html'), 'utf8')).replace('"__ID__"', '"frontend-06"');
-const once = fill(tpl);
+const once = fill(tpl, '', '', { cards: SAMPLE_CARDS });
 assert.ok(!once.includes('\r'), 'no mixed line endings');
-assert.equal(fill(once), once);
+assert.equal(fill(once, '', '', { cards: SAMPLE_CARDS }), once);
 
 // 6. Internal links still resolve when files are CRLF (the checker lists files with git, so the copy becomes a repo;
 // core.autocrlf=false keeps the CRLF files as they are).

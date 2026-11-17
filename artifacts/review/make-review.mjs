@@ -76,6 +76,37 @@ export function lessonExcerpt(md, n = 1600) {
   return plain(body.replace(/^##\s+/gm, '')).slice(0, n);
 }
 
+/** Môn đang học, từ bảng "Môn đang học" của learning/README.md: { dir: { name, file, prefix } }. */
+export function subjects(readme, cards = '') {
+  const out = {};
+  for (const m of readme.matchAll(/^\| ([^|]+?) \| [^|]+ \| \[([a-z0-9-]+)\.md\]\(\2\.md\) \|/gm)) {
+    const name = m[1].trim(), dir = m[2];
+    const ids = [...cards.matchAll(new RegExp(`^\\| ([A-Z]+)\\d+ \\| ${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} \\|`, 'gm'))].map((x) => x[1]);
+    out[dir] = { name, file: dir + '.md', prefix: ids[0] || dir[0].toUpperCase() };
+  }
+  return out;
+}
+
+/** Số thẻ ôn đầu mỗi buổi học (learning/README.md, "Khung một buổi"). */
+export const REVIEW_CARDS = 3;
+
+/**
+ * REVIEW_CARDS thẻ đến hạn, mỗi thẻ kèm đáp án trong mục "Tự kiểm" của bài (null nếu không thấy).
+ * Thiếu thẻ đến hạn thì thêm thẻ hạn sớm nhất của môn khác `subject` (learning/README.md, "Khung một buổi"), đánh dấu filler: true.
+ */
+export function reviewCards(cardsText, base, today, max = REVIEW_CARDS, subject = '') {
+  const all = parseCards(cardsText), due = dueCards(all, today, max);
+  const ids = new Set(due.map((c) => c.id));
+  const fill = all.filter((c) => !ids.has(c.id) && c.subject !== subject && /^\d{4}-\d{2}-\d{2}$/.test(c.due))
+    .map((c, i) => ({ c, i })).sort((a, b) => a.c.due.localeCompare(b.c.due) || a.i - b.i).slice(0, Math.max(0, max - due.length)).map((x) => ({ ...x.c, filler: true }));
+  return [...due, ...fill].map((c) => {
+    const file = c.link ? resolve(base, c.link) : '';
+    const md = file && existsSync(file) ? lf(readFileSync(file, 'utf8')) : '';
+    const hit = md ? matchAnswer(c.question, selfCheck(md)) : null;
+    return { ...c, answer: hit ? hit.a : null };
+  });
+}
+
 /** Dữ liệu trang ôn: mỗi thẻ đến hạn kèm đáp án và đoạn bài. `base` là thư mục chứa cards.md. */
 export function buildReview(cardsText, base, today, max = 10) {
   const items = dueCards(parseCards(cardsText), today, max).map((c) => {
@@ -92,7 +123,9 @@ export function buildReview(cardsText, base, today, max = 10) {
 export function applyReview(cardsText, results, today) {
   const lines = cardsText.split('\n');
   const cards = parseCards(cardsText);
-  const head = lines[lines.findIndex((l) => /^\|\s*Thẻ\s*\|/.test(l))].split('|').slice(1, -1).map((c) => c.trim());
+  const at = lines.findIndex((l) => /^\|\s*Thẻ\s*\|/.test(l));
+  if (at < 0) return { text: cardsText, changed: [] };   // không có bảng thẻ: không có gì để sửa
+  const head = lines[at].split('|').slice(1, -1).map((c) => c.trim());
   const boxAt = head.indexOf('Hộp'), dueAt = head.indexOf('Hỏi lại');
   const changed = [];
   for (const [id, r] of Object.entries(results)) {

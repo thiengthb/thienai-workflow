@@ -4,8 +4,9 @@ import { readFileSync, writeFileSync, mkdtempSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
-import { subjects, lessonOf, pageQuestions, stuckPoints, addStuck, draft, checkAfter, checkAll, logRows, addLogRow, trimLog, subjectChecks, trimAll } from '../../artifacts/lesson/after-lesson.mjs';
-import { fill, subjectFile } from '../../artifacts/lesson/make-lesson.mjs';
+import { reviewResults, lessonDay, subjects, lessonOf, pageQuestions, stuckPoints, addStuck, draft, checkAfter, checkAll, logRows, addLogRow, trimLog, subjectChecks, trimAll } from '../../artifacts/lesson/after-lesson.mjs';
+import { fill as fill0, subjectFile, SAMPLE_CARDS } from '../../artifacts/lesson/make-lesson.mjs';
+const fill = (h, id, file, o = {}) => fill0(h, id, file, { cards: SAMPLE_CARDS, ...o });
 import { addUsage, usageRows, usageSummary } from '../../artifacts/kit/usage.mjs';
 import { reviewUsage } from '../../artifacts/review/apply-review.mjs';
 import { fileURLToPath } from 'node:url';
@@ -22,11 +23,11 @@ assert.equal(lessonOf('review'), null);
 
 // Câu hỏi trên trang mẫu
 const tpl = read('artifacts/lesson/template.html');
-const Q = pageQuestions(tpl);
+const Q = pageQuestions(fill(tpl, 'demo-01', ''));   // bước ôn tự sinh từ thẻ mẫu
 assert.match(Q.q1.text, /^Màn đặt lịch có nút "Đặt lịch"/);
 assert.equal(Q.q1.options.length, 3);
 assert.equal(Q.q1.answer, 0);
-assert.match(Q.C1.text, /^Muốn nút chính nổi hơn/, 'bỏ số thứ tự "1." ở đầu câu');
+assert.match(Q.F8.text, /^Thẻ trạng thái/, 'bỏ số thứ tự "1." ở đầu câu');
 
 // Chỗ còn vướng: tạo mục trước "Buổi tiếp theo", thêm tiếp, bỏ dòng trùng, giữ dòng mới nhất
 const md = '# Môn\n\n## Nhật ký\n| Buổi |\n\n## Buổi tiếp theo\n- Buổi 2\n';
@@ -78,6 +79,13 @@ const R = {
   ai: [{ kind: 'ask', step: 'Thử trước', q: 'màu trạng thái có tính không?', a: '…' }, { kind: 'why', q: 'q1', a: '…' }], spoke: 2,
 };
 const cards = '| F8 | Frontend | x | y | 1 | 2026-11-13 |\n| F9 | Frontend | x | y | 1 | 2026-11-13 |\n';
+const HEAD = '| Thẻ | Môn | Câu hỏi | Đáp án ở | Hộp | Hỏi lại |\n|---|---|---|---|---|---|\n';
+// Kết quả ôn đầu buổi → cards.md: chỉ mã thẻ có thật, đã đến hạn vào ngày học (giờ Việt Nam)
+assert.equal(lessonDay('2026-11-16T23:30:00Z'), '2026-11-17', '6 giờ 30 sáng ở Việt Nam là ngày 17');
+assert.equal(lessonDay(undefined), null);
+assert.deepEqual(reviewResults({ review: { F8: { ok: true }, F9: { ok: false }, C1: { ok: true }, recall: { ok: true } } }, HEAD + cards, '2026-11-15'), { F8: 'nho', F9: 'quen' });
+assert.deepEqual(reviewResults({ review: { F8: { ok: true } } }, HEAD + cards, '2026-11-12'), {}, 'thẻ chưa đến hạn vào ngày học thì không đổi');
+assert.deepEqual(reviewResults({}, HEAD + cards, '2026-11-15'), {});
 const d = draft({ R, html: tpl, subject: subs.frontend, lessonFile: 'frontend/lessons/06-app-colours.md', cards });
 assert.equal(d.date, '2026-11-15');
 assert.ok(d.facts.includes('Thời gian trên trang: 14 phút'));
@@ -134,11 +142,11 @@ for (const p of ['learning/frontend/lessons', 'learning/frontend/pages']) mkdirS
 writeFileSync(join(T, 'learning/README.md'), '| Môn | Vai | File môn | Trạng thái |\n|---|---|---|---|\n| Frontend | Môn chính | [frontend.md](frontend.md) | 5 buổi |\n| BA | Môn mở rộng | [ba.md](ba.md) | 2 buổi |\n\n## Trạng thái\n| Frontend 6 (màu) | 2026-11-15 | Frontend | BA 3 |\n');
 writeFileSync(join(T, 'learning/frontend.md'), '# Frontend\n\n## Nhật ký\n| Buổi | Ngày | Ý chính | Kết quả |\n|---|---|---|---|\n' + [3, 4, 5].map((n) => row(n)).join('\n') + '\n\n## Buổi tiếp theo\n- Buổi 7\n');
 writeFileSync(join(T, 'learning/ba.md'), '# BA\n\n## Buổi tiếp theo\n- Buổi 3\n');
-writeFileSync(join(T, 'learning/cards.md'), cards + '| B2 | BA | y | z | 1 | 2026-11-13 |\n');
+writeFileSync(join(T, 'learning/cards.md'), HEAD + cards + '| B2 | BA | y | z | 1 | 2026-11-13 |\n');
 writeFileSync(join(T, 'learning/roadmap.md'), '# Lộ trình\n\n## Frontend\n- [ ] Màu\n');
 writeFileSync(join(T, 'learning/usage.md'), head);
 writeFileSync(join(T, 'learning/frontend/pages/lesson-06.html'), fill(tplFilled, 'frontend-06', ''));
-writeFileSync(join(T, 's.json'), JSON.stringify({ data: { ...R, review: { ...R.review, B2: { pick: 0, ok: false } } } }));
+writeFileSync(join(T, 's.json'), JSON.stringify({ data: { ...R, review: { ...R.review, B2: { pick: 0, ok: false }, F8: { pick: 1, ok: true } } } }));
 const cli = (...a) => spawnSync(process.execPath, [join(ROOT, 'artifacts/lesson/after-lesson.mjs'), ...a], { encoding: 'utf8', env: { ...process.env, REPO_ROOT: T } });
 let r = cli(join(T, 's.json'), '--write');
 assert.equal(r.status, 0, r.stderr);
@@ -148,7 +156,12 @@ assert.equal(stuckPoints(readFileSync(join(T, 'learning/frontend.md'), 'utf8')).
 assert.match(stuckPoints(readFileSync(join(T, 'learning/ba.md'), 'utf8'))[0], /ôn ở buổi Frontend 6: câu ôn B2/);
 assert.deepEqual(logRows(readFileSync(join(T, 'learning/frontend.md'), 'utf8')).map((x) => x.n), [4, 5, 6]);
 assert.deepEqual(logRows(readFileSync(join(T, 'learning/frontend/log.md'), 'utf8')).map((x) => x.n), [3]);
+const cardsAfter = readFileSync(join(T, 'learning/cards.md'), 'utf8');
+assert.match(cardsAfter, /^\| F8 \| Frontend \| x \| y \| 2 \| 2026-11-18 \|$/m, 'ôn đúng: lên hộp 2, hỏi lại sau 3 ngày tính từ ngày học');
+assert.match(cardsAfter, /^\| B2 \| BA \| y \| z \| 1 \| 2026-11-16 \|$/m, 'ôn sai: về hộp 1');
+assert.match(cardsAfter, /^\| F9 \| Frontend \| x \| y \| 1 \| 2026-11-13 \|$/m, 'thẻ không ôn giữ nguyên');
 assert.equal(cli(join(T, 's.json'), '--write').status, 0);
+assert.equal(readFileSync(join(T, 'learning/cards.md'), 'utf8'), cardsAfter, 'chạy lại --write không lên hộp lần nữa');
 assert.equal(logRows(readFileSync(join(T, 'learning/frontend.md'), 'utf8')).length, 3, 'chạy lại --write không thêm dòng trùng');
 assert.equal(stuckPoints(readFileSync(join(T, 'learning/ba.md'), 'utf8')).length, 1);
 assert.equal(usageRows(readFileSync(join(T, 'learning/usage.md'), 'utf8'))[0]['Trang'], 'frontend-06 lúc 19:00', 'giờ bắt đầu theo giờ Việt Nam');
@@ -158,7 +171,11 @@ assert.match(r.stdout, /✗ dòng nhật ký buổi 6[^\n]*đã viết xong ph�
 assert.match(cli('--check', 'frontend-03').stdout, /✓ dòng nhật ký buổi 3/, 'dòng đã chuyển sang log.md vẫn tính');
 writeFileSync(join(T, 'learning/frontend/lessons/06-app-colours.md'), '# Bài 6\n');
 writeFileSync(join(T, 'learning/frontend.md'), readFileSync(join(T, 'learning/frontend.md'), 'utf8').replace(/^\| 6 \|.*$/m, row(6)));
-writeFileSync(join(T, 'learning/cards.md'), cards + d.cardRows.join('\n') + '\n');
+writeFileSync(join(T, 'learning/cards.md'), HEAD + cards + d.cardRows.join('\n') + '\n');
+r = cli('--check', 'frontend-06');
+assert.equal(r.status, 1);
+assert.match(r.stdout, /✗ câu trắc nghiệm trong learning\/cards-quiz\.json cho mọi thẻ của bài này \(thiếu F10, F11\)/);
+writeFileSync(join(T, 'learning/cards-quiz.json'), JSON.stringify({ F10: { opts: ['a', 'b'], a: 0, why: 'w' }, F11: { opts: ['a', 'b', 'c'], a: 2, why: 'w' } }));
 writeFileSync(join(T, 'learning/roadmap.md'), '# Lộ trình\n\n## Frontend\n- [x] Màu (buổi 6, 2026-11-15)\n');
 r = cli('--check', 'frontend-06');
 assert.equal(r.status, 0, r.stdout);

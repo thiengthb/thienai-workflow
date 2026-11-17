@@ -54,17 +54,17 @@ export function changedPages(ref) {
 
 /** Nguồn trang bài → bản đầy đủ trong dir (trang khung cũ, không có thẻ kit, giữ nguyên). */
 export async function buildRepoPage(file, dir) {
-  const { fill } = await import('../lesson/make-lesson.mjs');
+  const { fill, SAMPLE_CARDS } = await import('../lesson/make-lesson.mjs');
   const html = readFileSync(file, 'utf8');
   if (!/<script id="kit-js">/.test(html)) return file;
   const out = join(dir, relative(join(root, 'learning'), file).replace(/[\\/]/g, '-'));
-  writeFileSync(out, fill(html, '', file));
+  writeFileSync(out, fill(html, '', file, { cards: SAMPLE_CARDS }));   // bước ôn tự sinh: thẻ mẫu, chỉ để kiểm bố cục
   return out;
 }
 
 /** Dựng một trang mẫu từ mỗi mẫu trong artifacts/ vào dir. Trả về [{ name, file }]. */
 export async function buildFixtures(dir, browser) {
-  const { fill } = await import('../lesson/make-lesson.mjs');
+  const { fill, SAMPLE_CARDS } = await import('../lesson/make-lesson.mjs');
   const out = [];
   const lessons = { lesson: '../lesson/template.html', war: '../war/template.html', frontend: '../it/template-frontend.html', ba: '../it/template-ba.html' };
   for (const [name, tpl] of Object.entries(lessons)) {
@@ -74,7 +74,7 @@ export async function buildFixtures(dir, browser) {
     const page = join(dir, `${name}.html`);
     // Bài thường kèm hai chỗ còn vướng cố định, để lời dặn có phần này được kiểm (ask-prompts).
     const stuck = name === 'lesson' ? ['2026-11-12, buổi 5: chưa bắt được chữ màu và biểu tượng nhỏ giành mắt', '2026-11-12, buổi 5: hỏi Claude ở bước "Thử trước": "màu trạng thái có tính là màu nhấn không?"'] : undefined;
-    writeFileSync(page, fill(html, `demo-${name}`, file, { stuck }));
+    writeFileSync(page, fill(html, `demo-${name}`, file, { stuck, cards: SAMPLE_CARDS }));
     out.push({ name, file: page });
   }
   // Ảnh giả cho trang chọn phương án và trang so sánh: chụp một khối màu có chữ.

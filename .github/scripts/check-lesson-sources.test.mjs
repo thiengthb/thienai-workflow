@@ -4,10 +4,10 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { checkSources, checkSplit, lessonPages } from './check-lesson-sources.mjs';
-import { fill, strip } from '../../artifacts/lesson/make-lesson.mjs';
+import { fill, strip, SAMPLE_CARDS } from '../../artifacts/lesson/make-lesson.mjs';
 
 const tpl = readFileSync(new URL('../../artifacts/lesson/template.html', import.meta.url), 'utf8').replace('"__ID__"', '"demo-01"');
-const built = fill(tpl, 'demo-01', '');
+const built = fill(tpl, 'demo-01', '', { cards: SAMPLE_CARDS });
 const T = mkdtempSync(join(tmpdir(), 'sources-'));
 mkdirSync(join(T, 'learning/demo/pages'), { recursive: true });
 writeFileSync(join(T, 'learning/demo/pages/lesson-01.html'), strip(built));

@@ -2,11 +2,11 @@
 
 Đầu mỗi buổi, AI lấy 3 thẻ đến hạn (cột "Hỏi lại" là hôm nay hoặc đã qua), ưu tiên thẻ quá hạn lâu nhất, môn nào cũng được. thien trả lời trước, rồi mới xem đáp án trong file bài.
 
-Sau khi hỏi, AI sửa hai cột cuối:
+Sau khi hỏi, sửa hai cột cuối (buổi học: `artifacts/lesson/after-lesson.mjs --write` tự sửa; trang ôn thẻ: `apply-review.mjs`):
 - Trả lời đúng: lên một hộp. Hộp 1 hỏi lại sau 1 ngày, hộp 2 sau 3 ngày, hộp 3 sau 1 tuần, hộp 4 sau 2 tuần, hộp 5 sau 1 tháng.
 - Trả lời sai hoặc quên: về hộp 1.
 
-Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở hộp 1.
+Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở hộp 1, mỗi thẻ kèm một câu trắc nghiệm trong [cards-quiz.json](cards-quiz.json) để trang buổi sau tự sinh phần ôn.
 
 Ôn ngoài buổi học: [trang ôn thẻ](https://claude.ai/artifact/L612hHx2vHUokcPBgH7RPu) hiện các thẻ đến hạn. Kết quả ôn ở đó ghi vào bảng này bằng `node artifacts/review/apply-review.mjs` (xem [`artifacts/review/`](../artifacts/review/README.md)). Giữ đúng các cột của bảng, vì script đọc theo tên cột.
 

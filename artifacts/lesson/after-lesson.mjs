@@ -6,7 +6,8 @@
 //       In nháp: số liệu, dòng nhật ký, chỗ còn vướng, thẻ mới, dòng "Trạng thái".
 //       --write: ghi luôn phần máy làm được: thêm dòng vào mục "Chỗ còn vướng" của learning/<môn>.md (câu ôn sai
 //       của môn khác thì vào file của môn đó), thêm dòng nhật ký nháp (AI sửa phần <…>), chuyển nhật ký cũ sang
-//       learning/<môn>/log.md để file môn chỉ giữ 3 dòng, và một dòng vào learning/usage.md.
+//       learning/<môn>/log.md để file môn chỉ giữ 3 dòng, một dòng vào learning/usage.md, và kết quả 3 thẻ ôn đầu buổi
+//       vào cột Hộp, Hỏi lại của learning/cards.md (đúng lên một hộp, sai về hộp 1; chỉ thẻ đã đến hạn vào ngày học, nên chạy lại không lên hai lần).
 //       Phần còn lại (thẻ, Trạng thái, roadmap) AI viết từ nháp.
 //   node artifacts/lesson/after-lesson.mjs --check <lesson-id>
 //       Kiểm đã ghi đủ chưa: dòng nhật ký, file bài, thẻ mới, Trạng thái, roadmap, dòng usage, file môn gọn. Thiếu thì thoát mã 1.
@@ -22,6 +23,9 @@ import { join, dirname, resolve, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { addUsage, usageRows } from '../kit/usage.mjs';
 import { guessId, stuckPoints, STUCK } from './make-lesson.mjs';
+import { subjects, parseCards, applyReview } from '../review/make-review.mjs';
+import { validQuiz, QUIZ_FILE } from './make-lesson.mjs';
+export { subjects };   // ở make-review.mjs để make-lesson.mjs dùng mà không vòng import
 // Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
 const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
@@ -115,13 +119,20 @@ export function subjectChecks(md, file) {
   ];
 }
 
-/** Môn đang học, từ bảng "Môn đang học" của learning/README.md: { dir: { name, file, prefix } }. */
-export function subjects(readme, cards = '') {
+
+/** Ngày học theo giờ Việt Nam từ R.start (ISO); không có thì null. */
+export const lessonDay = (start) => (start && !isNaN(Date.parse(start)) ? new Date(start).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }) : null);
+
+/**
+ * Kết quả bước ôn trên trang → { mã thẻ: 'nho' | 'quen' } cho applyReview. Chỉ khóa là mã thẻ có trong cards.md (bỏ "recall",
+ * câu của bài) và thẻ đã đến hạn vào ngày học `day`: sau lần ghi đầu, hạn đã dời qua ngày học, nên chạy lại không lên hộp lần nữa.
+ */
+export function reviewResults(R, cardsText, day) {
+  const cards = new Map(parseCards(cardsText).map((c) => [c.id, c]));
   const out = {};
-  for (const m of readme.matchAll(/^\| ([^|]+?) \| [^|]+ \| \[([a-z0-9-]+)\.md\]\(\2\.md\) \|/gm)) {
-    const name = m[1].trim(), dir = m[2];
-    const ids = [...cards.matchAll(new RegExp(`^\\| ([A-Z]+)\\d+ \\| ${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} \\|`, 'gm'))].map((x) => x[1]);
-    out[dir] = { name, file: dir + '.md', prefix: ids[0] || dir[0].toUpperCase() };
+  for (const [id, v] of Object.entries((R && R.review) || {})) {
+    const c = cards.get(id);
+    if (c && /^\d{4}-\d{2}-\d{2}$/.test(c.due) && c.due <= day) out[id] = v && v.ok ? 'nho' : 'quen';
   }
   return out;
 }
@@ -261,6 +272,12 @@ export function checkAfter(root, dir, n, { strict = true } = {}) {
     r.push({ ok: new RegExp(`\\| ${subj.name} ${n}(?!\\d)`).test(readme), what: `bảng "Trạng thái" của learning/README.md ghi ${subj.name} ${n}` });
     r.push({ ok: usageRows(read('learning/usage.md')).some((x) => lessonOf(x['Trang'])?.dir === dir && lessonOf(x['Trang'])?.n === n), what: 'dòng của buổi này trong learning/usage.md (after-lesson --write)' });
     r.push(...subjectChecks(md, subj.file));
+    // Thẻ mới kèm câu trắc nghiệm, để buổi sau make-lesson.mjs tự sinh bước ôn (thien chọn giữ trắc nghiệm, 2026-11-17).
+    let quiz = {};
+    try { quiz = JSON.parse(read('learning/' + QUIZ_FILE) || '{}'); } catch (e) { quiz = null; }
+    const own = lesson ? parseCards(cards).filter((c) => c.link === `${dir}/lessons/${lesson}`).map((c) => c.id) : [];
+    const noQuiz = quiz ? own.filter((id) => !validQuiz(quiz[id])) : own;
+    r.push({ ok: !!quiz && !noQuiz.length, what: quiz ? `câu trắc nghiệm trong learning/${QUIZ_FILE} cho mọi thẻ của bài này${noQuiz.length ? ` (thiếu ${noQuiz.join(', ')})` : ''}` : `learning/${QUIZ_FILE} là JSON hợp lệ` });
   }
   return r;
 }
@@ -365,6 +382,12 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     }
     const up = join(root, 'learning/usage.md');
     writeFileSync(up, addUsage(lf(readFileSync(up, 'utf8')), d.usage));
+    // Kết quả ôn đầu buổi vào cards.md, cùng luật hộp với trang ôn thẻ (artifacts/review/apply-review.mjs).
+    const day = lessonDay(R.start) || today || new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+    const cp = join(root, 'learning/cards.md'), cardsNow = lf(readFileSync(cp, 'utf8'));
+    const applied = applyReview(cardsNow, reviewResults(R, cardsNow, day), day);
+    if (applied.changed.length) writeFileSync(cp, applied.text);
     console.log(`Đã ghi: ${d.stuck.length} dòng vào "${STUCK}" của ${rel(root, sp)}, ${notes.length ? notes.join(', ') + ', ' : ''}dòng nhật ký nháp buổi ${d.n}${t?.moved ? ` (chuyển ${t.moved} dòng cũ sang learning/${l.dir}/log.md)` : ''}, một dòng vào ${rel(root, up)}.`);
+    console.log(applied.changed.length ? `Thẻ ôn đầu buổi đã ghi vào learning/cards.md: ${applied.changed.join('; ')}.` : 'Thẻ ôn đầu buổi: không có thẻ nào cần ghi (đã ghi rồi, hay trang không có bước ôn).');
   }
 }

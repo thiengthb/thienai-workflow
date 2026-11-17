@@ -6,7 +6,7 @@ Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đ�
 
 ## Đang ở đâu
 - Đang ở: đợt 0, 1, 2 xong, PR #98 merge 2026-11-17; sakubun nhận phần chung mới qua PR #327 (merge cùng ngày).
-- Còn thiếu: đợt 3 xong (BA 4: 15,8 triệu token; Frontend 9: 23,1 triệu). Đã sửa các lượt phí đợt 3 tìm ra (xem "Kết luận đợt 3"). Đợt 4 để tới lần xem lại 2026-12-01 (thien chọn 2026-11-17).
+- Còn thiếu: đợt 3 xong (BA 4: 15,8 triệu token; Frontend 9: 23,1 triệu). Đã sửa các lượt phí đợt 3 tìm ra (xem "Kết luận đợt 3"). Đợt 4 và 5 làm sớm để CodeRabbit kịp review trước khi hết dùng thử 2026-11-24: phần máy của checkpoint 3 bên `2026-11-15-lean-learning.md` đã xong, còn đo ở hai buổi học kế tiếp; đối chiếu tính năng mới của Claude vẫn để 2026-12-01.
 - thien cần làm: không có.
 
 ## Mục tiêu
@@ -58,7 +58,9 @@ Kết luận đợt 3 (2026-11-17): mỗi buổi khoảng 50–60 lượt gọi.
 
 ### 4. Tự động hoá phần học, chỉ khi đợt 3 cho thấy đáng
 Kết quả (2026-11-17, thien bấm trên thẻ hỏi "Làm đợt 4 (tự sinh khung bài học) ngay, hay để tới 1/12?"): "Để tới 1/12 (đề xuất)". Lý do của đề xuất: dựng trang chỉ khoảng một phần ba số lượt mỗi buổi, sửa lượt phí gần như không tốn gì, và kế hoạch của nick tnt697 cũng đề xuất ngừng thêm luật tới 2026-12-01. Ngày 2026-12-01 xem số đo các buổi sau PR #103 rồi mới quyết.
+Đổi lại (2026-11-17, sau thẻ trên): thien nhắn "sao mình không thực hiện đợt 4 và 5 luôn tại bây giờ vì vài ngày nữa coderabbit sẽ hết hạn review, nên là hãy tận dụng nhiều nhất có thể nó". Câu này thay cho lựa chọn "Để tới 1/12".
 Ngưỡng và cách làm ở checkpoint 3, 4 của `2026-11-15-lean-learning.md`.
+- [x] Phần máy của checkpoint 3 bên đó: bước ôn 3 thẻ đầu buổi tự sinh khi dựng trang, từ câu trắc nghiệm lưu sẵn ở `learning/cards-quiz.json` (thien chọn "Giữ trắc nghiệm 3 lựa chọn"); `after-lesson.mjs --write` tự ghi kết quả ôn vào `learning/cards.md` (trước đây không bước nào ghi). Còn đo ở hai buổi học kế tiếp, ghi bên kế hoạch đó
 
 ### 5. Chiều bớt (làm sớm phần làm được, 2026-11-17, thien muốn tận dụng CodeRabbit trước khi hết dùng thử 2026-11-24)
 - [x] Phần chung `AGENTS.template.md`, dòng xem nhánh chưa merge: khi không có `check-open-work.mjs` thì xem cả nhánh đã đẩy mà chưa có PR và sổ bàn giao (góp ý đúng của CodeRabbit trên sakubun PR #327)
