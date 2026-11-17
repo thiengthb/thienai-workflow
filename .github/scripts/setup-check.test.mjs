@@ -1,7 +1,7 @@
 // Tests for templates/setup-check.mjs, run in CI by .github/workflows/test.yml.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { parseSetup, checkStandard, checkSetup, instructionsFor, parseAccounts, skillVersion, SKILLS, missingLines, checkSync, parseSyncArg } from '../../templates/setup-check.mjs';
+import { parseSetup, checkStandard, checkSetup, instructionsFor, parseAccounts, skillVersion, SKILLS, missingLines, checkSync, parseSyncArg, isBeta } from '../../templates/setup-check.mjs';
 
 const md = readFileSync(new URL('../../profile/SETUP.md', import.meta.url), 'utf8');
 assert.deepEqual(checkStandard(md), [], 'profile/SETUP.md itself must pass (version numbers in step)');
@@ -9,7 +9,9 @@ const std = parseSetup(md);
 assert.ok(std.version >= 1);
 assert.deepEqual(std.projects.sakubun, ['thiengthb/sakubun', 'thiengthb/thienai-workflow']);
 assert.deepEqual(std.projects.claude, ['thiengthb/thienai-workflow']);
-assert.equal(checkStandard(md.replace(/^Phiên bản chuẩn: \*\*\d+\*\*/m, 'Phiên bản chuẩn: **99**')).length, 1, 'bumping one number only fails');
+assert.equal(checkStandard(md.replace(/^Phiên bản chuẩn: \*\*\d+\*\*/m, 'Phiên bản chuẩn: **99**')).length, 2, 'bumping one number only fails, for both blocks');
+assert.equal(checkStandard(md.replace(/chuẩn setup v(\d+) beta/, 'chuẩn setup v99 beta')).length, 1, 'beta block number must match too');
+assert.ok(std.block && std.blockBeta && !isBeta(std.block) && isBeta(std.blockBeta), 'two blocks: old kind and beta');
 
 const good = instructionsFor(std, 'sakubun', 'tnt024');
 assert.match(good, new RegExp(`^chuẩn setup v${std.version} · project: sakubun`));
@@ -39,6 +41,21 @@ assert.ok(r.fixes.some(f => /chưa cho Claude đọc thiengthb\/sakubun/.test(f)
 
 r = checkSetup(std, { project: 'sakubun', instructions: good, repos: all.repos, skills: ['anthropic-skills:start-project'] });
 assert.ok(r.fixes.some(f => /make-slides/.test(f)), 'missing skill');
+
+// Beta projects: the beta block, beta settings pages, and old-kind instructions in a beta project are caught.
+const goodBeta = instructionsFor(std, 'Claude', 'tnt628', true);
+assert.match(goodBeta, new RegExp(`^chuẩn setup v${std.version} beta · project: Claude · nick: tnt628`));
+assert.ok(!/project_info/.test(goodBeta.replace(/không tìm project_info/, '')), 'beta block does not send threads to project_info');
+const beta = { repos: ['thiengthb/thienai-workflow'], skills: all.skills };
+r = checkSetup(std, { project: 'Claude', instructions: goodBeta, ...beta }, () => true);
+assert.deepEqual(r.fixes, [], 'beta project with beta instructions passes, beta found from the first line');
+assert.equal(r.nick, 'tnt628');
+r = checkSetup(std, { project: 'Claude', instructions: instructionsFor(std, 'Claude', 'tnt628'), ...beta, beta: true }, () => true);
+assert.ok(r.fixes.some(f => /đoạn của bản cũ/.test(f) && /Memory > Project instructions/.test(f) && /v\d+ beta/.test(f)), 'old block in a beta project: paste the beta one');
+r = checkSetup(std, { project: 'sakubun', instructions: instructionsFor(std, 'sakubun', 'tnt628', true), repos: ['thiengthb/sakubun'], skills: all.skills });
+assert.ok(r.fixes.some(f => /Project settings > Environment/.test(f)), 'beta: repos are added under Environment');
+r = checkSetup(std, { project: 'sakubun', instructions: good, repos: ['thiengthb/sakubun'], skills: all.skills });
+assert.ok(r.fixes.some(f => /Project knowledge/.test(f)), 'old kind: repos are added in the Project knowledge box');
 
 r = checkSetup(std, { project: 'tiktok', instructions: instructionsFor(std, 'tiktok', 'tnt024'), repos: [], skills: all.skills });
 assert.deepEqual(r.fixes, []); assert.ok(r.notes.some(n => /chưa có trong chuẩn/.test(n)), 'unknown project is a question, not a failure');

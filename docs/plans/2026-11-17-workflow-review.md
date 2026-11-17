@@ -55,7 +55,7 @@ Xong khi: có tổng số lượt của chat dựng bài và chat sau buổi ở
 Ngưỡng và cách làm ở checkpoint 3, 4 của `2026-11-15-lean-learning.md`.
 
 ### 5. Chiều bớt (làm sau lần xem lại 2026-12-01)
-- [ ] Kế hoạch xong chuyển vào `docs/plans/done/`; bảng "luật nằm ở đâu" kèm mốc xem lại; đối chiếu phần tự làm với tính năng mới của Claude
+- [ ] Kế hoạch xong chuyển vào thư mục `done` trong `docs/plans/`; bảng "luật nằm ở đâu" kèm mốc xem lại; đối chiếu phần tự làm với tính năng mới của Claude
 
 ## Bộ tình huống mẫu (kiểm đợt 1 bằng cách đọc)
 | Tình huống | Hành vi đúng | Luật quyết định |

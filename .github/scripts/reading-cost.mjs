@@ -10,7 +10,8 @@
 // with --reading-cost and must print how many bytes it would print at most.
 //
 // Sizes are bytes of the files as they are in the repo. Tokens are an estimate (about 3 bytes per token for this
-// mix of Vietnamese and code); no tokenizer is run, so treat them as a rough scale, not a count.
+// mix of Vietnamese and code); no tokenizer is run, so treat them as a rough scale, not a count. This is document size,
+// not usage: most usage is the system prompt read again every turn (docs/usage-log.md), so turns matter more than KB.
 import { readFileSync, existsSync, statSync, readdirSync, realpathSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -101,6 +102,6 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   }
   const missing = [...m.tier1.files, ...m.tasks.flatMap((t) => t.files)].filter((f) => f.missing).map((f) => f.path);
   if (missing.length) console.log(`Không thấy (repo project hay chưa có): ${[...new Set(missing)].join(', ')}`);
-  console.log(`Ngân sách mỗi việc: ${BUDGET_KB} KB. Token là ước tính (khoảng ${BYTES_PER_TOKEN} byte một token), chưa đếm bằng tokenizer.`);
+  console.log(`Ngân sách mỗi việc: ${BUDGET_KB} KB. Token là ước tính (khoảng ${BYTES_PER_TOKEN} byte một token), chưa đếm bằng tokenizer. Đây là cỡ tài liệu AI đọc, không phải usage: usage thật xem ở Settings > Usage (project bản beta: Project settings > Usage, có số theo từng thread); phần lớn usage là lời nhắc hệ thống đọc lại mỗi lượt, nên số lượt mới là thứ đáng giảm.`);
   if (over) { console.log(`${over} việc quá ngân sách: tách file nặng nhất, hay chuyển phần lịch sử (nhật ký cũ) ra file riêng rồi sửa profile/MAP.md.`); process.exitCode = 1; }
 }

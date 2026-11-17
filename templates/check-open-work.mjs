@@ -3,7 +3,9 @@
 //
 //   node templates/check-open-work.mjs [đường-dẫn ...] [--base <nhánh chính>] [--no-fetch]
 //
-// Tải nhánh mới nhất từ origin, rồi in mọi nhánh trên origin có commit chưa vào nhánh chính, kèm file nó sửa.
+// Tải nhánh mới nhất từ origin, rồi in mọi nhánh trên origin có commit chưa vào nhánh chính, kèm file nó sửa
+// và PR của nhánh (đang mở, đã đóng hay chưa có), đọc từ refs/pull của GitHub: PR đóng thì nhánh chỉ là nhánh cũ
+// cần xem lại hay xoá, không phải việc đang làm dở.
 // Nhánh chính: --base nếu có; không thì nhánh mặc định của origin (origin/HEAD), rồi main, rồi master.
 // Có đường dẫn (ví dụ learning/war.md learning/war/): chỉ báo nhánh sửa đúng những chỗ đó, và thoát mã 1 nếu có,
 // để script khác (make-lesson.mjs) dừng lại. Nhánh đang đứng, và nhánh đã gộp hết vào nhánh đang đứng, không tính.
@@ -15,6 +17,25 @@ import { fileURLToPath } from 'node:url';
 
 let CWD = process.cwd();
 const git = (...a) => execFileSync('git', a, { cwd: CWD, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+
+/**
+ * PRs of origin as GitHub keeps them under refs/pull: { byNumber: Map(n -> { head, open }), byHead: Map(sha -> n) }.
+ * refs/pull/N/merge exists only while PR N is open and GitHub could build its merge commit, so "no merge ref" means
+ * closed, merged, or open with a conflict. Returns null when origin cannot be read (offline, not GitHub).
+ */
+export function prRefs({ cwd = process.cwd() } = {}) {
+  let out;
+  try { out = execFileSync('git', ['ls-remote', 'origin', 'refs/pull/*/head', 'refs/pull/*/merge'], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 30000 }); } catch (e) { return null; }
+  const byNumber = new Map(), byHead = new Map(), merge = new Set();
+  for (const line of out.split('\n')) {
+    const m = line.match(/^([0-9a-f]{40})\s+refs\/pull\/(\d+)\/(head|merge)$/);
+    if (!m) continue;
+    if (m[3] === 'merge') merge.add(Number(m[2]));
+    else { byNumber.set(Number(m[2]), { head: m[1], open: false }); byHead.set(m[1], Number(m[2])); }
+  }
+  for (const n of merge) if (byNumber.has(n)) byNumber.get(n).open = true;
+  return { byNumber, byHead };
+}
 
 /** Returns [{ branch, subject, date, files }] for origin branches with commits not on base, optionally only those touching paths.
     The array has .stale = true when the fetch failed and the answer comes from old refs. */
@@ -50,11 +71,18 @@ export function openWork({ base, paths = [], fetch = true, cwd = process.cwd() }
     const hit = paths.length ? files.filter((f) => paths.some((p) => f === p || f.startsWith(p.endsWith('/') ? p : p + '/'))) : files;
     if (paths.length && !hit.length) continue;
     const [date, subject] = git('log', '-1', '--format=%cs%x09%s', b).split('\t');
-    out.push({ branch: b.replace(/^origin\//, ''), subject, date, ahead, files: hit });
+    out.push({ branch: b.replace(/^origin\//, ''), subject, date, ahead, files: hit, sha: git('rev-parse', b) });
   }
+  // PR of each branch (tip commit = PR head). Not readable: leave it out, the list still stands.
+  const prs = out.length ? prRefs({ cwd }) : null;
+  if (prs) for (const w of out) { const n = prs.byHead.get(w.sha); w.pr = n ? { number: n, open: prs.byNumber.get(n).open } : null; }
   out.stale = stale; out.base = base;
   return out;
 }
+
+/** ", PR #N đang mở" and the like; nothing when PRs were not read. */
+const prNote = (w) => w.pr === undefined ? '' : !w.pr ? ', chưa có PR'
+  : w.pr.open ? `, PR #${w.pr.number} đang mở` : `, PR #${w.pr.number} đã đóng hay đang conflict: nhánh cũ, xem PR rồi xoá nhánh nếu không cần`;
 
 export function report(list, paths = []) {
   if (list.missingBase) return `Không thấy nhánh chính origin/${list.base}. Chạy lại với --base <tên nhánh chính>, hoặc tự xem trang Pull requests trước khi làm.`;
@@ -62,7 +90,7 @@ export function report(list, paths = []) {
     `Tự xem trang Pull requests trước khi làm.`, ...(list.length ? [report(Object.assign([...list], { stale: false }), paths)] : [])].join('\n');
   if (!list.length) return paths.length ? `Không có nhánh chưa merge nào sửa ${paths.join(', ')}.` : 'Không có nhánh chưa merge.';
   return [paths.length ? `Có ${list.length} nhánh chưa merge sửa ${paths.join(', ')}. Đọc trước khi làm, đừng làm trùng:` : `Có ${list.length} nhánh chưa merge:`,
-    ...list.map((w) => `- ${w.branch} (${w.date}, ${w.ahead} commit): ${w.subject}\n    ${w.files.slice(0, 8).join(', ')}${w.files.length > 8 ? ', …' : ''}`)].join('\n');
+    ...list.map((w) => `- ${w.branch} (${w.date}, ${w.ahead} commit${prNote(w)}): ${w.subject}\n    ${w.files.slice(0, 8).join(', ')}${w.files.length > 8 ? ', …' : ''}`)].join('\n');
 }
 
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {

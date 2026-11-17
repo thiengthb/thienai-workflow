@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { statusParts, claimText, claimBy, otherNickNote, branchOf } from '../../templates/start-session.mjs';
+import { statusParts, claimText, claimBy, otherNickNote, branchOf, stalePrNotes } from '../../templates/start-session.mjs';
 import { skeleton } from '../../templates/handoff.mjs';
 
 // STATUS: only the parts a new session needs, history left out.
@@ -68,6 +68,7 @@ assert.doesNotMatch(r.stdout, /## Nhận việc/, 'no claim without --claim');
 assert.match(r.stdout, /## STATUS/);
 assert.match(r.stdout, /## AGENTS\.md/, 'AGENTS.md is printed, no extra turn to load it');
 assert.doesNotMatch(start('--no-agents').stdout, /## AGENTS\.md/);
+assert.doesNotMatch(start('--beta').stdout, /## AGENTS\.md/, 'beta threads already loaded AGENTS.md through CLAUDE.md');
 
 r = start('--claim', 'Claude tnt697, https://new');
 assert.equal(r.status, 0, r.stdout + r.stderr);
@@ -100,6 +101,20 @@ r = start('--project', 'Claude', '--instructions', 'none', '--repos', 'thiengthb
 assert.equal(r.status, 1);
 assert.match(r.stdout, /Thiếu setup/);
 assert.match(r.stdout, /## Sổ bàn giao/);
+
+// STATUS waiting on a PR that is closed: a reminder; open PRs and another repo's PR numbers: none.
+{
+  const md = '# Tiến độ\n\n## Kế hoạch đang chạy\n| a | 4/4, chờ thien merge PR #97 | 7/7 |\n\n## Đang chờ thien\n- Merge sakubun PR #97.\n- Merge PR #98.\n- Xoá nhánh x | PR #97 đã đóng, phần cần đã merge (PR #97) |\n';
+  const prs = { byNumber: new Map([[97, { head: 'a', open: false }], [98, { head: 'b', open: true }]]), byHead: new Map() };
+  const notes = stalePrNotes(md, prs);
+  assert.equal(notes.length, 1, 'only the closed PR of this repo'); assert.match(notes[0], /PR #97 nhưng PR đó đã đóng/);
+  assert.deepEqual(stalePrNotes(md, null), [], 'PRs not readable: no reminder');
+}
+// Unknown options stop before anything is read or claimed (2026-11-17: --dry-run was ignored and a task got claimed).
+{
+  const r = spawnSync(process.execPath, [fileURLToPath(new URL('../../templates/start-session.mjs', import.meta.url)), '--claim', 'Claude tnt628, x', '--dry-run'], { encoding: 'utf8' });
+  assert.equal(r.status, 2); assert.match(r.stderr, /tham số lạ: --dry-run/); assert.doesNotMatch(r.stdout, /Sổ bàn giao/);
+}
 
 rmSync(root, { recursive: true, force: true });
 console.log('ok start-session');

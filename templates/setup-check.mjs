@@ -5,7 +5,10 @@
 // Prints "ổn" when everything matches, otherwise the list of fixes for thien, in Vietnamese. Exit code 1 when something is missing.
 //
 //   node templates/setup-check.mjs --project sakubun --instructions <file|none|unseen> --repos a/b,c/d --skills start-project@1,make-slides@1
-//        [--sync "/:include"]
+//        [--beta] [--sync "/:include"]
+// --beta: the project is the beta kind (one coordinator chat, a cloud thread per task): checked against the beta block of
+// SETUP.md, fixes point at the beta settings pages, and there is no knowledge sync to check. Instructions whose first
+// line says "vN beta" count as beta too.
 // --instructions none: the project has no instructions. unseen: this session cannot see them (then they are not checked,
 // and the output says so instead of guessing). --sync: the GitHub sync filters of the project's knowledge, as the
 // Projects tool (project_info) shows them, path:include|exclude separated by commas; compared with profile/SETUP.md.
@@ -23,12 +26,15 @@ const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 const here = dirname(dirname(fileURLToPath(import.meta.url)));
 export const SKILLS = ['start-project', 'make-slides'];
 
-/** Reads the standard out of SETUP.md: version, the instructions block, and the project -> repos table. */
+/** Reads the standard out of SETUP.md: version, the two instructions blocks (old kind, beta), and the project -> repos table. */
 export function parseSetup(md) {
   md = lf(md);
   const version = Number((md.match(/^Phiên bản chuẩn: \*\*(\d+)\*\*/m) || [])[1]);
-  const block = (md.match(/```text\n(chuẩn setup v\d+[\s\S]*?)```/) || [])[1] || '';
+  const blocks = [...md.matchAll(/```text\n(chuẩn setup v\d+[\s\S]*?)```/g)].map(m => m[1]);
+  const block = blocks.find(b => !isBeta(b)) || '';
+  const blockBeta = blocks.find(isBeta) || '';
   const blockVersion = Number((block.match(/^chuẩn setup v(\d+)/) || [])[1]);
+  const betaVersion = Number((blockBeta.match(/^chuẩn setup v(\d+)/) || [])[1]);
   const projects = {};
   for (const m of md.matchAll(/^\|\s*`([^`]+)`\s*\|\s*((?:`[\w.-]+\/[\w.-]+`[,\s]*)+)\|/gm)) {
     projects[m[1].toLowerCase()] = [...m[2].matchAll(/`([\w.-]+\/[\w.-]+)`/g)].map(x => x[1]);
@@ -37,8 +43,11 @@ export function parseSetup(md) {
   const syncPart = (md.match(/^## Đồng bộ repo vào knowledge\n([\s\S]*?)(?=^## )/m) || [])[1] || '';
   const sync = [...syncPart.matchAll(/^- `([^`]+)`/gm)].map(m => m[1]);
   const syncOut = [...syncPart.matchAll(/^- bỏ `([^`]+)`/gm)].map(m => m[1]);
-  return { version, block, blockVersion, projects, sync, syncOut };
+  return { version, block, blockVersion, blockBeta, betaVersion, projects, sync, syncOut };
 }
+
+/** Instructions of the beta kind say so on their first line: "chuẩn setup v4 beta · project: …". */
+export const isBeta = (text) => /^chuẩn setup v\d+ beta\b/m.test(lf(String(text || '')));
 
 const squash = (s) => s.replace(/\s+/g, ' ').trim().toLowerCase();
 
@@ -46,9 +55,9 @@ const squash = (s) => s.replace(/\s+/g, ' ').trim().toLowerCase();
  * Lines of the standard instructions that are missing from what the project has. The first line (version, project,
  * nick) is left out: the checks below look at it part by part and say exactly what is wrong.
  */
-export function missingLines(standard, project, text, nick = '<tên nick>') {
+export function missingLines(standard, project, text, nick = '<tên nick>', beta = false) {
   const have = squash(lf(text));
-  return instructionsFor(standard, project, nick).split('\n').slice(1).map(l => l.trim()).filter(Boolean).filter(l => !have.includes(squash(l)));
+  return instructionsFor(standard, project, nick, beta).split('\n').slice(1).map(l => l.trim()).filter(Boolean).filter(l => !have.includes(squash(l)));
 }
 
 /**
@@ -72,7 +81,7 @@ export function checkSync(standard, filters) {
   const miss = standard.sync.filter(p => !synced(p) || fs.some(f => f.mode === 'exclude' && under(f, clean(p)) && !out.some(o => f.path === o || f.path.startsWith(o + '/'))));
   const heavy = (standard.syncOut || []).filter(p => synced(p) || fs.some(f => f.mode === 'include' && under(f, clean(p))));
   const notes = [];
-  const where = 'Project settings > GitHub, chọn lại theo profile/SETUP.md, mục "Đồng bộ repo vào knowledge"';
+  const where = 'Ô Project knowledge ở cột phải trang project > bấm vào repo, chọn lại theo profile/SETUP.md, mục "Đồng bộ repo vào knowledge"';
   if (heavy.length) notes.push(`Knowledge của project đang đồng bộ cả phần nặng (${heavy.join(', ')}): knowledge nhanh đầy và Claude phải tìm từng đoạn thay vì đọc hết. ${where}.`);
   if (miss.length) notes.push(`Knowledge của project chưa đồng bộ: ${miss.join(', ')}. ${where}.`);
   return notes;
@@ -101,14 +110,16 @@ export function checkStandard(md) {
   const out = [];
   if (!s.version) out.push('thiếu dòng "Phiên bản chuẩn: **N**"');
   if (!s.block) out.push('thiếu đoạn project instructions (khối ```text bắt đầu bằng "chuẩn setup vN")');
+  if (!s.blockBeta) out.push('thiếu đoạn project instructions bản beta (khối ```text bắt đầu bằng "chuẩn setup vN beta")');
   if (s.version && s.blockVersion && s.version !== s.blockVersion) out.push(`số phiên bản lệch nhau: chuẩn ${s.version}, đoạn instructions v${s.blockVersion}`);
+  if (s.version && s.betaVersion && s.version !== s.betaVersion) out.push(`số phiên bản lệch nhau: chuẩn ${s.version}, đoạn instructions bản beta v${s.betaVersion}`);
   if (!Object.keys(s.projects).length) out.push('bảng project và repo trống');
   return out;
 }
 
-/** The instructions text thien should paste for one project. */
-export const instructionsFor = (standard, project, nick = '<tên nick>') =>
-  standard.block.replace('<tên project>', project).replace('<tên nick>', nick).trim();
+/** The instructions text thien should paste for one project (beta: the block for beta projects). */
+export const instructionsFor = (standard, project, nick = '<tên nick>', beta = false) =>
+  ((beta && standard.blockBeta) || standard.block).replace('<tên project>', project).replace('<tên nick>', nick).trim();
 
 export const NICK = /^tnt\d{2,}$/;
 
@@ -131,26 +142,30 @@ export function skillVersion(skillMd) {
  * Compares what the session sees with the standard. Returns { fixes: [...], notes: [...] }.
  * readable(repo) -> true/false/undefined (undefined = not checked).
  */
-export function checkSetup(standard, { project, instructions, repos = [], skills = [], accounts, skillVersions = {} }, readable = () => undefined) {
+export function checkSetup(standard, { project, instructions, repos = [], skills = [], accounts, skillVersions = {}, beta = false }, readable = () => undefined) {
   const fixes = [], notes = [];
   const key = String(project || '').toLowerCase();
   const want = standard.projects[key];
   instructions = lf(instructions || '');
+  const pastedBeta = isBeta(instructions);
+  beta = beta || pastedBeta;
   const nick = (instructions.match(/· nick: (\S+)/) || [])[1];
-  const paste = `Project settings > Instructions, xoá bản cũ, dán:\n\n${instructionsFor(standard, project || '<tên project>', nick && NICK.test(nick) ? nick : '<tên nick>')}`;
+  const where = beta ? 'Project settings > Memory > Project instructions' : 'Project settings > Instructions';
+  const paste = `${where}, xoá bản cũ, dán (đoạn của project bản ${beta ? 'beta' : 'cũ'}):\n\n${instructionsFor(standard, project || '<tên project>', nick && NICK.test(nick) ? nick : '<tên nick>', beta)}`;
   if (!want) {
     notes.push(`Project "${project}" chưa có trong chuẩn (profile/SETUP.md). Hỏi thien có thêm vào bảng không.`);
   }
   const text = (instructions || '').trim();
   const vm = text.match(/chuẩn setup v(\d+)/);
   const v = vm ? Number(vm[1]) : null;
-  const named = (text.match(/chuẩn setup v\d+ · project: ([^\n·]+)/) || [])[1]?.trim().toLowerCase();
+  const named = (text.match(/chuẩn setup v\d+(?: beta)? · project: ([^\n·]+)/) || [])[1]?.trim().toLowerCase();
   if (!text) fixes.push(`Project này chưa có project instructions. ${paste}`);
   else if (v === null) fixes.push(`Project instructions chưa theo chuẩn chung (không có dòng "chuẩn setup vN"). ${paste}`);
   else if (v < standard.version) fixes.push(`Project instructions đang ở chuẩn v${v}, chuẩn mới là v${standard.version}. ${paste}`);
   else if (v > standard.version) notes.push(`Project instructions ghi v${v}, mới hơn repo (v${standard.version}): có thể PR đổi chuẩn chưa merge.`);
-  if (v === standard.version) {
-    const miss = missingLines(standard, project || '<tên project>', text, nick);
+  if (v !== null && beta && !pastedBeta) fixes.push(`Đây là project bản beta mà instructions là đoạn của bản cũ (bảo gọi project_info và clone repo, hai thứ bản beta không có). ${paste}`);
+  else if (v === standard.version) {
+    const miss = missingLines(standard, project || '<tên project>', text, nick, beta);
     if (miss.length) fixes.push(`Project instructions có số v${v} nhưng thiếu ${miss.length} dòng của bản chuẩn (bản dán bị cắt hay đã sửa tay): «${miss[0].slice(0, 80)}${miss[0].length > 80 ? '…' : ''}»${miss.length > 1 ? ' và các dòng khác' : ''}. ${paste}`);
   }
   if (v !== null && v >= 2 && !(nick && NICK.test(nick))) fixes.push(`Project instructions chưa ghi tên nick (dạng tnt + số, ví dụ tnt024; danh sách ở profile/ACCOUNTS.md). Sửa đoạn "<tên nick>" ở dòng đầu. ${paste}`);
@@ -165,7 +180,9 @@ export function checkSetup(standard, { project, instructions, repos = [], skills
   if (want) {
     const have = new Set(repos.map(r => r.toLowerCase()));
     const missing = want.filter(r => !have.has(r.toLowerCase()));
-    if (missing.length) fixes.push(`Project chưa gắn repo ${missing.join(', ')}. Project settings > Repositories > thêm ${missing.map(r => '`' + r + '`').join(' và ')}.`);
+    if (missing.length) fixes.push(beta
+      ? `Project chưa gắn repo ${missing.join(', ')}. Project settings > Environment > thêm ${missing.map(r => '`' + r + '`').join(' và ')} (hay nhờ chat điều phối thêm repo vào project).`
+      : `Project chưa gắn repo ${missing.join(', ')}. Ô Project knowledge ở cột phải trang project > + > GitHub > thêm ${missing.map(r => '`' + r + '`').join(' và ')}, tích file theo profile/SETUP.md, mục "Đồng bộ repo vào knowledge".`);
     const unreadable = want.filter(r => readable(r) === false);
     if (unreadable.length) fixes.push(`Nick này chưa cho Claude đọc ${unreadable.join(', ')} trên GitHub. Settings > Connectors > GitHub > cho phép repo đó (xem profile/SETUP.md, mục "Một lần cho mỗi nick").`);
   }
@@ -191,13 +208,15 @@ function main(argv) {
   const repos = list(opt('--repos'));
   const skills = list(opt('--skills'));
   const noGit = flag('--no-git');
+  const beta = flag('--beta');
   const accountsPath = opt('--accounts') || join(here, 'profile/ACCOUNTS.md');
   const skillsDir = opt('--skills-dir') || join(here, 'skills');
   const accounts = existsSync(accountsPath) ? parseAccounts(lf(readFileSync(accountsPath, 'utf8'))) : undefined;
   const skillVersions = {};
   for (const n of SKILLS) { const f = join(skillsDir, n, 'SKILL.md'); if (existsSync(f)) skillVersions[n] = skillVersion(lf(readFileSync(f, 'utf8'))); }
   const syncArg = opt('--sync');
-  if (!project || instrArg === undefined) throw new Error('dùng: --project <tên> --instructions <file|none|unseen> [--repos a/b,c/d] [--skills x@N,y@N] [--sync "/:include"] [--no-git]');
+  if (!project || instrArg === undefined) throw new Error('dùng: --project <tên> --instructions <file|none|unseen> [--repos a/b,c/d] [--skills x@N,y@N] [--beta] [--sync "/:include"] [--no-git]');
+  if (argv.length) throw new Error(`tham số lạ: ${argv.join(' ')} (xem đầu file templates/setup-check.mjs)`);
   const md = lf(readFileSync(setupPath, 'utf8'));
   const bad = checkStandard(md);
   if (bad.length) throw new Error('profile/SETUP.md hỏng: ' + bad.join('; '));
@@ -206,12 +225,13 @@ function main(argv) {
   const instructions = instrArg === 'none' || unseen ? '' : existsSync(instrArg) ? lf(readFileSync(instrArg, 'utf8')) : instrArg;
   const readable = noGit ? () => undefined
     : (r) => spawnSync('git', ['ls-remote', '--exit-code', '-q', `https://github.com/${r}`, 'HEAD'], { encoding: 'utf8', timeout: 30000 }).status === 0;
-  const r = checkSetup(standard, { project, instructions, repos, skills, accounts, skillVersions }, readable);
+  const r = checkSetup(standard, { project, instructions, repos, skills, accounts, skillVersions, beta }, readable);
   // Only report what was actually seen: unseen instructions are "not checked", never "missing".
   const fixes = unseen ? r.fixes.filter(f => !/^Project (này chưa có|instructions)/.test(f)) : r.fixes;
   const notes = [...(unseen ? ['Phiên này không thấy project instructions nên chưa kiểm phần đó (cả tên nick).'] : []), ...r.notes];
+  // The beta kind clones the repos and has no knowledge sync: nothing to check there.
   if (syncArg !== undefined) notes.push(...checkSync(standard, parseSyncArg(syncArg)));
-  else notes.push('Không có --sync nên chưa kiểm bộ lọc đồng bộ knowledge (xem bằng project_info).');
+  else if (!beta && !isBeta(instructions)) notes.push('Không có --sync nên chưa kiểm bộ lọc đồng bộ knowledge (xem bằng project_info).');
   for (const n of notes) console.log('nhắc: ' + n);
   if (!fixes.length) { console.log(`ổn: project "${project}" đúng chuẩn setup v${standard.version}${unseen ? ' ở những phần đã kiểm (chưa kiểm instructions)' : ''}`); return 0; }
   console.log(`Project "${project}" chưa đúng chuẩn setup v${standard.version}. Nhờ thien làm trước khi bắt đầu:`);
