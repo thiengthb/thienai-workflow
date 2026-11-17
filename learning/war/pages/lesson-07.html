@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi" data-board="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chiến tranh 7: giấu pháo ở Điện Biên Phủ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style id="kit-css"></style>
+<style id="lesson-css"></style>
+<style id="war-css"></style>
+<style>
+/* Bài 7: không có phần riêng, dùng đủ khung chung và sa bàn. */
+</style>
+</head>
+<body>
+<script type="application/json" id="lesson">{"id":"war-07","subject":"Chiến tranh","title":"Buổi 7: Bất ngờ và lừa địch","extra":false}</script>
+<script type="application/json" id="battle" data-src="../battles/dien-bien-phu-1954.json"></script>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>Chiến tranh · Buổi 7: Bất ngờ và lừa địch</span><span id="cnt">1/9</span></div><div class="bar"><span id="bar"></span></div></div>
+  <div id="board"></div>
+
+  <!-- 0. Mở bài: giới thiệu ý mới khoảng 1 phút, nhìn sa bàn, chưa hỏi gì -->
+  <section class="step on" data-s="0" data-board="p7@0">
+    <h1>Giấu pháo ở đâu?</h1>
+    <p><b>Bất ngờ</b> là làm điều bên kia không tính tới. <b>Lừa địch</b> là cho họ thấy một thứ sai để họ tính sai. Buổi 1 đã có một ví dụ: Ngô Quyền cho thuyền nhẹ giả thua, kéo quân Nam Hán vào bãi cọc.</p>
+    <p>Hôm nay là lòng chảo Điện Biên Phủ, đầu tháng 3/1954. Khối xanh là cứ điểm, hình chóp xanh là pháo Pháp. Pháo của ta chưa đặt: bạn sẽ chọn chỗ.</p>
+    <p>Xoay sa bàn một lúc. Để ý núi quanh lòng chảo có hai mặt: mặt quay vào trong và mặt quay ra ngoài.</p>
+    <p class="small muted">Khoảng 12 phút, dài cỡ buổi 6.</p>
+    <button class="btn primary next" type="button" data-go="1">Bắt đầu</button>
+  </section>
+
+  <!-- 1. Ôn 3 thẻ: make-lesson.mjs tự sinh. Chỉ lần học đầu. -->
+  <section class="step" data-s="1" data-part="review" data-auto="cards">
+    <!-- Ôn 3 thẻ: make-lesson.mjs tự sinh lúc dựng từ learning/cards.md và learning/cards-quiz.json. Để trống. -->
+  </section>
+
+  <!-- 2. Nhớ lại buổi trước, chỉ lần học đầu -->
+  <section class="step" data-s="2" data-part="review">
+    <h2>Nhớ lại buổi 6</h2>
+    <div class="card">
+      <p>Him Lam rất kiên cố mà vẫn là chỗ yếu. Ở đó ta có gì so với quân giữ?</p>
+      <div class="q" data-q="R6" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Ta có nhiều lính hơn Pháp trong cả lòng chảo</button>
+        <button class="opt" type="button">Ta dồn được 40 khẩu pháo và cả một đại đoàn vào một tiểu đoàn, trung tâm cứu không kịp</button>
+        <button class="opt" type="button">Him Lam không có công sự</button>
+        <p class="why">Chỗ yếu là chỗ mình mạnh hơn hẳn ngay tại đó, lúc đó. Hôm nay vẫn là chuyện pháo: muốn dồn pháo được thì pháo phải sống tới giờ bắn.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="3" data-need="R6" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 3. Làm chỉ huy -->
+  <section class="step" data-s="3" data-board="p7@0">
+    <h2>Bạn là Đại tướng Võ Nguyên Giáp</h2>
+    <p>Sau lần hoãn đánh ở buổi 3, pháo đã kéo ra. Giờ đưa pháo vào lại. Đặt ở đâu?</p>
+    <ul class="know">
+      <li>Pháo Pháp (105 và 155 ly) ở Mường Thanh và Hồng Cúm, có máy bay trinh sát.</li>
+      <li>Pháp tin: pháo ta tới gần là bị phát hiện, rồi bị pháo hay máy bay diệt.</li>
+      <li>Pháo ta ít, đạn ít, nhiều khẩu phải kéo tay qua núi.</li>
+    </ul>
+    <p><b>Chọn cách đặt pháo.</b> Bấm "Xem" trước khi chọn.</p>
+    <div class="choose" data-c="d1" data-real="C" data-same="Giống quyết định thật." data-diff="Đại tướng chọn khác. Xem chuyện thật rồi so với cách của bạn.">
+      <div class="row"><button class="opt" type="button" data-v="A"><span><b>A.</b> Đặt ở mặt núi quay ra ngoài, bắn vòng qua đỉnh. Pháp không thấy pháo, mình cũng không thấy cứ điểm</span></button><button class="btn" type="button" data-plan="p7A">Xem</button></div>
+      <div class="row"><button class="opt" type="button" data-v="B"><span><b>B.</b> Đặt trên sườn trống nhìn xuống lòng chảo, bắn thẳng được ngay, không phải đào lâu</span></button><button class="btn" type="button" data-plan="p7B">Xem</button></div>
+      <div class="row"><button class="opt" type="button" data-v="C"><span><b>C.</b> Đào hầm cho từng khẩu ở sườn nhìn xuống lòng chảo, thêm vài trận địa giả. Tốn nhiều tuần đào</span></button><button class="btn" type="button" data-plan="p7">Xem</button></div>
+    </div>
+    <button class="btn primary next" type="button" data-go="4" data-need="d1" disabled>Xem chuyện gì xảy ra</button>
+  </section>
+
+  <!-- 4. Xem chuyện thật, tự để ý -->
+  <section class="step" data-s="4" data-board="p7">
+    <h2>Chuyện gì đã xảy ra</h2>
+    <p class="fb" data-echo="d1"></p>
+    <p>Bấm từng mốc dưới sa bàn. Xong thì xem thử hai cách còn lại.</p>
+    <div class="tracks"><button class="btn" type="button" data-track="p7">Chuyện thật</button><button class="btn" type="button" data-track="p7A">Nếu chọn A</button><button class="btn" type="button" data-track="p7B">Nếu chọn B</button></div>
+    <div class="card"><p>Ở mốc 13/3 của chuyện thật, bấm nút "Mắt quân Pháp". Rồi chạm vào đất trống cạnh Mường Thanh: sa bàn tô những chỗ nhìn thấy được từ đó. Pháo ta nằm ở chỗ Pháp thấy được hay không? Nếu thấy được, vì sao Pháp vẫn không diệt được? Một câu thôi.</p><textarea data-key="notice" data-min="3" placeholder="Mình thấy..."></textarea></div>
+    <button class="btn primary next" type="button" data-go="5" data-need="seen-p7 notice" disabled>Tiếp: vì sao</button>
+  </section>
+
+  <!-- 5. Hiểu sau -->
+  <section class="step" data-s="5" data-board="p7">
+    <h2>Làm hỏng đúng bước bên kia cần</h2>
+    <p class="fb" data-echo="d1"></p>
+    <div class="card">
+      <p>Pháp đã tính sẵn ba bước: pháo ta bắn, lộ chỗ, rồi bị pháo hay máy bay Pháp diệt. Cả cách tính dựa vào bước giữa: <b>lộ chỗ</b>.</p>
+      <p>Đại tướng làm hỏng đúng bước đó bằng hai cách. <b>Giấu:</b> mỗi khẩu một hầm, nóc phủ đất dày 3 m, ngụy trang kín. <b>Lừa:</b> trận địa giả, để Pháp bắn vào chỗ không có gì.</p>
+      <p>Cách A an toàn nhưng xa và không thấy mục tiêu, lúc đạn ít thì phí. Cách B bắn ngay nhưng đúng là thứ Pháp đang chờ (cả hai là suy luận). Bất ngờ ở đây không phải trốn khỏi tầm mắt, mà là làm cho cách tính của bên kia hết dùng được.</p>
+    </div>
+    <div class="card small"><p><b>Nguồn</b></p>
+      <p>Đại tướng Võ Nguyên Giáp, <i>Điện Biên Phủ</i>, NXB Chính trị quốc gia, 2004, tr. 192–204, trích trên Nhân Dân: <a href="https://special.nhandan.vn/daymanhcongtacchuanbi/index.html" target="_blank" rel="noopener">"Đẩy mạnh công tác chuẩn bị cho chiến dịch Điện Biên Phủ"</a>. Trận địa xây vào sườn núi, sườn đồi, ngụy trang kín, chịu được pháo 105 và 155 ly; trận địa nghi binh để làm lạc hướng, phân tán hỏa lực, tiêu hao bom đạn của địch; địch coi thường pháo ta, tin sẽ phát hiện và diệt được.</p>
+      <p>Thiếu tướng Đỗ Quốc Ân, Tư lệnh Binh chủng Pháo binh, <a href="https://special.nhandan.vn/phao-binh-trong-chien-dich-Dien-Bien-Phu/index.html" target="_blank" rel="noopener">"Pháo binh trong Chiến dịch Điện Biên Phủ"</a> (Nhân Dân): "lên cao, vào gần, bắn thẳng"; đợt bắn "Sấm rền" 17h05 ngày 13/3, Trung đoàn 45 bắn phát đầu; 234 khẩu pháo, cối đợt một, 261 đợt ba.</p>
+      <p>Quân đội nhân dân, <a href="https://giaoduc.net.vn/tieu-diem/nghe-thuat-su-dung-phao-binh-trong-chien-dich-dien-bien-phu-post176399.gd" target="_blank" rel="noopener">"Nghệ thuật sử dụng pháo binh..."</a> (đăng lại 2017): hầm cho pháo và 10 pháo thủ, vách gỗ dày 30 cm, nóc nứa và đất dày 3 m; pháo bắn ngắm trực tiếp đặt trên núi cao.</p>
+      <p>Đại tá Nguyễn Thế Vỵ, <a href="https://viettimes.vn/su-dung-luc-luong-phao-binh-trong-chien-dich-dien-bien-phu-post26869.html" target="_blank" rel="noopener">"Sử dụng lực lượng pháo binh..."</a> (Tạp chí Quốc phòng toàn dân, đăng lại 2016): pháo ở Tà Lùng, Bản Tấu, Nà Lời và phía nam; đạn lựu pháo lúc mở màn rất hạn chế; chỉ huy pháo binh Pháp tự sát.</p>
+      <p>Geoffrey Norman, <a href="https://historynet.com/what-the-french-lost-at-dien-bien-phu/" target="_blank" rel="noopener">"What the French Lost at Dien Bien Phu"</a> (HistoryNet, đăng lần đầu trên Military History, 1/2010): Charles Piroth cam đoan pháo đối phương không đáng lo, phản pháo sẽ dập được; ngày 15/3 tự sát bằng lựu đạn.</p>
+      <p><b>Sử chép khác:</b> sách Việt thường gọi Piroth là đại tá; HistoryNet gọi Colonel, một số sách Pháp, Anh ghi trung tá. Bài này chỉ ghi chức vụ.</p>
+      <p><b>Không lấy từ sử:</b> hai cách A và B là mô phỏng; vị trí pháo, trận địa giả trên sa bàn là ước lượng, chỉ địa hình là thật.</p>
+    </div>
+    <button class="btn primary next" type="button" data-go="6">Tiếp</button>
+  </section>
+
+  <!-- 6. Câu hỏi nhanh -->
+  <section class="step" data-s="6">
+    <h2>Câu hỏi nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Pháo ta nằm ở sườn quay vào lòng chảo, chỗ Pháp nhìn lên được. Vì sao Pháp vẫn không diệt được?</p>
+      <div class="q" data-q="q1" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Vì Pháp không có máy bay ở Điện Biên Phủ</button>
+        <button class="opt" type="button">Vì mỗi khẩu nằm trong hầm chịu được đạn lớn, ngụy trang kín, lại có trận địa giả: khó biết bắn vào đâu, bắn trúng cũng khó phá</button>
+        <button class="opt" type="button">Vì pháo ta đông gấp mười pháo Pháp</button>
+        <p class="why">Pháp có máy bay trinh sát và cả pháo 105, 155 ly. Thứ họ thiếu là chỗ bắn đúng.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Pháp tính: pháo ta bắn, lộ chỗ, bị diệt. Trận địa giả đánh vào bước nào?</p>
+      <div class="q" data-q="q2" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Bước pháo ta bắn: làm pháo ta bắn nhiều hơn</button>
+        <button class="opt" type="button">Bước lộ chỗ: Pháp thấy chỗ bắn mà không biết chỗ nào thật</button>
+        <button class="opt" type="button">Bước diệt: làm hỏng pháo Pháp</button>
+        <p class="why">Hầm và ngụy trang cũng đánh vào bước này. Đánh trúng bước mà cả cách tính dựa vào thì cả cách tính đổ.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="7" data-need="q1 q2" disabled>Tiếp</button>
+  </section>
+
+  <!-- 7. Tự nói lại theo tình huống -->
+  <section class="step" data-s="7">
+    <h2>Tự nói lại</h2>
+    <div class="say ask-from" data-who="Huy, bạn cùng lớp hay chơi game chiến thuật"><b>Huy nhắn</b>Ông bảo ở Điện Biên Phủ pháo mình đặt ngay sườn núi nhìn xuống, Pháp nhìn lên là thấy mà. Sao không giấu hẳn ra sau núi cho an toàn?</div>
+    <p>Trả lời Huy 2–3 câu, như nhắn tin.</p>
+    <textarea data-key="teach" data-min="5" placeholder="Vì..."></textarea>
+    <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Sau núi thì an toàn, nhưng mình cũng không thấy cứ điểm, phải nhờ người chỉnh từng phát, mà lúc đó đạn ít. Ở sườn trong thì bắn thẳng, gần, trúng hơn. Cái giá là dễ bị thấy, nên mỗi khẩu nằm trong hầm nóc đất dày 3 m, ngụy trang kín, thêm trận địa giả. Pháp tính "bắn là lộ, lộ là bị diệt"; mình làm hỏng đúng bước "lộ" đó.</div></div>
+    <button class="btn primary next" type="button" data-go="8" data-need="teach" disabled>Tiếp</button>
+  </section>
+
+  <!-- 8. Góp ý, xong buổi -->
+  <section class="step" data-s="8">
+    <h2>Góp ý buổi này</h2>
+    <div class="card">
+      <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
+      <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Điện Biên Phủ lần thứ 4</b><div class="seg full" data-f="method"><button type="button" data-v="vẫn thích" aria-pressed="false">Vẫn thích</button><button type="button" data-v="bình thường" aria-pressed="false">Bình thường</button><button type="button" data-v="muốn trận khác" aria-pressed="false">Muốn trận khác</button></div></div>
+      <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+    </div>
+    <button class="btn primary next" type="button" id="finish">Xong buổi học</button>
+    <p class="done-msg" id="done-msg" role="status"></p>
+    <button class="btn next hide" type="button" id="copy">Chép kết quả</button>
+  </section>
+</div>
+
+<script id="kit-js"></script>
+<script id="lesson-js"></script>
+<script id="war-js"></script>
+<script>
+/* Bài 7 không có phần riêng. */
+</script>
+<script id="lesson-kit"></script>
+</body>
+</html>
