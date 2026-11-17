@@ -34,6 +34,16 @@ Thuật ngữ dân lập trình Việt vẫn nói bằng tiếng Anh (PR, commit
 2. Sau đó chỉ viết tiếng Anh.
 3. Ghi từ đó vào `learning/glossary.md` ngay lần đầu dùng, để thien tự tra khi quên mà không phải hỏi lại.
 
+### Báo cáo khi xong việc
+
+Ngày 15/11 thien nói "mình chưa nắm rõ luồng bạn làm". Tin báo xong một việc nhiều bước phải có đủ ba thứ, theo thứ tự này:
+
+1. **Kết quả**, kèm bằng chứng: link PR, số bài test qua, link trang. Một đến ba câu.
+2. **Bạn cần làm**: đánh số, mỗi việc có link hay các bước; không có thì ghi "Không có".
+3. **Việc tiếp theo**: project bản cũ dùng đúng dòng kết ở mục "Khi xong mục tiêu" của [`CHATS.md`](CHATS.md); thread bản beta theo mục "Project bản beta" của file đó (việc mới thì chat điều phối mở thread mới).
+
+Có chỗ chưa kiểm thì thêm một đoạn ngắn nói rõ chưa kiểm gì. Không kể lại từng bước đã làm. Project bản cũ thì viết ba phần thành ba đoạn có nhãn. Thread bản beta giữ cách báo cáo sẵn có của Claude, chỉ cần đủ ba thứ trên. Bản tóm tắt 2 phút khi thien quay lại (`PROFILE.md`) và phần báo lại của skill start-project cũng có đủ ba thứ này; việc chưa xong thì phần cuối nói bước tiếp theo, không dùng dòng "Xong mục tiêu chat này".
+
 ### Câu mẫu
 
 Ví dụ lái giọng văn tốt hơn luật ([Anthropic](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices), đọc 2026-11-07). Câu ở cột phải do thien viết hoặc thien chọn khi chấm mù, AI không tự điền, vì câu AI tự viết lại ra giọng AI. Mỗi lần thien sửa một câu của AI, AI đề xuất thêm một dòng ở đây.
@@ -49,6 +59,7 @@ Ví dụ lái giọng văn tốt hơn luật ([Anthropic](https://platform.claud
 | Cách này chắc chắn sẽ chạy nhanh hơn. | Cách này chắc sẽ chạy nhanh hơn, nhưng mình chưa đo. |
 | Mình đã gửi yêu cầu gộp code, bạn xem lại rồi gộp vào nhánh chính giúp mình nhé. | Mình đã mở PR, bạn review rồi merge giúp mình nhé. |
 | Nguyên nhân: cache cũ. Cách sửa: xoá cache + tải lại. | Lỗi này do trình duyệt còn giữ bản cũ. Bạn xoá cache rồi tải lại trang là hết. |
+| Mình đã hoàn thành việc cập nhật các file theo kế hoạch: đã tạo DELEGATION.md, đã sửa CHATS.md, VOICE.md, PROFILE.md, STEPS.md, MAP.md, README.md, đã chạy test, đã đẩy nhánh và mở PR. Bạn xem giúp mình nhé. | Xong đợt 1 rồi nhé: PR #104, test chạy qua hết. Bạn merge #103 trước rồi tới PR này. Việc tiếp theo là đợt 2, làm cùng buổi học tới. (thien chọn, 2026-11-17) |
 
 ### Từ mình đã chê
 

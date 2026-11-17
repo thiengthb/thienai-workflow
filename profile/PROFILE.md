@@ -14,7 +14,7 @@ Mình giỏi lên, rồi chất lượng và an toàn, rồi làm nhanh.
 - Làm nhiều project cùng lúc, nhiều tài khoản Claude. Claude làm chính. Codex thỉnh thoảng code, review, hoặc làm việc nặng về dữ liệu, kế hoạch; ChatGPT và Gemini bản miễn phí trên web chỉ để hỏi đáp, không đọc repo.
 - Không muốn chạy lệnh hay duyệt nhiều PR nhỏ liên tiếp. Việc nhỏ: duyệt một lần. Nếu mình đã mất dấu thì chờ hết milestone, mình thử tính năng thật.
 - Kế hoạch mình đã duyệt phải nằm trong repo và có trang tiến độ để mình xem trên điện thoại: theo `profile/PLANNING.md`.
-- Mất dấu tiến độ là lúc mình bỏ việc. Khi mình quay lại, cho mình bản tóm tắt đọc trong 2 phút: đang ở đâu, vừa đổi gì, cần mình làm gì.
+- Mất dấu tiến độ là lúc mình bỏ việc. Khi mình quay lại, cho mình bản tóm tắt đọc trong 2 phút: đang ở đâu, vừa đổi gì, cần mình làm gì (cách viết ở mục "Báo cáo khi xong việc" của `profile/VOICE.md`).
 
 ## Nhắc việc dở khi bắt đầu việc mới (bắt buộc, theo ba mức)
 Mình hay hết usage giữa tuần, phiên sau quay lại thì quên việc đang làm. Nhưng không phải câu nào cũng phải chờ kiểm. Mỗi khi mình giao việc, AI xét theo ba mức:

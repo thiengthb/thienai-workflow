@@ -11,7 +11,8 @@ Phạm vi: các mục từ "Căn cứ" tới "Việc kế tiếp" là cho **proj
 - Làm phần "sau buổi" ngay trong chat dựng bài rẻ hơn chat mới khoảng 2–3% phiên mỗi buổi; bản ghi đủ ý như nhau.
 
 ## Đầu chat
-- Câu trả lời đầu tiên có một dòng mục tiêu: "Mục tiêu chat này: <việc>". Mục tiêu là một việc có điểm xong rõ: một PR, một buổi học, một câu hỏi.
+- Câu trả lời đầu tiên có một dòng mục tiêu. Mục tiêu là một việc có điểm xong rõ: một PR, một buổi học, một câu hỏi. Việc xong trong một lượt: "Mục tiêu chat này: <việc>". Việc nhiều bước: "Mục tiêu: <việc> · Sẽ ra: <PR, trang, doc...> · Xong khi: <thien thấy gì>"; tin của thien gộp nhiều việc thì nói thêm thứ tự sẽ làm.
+- Chỉ hỏi lại khi câu trả lời đổi thứ sẽ ra: tối đa 2 câu, mỗi câu có lựa chọn và một lựa chọn mặc định để thien trả lời "ok". Lý do: có lần AI hiểu sai ý (2026-11-17, sau buổi Frontend 7) mà không hỏi lại.
 - Buổi học là một mục tiêu gồm cả dựng trang lẫn phần "sau buổi", vì kết quả bấm "Xong buổi học" quay về đúng chat đã dựng trang. Làm "sau buổi" ngay trong chat đó, không mở chat mới.
 
 ## Khi xong mục tiêu

@@ -11,6 +11,7 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 | thien nói hay việc là | Đọc | Chạy | Ghi khi xong |
 |---|---|---|---|
 | Giao việc mới | `profile/PROFILE.md` mục "Nhắc việc dở" | phần sổ bàn giao và nhánh chưa merge đã in bởi `templates/start-session.mjs` (chạy lại nếu đã lâu), danh sách PR | (chưa ghi gì tới khi thien chọn) |
+| Merge PR, xoá nhánh, việc AI được tự làm | `profile/DELEGATION.md` | | dòng `Tự merge theo profile/DELEGATION.md` trong mô tả PR |
 | Xong mục tiêu của chat, hay việc lớn mới trong chat đã xong mục tiêu | `profile/CHATS.md` | skill `explain-usage` chỉ khi có kế hoạch đang đo | một dòng `docs/usage-log.md` khi có đo |
 | "tiếp tục" | `profile/HANDOFF.md`, `profile/ACCOUNTS.md` khi việc do nick khác ghi | `templates/start-session.mjs --claim` (đọc sổ, nhận việc, so nhánh) | sổ bàn giao ở các mốc khó khôi phục |
 | "học" | gói buổi in bởi `artifacts/lesson/prepare-lesson.mjs` (buổi kế tiếp, khung một buổi, hồ sơ môn, 3 thẻ đến hạn, nhánh mở), `profile/TUTOR.md`, `artifacts/lesson/README.md` | `artifacts/lesson/prepare-lesson.mjs`, `artifacts/lesson/make-lesson.mjs`, `artifacts/review/make-review.mjs` | mục "Sau buổi" của `learning/README.md` (`after-lesson.mjs`), rồi PR |

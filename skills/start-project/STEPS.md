@@ -26,7 +26,7 @@ Skill có thể được gọi ở coordinator hoặc ở một thread. Khi nói
    - Nếu là đồ án, bài môn học, hoặc project nhóm cần khai báo AI: chép thêm `templates/AI-LOG.template.md` vào `docs/ai-log.md` trong cùng PR đó.
    - Bước này hay bị quên: trong PR vào thienai-workflow, thêm project vào bảng "Mỗi project, ở mỗi nick" của `profile/SETUP.md`, rồi đưa thien đúng đoạn project instructions trong file đó (bản beta hay bản cũ, theo kiểu project của nick ở `profile/ACCOUNTS.md`) kèm chỗ dán. AI không tự sửa cài đặt được. Chỉ một đoạn chuẩn, để `setup-check.mjs` kiểm được ở mọi project.
    - Nếu lưu hồ sơ vào memory của project, ghi rõ đó là bản sao, bản gốc ở repo thienai-workflow.
-5. Báo lại trong 3 dòng: đã tạo gì, PR nào, thien cần làm gì.
+5. Báo lại theo mục "Báo cáo khi xong việc" của `profile/VOICE.md`: đã tạo gì, PR nào, thien cần làm gì.
 
 ## Khi thien muốn thêm hay bỏ repo khỏi danh sách đồng bộ
 Ở bất kỳ project nào, bất kỳ lúc nào: mở một PR vào repo thienai-workflow sửa bảng trong `life/tracked-repos.md`.
