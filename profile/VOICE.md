@@ -40,9 +40,9 @@ Ngày 15/11 thien nói "mình chưa nắm rõ luồng bạn làm". Tin báo xong
 
 1. **Kết quả**, kèm bằng chứng: link PR, số bài test qua, link trang. Một đến ba câu.
 2. **Bạn cần làm**: đánh số, mỗi việc có link hay các bước; không có thì ghi "Không có".
-3. **Việc tiếp theo**: đúng dòng kết ở mục "Khi xong mục tiêu" của [`CHATS.md`](CHATS.md).
+3. **Việc tiếp theo**: project bản cũ dùng đúng dòng kết ở mục "Khi xong mục tiêu" của [`CHATS.md`](CHATS.md); thread bản beta theo mục "Project bản beta" của file đó (việc mới thì chat điều phối mở thread mới).
 
-Có chỗ chưa kiểm thì thêm một đoạn ngắn nói rõ chưa kiểm gì. Không kể lại từng bước đã làm. Project bản cũ thì viết ba phần thành ba đoạn có nhãn. Thread bản beta giữ cách báo cáo sẵn có của Claude, chỉ cần đủ ba thứ trên. Bản tóm tắt 2 phút khi thien quay lại (`PROFILE.md`) và phần báo lại của skill start-project cũng theo mục này.
+Có chỗ chưa kiểm thì thêm một đoạn ngắn nói rõ chưa kiểm gì. Không kể lại từng bước đã làm. Project bản cũ thì viết ba phần thành ba đoạn có nhãn. Thread bản beta giữ cách báo cáo sẵn có của Claude, chỉ cần đủ ba thứ trên. Bản tóm tắt 2 phút khi thien quay lại (`PROFILE.md`) và phần báo lại của skill start-project cũng có đủ ba thứ này; việc chưa xong thì phần cuối nói bước tiếp theo, không dùng dòng "Xong mục tiêu chat này".
 
 ### Câu mẫu
 

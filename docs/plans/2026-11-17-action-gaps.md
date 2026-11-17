@@ -49,7 +49,7 @@ Xong khi: ở 3 chat kế tiếp có PR thuộc dòng đầu của `profile/DELE
 - [ ] Kiểm ở 3 chat kế tiếp
 
 ### 2. Đường chảy cho góp ý (cùng buổi học kế tiếp)
-Xong khi: PR sau buổi kế tiếp có dòng bảng thuật ngữ (hay "không có từ mới") và câu gu đã vào hàng chờ của thienui; bỏ một trong hai thì `after-lesson --check` báo thiếu; thien mở `taste.md` thấy mục "Đang thử" có gu từ các buổi frontend.
+Xong khi: PR sau buổi kế tiếp có dòng bảng thuật ngữ (hay "không có từ mới"), thiếu thì `after-lesson --check` báo; lệnh in câu gu của buổi và nơi ghi (hàng chờ gom 2 tuần một PR vào thienui, không có lệnh kiểm); thien mở `taste.md` thấy mục "Đang thử" có gu từ các buổi frontend.
 - [ ] `after-lesson.mjs`: in câu gu của buổi và nơi ghi; `--check` đòi file bài có dòng "Từ mới:" và các từ đó có trong `glossary.md`. Ghi một dòng vào "Đã đổi" của [`2026-11-15-lean-learning.md`](2026-11-15-lean-learning.md) để checkpoint 4 ở đó giữ phần kiểm này
 - [ ] `learning/README.md` mục Sau buổi thêm bước "từ mới vào bảng thuật ngữ, câu gu vào hàng chờ thienui"; `profile/MAP.md` thêm dòng "Góp ý của thien" trỏ bảng file đích
 - [ ] Bù một lần: từ mới của 18 buổi vào `glossary.md`; gu từ nhật ký frontend 1–9 vào `taste.md` mục "Đang thử" qua một PR vào thienui (thien duyệt từng dòng)
