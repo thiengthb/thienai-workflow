@@ -11,3 +11,4 @@ Trạng thái học, nhật ký và kế hoạch buổi sau nằm ở [`../ba.md
 | 1 | Điều người ta nhờ thường là giải pháp; hỏi "để làm gì" để tìm vấn đề thật | [01-requests-vs-needs.md](lessons/01-requests-vs-needs.md) | [lesson-01.html](pages/lesson-01.html) |
 | 2 | Hỏi về một lần cụ thể, nghe và hỏi tiếp, tránh gợi sẵn đáp án | [02-user-interviews.md](lessons/02-user-interviews.md) | [lesson-02.html](pages/lesson-02.html) |
 | 3 | Xếp các bên theo quyền và mức quan tâm; gặp sớm người chặn được, kể cả khi họ ít quan tâm | [03-stakeholders.md](lessons/03-stakeholders.md) | [lesson-03.html](pages/lesson-03.html) |
+| 4 | Viết nhu cầu thành "Là…, tôi muốn…, để…": người cụ thể, việc muốn làm được (chưa phải nút nào), lý do thật hỏi ra từ một lần cụ thể | [04-user-stories.md](lessons/04-user-stories.md) | [lesson-04.html](pages/lesson-04.html) |

@@ -1,6 +1,6 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-17 · Claude nick tnt628 (project beta "Claude", thread "Review sâu và tối ưu thienai-workflow") · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
+Cập nhật lần cuối: 2026-11-17 · Claude nick tnt628 (project beta "Claude", thread "Học buổi BA 4") · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu. Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
 
@@ -12,7 +12,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
-| [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–2 xong (PR #98); 3: đo hai buổi học kế tiếp | 14/18 |
+| [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–2 xong (PR #98); 3: đã đo BA 4, còn một buổi | 15/18 |
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 2/6 xong; đợt 3–4 chỉ làm khi số đo buổi học cho thấy đáng | 6/12 |
 
 ## Việc dở
@@ -26,7 +26,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 - Tự nói lại theo tình huống cụ thể (PR #93); Frontend 7, 8, BA 3, Chiến tranh 6 đã ghi sau buổi (PR #91, #92, #95, #97).
 
 ## Việc tiếp theo
-1. Buổi học kế tiếp: BA 4, rồi Frontend 9 (so sánh mù, mốc 2026-11-22). Đếm số lượt của chat dựng bài và chat sau buổi, theo đợt 3 của kế hoạch review.
+1. Buổi học kế tiếp: Frontend 9 (so sánh mù, mốc 2026-11-22). Đếm số lượt của chat dựng bài và chat sau buổi (đợt 3 của kế hoạch review, buổi 2; buổi 1 là BA 4).
 2. Dùng mẫu so sánh cho vòng duyệt giao diện kế tiếp ở sakubun, ghi lại chỗ còn vướng.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
