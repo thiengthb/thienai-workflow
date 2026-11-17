@@ -56,9 +56,19 @@ const NONE = /^(không có|không|chưa có|-)\.?$/i;
 export function newWords(md) {
   const m = lf(md || '').match(/^\s*(?:[-*]\s*)?(?:\*\*)?Từ mới:?(?:\*\*)?:?\s*(.*)$/m);
   if (!m) return null;
-  const v = m[1].replace(/[`*_]/g, '').trim();
+  // Bỏ dấu Markdown bao ngoài (`…`, **…**) mà giữ ký tự trong từ (`_blank` vẫn là _blank).
+  const v = m[1].replace(/`/g, '').replace(/\*\*/g, '').trim();
   if (!v || NONE.test(v)) return [];
-  return v.split(/\s*[,;]\s*/).map((w) => w.replace(/\.$/, '').replace(/\s*\(.*\)\s*$/, '').trim()).filter(Boolean);
+  // Tách ở dấu phẩy, chấm phẩy nằm ngoài ngoặc: "PR (pull request, yêu cầu gộp)" là một từ.
+  const parts = [];
+  let depth = 0, cur = '';
+  for (const ch of v) {
+    if (ch === '(') depth++;
+    else if (ch === ')') depth = Math.max(0, depth - 1);
+    if ((ch === ',' || ch === ';') && !depth) { parts.push(cur); cur = ''; } else cur += ch;
+  }
+  parts.push(cur);
+  return parts.map((w) => w.trim().replace(/\.$/, '').replace(/\s*\(.*\)\s*$/, '').trim()).filter(Boolean);
 }
 
 /** Các từ trong cột đầu của bảng thuật ngữ, viết thường; "PR (pull request)" cho cả "pr" lẫn "pull request". */

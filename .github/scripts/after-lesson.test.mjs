@@ -129,6 +129,7 @@ assert.match(draftText(draft({ R: { ...R, feedback: {} }, html: tpl, subject: su
 assert.equal(newWords('# Bài 7\n'), null, 'chưa có dòng');
 assert.deepEqual(newWords('Từ mới: không có\n'), []);
 assert.deepEqual(newWords('- **Từ mới:** focal point, user story (câu ba phần).\n'), ['focal point', 'user story']);
+assert.deepEqual(newWords('Từ mới: `_blank`, PR (pull request, yêu cầu gộp); state\n'), ['_blank', 'PR', 'state'], 'giữ dấu _ trong từ, không tách trong ngoặc');
 const gl = glossaryTerms('| Từ | Nghĩa |\n|---|---|\n| PR (pull request) | x |\n| User story | y |\n');
 assert.ok(gl.has('pr') && gl.has('pull request') && gl.has('user story') && !gl.has('từ'));
 
