@@ -60,9 +60,9 @@ Kết luận đợt 3 (2026-11-17): mỗi buổi khoảng 50–60 lượt gọi.
 Kết quả (2026-11-17, thien bấm trên thẻ hỏi "Làm đợt 4 (tự sinh khung bài học) ngay, hay để tới 1/12?"): "Để tới 1/12 (đề xuất)". Lý do của đề xuất: dựng trang chỉ khoảng một phần ba số lượt mỗi buổi, sửa lượt phí gần như không tốn gì, và kế hoạch của nick tnt697 cũng đề xuất ngừng thêm luật tới 2026-12-01. Ngày 2026-12-01 xem số đo các buổi sau PR #103 rồi mới quyết.
 Ngưỡng và cách làm ở checkpoint 3, 4 của `2026-11-15-lean-learning.md`.
 
-### 5. Chiều bớt (làm sau lần xem lại 2026-12-01)
-- [ ] Phần chung `AGENTS.template.md`, dòng xem nhánh chưa merge: khi không có `check-open-work.mjs` thì xem cả nhánh chưa có PR và sổ bàn giao (góp ý đúng của CodeRabbit trên sakubun PR #327). Gộp vào lần sửa mẫu kế tiếp, để không sinh thêm một PR đồng bộ chỉ vì một dòng
-- [ ] Kế hoạch xong chuyển vào thư mục `done` trong `docs/plans/`; bảng "luật nằm ở đâu" kèm mốc xem lại; đối chiếu phần tự làm với tính năng mới của Claude
+### 5. Chiều bớt (làm sớm phần làm được, 2026-11-17, thien muốn tận dụng CodeRabbit trước khi hết dùng thử 2026-11-24)
+- [x] Phần chung `AGENTS.template.md`, dòng xem nhánh chưa merge: khi không có `check-open-work.mjs` thì xem cả nhánh đã đẩy mà chưa có PR và sổ bàn giao (góp ý đúng của CodeRabbit trên sakubun PR #327)
+- [ ] Đối chiếu phần tự làm với tính năng mới của Claude: để tới 2026-12-01, vì làm bây giờ thì tới ngày đó phải đối chiếu lại với tài liệu mới
 
 ## Phối hợp với kế hoạch song song (nick tnt697)
 Ngày 2026-11-17 nick tnt697 soạn báo cáo "Rà soát quy trình làm việc thien và Claude" (bảng ủy quyền, dòng mục tiêu khi nhận việc, mẫu báo cáo khi xong việc, đường chảy cho góp ý), dự định ghi thành file `2026-11-17-action-gaps.md` trong thư mục kế hoạch. thien giao nick đó làm. Nick tnt628 so với kế hoạch này và đề xuất ba chỗ chỉnh, nick nào làm kế hoạch kia thì áp:
@@ -89,6 +89,7 @@ Thêm: bảng ủy quyền chỉ áp cho repo này (sakubun có luật mức r�
 | 2026-11-17 | Bỏ ý thử hook SessionStart ở đợt 2 | Tài liệu chính thức: thread project beta không chạy hook |
 | 2026-11-17 | Bản instructions beta làm ngay trong PR này thay vì chờ sau đợt 2 | thien vừa dán v3 vào project beta; v3 bảo gọi `project_info` mà beta không có |
 | 2026-11-17 | Xoá 5 nhánh cũ chuyển cho thien | Phiên cloud bị chặn đẩy (403) lên nhánh khác nhánh làm việc |
+| 2026-11-17 | Đợt 5 làm sớm dòng mẫu AGENTS; bỏ việc chuyển kế hoạch xong vào thư mục `done`; bỏ bảng "luật nằm ở đâu kèm mốc xem lại" khỏi đợt này | thien muốn làm đợt 4, 5 ngay để CodeRabbit review trước 2026-11-24. Trang tiến độ đã tự ẩn kế hoạch có "Trạng thái: xong" (`templates/progress-page.mjs`), còn chuyển thư mục thì phải sửa link ở nhiều file mà không được gì thêm. Mốc xem lại của luật đã nằm trong đợt 3 của kế hoạch `2026-11-17-action-gaps.md` (PR #104), không làm hai lần |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
