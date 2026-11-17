@@ -6,8 +6,8 @@ Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đ�
 
 ## Đang ở đâu
 - Đang ở: đợt 0, 1, 2 xong, PR #98 merge 2026-11-17; sakubun nhận phần chung mới qua PR #327 (merge cùng ngày).
-- Còn thiếu: thien dán instructions v4 ở từng project và xoá 5 nhánh cũ. Đợt 3 chạy cùng hai buổi học kế tiếp.
-- thien cần làm: dán instructions theo `profile/SETUP.md`; xoá 5 nhánh cũ (danh sách trong PR #98).
+- Còn thiếu: đợt 3 chạy cùng hai buổi học kế tiếp (thien đã dán instructions v4 và xoá 5 nhánh cũ, 2026-11-17).
+- thien cần làm: không có; nhắn "học" như thường.
 
 ## Mục tiêu
 Bộ quy trình đúng và gọn hơn mà không mất luật nào: sửa chỗ ghi sai, luật áp theo điều kiện thay vì áp mọi lúc, có đường riêng cho project bản beta, và bám tính năng có sẵn của Claude thay vì tự làm lại.
@@ -29,7 +29,7 @@ Xong khi: thien đọc STATUS thấy đúng; `start-session --claim` không nh�
 - [x] Đầu 3 kế hoạch cũ đúng trạng thái; `handoff.mjs done` việc `claude-only-learning` (đã xoá khỏi sổ 2026-11-17) (PR #98)
 - [x] Con trỏ cũ "đọc `learning/README.md` trước" ở `TUTOR.md`, `learning/README.md`, `MAP.md` đổi thành gói buổi (PR #98)
 - [x] Lấy lại cách gắn repo qua ô Project knowledge của PR #74 cho project bản cũ (PR #98)
-- [ ] Xoá 5 nhánh cũ (thien làm, AI không có quyền xoá)
+- [x] Xoá 5 nhánh cũ (thien xoá 2026-11-17; `check-open-work` báo không còn nhánh chưa merge)
 
 ### 1. Luật theo điều kiện áp dụng (chỉ sửa chữ)
 Xong khi: đọc bộ tình huống dưới với luật mới thì mỗi ca ra đúng một hành vi; câu hỏi đơn giản không phải chờ kiểm việc dở.

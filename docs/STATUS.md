@@ -12,7 +12,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
-| [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–2 xong (PR #98); 3: đo hai buổi học kế tiếp | 13/18 |
+| [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–2 xong (PR #98); 3: đo hai buổi học kế tiếp | 14/18 |
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 2/6 xong; đợt 3–4 chỉ làm khi số đo buổi học cho thấy đáng | 6/12 |
 
 ## Việc dở
@@ -31,8 +31,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- Dán lại project instructions bản v4 ở từng project, theo `profile/SETUP.md` (project beta và project cũ dùng hai đoạn khác nhau).
-- Xoá 5 nhánh cũ đã có nội dung trong main (danh sách trong PR #98); AI không có quyền xoá nhánh.
+- Không có. (2026-11-17: thien đã dán instructions v4 và xoá 5 nhánh cũ; nick nào chưa dán thì lần kiểm setup đầu phiên sẽ nhắc.)
 
 ## Đang vướng
 - Không có. Trang tổng quan đọc sakubun bằng bản clone công khai.
