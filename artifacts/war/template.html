@@ -34,17 +34,8 @@
   </section>
 
   <!-- 1. Ôn trộn và nhớ lại buổi trước. Chỉ lần học đầu. Không có sa bàn. -->
-  <section class="step" data-s="1" data-part="review">
-    <h2>Ôn nhanh</h2>
-    <div class="card">
-      <p><b>1.</b> Câu hỏi ôn từ learning/cards.md.</p>
-      <div class="q" data-q="C1" data-a="0" data-kind="review"><p class="status" role="status"></p>
-        <button class="opt" type="button">Đáp án đúng</button>
-        <button class="opt" type="button">Đáp án sai</button>
-        <p class="why">Một câu giải thích.</p>
-      </div>
-    </div>
-    <button class="btn primary next" type="button" data-go="2" data-need="C1" data-review-gate disabled>Tiếp</button>
+  <section class="step" data-s="1" data-part="review" data-auto="cards">
+    <!-- Ôn 3 thẻ: make-lesson.mjs tự sinh lúc dựng từ learning/cards.md và learning/cards-quiz.json. Để trống. -->
   </section>
 
   <!-- 2. Làm chỉ huy: biết đúng những gì người thật biết lúc đó, xem trước từng cách trên sa bàn, rồi chọn. -->

@@ -16,13 +16,14 @@ import { readFileSync, existsSync, realpathSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { subjects, logRows, MAX_STUCK } from './after-lesson.mjs';
-import { stuckPoints, STUCK } from './make-lesson.mjs';
-import { parseCards, dueCards, selfCheck, matchAnswer } from '../review/make-review.mjs';
+import { stuckPoints, STUCK, validQuiz } from './make-lesson.mjs';
+import { reviewCards, REVIEW_CARDS } from '../review/make-review.mjs';
+// Chọn thẻ ôn nằm ở make-review.mjs để make-lesson.mjs dùng chung mà không vòng import (make-lesson → prepare-lesson → make-lesson).
+export { reviewCards, REVIEW_CARDS };
 import { openWork } from '../../templates/check-open-work.mjs';
 
 const lf = (s) => s.replace(/^﻿/, '').replace(/\r\n?/g, '\n');
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-export const REVIEW_CARDS = 3;
 // Luật đọc nguyên văn mỗi buổi, không chép vào gói (gói chỉ trỏ tới): profile/MAP.md, hàng "học".
 export const RULES = ['profile/TUTOR.md', 'artifacts/lesson/README.md'];
 
@@ -87,22 +88,6 @@ export function profile(md, { dir, file }) {
   return out.join('\n\n');
 }
 
-/**
- * REVIEW_CARDS thẻ đến hạn, mỗi thẻ kèm đáp án trong mục "Tự kiểm" của bài (null nếu không thấy).
- * Thiếu thẻ đến hạn thì thêm thẻ hạn sớm nhất của môn khác `subject` (learning/README.md, "Khung một buổi"), đánh dấu filler: true.
- */
-export function reviewCards(cardsText, base, today, max = REVIEW_CARDS, subject = '') {
-  const all = parseCards(cardsText), due = dueCards(all, today, max);
-  const ids = new Set(due.map((c) => c.id));
-  const fill = all.filter((c) => !ids.has(c.id) && c.subject !== subject && /^\d{4}-\d{2}-\d{2}$/.test(c.due))
-    .map((c, i) => ({ c, i })).sort((a, b) => a.c.due.localeCompare(b.c.due) || a.i - b.i).slice(0, Math.max(0, max - due.length)).map((x) => ({ ...x.c, filler: true }));
-  return [...due, ...fill].map((c) => {
-    const file = c.link ? resolve(base, c.link) : '';
-    const md = file && existsSync(file) ? lf(readFileSync(file, 'utf8')) : '';
-    const hit = md ? matchAnswer(c.question, selfCheck(md)) : null;
-    return { ...c, answer: hit ? hit.a : null };
-  });
-}
 
 /** Chữ của gói buổi. open: kết quả openWork (hay null khi không kiểm). */
 export function packet({ root, dir, n, label, today, open = null }) {
@@ -139,9 +124,13 @@ export function packet({ root, dir, n, label, today, open = null }) {
   const nDue = cards.filter((c) => !c.filler).length;
   if (nDue < REVIEW_CARDS) L.push(`Chỉ có ${nDue} thẻ đến hạn${cards.length > nDue ? '; thêm thẻ hạn sớm nhất của môn khác (ghi "chưa đến hạn")' : ''}.`);
   if (!cards.length) L.push('Không có thẻ nào. Bỏ phần ôn trộn, hay hỏi thien muốn ôn thẻ nào.');
+  // Bước ôn trên trang do make-lesson.mjs tự sinh từ learning/cards-quiz.json: chỉ thẻ chưa có câu trắc nghiệm mới phải viết.
+  let quiz = {};
+  try { quiz = JSON.parse(read('learning/cards-quiz.json') || '{}'); } catch (e) { L.push('learning/cards-quiz.json không phải JSON hợp lệ: sửa trước khi dựng trang.'); }
   for (const c of cards) {
     L.push(`- ${c.id} (${c.subject}, hộp ${c.box}, ${c.filler ? 'chưa đến hạn, ' : ''}hạn ${c.due}): ${c.question}`,
-      c.answer ? `  Đáp án (mục "Tự kiểm" của ${c.linkText || c.link}): ${c.answer}` : `  Đáp án: chưa kiểm, không thấy trong mục "Tự kiểm" của ${c.link || 'bài'}; mở bài đó.`);
+      c.answer ? `  Đáp án (mục "Tự kiểm" của ${c.linkText || c.link}): ${c.answer}` : `  Đáp án: chưa kiểm, không thấy trong mục "Tự kiểm" của ${c.link || 'bài'}; mở bài đó.`,
+      validQuiz(quiz[c.id]) ? '  Câu trắc nghiệm: đã có, trang tự sinh.' : '  Câu trắc nghiệm: chưa có. Viết vào learning/cards-quiz.json trước khi dựng trang (make-lesson.mjs in sẵn dòng cần thêm).');
   }
   L.push('');
 

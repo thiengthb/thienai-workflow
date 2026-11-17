@@ -1,19 +1,19 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-17 · Claude nick tnt697 (project Claude, chat rà soát hành động) · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
+Cập nhật lần cuối: 2026-11-17 · Claude nick tnt628 (project beta "Claude", thread "Review sâu và tối ưu thienai-workflow") · Trang tiến độ: https://claude.ai/artifact/WucUDZEgEpMaYMvx8UuNb4
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu. Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
 
 ## Đang ở đâu
-Bộ quy trình chung, bộ khung artifact (4 mẫu, dựng bằng một lệnh) và hệ thống học 3 môn xoay vòng đều đang dùng hằng ngày. Kế hoạch sửa sau review 2026-11-17 đã xong đợt 0–2 (PR #98): luật áp theo điều kiện, chuẩn setup v4 có đoạn riêng cho project bản beta. Đợt 3 đo hai buổi học kế tiếp.
+Bộ quy trình chung, bộ khung artifact (4 mẫu, dựng bằng một lệnh) và hệ thống học 3 môn xoay vòng đều đang dùng hằng ngày. Kế hoạch sửa sau review 2026-11-17 đã xong đợt 0–3 (PR #98–#103); đợt 4, 5 đang làm sớm để CodeRabbit kịp review trước 2026-11-24.
 
 ## Kế hoạch đang chạy
 Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
-| [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–3 xong: đo BA 4 (15,8 triệu token) và Frontend 9 (23,1 triệu), đã sửa các lượt phí tìm ra (PR #103); 4 và 5 để tới 2026-12-01 | 19/21 |
-| [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 2/6 xong; đợt 3–4 chỉ làm khi số đo buổi học cho thấy đáng | 6/12 |
+| [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–3 xong (PR #98–#103); 5: phần làm được đã làm sớm, còn đối chiếu với tính năng mới của Claude ở 2026-12-01; 4: phần máy xong (bước ôn tự sinh), chờ đo ở hai buổi học kế tiếp | 21/22 |
+| [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 0–2 xong; 3: phần máy xong (bước ôn tự sinh, sau buổi tự ghi kết quả ôn), chờ đo ở hai buổi học kế tiếp; 4 bỏ (thien chọn 2026-11-17) | 8/11 |
 | [Các hành động giữa thien và AI còn thiếu luật](plans/2026-11-17-action-gaps.md) | 1/3 đã merge (PR #104), đang kiểm ở 3 chat kế tiếp; 2 cùng buổi học kế tiếp; 3 ở mốc 01/12 | 4/16 |
 
 ## Việc dở
@@ -28,7 +28,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 - Tự nói lại theo tình huống cụ thể (PR #93); Frontend 7, 8, BA 3, Chiến tranh 6 đã ghi sau buổi (PR #91, #92, #95, #97).
 
 ## Việc tiếp theo
-1. Buổi học kế tiếp: Chiến tranh 7, rồi BA 5. Frontend 10 mở chặng 2 (áp vào app của mình). Đợt 3 của kế hoạch review đo xong số lượt hai buổi; xem số đó có đủ để làm đợt 4 không.
+1. Buổi học kế tiếp: Chiến tranh 7, rồi BA 5. Frontend 10 mở chặng 2 (áp vào app của mình). Hai buổi này cũng là lần đo bước ôn tự sinh (checkpoint 3 của kế hoạch học gọn).
 2. Dùng mẫu so sánh cho vòng duyệt giao diện kế tiếp ở sakubun, ghi lại chỗ còn vướng.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 

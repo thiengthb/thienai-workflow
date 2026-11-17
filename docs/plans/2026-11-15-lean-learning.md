@@ -5,8 +5,8 @@ Trạng thái: đang chạy · Duyệt: 2026-11-15 · Cập nhật: 2026-11-17 �
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 0–2 xong và đã merge (PR #77, #78, #81). Đợt 3 (khung tự sinh) và 4 (sau buổi chỉ ghi một bản ghi) chưa làm.
-- Còn thiếu: số lượt của hai buổi học kế tiếp (đợt 3 của kế hoạch `2026-11-17-workflow-review.md`). Đợt 3 ở đây chỉ làm khi pha "viết khung" chiếm từ một phần ba số lượt dựng bài; đợt 4 khi pha "ghi file" chiếm từ một nửa số lượt sau buổi.
+- Đang ở: đợt 0–2 xong và đã merge (PR #77, #78, #81). Đợt 3: phần máy đã làm (bước ôn 3 thẻ tự sinh từ câu trắc nghiệm lưu sẵn, sau buổi tự ghi kết quả ôn), chờ đo ở hai buổi học thật. Đợt 4 (sau buổi chỉ ghi một bản ghi) bỏ.
+- Còn thiếu: số lượt dựng bài và bản chấm của thien ở hai buổi học kế tiếp, để biết đợt 3 có bớt lượt mà không làm buổi học kém đi không. Đợt 4 bỏ (thien chọn 2026-11-17, xem "Đã đổi").
 - thien cần làm: không có; nhắn "học" như thường.
 
 ## Mục tiêu
@@ -125,13 +125,12 @@ Xong khi: `reading-cost.mjs` in luồng "học" khoảng 50 KB; thêm 10 buổi 
 
 ### 3. Khung tự sinh, thử với một bài Frontend
 Xong khi: thien học một bài dựng theo cách mới và chấm độ dài, độ khó, độ thú vị không kém các buổi trước; số token phần dựng thấp hơn đợt 0 ở ít nhất 2 lần đo.
-- [ ] Thẻ lưu sẵn câu hỏi, lựa chọn, lời giải thích (viết một lần khi tạo thẻ)
-- [ ] Script sinh phần ôn, nhớ lại, góp ý, kết thúc; AI chỉ viết phần lõi
+- [x] Thẻ lưu sẵn câu hỏi, lựa chọn, lời giải thích (viết một lần khi tạo thẻ): `learning/cards-quiz.json`, 23/48 thẻ lấy lại từ các trang học cũ; thẻ còn lại AI viết khi thẻ đến hạn (`make-lesson.mjs` in sẵn dòng cần thêm), thẻ mới viết lúc sau buổi (`after-lesson.mjs --check` đòi)
+- [x] Script sinh phần ôn (`make-lesson.mjs`, bước `data-auto="cards"`), sau buổi tự ghi kết quả ôn vào `cards.md` (`after-lesson.mjs --write`). Góp ý và kết thúc vốn đã có sẵn trong mẫu; phần nhớ lại buổi trước vẫn để AI viết, vì nó dựa vào chỗ còn vướng của thien, không sinh máy móc được
+- [ ] Hai buổi học thật dựng theo cách mới: thien chấm không kém, số lượt dựng bài thấp hơn
 
-### 4. Sau buổi chỉ ghi file mới
-Xong khi: hai PR buổi học của hai môn mở cùng lúc merge được mà không đụng nhau; `after-lesson.mjs --check-all` vẫn ra toàn ✓.
-- [ ] Bản ghi buổi `sessions/NN.json`, chạy lại cùng mã phiên không ghi trùng
-- [ ] Bảng "Trạng thái", "Bài đã học", hạn ôn, `usage.md` sinh từ bản ghi
+### 4. Sau buổi chỉ ghi file mới (bỏ 2026-11-17, lý do ở "Đã đổi")
+Định làm: bản ghi buổi `sessions/NN.json`; bảng "Trạng thái", "Bài đã học", hạn ôn, `usage.md` sinh từ bản ghi. Mở lại nếu PR buổi học phải gộp lại vì đụng nhau từ 2 lần trở lên.
 
 ### 5. Mở rộng sang BA và chiến tranh
 Xong khi: một bài BA và một bài chiến tranh dựng theo cách mới, sa bàn và bảng dán vẫn như cũ.
@@ -149,6 +148,8 @@ Chỗ dễ sa lầy: đợt 3, nếu cứ muốn phần khung tự sinh phủ h�
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-17 | Bỏ đợt 4 (bản ghi buổi riêng, bảng chung tự sinh); thien bấm "Bỏ 4b, ghi lý do (đề xuất)" trên thẻ hỏi trong thread review | Mục tiêu của đợt 4 là để hai PR buổi học không đụng nhau khi merge. Từ 2026-11-10 tới 2026-11-17 có 81 lần merge trên main mà chỉ một lần PR buổi học phải gộp lại vì đụng (`claude/frontend-06-after`). Làm đủ thì phải viết lại cách `after-lesson.mjs` ghi mọi file, đúng lúc đợt 2 của `2026-11-17-action-gaps.md` (nick tnt697) cũng sửa file đó. Xem lại nếu PR buổi học đụng nhau từ 2 lần trở lên |
+| 2026-11-17 | Làm đợt 3 ngay, không chờ ngưỡng "viết khung chiếm một phần ba số lượt" | thien muốn làm sớm để CodeRabbit review code trước khi hết dùng thử (2026-11-24). Số đo hai buổi BA 4, Frontend 9 cho thấy dựng trang chiếm khoảng một phần ba số lượt; hai buổi học kế tiếp vẫn đo để biết có giữ không. thien chọn giữ trắc nghiệm cho phần ôn (thẻ hỏi trong thread review). Sau buổi giờ tự ghi kết quả ôn: trước đó mục "Sau buổi" của `learning/README.md` không có bước nào ghi kết quả 3 thẻ ôn đầu buổi |
 | 2026-11-15 | Làm đợt 1 trước đợt 0 | Đợt 1 chỉ đổi phần máy, không đụng trải nghiệm học, nên không cần số đo của đợt 0 để quyết. Đợt 0 vẫn đo ở buổi Frontend 6 |
 | 2026-11-15 | Đợt 2 dừng ở 64,0 KB, không ép xuống 50 | Gói chép nguyên văn mọi mục luật của file môn (cả "Cách một buổi chạy", "Các kiểu buổi để luân phiên" của frontend), vì kế hoạch ghi không tóm luật. Con số gồm 6,5 KB learning/codex.md (đã xoá ở checkpoint 3) mà Claude trên claude.ai không đọc, nên ở Claude là khoảng 57,5 KB. Phần lớn còn lại là phần cố định (tầng 1 23,2 KB, `TUTOR.md`, `artifacts/lesson/README.md` 10 KB); đợt 3 bỏ việc đọc mẫu nên sẽ giảm tiếp. Điều quan trọng hơn đã đạt: số không tăng theo số buổi |
 | 2026-11-15 | Thứ tự merge: PR #77 trước, PR #76 sau khi học xong | Ban đầu định merge #76 trước. Nhưng bài chưa học thì CI của #76 đỏ sẵn (`after-lesson --check-all` cần thẻ và dòng roadmap của bài), merge vào sẽ làm main đỏ. Nên #76 chờ học như mọi bài; khi rebase thì làm gọn nguồn và thêm chữ "kit" vào tiêu đề, vẫn giữ câu 3 là không tách |

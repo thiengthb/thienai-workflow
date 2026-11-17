@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Gắn lõi chung và khung buổi học vào một trang học (xem README.md trong thư mục này). Chạy lại được: thay bản cũ.
 //
-//   node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html [lesson-id] [--out <thư-mục>] [--no-check]
+//   node artifacts/lesson/make-lesson.mjs learning/<môn>/pages/lesson-NN.html [lesson-id] [--out <thư-mục>] [--no-check] [--today YYYY-MM-DD]
 //
 // Trang chưa có: chép mẫu ra rồi dừng. Trang đã có: dựng bản đầy đủ (gắn khung) ra <out>/lesson-NN.html, chạy
 // learning/teaching/check-page.cjs trên bản đó, qua thì ghi <out>/publish.json (mặc định build/lesson-<id> trong repo, đã gitignore; công cụ đăng của claude.ai không nhận file ở /tmp)
@@ -13,6 +13,7 @@ import { readFileSync, writeFileSync, realpathSync, existsSync, mkdirSync, copyF
 import { dirname, join, basename, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { writePublish } from '../kit/publish.mjs';
+import { reviewCards, subjects, REVIEW_CARDS } from '../review/make-review.mjs';
 import { fileURLToPath } from 'node:url';
 // Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
 const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
@@ -55,14 +56,78 @@ export function subjectFile(file) {
   return m ? `${m[1]}/${m[2]}.md` : null;
 }
 
+// Bước ôn 3 thẻ đầu buổi tự sinh lúc dựng (kế hoạch docs/plans/2026-11-15-lean-learning.md, checkpoint 3; thien chọn giữ trắc nghiệm
+// 2026-11-17): nguồn chỉ có <section ... data-auto="cards"> rỗng, lệnh lấy thẻ đến hạn như gói buổi (prepare-lesson.mjs) và câu
+// trắc nghiệm của từng thẻ trong learning/cards-quiz.json ({ "F2": { "opts": [2–3 lựa chọn], "a": số thứ tự đáp án đúng từ 0, "why": "..." } }).
+export const QUIZ_FILE = 'cards-quiz.json';
+const AUTO = /(<section class="step"[^>]*\bdata-auto="cards"[^>]*>)([\s\S]*?)(<\/section>)/;
+const AUTO_NOTE = '<!-- Ôn 3 thẻ: make-lesson.mjs tự sinh lúc dựng từ learning/cards.md và learning/cards-quiz.json. Để trống. -->';
+const escH = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/** Câu trắc nghiệm hợp lệ (learning/README.md, "Sau buổi"): 2–3 lựa chọn có chữ, a trỏ đúng một lựa chọn, có lời giải thích. */
+export function validQuiz(q) {
+  return !!q && Array.isArray(q.opts) && q.opts.length >= 2 && q.opts.length <= 3 && q.opts.every((o) => typeof o === 'string' && o.trim())
+    && Number.isInteger(q.a) && q.a >= 0 && q.a < q.opts.length && typeof q.why === 'string' && !!q.why.trim();
+}
+
+/** Ghép thẻ ôn với câu trắc nghiệm: { cards: [{ id, question, opts, a, why }], missing: [thẻ chưa có câu hợp lệ] }. */
+export function quizCards(cards, quiz = {}) {
+  const ok = [], missing = [];
+  for (const c of cards) (validQuiz(quiz[c.id]) ? ok.push({ id: c.id, question: c.question, opts: quiz[c.id].opts, a: quiz[c.id].a, why: quiz[c.id].why }) : missing.push(c));
+  return { cards: ok, missing };
+}
+
+/** Nội dung bước ôn: mỗi thẻ một câu một lựa chọn, đúng khuôn câu viết tay (data-kind="review"), nút Tiếp mở khi trả lời hết. */
+export function reviewStep(cards, next) {
+  const items = cards.map((c, i) => `    <div class="card">
+      <p><b>${i + 1}.</b> ${escH(c.question)}</p>
+      <div class="q" data-q="${escH(c.id)}" data-a="${c.a}" data-kind="review"><p class="status" role="status"></p>
+${c.opts.map((o) => `        <button class="opt" type="button">${escH(o)}</button>`).join('\n')}
+        <p class="why">${escH(c.why)}</p>
+      </div>
+    </div>`);
+  const lead = cards.length ? 'Trả lời theo trí nhớ. Câu sai sẽ được hỏi lại sớm hơn.' : 'Hôm nay không có thẻ nào đến hạn.';
+  const gate = cards.length ? ` data-need="${cards.map((c) => escH(c.id)).join(' ')}" data-review-gate disabled` : '';
+  return `
+    <h2>Ôn nhanh</h2>
+    <p class="small muted">${lead}</p>
+${items.join('\n')}${items.length ? '\n' : ''}    <button class="btn primary next" type="button" data-go="${next}"${gate}>Tiếp</button>
+  `;
+}
+
+/** Thẻ mẫu cho trang mẫu và bài kiểm trong CI (bố cục, không phải thẻ đến hạn thật): bản đăng mới là bản thật. */
+export const SAMPLE_CARDS = [
+  { id: 'F8', question: 'Thẻ trạng thái "Đã thanh toán" nên đặc hay nhạt?', opts: ['Đặc, cho dễ thấy', 'Nhạt: nền nhạt, chữ đậm màu'], a: 1, why: 'Trạng thái là để đọc, không phải để bấm. Khối đặc dành cho việc chính.' },
+  { id: 'B2', question: '"Thêm thông báo đẩy lúc 8 giờ tối" là gì?', opts: ['Nhu cầu', 'Giải pháp'], a: 1, why: 'Nó nói cách làm. Nhu cầu nằm sau nó, ví dụ "tôi hay quên ôn bài".' },
+  { id: 'W8', question: 'Vì sao Đại tướng Võ Nguyên Giáp hoãn trận đánh Điện Biên Phủ ngày 26/1/1954?', opts: ['Đánh nhanh thắng nhanh không còn chắc thắng', 'Thiếu lương thực'], a: 0, why: 'Địch đã củng cố, đánh theo kế hoạch cũ thì không chắc thắng, nên chuyển sang đánh chắc tiến chắc.' },
+];
+
+/** Trang có bước ôn tự sinh không. */
+export const hasAutoReview = (html) => AUTO.test(lf(html));
+
+/** Dòng nhắc AI viết câu trắc nghiệm cho các thẻ còn thiếu, dán thẳng vào learning/cards-quiz.json được. */
+export function missingQuizText(missing) {
+  return [`Thẻ ôn hôm nay chưa có câu trắc nghiệm trong learning/${QUIZ_FILE}: ${missing.map((c) => c.id).join(', ')}.`,
+    'Thêm mỗi thẻ một dòng (2–3 lựa chọn, "a" là số thứ tự đáp án đúng tính từ 0, "why" một câu giải thích lấy từ bài), rồi chạy lại đúng lệnh này:',
+    ...missing.map((c) => `  "${c.id}": {"opts": ["…", "…", "…"], "a": 0, "why": "…"},   ← ${c.question}`)].join('\n');
+}
+
 export function guessId(file) {
   const m = file.replace(/\\/g, '/').match(/learning\/([^/]+)\/pages\/lesson-(\d+)/);
   return m ? `${m[1]}-${m[2].padStart(2, '0')}` : basename(file, '.html');
 }
 
-/** Returns the page with every kit part filled in and the lesson-id meta set. */
-export function fill(html, id, file = '', { stuck } = {}) {
+/** Returns the page with every kit part filled in and the lesson-id meta set. cards: thẻ ôn đã ghép câu (quizCards), bắt buộc khi trang có bước ôn tự sinh. */
+export function fill(html, id, file = '', { stuck, cards } = {}) {
   html = lf(html);
+  if (AUTO.test(html)) {
+    if (!Array.isArray(cards)) throw new Error('Trang có bước ôn tự sinh (data-auto="cards") mà chưa có thẻ: dựng bằng make-lesson.mjs');
+    html = html.replace(AUTO, (m, a, b, c) => {
+      const s = +((a.match(/data-s="(\d+)"/) || [])[1]);
+      if (!Number.isInteger(s)) throw new Error('Bước ôn tự sinh thiếu data-s');
+      return a + reviewStep(cards, s + 1) + c;
+    });
+  }
   const all = [...Object.entries(PARTS), ...Object.entries(OPTIONAL).filter(([part, [tag]]) => new RegExp(`<${tag} id="${part}">`).test(html))];
   for (const [part, [tag, ...srcs]] of all) {
     const re = new RegExp(`<${tag} id="${part}">[\\s\\S]*?</${tag}>`);
@@ -110,6 +175,7 @@ export function strip(html) {
   if (!NEW_FRAME.test(html)) return html; // trang khung cũ (trước 2026-11-14): giữ nguyên, đóng băng
   for (const { re } of filledParts(html)) html = html.replace(re, (m, a, b, c) => a + c);
   html = html.replace(BATTLE, (m, a, b, c) => a + c);
+  html = html.replace(AUTO, (m, a, b, c) => `${a}\n    ${AUTO_NOTE}\n  ${c}`);
   const conf = html.match(/<script type="application\/json" id="lesson">([\s\S]*?)<\/script>/);
   if (conf) {
     try {
@@ -127,6 +193,8 @@ export function filledIn(html) {
   const out = filledParts(html).filter(({ re }) => html.match(re)[2].trim()).map(({ part }) => part);
   const b = html.match(BATTLE);
   if (b && b[2].trim()) out.push('battle');
+  const r = html.match(AUTO);
+  if (r && r[2].replace(AUTO_NOTE, '').trim()) out.push('cards');
   return out;
 }
 
@@ -135,8 +203,9 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const flag = (n) => { const i = args.indexOf('--' + n); return i >= 0 ? args.splice(i, 2)[1] : undefined; };
   const bool = (n) => { const i = args.indexOf('--' + n); return i >= 0 ? (args.splice(i, 1), true) : false; };
   const outArg = flag('out'), noCheck = bool('no-check'), ackOpen = bool('ack-open');
+  const today = flag('today') || new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });   // cùng ngày với gói buổi
   const [file, id] = args;
-  if (!file) { console.error('Cách dùng: node artifacts/lesson/make-lesson.mjs <trang.html> [lesson-id] [--out <thư-mục>] [--no-check] [--ack-open]'); process.exit(1); }
+  if (!file) { console.error('Cách dùng: node artifacts/lesson/make-lesson.mjs <trang.html> [lesson-id] [--out <thư-mục>] [--no-check] [--ack-open] [--today YYYY-MM-DD]'); process.exit(1); }
   // Trước khi dựng: nhánh chưa merge (PR đang mở) nào đã sửa bài của môn này thì dừng, để không làm trùng việc phiên khác (lỗi 2026-11-13, PR #44).
   const subjOpen = (file.replace(/\\/g, '/').match(/learning\/([^/]+)\/pages\//) || [])[1];
   if (subjOpen && !ackOpen) {
@@ -163,11 +232,26 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   let lid = id || conf.id;
   if (!lid || /^__/.test(lid)) lid = guessId(file);
   const sf = subjectFile(file), stuck = sf && existsSync(sf) ? stuckPoints(lf(readFileSync(sf, 'utf8'))) : [];
+  // Bước ôn tự sinh: cùng 3 thẻ gói buổi đã in (prepare-lesson.mjs, cùng ngày), câu lấy từ learning/cards-quiz.json.
+  let cards;
+  if (hasAutoReview(html)) {
+    const ldir = sf ? dirname(sf) : '', dir = (file.replace(/\\/g, '/').match(/learning\/([^/]+)\/pages\//) || [])[1];
+    if (!ldir || !existsSync(join(ldir, 'cards.md'))) { console.error('Trang có bước ôn tự sinh nhưng không nằm trong learning/<môn>/pages/ cạnh learning/cards.md.'); process.exit(1); }
+    const cardsText = lf(readFileSync(join(ldir, 'cards.md'), 'utf8'));
+    const name = subjects(existsSync(join(ldir, 'README.md')) ? lf(readFileSync(join(ldir, 'README.md'), 'utf8')) : '', cardsText)[dir]?.name || '';
+    const qf = join(ldir, QUIZ_FILE);
+    let quiz = {};
+    try { quiz = existsSync(qf) ? JSON.parse(lf(readFileSync(qf, 'utf8'))) : {}; } catch (e) { console.error(`learning/${QUIZ_FILE} không phải JSON hợp lệ: ${e.message}`); process.exit(1); }
+    const q = quizCards(reviewCards(cardsText, ldir, today, REVIEW_CARDS, name), quiz);
+    if (q.missing.length) { console.error(missingQuizText(q.missing)); process.exit(1); }
+    cards = q.cards;
+    console.log(`Bước ôn: ${cards.map((c) => c.id).join(', ') || 'không có thẻ'} (ngày ${today}).`);
+  }
   const out = resolve(outArg || join(here, '../../build', `lesson-${lid}`));
   mkdirSync(out, { recursive: true });
   // Bản đầy đủ ra thư mục out; file trong repo giữ là nguồn (không kit, không dữ liệu trận chép lần hai).
   const built = join(out, basename(file));
-  writeFileSync(built, fill(html, lid, file, { stuck }));
+  writeFileSync(built, fill(html, lid, file, { stuck, cards }));
   const src = strip(html);
   if (src !== html) { writeFileSync(file, src); console.log(`Đã làm gọn nguồn ${file}: bỏ kit đã điền, ${Math.round(html.length / 1024)} KB còn ${Math.round(src.length / 1024)} KB.`); }
   console.log(`Đã dựng ${built} (id ${lid})${stuck.length ? `, kèm ${stuck.length} chỗ còn vướng từ ${sf}` : ''}. Mở file này để xem, đừng mở nguồn.`);

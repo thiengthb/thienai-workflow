@@ -211,33 +211,8 @@
   </section>
 
   <!-- 1. Ôn trộn: 3 thẻ đến hạn trong learning/cards.md. Chỉ lần học đầu. -->
-  <section class="step" data-s="1" data-part="review">
-    <h2>Ôn nhanh</h2>
-    <div class="card">
-      <p><b>1.</b> Thẻ trạng thái "Đã thanh toán" nên đặc hay nhạt?</p>
-      <div class="q" data-q="F8" data-a="1" data-kind="review"><p class="status" role="status"></p>
-        <button class="opt" type="button">Đặc, cho dễ thấy</button>
-        <button class="opt" type="button">Nhạt: nền nhạt, chữ đậm màu</button>
-        <p class="why">Trạng thái là để đọc, không phải để bấm. Khối đặc dành cho việc chính.</p>
-      </div>
-    </div>
-    <div class="card">
-      <p><b>2.</b> "Thêm thông báo đẩy lúc 8 giờ tối" là gì?</p>
-      <div class="q" data-q="B2" data-a="1" data-kind="review"><p class="status" role="status"></p>
-        <button class="opt" type="button">Nhu cầu</button>
-        <button class="opt" type="button">Giải pháp</button>
-        <p class="why">Nó nói cách làm. Nhu cầu nằm sau nó, ví dụ "tôi hay quên ôn bài".</p>
-      </div>
-    </div>
-    <div class="card">
-      <p><b>3.</b> Vì sao Đại tướng Võ Nguyên Giáp hoãn trận đánh Điện Biên Phủ ngày 26/1/1954?</p>
-      <div class="q" data-q="W8" data-a="0" data-kind="review"><p class="status" role="status"></p>
-        <button class="opt" type="button">Đánh nhanh thắng nhanh không còn chắc thắng</button>
-        <button class="opt" type="button">Thiếu lương thực</button>
-        <p class="why">Địch đã củng cố, đánh theo kế hoạch cũ thì không chắc thắng, nên chuyển sang đánh chắc tiến chắc.</p>
-      </div>
-    </div>
-    <button class="btn primary next" type="button" data-go="2" data-need="F8 B2 W8" data-review-gate disabled>Tiếp</button>
+  <section class="step" data-s="1" data-part="review" data-auto="cards">
+    <!-- Ôn 3 thẻ: make-lesson.mjs tự sinh lúc dựng từ learning/cards.md và learning/cards-quiz.json. Để trống. -->
   </section>
 
   <!-- 2. Nhớ lại buổi trước của môn này. -->
