@@ -34,5 +34,5 @@ Skill có thể được gọi ở coordinator hoặc ở một thread. Khi nói
 ## Khi xem lại quy trình (hết milestone, hoặc thien yêu cầu)
 1. Đọc lại hồ sơ và các lần thien phải nhắc lại hoặc chê trong milestone vừa qua.
 2. Đề xuất tối đa 3 thay đổi cho `profile/PROFILE.md` hoặc `templates/AGENTS.template.md`, mỗi thay đổi kèm lý do và lý do mạnh nhất để không đổi.
-3. Giữ giới hạn: `profile/PROFILE.md` và phần chung của `templates/AGENTS.template.md` mỗi file dưới 60 dòng. Thêm một ý thì bỏ hoặc gộp một ý khác.
+3. Giữ giới hạn: `profile/PROFILE.md` và phần chung của `templates/AGENTS.template.md` chỉ giữ điều áp dụng ở mọi phiên, nhắm dưới 60 dòng và dưới 12 KB mỗi file. Thêm một ý thì bỏ, gộp hay chuyển ra file theo việc một ý khác, không nối dài câu cho đủ số dòng. Liệt kê luật đã tới ngày hay dấu hiệu xem lại (câu thứ tư ở mục "Sửa quy trình" của README).
 4. Thien chọn cái nào, AI mở một PR vào repo thienai-workflow. Không tự sửa.

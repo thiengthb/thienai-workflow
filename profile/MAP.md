@@ -11,8 +11,8 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 | thien nói hay việc là | Đọc | Chạy | Ghi khi xong |
 |---|---|---|---|
 | Giao việc mới | `profile/PROFILE.md` mục "Nhắc việc dở" | phần sổ bàn giao và nhánh chưa merge đã in bởi `templates/start-session.mjs` (chạy lại nếu đã lâu), danh sách PR | (chưa ghi gì tới khi thien chọn) |
-| Xong mục tiêu của chat, hay việc lớn mới trong chat đã xong mục tiêu | `profile/CHATS.md` | skill `explain-usage` | một dòng `docs/usage-log.md` trong PR của việc đó |
-| "tiếp tục" | `profile/HANDOFF.md`, `profile/ACCOUNTS.md` khi việc do nick khác ghi | `templates/start-session.mjs --claim` (đọc sổ, nhận việc, so nhánh) | sổ bàn giao sau mỗi bước |
+| Xong mục tiêu của chat, hay việc lớn mới trong chat đã xong mục tiêu | `profile/CHATS.md` | skill `explain-usage` chỉ khi có kế hoạch đang đo | một dòng `docs/usage-log.md` khi có đo |
+| "tiếp tục" | `profile/HANDOFF.md`, `profile/ACCOUNTS.md` khi việc do nick khác ghi | `templates/start-session.mjs --claim` (đọc sổ, nhận việc, so nhánh) | sổ bàn giao ở các mốc khó khôi phục |
 | "học" | gói buổi in bởi `artifacts/lesson/prepare-lesson.mjs` (buổi kế tiếp, khung một buổi, hồ sơ môn, 3 thẻ đến hạn, nhánh mở), `profile/TUTOR.md`, `artifacts/lesson/README.md` | `artifacts/lesson/prepare-lesson.mjs`, `artifacts/lesson/make-lesson.mjs`, `artifacts/review/make-review.mjs` | mục "Sau buổi" của `learning/README.md` (`after-lesson.mjs`), rồi PR |
 | Dạy hay giải thích để thien học | `profile/TUTOR.md` | | |
 | "mở lại bài …" (xem lại bài đăng ở nick khác) | `learning/reopen.md` | `artifacts/lesson/make-lesson.mjs --no-check` | không ghi gì |
@@ -34,12 +34,12 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 |---|---|---|---|---|
 | Buổi học | gói buổi của `artifacts/lesson/prepare-lesson.mjs` | `artifacts/lesson/make-lesson.mjs` → Artifact | trang học, `sessions/` trong db trang | `artifacts/lesson/after-lesson.mjs --write`, nhật ký môn, `cards.md`, `roadmap.md`, "Trạng thái", PR; `--check <id>` ra toàn ✓ |
 | Ôn thẻ | `learning/cards.md` | `artifacts/review/make-review.mjs` → link cố định | kết quả trong db trang | `artifacts/review/apply-review.mjs`, `usage.md` |
-| Đổi nick giữa chừng | sổ ở nhánh `handoff` | `templates/handoff.mjs` | file `tasks/<việc>.md` | sổ sau mỗi bước, `done` khi PR merge |
+| Đổi nick giữa chừng | sổ ở nhánh `handoff` | `templates/handoff.mjs` | file `tasks/<việc>.md` | sổ ở các mốc, `done` khi PR merge |
 | Setup nick và project | `profile/SETUP.md`, sổ nick `profile/ACCOUNTS.md` | `templates/setup-check.mjs` | danh sách việc thien bấm | `SETUP.md` qua PR khi đổi chuẩn |
 | Luật chung tới project khác | `templates/AGENTS.template.md` | Action `.github/workflows/sync-agents-md.yml` | PR vào từng repo trong `life/tracked-repos.md` | thien merge ở từng repo |
 | Trang tiến độ | `docs/STATUS.md`, `docs/plans/` | `templates/publish-progress.mjs` | `publish.json` | đăng đè link cũ |
 
 ## Giữ bản đồ này đúng
 - Thêm, đổi tên hay bỏ một file luật, mẫu hay lệnh: sửa bảng ở đây trong cùng PR. CI chạy `.github/scripts/check-links.mjs`, đường dẫn trong file này sai là CI đỏ.
-- Giữ dưới 60 dòng. Chi tiết nằm ở file được trỏ tới, không chép vào đây.
+- Nhắm dưới 60 dòng; chi tiết nằm ở file được trỏ tới, không chép vào đây, không nối dài câu cho đủ số dòng.
 - `.github/scripts/reading-cost.mjs` đọc bảng ở đây và in mỗi việc phải đọc bao nhiêu KB (tầng 1 cộng cột "Đọc"; lệnh `.mjs` ở cột "Đọc" là thứ AI đọc phần in ra, đo bằng `--reading-cost` của lệnh đó). CI đỏ khi một việc quá 120 KB: lúc đó tách file nặng nhất hay chuyển phần lịch sử (nhật ký cũ) ra file riêng, đừng nâng ngân sách.
