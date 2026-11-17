@@ -58,15 +58,15 @@ export function subjectFile(file) {
 
 // Bước ôn 3 thẻ đầu buổi tự sinh lúc dựng (kế hoạch docs/plans/2026-11-15-lean-learning.md, checkpoint 3; thien chọn giữ trắc nghiệm
 // 2026-11-17): nguồn chỉ có <section ... data-auto="cards"> rỗng, lệnh lấy thẻ đến hạn như gói buổi (prepare-lesson.mjs) và câu
-// trắc nghiệm của từng thẻ trong learning/cards-quiz.json ({ "F2": { "opts": [2–4 lựa chọn], "a": số thứ tự đáp án đúng từ 0, "why": "..." } }).
+// trắc nghiệm của từng thẻ trong learning/cards-quiz.json ({ "F2": { "opts": [2–3 lựa chọn], "a": số thứ tự đáp án đúng từ 0, "why": "..." } }).
 export const QUIZ_FILE = 'cards-quiz.json';
 const AUTO = /(<section class="step"[^>]*\bdata-auto="cards"[^>]*>)([\s\S]*?)(<\/section>)/;
 const AUTO_NOTE = '<!-- Ôn 3 thẻ: make-lesson.mjs tự sinh lúc dựng từ learning/cards.md và learning/cards-quiz.json. Để trống. -->';
 const escH = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-/** Câu trắc nghiệm hợp lệ: 2–4 lựa chọn có chữ, a trỏ đúng một lựa chọn, có lời giải thích. */
+/** Câu trắc nghiệm hợp lệ (learning/README.md, "Sau buổi"): 2–3 lựa chọn có chữ, a trỏ đúng một lựa chọn, có lời giải thích. */
 export function validQuiz(q) {
-  return !!q && Array.isArray(q.opts) && q.opts.length >= 2 && q.opts.length <= 4 && q.opts.every((o) => typeof o === 'string' && o.trim())
+  return !!q && Array.isArray(q.opts) && q.opts.length >= 2 && q.opts.length <= 3 && q.opts.every((o) => typeof o === 'string' && o.trim())
     && Number.isInteger(q.a) && q.a >= 0 && q.a < q.opts.length && typeof q.why === 'string' && !!q.why.trim();
 }
 

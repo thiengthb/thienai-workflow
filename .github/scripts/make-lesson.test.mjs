@@ -126,7 +126,7 @@ const TODAY = ['--today', '2026-11-17'];
 {
   const { validQuiz, quizCards, reviewStep, missingQuizText, hasAutoReview } = await import('../../artifacts/lesson/make-lesson.mjs');
   assert.ok(validQuiz({ opts: ['a', 'b'], a: 1, why: 'w' }));
-  for (const bad of [null, { opts: ['a'], a: 0, why: 'w' }, { opts: ['a', 'b'], a: 2, why: 'w' }, { opts: ['a', ' '], a: 0, why: 'w' }, { opts: ['a', 'b'], a: 0, why: '' }, { opts: ['a', 'b'], a: '0', why: 'w' }])
+  for (const bad of [null, { opts: ['a'], a: 0, why: 'w' }, { opts: ['a', 'b'], a: 2, why: 'w' }, { opts: ['a', ' '], a: 0, why: 'w' }, { opts: ['a', 'b'], a: 0, why: '' }, { opts: ['a', 'b'], a: '0', why: 'w' }, { opts: ['a', 'b', 'c', 'd'], a: 0, why: 'w' }])
     assert.equal(validQuiz(bad), false, JSON.stringify(bad));
   const q = quizCards([{ id: 'X1', question: 'q1' }, { id: 'X2', question: 'q2' }], { X1: { opts: ['a', 'b'], a: 0, why: 'w' }, X2: { opts: ['a'], a: 0, why: 'w' } });
   assert.deepEqual(q.cards.map((c) => c.id), ['X1']);

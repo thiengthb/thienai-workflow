@@ -109,6 +109,13 @@ assert.match(d3.others.ba[0], /^2026-11-15, ôn ở buổi Frontend 6: câu ôn 
 assert.equal(d3.stuck.length, 1, 'thẻ F3 của chính môn vẫn ghi vào môn đang học');
 assert.match(d3.stuck[0], /^2026-11-15, buổi 6: câu ôn “/);
 assert.deepEqual(draft({ R: { ...R, review: { B2: { pick: 0, ok: false } }, quiz: {}, ai: [] }, html: tpl, subject: subs.frontend, cards }).others, {}, 'không biết các môn thì giữ như cũ');
+// Nguồn trang để trống bước ôn (data-auto="cards"): chữ câu ôn sai lấy từ cards.md và cards-quiz.json, không còn là mã thẻ trơn.
+{
+  const qCards = '| Thẻ | Môn | Câu hỏi | Đáp án ở | Hộp | Hỏi lại |\n|---|---|---|---|---|---|\n| F8 | Frontend | Màu nhấn nên dùng mấy chỗ? | y | 1 | 2026-11-13 |\n';
+  const dq = draft({ R: { ...R, review: { F8: { pick: 1, ok: false } }, quiz: {}, ai: [], extra: [] }, html: '', subject: subs.frontend, cards: qCards,
+    quiz: { F8: { opts: ['Một vài chỗ', 'Khắp nơi'], a: 0, why: 'w' } } });
+  assert.match(dq.stuck[0], /câu ôn “Màu nhấn nên dùng mấy chỗ\?” chọn “Khắp nơi”, đúng là “Một vài chỗ”/);
+}
 
 // Bảng tính năng được dùng
 const head = '# x\n\n| Ngày | Trang | Phút | Hỏi Claude | Claude giải thích câu sai | Claude nhận xét, chấm | Nói thay gõ | Xem Claude làm | Nghe | Tình huống thêm | Ghi chú |\n|---|---|---|---|---|---|---|---|---|---|---|\n';

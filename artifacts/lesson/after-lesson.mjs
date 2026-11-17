@@ -170,11 +170,21 @@ export function addStuck(md, lines) {
   return next < 0 ? md.replace(/\n*$/, '\n\n') + intro : md.slice(0, next) + intro + md.slice(next);
 }
 
-/** Số liệu và nháp mọi thứ cần ghi sau một buổi. */
-export function draft({ R, html = '', subject, lessonFile = '', cards = '', today, all = {} }) {
+/**
+ * Câu ôn đầu buổi theo mã thẻ: { mã: { text, options, answer } }, lấy từ learning/cards.md và cards-quiz.json như make-lesson.mjs.
+ * Nguồn trang trong learning/<môn>/pages/ để trống bước ôn (data-auto="cards"), nên pageQuestions() không thấy các câu này.
+ */
+export function reviewQuestions(cardsText, quiz = {}) {
+  const out = {};
+  for (const c of parseCards(cardsText)) if (validQuiz(quiz?.[c.id])) out[c.id] = { text: c.question, options: quiz[c.id].opts, answer: quiz[c.id].a };
+  return out;
+}
+
+/** Số liệu và nháp mọi thứ cần ghi sau một buổi. `quiz`: nội dung learning/cards-quiz.json, cho chữ của câu ôn đầu buổi. */
+export function draft({ R, html = '', subject, lessonFile = '', cards = '', quiz = {}, today, all = {} }) {
   const lid = lessonOf(R.lesson) || { n: '?' };
   const date = today || String(R.end || R.start || '').slice(0, 10) || new Date().toISOString().slice(0, 10);
-  const Q = pageQuestions(html);
+  const Q = { ...reviewQuestions(cards, quiz), ...pageQuestions(html) };
   const list = (o) => Object.entries(o || {});
   const right = (o) => list(o).filter(([, v]) => v.ok).length;
   const mins = R.start && R.end ? Math.round((Date.parse(R.end) - Date.parse(R.start)) / 6e4) : null;
@@ -368,7 +378,9 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const html = pagePath && existsSync(pagePath) ? lf(readFileSync(pagePath, 'utf8')) : '';
   const ld = join(root, 'learning', l.dir, 'lessons');
   const lessonName = existsSync(ld) ? readdirSync(ld).find((f) => f.startsWith(String(l.n).padStart(2, '0') + '-')) : null;
-  const d = draft({ R, html, subject, lessonFile: lessonName ? `${l.dir}/lessons/${lessonName}` : '', cards, today, all });
+  let quiz = {};
+  try { quiz = JSON.parse(read('learning/' + QUIZ_FILE) || '{}'); } catch { console.error(`learning/${QUIZ_FILE} không phải JSON hợp lệ: câu ôn sai chỉ ghi được mã thẻ.`); }
+  const d = draft({ R, html, subject, lessonFile: lessonName ? `${l.dir}/lessons/${lessonName}` : '', cards, quiz, today, all });
   if (!html) console.error(`Không thấy trang của ${R.lesson}: câu sai chỉ ghi được khóa câu. Truyền --page <trang.html> để có chữ câu hỏi.`);
   console.log(draftText(d, { subjectFile: 'learning/' + subject.file }));
   if (write) {
