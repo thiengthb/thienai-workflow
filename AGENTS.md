@@ -18,6 +18,9 @@ Luật cho mọi AI làm việc trong repo thienai-workflow (Claude, Codex, côn
 3. Một buổi học là **một trang HTML tương tác** chứa đủ khung 7 bước, dựng từ mẫu `artifacts/lesson/` (xem README ở đó). Không dạy từng câu trong chat. Câu trả lời đầu tiên cho thien là trang đã dựng xong, kèm cách mở; chỉ dạy bằng chat khi thien tự xin.
 4. Sau buổi ghi đủ các file như mục "Sau buổi" trong `learning/README.md`, rồi mở PR.
 
+## Khi thien nhắn "mở nhanh"
+Gửi lại nguyên các link trong mục "Mở nhanh" của `README.md` (bản trên main), không dựng trang. Link hay mở mới thì thêm vào đúng mục đó, không ghi thêm chỗ khác.
+
 ## Sửa repo
 - Mọi thay đổi qua nhánh và PR; ai merge thì theo `profile/DELEGATION.md` (đa số là thien). Tên nhánh, tên file, thư mục, commit viết tiếng Anh; nội dung cho thien đọc viết tiếng Việt tự nhiên theo `profile/VOICE.md`.
 - PR và review: theo dòng "Repo có `.coderabbit.yaml`" ở phần chung. Không review PR bằng Claude trong lúc làm; thien nhờ review và tối ưu theo giai đoạn. Lý do: `docs/decisions/003-claude-as-reviewer.md`, `002`.

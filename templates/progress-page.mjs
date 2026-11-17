@@ -6,6 +6,7 @@
 //     A repo that cannot be read here is listed with its reason: missing=<owner/repo>:<reason>
 //     --prs <file.json>: open pull requests per repo ({"owner/repo": [...] | null}, null = could not fetch),
 //     shown in merge order in "Đang chờ bạn" (publish-progress.mjs fetches them).
+//     --links <README.md>=<owner/repo>:README.md: its "## Mở nhanh" section becomes the "Mở nhanh" tab.
 //   Learning roadmap (one markdown file, "##" = subject, "###" = stage):
 //     node progress-page.mjs --title "Lộ trình học" --roadmap <file.md>=<owner/repo>:<path in repo> > page.html
 //
@@ -353,7 +354,7 @@ export const taskKey = (repo, text) => { let h = 5381; for (const c of repo + '|
 /** Overview body, sized for the claude.ai artifact panel: on a wide panel two columns (tasks waiting for thien,
  *  grouped by repo and tickable | one card per repo, detail folded); one column when narrow. Every block uses the
  *  same card, row and type sizes so the two columns line up. */
-export function overviewBody(repos, details) {
+export function overviewBody(repos, details, quick = '') {
   gatherWaiting(repos);
   const waiting = repos.filter((r) => r.waitCount);
   const total = waiting.reduce((a, r) => a + r.waitCount, 0);
@@ -432,8 +433,10 @@ ${r.wait.tasks.length || r.wait.prs.length || r.prs === null ? `<h2 class="label
 <div class="col"><h2 class="label">Chi tiết</h2><div class="rc rc-full">${details[r.id] || ''}</div></div></div>`;
   const tab = (id, label, n, on) => `<button type="button" role="tab" id="tab-${esc(id)}" aria-controls="p-${esc(id)}" aria-selected="${on}" tabindex="${on ? 0 : -1}" data-tab="${esc(id)}">${esc(label)}${n ? `<span class="cnt" aria-label="${n} việc chờ bạn">${n}</span>` : ''}</button>`;
   const panel = (id, html, on) => `<section class="panel" role="tabpanel" id="p-${esc(id)}" aria-labelledby="tab-${esc(id)}"${on ? '' : ' hidden'}>${html}</section>`;
-  return `<nav class="tabs" role="tablist" aria-label="Xem theo repo">${tab('all', 'Tổng quan', 0, true)}${repos.map((r) => tab(r.id, r.name, r.waitCount, false)).join('')}</nav>
-${panel('all', allPanel, true)}${repos.map((r) => panel(r.id, repoPanel(r), false)).join('')}
+  // "Mở nhanh": the README section of the same name (links to pages, plans, guides), as the second tab.
+  const quickPanel = `<div class="rc rc-full quick">${quick}</div>`;
+  return `<nav class="tabs" role="tablist" aria-label="Xem theo repo">${tab('all', 'Tổng quan', 0, true)}${quick ? tab('mo-nhanh', 'Mở nhanh', 0, false) : ''}${repos.map((r) => tab(r.id, r.name, r.waitCount, false)).join('')}</nav>
+${panel('all', allPanel, true)}${quick ? panel('mo-nhanh', quickPanel, false) : ''}${repos.map((r) => panel(r.id, repoPanel(r), false)).join('')}
 <script>
 /* Tabs: the hash names the open repo (#<repo id>), so a link or a reload lands on the same tab. */
 (() => {
@@ -619,6 +622,10 @@ a.rrow:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .open { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 -14px; padding: 9px 14px; border-top: 1px solid var(--line); font-size: 13px; font-weight: 500; color: var(--muted); }
 .open .ic { width: 15px; height: 15px; }
 .rc-full { padding: 0 14px 14px; }
+.quick { padding-top: 12px; }
+.rc-full.quick p, .rc-full.quick li { font-size: 15px; line-height: 1.55; }
+.quick ul { margin: 4px 0 14px; padding-left: 20px; }
+.quick li { margin: 6px 0; }
 .rc-full .repo { border: 0; padding: 10px 0 0; background: transparent; gap: 12px; }
 .rc-full p, .rc-full li, .rc-full td, .rc-full th { font-size: 13.5px; }
 .rc-full .now-box p, .rc-full .now-box li { font-size: 14px; }
@@ -726,14 +733,25 @@ function stampNow() {
 }
 
 /** The whole page for CLI-style args (--title, --roadmap, <dir>=<repo>, missing=<repo>:<why>). */
+/** The "## Mở nhanh" section of a markdown file (README.md), rendered; '' when the file has none. */
+export function quickLinks(md, linkBase) {
+  const lines = lf(md).split('\n');
+  const start = lines.findIndex((l) => /^##\s+Mở nhanh\s*$/.test(l));
+  if (start < 0) return '';
+  let end = lines.findIndex((l, k) => k > start && /^#{1,2}\s/.test(l));
+  if (end < 0) end = lines.length;
+  return blocks(lines.slice(start + 1, end), linkBase);
+}
+
 export function buildPage(args) {
   let title = 'Tiến độ';
-  let roadmapArg = null, prs;
+  let roadmapArg = null, prs, quick = '';
   const repos = [];
   for (let k = 0; k < args.length; k++) {
     if (args[k] === '--title') title = args[++k];
     else if (args[k] === '--roadmap') roadmapArg = args[++k];
     else if (args[k] === '--prs') prs = JSON.parse(lf(readFileSync(args[++k], 'utf8')));
+    else if (args[k] === '--links') { const [file, linkBase] = args[++k].split('='); quick = quickLinks(readFileSync(file, 'utf8'), linkBase); }
     else repos.push(args[k]);
   }
   if (roadmapArg) {
@@ -752,7 +770,7 @@ export function buildPage(args) {
     if (prs) d.prs = repo in prs ? prs[repo] : null;
     return d;
   });
-  return page(title, overviewBody(parsed, details), stampNow(), { ticks: true });
+  return page(title, overviewBody(parsed, details, quick), stampNow(), { ticks: true });
 }
 
 // Compare real paths, not URL strings: on Windows, or with spaces or Vietnamese letters in the

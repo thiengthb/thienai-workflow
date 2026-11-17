@@ -2,6 +2,52 @@
 
 Bộ quy trình chung khi thien làm việc với AI. Áp vào project mới chỉ khi thien đồng ý ở đầu project.
 
+## Mở nhanh
+
+Mọi link hay mở nằm ở mục này, và chỉ ở đây. Trang Tổng quan hiện lại mục này ở tab "Mở nhanh" mỗi lần dựng lại; nhắn "mở nhanh" ở chat của project thì Claude gửi lại các link này. Trang trên claude.ai của nick nào thì chỉ nick đó mở được.
+
+**Trang hay xem**
+- [Tổng quan tiến độ](https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n): việc đang chờ bạn và kế hoạch đang chạy của mọi repo, kể cả repo này (nick tnt628)
+- [Lộ trình học](https://claude.ai/artifact/Vubbj6ghT9L7eKYegTfT9n): mỗi môn đang ở chặng nào, bài đã học (nick tnt628)
+- [Ôn thẻ đến hạn](https://claude.ai/artifact/L612hHx2vHUokcPBgH7RPu) và [Bảng học tuần](https://claude.ai/artifact/LijnAF7tSR4gBMrspPuQtV) (không ở nick tnt628, chưa ghi nick nào)
+- [Bộ màu thienui](https://claude.ai/artifact/2kM7som4ok6kmh7QaCSXZJ) (nick tnt024)
+
+**Kế hoạch**
+- Đang chạy tới đâu: bảng "Kế hoạch đang chạy" trong [docs/STATUS.md](docs/STATUS.md), hay tab thienai-workflow của trang Tổng quan
+- Mọi kế hoạch, kể cả đã xong: [docs/plans/](docs/plans/)
+
+**Câu hay nhắn**
+- "học": dựng buổi học kế tiếp thành một trang ([learning/README.md](learning/README.md))
+- "tiếp tục": làm tiếp việc dở, kể cả việc nick khác bỏ dở ([profile/HANDOFF.md](profile/HANDOFF.md))
+- "merge": việc nào AI được tự làm, việc nào phải hỏi ([profile/DELEGATION.md](profile/DELEGATION.md))
+- "xong": báo đã làm xong trang học khi thread chưa tự biết ([artifacts/lesson/README.md](artifacts/lesson/README.md))
+- "mở nhanh": Claude gửi lại các link trong mục này
+
+**Hướng dẫn**
+- Setup nick và project: [profile/SETUP.md](profile/SETUP.md)
+- Luật chung cho mọi project: [templates/AGENTS.template.md](templates/AGENTS.template.md)
+- AI lập và theo dõi kế hoạch thế nào: [profile/PLANNING.md](profile/PLANNING.md)
+- Bắt đầu project mới: [skills/start-project/STEPS.md](skills/start-project/STEPS.md)
+- [Sơ đồ hệ thống](https://github.com/thiengthb/thienai-workflow#s%C6%A1-%C4%91%E1%BB%93-h%E1%BB%87-th%E1%BB%91ng), [máy Windows](https://github.com/thiengthb/thienai-workflow#m%C3%A1y-windows-l%C3%A0m-m%E1%BB%99t-l%E1%BA%A7n)
+
+**Lối tắt trên điện thoại** (làm một lần): mở [trang Tổng quan](https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n) và [mục này](https://github.com/thiengthb/thienai-workflow#m%E1%BB%9F-nhanh) bằng Chrome, bấm nút ba chấm ở góc trên bên phải, chọn "Thêm vào màn hình chính". Trên iPhone dùng Safari, nút Chia sẻ, "Thêm vào MH chính".
+
+## Sơ đồ hệ thống
+
+Chỉ vẽ tầng lớn, vì tầng này ít đổi. Việc nào đi qua file nào thì xem bảng "Một việc đi qua những đâu" trong [`profile/MAP.md`](profile/MAP.md).
+
+```mermaid
+flowchart TD
+  T(["thien"]) -->|"nhắn việc"| C["Chat điều phối của project"]
+  C -->|"mỗi việc một thread"| TH["Thread làm việc"]
+  TH -->|"đọc luật, ghi tiến độ"| R[("Repo thienai-workflow: profile là luật và hồ sơ, templates là mẫu và lệnh, learning là việc học, docs là tiến độ và kế hoạch")]
+  TH -->|"đăng"| P["Trang trên claude.ai: bài học, tổng quan, lộ trình"]
+  TH -->|"mở"| PR["PR, có máy kiểm tự chạy"]
+  PR -->|"thien xem, merge"| R
+  R -->|"một lệnh dựng lại"| P
+  R -->|"Action đồng bộ AGENTS.md"| O["Repo các project khác: sakubun, tiktok"]
+```
+
 ## Có gì trong repo
 
 `AGENTS.md` ở gốc repo là luật cho AI làm việc ngay trong repo này (Codex tự nạp, `CLAUDE.md` trỏ tới nó). AI không đọc hết repo: [`profile/MAP.md`](profile/MAP.md) ghi việc nào đọc file nào.

@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { parsePlan, blocks, inline, repoId, waitingLines, planSteps, statusSteps, listItems, waitKind, prOrder, gatherWaiting, overviewBody } from '../../templates/progress-page.mjs';
+import { parsePlan, blocks, inline, repoId, waitingLines, planSteps, statusSteps, listItems, waitKind, prOrder, gatherWaiting, overviewBody, quickLinks } from '../../templates/progress-page.mjs';
 
 const plan = parsePlan([
   '# Kế hoạch thử', '', 'Trạng thái: đang chạy · Duyệt: 2026-01-01 · Cập nhật: 2026-01-02', '',
@@ -105,5 +105,14 @@ assert.match(withPrs, /Không lấy được danh sách PR của x lúc dựng t
 const quiet = { id: 'q', name: 'q', repo: 'o/q', tasks: [], prs: null, steps: [], status: 'running', head: 'h', plans: [], done: [], blocked: [], next: [] };
 assert.equal(overviewBody([quiet], { q: '' }).split('Không lấy được danh sách PR của q').length - 1, 2, 'a repo with nothing to do still warns in its own tab');
 assert.doesNotMatch(repoPage, /PR cần merge<\/b><span>theo thứ tự/, 'without --prs no PR list is shown');
+
+// "Mở nhanh": the README section of that name becomes the second tab; relative links go to GitHub.
+const quick = quickLinks('# R\n\n## Mở nhanh\n\n**Trang**\n- [STATUS](docs/STATUS.md)\n\n## Khác\n- [x](y.md)\n', 'o/r:README.md');
+assert.match(quick, /href="https:\/\/github\.com\/o\/r\/blob\/main\/docs\/STATUS\.md"/);
+assert.doesNotMatch(quick, /y\.md/, 'stops at the next section');
+assert.equal(quickLinks('# R\n## Khác\n', 'o/r:README.md'), '', 'no section, no tab');
+assert.match(overviewBody([quiet], { q: '' }, quick), /id="tab-mo-nhanh"[\s\S]*id="p-mo-nhanh"/);
+assert.doesNotMatch(overviewBody([quiet], { q: '' }), /mo-nhanh/);
+assert.match(quickLinks(readFileSync(new URL('../../README.md', import.meta.url), 'utf8'), 'o/r:README.md'), /claude\.ai\/artifact/, 'the real README keeps its "Mở nhanh" section');
 
 console.log('ok progress-page');
