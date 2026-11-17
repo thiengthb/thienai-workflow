@@ -15,7 +15,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–3 đã merge (PR #98–#103); 5: phần làm được đã làm sớm, còn đối chiếu với tính năng mới của Claude ở 2026-12-01; 4: phần máy xong (bước ôn tự sinh), chờ đo ở hai buổi học kế tiếp | 21/22 |
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 0–2 xong; 3: phần máy xong (bước ôn tự sinh, sau buổi tự ghi kết quả ôn), chờ đo ở hai buổi học kế tiếp; 4 bỏ (thien chọn 2026-11-17) | 8/11 |
 | [Các hành động giữa thien và AI còn thiếu luật](plans/2026-11-17-action-gaps.md) | 1 đã merge (PR #104), đang kiểm ở 3 chat; 2: lệnh, bảng file đích, thuật ngữ đã merge (PR #106), gu đã vào thienui (PR #8), sửa tên trục đã merge (PR #110); 3 ở mốc 01/12 | 11/16 |
-| [Trang mở nhanh](plans/2026-11-17-quick-access.md) | PR #116 đã merge; sơ đồ vẽ lại thành SVG (chờ merge); thien kiểm tab "Mở nhanh" và thêm lối tắt trên điện thoại | 8/11 |
+| [Trang mở nhanh](plans/2026-11-17-quick-access.md) | 1–4 xong (PR #116, #118), thien đã mở tab "Mở nhanh" trên điện thoại; còn lối tắt màn hình chính (tuỳ thien) và xem lại sơ đồ ở mốc 01/12 | 9/11 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
