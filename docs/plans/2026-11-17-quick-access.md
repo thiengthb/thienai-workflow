@@ -6,7 +6,7 @@ Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick
 
 ## Đang ở đâu
 - Đang ở: 1–4 đã làm trong PR này, chờ merge rồi thien kiểm trên điện thoại.
-- Còn thiếu: thien mở tab "Mở nhanh" và README trên điện thoại; xem lại sơ đồ sau 2026-12-01.
+- Còn thiếu: ô Website của repo (thien bấm); thien mở tab "Mở nhanh" và README trên điện thoại; xem lại sơ đồ sau 2026-12-01.
 - thien cần làm: merge PR, thêm hai lối tắt lên màn hình chính (cách ở mục "Mở nhanh" của `README.md`).
 
 ## Mục tiêu
@@ -24,14 +24,14 @@ Xong khi: thien mở trang Tổng quan trên điện thoại, bấm tab "Mở nh
 - [ ] Mục "Mở nhanh" ở đầu `README.md`, là chỗ duy nhất ghi link (chờ merge PR)
 - [ ] `templates/progress-page.mjs` dựng tab "Mở nhanh" từ mục đó, có test (chờ merge PR)
 - [ ] Nhắn "mở nhanh" thì Claude gửi lại các link (`AGENTS.md`) (chờ merge PR)
-- [ ] Ô Website của repo trên GitHub trỏ tới trang Tổng quan
+- [ ] Ô Website của repo trên GitHub trỏ tới trang Tổng quan (thien bấm: Claude không được đổi cài đặt repo)
 - [ ] thien thêm hai lối tắt lên màn hình chính điện thoại
 
 ### 2. Gộp trang Tiến độ thienai-workflow, ghim, thư mục
 Xong khi: thanh bên claude.ai của nick tnt628 có trang Tổng quan và Lộ trình học được ghim.
 - [ ] Dòng "Trang tiến độ" của STATUS trỏ về trang Tổng quan; `publish-progress.mjs repo` dừng thay vì đè trang Tổng quan (chờ merge PR)
-- [ ] Trang cũ báo đã gộp và trỏ sang trang Tổng quan
-- [ ] Ghim hai trang, thư mục "thienai-workflow" trên trang Artifacts
+- [x] Trang cũ báo đã gộp và trỏ sang trang Tổng quan (đăng 2026-11-17)
+- [x] Ghim hai trang, thư mục "thienai-workflow" trên trang Artifacts (12 trang kế hoạch, nghiên cứu, tiến độ; trang bài học để ngoài)
 
 ### 3. Sơ đồ hệ thống
 Xong khi: thien mở README trên điện thoại và thấy hình, không phải chữ Mermaid.
@@ -40,7 +40,7 @@ Xong khi: thien mở README trên điện thoại và thấy hình, không phả
 
 ### 4. Dọn bản chép cũ
 Xong khi: thư mục chung của project không còn `progress-pages/` và `thienai-workflow/`.
-- [ ] Xoá hai thư mục đó
+- [x] Xoá hai thư mục đó (2026-11-17)
 
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
