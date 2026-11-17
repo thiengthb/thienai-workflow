@@ -12,7 +12,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
-| [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–2 xong (PR #98); 3: đã đo BA 4 (15,8 triệu token) và số lượt Frontend 9, còn số token Frontend 9 | 15/18 |
+| [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–3 xong: đo BA 4 (15,8 triệu token) và Frontend 9 (23,1 triệu); 4 chờ xem số đo có đáng làm | 16/18 |
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 2/6 xong; đợt 3–4 chỉ làm khi số đo buổi học cho thấy đáng | 6/12 |
 
 ## Việc dở
@@ -32,7 +32,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- Đọc số token của thread "Học buổi Frontend 9" ở Project settings > Usage, nhắn lại trong thread đó.
+- Không có.
 
 ## Đang vướng
 - Không có. Trang tổng quan đọc sakubun bằng bản clone công khai.
