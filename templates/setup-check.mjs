@@ -215,7 +215,7 @@ function main(argv) {
   const skillVersions = {};
   for (const n of SKILLS) { const f = join(skillsDir, n, 'SKILL.md'); if (existsSync(f)) skillVersions[n] = skillVersion(lf(readFileSync(f, 'utf8'))); }
   const syncArg = opt('--sync');
-  if (!project || instrArg === undefined) throw new Error('dùng: --project <tên> --instructions <file|none|unseen> [--repos a/b,c/d] [--skills x@N,y@N] [--beta] [--sync "/:include"] [--no-git]');
+  if (!project || instrArg === undefined) throw new Error('thiếu tham số. --instructions nhận cả đoạn project instructions trong dấu nháy (hay đường dẫn file chứa nó), none khi project chưa có, unseen khi phiên không thấy. dùng: --project <tên> --instructions <đoạn|file|none|unseen> [--repos a/b,c/d] [--skills x@N,y@N] [--beta] [--sync "/:include"] [--no-git]');
   if (argv.length) throw new Error(`tham số lạ: ${argv.join(' ')} (xem đầu file templates/setup-check.mjs)`);
   const md = lf(readFileSync(setupPath, 'utf8'));
   const bad = checkStandard(md);
