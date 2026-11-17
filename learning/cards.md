@@ -19,7 +19,7 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | F5 | Frontend | Vì sao nhiều design system chỉ cho dùng 4, 8, 12, 16, 24, 32? | [bài 3](frontend/lessons/03-spacing-groups.md) | 3 | 2026-11-24 |
 | F6 | Frontend | Màn thanh toán có hai nút đặc "Thanh toán" và "Thêm mã giảm giá". Sửa thế nào? | [bài 4](frontend/lessons/04-fix-a-whole-screen.md) | 3 | 2026-11-24 |
 | B1 | BA | Khách nhờ "thêm nút xuất Excel". Câu nào nên hỏi đầu tiên? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 3 | 2026-11-24 |
-| B2 | BA | "Thêm thông báo đẩy lúc 8 giờ tối" là nhu cầu hay giải pháp? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 1 | 2026-11-16 |
+| B2 | BA | "Thêm thông báo đẩy lúc 8 giờ tối" là nhu cầu hay giải pháp? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 2 | 2026-11-20 |
 | B3 | BA | Vì sao không nên làm ngay đúng thứ được nhờ? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 2 | 2026-11-19 |
 | F7 | Frontend | Thanh đầu trang cùng màu đặc với nút chính thì sao? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 3 | 2026-11-24 |
 | F8 | Frontend | Thẻ trạng thái "Đã thanh toán" nên đặc hay nhạt, vì sao? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 2 | 2026-11-18 |
@@ -32,8 +32,8 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | W10 | Chiến tranh | Khi đổi sang "đánh chắc tiến chắc", đạn và gạo tăng bao nhiêu lần? Thứ nào tăng mạnh hơn, vì sao? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 2 | 2026-11-17 |
 | W12 | Chiến tranh | Gánh bộ đường xa, để 1 kg gạo tới mặt trận thì dọc đường ăn mất bao nhiêu? Xe đạp thồ giảm con số đó bằng cách nào? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 2 | 2026-11-18 |
 | W13 | Chiến tranh | Chỉ huy Pháp tính sai điều gì về hậu cần của bên ta ở Điện Biên Phủ? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 2 | 2026-11-20 |
-| W14 | Chiến tranh | Ở ải Chi Lăng năm 1427, lòng ải hẹp làm đạo quân đông của Liễu Thăng bất lợi ở điểm nào? | [bài 5](war/lessons/05-terrain-chi-lang-1427.md) | 1 | 2026-11-16 |
-| W15 | Chiến tranh | Vì sao chỉ có địa hình hiểm thôi thì chưa đủ để thắng ở Chi Lăng? | [bài 5](war/lessons/05-terrain-chi-lang-1427.md) | 1 | 2026-11-16 |
+| W14 | Chiến tranh | Ở ải Chi Lăng năm 1427, lòng ải hẹp làm đạo quân đông của Liễu Thăng bất lợi ở điểm nào? | [bài 5](war/lessons/05-terrain-chi-lang-1427.md) | 2 | 2026-11-20 |
+| W15 | Chiến tranh | Vì sao chỉ có địa hình hiểm thôi thì chưa đủ để thắng ở Chi Lăng? | [bài 5](war/lessons/05-terrain-chi-lang-1427.md) | 2 | 2026-11-20 |
 | W16 | Chiến tranh | Ở Xương Giang có mưa to gió lớn. Vì sao trận mưa đè nặng lên quân Minh hơn quân ta? | [bài 5](war/lessons/05-terrain-chi-lang-1427.md) | 1 | 2026-11-16 |
 | W11 | Chiến tranh | Vì sao hậu cần Điện Biên Phủ không dồn hết vào xe ô tô? | [bài 4](war/lessons/04-logistics-dien-bien-phu.md) | 2 | 2026-11-20 |
 | F9 | Frontend | Ngoài khối màu to, hai thứ nhỏ nào cũng hay giành mắt mà dễ bị bỏ sót? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 2 | 2026-11-18 |
@@ -65,3 +65,5 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | F18 | Frontend | Hai nút đặc cùng cỡ, cùng màu đứng cạnh nhau ("Get Started" và "Download"). Đó là lỗi gì? | [bài 9](frontend/lessons/09-blind-comparison-milestone.md) | 1 | 2026-11-18 |
 | F19 | Frontend | Màn đặt lịch có năm khối màu trông vui mắt hơn bản một màu xanh. Vì sao bản một màu vẫn tốt hơn? | [bài 9](frontend/lessons/09-blind-comparison-milestone.md) | 1 | 2026-11-18 |
 | F20 | Frontend | Một bạn hỏi "sao phải sửa màn này?". Câu trả lời thuyết phục cần ba thứ gì? | [bài 9](frontend/lessons/09-blind-comparison-milestone.md) | 1 | 2026-11-18 |
+| F21 | Frontend | Muốn một số nổi lên giữa ba ô số bằng nhau (như "Nhớ 70%"), nên làm gì, và vì sao tô màu ô đó chưa đủ? | [bài 10](frontend/lessons/10-pick-a-fix-session-summary.md) | 1 | 2026-11-18 |
+| F22 | Frontend | Bản sửa đẹp nhất (băng chuỗi ngày to) lại không phải bản tốt cho màn "Xong buổi ôn". Câu hỏi nào giúp chọn đúng? | [bài 10](frontend/lessons/10-pick-a-fix-session-summary.md) | 1 | 2026-11-18 |
