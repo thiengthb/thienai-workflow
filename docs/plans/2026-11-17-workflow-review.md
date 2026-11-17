@@ -6,8 +6,8 @@ Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đ�
 
 ## Đang ở đâu
 - Đang ở: đợt 0, 1, 2 xong, PR #98 merge 2026-11-17; sakubun nhận phần chung mới qua PR #327 (merge cùng ngày).
-- Còn thiếu: đợt 3 đã có đủ số đo hai buổi (BA 4: 15,8 triệu token; Frontend 9: 23,1 triệu); việc tiếp theo là xem số đó có đủ để làm đợt 4 không.
-- thien cần làm: không có.
+- Còn thiếu: đợt 3 xong (BA 4: 15,8 triệu token; Frontend 9: 23,1 triệu). Đã sửa các lượt phí đợt 3 tìm ra (xem "Kết luận đợt 3"); đợt 4 chờ thien chọn làm ngay hay để tới 2026-12-01.
+- thien cần làm: chọn cách xử lý đợt 4 (thẻ hỏi trong thread).
 
 ## Mục tiêu
 Bộ quy trình đúng và gọn hơn mà không mất luật nào: sửa chỗ ghi sai, luật áp theo điều kiện thay vì áp mọi lúc, có đường riêng cho project bản beta, và bám tính năng có sẵn của Claude thay vì tự làm lại.
@@ -51,12 +51,24 @@ Xong khi: có tổng số lượt của chat dựng bài và chat sau buổi ở
 - [x] Buổi 1: BA 4 (2026-11-17, nick tnt628, project beta, một thread cho cả dựng bài và sau buổi). Dựng bài khoảng 35 lượt gọi trong 9 phút, sau buổi khoảng 18 lượt. Lâu nhất là dựng trang (khoảng 18 lượt: đọc kit `artifacts/it/` và bài BA 3 làm mẫu, viết trang, sửa hai lỗi bài kiểm). Lượt phí: 3 lần chạy lại `start-session.mjs` vì truyền thiếu `--instructions`, 4 lượt tìm công cụ đăng trang (`publish_files`, khai khả năng, `watch` không bật được nên trang không tự báo về thread). Project settings > Usage lúc 11:08 (sau khi merge PR #100): thread 15,8 triệu token, 2% của project; để so, thread "Review sâu và tối ưu thienai-workflow" 60,6 triệu, "Học luân phiên nhiều môn" 137,3 triệu
 - [x] Buổi 2: Frontend 9 (2026-11-17, nick tnt628, project beta, một thread cho cả dựng bài và sau buổi). Dựng bài khoảng 43 lượt gọi trong 18 phút (04:12–04:30 UTC), sau buổi khoảng 16 lượt (gồm mở PR). Lâu nhất là dựng trang (khoảng 16 lượt: viết trang 12 bước có ảnh chụp buổi 1, năm cặp màn và bàn thử mới; hai lần chạy `make-lesson.mjs`, mỗi lần khoảng 4 phút vì `check-page.cjs` bấm từng nút, lần đầu trượt vì hàng 4 nút góp ý tràn khổ điện thoại). Lượt phí: 3 lượt chờ lệnh chạy nền; trang lại không tự báo về thread (`watch` báo `no_address`) nên thien phải nhắn "xong". Buổi dài hơn BA 4 vì là buổi mốc (12 bước, thien chấm "dài"). Project settings > Usage lúc 12:26 (sau khi sửa hai góp ý review, chưa merge PR #102): thread 23,1 triệu token, 3% của project; BA 4 là 15,8 triệu
 
+Kết luận đợt 3 (2026-11-17): mỗi buổi khoảng 50–60 lượt gọi. Dựng trang khoảng 16–18 lượt, khoảng một phần ba. Khoảng 7–10 lượt là phí, sửa được mà không thêm script:
+- [x] 4 lượt đi tìm công cụ đăng trang ở bản beta: `artifacts/kit/publish.mjs` in sẵn cách đăng cho bản beta (`publish_files`, `read_declaration`, `declare_capabilities`); `artifacts/lesson/README.md` ghi tên công cụ đọc kết quả ở bản beta
+- [x] 3 lần chạy lại `start-session.mjs` vì thiếu `--instructions`: lời báo lỗi của `setup-check.mjs` nói rõ tham số nhận gì
+- [x] Trang không tự báo về thread ở bản beta (hai buổi đều vậy, `watch` báo `no_address`): `artifacts/lesson/README.md` dặn khi đưa trang thì bảo thien nhắn "xong" trong thread. [Chưa kiểm] vì sao không tự thức; tài liệu công cụ nói đăng bằng `publish_files` là đã tự theo dõi trang
+
 ### 4. Tự động hoá phần học, chỉ khi đợt 3 cho thấy đáng
 Ngưỡng và cách làm ở checkpoint 3, 4 của `2026-11-15-lean-learning.md`.
 
 ### 5. Chiều bớt (làm sau lần xem lại 2026-12-01)
 - [ ] Phần chung `AGENTS.template.md`, dòng xem nhánh chưa merge: khi không có `check-open-work.mjs` thì xem cả nhánh chưa có PR và sổ bàn giao (góp ý đúng của CodeRabbit trên sakubun PR #327). Gộp vào lần sửa mẫu kế tiếp, để không sinh thêm một PR đồng bộ chỉ vì một dòng
 - [ ] Kế hoạch xong chuyển vào thư mục `done` trong `docs/plans/`; bảng "luật nằm ở đâu" kèm mốc xem lại; đối chiếu phần tự làm với tính năng mới của Claude
+
+## Phối hợp với kế hoạch song song (nick tnt697)
+Ngày 2026-11-17 nick tnt697 soạn báo cáo "Rà soát quy trình làm việc thien và Claude" (bảng ủy quyền, dòng mục tiêu khi nhận việc, mẫu báo cáo khi xong việc, đường chảy cho góp ý), dự định ghi thành file `2026-11-17-action-gaps.md` trong thư mục kế hoạch. thien giao nick đó làm. Nick tnt628 so với kế hoạch này và đề xuất ba chỗ chỉnh, nick nào làm kế hoạch kia thì áp:
+1. Dòng mục tiêu ba phần ("Mục tiêu · Sẽ ra · Xong khi") chỉ cho project bản cũ. Project bản beta đã có tên thread và bảng tiến độ của thread, nên ghi "Sẽ ra" và "Xong khi" vào dòng đầu bảng tiến độ, không đổi mục "Project bản beta" của `profile/CHATS.md`.
+2. Mẫu báo cáo khi xong việc ghi trong `profile/VOICE.md` là nội dung phải có (kết quả kèm bằng chứng, thien cần làm gì, việc tiếp theo), không ép khuôn ba mục ở bản beta: thread beta đã có cách báo cáo của Claude (mở đầu bằng kết quả hay việc cần thien làm, viết ngắn khi thien vắng lâu). Theo nguyên tắc ở trên, không đè hướng dẫn gốc.
+3. Sửa `artifacts/lesson/after-lesson.mjs` để kiểm từ mới thì ghi một dòng vào "Đã đổi" của `2026-11-15-lean-learning.md`, để checkpoint 4 ở đó (sau buổi chỉ ghi file mới) giữ lại phần kiểm này, không phải sửa lệnh hai lần.
+Thêm: bảng ủy quyền chỉ áp cho repo này (sakubun có luật mức rủi ro riêng trong `CLAUDE.md`). Lịch nhắc thứ Hai, thứ Năm nằm ở nick tnt628, vẫn chạy (lần gần nhất 2026-11-16).
 
 ## Bộ tình huống mẫu (kiểm đợt 1 bằng cách đọc)
 | Tình huống | Hành vi đúng | Luật quyết định |
