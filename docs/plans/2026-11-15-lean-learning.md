@@ -6,7 +6,7 @@ Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đ�
 
 ## Đang ở đâu
 - Đang ở: đợt 0–2 xong và đã merge (PR #77, #78, #81). Đợt 3: phần máy đã làm (bước ôn 3 thẻ tự sinh từ câu trắc nghiệm lưu sẵn, sau buổi tự ghi kết quả ôn), chờ đo ở hai buổi học thật. Đợt 4 (sau buổi chỉ ghi một bản ghi) chưa làm.
-- Còn thiếu: số lượt dựng bài và bản chấm của thien ở hai buổi học kế tiếp, để biết đợt 3 có bớt lượt mà không làm buổi học kém đi không. sau buổi.
+- Còn thiếu: số lượt dựng bài và bản chấm của thien ở hai buổi học kế tiếp, để biết đợt 3 có bớt lượt mà không làm buổi học kém đi không. Đợt 4 đề xuất bỏ (xem "Đã đổi" 2026-11-17), chờ thien chọn.
 - thien cần làm: không có; nhắn "học" như thường.
 
 ## Mục tiêu
@@ -150,6 +150,7 @@ Chỗ dễ sa lầy: đợt 3, nếu cứ muốn phần khung tự sinh phủ h�
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-17 | Đề xuất bỏ đợt 4 (bản ghi buổi riêng, bảng chung tự sinh), chờ thien chọn | Mục tiêu của đợt 4 là để hai PR buổi học không đụng nhau khi merge. Từ 2026-11-10 tới 2026-11-17 có 81 lần merge trên main mà chỉ một lần PR buổi học phải gộp lại vì đụng (`claude/frontend-06-after`). Làm đủ thì phải viết lại cách `after-lesson.mjs` ghi mọi file, đúng lúc đợt 2 của `2026-11-17-action-gaps.md` (nick tnt697) cũng sửa file đó. Xem lại nếu PR buổi học đụng nhau từ 2 lần trở lên |
 | 2026-11-17 | Làm đợt 3 ngay, không chờ ngưỡng "viết khung chiếm một phần ba số lượt" | thien muốn làm sớm để CodeRabbit review code trước khi hết dùng thử (2026-11-24). Số đo hai buổi BA 4, Frontend 9 cho thấy dựng trang chiếm khoảng một phần ba số lượt; hai buổi học kế tiếp vẫn đo để biết có giữ không. thien chọn giữ trắc nghiệm cho phần ôn (thẻ hỏi trong thread review). Sau buổi giờ tự ghi kết quả ôn: trước đó mục "Sau buổi" của `learning/README.md` không có bước nào ghi kết quả 3 thẻ ôn đầu buổi |
 | 2026-11-15 | Làm đợt 1 trước đợt 0 | Đợt 1 chỉ đổi phần máy, không đụng trải nghiệm học, nên không cần số đo của đợt 0 để quyết. Đợt 0 vẫn đo ở buổi Frontend 6 |
 | 2026-11-15 | Đợt 2 dừng ở 64,0 KB, không ép xuống 50 | Gói chép nguyên văn mọi mục luật của file môn (cả "Cách một buổi chạy", "Các kiểu buổi để luân phiên" của frontend), vì kế hoạch ghi không tóm luật. Con số gồm 6,5 KB learning/codex.md (đã xoá ở checkpoint 3) mà Claude trên claude.ai không đọc, nên ở Claude là khoảng 57,5 KB. Phần lớn còn lại là phần cố định (tầng 1 23,2 KB, `TUTOR.md`, `artifacts/lesson/README.md` 10 KB); đợt 3 bỏ việc đọc mẫu nên sẽ giảm tiếp. Điều quan trọng hơn đã đạt: số không tăng theo số buổi |
