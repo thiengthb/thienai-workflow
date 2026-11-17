@@ -83,7 +83,11 @@ html[data-stage="on"] #stage { display: block; }
   background-image: radial-gradient(color-mix(in srgb, var(--line) 80%, var(--muted)) 1px, transparent 1px); background-size: 18px 18px; }
 .bd-area { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
 .zones { flex: 1; min-height: 220px; display: grid; gap: 8px; position: relative; }
-.zones.grid2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; margin-left: 22px; margin-bottom: 18px; }
+/* Lưới 2×2: tên trục nằm trong lề riêng ngoài các ô (--axis-gap), không bao giờ vào ô nên không đè thẻ (lỗi thien chê sau BA 3, 2026-11-16).
+   Chỉ chừa lề khi có trục; lưới không trục dùng hết bề ngang. */
+.zones.grid2 { --axis-gap: 24px; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.zones.grid2:has(> .axis.y) { margin-left: var(--axis-gap); }
+.zones.grid2:has(> .axis.x) { margin-bottom: var(--axis-gap); }
 .zones.flow { flex: 0 0 auto; grid-auto-flow: column; grid-auto-columns: 1fr; min-height: 180px; margin-top: auto; }
 .zones.flow + .tray { margin-bottom: auto; }
 .zone { position: relative; display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start; text-align: left; padding: 8px 10px; border: 1.5px dashed color-mix(in srgb, var(--line) 50%, var(--muted));
@@ -95,8 +99,9 @@ html[data-stage="on"] #stage { display: block; }
 .board.picking .zone:hover { background: var(--card); }
 .zones.flow .zone:not(:last-child)::after { content: "→"; position: absolute; right: -9px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; z-index: 1; }
 .axis { position: absolute; font: 600 11px/1 var(--font); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); pointer-events: none; }
-.axis.y { left: 0; top: 50%; transform: translate(-50%, -50%) rotate(-90deg) translateY(-50%); margin-left: 6px; white-space: nowrap; }
-.axis.x { bottom: 0; left: 50%; transform: translateX(-50%); }
+.axis { display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+.axis.y { top: 0; bottom: 0; right: 100%; width: var(--axis-gap, 24px); writing-mode: vertical-rl; transform: rotate(180deg); }
+.axis.x { left: 0; right: 0; top: 100%; height: var(--axis-gap, 24px); }
 .tray { position: relative; min-height: 52px; flex: none; border-radius: var(--r); border: 1px solid var(--line); background: color-mix(in srgb, var(--card) 85%, transparent); }
 .tray > .label { position: absolute; left: 10px; top: 6px; font-size: 10.5px; }
 .tray.empty { border: 0; min-height: 0; }

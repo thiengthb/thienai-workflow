@@ -60,4 +60,4 @@ AI ghi sau mỗi buổi (nháp từ `artifacts/lesson/after-lesson.mjs`), xóa d
 - Mở bằng đoạn giới thiệu ngắn (khoảng 1 phút: điều kiện hoàn thành là gì, một ví dụ, việc sắp làm), rồi mới thử. thien xin điều này sau buổi 4 vì user story là ý hoàn toàn mới mà bài cho thử ngay; giờ là luật ở bước 3 của khung chung.
 - Ôn "ai chặn được" lần ba bằng một tình huống khác hẳn (không phải IT trường), vì thien vẫn xếp theo lúc cần tới họ.
 - Nhắc lại khi chọn giải pháp: so từng cách với phần "để" trước, rồi mới xét cách nào ít công.
-- Giữ khoảng 15 phút, độ khó "vừa" là đúng mức. Bảng không có tên trục ở buổi 4 không còn lỗi chữ đè thẻ; lưới 2×2 có trục vẫn chưa sửa (README của `artifacts/it/`, mục "Chưa làm").
+- Giữ khoảng 15 phút, độ khó "vừa" là đúng mức. Bảng không có tên trục ở buổi 4 không còn lỗi chữ đè thẻ; lưới 2×2 có trục đã sửa ở kit ngày 2026-11-17 (tên trục ra lề riêng); BA 5 dùng lưới có trục được, phần trau chuốt bố cục vẫn còn trong mục "Chưa làm" của `artifacts/it/README.md`.
