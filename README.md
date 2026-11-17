@@ -36,17 +36,9 @@ Mọi link hay mở nằm ở mục này, và chỉ ở đây. Trang Tổng quan
 
 Chỉ vẽ tầng lớn, vì tầng này ít đổi. Việc nào đi qua file nào thì xem bảng "Một việc đi qua những đâu" trong [`profile/MAP.md`](profile/MAP.md).
 
-```mermaid
-flowchart TD
-  T(["thien"]) -->|"nhắn việc"| C["Chat điều phối của project"]
-  C -->|"mỗi việc một thread"| TH["Thread làm việc"]
-  TH -->|"đọc luật, ghi tiến độ"| R[("Repo thienai-workflow: profile là luật và hồ sơ, templates là mẫu và lệnh, learning là việc học, docs là tiến độ và kế hoạch")]
-  TH -->|"đăng"| P["Trang trên claude.ai: bài học, tổng quan, lộ trình"]
-  TH -->|"mở"| PR["PR, có máy kiểm tự chạy"]
-  PR -->|"thien xem, merge"| R
-  R -->|"một lệnh dựng lại"| P
-  R -->|"Action đồng bộ AGENTS.md"| O["Repo các project khác: sakubun, tiktok"]
-```
+<p align="center"><img src="docs/images/system-diagram.svg" width="400" alt="Sơ đồ hệ thống: thien nhắn việc ở chat điều phối, chat mở thread cho từng việc; thread đọc luật trong repo và ghi lại qua PR thien merge; repo dựng lại các trang claude.ai và đồng bộ luật chung sang project khác"></p>
+
+Sửa sơ đồ thì sửa thẳng file `docs/images/system-diagram.svg` (chữ thường, mở bằng trình soạn thảo nào cũng được).
 
 ## Có gì trong repo
 
