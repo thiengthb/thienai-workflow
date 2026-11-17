@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-17 (thien: "ok mình duyệt và
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 0, 1, 2 làm trong một PR (chờ merge).
+- Đang ở: đợt 0, 1, 2 làm xong trong PR #98 (chờ merge).
 - Còn thiếu: thien merge PR; dán instructions v4 ở từng project; xoá 5 nhánh cũ. Đợt 3 chạy cùng hai buổi học kế tiếp.
-- thien cần làm: merge PR, rồi dán instructions theo `profile/SETUP.md`.
+- thien cần làm: merge PR #98, rồi dán instructions theo `profile/SETUP.md`.
 
 ## Mục tiêu
 Bộ quy trình đúng và gọn hơn mà không mất luật nào: sửa chỗ ghi sai, luật áp theo điều kiện thay vì áp mọi lúc, có đường riêng cho project bản beta, và bám tính năng có sẵn của Claude thay vì tự làm lại.
