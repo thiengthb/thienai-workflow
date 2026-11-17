@@ -2,28 +2,20 @@
   <title id="t">Sơ đồ hệ thống thienai-workflow</title>
   <desc id="d">thien nhắn việc ở chat điều phối, chat mở một thread cho từng việc. Thread đọc luật trong repo thienai-workflow và ghi lại qua PR, thien merge. Từ repo, một lệnh dựng lại các trang trên claude.ai, và luật chung tự đồng bộ sang repo các project khác.</desc>
   <style>
-    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #1d1d1f; }
-    .muted { fill: #6e6e73; }
-    .label { font-size: 11px; font-weight: 600; letter-spacing: .06em; fill: #8e8e93; }
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #24292f; }
+    .muted { fill: #57606a; }
+    .label { font-size: 11px; font-weight: 600; letter-spacing: .06em; fill: #57606a; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px; font-weight: 600; }
-    .card { fill: #f6f5f1; stroke: #e4e2dc; }
-    .chip { fill: #ffffff; stroke: #e4e2dc; }
-    .line { stroke: #c7c5bf; fill: none; stroke-width: 1.5; }
-    .head { fill: #c2410c; }
-    .pill { fill: #1d1d1f; }
-    .pill-t { fill: #ffffff; }
-    .sep { stroke: #ebe9e3; }
+    .card, .chip, .pill { fill: none; stroke: #24292f; stroke-width: 1.2; }
+    .line { stroke: #24292f; fill: none; stroke-width: 1.2; }
+    .head { fill: #24292f; }
+    .pill-t { fill: #24292f; }
+    .sep { stroke: #d0d7de; }
     @media (prefers-color-scheme: dark) {
-      text { fill: #f2f2f0; }
-      .muted { fill: #a1a1a6; }
-      .label { fill: #8e8e93; }
-      .card { fill: #1c1c1e; stroke: #34343a; }
-      .chip { fill: #26262a; stroke: #3a3a40; }
-      .line { stroke: #55555c; }
-      .head { fill: #f0875f; }
-      .pill { fill: #f2f2f0; }
-      .pill-t { fill: #1d1d1f; }
-      .sep { stroke: #2c2c30; }
+      text, .head, .pill-t { fill: #e6edf3; }
+      .muted, .label { fill: #9198a1; }
+      .card, .chip, .pill, .line { stroke: #e6edf3; }
+      .sep { stroke: #3d444d; }
     }
   </style>
   <defs>
@@ -33,18 +25,18 @@
   </defs>
 
   <!-- thien -->
-  <rect class="pill" x="150" y="12" width="100" height="36" rx="18"/>
+  <rect class="pill" x="150" y="12" width="100" height="36" rx="4"/>
   <text class="pill-t" x="200" y="35" text-anchor="middle" font-size="15" font-weight="600">thien</text>
   <line class="line" x1="200" y1="48" x2="200" y2="88" marker-end="url(#a)"/>
   <text class="muted" x="212" y="73" font-size="13">nhắn việc</text>
 
   <!-- Claude -->
-  <rect class="card" x="16" y="94" width="368" height="100" rx="14"/>
+  <rect class="card" x="16" y="94" width="368" height="100" rx="4"/>
   <text class="label" x="32" y="118">CLAUDE TRÊN CLAUDE.AI</text>
-  <rect class="chip" x="32" y="130" width="148" height="48" rx="10"/>
+  <rect class="chip" x="32" y="130" width="148" height="48" rx="4"/>
   <text x="106" y="159" text-anchor="middle" font-size="14.5" font-weight="600">Chat điều phối</text>
   <line class="line" x1="184" y1="154" x2="212" y2="154" marker-end="url(#a)"/>
-  <rect class="chip" x="220" y="130" width="148" height="48" rx="10"/>
+  <rect class="chip" x="220" y="130" width="148" height="48" rx="4"/>
   <text x="294" y="151" text-anchor="middle" font-size="14.5" font-weight="600">Thread</text>
   <text class="muted" x="294" y="168" text-anchor="middle" font-size="12">mỗi việc một thread</text>
 
@@ -54,7 +46,7 @@
   <text class="muted" x="212" y="233" font-size="13">ghi qua PR, bạn merge</text>
 
   <!-- Repo -->
-  <rect class="card" x="16" y="250" width="368" height="196" rx="14"/>
+  <rect class="card" x="16" y="250" width="368" height="196" rx="4"/>
   <text class="label" x="32" y="274">REPO THIENAI-WORKFLOW</text>
   <text class="mono head" x="32" y="306">profile/</text>
   <text x="140" y="306" font-size="14">luật và hồ sơ của bạn</text>
@@ -74,12 +66,12 @@
   <text class="muted" x="118" y="476" font-size="12">một lệnh dựng lại</text>
   <text class="muted" x="302" y="476" font-size="12">tự đồng bộ</text>
 
-  <rect class="card" x="16" y="502" width="180" height="78" rx="14"/>
+  <rect class="card" x="16" y="502" width="180" height="78" rx="4"/>
   <text x="32" y="531" font-size="14.5" font-weight="600">Trang claude.ai</text>
   <text class="muted" x="32" y="551" font-size="12.5">bài học, tổng quan,</text>
   <text class="muted" x="32" y="567" font-size="12.5">lộ trình học</text>
 
-  <rect class="card" x="204" y="502" width="180" height="78" rx="14"/>
+  <rect class="card" x="204" y="502" width="180" height="78" rx="4"/>
   <text x="220" y="531" font-size="14.5" font-weight="600">Project khác</text>
   <text class="muted" x="220" y="551" font-size="12.5">sakubun, tiktok nhận</text>
   <text class="muted" x="220" y="567" font-size="12.5">luật chung AGENTS.md</text>
