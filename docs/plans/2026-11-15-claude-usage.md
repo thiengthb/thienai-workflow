@@ -1,13 +1,13 @@
 # Dùng Claude tốn ít usage hơn: đo trước, đổi sau
 
-Trạng thái: đang chạy · Duyệt: chưa (chờ thien) · Cập nhật: 2026-11-16 · nick tnt697 (xong thí nghiệm 1, 2, 3; checkpoint 2, 3 xong) · Đầu vào: câu hỏi của thien 2026-11-15, số đo ở `docs/usage-log.md`
+Trạng thái: xong (xem lại 2026-12-01) · Duyệt: 2026-11-16 (thien chọn phương án B ở checkpoint 4) · Cập nhật: 2026-11-17 · nick tnt697 làm, nick tnt628 ghi trạng thái xong · Đầu vào: câu hỏi của thien 2026-11-15, số đo ở `docs/usage-log.md`
 
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 (đo): thí nghiệm 1 xong (4 lần có đủ số Settings, gần nhất 2026-11-16 22:39 và 22:45); thí nghiệm 2 xong; thí nghiệm 3 xong (lần 3 đo bật và tắt cùng ngày, mỗi nửa tăng 1% phiên; bảng "Kết quả đo"). Thí nghiệm 4 đã đủ 4 lần (lần 3 thiếu điểm a; lần 4 xong 2026-11-17, Frontend 8; theo Settings, làm sau buổi trong chat dựng bài rẻ hơn chat mới); còn thiếu thien chấm chất lượng bản ghi của lần 2 và lần 4 so với lần 1 và lần 3. Checkpoint 2 xong: khởi động theo v3 còn 3 lượt (đo 2026-11-15 16:49). Checkpoint 3 xong. Chưa đổi luật `profile/CHATS.md`.
-- Còn thiếu: không. Checkpoint 1 xong 2026-11-17; tiếp theo là checkpoint 4 (đổi luật `profile/CHATS.md`).
-- thien cần làm: duyệt kế hoạch; khi mở chat mới thì để AI chạy `explain-usage` ở những chỗ ghi trong thí nghiệm.
+- Đang ở: xong cả 4 checkpoint; luật đổi chat mới đã vào `profile/CHATS.md` (PR #97 merge 2026-11-16).
+- Còn thiếu: xem lại luật ở 2026-12-01 hoặc sau 10 dòng mới trong `docs/usage-log.md`. Số đo ở đây chỉ của project bản cũ (nick tnt697); project bản beta có Project settings > Usage riêng, xem kế hoạch `2026-11-17-workflow-review.md`.
+- thien cần làm: không có.
 
 ## thien hỏi gì
 "bây giờ mình chỉ học bằng claude nên bạn có thể bỏ phần codex đi, và chỉ tối ưu cho claude thôi" và "nghiên cứu xem là mỗi chat nếu chỉ làm một mục tiêu rồi đổi chat liên tục vậy có hiệu quả không, tại vì mỗi lần mở chat mới lại tốn thời gian đọc lệnh hệ thống và refresh lại context [...] những việc quan trọng cần context đủ dài để làm đủ và xuyên suốt một giai đoạn thì sao. [...] phải nghiên cứu hướng tối ưu chứ không phải là hướng nghe hợp lý nhất, và phải dựa trên nghiên cứu và thử nghiệm" (2026-11-15).
@@ -98,7 +98,7 @@ Xong khi: không file nào trong luồng học còn trỏ tới learning/codex.m
 
 ### 4. Đổi luật chat theo số đo
 Xong khi: `profile/CHATS.md` ghi luật mới kèm số đo làm căn cứ, thien duyệt.
-- [x] Sửa `profile/CHATS.md` (2026-11-17, PR #97, chờ thien merge): thien chọn B, đổi chat theo ngưỡng bằng số ("nếu ước lượng được bằng số thì cũng sẽ dễ căn hơn"); AI cũng chọn B, sửa thêm: tra số lượt theo loại việc trong bảng thay vì ước bằng cảm giác. Phương án bị bỏ: A giữ luật cũ (không có ngưỡng, AI đoán), C một chat cho cả giai đoạn (chat 157 lượt đắt hơn khoảng 20% mỗi lượt, dễ sai hơn), tách mọi bước ra chat riêng (thí nghiệm 4 cho thấy đắt hơn). thien bỏ qua phần tóm tắt 3 câu. Xem lại: sau 10 dòng mới trong `docs/usage-log.md` hoặc 2026-12-01
+- [x] Sửa `profile/CHATS.md` (2026-11-17, PR #97, merge 2026-11-16 20:30 UTC): thien chọn B, đổi chat theo ngưỡng bằng số ("nếu ước lượng được bằng số thì cũng sẽ dễ căn hơn"); AI cũng chọn B, sửa thêm: tra số lượt theo loại việc trong bảng thay vì ước bằng cảm giác. Phương án bị bỏ: A giữ luật cũ (không có ngưỡng, AI đoán), C một chat cho cả giai đoạn (chat 157 lượt đắt hơn khoảng 20% mỗi lượt, dễ sai hơn), tách mọi bước ra chat riêng (thí nghiệm 4 cho thấy đắt hơn). thien bỏ qua phần tóm tắt 3 câu. Xem lại: sau 10 dòng mới trong `docs/usage-log.md` hoặc 2026-12-01
 
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |

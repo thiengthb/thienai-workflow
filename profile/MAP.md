@@ -32,7 +32,7 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 ## Một việc đi qua những đâu
 | Luồng | Bắt đầu | Công cụ | Đầu ra | Cập nhật |
 |---|---|---|---|---|
-| Buổi học | `learning/README.md` "Trạng thái" | `artifacts/lesson/make-lesson.mjs` → Artifact | trang học, `sessions/` trong db trang | `artifacts/lesson/after-lesson.mjs --write`, nhật ký môn, `cards.md`, `roadmap.md`, "Trạng thái", PR; `--check <id>` ra toàn ✓ |
+| Buổi học | gói buổi của `artifacts/lesson/prepare-lesson.mjs` | `artifacts/lesson/make-lesson.mjs` → Artifact | trang học, `sessions/` trong db trang | `artifacts/lesson/after-lesson.mjs --write`, nhật ký môn, `cards.md`, `roadmap.md`, "Trạng thái", PR; `--check <id>` ra toàn ✓ |
 | Ôn thẻ | `learning/cards.md` | `artifacts/review/make-review.mjs` → link cố định | kết quả trong db trang | `artifacts/review/apply-review.mjs`, `usage.md` |
 | Đổi nick giữa chừng | sổ ở nhánh `handoff` | `templates/handoff.mjs` | file `tasks/<việc>.md` | sổ sau mỗi bước, `done` khi PR merge |
 | Setup nick và project | `profile/SETUP.md`, sổ nick `profile/ACCOUNTS.md` | `templates/setup-check.mjs` | danh sách việc thien bấm | `SETUP.md` qua PR khi đổi chuẩn |
