@@ -42,7 +42,7 @@ Bảng học tuần (số buổi mỗi tuần, thẻ đến hạn, chỗ còn v�
 
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
-| Frontend 9 (buổi mốc, so sánh mù) | 2026-11-17 | Frontend | **Chiến tranh 7**, rồi BA 5 |
+| Chiến tranh 7 (bất ngờ và lừa địch, giấu pháo ở Điện Biên Phủ) | 2026-11-17 | Chiến tranh | **BA 5**, rồi Frontend 10 |
 
 ## Khung một buổi, chung cho mọi môn
 

@@ -17,11 +17,11 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | F3 | Frontend | Ngoài cỡ chữ, màu và thứ tự, còn hai cách nào để tạo bậc chữ? | [bài 2](frontend/lessons/02-type-hierarchy.md) | 3 | 2026-11-24 |
 | F4 | Frontend | Trong nhóm các dòng cách nhau 8px. Giữa hai nhóm nên bao nhiêu? | [bài 3](frontend/lessons/03-spacing-groups.md) | 3 | 2026-11-24 |
 | F5 | Frontend | Vì sao nhiều design system chỉ cho dùng 4, 8, 12, 16, 24, 32? | [bài 3](frontend/lessons/03-spacing-groups.md) | 3 | 2026-11-24 |
-| F6 | Frontend | Màn thanh toán có hai nút đặc "Thanh toán" và "Thêm mã giảm giá". Sửa thế nào? | [bài 4](frontend/lessons/04-fix-a-whole-screen.md) | 2 | 2026-11-15 |
-| B1 | BA | Khách nhờ "thêm nút xuất Excel". Câu nào nên hỏi đầu tiên? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 2 | 2026-11-15 |
+| F6 | Frontend | Màn thanh toán có hai nút đặc "Thanh toán" và "Thêm mã giảm giá". Sửa thế nào? | [bài 4](frontend/lessons/04-fix-a-whole-screen.md) | 3 | 2026-11-24 |
+| B1 | BA | Khách nhờ "thêm nút xuất Excel". Câu nào nên hỏi đầu tiên? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 3 | 2026-11-24 |
 | B2 | BA | "Thêm thông báo đẩy lúc 8 giờ tối" là nhu cầu hay giải pháp? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 1 | 2026-11-16 |
 | B3 | BA | Vì sao không nên làm ngay đúng thứ được nhờ? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 2 | 2026-11-19 |
-| F7 | Frontend | Thanh đầu trang cùng màu đặc với nút chính thì sao? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 2 | 2026-11-15 |
+| F7 | Frontend | Thanh đầu trang cùng màu đặc với nút chính thì sao? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 3 | 2026-11-24 |
 | F8 | Frontend | Thẻ trạng thái "Đã thanh toán" nên đặc hay nhạt, vì sao? | [bài 5](frontend/lessons/05-one-accent-colour.md) | 2 | 2026-11-18 |
 | W4 | Chiến tranh | Theo Tống sử, vì sao Quách Quỳ rút quân năm 1077? | [bài 2](war/lessons/02-ly-song-war-1075-1077.md) | 2 | 2026-11-15 |
 | W5 | Chiến tranh | Quảng Nguyên về lại với Đại Việt bằng cách nào? | [bài 2](war/lessons/02-ly-song-war-1075-1077.md) | 2 | 2026-11-19 |
@@ -42,6 +42,8 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | W3 | Chiến tranh | Toàn thư và sử Trung Quốc chép khác nhau thế nào về cái chết của Hoằng Tháo? | [bài 1](war/lessons/01-bach-dang-938.md) | 2 | 2026-11-20 |
 | W17 | Chiến tranh | Him Lam là cụm rất kiên cố. Vì sao Đại tướng Võ Nguyên Giáp vẫn chọn đánh nó đầu tiên ở Điện Biên Phủ? | [bài 6](war/lessons/06-weak-point-dien-bien-phu.md) | 1 | 2026-11-18 |
 | W18 | Chiến tranh | Đợt 1 Điện Biên Phủ (13–17/3/1954) đánh những cứ điểm nào, và mở ra được gì? | [bài 6](war/lessons/06-weak-point-dien-bien-phu.md) | 1 | 2026-11-18 |
+| W19 | Chiến tranh | Ở Điện Biên Phủ, sao Đại tướng không đặt pháo hẳn sau núi cho an toàn? | [bài 7](war/lessons/07-surprise-hidden-guns-dien-bien-phu.md) | 1 | 2026-11-18 |
+| W20 | Chiến tranh | Pháp tính "pháo ta bắn, lộ chỗ, bị diệt". Hầm sâu và trận địa giả đánh vào bước nào? | [bài 7](war/lessons/07-surprise-hidden-guns-dien-bien-phu.md) | 1 | 2026-11-18 |
 | B4 | BA | Hỏi thế nào để biết người dùng đã xử lý việc quên ôn ra sao? | [BA bài 2](ba/lessons/02-user-interviews.md) | 2 | 2026-11-20 |
 | B5 | BA | Vì sao tránh hỏi “bạn cũng thấy thông báo là tốt nhất đúng không?” | [BA bài 2](ba/lessons/02-user-interviews.md) | 2 | 2026-11-20 |
 | B6 | BA | Người dùng vừa kể bỏ ôn 4 ngày. Hỏi tiếp “có nút ôn nhanh 5 phút thì bạn dùng không?” sai ở đâu, và nên hỏi gì? | [BA bài 2](ba/lessons/02-user-interviews.md) | 2 | 2026-11-19 |

@@ -86,8 +86,7 @@ Xong khi: thien xếp xong 10 ý lớn và học được vài ý đầu qua cá
 - [x] Ý 4, hậu cần: đánh chắc cần thêm bao nhiêu, chở bằng gì ở Điện Biên Phủ (2026-11-12, phần 2 trên sa bàn 2026-11-14, [bài](war/lessons/04-logistics-dien-bien-phu.md))
 - [x] Ý 3, địa hình và thời tiết: làm Bình Định vương Lê Lợi chọn chỗ đánh viện binh ở ải Chi Lăng 1427 (buổi 5, 2026-11-15, [bài](war/lessons/05-terrain-chi-lang-1427.md))
 - [x] Ý 5, đánh chỗ yếu: làm Đại tướng Võ Nguyên Giáp chọn chỗ mở màn đợt 1 Điện Biên Phủ (buổi 6, 2026-11-17, [bài](war/lessons/06-weak-point-dien-bien-phu.md))
-- [ ] Ý 5, đánh chỗ yếu tránh chỗ mạnh (buổi 1 mới chạm qua; thien chọn học riêng ngày 2026-11-14)
-- [ ] Ý 6, bất ngờ và lừa địch (buổi 1 mới chạm qua; thien chọn học riêng ngày 2026-11-14)
+- [x] Ý 6, bất ngờ và lừa địch: làm Đại tướng Võ Nguyên Giáp chọn chỗ đặt pháo ở Điện Biên Phủ (buổi 7, 2026-11-17, [bài](war/lessons/07-surprise-hidden-guns-dien-bien-phu.md))
 - [ ] Ý 7, tinh thần
 - [ ] Ý 8, vũ khí và công nghệ
 - [ ] Ý 9, sương mù chiến tranh
