@@ -13,3 +13,9 @@ Cột "Đã quen" để thien tự đánh dấu. Từ đã quen thì AI chỉ vi
 | component | một mảnh giao diện viết một lần, dùng lại nhiều chỗ | 08/11/2026, vòng chấm giọng văn | |
 | state | dữ liệu một component đang giữ, đổi thì giao diện đổi theo | 08/11/2026, vòng chấm giọng văn | |
 | re-render | vẽ lại giao diện khi dữ liệu đổi | 08/11/2026, vòng chấm giọng văn | |
+| focal point | chỗ mắt nhìn vào đầu tiên trên một màn (điểm nhấn) | 07/11/2026, Frontend 1 | |
+| visual hierarchy | thứ bậc thị giác: cái gì nhìn thấy trước, cái gì sau | 07/11/2026, Frontend 1 | |
+| proximity | luật gần nhau: thứ đặt gần nhau thì mắt coi là một nhóm | 11/11/2026, Frontend 3 | |
+| design system | bộ quy ước dùng chung của một sản phẩm: màu, chữ, khoảng cách, component | 11/11/2026, Frontend 3 | |
+| WCAG | bộ chuẩn quốc tế về giao diện dễ tiếp cận (độ tương phản, màu không là cách duy nhất mang nghĩa...) | 12/11/2026, Frontend 5 | |
+| user story | một câu ba phần ghi nhu cầu người dùng: ai, muốn gì, để làm gì | 17/11/2026, BA 4 | |

@@ -11,6 +11,7 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 | thien nói hay việc là | Đọc | Chạy | Ghi khi xong |
 |---|---|---|---|
 | Giao việc mới | `profile/PROFILE.md` mục "Nhắc việc dở" | phần sổ bàn giao và nhánh chưa merge đã in bởi `templates/start-session.mjs` (chạy lại nếu đã lâu), danh sách PR | (chưa ghi gì tới khi thien chọn) |
+| thien chê, khen, chọn, sửa câu (góp ý) | bảng "Góp ý của thien đi đâu" dưới | `artifacts/lesson/after-lesson.mjs` (sau buổi học in sẵn câu gu và kiểm từ mới) | file đích theo bảng, trong PR của việc đang làm |
 | Merge PR, xoá nhánh, việc AI được tự làm | `profile/DELEGATION.md` | | dòng `Tự merge theo profile/DELEGATION.md` trong mô tả PR |
 | Xong mục tiêu của chat, hay việc lớn mới trong chat đã xong mục tiêu | `profile/CHATS.md` | skill `explain-usage` chỉ khi có kế hoạch đang đo | một dòng `docs/usage-log.md` khi có đo |
 | "tiếp tục" | `profile/HANDOFF.md`, `profile/ACCOUNTS.md` khi việc do nick khác ghi | `templates/start-session.mjs --claim` (đọc sổ, nhận việc, so nhánh) | sổ bàn giao ở các mốc khó khôi phục |
@@ -39,6 +40,16 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 | Setup nick và project | `profile/SETUP.md`, sổ nick `profile/ACCOUNTS.md` | `templates/setup-check.mjs` | danh sách việc thien bấm | `SETUP.md` qua PR khi đổi chuẩn |
 | Luật chung tới project khác | `templates/AGENTS.template.md` | Action `.github/workflows/sync-agents-md.yml` | PR vào từng repo trong `life/tracked-repos.md` | thien merge ở từng repo |
 | Trang tiến độ | `docs/STATUS.md`, `docs/plans/` | `templates/publish-progress.mjs` | `publish.json` | đăng đè link cũ |
+
+## Góp ý của thien đi đâu
+| thien nói về | File đích | Khi nào ghi |
+|---|---|---|
+| Gu giao diện | `learning/frontend/taste-queue.md`, 2 tuần một PR vào thienui `docs/taste.md` mục "Đang thử" | sau buổi frontend, hay lúc thien chọn bố cục |
+| Câu chữ, từ đã chê, câu mẫu | `profile/VOICE.md` | ngay khi thien sửa câu của AI |
+| Từ tiếng Anh chưa học | `learning/glossary.md` | lần đầu dùng; sau buổi học kiểm bằng `after-lesson --check` |
+| Lỗi trang học | mục "Chưa làm" của `artifacts/it/README.md` (bài frontend, BA); môn khác ghi vào "Buổi tiếp theo" của `learning/<môn>.md` | trong PR sau buổi |
+| Nhịp học, độ dài, kiểu buổi | `learning/<môn>.md` mục "Buổi tiếp theo", `learning/README.md` | sau buổi |
+| AI làm sai | bảng "Lỗi gặp" của kế hoạch đang chạy, không chèn thêm vào luật | ngay khi gặp |
 
 ## Giữ bản đồ này đúng
 - Thêm, đổi tên hay bỏ một file luật, mẫu hay lệnh: sửa bảng ở đây trong cùng PR. CI chạy `.github/scripts/check-links.mjs`, đường dẫn trong file này sai là CI đỏ.

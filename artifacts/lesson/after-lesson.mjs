@@ -9,8 +9,11 @@
 //       learning/<môn>/log.md để file môn chỉ giữ 3 dòng, một dòng vào learning/usage.md, và kết quả 3 thẻ ôn đầu buổi
 //       vào cột Hộp, Hỏi lại của learning/cards.md (đúng lên một hộp, sai về hộp 1; chỉ thẻ đã đến hạn vào ngày học, nên chạy lại không lên hai lần).
 //       Phần còn lại (thẻ, Trạng thái, roadmap) AI viết từ nháp.
+//       Nháp còn in góp ý của thien trong buổi và nơi ghi (bảng "Góp ý của thien" trong profile/MAP.md): câu gu của buổi
+//       frontend vào hàng chờ learning/frontend/taste-queue.md, từ mới vào learning/glossary.md.
 //   node artifacts/lesson/after-lesson.mjs --check <lesson-id>
-//       Kiểm đã ghi đủ chưa: dòng nhật ký, file bài, thẻ mới, Trạng thái, roadmap, dòng usage, file môn gọn. Thiếu thì thoát mã 1.
+//       Kiểm đã ghi đủ chưa: dòng nhật ký, file bài, thẻ mới, Trạng thái, roadmap, dòng usage, file môn gọn, dòng "Từ mới:"
+//       trong file bài và các từ đó đã có trong learning/glossary.md. Thiếu thì thoát mã 1.
 //   node artifacts/lesson/after-lesson.mjs --check-all
 //       CI: mọi bài trong learning/<môn>/lessons/ đều có dòng nhật ký, có thẻ, có trong roadmap; file môn nào cũng gọn
 //       (tối đa 3 dòng nhật ký, 6 dòng chỗ còn vướng, không còn chỗ <…> chưa viết).
@@ -43,6 +46,34 @@ const addDays = (d, n) => new Date(Date.parse(d + 'T00:00:00Z') + n * 864e5).toI
 export const LOG = 'Nhật ký', KEEP_LOG = 3, MAX_STUCK = 6;
 /** Chỗ AI chưa viết trong dòng nhật ký nháp. */
 export const PLACEHOLDER = /<ý chính>|<tự nói lại[^>]*>/;
+
+// Đường chảy cho góp ý (docs/plans/2026-11-17-action-gaps.md, đợt 2): từ mới của buổi phải vào bảng thuật ngữ,
+// câu gu của buổi frontend vào hàng chờ, 2 tuần một lần gom thành một PR vào thienui docs/taste.md (thien duyệt từng dòng).
+export const GLOSSARY = 'learning/glossary.md', TASTE_QUEUE = 'learning/frontend/taste-queue.md';
+const NONE = /^(không có|không|chưa có|-)\.?$/i;
+
+/** Dòng "Từ mới: a, b" trong file bài: null khi chưa có dòng, [] khi ghi "không có", còn lại là danh sách từ. */
+export function newWords(md) {
+  const m = lf(md || '').match(/^\s*(?:[-*]\s*)?(?:\*\*)?Từ mới:?(?:\*\*)?:?\s*(.*)$/m);
+  if (!m) return null;
+  const v = m[1].replace(/[`*_]/g, '').trim();
+  if (!v || NONE.test(v)) return [];
+  return v.split(/\s*[,;]\s*/).map((w) => w.replace(/\.$/, '').replace(/\s*\(.*\)\s*$/, '').trim()).filter(Boolean);
+}
+
+/** Các từ trong cột đầu của bảng thuật ngữ, viết thường; "PR (pull request)" cho cả "pr" lẫn "pull request". */
+export function glossaryTerms(md) {
+  const out = new Set();
+  for (const m of lf(md || '').matchAll(/^\| ([^|]+?) \|/gm)) {
+    const cell = m[1].trim();
+    if (/^(Từ|-+)$/.test(cell)) continue;
+    const low = cell.toLowerCase();
+    out.add(low.replace(/\s*\(.*\)\s*$/, ''));
+    const inner = low.match(/\(([^)]+)\)/);
+    if (inner) out.add(inner[1].trim());
+  }
+  return out;
+}
 // Một dòng nhật ký bắt đầu bằng số buổi: "| 4 |", cả "| 4, phần 2 |" (buổi học tiếp trong ngày khác).
 const ROW = /^\| \d+(?:[^|\d][^|]*)? \|/;
 const rowN = (l) => +((l.match(/^\| (\d+)/) || [])[1] ?? NaN);
@@ -242,7 +273,11 @@ export function draft({ R, html = '', subject, lessonFile = '', cards = '', quiz
     'Claude nhận xét, chấm': teachAi.length, 'Nói thay gõ': R.spoke || 0,
     'Xem Claude làm': hasStage ? demos.length : '-', 'Nghe': R.listened || 0, 'Tình huống thêm': isWar ? '-' : extra.length, 'Ghi chú': R.sawMineBeforeWriting ? 'xem bản mẫu trước khi viết' : '-',
   };
-  return { date, n: lid.n, facts, stuck, others, cardRows, logRow, usage, statusRow: `| ${subject?.name || '?'} ${lid.n} (<tên buổi>) | ${date} | ${subject?.name || '?'} | **<buổi kế tiếp theo vòng xoay>** |` };
+  // Góp ý của thien trong buổi: câu gu (buổi frontend) vào hàng chờ thienui, ghi thêm thì theo bảng trong profile/MAP.md.
+  const said = (v) => (Array.isArray(v) ? v : [v]).map((x) => String(x || '').trim()).filter(Boolean);
+  const taste = subject?.file === 'frontend.md' ? [...said(R.taste), ...said(R.notice)] : said(R.taste);
+  const notes = said(fb.note);
+  return { date, n: lid.n, facts, stuck, others, cardRows, logRow, usage, taste, notes, statusRow: `| ${subject?.name || '?'} ${lid.n} (<tên buổi>) | ${date} | ${subject?.name || '?'} | **<buổi kế tiếp theo vòng xoay>** |` };
 }
 
 export function draftText(d, { subjectFile = '' } = {}) {
@@ -254,6 +289,10 @@ export function draftText(d, { subjectFile = '' } = {}) {
     ...Object.entries(d.others || {}).flatMap(([dir, ls]) => [`## ${STUCK} của môn khác: learning/${dir}.md (câu ôn sai; --write đã thêm sẵn)`, ...ls.map((s) => '- ' + s), '']),
     '## Thẻ mới (nháp, viết lại thành câu tự trả lời được, 2–3 thẻ, thêm vào learning/cards.md)', ...d.cardRows, '',
     '## Dòng "Trạng thái" (learning/README.md)', d.statusRow, '',
+    '## Góp ý của thien trong buổi (đi đâu: bảng "Góp ý của thien" trong profile/MAP.md)',
+    ...(d.taste?.length ? [`Câu gu (chép câu nào là gu vào ${TASTE_QUEUE}; 2 tuần một lần gom thành một PR vào thienui docs/taste.md mục "Đang thử", thien duyệt từng dòng):`, ...d.taste.map((t) => '- ' + clip(t, 300))] : ['- Không có câu gu trong bản lưu.']),
+    ...(d.notes?.length ? ['Ghi thêm của thien (lỗi trang, nhịp học, câu chữ: ghi vào file đích theo bảng):', ...d.notes.map((t) => '- ' + clip(t, 300))] : []),
+    `- Từ mới: file bài cần dòng "Từ mới: a, b" (hay "Từ mới: không có"); từ nào chưa có thì thêm vào ${GLOSSARY}. --check kiểm cả hai.`, '',
     '## Còn phải làm', '- Viết phần <…> của dòng nhật ký, gọn mục "Chỗ còn vướng" (tối đa 6 dòng).',
     '- Lưu bài vào learning/<môn>/lessons/, tick chặng và thêm link trong learning/roadmap.md, viết mục "Buổi tiếp theo".',
     `- Kiểm: node artifacts/lesson/after-lesson.mjs --check <lesson-id>`, '',
@@ -288,6 +327,10 @@ export function checkAfter(root, dir, n, { strict = true } = {}) {
     const own = lesson ? parseCards(cards).filter((c) => c.link === `${dir}/lessons/${lesson}`).map((c) => c.id) : [];
     const noQuiz = quiz ? own.filter((id) => !validQuiz(quiz[id])) : own;
     r.push({ ok: !!quiz && !noQuiz.length, what: quiz ? `câu trắc nghiệm trong learning/${QUIZ_FILE} cho mọi thẻ của bài này${noQuiz.length ? ` (thiếu ${noQuiz.join(', ')})` : ''}` : `learning/${QUIZ_FILE} là JSON hợp lệ` });
+    const words = lesson ? newWords(read(`learning/${dir}/lessons/${lesson}`)) : null;
+    const terms = glossaryTerms(read(GLOSSARY)), missing = (words || []).filter((w) => !terms.has(w.toLowerCase()));
+    r.push({ ok: words !== null, what: `file bài có dòng "Từ mới:" (liệt kê từ, hay "Từ mới: không có")` });
+    r.push({ ok: words !== null && !missing.length, what: `từ mới của bài đã có trong ${GLOSSARY}${missing.length ? ` (thiếu: ${missing.join(', ')})` : ''}` });
   }
   return r;
 }

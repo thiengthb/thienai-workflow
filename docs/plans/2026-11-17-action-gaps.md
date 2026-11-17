@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-17 · Cập nhật: 2026-11-17 �
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 1 đã merge (PR #104); đang kiểm ở 3 chat kế tiếp.
-- Còn thiếu: kiểm đợt 1 ở 3 chat kế tiếp; đợt 2 cùng buổi học kế tiếp; đợt 3 ở mốc 2026-12-01.
-- thien cần làm: không có. Đợt 2 làm cùng buổi học kế tiếp.
+- Đang ở: đợt 1 đã merge (PR #104), đang kiểm ở 3 chat kế tiếp. Đợt 2: lệnh, bảng file đích, bù thuật ngữ đã xong (PR đợt 2, chờ merge); hàng chờ gu có 5 dòng bù chờ thien duyệt; kiểm thật ở PR sau buổi Chiến tranh 7.
+- Còn thiếu: kiểm đợt 1 ở 3 chat kế tiếp; đợt 2: thien duyệt hàng chờ gu rồi PR vào thienui, sửa lỗi tên trục trước BA 5, PR sau buổi Chiến tranh 7 qua `--check`; đợt 3 ở mốc 2026-12-01.
+- thien cần làm: duyệt 5 dòng trong `learning/frontend/taste-queue.md` (giữ, sửa hay bỏ).
 
 ## Mục tiêu
 Những gì thien nói với AI (chê, khen, chọn, giao việc) đi tới đúng file và được làm, mà thien không phải nhắc lại hay duyệt thêm.
@@ -42,17 +42,17 @@ Xong khi: thien trả lời 4 câu hỏi của báo cáo và PR #102 đã merge.
 
 ### 1. Ủy quyền, nhận việc, báo cáo
 Xong khi: ở 3 chat kế tiếp có PR thuộc dòng đầu của `profile/DELEGATION.md`, thien không phải nhắn "merge giúp mình"; tin cuối của mỗi chat có đủ kết quả, việc thien cần làm, việc tiếp theo; thien đọc bộ tình huống dưới thấy mỗi ca ra đúng một hành vi.
-- [ ] `profile/DELEGATION.md`; `AGENTS.md` mục Sửa repo trỏ tới nó; một dòng ở `profile/MAP.md` (chờ merge PR này)
-- [ ] `profile/CHATS.md` mục Đầu chat: dòng mục tiêu ba phần cho việc nhiều bước, chỉ hỏi lại khi câu trả lời đổi thứ sẽ ra (chờ merge PR này)
-- [ ] `profile/VOICE.md` mục "Báo cáo khi xong việc"; `PROFILE.md` (bản tóm tắt 2 phút) và `skills/start-project/STEPS.md` trỏ tới mục đó (chờ merge PR này)
+- [x] `profile/DELEGATION.md`; `AGENTS.md` mục Sửa repo trỏ tới nó; một dòng ở `profile/MAP.md` (PR #104)
+- [x] `profile/CHATS.md` mục Đầu chat: dòng mục tiêu ba phần cho việc nhiều bước, chỉ hỏi lại khi câu trả lời đổi thứ sẽ ra (PR #104)
+- [x] `profile/VOICE.md` mục "Báo cáo khi xong việc"; `PROFILE.md` (bản tóm tắt 2 phút) và `skills/start-project/STEPS.md` trỏ tới mục đó (PR #104)
 - [x] thien chọn câu mẫu A (2026-11-17), đã thêm vào bảng câu mẫu của `VOICE.md` (PR #104)
 - [ ] Kiểm ở 3 chat kế tiếp
 
 ### 2. Đường chảy cho góp ý (cùng buổi học kế tiếp)
 Xong khi: PR sau buổi kế tiếp có dòng bảng thuật ngữ (hay "không có từ mới"), thiếu thì `after-lesson --check` báo; lệnh in câu gu của buổi và nơi ghi (hàng chờ gom 2 tuần một PR vào thienui, không có lệnh kiểm); thien mở `taste.md` thấy mục "Đang thử" có gu từ các buổi frontend.
-- [ ] `after-lesson.mjs`: in câu gu của buổi và nơi ghi; `--check` đòi file bài có dòng "Từ mới:" và các từ đó có trong `glossary.md`. Ghi một dòng vào "Đã đổi" của [`2026-11-15-lean-learning.md`](2026-11-15-lean-learning.md) để checkpoint 4 ở đó giữ phần kiểm này
-- [ ] `learning/README.md` mục Sau buổi thêm bước "từ mới vào bảng thuật ngữ, câu gu vào hàng chờ thienui"; `profile/MAP.md` thêm dòng "Góp ý của thien" trỏ bảng file đích
-- [ ] Bù một lần: từ mới của 18 buổi vào `glossary.md`; gu từ nhật ký frontend 1–9 vào `taste.md` mục "Đang thử" qua một PR vào thienui (thien duyệt từng dòng)
+- [ ] `after-lesson.mjs`: in câu gu của buổi và nơi ghi; `--check` đòi file bài có dòng "Từ mới:" và các từ đó có trong `glossary.md`. Ghi một dòng vào "Đã đổi" của [`2026-11-15-lean-learning.md`](2026-11-15-lean-learning.md) để checkpoint 4 ở đó giữ phần kiểm này (PR đợt 2, chờ merge; test trong `.github/scripts/after-lesson.test.mjs`)
+- [ ] `learning/README.md` mục Sau buổi thêm bước "từ mới vào bảng thuật ngữ, câu gu vào hàng chờ thienui"; `profile/MAP.md` thêm dòng "Góp ý của thien" trỏ bảng file đích (PR đợt 2, chờ merge; bảng nằm ngay trong `MAP.md`)
+- [ ] Bù một lần: từ mới của 18 buổi vào `glossary.md` (6 từ, PR đợt 2); gu từ nhật ký frontend 1–9 vào `taste.md` mục "Đang thử" qua một PR vào thienui (thien duyệt từng dòng): 5 dòng đã vào `learning/frontend/taste-queue.md`, chờ thien duyệt; buổi 6–9 không có câu gu trong file bài
 - [ ] Trước buổi BA 5: sửa lỗi tên trục đè thẻ ở lưới 2×2 (PR kit riêng)
 
 ### 3. Cho luật "mỗi milestone" một ngày thật (mốc 2026-12-01)
@@ -77,6 +77,8 @@ Chỗ dễ sa lầy: bảng ủy quyền phình thành danh sách từng trườ
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-17 | Bảng file đích đặt ngay trong `profile/MAP.md` (mục "Góp ý của thien đi đâu"); câu gu chờ ở `learning/frontend/taste-queue.md` | Không thêm file sổ mới cho bảng; hàng chờ cần một chỗ trong repo này vì thienui là repo khác, PR gom 2 tuần một lần |
+| 2026-11-17 | Đợt 2 làm sau khi PR #105 merge, sửa chồng lên phần ôn tự sinh của #105 | #105 cũng sửa `after-lesson.mjs` và `learning/README.md`; thien chọn merge #105 trước |
 | 2026-11-17 | Dòng mục tiêu ba phần chỉ cho project bản cũ; mẫu báo cáo là nội dung phải có, không ép ba mục ở bản beta; bảng ủy quyền chỉ cho repo này; đợt 2 ghi một dòng vào kế hoạch học nhẹ dần | Ba chỗ chỉnh của nick tnt628 ở PR #103 (mục "Phối hợp với kế hoạch song song" của kế hoạch review) |
 | 2026-11-17 | Bộ tình huống của đợt 1 để trong file này, không thêm vào kế hoạch review | File kế hoạch review đang được sửa ở PR #103 |
 | 2026-11-17 | Lịch nhắc thứ Hai, thứ Năm: không còn là câu hỏi, chỉ cần ghi vào `ACCOUNTS.md` ở đợt 3 | Nick tnt628 xác nhận lịch nằm ở nick đó, vẫn chạy (lần gần nhất 2026-11-16) |
@@ -84,4 +86,5 @@ Chỗ dễ sa lầy: bảng ủy quyền phình thành danh sách từng trườ
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
 |---|---|---|
+| 2026-11-17 | Gắn repo quyền push lại bị bộ duyệt quyền chặn ở chat Chiến tranh 7, dù project instructions có tên repo | thien nhắn cho phép, gắn lại |
 | 2026-11-17 | Lần gắn repo đầu bị bộ duyệt quyền chặn vì tin mở đầu không có tên repo; báo cáo nháp đầu dựa trên bản đồng bộ knowledge chậm hơn main khoảng 2 ngày | thien cho phép gắn repo; viết lại báo cáo trên main `e83e308` |
