@@ -71,8 +71,9 @@ export function matchAnswer(question, checks) {
 
 /** Đoạn bài để Claude chấm: các mục trước "Tự kiểm", bỏ mục "Nguồn" và "Bạn đã nói", tối đa n ký tự. */
 export function lessonExcerpt(md, n = 1600) {
-  const head = md.search(/^## /m);   // bỏ tiêu đề và dòng ngày học, link trang ở đầu file
-  const body = md.slice(head < 0 ? 0 : head).split(/^## Tự kiểm/m)[0];
+  // Bỏ tiêu đề và dòng ngày học, link trang ở đầu file. Không cắt tới mục "## " đầu tiên: bài không có mục nào
+  // trước "Tự kiểm" (BA 3, 4, 5) thì cắt vậy ra đoạn rỗng (CI đỏ ở PR #111, thẻ B8).
+  const body = md.replace(/^# .*$/m, '').replace(/^Học ngày.*$/m, '').split(/^## Tự kiểm/m)[0];
   return plain(body.replace(/^##\s+/gm, '')).slice(0, n);
 }
 
