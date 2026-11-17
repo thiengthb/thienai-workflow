@@ -7,6 +7,7 @@
 //   repo không đọc được thì vẫn có thẻ kèm lý do. Link trang: dòng "Trang tổng quan" trong life/tracked-repos.md.
 //   Lấy luôn PR đang mở của từng repo (gh, không có thì API công khai) để mục "Đang chờ bạn" xếp thứ tự merge.
 // repo: tiến độ riêng repo đang đứng (thư mục hiện tại), link ở dòng "Trang tiến độ:" của docs/STATUS.md.
+//   thienai-workflow không có trang riêng (dòng đó trỏ về trang tổng quan), lệnh dừng và bảo chạy overview.
 // roadmap: lộ trình học learning/roadmap.md, link ở dòng "Trang để xem trên điện thoại:" của file đó.
 // --new: bỏ link, đăng thành trang mới (khi trang cũ thuộc tài khoản Claude khác, đăng đè sẽ bị từ chối).
 import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, realpathSync } from 'node:fs';
@@ -84,7 +85,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   if (kind === 'overview') {
     const md = read(join(root, 'life/tracked-repos.md'));
     const others = trackedRepos(md).filter((r) => r !== SELF);
-    pageArgs = ['--title', 'Tổng quan tiến độ', '--prs', await prsFile([SELF, ...others], out), `${root}=${SELF}`];
+    pageArgs = ['--title', 'Tổng quan tiến độ', '--prs', await prsFile([SELF, ...others], out), '--links', `${join(root, 'README.md')}=${SELF}:README.md`, `${root}=${SELF}`];
     for (const repo of others) {
       const dir = join(out, 'repos', basename(repo));
       const why = clone(repo, dir);
@@ -97,6 +98,12 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     const dir = process.cwd(), repo = originRepo(dir) || SELF;
     pageArgs = ['--title', `Tiến độ ${repo.split('/')[1]}`, '--prs', await prsFile([repo], out), `${dir}=${repo}`];
     url = linkAfter(read(join(dir, 'docs/STATUS.md')), 'Trang tiến độ:');
+    // Repo này không có trang riêng: dòng "Trang tiến độ:" trỏ về trang tổng quan (tab thienai-workflow ở đó),
+    // nên đăng trang một repo lên link đó sẽ đè mất trang tổng quan.
+    if (url && url === linkAfter(read(join(root, 'life/tracked-repos.md')), 'Trang tổng quan')) {
+      console.error('Trang tiến độ của repo này là trang tổng quan. Chạy: node templates/publish-progress.mjs overview');
+      process.exit(1);
+    }
     description = `Tiến độ repo ${repo}`;
   } else if (kind === 'roadmap') {
     const file = join(root, 'learning/roadmap.md');

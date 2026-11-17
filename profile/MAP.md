@@ -39,7 +39,7 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 | Đổi nick giữa chừng | sổ ở nhánh `handoff` | `templates/handoff.mjs` | file `tasks/<việc>.md` | sổ ở các mốc, `done` khi PR merge |
 | Setup nick và project | `profile/SETUP.md`, sổ nick `profile/ACCOUNTS.md` | `templates/setup-check.mjs` | danh sách việc thien bấm | `SETUP.md` qua PR khi đổi chuẩn |
 | Luật chung tới project khác | `templates/AGENTS.template.md` | Action `.github/workflows/sync-agents-md.yml` | PR vào từng repo trong `life/tracked-repos.md` | thien merge ở từng repo |
-| Trang tiến độ | `docs/STATUS.md`, `docs/plans/` | `templates/publish-progress.mjs` | `publish.json` | đăng đè link cũ |
+| Trang tiến độ | `docs/STATUS.md`, `docs/plans/`, mục "Mở nhanh" của `README.md` | `templates/publish-progress.mjs` | `publish.json` | đăng đè link cũ |
 
 ## Góp ý của thien đi đâu
 | thien nói về | File đích | Khi nào ghi |

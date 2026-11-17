@@ -11,7 +11,7 @@ const tracked = readFileSync(new URL('life/tracked-repos.md', root), 'utf8');
 assert.ok(trackedRepos(tracked).includes('thiengthb/sakubun'), 'reads repo names from the table');
 assert.match(linkAfter(tracked, 'Trang tổng quan'), /^https:\/\/claude\.ai\/artifact\/\w+$/, 'overview link must stay findable');
 assert.match(linkAfter(readFileSync(new URL('learning/roadmap.md', root), 'utf8'), 'Trang để xem trên điện thoại:'), /^https:\/\/claude\.ai\/artifact\/\w+$/, 'roadmap link must stay findable');
-assert.match(linkAfter(readFileSync(new URL('docs/STATUS.md', root), 'utf8'), 'Trang tiến độ:'), /^https:\/\/claude\.ai\/artifact\/\w+$/, 'STATUS page link must stay findable');
+assert.equal(linkAfter(readFileSync(new URL('docs/STATUS.md', root), 'utf8'), 'Trang tiến độ:'), linkAfter(tracked, 'Trang tổng quan'), 'this repo has no page of its own: STATUS points at the overview (merged 2026-11-17)');
 assert.equal(linkAfter('a https://claude.ai/artifact/X1 · Trang tiến độ: https://claude.ai/artifact/Y2', 'Trang tiến độ:'), 'https://claude.ai/artifact/Y2', 'the link after the marker, not the first on the line');
 assert.equal(linkAfter('nothing', 'Trang'), '');
 
