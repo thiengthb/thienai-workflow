@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Điều kiện hoàn thành</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style id="kit-css"></style>
+<style id="lesson-css"></style>
+<style id="it-css"></style>
+<style>
+.story-line { font-size: 15px; line-height: 1.55; }
+.story-line b { color: var(--accent-ink); }
+.ac { margin: 6px 0 0; padding-left: 20px; }
+.ac li { margin: 6px 0; line-height: 1.5; }
+.gwt b { color: var(--accent-ink); }
+.src { font-size: 12.5px; line-height: 1.9; }
+.src a { display: inline-block; padding: 5px 0; }
+</style>
+</head>
+<body>
+<!-- BA 5: điều kiện hoàn thành (acceptance criteria). Nối từ story của Hà ở BA 4 (learning/ba.md, "Buổi tiếp theo").
+     Bảng 2×2 có trục: Kiểm được (ngang) × Bám phần "để" (dọc). Ô chính z2 = trên phải. Thẻ "tieng" ẩn, lộ ra khi hỏi Hà về một tối cụ thể. -->
+<script type="application/json" id="lesson">{ "id": "ba-05", "subject": "BA", "title": "Điều kiện hoàn thành" }</script>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>BA · Điều kiện hoàn thành</span><span id="cnt">1/9</span></div><div class="bar"><span id="bar"></span></div></div>
+
+  <div id="stage">
+    <div class="pane board" data-pane="ac" data-hear="3"
+      data-answer='{"dep":"z3","choi":"z1","nut":"z4","mau":"z4","sang":"z2","tieng":"z2","thu":"z2"}'>
+      <div class="bd-area">
+        <div class="zones grid2">
+          <button class="zone" type="button" data-z="z1" data-reset><span>Viết lại cho rõ</span></button>
+          <button class="zone key" type="button" data-z="z2" data-reset><span>Dùng làm điều kiện</span></button>
+          <button class="zone" type="button" data-z="z3" data-reset><span>Bỏ</span></button>
+          <button class="zone" type="button" data-z="z4" data-reset><span>Cách làm, để sau</span></button>
+          <span class="axis y">Bám phần "để" ↑</span><span class="axis x">Kiểm được →</span>
+        </div>
+        <div class="tray"><span class="label">Các điều nhóm đề xuất</span></div>
+        <button class="bd-card" type="button" data-c="choi" style="--c:#7c3aed"
+          data-say="Chép thẳng từ story: &quot;màn không chói&quot;."
+          data-why="Đúng điều Hà cần, nhưng &quot;không chói&quot; mỗi người hiểu một kiểu. Giữ ý, viết lại thành việc ai thử cũng ra cùng kết quả."
+          data-react-z2="Nghiệm thu: Nam bảo hết chói rồi, Hà bảo vẫn chói. Hai bên cãi nhau mà không ai chứng minh được."
+          data-react-z3="Bỏ tôi là bỏ đúng điều Hà cần. Đừng bỏ, viết lại cho đo được."
+          data-react-z4="Tôi không phải cách làm. Tôi là điều Hà cần, chỉ là còn mơ hồ."><i>1</i>Màn không chói</button>
+        <button class="bd-card" type="button" data-c="dep" style="--c:#a16207"
+          data-say="Một bạn trong nhóm góp: &quot;Coi là xong khi app đẹp hơn ban đêm.&quot;"
+          data-why="&quot;Đẹp&quot; không đo được, mà Hà cũng không nhờ app đẹp hơn. Bỏ."
+          data-react-z2="Nghiệm thu: cả nhóm thấy đẹp. Hà vẫn tắt máy giữa chừng vì màn vẫn chói."
+          data-react-z1="Viết lại thế nào thì &quot;đẹp&quot; vẫn không phải chuyện con Hà thức hay ngủ."><i>2</i>App đẹp hơn ban đêm</button>
+        <button class="bd-card" type="button" data-c="nut" style="--c:#dc2626"
+          data-say="Nam: &quot;Có nút chế độ tối trong Cài đặt là xong.&quot;"
+          data-why="Kiểm được (có nút hay không), nhưng đó là một cách làm. Có nút mà độ sáng máy để tối đa thì Hà vẫn thấy chói."
+          data-react-z2="Nhóm làm xong nút, test qua. Tối đó Hà vẫn tắt máy: màn để sáng hết cỡ, và tiếng &quot;ting&quot; làm con giật mình."><i>3</i>Có nút chế độ tối trong Cài đặt</button>
+        <button class="bd-card" type="button" data-c="mau" style="--c:#475569"
+          data-say="Bạn frontend: &quot;Điều kiện: nền màu #121212.&quot;"
+          data-why="Đo được, nhưng là chi tiết làm. Nền tối mà độ sáng máy để tối đa thì vẫn chói, và Hà đọc cũng không biết có đúng ý mình không."
+          data-react-z2="Test qua vì nền đúng mã màu. Hà không biết #121212 là gì, và vẫn thấy chói."><i>4</i>Nền màu #121212</button>
+        <button class="bd-card" type="button" data-c="sang" style="--c:#2563eb"
+          data-say="Ghi từ lời Hà: &quot;Tối nào chị cũng phải kéo độ sáng xuống, mà hay quên.&quot;"
+          data-why="Có giờ, có mức, ai thử cũng ra cùng kết quả, và nó bám thẳng chuyện màn chói làm con thức."
+          data-react-z4="Tôi không chốt cách làm: tự hạ sáng bằng cách nào là việc của nhóm. Tôi chỉ nói thế nào là đạt."
+          data-react-z3="Bỏ tôi thì không còn điều nào nói chuyện chói mà đo được."><i>5</i>Mở app sau 22 giờ: độ sáng tự hạ về mức thấp nhất, Hà không phải chỉnh</button>
+        <button class="bd-card" type="button" data-c="thu" style="--c:#0f766e"
+          data-say="Ghi từ lời Hà: &quot;Bài 15 phút mà chưa xong.&quot;"
+          data-why="Đây là phép thử với chính người dùng, đo đúng phần &quot;để&quot;. Máy qua hết mà Hà vẫn tắt máy giữa chừng thì chưa xong."
+          data-react-z4="Tôi không phải cách làm. Tôi là phép thử cuối cùng: Hà làm hết bài hay không."
+          data-react-z3="Bỏ tôi thì nhóm làm đúng hết điều kiện mà vẫn không biết con Hà có thức không."><i>6</i>Hà dùng thử 3 tối, tối nào cũng làm hết bài 15 phút, không tắt máy giữa chừng</button>
+        <button class="bd-card" type="button" data-c="tieng" data-hidden style="--c:#be185d"
+          data-say="Hà kể: &quot;Trả lời đúng là app kêu ting. Hôm qua con giật mình vì tiếng đó.&quot;"
+          data-why="Story không nhắc tới tiếng, nhưng phần &quot;để&quot; là con không thức. Chỉ hỏi về một tối cụ thể mới lộ ra."
+          data-react-z3="Bỏ tôi thì màn tối hẳn mà con vẫn giật mình vì tiếng ting."
+          data-react-z4="Tôi không phải cách làm. Tôi nói điều phải đạt: sau 22 giờ, không có tiếng."><i>7</i>Sau 22 giờ, app không phát tiếng, không rung</button>
+      </div>
+      <div class="say-bar"></div>
+    </div>
+  </div>
+
+  <!-- 0. Mở bài và giới thiệu ngắn (ý hoàn toàn mới, khung chung bước 3). Chưa giải thích vì sao. -->
+  <section class="step on" data-s="0" data-stage="ac@listen">
+    <h1>Thế nào thì coi là xong?</h1>
+    <p class="small muted">Mô phỏng: Hà và sakubun nối tiếp từ buổi trước. Khoảng 15 phút.</p>
+    <div class="card small">
+      <p><b>Điều kiện hoàn thành</b> (acceptance criteria) là vài dòng đi kèm một user story, nói rõ làm tới đâu thì coi là xong.</p>
+      <p>Ví dụ: story "Là sinh viên, tôi muốn biết lịch thi sớm, để kịp đổi ca làm thêm". Một điều kiện: "Lịch thi hiện trong app ít nhất 14 ngày trước ngày thi."</p>
+      <p>Hôm nay bạn chọn điều kiện cho story của Hà từ buổi trước:</p>
+      <p class="story-line"><b>Là</b> người đi làm, học lúc tối muộn trong phòng tối, <b>tôi muốn</b> học được khi phòng tắt đèn mà màn không chói, <b>để</b> xong bài 15 phút mà con không thức giấc.</p>
+    </div>
+    <p>Nhóm đã góp mấy điều. Bấm từng thẻ để nghe nó từ đâu ra. Nghe ít nhất 3 thẻ.</p>
+    <p class="stage-hint"><span class="pc">Bảng ở bên trái.</span><span class="ph">Bảng ở phía trên.</span></p>
+    <button class="btn primary next" type="button" data-go="1" data-need="heard-ac" disabled>Bắt đầu</button>
+  </section>
+
+  <!-- 1. Ôn trộn 3 thẻ: make-lesson.mjs tự sinh. -->
+  <section class="step" data-s="1" data-part="review" data-auto="cards">
+    <!-- Ôn 3 thẻ: make-lesson.mjs tự sinh lúc dựng từ learning/cards.md và learning/cards-quiz.json. Để trống. -->
+  </section>
+
+  <!-- 2. Nhớ lại: "ai chặn được" lần ba, tình huống khác hẳn IT trường (learning/ba.md, "Buổi tiếp theo"). -->
+  <section class="step" data-s="2" data-part="review">
+    <h2>Nhớ lại BA 3</h2>
+    <div class="card">
+      <p>Nhóm capstone làm app điểm danh. Hội đồng chấm không dùng app, chỉ xuất hiện ở buổi bảo vệ cuối kỳ, nhưng họ quyết định đậu hay rớt. Tìm hiểu hội đồng cần gì vào lúc nào?</p>
+      <div class="q" data-q="recall" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Tuần cuối, lúc chuẩn bị slide bảo vệ</button>
+        <button class="opt" type="button">Ngay từ đầu: đọc tiêu chí chấm, hỏi giảng viên hướng dẫn, vì hội đồng chặn được cả dự án</button>
+        <button class="opt" type="button">Không cần, hội đồng không phải người dùng</button>
+        <p class="why">Xếp theo ai chặn được, không theo lúc họ xuất hiện. Hội đồng tới muộn nhất nhưng quyền lớn nhất, nên tìm hiểu từ đầu.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="3" data-need="recall" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 3. Hỏi Hà về một tối cụ thể: lộ ra thẻ ẩn (tiếng ting). -->
+  <section class="step" data-s="3" data-stage="ac@listen">
+    <h2>Hỏi Hà thêm một câu</h2>
+    <p>Trước khi chốt điều kiện, bạn hỏi Hà câu nào? Hỏi mấy câu cũng được.</p>
+    <div class="ask" data-ask="ha" data-of="ac">
+      <button class="opt" type="button" data-reply="Ừ, chắc vậy. Có chế độ tối là được rồi.">"Chị thấy có chế độ tối là đủ rồi đúng không?"</button>
+      <button class="opt" type="button" data-reply="Tối tối là được, em xem đi.">"Chị muốn màn tối cỡ nào?"</button>
+      <button class="opt" type="button" data-reveal="tieng" data-reply="Tối qua mở app lúc 11 giờ, kéo độ sáng xuống thấp nhất. Làm được 5 câu thì trả lời đúng, app kêu &quot;ting&quot;, con giật mình. Chị tắt máy luôn.">"Chị kể em nghe tối qua, từ lúc mở app tới lúc tắt máy?"</button>
+      <p class="reply" role="status"></p>
+    </div>
+    <button class="btn primary next" type="button" data-go="4" data-need="reveal-tieng" disabled>Tiếp</button>
+  </section>
+
+  <!-- 4. Thử trước: xếp các điều nhóm góp lên lưới, chưa có lý thuyết. -->
+  <section class="step" data-s="4" data-stage="ac">
+    <h2>Chọn điều kiện</h2>
+    <p>Xếp từng thẻ theo hai câu: ai thử cũng ra cùng kết quả không (kiểm được), và có giúp con Hà không thức không (bám phần "để"). Bấm một thẻ, rồi bấm ô.</p>
+    <button class="btn" type="button" data-check="ac" data-need="placed-ac" disabled>Kiểm tra</button>
+    <p class="fb" data-echo="ac" data-same="Khớp hết với bản mẫu."></p>
+    <button class="btn primary next" type="button" data-go="5" data-need="checked-ac" disabled>Tiếp</button>
+  </section>
+
+  <!-- 5. Hiểu sau: bản mẫu trên chính bảng, rồi ý chính. -->
+  <section class="step" data-s="5" data-stage="ac">
+    <h2>Ý chính</h2>
+    <button class="btn" type="button" data-answer-of="ac">Xem bản mẫu</button>
+    <div class="card small">
+      <p>Story của Hà có ba điều kiện:</p>
+      <ol class="ac">
+        <li>Mở app sau 22 giờ: độ sáng tự hạ về mức thấp nhất, Hà không phải chỉnh.</li>
+        <li>Sau 22 giờ, app không phát tiếng, không rung.</li>
+        <li>Hà dùng thử 3 tối, tối nào cũng làm hết bài 15 phút, không tắt máy giữa chừng.</li>
+      </ol>
+    </div>
+    <div class="card small">
+      <p>Một điều kiện tốt qua được hai câu bạn vừa dùng. <b>Kiểm được:</b> ai thử cũng ra cùng một kết quả, nên lúc nghiệm thu không ai cãi. "Màn không chói" thì Nam bảo đạt, Hà bảo chưa. <b>Bám phần "để":</b> đạt nó là tiến gần tới việc con không thức. "Nền #121212" kiểm được nhưng là cách làm: nền tối mà máy để sáng hết cỡ thì vẫn chói.</p>
+      <p class="gwt">Hay viết theo mẫu <b>Khi</b> … <b>làm</b> … <b>thì</b> …: <b>khi</b> mở app sau 22 giờ, <b>làm</b> một bài có câu trả lời đúng, <b>thì</b> app không phát tiếng.</p>
+      <p>Điều kiện tiếng "ting" không có trong story. Nó chỉ lộ ra khi hỏi Hà về một tối cụ thể. Story là lời nhắc để nói chuyện tiếp; điều kiện hoàn thành là chỗ chốt lại cuộc nói chuyện đó.</p>
+    </div>
+    <p class="src muted">Nguồn: story gồm thẻ, cuộc nói chuyện và phần xác nhận (confirmation), tức các phép thử nghiệm thu: Ron Jeffries, <a href="https://ronjeffries.com/xprog/articles/expcardconversationconfirmation/" target="_blank" rel="noopener">Card, Conversation, Confirmation</a> (2001). Mẫu Given/When/Then (Khi/Làm/Thì): Dan North, <a href="https://dannorth.net/introducing-bdd/" target="_blank" rel="noopener">Introducing BDD</a> (2006). Hà và sakubun là mô phỏng.</p>
+    <button class="btn primary next" type="button" data-go="6">Tiếp</button>
+  </section>
+
+  <!-- 6. Câu hỏi nhanh: q1 dùng điều kiện để so các cách với phần "để" (chỗ vướng của BA 4); q2 viết lại cho kiểm được, ở capstone. -->
+  <section class="step" data-s="6">
+    <h2>Câu hỏi nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Nhóm có ba cách cho Hà. Cách nào qua được hai điều kiện máy kiểm (tự hạ sáng, không tiếng sau 22 giờ)?</p>
+      <div class="q" data-q="q1" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Thêm chế độ tối, ít công nhất</button>
+        <button class="opt" type="button">Sau 22 giờ tự hạ độ sáng và tắt tiếng, rồi cho Hà thử 3 tối</button>
+        <button class="opt" type="button">Chế độ nghe: app đọc câu hỏi, Hà trả lời bằng giọng nói</button>
+        <p class="why">Chế độ tối không hạ độ sáng và vẫn kêu "ting". Chế độ nghe thì phát tiếng, đúng thứ làm con thức. So từng cách với điều kiện trước, rồi mới xét cách nào ít công.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Story capstone: "Là giảng viên, tôi muốn gửi danh sách vắng cho phòng đào tạo ngay sau giờ dạy, để không phải gõ lại từ sổ." Điều kiện nào kiểm được?</p>
+      <div class="q" data-q="q2" data-a="2"><p class="status" role="status"></p>
+        <button class="opt" type="button">"Gửi nhanh, tiện lợi"</button>
+        <button class="opt" type="button">"Dùng API REST để gửi"</button>
+        <button class="opt" type="button">"Bấm Gửi thì trong 1 phút phòng đào tạo thấy danh sách, đúng tên và số buổi vắng"</button>
+        <p class="why">"Nhanh, tiện" không đo được. "API REST" là cách làm. Câu thứ ba có thời gian và nội dung cụ thể, ai thử cũng ra cùng kết quả.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="7" data-need="q1 q2" disabled>Tiếp</button>
+  </section>
+
+  <!-- 7. Tự nói lại theo tình huống: bạn test của nhóm hỏi làm sao biết là xong. -->
+  <section class="step" data-s="7">
+    <h2>Trả lời Linh</h2>
+    <div class="say ask-from" data-who="Linh, bạn lo test của nhóm sakubun"><b>Linh nhắn</b>Story của Hà ghi "màn không chói". Mình test kiểu gì để biết là xong?</div>
+    <p>Trả lời Linh 2–3 câu: những điều kiện nào, dựa vào chuyện của Hà.</p>
+    <textarea data-key="teach" data-min="5" placeholder="Linh ơi, ..."></textarea>
+    <button class="btn ghost" type="button" data-show="mine" data-need="teach" disabled>Xem bản của Claude</button>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Linh ơi, "không chói" thì ai test cũng cãi được, nên mình chốt ba điều. Mở app sau 22 giờ thì độ sáng tự về mức thấp nhất, Hà không phải chỉnh. Sau 22 giờ app không kêu, không rung, vì tiếng "ting" cũng làm con Hà giật mình. Cuối cùng cho Hà dùng thử 3 tối, tối nào cũng làm hết bài 15 phút mà không tắt máy. Qua cả ba mới coi là xong, kể cả khi nhóm có làm thêm chế độ tối.</div></div>
+    <button class="btn primary next" type="button" data-go="8" data-need="teach" disabled>Tiếp</button>
+  </section>
+
+  <!-- 8. Góp ý, xong buổi. Tiêu chí thứ ba: lưới có trục (đã sửa 2026-11-17) so với bảng không trục ở BA 4. -->
+  <section class="step" data-s="8">
+    <h2>Góp ý buổi này</h2>
+    <div class="card">
+      <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
+      <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Lưới có tên trục so với bảng không trục ở buổi 4</b><div class="seg full" data-f="method"><button type="button" data-v="thích hơn" aria-pressed="false">Thích hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="kém hơn" aria-pressed="false">Kém hơn</button></div></div>
+      <div class="crit"><b>Đoạn giới thiệu ở đầu bài</b><div class="seg full" data-f="intro"><button type="button" data-v="đủ để bắt đầu" aria-pressed="false">Đủ để bắt đầu</button><button type="button" data-v="vẫn ngượng" aria-pressed="false">Vẫn ngượng</button><button type="button" data-v="thừa" aria-pressed="false">Thừa</button></div></div>
+      <div class="crit"><b>Ghi thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+    </div>
+    <button class="btn primary next" type="button" id="finish">Xong buổi học</button>
+    <p class="done-msg" id="done-msg" role="status"></p>
+    <button class="btn next hide" type="button" id="copy">Chép kết quả</button>
+  </section>
+</div>
+
+<script id="kit-js"></script>
+<script id="lesson-js"></script>
+<script id="it-js"></script>
+<script>
+/* Bài này không cần phần riêng. */
+</script>
+<script id="lesson-kit"></script>
+</body>
+</html>
