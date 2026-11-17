@@ -14,7 +14,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 |---|---|---|
 | [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–3 xong (PR #98–#103); 5: phần làm được đã làm sớm, còn đối chiếu với tính năng mới của Claude ở 2026-12-01; 4: phần máy xong (bước ôn tự sinh), chờ đo ở hai buổi học kế tiếp | 21/22 |
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 0–2 xong; 3: phần máy xong (bước ôn tự sinh, sau buổi tự ghi kết quả ôn), chờ đo ở hai buổi học kế tiếp; 4 bỏ (thien chọn 2026-11-17) | 8/11 |
-| [Các hành động giữa thien và AI còn thiếu luật](plans/2026-11-17-action-gaps.md) | 1 đã merge (PR #104), đang kiểm ở 3 chat; 2: lệnh, bảng file đích, bù thuật ngữ chờ merge, hàng chờ gu chờ thien duyệt, sửa tên trục trước BA 5; 3 ở mốc 01/12 | 7/16 |
+| [Các hành động giữa thien và AI còn thiếu luật](plans/2026-11-17-action-gaps.md) | 1 đã merge (PR #104), đang kiểm ở 3 chat; 2: lệnh, bảng file đích, thuật ngữ đã merge (PR #106), gu chờ merge thienui PR #8, sửa tên trục trước BA 5; 3 ở mốc 01/12 | 9/16 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
@@ -33,7 +33,8 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- Không có.
+- Merge thienui PR #8 (3 dòng gu từ buổi học vào `taste.md`, thien đã duyệt từng dòng).
+- Xoá nhánh đã merge `claude/war-07-artillery`, `claude/action-gaps-batch-2` (AI không xoá được qua proxy).
 
 ## Đang vướng
 - Không có. Trang tổng quan đọc sakubun bằng bản clone công khai.
