@@ -16,7 +16,7 @@ Xong khi: bài so sánh mù ngày 2026-11-22, thien chấm lại các màn cũ v
 - [x] Một màu nhấn, màu khác chỉ khi mang nghĩa (buổi 5, 2026-11-12)
 - [x] Chọn màu cho cả một app theo loại app, người dùng, độ tuổi (buổi 6, 2026-11-15)
 - [x] Sửa một màn có nhiều lỗi cùng lúc, trộn bốn ý (buổi 7, 2026-11-17, [bài](frontend/lessons/07-fix-four-mistakes.md))
-- [ ] So sánh mù các màn đã xem (2026-11-22)
+- [x] So sánh mù các màn đã xem (buổi 9, 2026-11-17, sớm hơn mốc 2026-11-22, [bài](frontend/lessons/09-blind-comparison-milestone.md)): chọn đúng bản tốt 4/5, gọi đúng tên ý 3/5, tự sửa đúng một màn chưa gặp; phần nói ra vì sao còn yếu, mang sang chặng 2
 
 ### Chặng 2: Áp vào app của mình
 Xong khi: thien tự sửa được một màn của sakubun hoặc todo và viết được 3 luật cho thienui. Bắt đầu sau mốc 2026-11-22.
@@ -26,15 +26,16 @@ Xong khi: thien tự sửa được một màn của sakubun hoặc todo và vi�
 
 ### Chặng 3: Phần kỹ thuật nền
 Chưa chốt. Ở mốc 2026-11-22 sẽ chọn học phần nào trước trong: trình duyệt và mạng, TypeScript, kiến trúc, dễ truy cập (a11y), hiệu năng, test.
-- [ ] Chốt thứ tự ở mốc 2026-11-22
+- [x] Chốt phần học trước: dễ truy cập (a11y), thien chọn ở buổi 9 (2026-11-17); thứ tự các phần sau chưa chốt
 
 ### Bài đã học
-- Bài 1 đến 8: đọc nhanh và làm lại ở [frontend/README.md](frontend/README.md)
+- Bài 1 đến 9: đọc nhanh và làm lại ở [frontend/README.md](frontend/README.md)
 - Trang buổi 1: [Một điểm nhấn](https://claude.ai/artifact/A3nqpsF7j3wnNaYpfdmoKC)
 - Trang buổi 5: [Màu](https://claude.ai/artifact/Gn4VUaqRzfT7jBDFz9GZ5z)
 - Buổi 6: [bài](frontend/lessons/06-colour-for-a-whole-app.md), [trang ở nick tnt697](https://claude.ai/artifact/M1nUVofKUZmF9etaFYNFBt)
 - Buổi 7: [bài](frontend/lessons/07-fix-four-mistakes.md), [trang ở nick tnt697](https://claude.ai/artifact/4vZj2LZp7fGnZ1qDaa1ZC6)
 - Buổi 8: [bài](frontend/lessons/08-copy-a-screen-spacing-scale.md), [trang ở nick tnt697](https://claude.ai/artifact/SNn544T5RTNcd6APZtHnCd)
+- Buổi 9: [bài](frontend/lessons/09-blind-comparison-milestone.md), [trang ở nick tnt628](https://claude.ai/artifact/64bbu9ks3Rya1cUWEhJJB1)
 - Thẻ ôn của mọi môn: [cards.md](cards.md)
 
 ### Nguồn học
@@ -121,3 +122,4 @@ Testing, kinh tế, chính trị. Một môn chỉ vào học khi có môn khác
 | 2026-11-12 | Học chiến tranh 3 trước BA 2 | thien nhắn "học tiếp chiến tranh" |
 | 2026-11-12 | Học chiến tranh 4 trước Frontend 6; phác chặng 2 môn chiến tranh | thien nhắn "học chiến tranh"; thien hỏi học xong tổng quan thì học gì tiếp |
 | 2026-11-14 | Ý 5 và 6 môn chiến tranh có buổi riêng, chặng 1 còn khoảng 7 buổi thay vì 5 | Luật 10 buổi đầu là mỗi buổi một ý; buổi 1 mới chạm qua. thien chọn trên thẻ quyết định |
+| 2026-11-17 | Chạy mốc so sánh mù frontend ở buổi 9 thay vì chờ 2026-11-22; chặng 3 học dễ truy cập (a11y) trước | Buổi 9 tới lượt trước ngày mốc; thien chọn a11y trong bài |
