@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buổi 10: Chọn bản sửa cho màn của sakubun</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style id="kit-css"></style>
+<style id="lesson-css"></style>
+<style id="it-css"></style>
+<style>
+/* Phần riêng của bài 10 (mở chặng 2: áp vào app của mình; kiểu bài "chọn bản sửa").
+   1. Hai màn nhỏ tự dựng cho phần nhớ lại (.mk): hộp hỏi xóa có hai nút đặc, thẻ "Hôm nay" nhiều màu và một màu.
+   2. Bàn thử "sum": màn "Xong buổi ôn" của sakubun, dựng lại bằng HTML từ components/features/review/session-summary.tsx
+      (bản ngày 2026-11-17). Số đo lấy từ code, ở cỡ thật 390px rồi thu lại (zoom): tiêu đề text-lg 18 đậm 600, số trong ô
+      18 đậm 600, nhãn ô 17 (text-body), câu tóm tắt 17 xám. Số liệu buổi ôn là số mẫu.
+      Núm: so (ba ô / một số to), mau (xám / mỗi ô một màu), chuoi (trong ô / băng to đầu màn), co (cỡ số chính, chỉ ở bản một số).
+      Bản A = ba, mau, o. Bản B = ba, xam, bang. Bản C = mot, xam, o, 34. Bản tốt: C. Claude chốt cỡ 34 (bằng text-display ở màn Hôm nay). */
+.mk { background: #fff; color: #1b1b1a; border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 11px; line-height: 1.35; display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
+.mk .mut { color: #6b6862; }
+.mk .b { display: block; text-align: center; border-radius: 6px; padding: 6px 0; font-weight: 600; font-size: 11px; }
+.mk .bx { display: flex; gap: 6px; } .mk .bx .b { flex: 1; }
+.mk .fill { background: #ab4926; color: #fff; }
+.mk .big { font-size: 22px; font-weight: 700; line-height: 1; }
+.mk .chip { display: inline-block; font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 99px; color: #fff; }
+.mk.dlg { max-width: 260px; margin: 0 auto; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pair > div { display: grid; gap: 6px; align-content: start; }
+.pair .tag { font-weight: 700; font-size: 14px; }
+.q.two { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.q.two > .status, .q.two > .why { grid-column: 1 / -1; }
+.q.two > .opt { min-width: 0; }
+.todo { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.picks { display: grid; gap: 8px; }
+.picks .opt { flex-direction: column; align-items: flex-start; gap: 2px; }
+.picks .opt span { font-size: 13px; color: var(--muted); }
+.vers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.vers .btn { min-width: 0; padding: 0 4px; }
+.map { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+#claude-co { display: none; } #claude-co.on { display: block; }
+textarea.frame { min-height: 150px; }
+
+/* Bàn thử: màn "Xong buổi ôn" của sakubun, cỡ thật 390px thu về khung (lòng máy 246px). */
+.bench[data-pane="sum"] .screen { --co: 18px; background: #faf9f5; }
+.sum { width: 390px; zoom: .63; min-height: 150%; padding: 20px 16px 24px; display: flex; flex-direction: column; gap: 24px; background: #faf9f5; color: #141413; font-size: 17px; line-height: 1.47; }
+.sum .mut { color: #686762; }
+.sum .card { background: #fff; border-radius: 12px; box-shadow: inset 0 0 0 2px #e3e1da, 0 2px 0 #e3e1da; }
+.sum .hd { display: grid; gap: 4px; }
+.sum .hd h3 { margin: 0; font-size: 18px; line-height: 1.5; font-weight: 600; }
+.sum .hd .kick { display: none; font-size: 14px; font-weight: 500; color: #ab4926; }
+.sum .hero { display: none; }
+.sum .hero .num { font-size: var(--co); font-weight: 700; line-height: 1.06; letter-spacing: -.022em; font-variant-numeric: tabular-nums; }
+.sum .hero .unit { font-size: 20px; font-weight: 600; margin-left: 8px; }
+.sum .hero .line { font-size: 14px; color: #686762; margin-top: 4px; }
+.sum .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.sum .tile { padding: 12px 16px; display: grid; gap: 4px; }
+.sum .tile dt { color: #686762; }
+.sum .tile dd { margin: 0; height: 28px; display: flex; align-items: center; font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sum .rev h4 { margin: 0 0 8px; font-size: 17px; font-weight: 600; }
+.sum .rev ul { list-style: none; margin: 0; padding: 0; }
+.sum .rev li { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 8px 16px; border-top: 1px solid #e3e1da; }
+.sum .rev li:first-child { border-top: 0; }
+.sum .rev .jp { font-size: 18px; }
+.sum .rev .vi { flex: 1; color: #686762; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sum .rev .chev { color: #686762; }
+.sum .more { background: #f0eee6; border-radius: 8px; padding: 16px; display: grid; gap: 4px; }
+.sum .more b { font-weight: 600; }
+.sum .streak { display: none; margin: -20px -16px 0; padding: 22px 16px 20px; background: linear-gradient(135deg, #f97316, #ec4899); color: #fff; }
+.sum .streak b { display: block; font-size: 30px; line-height: 1.1; font-weight: 700; }
+.sum .streak span { font-size: 15px; opacity: .92; }
+/* Núm "so": một số to thay cho ba ô (bản C). */
+.screen[data-so="mot"] .sum .tiles, .screen[data-so="mot"] .sum .hd h3, .screen[data-so="mot"] .sum .hd .sentence { display: none; }
+.screen[data-so="mot"] .sum .hd .kick, .screen[data-so="mot"] .sum .hero { display: block; }
+/* Núm "mau": mỗi ô một màu (bản A); ở bản một số thì số thành màu xanh. */
+.screen[data-mau="mau"] .sum .tile:nth-child(1) { background: #dbeafe; box-shadow: none; } .screen[data-mau="mau"] .sum .tile:nth-child(1) dd { color: #1d4ed8; }
+.screen[data-mau="mau"] .sum .tile:nth-child(2) { background: #dcfce7; box-shadow: none; } .screen[data-mau="mau"] .sum .tile:nth-child(2) dd { color: #15803d; }
+.screen[data-mau="mau"] .sum .tile:nth-child(3) { background: #ffedd5; box-shadow: none; } .screen[data-mau="mau"] .sum .tile:nth-child(3) dd { color: #c2410c; }
+.screen[data-mau="mau"] .sum .hero .num { color: #15803d; }
+/* Núm "chuoi": băng chuỗi ngày to đầu màn (bản B). */
+.screen[data-chuoi="bang"] .sum .streak { display: block; }
+</style>
+</head>
+<body>
+<script type="application/json" id="lesson">{ "id": "frontend-10", "subject": "Frontend", "title": "Buổi 10: Chọn bản sửa cho màn của sakubun" }</script>
+<div class="wrap">
+  <div class="top"><div class="meta"><span>Frontend · Buổi 10: Chọn bản sửa</span><span id="cnt">1/9</span></div><div class="bar"><span id="bar"></span></div></div>
+
+  <div id="stage">
+    <!-- Bàn thử: màn "Xong buổi ôn" của sakubun (dựng lại từ code, không phải ảnh chụp). Lúc mở: bản gốc. -->
+    <div class="pane bench" data-pane="sum">
+      <div class="phone"><div class="screen" data-so="ba" data-mau="xam" data-chuoi="o">
+        <div class="sum">
+          <div class="streak"><b>12 ngày liền!</b><span>Giữ lửa nhé, mai ôn tiếp</span></div>
+          <div class="hd">
+            <span class="kick">Xong buổi ôn</span>
+            <h3>Xong buổi ôn</h3>
+            <p class="sentence mut" style="margin:0">Nhớ 7 trên 10 thẻ. Thẻ tiếp theo đến hạn 3 giờ nữa.</p>
+          </div>
+          <div class="hero">
+            <div><span class="num">7/10</span><span class="unit">thẻ nhớ</span></div>
+            <p class="line" style="margin-bottom:0">Đã ôn 10 thẻ · chuỗi 12 ngày · thẻ tiếp theo sau 3 giờ</p>
+          </div>
+          <dl class="tiles" style="margin:0">
+            <div class="card tile"><dt>Đã ôn</dt><dd>10 thẻ</dd></div>
+            <div class="card tile"><dt>Nhớ</dt><dd>70%</dd></div>
+            <div class="card tile"><dt>Chuỗi</dt><dd>12 ngày</dd></div>
+          </dl>
+          <div class="rev">
+            <h4>Xem lại thẻ chưa nhớ</h4>
+            <ul class="card">
+              <li><span class="jp" lang="ja">〜ばかり</span><span class="vi">vừa mới (làm xong)</span><span class="chev">›</span></li>
+              <li><span class="jp" lang="ja">届ける</span><span class="vi">gửi tới, mang tới</span><span class="chev">›</span></li>
+              <li><span class="jp" lang="ja">〜わけにはいかない</span><span class="vi">không thể (vì lẽ thường)</span><span class="chev">›</span></li>
+            </ul>
+          </div>
+          <div class="more"><b>Còn sức? Dịch một câu với Claude</b><span class="mut">Mở Claude, gõ “học”. Claude lấy đúng một mẫu đến hạn để bạn dịch.</span></div>
+        </div>
+      </div><div class="cover">Màn đang che.<br>Bấm "Xem 5 giây" để nhìn.</div></div>
+      <div class="side">
+        <div class="knobs">
+          <div class="knob" data-knob="so" data-min="2"><span class="label">Ba số</span>
+            <div class="seg"><button type="button" data-val="ba" data-name="Ba ô bằng nhau" data-code="grid 3 cột" aria-pressed="true">Ba ô</button><button type="button" data-val="mot" data-name="Một số to" data-code="một số + dòng phụ">Một số to</button></div></div>
+          <div class="knob" data-knob="mau" data-min="2"><span class="label">Màu ô</span>
+            <div class="seg"><button type="button" data-val="xam" data-name="Trắng, xám" data-code="#fff" aria-pressed="true">Trắng</button><button type="button" data-val="mau" data-name="Mỗi ô một màu" data-code="xanh, lục, cam">Mỗi ô một màu</button></div></div>
+          <div class="knob" data-knob="chuoi" data-min="2"><span class="label">Chuỗi ngày</span>
+            <div class="seg"><button type="button" data-val="o" data-name="Như số khác" data-code="như số khác" aria-pressed="true">Như số khác</button><button type="button" data-val="bang" data-name="Băng to đầu màn" data-code="băng 30px đầu màn">Băng to</button></div></div>
+          <div class="knob" data-knob="co" data-var="--co" data-min="2"><span class="label">Cỡ số chính (khi chọn Một số to)</span>
+            <div class="seg"><button type="button" data-val="18px" data-name="18" aria-pressed="true">18</button><button type="button" data-val="34px" data-name="34">34</button><button type="button" data-val="56px" data-name="56">56</button></div></div>
+        </div>
+        <pre class="code"><span class="c">/* đổi theo núm */</span><span data-line="so"><span class="k">.so-lieu</span> { <span data-v="so"></span> }</span><span data-line="mau"><span class="k">.o</span> { background: <span data-v="mau"></span> }</span><span data-line="chuoi"><span class="k">.chuoi</span> { <span data-v="chuoi"></span> }</span><span data-line="co"><span class="k">.so-chinh</span> { font-size: <span data-v="co"></span> }</span></pre>
+      </div>
+      <pre class="code"><span data-line="so"><span class="k">.so-lieu</span> { <span data-v="so"></span> }</span><span data-line="mau"><span class="k">.o</span> { background: <span data-v="mau"></span> }</span><span data-line="chuoi"><span class="k">.chuoi</span> { <span data-v="chuoi"></span> }</span><span data-line="co"><span class="k">.so-chinh</span> { font-size: <span data-v="co"></span> }</span></pre>
+    </div>
+  </div>
+
+  <!-- 0. Mở bài: kiểu bài mới (chọn bản sửa), giới thiệu khoảng 1 phút, chưa giải thích vì sao. -->
+  <section class="step on" data-s="0">
+    <h1>Chọn bản sửa cho màn của chính bạn</h1>
+    <p>Từ hôm nay sang chặng 2: không còn màn của app lạ, mà là màn trong sakubun. Màn đầu tiên là "Xong buổi ôn", màn hiện ra ngay sau khi bạn chấm thẻ cuối.</p>
+    <p>Kiểu bài mới tên là <b>chọn bản sửa</b>: một màn có một chỗ cấn mắt, kèm ba bản sửa. Bạn chọn bản tốt nhất và nói một câu vì sao. Có một bản trông đẹp hơn hẳn nhưng sửa sai chỗ. Người làm giao diện làm việc này hằng ngày: luôn có nhiều cách sửa, việc khó là chọn.</p>
+    <div class="card small">
+      <b>Việc sắp làm, khoảng 12 phút</b>
+      <ol class="todo">
+        <li>Ôn 3 thẻ, nhớ lại buổi 9</li>
+        <li>Nhìn màn "Xong buổi ôn" đúng 5 giây</li>
+        <li>Xem ba bản sửa trên màn, chọn một bản</li>
+        <li>Tự vặn một con số, rồi đọc ý chính</li>
+        <li>Trả lời một người hỏi, có khung sẵn 3 ý</li>
+      </ol>
+    </div>
+    <p class="muted">Màn được dựng lại bằng HTML theo đúng code của sakubun ngày 17/11 (cỡ chữ, màu, khoảng cách), không phải ảnh chụp. Số liệu buổi ôn là số mẫu.</p>
+    <button class="btn primary next" type="button" data-go="1">Bắt đầu</button>
+  </section>
+
+  <!-- 1. Ôn trộn: make-lesson.mjs tự sinh 3 thẻ đến hạn. Chỉ lần học đầu. -->
+  <section class="step" data-s="1" data-part="review" data-auto="cards">
+    <!-- Ôn 3 thẻ: make-lesson.mjs tự sinh lúc dựng từ learning/cards.md và learning/cards-quiz.json. Để trống. -->
+  </section>
+
+  <!-- 2. Nhớ lại buổi 9: đúng hai chỗ vướng (hai nút đặc cạnh nhau gọi là "mục đích"; màn nhiều màu vui mắt kéo mắt). -->
+  <section class="step" data-s="2" data-part="review">
+    <h2>Nhớ lại buổi 9</h2>
+    <div class="card">
+      <div class="mk dlg">
+        <b style="font-size:12px">Xóa thẻ 届ける?</b>
+        <span class="mut">Lịch ôn của thẻ này sẽ mất.</span>
+        <div class="bx"><span class="b fill">Hủy</span><span class="b fill">Xóa</span></div>
+      </div>
+      <p>Hộp hỏi này cấn mắt ở hai nút. Đó là lỗi của ý nào?</p>
+      <div class="q" data-q="recall" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">Màu: hai nút cùng màu cam</button>
+        <button class="opt" type="button">Điểm nhấn: hai khối đặc bằng nhau, không khối nào là thứ nhất</button>
+        <button class="opt" type="button">Mục đích của màn: người dùng không biết hộp hỏi gì</button>
+        <p class="why">Điểm nhấn. Đổi màu một nút thì vẫn còn hai khối đặc, mắt vẫn phải dừng lại chọn. Mục đích của màn chỉ cho biết nút nào được giữ đặc. Buổi 9 bạn gọi lỗi này là "mục đích của màn", buổi 7 gọi là "màu".</p>
+      </div>
+    </div>
+    <div class="card">
+      <p>Thẻ đầu trang của một app học từ. Bản nào giúp người mở app biết ngay phải bấm đâu?</p>
+      <div class="pair">
+        <div><span class="tag">A</span><div class="mk">
+          <span class="mut">Đến hạn hôm nay</span><span class="big">24 thẻ</span>
+          <span><span class="chip" style="background:#7c3aed">N4</span> <span class="chip" style="background:#db2777">+5 mới</span> <span class="chip" style="background:#0891b2">8 phút</span></span>
+          <span class="b" style="background:#16a34a;color:#fff">Bắt đầu ôn</span></div></div>
+        <div><span class="tag">B</span><div class="mk">
+          <span class="mut">Đến hạn hôm nay</span><span class="big">24 thẻ</span>
+          <span class="mut">N4 · 5 mới · khoảng 8 phút</span>
+          <span class="b fill">Bắt đầu ôn</span></div></div>
+      </div>
+      <div class="q two" data-q="recall2" data-a="1" data-kind="review"><p class="status" role="status"></p>
+        <button class="opt" type="button">A</button><button class="opt" type="button">B</button>
+        <p class="why">B. Ở A bốn khối màu (tím, hồng, xanh, lục) cùng giành mắt với nút. Vui mắt hơn, nhưng mắt phải dò. Buổi 9 bạn chọn bản đặt lịch năm màu: màu vui mắt vẫn kéo mắt, nhớ chỗ này cho bước sau.</p>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="3" data-need="recall recall2" data-review-gate disabled>Tiếp</button>
+  </section>
+
+  <!-- 3. Thử trước (1): nhìn 5 giây, chưa có đúng sai. -->
+  <section class="step" data-s="3" data-stage="sum@cover">
+    <h2>Nhìn 5 giây</h2>
+    <p>Bạn vừa ôn xong 10 thẻ trong sakubun. Màn "Xong buổi ôn" đang che. Bạn chỉ được nhìn 5 giây.</p>
+    <button class="btn" type="button" data-peek="sum" data-sec="5" data-after="Đã xem 5 giây">Xem 5 giây</button>
+    <p>Trong 5 giây đó, mắt bạn dừng lâu nhất ở đâu? Không có đúng sai.</p>
+    <div class="picks">
+      <button class="opt" type="button" data-eye="tieude">Dòng "Xong buổi ôn"</button>
+      <button class="opt" type="button" data-eye="o">Ba ô số<span>Đã ôn, Nhớ, Chuỗi</span></button>
+      <button class="opt" type="button" data-eye="list">Danh sách thẻ chưa nhớ</button>
+      <button class="opt" type="button" data-eye="more">Hộp "Còn sức?"</button>
+      <button class="opt" type="button" data-eye="khap">Không rõ, mắt đi khắp màn</button>
+    </div>
+    <p class="fb" id="eye-say"></p>
+    <button class="btn primary next" type="button" data-go="4" data-need="peek-sum eye" disabled>Tiếp</button>
+  </section>
+
+  <!-- 4. Thử trước (2): xem ba bản sửa trên bàn thử, chọn một bản, viết một câu vì sao. Bản tốt: C. -->
+  <section class="step" data-s="4" data-stage="sum">
+    <h2>Ba bản sửa</h2>
+    <p>Người làm thử nói chỗ cấn mắt là: <b>màn có nhiều số mà không biết nhìn số nào trước</b>. Ba người sửa ba kiểu. Bấm để đặt từng bản lên màn, nhìn từng bản vài giây.</p>
+    <div class="vers">
+      <button class="btn" type="button" data-set="sum" data-vals="so=ba; mau=xam; chuoi=o">Gốc</button>
+      <button class="btn" type="button" data-set="sum" data-vals="so=ba; mau=mau; chuoi=o" data-done="see-a">Bản A</button>
+      <button class="btn" type="button" data-set="sum" data-vals="so=ba; mau=xam; chuoi=bang" data-done="see-b">Bản B</button>
+      <button class="btn" type="button" data-set="sum" data-vals="so=mot; mau=xam; chuoi=o; co=34px" data-done="see-c">Bản C</button>
+    </div>
+    <p class="stage-hint"><span class="pc">Màn ở bên trái, núm bên cạnh cho thấy mỗi bản đổi gì.</span><span class="ph">Màn ở phía trên, cuộn lên để xem.</span></p>
+    <p>Nếu được đưa một bản vào sakubun, bạn chọn bản nào?</p>
+    <div class="picks">
+      <button class="opt" type="button" data-fix="A">Bản A<span>Tô mỗi ô số một màu</span></button>
+      <button class="opt" type="button" data-fix="B">Bản B<span>Băng chuỗi ngày to, màu cam hồng ở đầu màn</span></button>
+      <button class="opt" type="button" data-fix="C">Bản C<span>Một số "7/10" to, hai số kia thành dòng nhỏ</span></button>
+    </div>
+    <p>Một câu vì sao (ngắn thôi):</p>
+    <textarea data-key="fixwhy" data-min="5" placeholder="Mình chọn bản này vì..."></textarea>
+    <button class="btn primary next" type="button" data-go="5" data-need="see-a see-b see-c fix fixwhy" disabled>Tiếp</button>
+  </section>
+
+  <!-- 5. Hiểu sau: nhắc lại lựa chọn, giải thích bằng số, rồi tự vặn cỡ số chính trên bản C. Claude chốt 34. -->
+  <section class="step" data-s="5" data-stage="sum">
+    <h2>Ý chính: hạ thứ khác xuống</h2>
+    <p class="fb" id="fix-say"></p>
+    <p>Người vừa ôn xong mở màn này để biết mình <b>nhớ được bao nhiêu</b> và <b>thẻ nào cần xem lại</b>. Ở bản gốc, tiêu đề 18 đậm, ba số 18 đậm, nhãn ô 17: ba thứ gần bằng nhau, nên không có chỗ nào để mắt nhìn trước. Trong khi màn Hôm nay của chính sakubun để số thẻ đến hạn cỡ 34.</p>
+    <div class="card small">
+      <ol class="map" style="list-style:upper-alpha">
+        <li><b>Tô màu ba ô</b>: ba ô vẫn bằng nhau, giờ thêm ba màu cùng giành mắt. Đây là cách người mới hay làm: muốn nổi thì thêm màu.</li>
+        <li><b>Băng chuỗi ngày</b>: đẹp và vui nhất, nhưng kéo mắt vào chuỗi ngày, việc phụ của màn này, và đẩy danh sách thẻ chưa nhớ xuống. Đẹp hơn mà sửa sai chỗ, như bản "Hủy đơn" ở buổi 9.</li>
+        <li><b>Một số to</b>: không thêm gì, chỉ hạ: "7/10" thành 34, hai số kia và tiêu đề thành chữ 14 xám. Bản Claude chọn.</li>
+      </ol>
+    </div>
+    <p><b>Tự vặn.</b> Đặt bản C lên màn, rồi thử cỡ số chính 18, 34, 56. Chốt cỡ bạn thấy vừa.</p>
+    <button class="btn" type="button" data-set="sum" data-vals="so=mot; mau=xam; chuoi=o; co=18px" data-done="set-c">Đặt bản C, số 18</button>
+    <button class="btn" type="button" data-pick="d1" data-of="sum" data-need="set-c tried-sum.co" disabled>Chốt cỡ này</button>
+    <p class="fb" data-echo="d1"></p>
+    <div class="card small" id="claude-co">
+      <p style="margin-top:0"><b>Claude chốt 34.</b> 18 thì bằng chữ thường, không nổi. 56 to hơn mọi số trong app và đẩy danh sách thẻ chưa nhớ xuống sát mép. 34 gần gấp đôi chữ thường, lại đúng cỡ số ở màn Hôm nay, nên hai màn cùng một nhịp.</p>
+      <p class="muted" style="margin-bottom:0">Mức chắc chắn: cỡ chữ lấy từ code sakubun; chọn bản C là ý của Claude dựa trên năm ý đã học, chưa thử với người dùng thật.</p>
+    </div>
+    <button class="btn primary next" type="button" data-go="6" data-need="d1" disabled>Tiếp</button>
+  </section>
+
+  <!-- 6. Câu hỏi nhanh: 2 câu kiến thức + 1 câu gu (không đúng sai, dùng cho chặng 2). -->
+  <section class="step" data-s="6">
+    <h2>Câu hỏi nhanh</h2>
+    <div class="card">
+      <p><b>1.</b> Muốn "Nhớ 70%" nổi lên giữa ba ô bằng nhau, cách nào hợp nhất?</p>
+      <div class="q" data-q="k1" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Tô ô "Nhớ" màu xanh lá đậm</button>
+        <button class="opt" type="button">Làm số "Nhớ" to hẳn, hạ hai số kia thành một dòng nhỏ xám</button>
+        <button class="opt" type="button">Thêm viền đậm và bóng cho ô "Nhớ"</button>
+        <p class="why">Màu, viền, bóng là thêm vào; ba ô vẫn cùng khung, cùng cỡ. Hạ thứ khác xuống mới tạo ra khoảng cách giữa thứ nhất và thứ hai.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>2.</b> Băng chuỗi ngày ở bản B đẹp và có động lực. Vì sao vẫn không hợp màn này?</p>
+      <div class="q" data-q="k2" data-a="1"><p class="status" role="status"></p>
+        <button class="opt" type="button">Vì cam và hồng không phải màu của sakubun</button>
+        <button class="opt" type="button">Vì màn này để biết vừa nhớ bao nhiêu và xem lại thẻ quên; băng to kéo mắt khỏi hai việc đó</button>
+        <button class="opt" type="button">Vì chuỗi ngày không quan trọng với người học</button>
+        <p class="why">Chuỗi ngày có ích, chỉ là không phải việc chính của màn này (nó đã nằm ở đầu màn Hôm nay). Câu "mở màn để làm gì" quyết định thứ gì được to.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>3.</b> Không có đúng sai. Với màn này trong sakubun thật, bạn muốn:</p>
+      <div class="picks">
+        <button class="opt" type="button" data-ship="C">Sửa theo bản C</button>
+        <button class="opt" type="button" data-ship="C+">Bản C, nhưng cho chuỗi ngày nổi hơn một chút</button>
+        <button class="opt" type="button" data-ship="keep">Giữ như cũ</button>
+        <button class="opt" type="button" data-ship="later">Để sau, xem thêm các màn khác trước</button>
+      </div>
+    </div>
+    <button class="btn primary next" type="button" data-go="7" data-need="k1 k2 ship" disabled>Tiếp</button>
+  </section>
+
+  <!-- 7. Tự nói lại theo tình huống, có khung 3 ý để điền (thien chọn thử ở đầu buổi 10, 2026-11-17; buổi sau bỏ khung). -->
+  <section class="step" data-s="7">
+    <h2>Tự nói lại</h2>
+    <div class="say ask-from" data-who="Linh, bạn cùng lớp tiếng Nhật đang dùng thử sakubun"><b>Linh nhắn</b>Màn "Xong buổi ôn" có ba ô số gọn gàng mà. Sao bạn bỏ ba ô, chỉ để một số to? Mình lại thích thấy chuỗi ngày to cơ, nhìn có động lực.</div>
+    <p>Trả lời Linh bằng khung dưới: điền vào chỗ "…", sửa câu chữ thoải mái. Có số trên màn thì càng tốt.</p>
+    <textarea class="frame" data-key="teach" data-min="110">Linh ơi, người ta mở màn này để …
+Giờ chỗ … đang …, nên mình sửa thành …
+Vì mắt …</textarea>
+    <button class="btn ghost" type="button" data-show="mine">Xem bản của Claude</button>
+    <div class="mine" id="mine"><div class="say"><b>Bản của Claude</b>Linh ơi, người ta mở màn này ngay sau khi ôn để biết vừa nhớ được bao nhiêu và thẻ nào cần xem lại. Giờ tiêu đề, ba số và nhãn đều cỡ 17–18, "Nhớ 70%" ngang hàng với "Chuỗi 12 ngày", nên mình sửa thành một số "7/10" cỡ 34, còn số thẻ đã ôn và chuỗi ngày thành một dòng nhỏ xám. Vì mắt cần một thứ khác hẳn mới biết nhìn đâu trước; mọi thứ cùng cỡ thì mắt nhảy qua lại. Chuỗi ngày vẫn ở đầu màn Hôm nay mỗi lần mở app; để to ở đây nó giành mắt khỏi danh sách thẻ quên.</div></div>
+    <button class="btn primary next" type="button" data-go="8" data-need="teach" disabled>Tiếp</button>
+  </section>
+
+  <!-- 8. Góp ý, xong buổi. Thêm hai câu: kiểu chọn bản sửa, khung 3 ý. -->
+  <section class="step" data-s="8">
+    <h2>Góp ý buổi này</h2>
+    <div class="card">
+      <div class="crit"><b>Độ dài</b><div class="seg full" data-f="len"><button type="button" data-v="ngắn" aria-pressed="false">Ngắn</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="dài" aria-pressed="false">Dài</button></div></div>
+      <div class="crit"><b>Độ khó</b><div class="seg full" data-f="hard"><button type="button" data-v="dễ" aria-pressed="false">Dễ</button><button type="button" data-v="vừa" aria-pressed="false">Vừa</button><button type="button" data-v="khó" aria-pressed="false">Khó</button></div></div>
+      <div class="crit"><b>Chọn bản sửa trên màn của sakubun, so với các buổi trước</b><div class="seg full" data-f="method"><button type="button" data-v="thích hơn" aria-pressed="false">Thích hơn</button><button type="button" data-v="như nhau" aria-pressed="false">Như nhau</button><button type="button" data-v="kém hơn" aria-pressed="false">Kém hơn</button></div></div>
+      <div class="crit"><b>Khung 3 ý ở bước tự nói lại</b><div class="seg full" data-f="frame"><button type="button" data-v="giúp" aria-pressed="false">Giúp</button><button type="button" data-v="bình thường" aria-pressed="false">Bình thường</button><button type="button" data-v="gò bó" aria-pressed="false">Gò bó</button></div></div>
+      <div class="crit"><b>Muốn nói thêm (không bắt buộc)</b><textarea id="note" placeholder="Chỗ nào khó hiểu, chỗ nào thích..."></textarea></div>
+    </div>
+    <button class="btn primary next" type="button" id="finish">Xong buổi học</button>
+    <p class="done-msg" id="done-msg" role="status"></p>
+    <button class="btn next hide" type="button" id="copy">Chép kết quả</button>
+  </section>
+</div>
+<script id="kit-js"></script>
+<script id="lesson-js"></script>
+<script id="it-js"></script>
+<script>
+/* Phần riêng của bài 10: mắt dừng ở đâu (R.eye), bản sửa chọn (R.fix, lý do ở R.fixwhy), muốn làm gì với sakubun (R.ship),
+   hiện cỡ số Claude chốt sau khi người học chốt. */
+(() => {
+  const R = window.R, L = window.Lesson;
+  const $ = (s) => document.querySelector(s), $$ = (s) => [...document.querySelectorAll(s)];
+  const one = (attr, key, then) => $$(`[${attr}]`).forEach((b) => b.addEventListener('click', () => {
+    $$(`[${attr}]`).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    R[key] = b.getAttribute(attr);
+    L.done(key);
+    if (then) then(b);
+  }));
+  const EYE = { tieude: 'dòng "Xong buổi ôn"', o: 'ba ô số', list: 'danh sách thẻ chưa nhớ', more: 'hộp "Còn sức?"', khap: 'không rõ, mắt đi khắp màn' };
+  one('data-eye', 'eye', (b) => {
+    $('#eye-say').textContent = 'Bạn ghi: ' + EYE[b.dataset.eye] + '. Giữ câu này, bước sau so lại.';
+  });
+  const FIX = {
+    A: 'Bạn chọn bản A (tô màu ba ô). Màu làm màn vui hơn thật, nhưng ba ô vẫn bằng nhau, nên mắt vẫn phải dò.',
+    B: 'Bạn chọn bản B (băng chuỗi ngày). Đây là bản đẹp nhất, và là bản "đẹp hơn mà sửa sai chỗ" của buổi này: cùng kiểu với bản "Hủy đơn" và bản đặt lịch năm màu ở buổi 9.',
+    C: 'Bạn chọn bản C (một số to), trùng với Claude.',
+  };
+  const say = () => {
+    const why = (R.fixwhy || '').trim();
+    $('#fix-say').textContent = (FIX[R.fix] || '') + (why ? ' Lý do bạn viết: "' + why + '".' : '');
+  };
+  one('data-fix', 'fix', say);
+  $$('textarea[data-key="fixwhy"]').forEach((t) => t.addEventListener('input', say));
+  one('data-ship', 'ship');
+  $$('[data-pick="d1"]').forEach((b) => b.addEventListener('click', () => $('#claude-co').classList.add('on')));
+})();
+</script>
+<!-- Tự lưu chạy sau script riêng của bài, để khi mở lại, các lần bấm có người nghe. -->
+<script id="lesson-kit"></script>
+</body>
+</html>
