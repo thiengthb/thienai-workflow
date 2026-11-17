@@ -6,8 +6,8 @@ Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đ�
 
 ## Đang ở đâu
 - Đang ở: đợt 0, 1, 2 xong, PR #98 merge 2026-11-17; sakubun nhận phần chung mới qua PR #327 (merge cùng ngày).
-- Còn thiếu: đợt 3 chạy cùng hai buổi học kế tiếp (thien đã dán instructions v4 và xoá 5 nhánh cũ, 2026-11-17).
-- thien cần làm: không có; nhắn "học" như thường.
+- Còn thiếu: đợt 3 đã có đủ số đo hai buổi (BA 4: 15,8 triệu token; Frontend 9: 23,1 triệu); việc tiếp theo là xem số đó có đủ để làm đợt 4 không.
+- thien cần làm: không có.
 
 ## Mục tiêu
 Bộ quy trình đúng và gọn hơn mà không mất luật nào: sửa chỗ ghi sai, luật áp theo điều kiện thay vì áp mọi lúc, có đường riêng cho project bản beta, và bám tính năng có sẵn của Claude thay vì tự làm lại.
@@ -49,7 +49,7 @@ Xong khi: thread beta mới khởi động không gọi `project_info`, không c
 ### 3. Đo buổi học (chạy cùng hai buổi học kế tiếp)
 Xong khi: có tổng số lượt của chat dựng bài và chat sau buổi ở hai buổi, kèm một câu "bước nào lâu nhất"; ở beta thêm số token của thread trong Project settings > Usage.
 - [x] Buổi 1: BA 4 (2026-11-17, nick tnt628, project beta, một thread cho cả dựng bài và sau buổi). Dựng bài khoảng 35 lượt gọi trong 9 phút, sau buổi khoảng 18 lượt. Lâu nhất là dựng trang (khoảng 18 lượt: đọc kit `artifacts/it/` và bài BA 3 làm mẫu, viết trang, sửa hai lỗi bài kiểm). Lượt phí: 3 lần chạy lại `start-session.mjs` vì truyền thiếu `--instructions`, 4 lượt tìm công cụ đăng trang (`publish_files`, khai khả năng, `watch` không bật được nên trang không tự báo về thread). Project settings > Usage lúc 11:08 (sau khi merge PR #100): thread 15,8 triệu token, 2% của project; để so, thread "Review sâu và tối ưu thienai-workflow" 60,6 triệu, "Học luân phiên nhiều môn" 137,3 triệu
-- [ ] Buổi 2
+- [x] Buổi 2: Frontend 9 (2026-11-17, nick tnt628, project beta, một thread cho cả dựng bài và sau buổi). Dựng bài khoảng 43 lượt gọi trong 18 phút (04:12–04:30 UTC), sau buổi khoảng 16 lượt (gồm mở PR). Lâu nhất là dựng trang (khoảng 16 lượt: viết trang 12 bước có ảnh chụp buổi 1, năm cặp màn và bàn thử mới; hai lần chạy `make-lesson.mjs`, mỗi lần khoảng 4 phút vì `check-page.cjs` bấm từng nút, lần đầu trượt vì hàng 4 nút góp ý tràn khổ điện thoại). Lượt phí: 3 lượt chờ lệnh chạy nền; trang lại không tự báo về thread (`watch` báo `no_address`) nên thien phải nhắn "xong". Buổi dài hơn BA 4 vì là buổi mốc (12 bước, thien chấm "dài"). Project settings > Usage lúc 12:26 (sau khi sửa hai góp ý review, chưa merge PR #102): thread 23,1 triệu token, 3% của project; BA 4 là 15,8 triệu
 
 ### 4. Tự động hoá phần học, chỉ khi đợt 3 cho thấy đáng
 Ngưỡng và cách làm ở checkpoint 3, 4 của `2026-11-15-lean-learning.md`.

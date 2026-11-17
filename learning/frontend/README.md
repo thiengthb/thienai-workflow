@@ -16,6 +16,7 @@ Trạng thái học, nhật ký và kế hoạch buổi sau nằm ở [`../front
 | 6 | Chọn màu nhấn sau khi biết màn đã dùng màu mang nghĩa nào; lượng màu theo người dùng | [06-colour-for-a-whole-app.md](lessons/06-colour-for-a-whole-app.md) | [lesson-06.html](pages/lesson-06.html) |
 | 7 | Hỏi trước người dùng mở màn để làm gì, rồi sửa điểm nhấn, bậc chữ, khoảng cách, màu theo câu đó | [07-fix-four-mistakes.md](lessons/07-fix-four-mistakes.md) | [lesson-07.html](pages/lesson-07.html) |
 | 8 | Chép lại một màn bằng mắt: trong nhỏ hơn ngoài, mỗi tầng gấp ít nhất 2 lần, số lấy từ thang 4, 8, 16, 24, 32 | [08-copy-a-screen-spacing-scale.md](lessons/08-copy-a-screen-spacing-scale.md) | [lesson-08.html](pages/lesson-08.html) |
+| 9 | Buổi mốc: năm ý dùng cùng lúc, bắt đầu từ "người dùng mở màn này để làm gì" | [09-blind-comparison-milestone.md](lessons/09-blind-comparison-milestone.md) | [lesson-09.html](pages/lesson-09.html) |
 
 ## Ôn lại thế nào
 

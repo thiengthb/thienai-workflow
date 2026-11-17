@@ -14,9 +14,9 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 |---|---|---|---|---|---|
 | F1 | Frontend | Hai nút cùng cỡ, cùng màu đặt cạnh nhau thì sao? | [bài 1](frontend/lessons/01-one-focal-point.md) | 3 | 2026-11-24 |
 | F2 | Frontend | Muốn nút chính nổi hơn mà không thêm màu mới thì làm gì? | [bài 1](frontend/lessons/01-one-focal-point.md) | 3 | 2026-11-24 |
-| F3 | Frontend | Ngoài cỡ chữ, màu và thứ tự, còn hai cách nào để tạo bậc chữ? | [bài 2](frontend/lessons/02-type-hierarchy.md) | 2 | 2026-11-15 |
-| F4 | Frontend | Trong nhóm các dòng cách nhau 8px. Giữa hai nhóm nên bao nhiêu? | [bài 3](frontend/lessons/03-spacing-groups.md) | 2 | 2026-11-15 |
-| F5 | Frontend | Vì sao nhiều design system chỉ cho dùng 4, 8, 12, 16, 24, 32? | [bài 3](frontend/lessons/03-spacing-groups.md) | 2 | 2026-11-15 |
+| F3 | Frontend | Ngoài cỡ chữ, màu và thứ tự, còn hai cách nào để tạo bậc chữ? | [bài 2](frontend/lessons/02-type-hierarchy.md) | 3 | 2026-11-24 |
+| F4 | Frontend | Trong nhóm các dòng cách nhau 8px. Giữa hai nhóm nên bao nhiêu? | [bài 3](frontend/lessons/03-spacing-groups.md) | 3 | 2026-11-24 |
+| F5 | Frontend | Vì sao nhiều design system chỉ cho dùng 4, 8, 12, 16, 24, 32? | [bài 3](frontend/lessons/03-spacing-groups.md) | 3 | 2026-11-24 |
 | F6 | Frontend | Màn thanh toán có hai nút đặc "Thanh toán" và "Thêm mã giảm giá". Sửa thế nào? | [bài 4](frontend/lessons/04-fix-a-whole-screen.md) | 2 | 2026-11-15 |
 | B1 | BA | Khách nhờ "thêm nút xuất Excel". Câu nào nên hỏi đầu tiên? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 2 | 2026-11-15 |
 | B2 | BA | "Thêm thông báo đẩy lúc 8 giờ tối" là nhu cầu hay giải pháp? | [BA bài 1](ba/lessons/01-requests-vs-needs.md) | 1 | 2026-11-16 |
@@ -57,3 +57,6 @@ Sau mỗi buổi, AI thêm 2–3 thẻ mới từ buổi đó, bắt đầu ở 
 | F15 | Frontend | Danh bạ: tên và số của một người cách nhau 16, hai người cũng cách nhau 16. Sửa thành bao nhiêu? | [bài 7](frontend/lessons/07-fix-four-mistakes.md) | 1 | 2026-11-18 |
 | F16 | Frontend | Tên tác giả cách sách của nó 10, cách cuốn bên dưới 6. Mắt thấy gì, sửa theo luật nào? | [bài 8](frontend/lessons/08-copy-a-screen-spacing-scale.md) | 1 | 2026-11-18 |
 | F17 | Frontend | Một màn dùng bốn khoảng 13, 15, 17, 19. Vì sao nên đổi, đổi thế nào? | [bài 8](frontend/lessons/08-copy-a-screen-spacing-scale.md) | 1 | 2026-11-18 |
+| F18 | Frontend | Hai nút đặc cùng cỡ, cùng màu đứng cạnh nhau ("Get Started" và "Download"). Đó là lỗi gì? | [bài 9](frontend/lessons/09-blind-comparison-milestone.md) | 1 | 2026-11-18 |
+| F19 | Frontend | Màn đặt lịch có năm khối màu trông vui mắt hơn bản một màu xanh. Vì sao bản một màu vẫn tốt hơn? | [bài 9](frontend/lessons/09-blind-comparison-milestone.md) | 1 | 2026-11-18 |
+| F20 | Frontend | Một bạn hỏi "sao phải sửa màn này?". Câu trả lời thuyết phục cần ba thứ gì? | [bài 9](frontend/lessons/09-blind-comparison-milestone.md) | 1 | 2026-11-18 |
