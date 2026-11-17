@@ -38,7 +38,7 @@ Buổi đầu của chặng 2 (áp vào app của mình), kiểu bài "chọn b�
 ## Bạn đã làm
 
 - Nhìn 5 giây: mắt "đi khắp màn", đúng chỗ cấn của màn gốc.
-- Chọn bản B (băng chuỗi ngày), lý do: "vì vào màn là mình nhìn được con số chính là số mình cần ôn". Lý do này tả đúng bản C hơn bản B, chưa rõ là lẫn số chuỗi ngày với số chính hay bấm nhầm.
+- Chọn bản C (một số to), lý do: "vì vào màn là mình nhìn được con số chính là số mình cần ôn". Bản lưu ghi bản B vì bấm nhầm; thien xác nhận sau buổi (2026-11-17) là chọn C, trùng với Claude.
 - Câu hỏi nhanh 1 chọn "tô ô Nhớ màu xanh lá đậm"; câu 2 (vì sao băng chuỗi ngày không hợp) đúng.
 - Bàn thử: thử đủ hai giá trị mọi núm, chốt một số to, trắng, cỡ 18. Có thể do lỗi trang: nút "Đặt bản C, số 18" đặt lại cỡ về 18 nếu bấm sau khi đã thử 56 và 34 (AI suy ra; đã sửa nút trong nguồn).
 - Với sakubun thật: "để sau, xem thêm các màn khác trước". Chưa sửa gì trong sakubun.
