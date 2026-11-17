@@ -1,0 +1,82 @@
+# Sửa quy trình sau review 2026-11-17
+
+Trạng thái: đang chạy · Duyệt: 2026-11-17 (thien: "ok mình duyệt và bạn hãy bắt đầu làm", đợt 0, 1, 2 và 5 câu hỏi theo đề xuất) · Cập nhật: 2026-11-17 · Thread: [Review sâu và tối ưu thienai-workflow](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRL6Rmzan9FkewxyJuLWWw6Z) · nick tnt628 · Đầu vào: [bản review và kế hoạch gộp](https://claude.ai/artifact/Wi411et6UDhnH1Eo147PM4) (gộp cả review của Codex cùng ngày, cùng commit 08334ae)
+
+Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
+
+## Đang ở đâu
+- Đang ở: đợt 0, 1, 2 làm xong trong PR #98 (chờ merge).
+- Còn thiếu: thien merge PR; dán instructions v4 ở từng project; xoá 5 nhánh cũ. Đợt 3 chạy cùng hai buổi học kế tiếp.
+- thien cần làm: merge PR #98, rồi dán instructions theo `profile/SETUP.md`.
+
+## Mục tiêu
+Bộ quy trình đúng và gọn hơn mà không mất luật nào: sửa chỗ ghi sai, luật áp theo điều kiện thay vì áp mọi lúc, có đường riêng cho project bản beta, và bám tính năng có sẵn của Claude thay vì tự làm lại.
+
+## Không làm
+- Không viết lại từ đầu, không xây hệ thống điều phối hay khoá mới.
+- Không thêm script mới; chỉ sửa script có sẵn.
+- Không dùng hook SessionStart: thread của project beta không chạy hook trong `.claude/settings.json` ([tài liệu Claude Projects](https://code.claude.com/docs/en/claude-projects), mục "What threads pick up from your repositories", đọc 2026-11-17).
+- Không cắt luật dạy hay nén luật quan trọng chỉ để giảm KB. Không tách hệ thống học ra repo riêng.
+
+## Nguyên tắc
+Bám tính năng có sẵn của Claude và cập nhật theo nó; không làm lại thứ Claude đã có, không sửa hay cắt hướng dẫn gốc của Claude. Phần tự làm chỉ giữ khi tính năng có sẵn không làm được (ví dụ đổi nick: Claude không chia sẻ thread giữa các tài khoản).
+
+## Checkpoint
+
+### 0. Dọn sự thật, không đổi luật
+Xong khi: thien đọc STATUS thấy đúng; `start-session --claim` không nhận việc đã xong.
+- [ ] STATUS viết lại theo trạng thái 2026-11-17 (bỏ PR đã merge, nhánh đã merge, sakubun #301 cũ thành #326)
+- [ ] Đầu 3 kế hoạch cũ đúng trạng thái; `handoff.mjs done` việc `claude-only-learning` (đã xoá khỏi sổ 2026-11-17)
+- [ ] Con trỏ cũ "đọc `learning/README.md` trước" ở `TUTOR.md`, `learning/README.md`, `MAP.md` đổi thành gói buổi
+- [ ] Lấy lại cách gắn repo qua ô Project knowledge của PR #74 cho project bản cũ
+- [ ] Xoá 5 nhánh cũ (thien làm, AI không có quyền xoá)
+
+### 1. Luật theo điều kiện áp dụng (chỉ sửa chữ)
+Xong khi: đọc bộ tình huống dưới với luật mới thì mỗi ca ra đúng một hành vi; câu hỏi đơn giản không phải chờ kiểm việc dở.
+- [ ] Nhắc việc dở ba mức (chặn / không chặn / hỏi đáp), file chủ `PROFILE.md`
+- [ ] Phương án đã xét chỉ bắt buộc với quyết định khó sửa lại hay có đánh đổi thật; STATUS sửa khi trạng thái đổi
+- [ ] Sổ bàn giao ghi ở mốc có nghĩa, không sau từng bước
+- [ ] `CHATS.md`: ngưỡng là hướng dẫn đang thử, chỉ cho project bản cũ; đo usage chỉ khi đang có thí nghiệm, bỏ khỏi phần chung
+- [ ] Giới hạn số dòng đổi thành nguyên tắc kèm cỡ KB; câu hỏi thứ tư "luật này xem lại khi nào"
+
+### 2. Đường beta và bớt báo động giả (sửa script có sẵn)
+Xong khi: thread beta mới khởi động không gọi `project_info`, không clone lại, không báo thiếu setup sai; `check-open-work` ghi rõ nhánh nào đã có PR đóng.
+- [ ] `SETUP.md` v4: hai đoạn instructions (project beta và project cũ), chỗ bấm đúng cho từng loại
+- [ ] `start-session.mjs`: chế độ beta không in lại `AGENTS.md`; báo lỗi khi gặp tham số lạ; cảnh báo khi STATUS bảo chờ một PR đã đóng
+- [ ] `check-open-work.mjs` ghi PR của từng nhánh (đang mở, đã đóng, chưa có)
+- [ ] `reading-cost.mjs` ghi rõ đây là cỡ tài liệu, không phải usage
+
+### 3. Đo buổi học (chạy cùng hai buổi học kế tiếp)
+Xong khi: có tổng số lượt của chat dựng bài và chat sau buổi ở hai buổi, kèm một câu "bước nào lâu nhất"; ở beta thêm số token của thread trong Project settings > Usage.
+- [ ] Buổi 1
+- [ ] Buổi 2
+
+### 4. Tự động hoá phần học, chỉ khi đợt 3 cho thấy đáng
+Ngưỡng và cách làm ở checkpoint 3, 4 của `2026-11-15-lean-learning.md`.
+
+### 5. Chiều bớt (làm sau lần xem lại 2026-12-01)
+- [ ] Kế hoạch xong chuyển vào thư mục `done` trong `docs/plans/`; bảng "luật nằm ở đâu" kèm mốc xem lại; đối chiếu phần tự làm với tính năng mới của Claude
+
+## Bộ tình huống mẫu (kiểm đợt 1 bằng cách đọc)
+| Tình huống | Hành vi đúng | Luật quyết định |
+|---|---|---|
+| thien hỏi một câu tra cứu ("CHATS.md nói gì?") | Trả lời ngay, không kiểm việc dở | `PROFILE.md`, nhắc việc dở mức 3 |
+| thien bảo sửa một dòng chữ | Làm luôn, nói một câu đã sửa gì; không đưa bảng phương án | `PROFILE.md`, ra quyết định (việc nhỏ) |
+| Việc mới về môn BA trong khi có PR mở sửa bài BA | Báo PR đó trước, làm trên nhánh đó hay chờ merge | nhắc việc dở mức 1; phần chung "Đầu phiên" |
+| Việc mới trong khi có PR sakubun chờ merge, không liên quan | Nhắc một dòng rồi làm luôn | nhắc việc dở mức 2 |
+| "tiếp tục" khi sổ có việc của nick khác | `start-session --claim`, so nhánh với sổ, làm tiếp | `HANDOFF.md` |
+| Nhắn "học" | Chạy `prepare-lesson.mjs`, dựng trang, không dạy trong chat | `AGENTS.md` mục "học" |
+| Thread beta mới | Không gọi `project_info`, không clone; chạy `start-session --beta` | `SETUP.md` bản beta |
+| Chat bản cũ đã 35 lượt, việc kế tiếp lớn | Gợi ý mở chat mới kèm câu nhắn "tiếp tục" | `CHATS.md` (bản cũ) |
+
+## Đã đổi
+| Ngày | Đổi gì | Vì sao |
+|---|---|---|
+| 2026-11-17 | Bỏ ý thử hook SessionStart ở đợt 2 | Tài liệu chính thức: thread project beta không chạy hook |
+| 2026-11-17 | Bản instructions beta làm ngay trong PR này thay vì chờ sau đợt 2 | thien vừa dán v3 vào project beta; v3 bảo gọi `project_info` mà beta không có |
+| 2026-11-17 | Xoá 5 nhánh cũ chuyển cho thien | Phiên cloud bị chặn đẩy (403) lên nhánh khác nhánh làm việc |
+
+## Lỗi gặp
+| Ngày | Lỗi | Đã xử lý |
+|---|---|---|
+| 2026-11-17 | Lúc review, AI chạy thử `start-session.mjs --claim ... --dry-run`; lệnh không có `--dry-run` mà lặng lẽ bỏ qua, nên đã nhận thật việc `claude-only-learning` trong sổ (ghi "Claude tnt628, test") | Việc đó đã xong nên xoá khỏi sổ; đợt 2 cho lệnh báo lỗi khi gặp tham số lạ |

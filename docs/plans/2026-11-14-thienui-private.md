@@ -1,13 +1,13 @@
 # Chuyển repo thienui sang riêng tư
 
-Trạng thái: xong · Duyệt: 2026-11-14 · Cập nhật: 2026-11-14 · Thread: [Chuyển thienui sang riêng tư an toàn](https://claude.ai/code/project/chan_01TWjpyDUPatD4TgSaGkK3GV?thread=cmsg_01TWjpyDUPatD4TgSaGkK3GVDxSvhHTsmVLvK7FafqhunR) · nick tnt024
+Trạng thái: xong · Duyệt: 2026-11-14 · Cập nhật: 2026-11-17 · Thread: [Chuyển thienui sang riêng tư an toàn](https://claude.ai/code/project/chan_01TWjpyDUPatD4TgSaGkK3GV?thread=cmsg_01TWjpyDUPatD4TgSaGkK3GVDxSvhHTsmVLvK7FafqhunR) · nick tnt024
 
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: xong cả 3 checkpoint (2026-11-15), chỉ còn merge PR.
-- Còn thiếu: merge PR #73 ở thienai-workflow và PR #7 ở thienui.
-- thien cần làm: merge hai PR đó.
+- Đang ở: xong cả 3 checkpoint (2026-11-15). PR #73 ở thienai-workflow đã merge.
+- Còn thiếu: [chưa kiểm] PR #7 ở thienui đã merge chưa (phiên 2026-11-17 không có quyền đọc thienui).
+- thien cần làm: merge PR #7 ở thienui nếu còn mở.
 
 ## Mục tiêu
 Người ngoài không xem, không clone được gu giao diện, component, luật và skill của thien trong repo [thienui](https://github.com/thiengthb/thienui), mà AI ở cả 3 nick vẫn đọc được như cũ.

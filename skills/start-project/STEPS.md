@@ -24,7 +24,7 @@ Skill có thể được gọi ở coordinator hoặc ở một thread. Khi nói
    - Chép `templates/gitattributes.template` thành `.gitattributes` ở gốc repo của project, trong cùng PR. Repo đã có `.gitattributes` thì đặt dòng `* text=auto eol=lf` ở **đầu** file (luật đứng sau thắng, nên các ngoại lệ sẵn có như `*.bat text eol=crlf` phải nằm sau nó), rồi kiểm bằng `git check-attr -a <một file .bat>`. Repo đã có file từ trước: trong cùng PR chạy `git add --renormalize .` và commit, để file đã lỡ lưu CRLF cũng thành LF; người đã clone thì làm theo mục "Máy Windows (làm một lần)" trong README của thienai-workflow (cần `git status` sạch). Lý do: git trên Windows đổi file thành CRLF, script đọc Markdown như `check-status.mjs` và `handoff.mjs` tìm không thấy mục (lỗi thật trên laptop của thien, thienai-workflow PR #69).
    - Trong một PR vào repo thienai-workflow, thêm repo này vào `life/tracked-repos.md` để phần chung của `AGENTS.md` được đồng bộ khi mẫu đổi. Không hỏi thêm; báo ở bước 5 để thien bỏ nếu không muốn. Kèm hướng dẫn thêm repo vào token `workflow-sync` theo `life/tracked-repos.md`.
    - Nếu là đồ án, bài môn học, hoặc project nhóm cần khai báo AI: chép thêm `templates/AI-LOG.template.md` vào `docs/ai-log.md` trong cùng PR đó.
-   - Bước này hay bị quên: đưa thien đoạn sau để dán vào hướng dẫn của project (AI không tự sửa cài đặt được): "Project này theo quy trình thienai-workflow. Trước khi làm, đọc AGENTS.md và docs/STATUS.md trong repo <tên repo>."
+   - Bước này hay bị quên: trong PR vào thienai-workflow, thêm project vào bảng "Mỗi project, ở mỗi nick" của `profile/SETUP.md`, rồi đưa thien đúng đoạn project instructions trong file đó (bản beta hay bản cũ, theo kiểu project của nick ở `profile/ACCOUNTS.md`) kèm chỗ dán. AI không tự sửa cài đặt được. Chỉ một đoạn chuẩn, để `setup-check.mjs` kiểm được ở mọi project.
    - Nếu lưu hồ sơ vào memory của project, ghi rõ đó là bản sao, bản gốc ở repo thienai-workflow.
 5. Báo lại trong 3 dòng: đã tạo gì, PR nào, thien cần làm gì.
 
@@ -34,5 +34,5 @@ Skill có thể được gọi ở coordinator hoặc ở một thread. Khi nói
 ## Khi xem lại quy trình (hết milestone, hoặc thien yêu cầu)
 1. Đọc lại hồ sơ và các lần thien phải nhắc lại hoặc chê trong milestone vừa qua.
 2. Đề xuất tối đa 3 thay đổi cho `profile/PROFILE.md` hoặc `templates/AGENTS.template.md`, mỗi thay đổi kèm lý do và lý do mạnh nhất để không đổi.
-3. Giữ giới hạn: `profile/PROFILE.md` và phần chung của `templates/AGENTS.template.md` mỗi file dưới 60 dòng. Thêm một ý thì bỏ hoặc gộp một ý khác.
+3. Giữ giới hạn: `profile/PROFILE.md` và phần chung của `templates/AGENTS.template.md` chỉ giữ điều áp dụng ở mọi phiên, nhắm dưới 60 dòng và dưới 12 KB mỗi file. Thêm một ý thì bỏ, gộp hay chuyển ra file theo việc một ý khác, không nối dài câu cho đủ số dòng. Liệt kê luật đã tới ngày hay dấu hiệu xem lại (câu thứ tư ở mục "Sửa quy trình" của README).
 4. Thien chọn cái nào, AI mở một PR vào repo thienai-workflow. Không tự sửa.

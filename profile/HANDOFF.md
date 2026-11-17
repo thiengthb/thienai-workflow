@@ -1,6 +1,6 @@
 # Bàn giao giữa các nick Claude
 
-thien dùng nhiều nick Claude. Nick đang làm có thể hết usage (phiên hay tuần) bất cứ lúc nào, và không có tín hiệu nào báo trước. Nick khác không đọc được chat, thread hay memory của nick cũ, chỉ đọc được repo. Nên việc dở được ghi vào một sổ bàn giao trong repo **sau mỗi bước**, không đợi cuối phiên. Quyết định ở [`docs/decisions/001-account-handoff.md`](../docs/decisions/001-account-handoff.md) (thien chọn bản A ngày 2026-11-14).
+thien dùng nhiều nick Claude. Nick đang làm có thể hết usage (phiên hay tuần) bất cứ lúc nào, và không có tín hiệu nào báo trước. Nick khác không đọc được chat, thread hay memory của nick cũ, chỉ đọc được repo. Nên việc dở được ghi vào một sổ bàn giao trong repo **ở những mốc khó khôi phục**, không đợi cuối phiên. Quyết định ở [`docs/decisions/001-account-handoff.md`](../docs/decisions/001-account-handoff.md) (thien chọn bản A ngày 2026-11-14).
 
 ## Sổ nằm ở đâu
 - Mỗi project giữ sổ của mình trong repo của chính nó: nhánh `handoff`, mỗi việc dở một file `tasks/<việc>.md`. Việc của sakubun nằm ở repo sakubun, việc của thienai-workflow nằm ở thienai-workflow.
@@ -10,7 +10,7 @@ thien dùng nhiều nick Claude. Nick đang làm có thể hết usage (phiên h
 | Việc | Lệnh |
 |---|---|
 | Bắt đầu một việc | `node templates/handoff.mjs new <owner/repo> <việc> "<tên việc>" --out <việc>.md`, điền rồi `save` (đẩy vào repo ghi ở dòng `Repo:`) |
-| Ghi sau mỗi bước | sửa file rồi `node templates/handoff.mjs save <việc>.md`. Nick khác đã sửa cùng việc từ lúc mình đọc thì lệnh từ chối, không ghi đè; `show <owner/repo> <việc> --out <việc>.new.md` lấy bản mới vào file riêng, gộp phần của mình vào đó, đổi tên về `<việc>.md` rồi `save` |
+| Ghi ở mỗi mốc | sửa file rồi `node templates/handoff.mjs save <việc>.md`. Nick khác đã sửa cùng việc từ lúc mình đọc thì lệnh từ chối, không ghi đè; `show <owner/repo> <việc> --out <việc>.new.md` lấy bản mới vào file riêng, gộp phần của mình vào đó, đổi tên về `<việc>.md` rồi `save` |
 | Xem việc dở | `node templates/handoff.mjs list` (mọi repo) hay `list <owner/repo>`; chi tiết bằng `show <owner/repo> <việc>` |
 | Xong việc | `node templates/handoff.mjs done <owner/repo> <việc>` |
 
@@ -24,7 +24,7 @@ Dùng `--out <file>` thay cho `> file`: trên Windows PowerShell 5, `>` ghi file
 
 ## Khi nào ghi
 - Ngay khi nhận một việc nhiều bước (một câu hỏi trả lời xong trong một lượt thì không cần).
-- Sau mỗi bước trong checklist: trước hết commit và đẩy nhánh làm việc, rồi sửa "Đã xong" (kèm mã commit đã đẩy) và "Bước tiếp theo", rồi `save`. Một bước là một kết quả nick khác tiếp được ngay (một commit có nghĩa, một trang đã đăng), không phải mỗi lần sửa một file.
+- Ở mốc có nghĩa: sau một commit đã đẩy mà nick khác khó tự dựng lại, ngay khi đang chờ thien (trang, câu hỏi), và trước một thao tác dài (dựng trang lớn, chạy test lâu). Trước hết commit và đẩy nhánh làm việc, rồi sửa "Đã xong" (kèm mã commit đã đẩy) và "Bước tiếp theo", rồi `save`. Việc ngắn (khoảng dưới 10 lượt) gộp nhiều bước vào một lần ghi. Ghi sổ không bảo đảm không mất việc: phần chưa đẩy vẫn mất khi hết usage.
 - Không ghi token, mật khẩu, dữ liệu bài học thô hay chuyện riêng: sổ nằm trong lịch sử git cả khi đã `done`. `save` từ chối chuỗi giống token, nhưng đó chỉ là lưới an toàn.
 - Ngay sau khi đăng một trang chờ thien (chọn phương án, duyệt giao diện, buổi học): ghi vào "Đang chờ thien" link trang, câu hỏi, và **lệnh dựng lại trang từ repo**. File nguồn của trang (ví dụ `decision.json`, ảnh, trang học) phải nằm trong nhánh làm việc đã đẩy, không để ở `/tmp`, vì nick khác không thấy máy của nick cũ. Ảnh nén JPG, mỗi ảnh vài trăm KB; trang phác để đuôi `.txt` cho khỏi bị build; có `docs/plans/` thì để cạnh kế hoạch của bước, ví dụ `docs/plans/<ngày>-<bước>/round2/`.
 - Khi thien trả lời hay chọn: chép **nguyên văn** kết quả vào repo (mục "Kết quả" của kế hoạch, PR, hay quyết định) rồi mới sửa sổ.
@@ -37,7 +37,7 @@ Bước 1 và 3 nằm sẵn trong lệnh khởi động: `node templates/start-s
 2. `show` việc đó, gắn repo và nhánh ghi trong sổ, `git pull`, đọc `docs/STATUS.md` của repo đó. So sổ với git: commit cuối của nhánh (`git log -1`) và PR có khớp "Đã xong" không. Nhánh đi trước sổ (nick cũ hết usage sau khi đẩy, trước khi `save`) thì tin nhánh và sửa sổ; sổ ghi commit mà nhánh không có thì commit đó chưa đẩy, coi như mất.
 3. Nhận việc trước khi làm: "Ghi bởi" là nick khác và cập nhật trong 24 giờ qua thì làm theo mục "Nhiều nick" ở dưới. Rồi sửa "Ghi bởi" thành nick và link thread của mình (project cũ không có thread thì ghi link chat; "Claude nick chưa rõ" khi project instructions chưa có dòng `nick:`) và `save` ngay; `save` tự ghi giờ hiện tại vào "Cập nhật", nên mốc 24 giờ tính từ lúc nhận. `save` bị từ chối vì sổ vừa đổi nghĩa là một nick khác cũng vừa nhận việc này: dừng lại hỏi thien.
 4. Việc đang chờ thien chọn trên trang: link cũ chỉ mở được ở nick cũ. Chạy lệnh dựng lại ghi trong sổ, đăng thành trang mới, gửi thien link mới, ghi link mới vào sổ. Lựa chọn thien đã bấm mà chưa gửi trên trang cũ thì mất; thien bấm lại.
-5. Làm tiếp từ "Bước tiếp theo", và ghi sổ sau mỗi bước như trên.
+5. Làm tiếp từ "Bước tiếp theo", và ghi sổ ở các mốc như trên.
 
 ## Nhiều nick
 - Dòng "Ghi bởi" luôn có tên nick (`Ghi bởi: Claude tnt024, <link thread hoặc link chat>`), và link trang ghi "(mở ở nick tntXXX)". `list` in nick của từng việc.

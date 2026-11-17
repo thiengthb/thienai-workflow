@@ -20,6 +20,14 @@ g(work, 'checkout', '-q', 'main');
 let list = openWork({ paths: ['learning/war/'], cwd: work });
 assert.equal(list.length, 1); assert.equal(list[0].branch, 'other'); assert.deepEqual(list[0].files, ['learning/war/x.md']);
 assert.equal(openWork({ paths: ['learning/ba/'], cwd: work }).length, 0);
+// PR của nhánh, đọc từ refs/pull: chưa có PR, PR đang mở (có merge ref), PR đã đóng (chỉ còn head).
+assert.equal(list[0].pr, null); assert.match(report(list), /chưa có PR/);
+g(work, 'push', '-q', 'origin', 'other:refs/pull/7/head');
+list = openWork({ paths: ['learning/war/'], cwd: work, fetch: false });
+assert.deepEqual(list[0].pr, { number: 7, open: false }); assert.match(report(list), /PR #7 đã đóng/, 'closed PR: old branch to review');
+g(work, 'push', '-q', 'origin', 'other:refs/pull/7/merge');
+list = openWork({ paths: ['learning/war/'], cwd: work, fetch: false });
+assert.deepEqual(list[0].pr, { number: 7, open: true }); assert.match(report(list), /PR #7 đang mở/);
 g(work, 'checkout', '-qb', 'mine'); g(work, 'merge', '-q', 'other');
 assert.equal(openWork({ paths: ['learning/war/'], cwd: work, fetch: false }).length, 0, 'branch already merged into current one is not reported');
 // Clone một nhánh: fetch thường chỉ tải main, check vẫn phải thấy nhánh "other".

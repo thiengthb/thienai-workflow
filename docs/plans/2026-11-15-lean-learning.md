@@ -1,14 +1,13 @@
 # Học càng nhiều, repo không nặng thêm
 
-Trạng thái: đang chạy · Duyệt: 2026-11-15 · Cập nhật: 2026-11-15 · nick tnt697 · Đầu vào: review lần 3 của Codex (bd5c611), số đo trên main bd5c611 và PR #76
+Trạng thái: đang chạy · Duyệt: 2026-11-15 · Cập nhật: 2026-11-17 · nick tnt697 (ghi trạng thái 2026-11-17: nick tnt628) · Đầu vào: review lần 3 của Codex (bd5c611), số đo trên main bd5c611 và PR #76
 
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 2 xong ở nhánh `claude/lean-learning-2` (chờ merge). Đợt 1 xong (PR #77, #78). Đợt 0 có số đo đầu (mục 0), còn thiếu một lần "sau buổi" ở chat riêng.
-- Còn thiếu: thử gói buổi ở buổi BA 3 thật, rồi đợt 3.
-- thien cần làm: merge PR #78. PR #76 (chiến tranh 5) để tới khi học xong bài đó mới merge, như mọi bài khác. Buổi tới nhắn "học" như thường.
-- Khi học chiến tranh 5: AI rebase nhánh của PR #76 lên main, chạy `make-lesson.mjs` trên trang `lesson-05.html` của môn chiến tranh (nguồn tự gọn), thêm chữ "kit" vào tiêu đề PR #76 vì nó có sửa `sandtable.js` (câu 3: giữ nguyên, không tách).
+- Đang ở: đợt 0–2 xong và đã merge (PR #77, #78, #81). Đợt 3 (khung tự sinh) và 4 (sau buổi chỉ ghi một bản ghi) chưa làm.
+- Còn thiếu: số lượt của hai buổi học kế tiếp (đợt 3 của kế hoạch `2026-11-17-workflow-review.md`). Đợt 3 ở đây chỉ làm khi pha "viết khung" chiếm từ một phần ba số lượt dựng bài; đợt 4 khi pha "ghi file" chiếm từ một nửa số lượt sau buổi.
+- thien cần làm: không có; nhắn "học" như thường.
 
 ## Mục tiêu
 Chi phí của một buổi học (AI phải đọc bao nhiêu, phải viết bao nhiêu, CI chạy bao lâu, PR đụng bao nhiêu file chung) giữ gần như **cố định** dù đã học 10 hay 200 buổi. Trải nghiệm 7 bước và mọi luật thien đã chốt giữ nguyên.

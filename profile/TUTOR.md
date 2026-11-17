@@ -1,6 +1,6 @@
 # Khi AI dạy thien
 
-Áp cho mọi môn: frontend, BA, tiếng Nhật, môn mới sau này. thien học nhiều môn xoay vòng: khi thien nhắn "học", đọc `learning/README.md` trước để biết buổi tới học môn gì. Trạng thái từng môn nằm ở `learning/<môn>.md`; luật riêng của môn ở file đó thắng luật chung ở đây. Luyện dịch tiếng Nhật thì cách chấm của app sakubun thắng.
+Áp cho mọi môn: frontend, BA, tiếng Nhật, môn mới sau này. thien học nhiều môn xoay vòng: khi thien nhắn "học", chạy `artifacts/lesson/prepare-lesson.mjs` trước: gói buổi in buổi tới học môn gì và phần cần của `learning/README.md`, nên không mở cả file đó. Trạng thái từng môn nằm ở `learning/<môn>.md`; luật riêng của môn ở file đó thắng luật chung ở đây. Luyện dịch tiếng Nhật thì cách chấm của app sakubun thắng.
 
 ## Vì sao phải theo nhịp này
 

@@ -7,7 +7,12 @@
 //
 //   node templates/start-session.mjs --project <tên> --instructions "<đoạn instructions>"|none|unseen
 //        --repos a/b,c/d --skills start-project@1,make-slides@1 --sync "<bộ lọc của project_info: JSON dán nguyên, hay /path:include,...>"
-//        [--claim "Claude tnt697, <link chat>"] [--task <owner/repo>:<việc>]
+//        [--claim "Claude tnt697, <link chat>"] [--task <owner/repo>:<việc>] [--beta]
+//
+// --beta: project bản beta (chat điều phối, mỗi việc một thread cloud). AGENTS.md đã tự nạp qua CLAUDE.md nên không in lại;
+//          setup-check kiểm theo đoạn instructions bản beta và bỏ phần knowledge (profile/SETUP.md, "Hai kiểu project").
+// Tham số lạ làm lệnh dừng trước khi đụng tới sổ (lỗi 2026-11-17: --dry-run bị bỏ qua lặng lẽ và việc bị nhận thật).
+// STATUS nói chờ một PR mà PR đó đã đóng (đọc refs/pull trên origin) thì in "nhắc:" để phiên này sửa STATUS trong PR của nó.
 //
 // --claim: thien said "tiếp tục". Sets "Ghi bởi" of the task to this value and saves it right away (profile/HANDOFF.md,
 //          step 3); the working copy is written next to the repo folder (../<việc>.md), outside git.
@@ -19,7 +24,7 @@ import { join, dirname } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { readOnly, readText, summarize, allRepos, stripBase, hashOf, cleanup, normalize } from './handoff.mjs';
-import { openWork, report } from './check-open-work.mjs';
+import { openWork, report, prRefs } from './check-open-work.mjs';
 
 const here = dirname(dirname(fileURLToPath(import.meta.url)));
 const SELF = 'thiengthb/thienai-workflow';
@@ -32,6 +37,28 @@ export function statusParts(md) {
   const head = (md.match(/^Cập nhật lần cuối:.*$/m) || [''])[0];
   const parts = md.split(/^(?=## )/m).filter((p) => STATUS_PARTS.some((h) => p.startsWith('## ' + h + '\n')));
   return [head, ...parts.map((p) => p.trim())].filter(Boolean).join('\n\n');
+}
+
+/**
+ * Lines of STATUS that wait on a PR of this repo which is no longer open ("chờ merge PR #97" after #97 merged).
+ * prs: prRefs() of the repo. A "#N" right after another repo's name (sakubun PR #326) belongs to that repo: skipped.
+ */
+export function stalePrNotes(md, prs, otherRepos = ['sakubun', 'thienui', 'tiktok', 'nuc-infra']) {
+  if (!prs) return [];
+  const parts = statusParts(md).split('\n').filter((l) => /chờ|merge|đang mở/i.test(l));
+  const out = [];
+  for (const line of parts) {
+    for (const m of line.matchAll(/#(\d+)/g)) {
+      const before = line.slice(Math.max(0, m.index - 16), m.index);
+      if (new RegExp(`(${otherRepos.join('|')})\\s*(PR\\s*)?$`, 'i').test(before)) continue;
+      // History next to the number ("đã merge (PR #81)", "PR #60 đã đóng") is not waiting.
+      const near = line.slice(Math.max(0, m.index - 30), m.index + m[0].length + 14);
+      if (/đã (merge|đóng|vào|xong)/i.test(near)) continue;
+      const pr = prs.byNumber.get(Number(m[1]));
+      if (pr && !pr.open) out.push(`STATUS còn chờ PR #${m[1]} nhưng PR đó đã đóng (hay đang conflict): kiểm PR rồi sửa dòng «${line.trim().slice(0, 90)}» trong PR của phiên này.`);
+    }
+  }
+  return [...new Set(out)];
 }
 
 /**
@@ -81,21 +108,28 @@ function main(argv) {
   const taskDir = opt('--task-dir') || dirname(here);
   const noFetch = flag('--no-fetch');
   const noAgents = flag('--no-agents');
+  const beta = argv.includes('--beta'); // stays in argv: setup-check reads it too
   const map = Object.fromEntries((mapArg || '').split(',').filter(Boolean).map((x) => { const i = x.indexOf('='); return [x.slice(0, i), x.slice(i + 1)]; }));
   const urlOf = (repo) => map[repo] || `https://github.com/${repo}`;
   let code = 0;
+
+  // Unknown options stop here, before the book is touched.
+  if (!argv.includes('--project') && argv.some((a) => a !== '--beta')) throw new Error(`tham số lạ: ${argv.filter((a) => a !== '--beta').join(' ')} (xem đầu file templates/start-session.mjs). Chưa làm gì.`);
 
   // 1. Setup: everything left in argv goes to setup-check.mjs as is.
   console.log('## Setup');
   if (argv.includes('--project')) {
     const r = run([join(here, 'templates/setup-check.mjs'), ...argv]);
     process.stdout.write(r.stdout + r.stderr);
+    // Exit 2 = setup-check did not run (unknown option, bad SETUP.md): stop before claiming anything.
+    if (r.status === 2) { console.log('=> Lệnh dừng ở đây, chưa đụng tới sổ: sửa tham số rồi chạy lại.'); return 2; }
     if (r.status !== 0) { code = 1; console.log('=> Thiếu setup: nói với thien trước khi làm (đoạn cần dán đã in ở trên).'); }
   } else console.log('Chưa kiểm (không có --project).');
 
   // AGENTS.md is printed here so the session needs no extra turn to load it (project instructions: read it first).
+  // Beta threads already have it: CLAUDE.md (@AGENTS.md) is loaded when the thread starts.
   const agents = join(here, 'AGENTS.md');
-  if (existsSync(agents) && !noAgents) console.log('\n## AGENTS.md (thienai-workflow)\n' + normalize(readFileSync(agents, 'utf8')).replace(/^# AGENTS\.md\n+/, '').trim());
+  if (existsSync(agents) && !noAgents && !beta) console.log('\n## AGENTS.md (thienai-workflow)\n' + normalize(readFileSync(agents, 'utf8')).replace(/^# AGENTS\.md\n+/, '').trim());
 
   // 2. Handoff book of every repo, newest first.
   console.log('\n## Sổ bàn giao');
@@ -164,6 +198,7 @@ function main(argv) {
   console.log('\n## STATUS (thienai-workflow, phần cần cho phiên mới)');
   const status = join(here, 'docs/STATUS.md');
   console.log(existsSync(status) ? statusParts(readFileSync(status, 'utf8')) : 'Không có docs/STATUS.md.');
+  if (existsSync(status) && !noFetch) for (const n of stalePrNotes(readFileSync(status, 'utf8'), prRefs({ cwd: here }))) console.log('nhắc: ' + n);
   if (task && task.repo !== SELF) console.log(`\nViệc nằm ở ${task.repo}: clone repo đó, đọc docs/STATUS.md của nó trước khi làm.`);
   console.log('\n## Nhánh chưa merge (thienai-workflow)');
   let open = openWork({ fetch: !noFetch, cwd: here });

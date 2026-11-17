@@ -1,8 +1,8 @@
 # Học nhiều môn: vòng xoay và trạng thái
 
-File này cho biết buổi tới học môn gì. Khi thien nhắn "học" (tài khoản nào, model nào cũng vậy), AI đọc file này trước, mở buổi cho môn kế tiếp trong vòng, rồi cập nhật bảng "Trạng thái" sau buổi.
+File này cho biết buổi tới học môn gì. Khi thien nhắn "học" (nick nào, model nào cũng vậy), AI chạy `artifacts/lesson/prepare-lesson.mjs`: gói buổi in buổi kế tiếp, khung một buổi và phần cần của file này, nên không phải đọc cả file. Mở file này khi sửa nó (sau buổi) hay khi gói ghi "chưa kiểm".
 
-thien chỉ học bằng Claude (từ 2026-11-15, vì chỉ trang học artifact của Claude vừa ý), nên luồng học không còn phần cho Codex hay công cụ khác. Trước khi mở buổi, chạy `node templates/check-open-work.mjs learning/`: nhánh nào chưa merge mà có buổi học thì bảng "Trạng thái" dưới đây còn thiếu buổi đó, đọc nhánh đó trước. `make-lesson.mjs` tự kiểm việc này cho môn của trang và dừng nếu có nhánh chưa merge sửa bài của môn đó (sau lỗi 2026-11-13: dựng lại bài chiến tranh 4 trong khi PR #44 đã có).
+thien chỉ học bằng Claude (từ 2026-11-15, vì chỉ trang học artifact của Claude vừa ý), nên luồng học không còn phần cho Codex hay công cụ khác. Gói buổi có in nhánh chưa merge đụng môn đó (tự chạy `node templates/check-open-work.mjs learning/`): nhánh nào chưa merge mà có buổi học thì bảng "Trạng thái" dưới đây còn thiếu buổi đó, đọc nhánh đó trước. `make-lesson.mjs` tự kiểm việc này cho môn của trang và dừng nếu có nhánh chưa merge sửa bài của môn đó (sau lỗi 2026-11-13: dựng lại bài chiến tranh 4 trong khi PR #44 đã có).
 
 Kế hoạch đầy đủ và lý do nằm ở tài liệu "Kế hoạch học nhiều lĩnh vực song song" (https://claude.ai/artifact/QJwWL3z4pTjZerq5U3Fb9G), thien đồng ý ngày 2026-11-12.
 

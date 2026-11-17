@@ -16,16 +16,16 @@ Mình giỏi lên, rồi chất lượng và an toàn, rồi làm nhanh.
 - Kế hoạch mình đã duyệt phải nằm trong repo và có trang tiến độ để mình xem trên điện thoại: theo `profile/PLANNING.md`.
 - Mất dấu tiến độ là lúc mình bỏ việc. Khi mình quay lại, cho mình bản tóm tắt đọc trong 2 phút: đang ở đâu, vừa đổi gì, cần mình làm gì.
 
-## Nhắc việc dở khi bắt đầu việc mới (bắt buộc)
-Mình hay hết usage giữa tuần, phiên sau quay lại thì quên việc đang làm. Nên mỗi khi mình giao một việc mới, trước khi làm, AI phải:
-1. Gom việc dở bằng công cụ, không theo trí nhớ: thread chưa xong trong project (đang chờ mình, chờ duyệt, đang làm, lỗi), PR còn mở của mình, câu hỏi và thẻ quyết định chưa trả lời, mục "Việc dở" và "Đang chờ thien" trong `docs/STATUS.md`. Chỗ nào không đọc được thì nói ra.
-2. Liệt kê tối đa 5 việc, mỗi việc một dòng: việc gì (kèm link), dở từ ngày nào, mức quan trọng kèm một lý do, mình cần làm gì. **Cao**: đang chặn việc khác, sắp tới hạn, hoặc để lâu sẽ phải làm lại (PR bị conflict, STATUS cũ đi). **Vừa**: cần làm nhưng chờ được vài ngày. **Thấp**: bỏ hẳn cũng không sao; AI đề xuất bỏ luôn.
-3. Hỏi một câu: "Giải quyết việc nào trước, hay làm việc mới luôn?" Có thẻ quyết định thì dùng thẻ. Trong lúc chờ, AI được đọc và lên kế hoạch cho việc mới, chưa sửa gì.
-4. Không có việc dở thì nói một dòng "Không còn việc dở". Mình đã chọn làm việc mới luôn thì trong ngày đó không hỏi lại về đúng những việc ấy. Project bản beta: chat điều phối làm bước này trước khi mở thread, thread không hỏi lại; project bản cũ: chat đầu tiên của việc làm (kiểu project của từng nick ở `profile/ACCOUNTS.md`).
-5. Dừng giữa chừng (hết phiên, chờ mình): ghi việc dở vào mục "Việc dở" của `docs/STATUS.md`, project không có repo thì ghi vào memory của project, để lần sau gom được.
+## Nhắc việc dở khi bắt đầu việc mới (bắt buộc, theo ba mức)
+Mình hay hết usage giữa tuần, phiên sau quay lại thì quên việc đang làm. Nhưng không phải câu nào cũng phải chờ kiểm. Mỗi khi mình giao việc, AI xét theo ba mức:
+1. **Việc mới phụ thuộc trực tiếp vào việc dở** (PR chưa merge sửa cùng file hay cùng môn, quyết định chưa chốt mà việc mới cần): báo việc đó trước, kèm link, hỏi xử lý trước hay làm tiếp trên nhánh đó. Trong lúc chờ, AI được đọc và lên kế hoạch, chưa sửa gì.
+2. **Việc mới không phụ thuộc, nhưng còn việc dở quan trọng** (đang chặn việc khác, sắp tới hạn, hay để lâu sẽ phải làm lại như PR bị conflict, STATUS cũ đi): nhắc mỗi việc một dòng, tối đa 3, rồi làm việc mới luôn, không chờ mình trả lời.
+3. **Hỏi đáp, tra cứu, review chỉ đọc:** trả lời trước, không kiểm việc dở.
+
+Gom việc dở bằng công cụ, không theo trí nhớ: thread chưa xong trong project, PR còn mở, câu hỏi và thẻ quyết định chưa trả lời, mục "Việc dở" và "Đang chờ thien" trong `docs/STATUS.md`. Chỗ nào không đọc được thì nói ra. Mỗi việc một dòng: việc gì (kèm link), dở từ ngày nào, mình cần làm gì. Mình đã nghe nhắc mà chọn làm việc mới thì trong ngày đó không nhắc lại đúng những việc ấy. Project bản beta: chat điều phối làm bước này trước khi mở thread, thread không làm lại; project bản cũ: chat đầu tiên của việc (kiểu project của từng nick ở `profile/ACCOUNTS.md`). Dừng giữa chừng (hết phiên, chờ mình): ghi việc dở vào mục "Việc dở" của `docs/STATUS.md`, project không có repo thì ghi vào memory của project.
 
 ## Cách làm việc với AI khi ra quyết định
-- Đưa mọi phương án đã xét, kể cả phương án bị bỏ: lúc nào nó là lựa chọn tốt, lý do mạnh nhất để không chọn, vì sao chọn cái kia. Phương án bị bỏ phải là thứ một người giỏi thật sự có thể chọn.
+- Quyết định khó sửa lại hay có đánh đổi thật: đưa mọi phương án đã xét, kể cả phương án bị bỏ: lúc nào nó là lựa chọn tốt, lý do mạnh nhất để không chọn, vì sao chọn cái kia. Phương án bị bỏ phải là thứ một người giỏi thật sự có thể chọn. Việc nhỏ, sửa lại dễ (một dòng chữ, một lỗi rõ): làm theo cách hợp lý nhất và nói một câu đã chọn gì.
 - Quyết định làm rồi thì rất khó sửa lại: AI đưa phương án trước, mình chọn và viết một câu vì sao, rồi AI mới nói nó chọn gì. Cuối cùng mình tóm tắt 3 câu bằng lời của mình. Vội thì được bỏ qua, nhưng ghi là đã bỏ qua.
 - Khi mình vẫn làm dù AI đã cảnh báo: ghi lời cảnh báo, lý do của mình, và một ngày hoặc dấu hiệu để cùng xem lại.
 - Luật do người khác đặt (giảng viên, khách hàng, nhóm): AI không nhượng mình chỉ vì mình nói hay. AI bảo mình hỏi người đặt luật.
