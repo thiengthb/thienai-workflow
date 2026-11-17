@@ -1,6 +1,6 @@
 # Chuẩn setup cho mọi nick và project Claude
 
-Phiên bản chuẩn: **4**
+Phiên bản chuẩn: **5**
 
 thien dùng 3 nick Claude (tên ngắn và việc của từng nick ở [`ACCOUNTS.md`](ACCOUNTS.md)), nick nào cũng có các project giống nhau (project "Claude" gắn repo thienai-workflow, project "sakubun" gắn repo sakubun), cộng vài project riêng. Setting của nick và của project không tự đồng bộ giữa các nick: mỗi nick, mỗi project phải được cài tay. File này là chuẩn chung, và AI tự kiểm theo nó ở đầu mỗi phiên, nên đổi chuẩn ở đây một lần là mọi nick tự nhắc thien cập nhật ở lần mở tiếp theo.
 
@@ -20,6 +20,7 @@ Claude có hai kiểu project, mỗi nick chỉ có một kiểu (bảng ở [`A
 - Số bản của skill là `(bản N)` ở cuối phần mô tả skill trong danh sách skill của phiên. Không có số thì ghi tên trơn: lệnh coi đó là bản cũ.
 - Project chưa có instructions, chưa gắn repo vẫn phải kiểm: gắn repo thienai-workflow vào phiên rồi chạy. Lỗi đã gặp 2026-11-14: project "Claude" ở nick tnt024 chưa có instructions và chưa gắn repo, nên luật kiểm (nằm trong instructions và AGENTS.md) không bao giờ chạy, AI không nhắc gì cả.
 - Tin mở đầu khi muốn làm tiếp ở bản cũ: "tiếp tục, gắn repo thienai-workflow quyền ghi" (có tên repo và quyền). Chỉ "tiếp tục" thì lần gắn repo đầu hay bị bộ duyệt quyền chặn, tốn thêm 1–2 lượt; tin có tên repo đã qua ngay lần đầu một lần, chưa đủ để chắc lần nào cũng qua (chat 2026-11-17 00:42, nick tnt697; xem "Lỗi gặp" trong `docs/plans/2026-11-15-claude-usage.md`).
+- Từ v5, lần gắn đầu ở bản cũ mà bị chặn thì AI hỏi ngay bằng câu hỏi có nút bấm, chờ thien cho phép rồi gắn lại trong cùng lượt; không thử clone hay tìm qua Project, không dừng để báo lỗi (thien chê cách dừng rồi báo lỗi ở chat BA 5, 2026-11-17: hai lần thien nói rõ việc gắn thì đều qua).
 - Dòng `nhắc: AI tự làm: ...` là việc của AI (thêm dòng vào sổ nick), không phải việc của thien.
 - Thiếu gì thì nói với thien **trước khi làm việc**, kèm đúng đoạn cần dán và chỗ bấm. thien làm xong (hay nói "bỏ qua") thì làm tiếp. Đủ rồi thì không nói gì.
 - Project chưa có trong bảng dưới: hỏi thien có thêm vào chuẩn không (qua PR sửa bảng này).
@@ -54,7 +55,7 @@ Project instructions: xoá bản cũ rồi dán đúng đoạn của kiểu proj
 Bản beta, dán ở Project settings > Memory > Project instructions:
 
 ```text
-chuẩn setup v4 beta · project: <tên project> · nick: <tên nick>
+chuẩn setup v5 beta · project: <tên project> · nick: <tên nick>
 Mình là thien. Repo là nguồn sự thật duy nhất. Mình có 3 nick Claude dùng chung các repo, nhưng không dùng chung project, thread hay memory, nên chuyện gì quan trọng đều phải ghi vào repo.
 Thread mới: repo của project đã được clone sẵn và AGENTS.md đã tự nạp, nên không clone lại, không tìm project_info. Lượt đầu, trong thư mục repo thienai-workflow, chạy node templates/start-session.mjs --beta --project (tên ở dòng đầu) --instructions "(cả đoạn này)" --repos (các repo của project) --skills (skill@số bản). Lệnh in kết quả kiểm setup, sổ bàn giao, STATUS và nhánh chưa merge. Thiếu setup thì nhắc mình làm trước, kèm đoạn cần dán và chỗ bấm.
 Việc dở: chat điều phối nhắc trước khi mở thread, theo mục "Nhắc việc dở" trong profile/PROFILE.md; thread không hỏi lại.
@@ -66,9 +67,10 @@ Trả lời bằng tiếng Việt tự nhiên.
 Bản cũ, dán ở Project settings > Instructions:
 
 ```text
-chuẩn setup v4 · project: <tên project> · nick: <tên nick>
+chuẩn setup v5 · project: <tên project> · nick: <tên nick>
 Mình là thien. Repo là nguồn sự thật duy nhất. Mình có 3 nick Claude dùng chung các repo, nhưng không dùng chung chat, thread hay memory, nên chuyện gì quan trọng đều phải ghi vào repo.
 Đầu mỗi phiên, khởi động trong 3 lượt, không đọc file repo qua công cụ Project (file đồng bộ từ GitHub không đọc theo tên được). Lượt 1: gọi project_info và gắn repo thiengthb/thienai-workflow cùng lúc. Lượt 2: một lệnh Bash clone repo đó (--depth 1) rồi chạy node templates/start-session.mjs --project (tên ở dòng đầu) --instructions "(cả đoạn này)" --repos (các repo đang gắn) --skills (skill@số bản) --sync "(bộ lọc đồng bộ của project_info)". Lượt 3: làm việc.
+Gắn repo bị chặn thì không thử cách khác và không kết thúc lượt: hỏi mình ngay bằng câu hỏi có nút bấm (AskUserQuestion) "Cho gắn repo thienai-workflow quyền ghi?", mình bấm cho phép thì gắn lại rồi đi tiếp.
 Lệnh đó in kết quả kiểm setup, AGENTS.md, sổ bàn giao, STATUS và nhánh chưa merge. Thiếu setup thì nhắc mình làm trước, kèm đoạn cần dán và chỗ bấm. Khi mình giao việc mới: nhắc việc còn dở trước, theo mục "Nhắc việc dở" trong profile/PROFILE.md, dùng chính phần lệnh đã in.
 Khi mình nói "tiếp tục": thêm --claim "Claude (nick ở dòng đầu), (link chat)" vào lệnh ở lượt 2, rồi làm tiếp theo profile/HANDOFF.md.
 Mọi commit, PR, sổ bàn giao và link trang đều ghi tên nick ở dòng đầu, theo profile/ACCOUNTS.md.
@@ -105,6 +107,7 @@ Repo khác (sakubun) cũng vậy: tích tài liệu và luật, bỏ ảnh, buil
 - Không cần nhớ đã sửa ở nick nào: ở mỗi nick, phiên đầu tiên sau khi merge sẽ thấy project instructions còn số cũ và nhắc thien dán bản mới.
 
 ## Lịch sử
+- v5 (2026-11-17): bản cũ thêm một dòng: gắn repo bị chặn thì hỏi thien ngay bằng câu hỏi có nút bấm, chờ cho phép rồi gắn lại, không dừng để báo lỗi. Bản beta chỉ đổi số (không gắn repo lúc khởi động). Lỗi gặp ở `docs/plans/2026-11-15-claude-usage.md`.
 - v4 (2026-11-17): thêm đoạn riêng cho project bản beta (không `project_info`, không clone, `start-session --beta` không in lại AGENTS.md); bản cũ đổi số, nội dung giữ nguyên. Gắn repo ở bản cũ qua ô Project knowledge (lấy lại từ PR #74 đã đóng), thêm danh sách tích cho sakubun. Kế hoạch `docs/plans/2026-11-17-workflow-review.md`.
 - v3 (2026-11-15): khởi động 3 lượt bằng `templates/start-session.mjs` (kiểm setup, AGENTS.md, sổ bàn giao, STATUS, nhánh chưa merge trong một lệnh; `--claim` khi "tiếp tục"); không đọc file repo qua công cụ Project.
 - 2026-11-14, vẫn v2: thêm mục "Đồng bộ repo vào knowledge"; `setup-check.mjs` so từng dòng instructions và có `--instructions unseen`, `--sync`.
