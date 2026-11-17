@@ -12,3 +12,4 @@ Trạng thái học, nhật ký và kế hoạch buổi sau nằm ở [`../ba.md
 | 2 | Hỏi về một lần cụ thể, nghe và hỏi tiếp, tránh gợi sẵn đáp án | [02-user-interviews.md](lessons/02-user-interviews.md) | [lesson-02.html](pages/lesson-02.html) |
 | 3 | Xếp các bên theo quyền và mức quan tâm; gặp sớm người chặn được, kể cả khi họ ít quan tâm | [03-stakeholders.md](lessons/03-stakeholders.md) | [lesson-03.html](pages/lesson-03.html) |
 | 4 | Viết nhu cầu thành "Là…, tôi muốn…, để…": người cụ thể, việc muốn làm được (chưa phải nút nào), lý do thật hỏi ra từ một lần cụ thể | [04-user-stories.md](lessons/04-user-stories.md) | [lesson-04.html](pages/lesson-04.html) |
+| 5 | Điều kiện hoàn thành phải kiểm được (ai thử cũng ra cùng kết quả) và bám phần "để"; mơ hồ thì viết lại, cách làm thì để sau | [05-acceptance-criteria.md](lessons/05-acceptance-criteria.md) | [lesson-05.html](pages/lesson-05.html) |

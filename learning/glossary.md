@@ -19,3 +19,4 @@ Cột "Đã quen" để thien tự đánh dấu. Từ đã quen thì AI chỉ vi
 | design system | bộ quy ước dùng chung của một sản phẩm: màu, chữ, khoảng cách, component | 11/11/2026, Frontend 3 | |
 | WCAG | bộ chuẩn quốc tế về giao diện dễ tiếp cận (độ tương phản, màu không là cách duy nhất mang nghĩa...) | 12/11/2026, Frontend 5 | |
 | user story | một câu ba phần ghi nhu cầu người dùng: ai, muốn gì, để làm gì | 17/11/2026, BA 4 | |
+| acceptance criteria | điều kiện hoàn thành: vài dòng đi kèm user story, nói rõ làm tới đâu thì coi là xong | 17/11/2026, BA 5 | |
