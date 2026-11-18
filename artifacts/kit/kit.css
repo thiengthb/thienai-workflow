@@ -6,7 +6,7 @@
   --bg: #f7f7f5; --card: #ffffff; --soft: #f0f0ed; --line: #e5e5e1; --line-strong: #d4d4cf; --ink: #1c1c1b; --muted: #666662;
   --accent: #0e7490; --accent-soft: #e3f3f8; --accent-ink: #0b5a70;
   --good: #277a4c; --good-soft: #e6f3eb; --bad: #c2410c; --bad-soft: #fdeee6; --warn: #8a5a12; --warn-soft: #f6ecd6;
-  --accent-fill: #0e7490; --on-accent: #fff;   /* nền đặc màu nhấn (nút Gửi, nút đang chọn) và chữ trên nền đặc nhấn, đúng, sai */
+  --accent-fill: #0e7490; --on-accent: #fff; --primary-fill: var(--ink);   /* nền đặc màu nhấn (nút Gửi, nút đang chọn) và chữ trên nền đặc nhấn, đúng, sai */
   --shadow: 0 1px 2px rgba(28, 28, 27, .06), 0 6px 18px rgba(28, 28, 27, .06);
   --font: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -16,13 +16,13 @@
   --bg: #171716; --card: #1f1f1e; --soft: #272726; --line: #333331; --line-strong: #444441; --ink: #ededeb; --muted: #a3a39e;
   --accent: #38b2cf; --accent-soft: #11303a; --accent-ink: #8fd8ea;
   --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
-  --accent-fill: #38b2cf; --on-accent: #171716;
+  --accent-fill: #1b7a91; --on-accent: #fff; --primary-fill: #c4c4c0;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #171716; --card: #1f1f1e; --soft: #272726; --line: #333331; --line-strong: #444441; --ink: #ededeb; --muted: #a3a39e;
   --accent: #38b2cf; --accent-soft: #11303a; --accent-ink: #8fd8ea;
   --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
-  --accent-fill: #38b2cf; --on-accent: #171716;
+  --accent-fill: #1b7a91; --on-accent: #fff; --primary-fill: #c4c4c0;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; }
 /* Bộ token thứ hai, như nhau ở sáng và tối. Mọi màu của các mẫu (lesson, it, war, review, decide, compare) lấy từ đây hay từ trên;
    check-tokens.mjs báo khi có mã màu viết thẳng ngoài file này. Riêng màu của màn mô phỏng và địa hình trong từng bài là nội dung bài. */
@@ -31,7 +31,6 @@
   --shadow-sm: 0 1px 2px rgb(0 0 0 / .06); --shadow-pop: 0 4px 14px rgb(0 0 0 / .18); --shadow-lift: 0 8px 20px rgb(0 0 0 / .16);
   /* Nút nổi (gu thienui "nút nổi có gờ dưới 2px", nút đặc kiểu app FAP): bóng rất nhẹ cho nút viền, gờ tối 2px ở đáy nút đặc. */
   --shadow-btn: 0 1px 2px rgb(0 0 0 / .07); --lip: inset 0 -2px 0 rgb(0 0 0 / .18); --lip-soft: inset 0 -2px 0 rgb(0 0 0 / .06);
-  --glow-accent: 0 2px 8px -2px color-mix(in srgb, var(--accent-fill) 55%, transparent);
   --skel: color-mix(in srgb, var(--line) 70%, var(--card)); --skel-hi: var(--card);
   /* Chuyển động: lò xo nhẹ, không nảy rõ (thienui docs/taste.md). Vào chậm hơn ra. */
   --ease-spring: linear(0, .32 8%, .72 18%, .95 30%, 1.03 42%, 1.01 58%, 1); --ease-out: cubic-bezier(.2, .8, .2, 1);
@@ -62,7 +61,9 @@ code, .mono { font-family: var(--mono); font-size: .88em; }
 .label { font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* Nút: viền 1px, bo 8px, nổi nhẹ. Nút đặc (primary, accent) không viền, có gờ tối 2px ở đáy; bấm thì lún 1px theo lò xo, mất gờ. */
+/* Nút: viền 1px, bo 8px, nổi nhẹ. Nút đặc (primary, accent) không viền, có gờ tối 2px ở đáy; bấm thì lún 1px theo lò xo, mất gờ.
+   Không quầng sáng quanh nút: nút nào cũng nổi cùng một mức (thien 2026-11-19: nút sáng hẳn ra khỏi các nút khác nhìn khó chịu;
+   quầng sáng chỉ hợp với thứ mang nghĩa đèn, đang bật). Tối: nền đặc nhấn là xanh petrol đậm chữ trắng, nút Chính xám sáng vừa (--primary-fill), không trắng loá. */
 .btn { font: 600 14px/1 var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--line-strong);
   border-radius: var(--r); min-height: 36px; padding: 0 14px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   cursor: pointer; white-space: nowrap; box-shadow: var(--shadow-btn), var(--lip-soft); -webkit-tap-highlight-color: transparent;
@@ -70,9 +71,9 @@ code, .mono { font-family: var(--mono); font-size: .88em; }
 .btn:hover { background: var(--soft); }
 .btn:active { transform: translateY(1px) scale(.985); box-shadow: none; transition-duration: var(--t-fast); }
 .btn[disabled] { opacity: .45; cursor: default; transform: none; box-shadow: none; }
-.btn.primary { background: var(--ink); border-color: transparent; color: var(--bg); box-shadow: var(--shadow-btn), var(--lip); }
-.btn.primary:hover { background: color-mix(in srgb, var(--ink) 88%, var(--bg)); }
-.btn.accent { background: var(--accent-fill); border-color: transparent; color: var(--on-accent); box-shadow: var(--glow-accent), var(--lip); }
+.btn.primary { background: var(--primary-fill); border-color: transparent; color: var(--bg); box-shadow: var(--shadow-btn), var(--lip); }
+.btn.primary:hover { background: color-mix(in srgb, var(--primary-fill) 88%, var(--bg)); }
+.btn.accent { background: var(--accent-fill); border-color: transparent; color: var(--on-accent); box-shadow: var(--shadow-btn), var(--lip); }
 .btn.accent:hover { background: color-mix(in srgb, var(--accent-fill) 90%, var(--ink)); }
 .btn.primary:active, .btn.accent:active { box-shadow: none; }
 .btn.ghost { background: transparent; border-color: transparent; box-shadow: none; }

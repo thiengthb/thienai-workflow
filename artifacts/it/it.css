@@ -38,7 +38,7 @@ html[data-stage="on"] #stage { display: block; }
 .knob .seg { display: flex; width: 100%; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
 .knob .seg button { flex: 1; min-height: 32px; border: 0; background: var(--card); color: var(--ink); font: 500 13px var(--font); cursor: pointer; }
 .knob .seg button + button { border-left: 1px solid var(--line); }
-.knob .seg button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+.knob .seg button[aria-pressed="true"] { background: var(--primary-fill); color: var(--bg); }
 .knob .now { font-size: 12.5px; color: var(--muted); min-height: 1.2em; }
 .soi-btn { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; border: 0; background: none; padding: 0;
   font: 500 14px var(--font); color: var(--ink); cursor: pointer; min-height: 32px; }
