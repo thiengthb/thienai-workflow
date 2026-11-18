@@ -118,7 +118,7 @@ const TODAY = ['--today', '2026-11-17'];
     assert.equal(r.status, 0, r.stderr);
     const html = rd(join(d, 'out-' + subj, 'lesson-07.html'), 'utf8');
     assert.match(html, /window\.Stage = /, `it-stage.js filled in (${subj})`);
-    assert.match(html, /\.bench \{/, `it.css filled in (${subj})`);
+    assert.match(html, /\.bench ?\{/, `it.css filled in (${subj})`);
     assert.ok(html.includes(`<meta name="lesson-id" content="${subj}-07">`), `lesson id guessed from path (${subj})`);
   }
 }

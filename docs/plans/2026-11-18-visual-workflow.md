@@ -105,6 +105,7 @@ Dễ sa lầy: tự viết thuật toán xếp sơ đồ; đọc markdown kế h
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
 | 2026-11-18 | Vòng thử gu 2 (bảng màu) chạy ngay, không chờ khoảng 02/12; cùng đợt sửa nút (viền 1px, nút đặc nổi có gờ dưới), thay icon ký tự bằng Lucide, thêm chuyển động và thành phần mới (tab, gập mở, thanh bước, gợi ý, thẻ số, đang tải, màn rỗng, báo trong dòng) | thien nhắn 23:03: muốn nền hợp nhiều loại tài liệu, nút nổi như app FAP vì viền đang dày, icon chip và huy hiệu lệch; chọn "3 bản cho mình chọn" và mở rộng cả bốn hướng |
+| 2026-11-19 | Thêm bước đóng gói trang (`artifacts/kit/pack.mjs`) vào mọi lệnh dựng trang; trau chuốt tab, gập mở, nút chỉ có icon (`.btn.icon`) | thien: "trau chuốt component và tối ưu để không bị nặng khi bạn generate ra tài liệu"; phần kit của trang học từ 102 KB còn 74 KB |
 | 2026-11-18 | Checkpoint 2 thêm một việc: mang các ý review PR #124 vào mẫu kế hoạch | Bản nguồn của vòng gu giữ đúng như thien đã xem, nên sửa ở mẫu mới chứ không sửa bản cũ |
 
 ## Lỗi gặp

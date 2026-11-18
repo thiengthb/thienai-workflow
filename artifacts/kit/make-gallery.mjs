@@ -11,6 +11,7 @@ import { readFileSync, writeFileSync, mkdirSync, realpathSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { writePublish } from './publish.mjs';
+import { packHtml } from './pack.mjs';
 // Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
 const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
@@ -35,7 +36,7 @@ export function render({ palettes } = {}) {
 
 export function build(out, opts) {
   mkdirSync(out, { recursive: true });
-  const html = render(opts);
+  const html = packHtml(render(opts), { icons: false });   // trang mẫu giữ đủ icon để xem
   writeFileSync(join(out, 'index.html'), html);
   writeFileSync(join(out, 'preview.html'), `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>\n${html}\n</body></html>\n`);
   return join(out, 'preview.html');

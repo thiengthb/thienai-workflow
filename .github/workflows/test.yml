@@ -39,6 +39,7 @@ jobs:
       - run: node .github/scripts/setup-check.test.mjs
       - run: node .github/scripts/start-session.test.mjs
       - run: node .github/scripts/check-tokens.test.mjs
+      - run: node .github/scripts/pack.test.mjs
       - run: node .github/scripts/pack-skills.test.mjs
       - run: node .github/scripts/crlf.test.mjs
       - run: node .github/scripts/check-links.test.mjs

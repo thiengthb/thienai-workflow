@@ -81,6 +81,9 @@ code, .mono { font-family: var(--mono); font-size: .88em; }
 .btn.good[aria-pressed="true"] { background: var(--good-soft); border-color: var(--good); color: var(--good); }
 .btn.bad[aria-pressed="true"] { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
 .btn .ic { font-size: 16px; }
+/* Nút chỉ có icon: thêm lớp .icon và aria-label (CSS không phân biệt được nút có chữ hay không). */
+.btn.icon { padding: 0; width: 36px; }
+@media (pointer: coarse) { .btn.icon { width: 40px; } }
 .btn.busy { pointer-events: none; }
 .btn.busy::before { content: ""; width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: kit-spin .7s linear infinite; }
 @media (pointer: coarse) { .btn { min-height: 40px; } }
@@ -96,6 +99,7 @@ code, .mono { font-family: var(--mono); font-size: .88em; }
 .chip { font: 600 12px/1 var(--font); min-height: 22px; padding: 0 8px; border-radius: var(--r); background: var(--soft); color: var(--muted); white-space: nowrap;
   display: inline-flex; align-items: center; gap: 4px; vertical-align: middle; }
 .chip .ic { font-size: 13px; }
+.chip.icon { padding: 0; width: 22px; justify-content: center; }
 .chip.warn { background: var(--warn-soft); color: var(--warn); }
 .chip.good { background: var(--good-soft); color: var(--good); }
 .chip.bad { background: var(--bad-soft); color: var(--bad); }
@@ -219,10 +223,11 @@ button.dg-node:hover { border-color: var(--accent); }
 /* ── Thành phần mở rộng (2026-11-18). Hành vi ở kit.js: Kit.icon, Kit.tabs, Kit.reveal. ── */
 /* Tab: một hàng chữ, gạch dưới màu nhấn trượt theo tab đang mở. <div data-tabs> chứa .tabs (nút role=tab) rồi các .tab-panel. */
 .tabs { position: relative; display: flex; gap: 2px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
-.tabs button { font: 500 14px/1 var(--font); color: var(--muted); background: none; border: 0; padding: 10px 12px; cursor: pointer; white-space: nowrap;
+.tabs button { font: 500 14px/1 var(--font); color: var(--muted); background: none; border: 0; min-height: 40px; padding: 0 12px; cursor: pointer; white-space: nowrap;
   display: inline-flex; align-items: center; gap: 6px; border-radius: var(--r) var(--r) 0 0; transition: color var(--t-fast), background-color var(--t-fast); }
 .tabs button:hover { color: var(--ink); background: var(--soft); }
 .tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; }
+.tabs button:focus-visible { outline-offset: -2px; }
 .tabs .tab-ink { position: absolute; bottom: -1px; left: 0; height: 2px; width: 0; background: var(--accent); border-radius: 2px;
   transition: transform var(--t-slow) var(--ease-spring), width var(--t-slow) var(--ease-spring); }
 .tab-panel { padding-top: 12px; }
@@ -232,7 +237,11 @@ button.dg-node:hover { border-color: var(--accent); }
 /* Mục gập mở: <details class="acc"><summary>…</summary><div>…</div></details>. Mũi tên xoay, phần thân trượt xuống. */
 .acc { border: 1px solid var(--line); border-radius: var(--r); background: var(--card); }
 .acc + .acc { margin-top: -1px; }
-.acc summary { list-style: none; display: flex; align-items: center; gap: 8px; padding: 10px 12px; font-weight: 600; cursor: pointer; border-radius: var(--r); }
+.acc:has(+ .acc) { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.acc + .acc { border-top-left-radius: 0; border-top-right-radius: 0; }
+.acc:has(+ .acc) summary, .acc + .acc summary { border-radius: 0; }
+.acc summary { list-style: none; display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 12px; font-weight: 600; cursor: pointer; border-radius: var(--r);
+  transition: background-color var(--t-fast); }
 .acc summary::-webkit-details-marker { display: none; }
 .acc summary:hover { background: var(--soft); }
 .acc summary::after { content: ""; margin-left: auto; width: 16px; height: 16px; flex: none; background: var(--muted);
@@ -243,7 +252,8 @@ button.dg-node:hover { border-color: var(--accent); }
 
 /* Thanh bước: <ol class="steps"><li class="done">…</li><li class="now">…</li><li>…</li></ol>. Ngang, chữ xuống dòng dưới vòng; nhiều hơn 5 bước thì dùng sơ đồ. */
 .steps { list-style: none; margin: 0; padding: 0; display: flex; gap: 0; counter-reset: st; }
-.steps li { counter-increment: st; flex: 1 1 0; min-width: 0; display: grid; justify-items: center; gap: 6px; text-align: center; font-size: 13px; color: var(--muted); position: relative; }
+.steps li { counter-increment: st; flex: 1 1 0; min-width: 0; display: grid; justify-items: center; align-content: start; gap: 6px; text-align: center; font-size: 13px;
+  line-height: 1.35; color: var(--muted); position: relative; overflow-wrap: anywhere; text-wrap: balance; }
 .steps li::before { content: counter(st); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 600 12px/1 var(--font);
   background: var(--card); border: 1px solid var(--line-strong); color: var(--muted); position: relative; z-index: 1; transition: background-color var(--t-base), border-color var(--t-base), color var(--t-base); }
 .steps li:not(:last-child)::after { content: ""; position: absolute; top: 13px; left: calc(50% + 17px); right: calc(-50% + 17px); height: 1px; background: var(--line-strong); }
@@ -267,7 +277,7 @@ button.dg-node:hover { border-color: var(--accent); }
 /* Thẻ số: một con số lớn, nhãn nhỏ, dòng thay đổi có màu. */
 .stat { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); }
 .stat .label { font-size: 11.5px; }
-.stat b { font: 700 24px/1.15 var(--font); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.stat b { font: 700 24px/1.15 var(--font); letter-spacing: -.01em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .stat small { font-size: 12.5px; color: var(--muted); display: inline-flex; align-items: center; gap: 4px; }
 .stat small.up { color: var(--good); } .stat small.down { color: var(--bad); }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap: 8px; }
@@ -289,7 +299,8 @@ button.dg-node:hover { border-color: var(--accent); }
 
 /* Báo trong dòng: một icon, một câu. .note.info, .note.good, .note.warn, .note.bad. */
 .note { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border-radius: var(--r); font-size: 14px; line-height: 1.5; background: var(--soft); color: var(--ink); }
-.note > .ic { font-size: 16px; margin-top: 2px; }
+.note > .ic { font-size: 16px; margin-top: 3px; }
+.note > :not(.ic) { min-width: 0; }
 .note.info { background: var(--accent-soft); } .note.info > .ic { color: var(--accent-ink); }
 .note.good { background: var(--good-soft); } .note.good > .ic { color: var(--good); }
 .note.warn { background: var(--warn-soft); } .note.warn > .ic { color: var(--warn); }
