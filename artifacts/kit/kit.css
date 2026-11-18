@@ -74,7 +74,7 @@ code, .mono { font-family: var(--mono); font-size: .88em; }
 .btn.primary { background: var(--primary-fill); border-color: transparent; color: var(--bg); box-shadow: var(--shadow-btn), var(--lip); }
 .btn.primary:hover { background: color-mix(in srgb, var(--primary-fill) 88%, var(--bg)); }
 .btn.accent { background: var(--accent-fill); border-color: transparent; color: var(--on-accent); box-shadow: var(--shadow-btn), var(--lip); }
-.btn.accent:hover { background: color-mix(in srgb, var(--accent-fill) 90%, var(--ink)); }
+.btn.accent:hover { background: color-mix(in srgb, var(--accent-fill) 88%, black); }   /* luôn tối đi khi rê chuột, để chữ trắng giữ trên 4,5:1 ở cả sáng và tối */
 .btn.primary:active, .btn.accent:active { box-shadow: none; }
 .btn.ghost { background: transparent; border-color: transparent; box-shadow: none; }
 .btn.ghost:hover { background: var(--soft); }
