@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 2, mẫu kế hoạch nhìn được
 
-Repo: thiengthb/thienai-workflow · Nhánh: plan-page-links · PR: #137 (chờ thien merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtptJ · Cập nhật: 2026-11-18T19:51Z
+Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo nhánh mới từ main cho checkpoint 3) · PR: #135–#138 đã merge
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtptJ · Cập nhật: 2026-11-18T20:05Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -38,14 +38,14 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtpt
 
 - 02:48 thien: "thực hiện cho xong nốt". PR #137 (commit 9c408c4): trang tổng quan dẫn sang trang kế hoạch qua dòng `Trang:`; kế hoạch thêm "## Câu hỏi" 3 câu cho checkpoint 3; trang kế hoạch đăng đè (có câu hỏi).
 
+- 02:53 thien trả lời 3 câu hỏi checkpoint 3 bằng nút trên trang: ok cả 3 đề xuất (nguyên văn trong kế hoạch). 02:54 nhắn merge: #137 merge; #138 (STATUS, kế hoạch 11/24) tự merge sau khi sửa ý CodeRabbit (giữ chưa tick việc trang tổng quan). Trang kế hoạch đăng lại (câu hỏi đã trả lời). Trang tổng quan SZGp85… ở nick khác: nick này không đăng đè được (not found).
+
 ## Bước tiếp theo
-1. thien nhắn merge #137 thì merge, rồi `node templates/publish-progress.mjs overview` và đăng đè trang tổng quan; tick việc 4 của checkpoint 2
-2. Đọc câu trả lời 3 câu hỏi (db `plans/2026-11-18-visual-workflow` hay comment), chép nguyên văn vào kế hoạch; khi thien đã trả lời bằng nút thì checkpoint 2 xong
-3. Checkpoint 3: mẫu `artifacts/flow/` theo câu trả lời
+1. Checkpoint 3: mẫu `artifacts/flow/` theo 3 lựa chọn của thien: mỗi luồng một file JSON đúng định dạng `Diagram.mount`; điện thoại sơ đồ dính trên, chữ từng bước cuộn dưới, khối đang đọc sáng lên; cuối trang ô tự kể lại luồng, gửi cho Claude
+2. Khi một nick giữ trang tổng quan (SZGp85…) mở phiên: `node templates/publish-progress.mjs overview` rồi đăng đè, tick việc 4 của checkpoint 2
 
 ## Đang chờ thien
-- Merge PR #137
-- Trả lời 3 câu hỏi cuối trang https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (mở ở nick tnt697). Dựng lại: `node artifacts/plan/make-plan.mjs docs/plans/2026-11-18-visual-workflow.md /tmp/plan-vw --url https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v`, đăng preview.html làm index.html
+Không.
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
