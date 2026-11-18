@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quy trình nhìn được</title>
+<!-- Vòng gu 1, bản "Một nấc": nguồn trang duyệt kế hoạch https://claude.ai/artifact/7hVBYXwyHZbfVp7mL4GsV4 (nick tnt697), chép vào repo 2026-11-18. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Bố cục: một cột đọc 720px; toàn cảnh trước, rồi chẩn đoán, nghiên cứu, tuyến checkpoint, câu hỏi.
+   Màu và chữ giữ đúng kit của thien (ngà, teal, Onest, bo 8px); phần "một nấc mới" nằm ở bố cục: tuyến ga, đường cong gu. */
+:root {
+  --bg: #faf8f3; --card: #ffffff; --soft: #f3f1ec; --line: #e7e3da; --ink: #1b1b1a; --muted: #6b6862;
+  --accent: #308e84; --accent-soft: #e3f1ef; --accent-ink: #1f6b63; --accent-fill: #2a7d74; --on-accent: #fff;
+  --good: #277a4c; --good-soft: #e6f3eb; --warn: #8a5a12; --warn-soft: #f6ecd6; --bad: #c2410c; --bad-soft: #fdeee6;
+  --font: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r: 8px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161615; --card: #1f1f1d; --soft: #262523; --line: #34322e; --ink: #ecebe7; --muted: #a19e97;
+  --accent: #4fb3a6; --accent-soft: #1c3330; --accent-ink: #8fd9c9; --accent-fill: #4fb3a6; --on-accent: #161615;
+  --good: #4fb07a; --good-soft: #1c3125; --warn: #e9c27a; --warn-soft: #3a2f1a; --bad: #f0763f; --bad-soft: #3b2219;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #161615; --card: #1f1f1d; --soft: #262523; --line: #34322e; --ink: #ecebe7; --muted: #a19e97;
+  --accent: #4fb3a6; --accent-soft: #1c3330; --accent-ink: #8fd9c9; --accent-fill: #4fb3a6; --on-accent: #161615;
+  --good: #4fb07a; --good-soft: #1c3125; --warn: #e9c27a; --warn-soft: #3a2f1a; --bad: #f0763f; --bad-soft: #3b2219;
+  color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--font); }
+h1, h2, h3 { margin: 0; line-height: 1.25; text-wrap: balance; }
+h1 { font-size: 30px; letter-spacing: -.022em; font-weight: 700; }
+h2 { font-size: 21px; letter-spacing: -.015em; font-weight: 650; }
+h3 { font-size: 16px; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--accent-ink); text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 28px 18px 80px; display: grid; gap: 44px; }
+section { display: grid; gap: 16px; scroll-margin-top: 64px; }
+.eyebrow { font: 600 12px/1 var(--font); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.lead { font-size: 17px; color: var(--ink); max-width: 64ch; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+.mono { font-family: var(--mono); font-size: 12px; }
+.chip { font: 600 12px/1 var(--font); padding: 5px 8px; border-radius: var(--r); background: var(--soft); color: var(--muted); white-space: nowrap; display: inline-block; }
+.chip.acc { background: var(--accent-soft); color: var(--accent-ink); }
+.chip.good { background: var(--good-soft); color: var(--good); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; }
+
+/* Thanh mục lục dính trên cùng */
+nav.toc { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+nav.toc .in { max-width: 760px; margin: 0 auto; padding: 8px 18px; display: flex; gap: 6px; overflow-x: auto; }
+nav.toc a { font: 500 13px/1 var(--font); color: var(--muted); text-decoration: none; padding: 9px 10px; border-radius: var(--r); white-space: nowrap; }
+nav.toc a:hover, nav.toc a.on { background: var(--card); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
+
+/* Đầu trang */
+header { display: grid; gap: 12px; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* Toàn cảnh: ba nhánh đứng trên một nền chung */
+.overview { display: grid; gap: 10px; }
+.branches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.branch { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: grid; gap: 6px; align-content: start;
+  text-align: left; font: inherit; color: inherit; cursor: pointer; position: relative; }
+.branch:hover { border-color: var(--accent); }
+.branch .n { font: 600 12px/1 var(--mono); color: var(--accent-ink); }
+.branch b { font-size: 16px; }
+.branch span { font-size: 14px; color: var(--muted); line-height: 1.45; }
+.branch::after { content: ""; position: absolute; left: 50%; bottom: -11px; width: 1px; height: 10px; background: var(--line); }
+.base { border: 1px dashed var(--accent); background: var(--accent-soft); color: var(--accent-ink); border-radius: var(--r); padding: 12px 14px; font-size: 14px; }
+.base b { color: var(--ink); }
+.goal { border: 1px solid var(--ink); border-radius: var(--r); padding: 12px 14px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.arrow-down { justify-self: center; width: 1px; height: 14px; background: var(--line); }
+@media (max-width: 560px) { .branches { grid-template-columns: 1fr; } .branch::after { display: none; } }
+
+/* Bản đồ điểm chạm: chỗ bạn đọc mỗi ngày, có hình hay toàn chữ */
+.touch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tp { display: grid; grid-template-columns: 12px 1fr auto; gap: 10px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; font-size: 14px; }
+.tp i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.tp.vis i { background: var(--accent); }
+.tp.half i { background: linear-gradient(90deg, var(--accent) 50%, var(--line) 50%); }
+.tp .chip { font-size: 11px; }
+.touch-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.touch-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.touch-legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+@media (max-width: 560px) { .touch { grid-template-columns: 1fr; } }
+
+/* Biểu đồ số buổi có dùng tính năng */
+.bars { display: grid; gap: 8px; }
+.bar { display: grid; grid-template-columns: minmax(140px, 200px) 1fr 44px; gap: 10px; align-items: center; font-size: 14px; }
+.bar .track { height: 14px; background: var(--soft); border-radius: 4px; overflow: hidden; position: relative; }
+.bar .fill { height: 100%; background: var(--accent); border-radius: 4px; }
+.bar.low .fill { background: var(--muted); opacity: .55; }
+.bar .v { font: 500 12px/1 var(--mono); color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.bar.zero .v { color: var(--bad); }
+@media (max-width: 480px) { .bar { grid-template-columns: 1fr 44px; } .bar .track { grid-column: 1 / -1; grid-row: 2; } }
+.takeaway { border-left: 0; background: var(--soft); border-radius: var(--r); padding: 12px 14px; font-size: 15px; }
+
+/* Nguyên tắc từ nghiên cứu */
+.principles { display: grid; gap: 8px; }
+details.pr { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+details.pr summary { list-style: none; cursor: pointer; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: start; }
+details.pr summary::-webkit-details-marker { display: none; }
+details.pr summary .t { font-weight: 600; }
+details.pr summary .a { grid-column: 1; font-size: 14px; color: var(--muted); }
+details.pr summary .chip { grid-row: 1; grid-column: 2; }
+details.pr .body { padding: 0 14px 14px; font-size: 14px; display: grid; gap: 8px; }
+details.pr[open] summary .a { color: var(--ink); }
+.src { font-size: 13px; color: var(--muted); }
+
+/* Đường cong gu: chỗ thử được */
+.lab { display: grid; gap: 12px; }
+.lab svg { width: 100%; height: auto; display: block; }
+.lab .controls { display: grid; gap: 10px; }
+.lab label { font-size: 14px; display: grid; gap: 6px; }
+.lab input[type=range] { width: 100%; accent-color: var(--accent); min-height: 32px; }
+.seg { display: inline-flex; background: var(--soft); border-radius: var(--r); padding: 3px; gap: 2px; flex-wrap: wrap; }
+.seg button { font: 500 14px/1 var(--font); color: var(--muted); background: transparent; border: 0; border-radius: 5px; min-height: 36px; padding: 0 12px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgb(0 0 0 / .08); font-weight: 600; }
+.readout { font-size: 15px; min-height: 3.2em; }
+
+/* Tuyến checkpoint kiểu tuyến tàu */
+.line { display: grid; gap: 0; position: relative; }
+.stop { display: grid; grid-template-columns: 40px 1fr; gap: 12px; position: relative; padding-bottom: 18px; }
+.stop::before { content: ""; position: absolute; left: 19px; top: 30px; bottom: -2px; width: 2px; background: var(--line); }
+.stop:last-child::before { display: none; }
+.stop.now::before { background: linear-gradient(var(--accent), var(--line)); }
+.dot { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--line); background: var(--card); display: grid; place-items: center;
+  font: 600 14px/1 var(--mono); color: var(--muted); position: relative; z-index: 1; }
+.stop.now .dot { border-color: var(--accent); color: var(--accent-ink); background: var(--accent-soft); }
+.stop.gate .dot { border-style: dashed; }
+.stop .box { display: grid; gap: 8px; padding-top: 6px; }
+.stop .head { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; }
+.done-when { font-size: 14px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; }
+.done-when b { color: var(--accent-ink); font-weight: 600; }
+.stop details summary { cursor: pointer; font-size: 14px; color: var(--muted); padding: 6px 0; min-height: 32px; }
+.stop details ul { margin: 4px 0 0; padding-left: 18px; font-size: 14px; display: grid; gap: 4px; }
+
+/* Phương án */
+.opts { display: grid; gap: 8px; }
+.opt { display: grid; grid-template-columns: 34px 1fr; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; }
+.opt.pick { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.opt .k { font: 600 15px/34px var(--mono); width: 34px; height: 34px; text-align: center; border-radius: var(--r); background: var(--soft); color: var(--muted); }
+.opt.pick .k { background: var(--accent-fill); color: var(--on-accent); }
+.opt .c { display: grid; gap: 6px; font-size: 14px; }
+.opt .c .t { font-size: 16px; font-weight: 600; display: flex; gap: 8px; flex-wrap: wrap; align-items: baseline; }
+.opt dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 4px 10px; }
+.opt dt { color: var(--muted); }
+.opt dd { margin: 0; }
+@media (max-width: 480px) { .opt dl { grid-template-columns: 1fr; } .opt dt { margin-top: 4px; } }
+
+/* Hai cột Không làm / Sa lầy */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 600px) { .two { grid-template-columns: 1fr; } }
+.list { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
+
+/* Lịch */
+.cal { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.wk { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 10px; display: grid; gap: 6px; align-content: start; font-size: 13px; }
+.wk .d { font: 600 12px/1 var(--mono); color: var(--muted); }
+.wk .pill { border-radius: 5px; padding: 5px 7px; background: var(--accent-soft); color: var(--accent-ink); font-weight: 500; }
+.wk .pill.m { background: var(--warn-soft); color: var(--warn); }
+.wk .pill.g { background: var(--soft); color: var(--ink); }
+@media (max-width: 600px) { .cal { grid-template-columns: 1fr 1fr; } }
+
+/* Câu hỏi */
+.qs { display: grid; gap: 12px; }
+.q { display: grid; gap: 10px; }
+.q .opts2 { display: grid; gap: 6px; }
+.choice { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; text-align: left; font: inherit; font-size: 14px; color: var(--ink);
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; cursor: pointer; min-height: 44px; }
+.choice i { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line); margin-top: 2px; }
+.choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.choice[aria-pressed="true"] i { border-color: var(--accent); background: radial-gradient(var(--accent) 45%, transparent 50%); }
+.choice .rec { color: var(--accent-ink); font-weight: 600; }
+.reply { display: grid; gap: 8px; }
+.reply textarea { width: 100%; min-height: 150px; font: 14px/1.5 var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 12px; resize: vertical; }
+.btn { font: 600 15px/1 var(--font); color: var(--on-accent); background: var(--accent-fill); border: 2px solid color-mix(in srgb, var(--accent-fill) 75%, #000);
+  border-bottom-width: 3px; border-radius: var(--r); min-height: 44px; padding: 0 16px; cursor: pointer; justify-self: start; }
+.btn:active { transform: translateY(1px); border-bottom-width: 2px; }
+.btn.ghost { background: var(--card); color: var(--ink); border-color: var(--line); }
+
+/* Ô "chi tiết thử" ở cuối trang: thí điểm cơ chế nâng gu */
+.trial { display: grid; gap: 10px; border: 1px dashed var(--line); border-radius: var(--r); padding: 14px; }
+.trial .row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.sources { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
+.sources ol { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+footer { font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<nav class="toc" aria-label="Mục lục"><div class="in">
+  <a href="#tong-quan">Toàn cảnh</a><a href="#thay-gi">Mình thấy gì</a><a href="#nghien-cuu">Nghiên cứu</a><a href="#gu">Gu lớn dần</a>
+  <a href="#tuyen">Checkpoint</a><a href="#phuong-an">Phương án</a><a href="#lich">Thời gian</a><a href="#cau-hoi">Câu hỏi</a>
+</div></nav>
+
+<main class="wrap">
+<header>
+  <span class="eyebrow">Kế hoạch chờ duyệt · thienai-workflow</span>
+  <h1>Quy trình nhìn được, và gu lớn dần theo ngày</h1>
+  <p class="lead">Hoàn thiện các mẫu trang đang có, thêm mẫu cho những chỗ trong quy trình còn toàn chữ, và đặt một vòng thử gu đều đặn để gu của bạn đi lên từng nấc chứ không đứng yên.</p>
+  <div class="meta"><span class="chip warn">Chờ bạn duyệt</span><span class="chip">Nick tnt697</span><span class="chip">18/11/2026</span><span class="chip">Khoảng 8 phiên, tới 09/12</span></div>
+</header>
+
+<section id="tong-quan">
+  <span class="eyebrow">Đọc trong 30 giây</span>
+  <h2>Ba nhánh, đứng chung trên một lớp sơ đồ</h2>
+  <div class="overview">
+    <div class="branches">
+      <button class="branch" data-go="#s4"><span class="n">Nhánh A</span><b>Đánh bóng mẫu cũ</b><span>Sửa đúng những chỗ bạn đã chê: bảng dán BA, màn kết buổi học, so trước và sau.</span></button>
+      <button class="branch" data-go="#s2"><span class="n">Nhánh B</span><b>Mẫu cho quy trình</b><span>Kế hoạch và luồng chạy thành trang có tuyến, có sơ đồ, sinh thẳng từ file trong repo.</span></button>
+      <button class="branch" data-go="#gu"><span class="n">Nhánh C</span><b>Vòng thử gu</b><span>Hai tuần một lần: quen, một nấc mới, thật xa. Bạn chọn, gu tiến lên theo lựa chọn đó.</span></button>
+    </div>
+    <div class="base"><b>Nền chung: lớp sơ đồ dùng lại được.</b> Khối trơn viền mảnh kiểu draw.io như bạn thích hôm 17/11, bấm từng bước thì khối sáng lên kèm chữ ngay cạnh. Cả ba nhánh dùng lớp này.</div>
+    <div class="arrow-down"></div>
+    <div class="goal"><b>Kết quả bạn thấy:</b><span class="muted">mở điện thoại là nắm được việc đang ở đâu, luồng chạy ra sao, mà không phải đọc hết một file markdown.</span></div>
+  </div>
+</section>
+
+<section id="thay-gi">
+  <span class="eyebrow">Mình thấy gì khi đọc repo</span>
+  <h2>Chỗ bạn đọc nhiều nhất lại đang toàn chữ</h2>
+  <p>Học, ôn, duyệt giao diện và chọn phương án đã có trang đẹp. Còn phần quy trình hằng ngày thì vẫn là markdown và tin nhắn dài.</p>
+  <div class="touch-legend"><span><i style="background:var(--accent)"></i>Đã có trang</span><span><i style="background:linear-gradient(90deg,var(--accent) 50%,var(--line) 50%)"></i>Có lúc có, làm tay mỗi lần một kiểu</span><span><i style="background:var(--line)"></i>Toàn chữ</span></div>
+  <div class="touch">
+    <div class="tp vis"><i></i>Buổi học<span class="chip">lesson, it, war</span></div>
+    <div class="tp vis"><i></i>Ôn thẻ<span class="chip">review</span></div>
+    <div class="tp vis"><i></i>Duyệt giao diện<span class="chip">compare</span></div>
+    <div class="tp vis"><i></i>Chọn phương án<span class="chip">decide</span></div>
+    <div class="tp vis"><i></i>Tiến độ, mở nhanh<span class="chip">tổng quan</span></div>
+    <div class="tp half"><i></i>Kế hoạch gửi duyệt<span class="chip">làm tay</span></div>
+    <div class="tp"><i></i>File kế hoạch, STATUS<span class="chip">markdown</span></div>
+    <div class="tp"><i></i>Báo cáo xong việc<span class="chip">chat</span></div>
+    <div class="tp"><i></i>Giải thích luồng, kiến trúc<span class="chip">chat</span></div>
+    <div class="tp"><i></i>Mô tả PR, sổ bàn giao<span class="chip">markdown</span></div>
+  </div>
+
+  <h3 style="margin-top:8px">Tính năng nào thật sự được bấm</h3>
+  <p class="small muted">Số buổi có dùng trên số buổi có tính năng đó, 12 buổi học từ 14 tới 17/11, lấy từ <span class="mono">learning/usage.md</span>.</p>
+  <div class="bars" id="bars"></div>
+  <p class="takeaway">Thứ <b>cho bạn thấy</b> (Claude làm mẫu trên sân khấu) được dùng ở hơn nửa số buổi. Thứ để <b>hỏi thêm</b> (hỏi Claude, nghe đọc, nói thay gõ) gần như không ai bấm. Nên đợt này mở rộng theo hướng hình và thao tác trực tiếp trên hình, không thêm nút hỏi đáp. Đây là suy luận của mình từ 12 buổi, còn ít; mốc 13/12 sẽ có số chắc hơn.</p>
+</section>
+
+<section id="nghien-cuu">
+  <span class="eyebrow">Nghiên cứu nói gì</span>
+  <h2>Tám điều, mỗi điều áp vào một chỗ cụ thể</h2>
+  <p class="small muted">Bấm từng dòng để xem áp vào đâu. Nhãn cho biết mình đã đọc tới đâu.</p>
+  <div class="principles">
+    <details class="pr" open>
+      <summary><span class="t">Chữ cộng hình giúp mọi người học tốt hơn chữ suông</span><span class="a">Không phải vì bạn là "người học bằng hình".</span><span class="chip">đọc tóm tắt</span></summary>
+      <div class="body">
+        <p>Tổng hợp của Mayer (2017) đo nguyên tắc "chữ đi với hình" có hiệu ứng trung vị d = 1,67 qua năm thí nghiệm. Còn ý dạy khớp với "kiểu học" của từng người thì bài tổng quan của Pashler và cộng sự (2008) gần như không tìm được bằng chứng.</p>
+        <p><b>Áp vào:</b> mình không bỏ chữ để thay bằng hình. Mỗi hình có một hai câu ngắn đặt ngay cạnh, và luật này áp cho mọi trang, không chỉ trang cho bạn.</p>
+      </div>
+    </details>
+    <details class="pr">
+      <summary><span class="t">Chữ đặt sát hình, bỏ thứ thừa, chia nhỏ theo nhịp người xem</span><span class="a">Ba nguyên tắc có số đo rõ nhất của Mayer.</span><span class="chip">đọc tóm tắt</span></summary>
+      <div class="body">
+        <p>Cùng bài tổng hợp: đặt chữ gần hình (d = 0,79), bỏ chữ và hình thừa (d = 0,70), chia bài thành đoạn do người học tự bấm qua (d = 0,70).</p>
+        <p><b>Áp vào:</b> lớp sơ đồ dùng chung có chữ chú thích nằm cạnh khối đang sáng, không dồn xuống dưới; mẫu luồng chạy đi từng bước bằng nút, không tự chạy.</p>
+      </div>
+    </details>
+    <details class="pr">
+      <summary><span class="t">Toàn cảnh trước, phóng to và lọc sau, chi tiết khi cần</span><span class="a">Câu thần chú của Shneiderman (1996) cho mọi trang nhiều thông tin.</span><span class="chip">đọc tóm tắt</span></summary>
+      <div class="body">
+        <p><b>Áp vào:</b> trang kế hoạch mở bằng tuyến checkpoint (toàn cảnh), bấm một ga mới ra việc con và bằng chứng (chi tiết). Trang này cũng xếp theo thứ tự đó.</p>
+      </div>
+    </details>
+    <details class="pr">
+      <summary><span class="t">Phần ít dùng để vào lớp thứ hai</span><span class="a">Progressive disclosure của Nielsen Norman Group.</span><span class="chip">đọc đoạn trích</span></summary>
+      <div class="body">
+        <p>Cách này giúp màn chính gọn và dễ học hơn. Có một chỗ cần nói thẳng: chính các tài liệu tổng hợp cũng ghi bằng chứng thực nghiệm cho riêng cách này còn mỏng, phần lớn dựa trên lý thuyết tải nhận thức.</p>
+        <p><b>Áp vào:</b> nút Nghe và Nói thay gõ (0 lần dùng) chuyển vào mục "Thêm" trên trang học, chưa xoá. Bỏ hẳn hay không thì quyết ở mốc 13/12 theo số đo.</p>
+      </div>
+    </details>
+    <details class="pr">
+      <summary><span class="t">Cho người đọc vặn núm và thấy kết quả ngay</span><span class="a">Explorable Explanations của Bret Victor (2011).</span><span class="chip">đọc đoạn trích</span></summary>
+      <div class="body">
+        <p>Ý chính: tài liệu nên để người đọc tự đổi giả định và nhìn hệ quả, thay vì chỉ đọc kết luận. Bàn thử ở bài frontend của bạn đã đi đúng hướng này.</p>
+        <p><b>Áp vào:</b> đem kiểu núm vặn sang quy trình. Ví dụ đường cong gu ngay bên dưới, hay trang kế hoạch có núm "nếu tuần này chỉ còn 3 phiên" để thấy ga nào bị đẩy lùi.</p>
+      </div>
+    </details>
+    <details class="pr">
+      <summary><span class="t">Kể bằng cuộn trang giảm tải mà vẫn hiểu như đọc chữ</span><span class="a">Một nghiên cứu 454 người, năm 2026.</span><span class="chip">đọc tóm tắt</span></summary>
+      <div class="body">
+        <p>So với văn bản thường, dạng cuộn kể chuyện làm người đọc hứng thú hơn, thấy nhẹ đầu hơn, còn mức hiểu thì ngang nhau. Đó là khi đọc chính sách quyền riêng tư, nên chỉ nên coi là gợi ý cho trang dài.</p>
+        <p><b>Áp vào:</b> mẫu luồng chạy có thể đi theo cuộn trên điện thoại; sơ đồ dính ở trên, chữ cuộn bên dưới.</p>
+      </div>
+    </details>
+    <details class="pr">
+      <summary><span class="t">Người ta nhớ đỉnh và kết của một trải nghiệm</span><span class="a">Quy luật đỉnh và kết của Kahneman và cộng sự (1993).</span><span class="chip">đọc đoạn trích</span></summary>
+      <div class="body">
+        <p>Ký ức về một trải nghiệm dựa vào lúc mạnh nhất và lúc cuối, độ dài gần như không tính.</p>
+        <p><b>Áp vào:</b> mỗi trang học kết bằng một màn có hình: bản đồ 7 bước bạn đã đi, câu tự nói lại hay nhất của bạn nổi lên. Không kết bằng một bảng kết quả khô.</p>
+      </div>
+    </details>
+    <details class="pr">
+      <summary><span class="t">Đẹp làm người ta bỏ qua lỗi nhỏ, và che lỗi lúc duyệt</span><span class="a">Hiệu ứng thẩm mỹ và dễ dùng, Kurosu và Kashimura (1995).</span><span class="chip">đọc đoạn trích</span></summary>
+      <div class="body">
+        <p>Giao diện đẹp được chấm là dễ dùng hơn, nhưng chỉ tha cho lỗi nhỏ. Khi thử, người dùng hay chỉ khen màu mà quên kể chỗ vướng.</p>
+        <p><b>Áp vào:</b> mỗi vòng duyệt hỏi tách hai câu: "làm được việc chưa" trước, "có đẹp không" sau.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section id="gu">
+  <span class="eyebrow">Nhánh C · Gu lớn dần</span>
+  <h2>Mới vừa đủ thì thích nhất, và chỗ "vừa đủ" dịch dần theo thời gian</h2>
+  <p>Hekkert và cộng sự (2003) thấy người ta thích thiết kế mới chừng nào cái mới không làm mất cảm giác quen; quen và mới quan trọng ngang nhau và kìm nhau. Một nghiên cứu về ghế cũng ra đường cong hình chữ U úp: mới vừa phải được chấm đẹp nhất. Người học mỹ thuật thì đổi cả thứ mình thích, ví dụ bớt ưa hình đối xứng (Gartus và cộng sự, 2020).</p>
+  <p>Ghép lại, đây là suy luận của mình: gu của bạn tiến lên khi đỉnh đường cong dịch sang phải, và cách đẩy nó là mỗi lần đưa một thứ <b>xa hơn một nấc</b>, không nhảy hẳn ra xa.</p>
+  <div class="card lab">
+    <svg viewBox="0 0 400 240" role="img" aria-labelledby="curve-t">
+      <title id="curve-t">Đường cong độ mới và mức thích</title>
+      <g id="grid"></g>
+      <path id="curve-old" fill="none" stroke-width="2" stroke-dasharray="5 5"></path>
+      <path id="curve" fill="none" stroke-width="3"></path>
+      <g id="zones"></g>
+      <circle id="knob" r="9"></circle>
+      <text id="xlab" x="214" y="228" text-anchor="middle" font-size="13">Độ mới so với gu hiện tại</text>
+      <text x="14" y="18" font-size="13" id="ylab">Mức thích</text>
+    </svg>
+    <div class="controls">
+      <label for="nov">Kéo để chọn độ mới của một trang<input id="nov" type="range" min="0" max="100" value="38"></label>
+      <div class="seg" role="group" aria-label="Thời điểm">
+        <button type="button" aria-pressed="true" data-t="0">Hôm nay</button>
+        <button type="button" aria-pressed="false" data-t="1">Sau vài vòng thử gu</button>
+      </div>
+      <p class="readout" id="readout"></p>
+    </div>
+  </div>
+  <h3>Vòng thử gu chạy thế nào</h3>
+  <div class="opts">
+    <div class="opt"><span class="k">1</span><div class="c"><span class="t">Cùng một màn, ba hướng</span><span>Quen: đúng kit bây giờ. Một nấc: giữ màu và chữ, đổi bố cục hay cách kể. Thật xa: một hướng từ ngoài vùng quen, kèm ví dụ thật mình mang về và một câu "để ý chỗ này". Dùng mẫu chọn phương án có sẵn.</span></div></div>
+    <div class="opt"><span class="k">2</span><div class="c"><span class="t">Bạn chọn và viết một câu vì sao</span><span>Câu đó vào hàng chờ gu như bây giờ, rồi theo nhịp PR hai tuần sang thienui, mục "Đang thử".</span></div></div>
+    <div class="opt"><span class="k">3</span><div class="c"><span class="t">Gu có ngày hết hạn</span><span>Mỗi dòng "Đang thử" có ngày xem lại sau 4 tuần: hoặc lên thành gu đã chốt, hoặc bỏ. Gu vẫn nhất quán vì chỉ dịch một nấc mỗi lần, nhưng không đứng yên.</span></div></div>
+    <div class="opt"><span class="k">4</span><div class="c"><span class="t">Mỗi trang mới có đúng một chi tiết thử</span><span>Ghi rõ ở cuối trang, có nút Thích và Không. Bạn không phải chờ vòng gu mới nói được ý mình. Trang này đang thử cách đó, xem ô cuối trang.</span></div></div>
+  </div>
+</section>
+
+<section id="tuyen">
+  <span class="eyebrow">Checkpoint</span>
+  <h2>Sáu ga, mỗi ga xong khi bạn tự kiểm được</h2>
+  <div class="line">
+    <div class="stop now" id="s0"><div class="dot">0</div><div class="box">
+      <div class="head"><h3>Vòng thử gu đầu tiên</h3><span class="chip acc">1 phiên</span><span class="chip">không đổi luật</span></div>
+      <p class="done-when"><b>Xong khi:</b> bạn mở trang chọn trên điện thoại, chọn một trong ba hướng cho màn "trang kế hoạch" và viết một câu vì sao; câu đó nằm trong hàng chờ gu.</p>
+      <details><summary>Việc con</summary><ul><li>Dựng ba bản của cùng một màn bằng mẫu chọn phương án; trang bạn đang đọc là bản "một nấc"</li><li>Mang về 3 ví dụ thật cho hướng "thật xa", mỗi cái một câu để ý</li><li>Ghi kết quả vào <span class="mono">learning/frontend/taste-queue.md</span></li></ul></details>
+    </div></div>
+    <div class="stop" id="s1"><div class="dot">1</div><div class="box">
+      <div class="head"><h3>Lớp sơ đồ dùng chung</h3><span class="chip acc">1 phiên</span><span class="chip">kit</span></div>
+      <p class="done-when"><b>Xong khi:</b> trang mẫu thành phần có mục Sơ đồ; bạn mở trên điện thoại, bấm qua một luồng 5 bước, không khối nào tràn hay đè chữ.</p>
+      <details><summary>Việc con</summary><ul><li><span class="mono">artifacts/kit/diagram.js</span>: khối trơn viền mảnh, mũi tên, không tô màu, không bóng</li><li>Xếp chỗ tự động bằng thư viện có sẵn, không tự viết thuật toán</li><li>Bấm từng bước: khối sáng lên, chữ chú thích hiện cạnh khối</li><li>Kiểm màu bằng <span class="mono">check-tokens.mjs</span> như mọi mẫu</li></ul></details>
+    </div></div>
+    <div class="stop" id="s2"><div class="dot">2</div><div class="box">
+      <div class="head"><h3>Mẫu kế hoạch nhìn được</h3><span class="chip acc">2 phiên</span><span class="chip">mẫu mới</span></div>
+      <p class="done-when"><b>Xong khi:</b> kế hoạch kế tiếp được gửi bạn duyệt bằng trang sinh từ file <span class="mono">docs/plans/</span>, và bạn trả lời câu hỏi bằng nút trên trang, không gõ lại.</p>
+      <details><summary>Việc con</summary><ul><li><span class="mono">artifacts/plan/make-plan.mjs</span> đọc file kế hoạch theo <span class="mono">PLAN.template.md</span>, dựng tuyến ga, phương án, câu hỏi</li><li>Câu trả lời lưu vào db của trang để Claude đọc, có nút chép làm đường lui</li><li>Thử trên cả 9 file kế hoạch đang có; file lệch mẫu thì lệnh báo rõ chỗ lệch</li><li>Trang tổng quan dẫn sang trang này thay vì sang file markdown</li></ul></details>
+    </div></div>
+    <div class="stop" id="s3"><div class="dot">3</div><div class="box">
+      <div class="head"><h3>Mẫu luồng chạy</h3><span class="chip acc">1–2 phiên</span><span class="chip">mẫu mới</span></div>
+      <p class="done-when"><b>Xong khi:</b> bạn xem luồng "một buổi học đi qua những đâu" và tự kể lại bằng lời mà không mở <span class="mono">profile/MAP.md</span>.</p>
+      <details><summary>Việc con</summary><ul><li><span class="mono">artifacts/flow/</span>: một sơ đồ, đi từng bước, sơ đồ dính trên, chữ cuộn dưới trên điện thoại</li><li>Dùng cho: quy trình vừa đổi gì, kiến trúc sakubun, luồng nghiệp vụ trong bài BA</li><li>Sau mẫu này là đủ 8 trên 8 mẫu; mẫu sau phải thay mẫu cũ</li></ul></details>
+    </div></div>
+    <div class="stop" id="s4"><div class="dot">4</div><div class="box">
+      <div class="head"><h3>Đánh bóng mẫu học</h3><span class="chip acc">2 phiên</span><span class="chip">ghép vào buổi học</span></div>
+      <p class="done-when"><b>Xong khi:</b> sau BA 6 và Frontend 11, bạn không còn chấm bảng dán là "chưa thoả mãn", và số lượt dựng một trang học không tăng.</p>
+      <details><summary>Việc con</summary><ul><li>Bảng dán BA: một vòng so sánh cũ và mới trước BA 6</li><li>Màn kết có hình cho mọi buổi (đỉnh và kết)</li><li>Hai màn cạnh nhau để so trước và sau trên bàn thử</li><li>Giữ đồng hồ "nhìn N giây" khi tải lại trang</li><li>Nút Nghe và Nói thay gõ vào mục "Thêm"</li></ul></details>
+    </div></div>
+    <div class="stop gate" id="s5"><div class="dot">5</div><div class="box">
+      <div class="head"><h3>Gom luật vào mốc 01/12</h3><span class="chip acc">trong chat mốc</span><span class="chip warn">đổi luật</span></div>
+      <p class="done-when"><b>Xong khi:</b> bạn duyệt các dòng luật ở mốc 01/12, và vòng thử gu thứ hai chạy khoảng 02/12 theo đúng luật mới.</p>
+      <details><summary>Việc con</summary><ul><li><span class="mono">artifacts/README.md</span>: thêm hai mẫu mới, luật "một chi tiết thử mỗi trang"</li><li>Vòng thử gu hai tuần một lần, dòng "Đang thử" có ngày xem lại</li><li><span class="mono">profile/VOICE.md</span>: giải thích luồng hay báo việc nhiều bước trong chat thì vẽ sơ đồ ngay trong chat</li><li><span class="mono">profile/MAP.md</span> và STATUS cập nhật theo</li></ul></details>
+    </div></div>
+  </div>
+</section>
+
+<section id="phuong-an">
+  <span class="eyebrow">Các phương án đã xét</span>
+  <h2>Mình chọn D, và đây là chỗ yếu của nó</h2>
+  <div class="opts">
+    <div class="opt"><span class="k">A</span><div class="c"><span class="t">Làm lại cả bộ kit theo gu mới một lần</span><dl><dt>Hợp khi</dt><dd>gu đã chốt và có nhiều thời gian.</dd><dt>Không chọn vì</dt><dd>gu bạn đang đổi; nhảy xa một lần dễ mất cảm giác quen (đúng chỗ MAYA cảnh báo), lại đụng các bài đã đóng băng và tốn rất nhiều lượt.</dd></dl></div></div>
+    <div class="opt"><span class="k">B</span><div class="c"><span class="t">Chỉ đánh bóng các mẫu học đang có</span><dl><dt>Hợp khi</dt><dd>tuần bận, chỉ cần sửa lời chê cũ.</dd><dt>Không chọn vì</dt><dd>không chạm chỗ đau lớn nhất là quy trình toàn chữ, và không có cách nào đẩy gu lên.</dd></dl></div></div>
+    <div class="opt"><span class="k">C</span><div class="c"><span class="t">Dùng hẳn các loại trang sẵn có của claude.ai</span><dl><dt>Hợp khi</dt><dd>muốn không phải giữ code nào. Whiteboard rất hợp để cùng vẽ kiến trúc, brainstorm.</dd><dt>Không chọn hết vì</dt><dd>các loại trang đó không tự đọc file repo, không theo gu của bạn, còn Docs thì vẫn là chữ. Mình vẫn dùng Whiteboard cho việc vẽ cùng nhau.</dd></dl></div></div>
+    <div class="opt pick"><span class="k">D</span><div class="c"><span class="t">Ba nhánh nhỏ trên một lớp sơ đồ chung<span class="chip acc">đề xuất</span></span><dl><dt>Vì sao</dt><dd>sửa đúng chỗ đau, trang sinh từ file repo nên không phải gõ tay thêm chỗ nào, gu đi lên từng nấc.</dd><dt>Chỗ yếu nhất</dt><dd>chạm trần 8 mẫu; lệnh đọc file kế hoạch dễ vỡ khi file viết lệch mẫu; vòng gu cần bạn bỏ ra khoảng 5 phút mỗi hai tuần, bỏ vài vòng thì gu lại đứng.</dd></dl></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="two">
+    <div class="card"><h3>Không làm lần này</h3><ul class="list" style="margin-top:8px">
+      <li>Không thêm nút hỏi Claude, đọc to hay nói thay gõ vào mẫu mới.</li>
+      <li>Không đổi bộ màu hay font gốc; đổi gu chỉ đi qua vòng thử gu, do bạn chọn.</li>
+      <li>Không dựng lại các trang học cũ; bài đã học giữ nguyên.</li>
+      <li>Không bỏ chữ: hình luôn đi kèm câu ngắn đặt cạnh.</li>
+      <li>Không tự dựng thứ claude.ai đã có (Whiteboard, Slides, Docs).</li>
+      <li>Không làm sơ đồ 3D hay chuyển động chỉ để đẹp; chỉ động khi nó chỉ ra một thay đổi.</li>
+    </ul></div>
+    <div class="card"><h3>Chỗ dễ sa lầy</h3><ul class="list" style="margin-top:8px">
+      <li>Tự viết thuật toán xếp sơ đồ: dùng thư viện, hạn một phiên, quá hạn thì xếp theo lưới.</li>
+      <li>Đọc markdown kế hoạch: lệnh báo lỗi rõ thay vì đoán, thử trên 9 file có sẵn.</li>
+      <li>Đẹp trên laptop, vỡ trên điện thoại: chạy bài kiểm trang như mọi mẫu.</li>
+      <li>Hiểu "một nấc mới" thành đổi màu: một nấc chỉ là bố cục và cách kể.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="lich">
+  <span class="eyebrow">Thời gian dự kiến</span>
+  <h2>Khoảng 8 phiên trong ba tuần</h2>
+  <div class="cal">
+    <div class="wk"><span class="d">18–23/11</span><span class="pill">Ga 0 · vòng gu 1</span><span class="pill">Ga 1 · lớp sơ đồ</span></div>
+    <div class="wk"><span class="d">24–30/11</span><span class="pill">Ga 2 · mẫu kế hoạch</span><span class="pill g">Ga 4 · ghép BA 6</span></div>
+    <div class="wk"><span class="d">01–07/12</span><span class="pill m">Ga 5 · mốc 01/12</span><span class="pill">Ga 3 · mẫu luồng</span><span class="pill g">Vòng gu 2</span></div>
+    <div class="wk"><span class="d">08–13/12</span><span class="pill g">Ga 4 · ghép Frontend 11</span><span class="pill m">Mốc 13/12 · số đo</span></div>
+  </div>
+  <p class="small muted">Tuần này bạn đã quá nhịp học, nên ga 4 ghép vào các buổi học đã có lịch, không mở buổi riêng.</p>
+</section>
+
+<section id="cau-hoi">
+  <span class="eyebrow">Câu hỏi</span>
+  <h2>Bốn câu làm đổi việc. Để nguyên đề xuất là "ok"</h2>
+  <div class="qs" id="qs"></div>
+  <div class="trial" id="trial">
+    <h3>Chi tiết thử của trang này</h3>
+    <p class="small">Tuyến checkpoint vẽ như tuyến tàu, ga đang chạy sáng lên, ga đổi luật viền nét đứt. Bạn thấy sao?</p>
+    <div class="row">
+      <button class="choice" style="grid-template-columns:20px auto" aria-pressed="false" data-trial="Thích"><i></i>Thích</button>
+      <button class="choice" style="grid-template-columns:20px auto" aria-pressed="false" data-trial="Không"><i></i>Không</button>
+    </div>
+  </div>
+  <div class="reply">
+    <label for="reply" class="small muted">Câu trả lời của bạn, tự soạn theo các nút trên. Sửa thêm nếu muốn rồi chép gửi mình.</label>
+    <textarea id="reply"></textarea>
+    <button class="btn" id="copy" type="button">Chép câu trả lời</button>
+    <p class="small muted" id="copied" aria-live="polite"></p>
+  </div>
+</section>
+
+<section class="sources">
+  <span class="eyebrow">Nguồn</span>
+  <ol>
+    <li>Mayer, R. E. (2017). Using multimedia for e-learning. Journal of Computer Assisted Learning 33(5). Đọc tóm tắt có số đo, 18/11/2026.</li>
+    <li>Pashler, McDaniel, Rohrer, Bjork (2008). Learning Styles: Concepts and Evidence. Psychological Science in the Public Interest 9(3). Đọc tóm tắt, 18/11/2026.</li>
+    <li>Shneiderman, B. (1996). The Eyes Have It. Đọc tóm tắt, 18/11/2026.</li>
+    <li>Nielsen Norman Group, Progressive Disclosure; The Decision Lab. Đọc đoạn trích, 18/11/2026.</li>
+    <li>Victor, B. (2011). Explorable Explanations, worrydream.com. Đọc đoạn trích, 18/11/2026.</li>
+    <li>Scrollytelling as an Alternative Format for Privacy Policies, arXiv 2603.04367 (2026). Đọc tóm tắt, 18/11/2026.</li>
+    <li>Kahneman, Fredrickson, Schreiber, Redelmeier (1993). When More Pain Is Preferred to Less. Đọc đoạn trích qua Wikipedia, 18/11/2026.</li>
+    <li>Kurosu và Kashimura (1995); Nielsen Norman Group, The Aesthetic-Usability Effect. Đọc đoạn trích, 18/11/2026.</li>
+    <li>Hekkert, Snelders, van Wieringen (2003). Most advanced, yet acceptable. British Journal of Psychology 94. Đọc tóm tắt, 18/11/2026.</li>
+    <li>Effects of Novelty and Its Dimensions on Aesthetic Preference in Product Design, International Journal of Design. Đọc tóm tắt, 18/11/2026.</li>
+    <li>Gartus, Völker, Leder (2020). What Experts Appreciate in Patterns. Symmetry 12(5). Đọc tóm tắt, 18/11/2026.</li>
+  </ol>
+  <p>Số buổi dùng tính năng lấy từ <span class="mono">learning/usage.md</span> trên nhánh main ngày 18/11.</p>
+</section>
+
+<footer>Claude, nick tnt697 · project Claude · chưa ghi vào repo, chờ bạn duyệt rồi mới ghi <span class="mono">docs/plans/2026-11-18-visual-workflow.md</span></footer>
+</main>
+
+<script>
+(function () {
+  // Biểu đồ số buổi dùng tính năng
+  var usage = [
+    ["Xem Claude làm", 6, 11], ["Claude nhận xét, chấm", 5, 12], ["Tình huống thêm", 2, 8],
+    ["Hỏi Claude", 1, 12], ["Claude giải thích câu sai", 1, 12], ["Nghe", 0, 11], ["Nói thay gõ", 0, 12]
+  ];
+  var bars = document.getElementById("bars");
+  usage.forEach(function (u) {
+    var pct = Math.round(u[1] / u[2] * 100);
+    var row = document.createElement("div");
+    row.className = "bar" + (pct === 0 ? " zero low" : pct < 30 ? " low" : "");
+    row.innerHTML = '<span>' + u[0] + '</span><span class="track"><span class="fill" style="width:' + Math.max(pct, 0) + '%"></span></span><span class="v">' + u[1] + '/' + u[2] + '</span>';
+    bars.appendChild(row);
+  });
+
+  // Nút ở toàn cảnh cuộn tới phần tương ứng
+  document.querySelectorAll("[data-go]").forEach(function (b) {
+    b.addEventListener("click", function () { var t = document.querySelector(b.dataset.go); if (t) t.scrollIntoView(); });
+  });
+
+  // Đường cong gu: chữ U úp, đỉnh dịch phải sau vài vòng
+  var L = 28, R = 392, T = 30, B = 205;
+  var svg = document.querySelector(".lab svg");
+  var css = getComputedStyle(document.documentElement);
+  function col(n) { return css.getPropertyValue(n).trim(); }
+  function paint() {
+    css = getComputedStyle(document.documentElement);
+    document.getElementById("curve").setAttribute("stroke", col("--accent"));
+    document.getElementById("curve-old").setAttribute("stroke", col("--muted"));
+    document.getElementById("knob").setAttribute("fill", col("--accent-fill"));
+    document.getElementById("knob").setAttribute("stroke", col("--card"));
+    document.getElementById("knob").setAttribute("stroke-width", "3");
+    ["xlab", "ylab"].forEach(function (id) { document.getElementById(id).setAttribute("fill", col("--muted")); });
+    drawGrid(); draw();
+  }
+  function drawGrid() {
+    var g = document.getElementById("grid"); g.innerHTML = "";
+    var ax = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    ax.setAttribute("d", "M" + L + " " + T + " V" + B + " H" + R);
+    ax.setAttribute("stroke", col("--line")); ax.setAttribute("fill", "none"); ax.setAttribute("stroke-width", "1.5");
+    g.appendChild(ax);
+  }
+  var peak = [38, 58];
+  var t = 0;
+  function y(x, p) { var d = (x - p) / 30; return Math.exp(-d * d); }
+  function px(x) { return L + (R - L) * x / 100; }
+  function py(v) { return B - (B - T) * v * .92; }
+  function path(p) { var s = ""; for (var x = 0; x <= 100; x += 1) { s += (x ? "L" : "M") + px(x).toFixed(1) + " " + py(y(x, p)).toFixed(1); } return s; }
+  var zonesDef = [["Quen", 12], ["Một nấc", 0], ["Thật xa", 88]];
+  function draw() {
+    var p = peak[t];
+    document.getElementById("curve").setAttribute("d", path(p));
+    var old = document.getElementById("curve-old");
+    old.setAttribute("d", t ? path(peak[0]) : "");
+    var z = document.getElementById("zones"); z.innerHTML = "";
+    zonesDef.forEach(function (d, i) {
+      var x = i === 1 ? p : d[1];
+      var tx = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      tx.setAttribute("x", px(x)); tx.setAttribute("y", i === 1 ? py(y(x, p)) - 14 : B - 10);
+      tx.setAttribute("text-anchor", "middle"); tx.setAttribute("font-size", "13"); tx.setAttribute("font-weight", "600");
+      tx.setAttribute("fill", i === 1 ? col("--accent-ink") : col("--muted"));
+      tx.textContent = d[0]; z.appendChild(tx);
+    });
+    var v = +document.getElementById("nov").value;
+    var k = document.getElementById("knob");
+    k.setAttribute("cx", px(v)); k.setAttribute("cy", py(y(v, p)));
+    var like = y(v, p), msg;
+    if (v < p - 22) msg = "Quá quen. Dễ chịu, nhưng gu không đi đâu cả. Đây là kit hiện tại.";
+    else if (v <= p + 14) msg = "Vùng một nấc: đủ lạ để thấy mới, đủ quen để không khó chịu. Vòng thử gu nhắm vào đây.";
+    else if (v <= p + 32) msg = "Hơi xa: có thể bạn chưa thích ngay. Đem ra làm ví dụ để nhìn, chưa dùng làm mặc định.";
+    else msg = "Thật xa: lúc này dễ bị chê. Vẫn đáng xem để mắt quen dần.";
+    if (t === 1) msg += " Đường nét đứt là gu hôm nay: sau vài vòng, thứ từng hơi xa trở thành vừa đủ.";
+    document.getElementById("readout").textContent = "Mức thích ước đoán " + Math.round(like * 100) + "/100. " + msg;
+  }
+  document.getElementById("nov").addEventListener("input", draw);
+  document.querySelectorAll(".lab .seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll(".lab .seg button").forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+      t = +b.dataset.t; draw();
+    });
+  });
+  paint();
+  try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paint); } catch (e) {}
+  new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  // Câu hỏi
+  var Q = [
+    { id: "order", q: "Làm nhánh nào trước?", why: "Bạn đọc kế hoạch và STATUS gần như mỗi ngày, còn tuần này đã đủ buổi học.",
+      o: [["Mẫu quy trình trước (ga 1, 2, 3), đánh bóng mẫu học ghép vào buổi học", true], ["Đánh bóng mẫu học trước"], ["Chỉ làm vòng thử gu, phần còn lại để sau 01/12"]] },
+    { id: "rules", q: "Luật \"không thêm luật tới 01/12\" thì sao?", why: "Ga 0 tới 4 chỉ thêm mẫu, lệnh và trang, không đổi cách làm việc; phần đổi luật gom về đúng mốc đã hẹn.",
+      o: [["Làm phần dựng ngay, gom mọi dòng luật vào mốc 01/12", true], ["Chờ hết tới 01/12 rồi mới bắt đầu"], ["Cho phép thêm luật ngay vì đây là việc lớn"]] },
+    { id: "rhythm", q: "Vòng thử gu bao lâu một lần?", why: "Trùng nhịp PR gu sang thienui nên không thêm lịch mới.",
+      o: [["Hai tuần một lần, cùng nhịp PR thienui", true], ["Mỗi tuần một lần"], ["Chỉ khi mình tự nhắn \"thử gu\""]] },
+    { id: "far", q: "Hướng \"thật xa\" ở vòng đầu lấy từ đâu?", why: "Mình mang về những thứ bạn chưa từng thấy, đó mới là chỗ gu được kéo đi.",
+      o: [["Claude chọn, kèm ví dụ thật và câu để ý", true], ["Mình đưa 1–2 app hay trang mình tò mò"], ["Cả hai: Claude chọn một, mình đưa một"]] }
+  ];
+  var ans = {}, trial = "";
+  var qs = document.getElementById("qs");
+  Q.forEach(function (item, i) {
+    var box = document.createElement("div"); box.className = "q card";
+    box.innerHTML = '<h3>' + (i + 1) + '. ' + item.q + '</h3><p class="small muted">Đề xuất vì: ' + item.why + '</p><div class="opts2"></div>';
+    var wrap = box.querySelector(".opts2");
+    item.o.forEach(function (o, j) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "choice";
+      b.setAttribute("aria-pressed", o[1] ? "true" : "false");
+      b.innerHTML = '<i></i><span>' + o[0] + (o[1] ? ' <span class="rec">· đề xuất</span>' : '') + '</span>';
+      if (o[1]) ans[item.id] = j;
+      b.addEventListener("click", function () {
+        wrap.querySelectorAll(".choice").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+        ans[item.id] = j; compose();
+      });
+      wrap.appendChild(b);
+    });
+    qs.appendChild(box);
+  });
+  document.querySelectorAll("[data-trial]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("[data-trial]").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      trial = b.dataset.trial; compose();
+    });
+  });
+  function compose() {
+    var allRec = Q.every(function (item) { return item.o[ans[item.id]][1]; });
+    var lines = [];
+    if (allRec) lines.push("ok, duyệt theo cả 4 đề xuất.");
+    else Q.forEach(function (item, i) { lines.push((i + 1) + ". " + item.q + " " + item.o[ans[item.id]][0] + (item.o[ans[item.id]][1] ? " (đề xuất)" : "")); });
+    if (trial) lines.push("Chi tiết thử (tuyến checkpoint kiểu tuyến tàu): " + trial + ".");
+    lines.push("Vì sao: ");
+    document.getElementById("reply").value = lines.join("\n");
+  }
+  compose();
+  document.getElementById("copy").addEventListener("click", function () {
+    var v = document.getElementById("reply").value, out = document.getElementById("copied");
+    function fallback() { var ta = document.getElementById("reply"); ta.focus(); ta.select(); out.textContent = "Chưa chép được tự động, bạn bấm giữ để chép đoạn đã chọn nhé."; }
+    try {
+      navigator.clipboard.writeText(v).then(function () { out.textContent = "Đã chép. Dán vào chat gửi mình nhé."; }, fallback);
+    } catch (e) { fallback(); }
+  });
+
+  // Đánh dấu mục đang xem trên thanh mục lục
+  var links = Array.prototype.slice.call(document.querySelectorAll("nav.toc a"));
+  var secs = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+  try {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { var i = secs.indexOf(e.target); links.forEach(function (l, k) { l.classList.toggle("on", k === i); }); } });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    secs.forEach(function (s) { if (s) io.observe(s); });
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

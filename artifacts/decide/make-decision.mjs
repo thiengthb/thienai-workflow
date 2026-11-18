@@ -4,7 +4,7 @@
 //   node artifacts/decide/make-decision.mjs <decision.json> <out-dir>
 //
 // decision.json: { id, question, context?, title?,
-//   options: [{ key, name, short?, summary?, image?, scale?, shot?, pros?: [..], cons?: [..] }],   (2–4 phương án; image tương đối với file json)
+//   options: [{ key, name, short?, summary?, image?, scale?, shot?, pros?: [..], cons?: [..], links?: [{ text, url, note? }] }],   (2–4 phương án; image tương đối với file json)
 //   shotSize?: "1180x760",                    shot: link hoặc file html của phương án; script tự chụp @2x ở shotSize thay cho image
 //   criteria?: [{ name, values: { <key>: "tốt" | "vừa" | "kém" | { text, tone: "good"|"bad"|"" } } }],
 //   recommend?: { key, why } }                                                                (ẩn trên màn tới khi thien chọn)
@@ -51,7 +51,13 @@ export function build(spec, specDir, out) {
         image = { src: name, w: Math.round(w / k), h: Math.round(h / k) };
       }
       return { key, name: String(o.name || key), short: String(o.short || String(o.name || key).split(' · ')[0]), summary: o.summary || '',
-        image, pros: (o.pros || []).map(String), cons: (o.cons || []).map(String) };
+        image, pros: (o.pros || []).map(String), cons: (o.cons || []).map(String),
+        links: (o.links || []).map((l) => {
+          let u = null;
+          try { u = new URL(String(l.url || '')); } catch { /* báo lỗi ngay dưới */ }
+          if (!u || u.protocol !== 'https:') fail(`Link của phương án ${key} phải là https và mở được: ${l.url}`);
+          return { text: String(l.text || l.url), url: String(l.url), note: String(l.note || '') };
+        }) };
     }),
     criteria: (spec.criteria || []).map((c) => {
       const values = {};

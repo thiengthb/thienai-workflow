@@ -1,0 +1,55 @@
+{
+  "id": "visual-workflow-taste-r1",
+  "title": "Vòng thử gu 1 · trang kế hoạch",
+  "question": "Trang kế hoạch nên trông thế nào?",
+  "context": "Cùng một kế hoạch (Quy trình nhìn được), ba cách kể. Xem bảng \"làm được việc chưa\" trước, rồi mới hỏi mình \"có đẹp không\". Chọn một bản và viết một câu vì sao vào ô ghi chú; bản bạn chọn thành gốc cho mẫu kế hoạch ở ga 2.",
+  "options": [
+    {
+      "key": "quen",
+      "name": "A · Quen",
+      "short": "Quen",
+      "image": "shots/quen.png",
+      "scale": 2,
+      "summary": "Kế hoạch đúng như hôm nay: file markdown đặt vào kit, checkpoint là một bảng, còn lại là danh sách.",
+      "pros": ["Đọc nhanh, đã quen mắt", "Sinh từ file markdown dễ nhất, gần như không vỡ"],
+      "cons": ["Toàn chữ: không thấy ga nào rơi vào ngày nào", "Trên điện thoại bảng bốn cột bị ép thành cột chữ hẹp"]
+    },
+    {
+      "key": "mot-nac",
+      "name": "B · Một nấc",
+      "short": "Một nấc",
+      "image": "shots/mot-nac.png",
+      "scale": 2,
+      "summary": "Giữ màu, chữ Onest, bo 8px; đổi cách kể: toàn cảnh trước, checkpoint vẽ như tuyến tàu, câu hỏi trả lời bằng nút. Chính là trang bạn đã dùng để duyệt kế hoạch này.",
+      "pros": ["Đã dùng thật một lần: bạn duyệt kế hoạch bằng nút, không gõ lại", "Tuyến tàu là chi tiết bạn đã chấm Thích"],
+      "cons": ["Dài: phải cuộn qua mấy phần mới tới checkpoint", "Ngày chỉ nằm ở lịch tuần cuối trang, không gắn vào từng ga"]
+    },
+    {
+      "key": "that-xa",
+      "name": "C · Thật xa",
+      "short": "Thật xa",
+      "image": "shots/that-xa.png",
+      "scale": 2,
+      "summary": "Kể bằng cuộn: bên trái là sân khấu tối dính một chỗ, số ga thật to và bản đồ các ga theo ngày; bên phải chữ cuộn, đọc tới ga nào thì ga đó sáng. Có núm \"mỗi tuần làm được mấy phiên\": kéo là các ga trượt theo ngày, riêng mốc 01/12 đứng yên. Màu vẫn là token của kit, chỉ đảo sang nền tối.",
+      "pros": ["Nhìn một lần biết đang ở ga nào và xong khoảng ngày nào", "Núm vặn trả lời \"tuần bận thì sao\" mà không cần hỏi Claude"],
+      "cons": ["Xa gu hôm nay nhất: nền tối, chữ rất to", "Trên điện thoại sân khấu chiếm nửa màn, chữ trên bản đồ nhỏ", "Khó dựng tự động từ file kế hoạch nhất"],
+      "links": [
+        { "text": "The Pudding · scrollytelling với position: sticky", "url": "https://pudding.cool/process/scrollytelling-sticky/", "note": "Để ý hình dính lại suốt mấy bước chữ rồi mới nhả ra. Bản C dùng đúng cách này cho bản đồ ga." },
+        { "text": "Bartosz Ciechanowski · Mechanical Watch", "url": "https://ciechanow.ski/mechanical-watch/", "note": "Để ý mỗi hình có thanh kéo hay kéo xoay được, và đoạn chữ ngay cạnh nói bạn vừa thấy gì. Núm \"mấy phiên một tuần\" học từ đây." },
+        { "text": "R2D3 · A visual introduction to machine learning", "url": "https://www.r2d3.us/visual-intro-to-machine-learning-part-1/", "note": "Để ý cùng một đám điểm đi suốt bài, mỗi đoạn chữ chỉ đổi một thứ trên hình. (Hôm nay mình chưa mở lại được trang này để kiểm.)" }
+      ]
+    }
+  ],
+  "criteria": [
+    { "name": "Biết ngay việc đang ở đâu", "values": { "quen": "vừa", "mot-nac": "tốt", "that-xa": "tốt" } },
+    { "name": "Thấy ga nào rơi vào ngày nào", "values": { "quen": "kém", "mot-nac": "vừa", "that-xa": "tốt" } },
+    { "name": "Đọc trên điện thoại", "values": { "quen": "vừa", "mot-nac": "tốt", "that-xa": "vừa" } },
+    { "name": "Trả lời câu hỏi bằng nút", "values": { "quen": "kém", "mot-nac": "tốt", "that-xa": "vừa" } },
+    { "name": "Sinh tự động từ file kế hoạch (ga 2)", "values": { "quen": "tốt", "mot-nac": "vừa", "that-xa": { "text": "khó nhất", "tone": "bad" } } },
+    { "name": "Xa gu hôm nay bao nhiêu", "values": { "quen": "quen", "mot-nac": "một nấc", "that-xa": "xa" } }
+  ],
+  "recommend": {
+    "key": "mot-nac",
+    "why": "B đã chạy thật một lần và đúng chỗ \"mới vừa đủ\" mà nghiên cứu chỉ ra. Mình sẽ lấy riêng bản đồ ga theo ngày và núm vặn của C làm chi tiết thử trong mẫu kế hoạch ở ga 2, không lấy nền tối và chữ khổng lồ."
+  }
+}
