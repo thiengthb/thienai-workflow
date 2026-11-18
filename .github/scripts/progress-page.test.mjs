@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { parsePlan, blocks, inline, repoId, waitingLines, planSteps, statusSteps, listItems, waitKind, prOrder, gatherWaiting, overviewBody, quickLinks } from '../../templates/progress-page.mjs';
+import { parsePlan, planLink, blocks, inline, repoId, waitingLines, planSteps, statusSteps, listItems, waitKind, prOrder, gatherWaiting, overviewBody, quickLinks } from '../../templates/progress-page.mjs';
 
 const plan = parsePlan([
   '# Kế hoạch thử', '', 'Trạng thái: đang chạy · Duyệt: 2026-01-01 · Cập nhật: 2026-01-02', '',
@@ -17,6 +17,9 @@ assert.deepEqual(plan.all, { done: 2, total: 3 });
 assert.equal(plan.current, 1, 'first checkpoint with an open tick is the current one');
 assert.equal(plan.changes.length, 1);
 assert.equal(plan.errors.length, 0, 'empty table has no rows');
+assert.deepEqual(planLink(plan), { url: 'https://github.com/o/r/blob/main/docs/plans/x.md', page: false }, 'no plan page: the file on GitHub');
+assert.deepEqual(planLink(parsePlan('# T\n\nTrạng thái: đang chạy · Trang: https://claude.ai/artifact/AbC (nick tnt697)\n\n## Checkpoint\n', 'o/r:docs/plans/x.md')),
+  { url: 'https://claude.ai/artifact/AbC', page: true }, 'a "Trang:" link on the status line wins');
 
 assert.match(inline('[a](../STATUS.md)', 'o/r:docs/plans/x.md'), /github\.com\/o\/r\/blob\/main\/docs\/STATUS\.md/, 'relative links go to GitHub');
 assert.match(inline('<script>', ''), /&lt;script&gt;/, 'html is escaped');

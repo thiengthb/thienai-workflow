@@ -137,6 +137,15 @@ export function parsePlan(md, linkBase) {
   };
 }
 
+/** Where a plan opens: its plan page ("Trang: <link>" on the status line, built by artifacts/plan/make-plan.mjs),
+ *  else the markdown file on GitHub. { url, page } — page is true for a plan page. */
+export function planLink(p) {
+  const m = /https:\/\/\S+?(?=[\s),]|$)/.exec(p.meta.Trang || '');
+  if (m) return { url: m[0], page: true };
+  const [repo, file] = (p.linkBase || '').split(':');
+  return repo && file ? { url: `https://github.com/${repo}/blob/main/${file}`, page: false } : null;
+}
+
 function planCard(p) {
   const state = p.meta['Trạng thái'] || 'đang chạy';
   const ck = p.checkpoints.map((c, idx) => {
@@ -147,6 +156,7 @@ function planCard(p) {
   const sec = (name, rows, cls) => rows.length ? `<details class="log ${cls}"><summary>${name} <span class="ck-count">${rows.length}</span></summary>${blocks(p.doc.sections.find((s) => s.title.startsWith(name)).lines, p.linkBase)}</details>` : '';
   return `<article class="plan">
   <header><h4 class="plan-title">${inline(p.title, p.linkBase)}</h4><span class="pill state">${esc(state)}</span></header>
+  ${(() => { const l = planLink(p); return l ? `<a class="plan-open" href="${esc(l.url)}">${l.page ? 'Mở trang kế hoạch' : 'Mở file kế hoạch'}</a>` : ''; })()}
   <div class="progress">${bar(p.all)}</div>
   <p class="meta">${['Duyệt', 'Cập nhật'].filter((k) => p.meta[k]).map((k) => `${k} ${esc(p.meta[k])}`).join(' · ')}${p.meta.Thread ? ` · ${inline(p.meta.Thread, p.linkBase)}` : ''}</p>
   <div class="where">${blocks(p.where, p.linkBase)}</div>
@@ -334,7 +344,7 @@ function repoSection(dir, repo) {
   <h3 class="label">Kế hoạch đang chạy</h3>
   ${running.length ? running.map(planCard).join('\n') : '<p class="muted">Không có kế hoạch nào đang chạy.</p>'}
   ${legacy ? `<p class="muted">${legacy} kế hoạch viết trước khi có mẫu, chưa có checkpoint để đếm: xem trong <a href="https://github.com/${esc(repo)}/tree/main/docs/plans">docs/plans</a>.</p>` : ''}
-  ${plans.length > running.length ? `<details class="done-plans"><summary>Kế hoạch đã xong hoặc đã bỏ <span class="ck-count">${plans.length - running.length}</span></summary>${plans.filter((p) => !running.includes(p)).map((p) => `<p>${inline(p.title, p.linkBase)} · ${esc(p.meta['Trạng thái'] || '')}</p>`).join('')}</details>` : ''}
+  ${plans.length > running.length ? `<details class="done-plans"><summary>Kế hoạch đã xong hoặc đã bỏ <span class="ck-count">${plans.length - running.length}</span></summary>${plans.filter((p) => !running.includes(p)).map((p) => { const l = planLink(p); return `<p>${l ? `<a href="${esc(l.url)}">${inline(p.title, p.linkBase)}</a>` : inline(p.title, p.linkBase)} · ${esc(p.meta['Trạng thái'] || '')}</p>`; }).join('')}</details>` : ''}
 </section>`;
 }
 
@@ -651,6 +661,7 @@ code { font-size: .9em; background: var(--line); padding: 1px 5px; border-radius
 .ask .label { color: var(--wait); }
 .plan { border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 8px; }
 .plan header { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
+.plan-open { justify-self: start; font-size: 14px; font-weight: 600; min-height: 32px; display: inline-flex; align-items: center; }
 .progress { display: flex; align-items: center; gap: 10px; }
 .bar { flex: 1; height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
 .bar span { display: block; height: 100%; background: var(--accent); border-radius: 99px; }

@@ -88,6 +88,7 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   const ask = `<section id="cau-hoi" aria-labelledby="h-q">
   <span class="label">${open ? 'Câu hỏi' : 'Góp ý'}</span>
   <h2 id="h-q">${open ? `${plan.questions.length} câu làm đổi việc. Để nguyên đề xuất là "ok"` : 'Bạn thấy trang này thế nào?'}</h2>
+  ${open && plan.questionsIntro ? `<p class="muted">${plan.questionsIntro}</p>` : ''}
   ${answeredList}
   <div class="qs" id="qs"></div>
   ${trial ? `<div class="trial" id="trial"><h3>${icon('sparkles')}Chi tiết thử của trang này</h3><p class="small">${esc(trial)}</p>
@@ -219,5 +220,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     report(mdPath, issues);
     console.log(`Đã dựng "${plain(plan.titleHtml)}" (${plan.checkpoints.length} ga, ${plan.questions.length} câu hỏi${plan.answered ? ' đã trả lời' : ''}) vào ${resolve(out)}/index.html`);
     for (const l of lines) console.log(l);
+    if (!plan.page) console.log(`Đăng xong: thêm " · Trang: <link> (nick <nick>)" vào dòng "Trạng thái:" của ${mdPath}, để trang tổng quan dẫn sang trang này và lần sau đăng đè bằng --url.`);
+    else if (!url) console.log(`File đã có trang ${plan.page}: muốn đăng đè thì chạy lại với --url ${plan.page}.`);
   } catch (e) { console.error(e.message); process.exit(1); }
 }

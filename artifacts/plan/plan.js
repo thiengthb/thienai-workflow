@@ -151,7 +151,9 @@
 
   // ---------- Câu hỏi, chi tiết thử, ghi chú ----------
   const store = Kit.store('plan:' + P.id, 'plans/' + P.id);
-  const S = { answers: {}, trial: '', note: '' };
+  // Bộ câu hỏi đổi (kế hoạch thêm câu mới) thì bản lưu cũ là câu trả lời cho bộ khác: không nạp lựa chọn và ghi chú cũ.
+  const qsig = P.questions.map((q) => q.qText).join('|');
+  const S = { answers: {}, trial: '', note: '', qsig };
   P.questions.forEach((q) => { const k = q.options.findIndex((o) => o.rec); S.answers[q.id] = k < 0 ? 0 : k; });
   const qs = $('qs');
   P.questions.forEach((q, i) => {
@@ -204,11 +206,11 @@
   // Nút chỉ bật sau khi đã đọc bản lưu, để không ghi đè lựa chọn cũ bằng mặc định.
   paint();
   store.load().then((saved) => {
-    if (saved) {
+    if (saved && (saved.qsig || '') === qsig) {
       for (const q of P.questions) if (Number.isInteger(saved.answers?.[q.id]) && q.options[saved.answers[q.id]]) S.answers[q.id] = saved.answers[q.id];
-      if (typeof saved.trial === 'string') S.trial = saved.trial;
       if (typeof saved.note === 'string') S.note = saved.note;
     }
+    if (saved && typeof saved.trial === 'string') S.trial = saved.trial;
   }).catch(() => {}).finally(() => {
     $('note').value = S.note;
     document.querySelectorAll('.choice, #note, #copy, #send').forEach((e) => { e.disabled = false; });
