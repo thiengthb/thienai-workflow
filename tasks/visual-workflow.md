@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 2, mẫu kế hoạch nhìn được
 
-Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo nhánh mới từ main) · PR: chưa có
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYey4CuVVfhKvuPEUY · Cập nhật: 2026-11-18T18:19Z
+Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo nhánh mới từ main) · PR: chưa có (mọi PR trước đã merge, tới #134)
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYey4CuVVfhKvuPEUY · Cập nhật: 2026-11-18T18:40Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -24,13 +24,14 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYey4CuVVfhKvuPEU
 - thien chê nút Nhấn sáng hẳn ra (00:31): PR #130 bỏ quầng sáng, chế độ tối dùng petrol đậm chữ trắng và --primary-fill; trang mẫu đã đăng đè; chờ thien merge #130
 - Vòng gu 3 (00:42): thien muốn rút style slide MLN122 (repo thiengthb/mln122-nhom9) áp vào sơ đồ, hình, biểu đồ, nền. Đã nghiên cứu, chạy bộ kiểm màu, dựng 3 mức; trang chọn https://claude.ai/artifact/RMSfapmLBg7FvoQ5PFDgad, trang bấm thử https://claude.ai/artifact/9tkpy5E3vqvs5AXqnWJor2; nguồn PR #131 (nháp, chồng #130), kế hoạch PR #132
 - thien chọn A · Thêm mực cam (01:11): mực hình --ink-1/2/3, em.k1/k2, kind sơ đồ, .fill-k*, .callout đã vào kit trong PR #131; trang mẫu đăng đè; kết quả ghi ở PR #133 (tự merge)
+- 19/11 01:21 thien nhắn merge: #130 (sửa thêm hover nút Nhấn theo CodeRabbit) và #131 (sửa hai ý CodeRabbit ở nguồn vòng 3) đã merge; #134 ghi STATUS và một dòng usage-log (277 lượt, đọc lại 110,9 triệu token)
 
 ## Bước tiếp theo
 1. Checkpoint 2: thư mục mới `artifacts/plan/`, lệnh `make-plan.mjs` đọc file `docs/plans/*.md` theo `templates/PLAN.template.md`, dựng tuyến checkpoint (dùng `Diagram.mount` hay `ol.steps` của kit, mực hình cho loại ga), phương án, câu hỏi trả lời bằng nút, lưu vào db trang; xem đủ việc trong mục checkpoint 2 của kế hoạch (cả 7 ý review PR #124)
 2. Ở ga 2 thử bản đồ ga theo ngày và núm vặn của bản C (vòng 1) làm chi tiết thử; không lấy nền tối, chữ khổng lồ; giữ bo góc, không kẻ ô
 
 ## Đang chờ thien
-- Merge PR #130 rồi #131 (chồng nhau)
+Không.
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
