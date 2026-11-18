@@ -61,7 +61,7 @@ Xong khi: kế hoạch kế tiếp được gửi thien duyệt bằng trang sin
 Ước: 2 phiên
 - [x] Lệnh mới make-plan.mjs trong thư mục mới artifacts/plan đọc file theo `templates/PLAN.template.md`, dựng tuyến checkpoint, phương án, câu hỏi (PR #135, merge 2026-11-19)
 - [x] Câu trả lời lưu vào db của trang để Claude đọc, có nút chép làm đường lui (PR #135; thien gửi thử từ trang 19/11 và Claude nhận được)
-- [x] Thử trên mọi file đang có trong `docs/plans/`; file lệch mẫu thì lệnh báo rõ chỗ lệch (`make-plan.mjs --check docs/plans`, test chạy cả 10 file, PR #135)
+- [x] Thử trên mọi file đang có trong `docs/plans/`; file lệch mẫu thì lệnh báo rõ chỗ lệch (`make-plan.mjs --check docs/plans`, test chạy cả 10 file, PR #135; file không có `## Checkpoint` thì lệnh coi là viết trước mẫu, in "bỏ qua" và không kiểm thêm)
 - [ ] Trang tổng quan dẫn sang trang này thay vì file markdown
 - [x] Mẫu dựng từ bản B nên mang theo 7 ý review của CodeRabbit ở PR #124 (bản nguồn `round-1/mot-nac.html` giữ nguyên như thien đã xem): chừa chỗ thanh mục lục khi nhảy tới một ga, thẻ nhánh là link `#...` để Tab đi đúng, kết quả thanh trượt có `role="status"`, nhãn vùng khớp ngưỡng, không ghi đè phần thien đã gõ, xoá chữ "Đã chép" khi câu đổi, mục lục bỏ sáng khi không còn mục nào; nếu lấy núm vặn của C: mốc 01/12 đứng yên thật, chọn lại ga khi cuộn ngược (PR #135; vùng "trễ" bỏ hẳn)
 
