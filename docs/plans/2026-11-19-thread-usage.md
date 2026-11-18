@@ -1,13 +1,13 @@
 # Dùng project bản beta tốn ít usage hơn: thread, lịch nhắc, theo dõi PR
 
-Trạng thái: chờ duyệt · Trang: https://claude.ai/artifact/S9H1zuVfHSZhSs5DfdURjZ (nick tnt628) · Viết: 2026-11-19 · Cập nhật: 2026-11-19 · nick tnt628 · Thread: [Tối ưu token khi làm kế hoạch dài trong thread](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRHS9xoyPanZaP9rntnrf9nJ)
+Trạng thái: đang chạy · Duyệt: 2026-11-19 · Trang: https://claude.ai/artifact/S9H1zuVfHSZhSs5DfdURjZ (nick tnt628) · Viết: 2026-11-19 · Cập nhật: 2026-11-19 · nick tnt628 · Thread: [Tối ưu token khi làm kế hoạch dài trong thread](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRHS9xoyPanZaP9rntnrf9nJ)
 
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: chờ thien duyệt kế hoạch và trả lời 3 câu hỏi ở cuối trang.
-- Còn thiếu: mọi checkpoint; chỉ làm sau khi thien duyệt.
-- thien cần làm: đọc phần "Ý kiến của mình" (mở trong mục Thêm), rồi bấm trả lời 3 câu hỏi.
+- Đang ở: checkpoint 1 đã sửa xong trong PR #139 (luật mới ở `profile/CHATS.md`, chuẩn setup lên v6); checkpoint 2: lịch nhắc mới đã tạo, chạy lần đầu tối thứ Năm 19/11.
+- Còn thiếu: số của lần nhắc đầu tiên; checkpoint 3 đo ở sakubun; xem lại ở mốc 01/12.
+- thien cần làm: merge PR #139, rồi dán lại project instructions bản v6 (khối "bản beta" trong `profile/SETUP.md`) ở từng project beta.
 
 ## Mục tiêu
 Quy trình thienai-workflow ở project bản beta không đốt usage vào những chỗ không làm ra gì: đánh thức thread lớn đã nghỉ lâu, lịch nhắc chạy trong thread cũ, thread thức dậy vì PR chỉ còn chờ merge. Dùng đúng tính năng sẵn có của Claude Projects, không viết thêm công cụ.
@@ -36,14 +36,14 @@ Quy trình thienai-workflow ở project bản beta không đốt usage vào nh�
 ### 1. Sửa luật thread và PR
 Xong khi: bạn mở `profile/CHATS.md` trên GitHub, mục "Project bản beta" có ba luật ở mục "Ý kiến của mình" kèm số đo làm căn cứ; chat điều phối ở các project beta đã có luật số 2 (theo câu hỏi 1).
 Ước: 1 phiên
-- [ ] `profile/CHATS.md` mục "Project bản beta": bỏ câu "nên không có ngưỡng", thêm ba luật và hai dòng số đo, giữ dưới khoảng 15 dòng
-- [ ] Đưa luật số 2 tới chat điều phối theo cách bạn chọn ở câu hỏi 1
-- [ ] `docs/STATUS.md`: thêm dòng kế hoạch này vào "Kế hoạch đang chạy" (STATUS đang đủ 40 dòng, nên gộp hay bớt một dòng cũ cho vừa)
+- [x] `profile/CHATS.md` mục "Project bản beta": bỏ câu "nên không có ngưỡng", thêm ba luật và hai dòng số đo, giữ dưới khoảng 15 dòng
+- [ ] Đưa luật số 2 tới chat điều phối theo cách bạn chọn ở câu hỏi 1: dòng mới trong khối bản beta của `profile/SETUP.md`, chuẩn lên v6 (đã sửa trong PR #139); tick khi bạn đã dán lại ở các project beta
+- [x] `docs/STATUS.md`: thêm dòng kế hoạch này vào "Kế hoạch đang chạy" (STATUS đang đủ 40 dòng, nên gộp hay bớt một dòng cũ cho vừa)
 
 ### 2. Lịch nhắc việc dở chạy ở phiên mới
 Xong khi: lần nhắc thứ Hai hay thứ Năm kế tiếp chạy ở một thread mới trong project Claude, tin nhắn tới bạn như cũ, và bản ghi của lần chạy đó không còn khoản ghi lại lịch sử cũ.
 Ước: 0,5 phiên
-- [ ] Tạo lại lịch nhắc thành lịch của project, mỗi lần chạy mở thread mới, với lời nhắc đầy đủ không cần lịch sử (theo câu hỏi 2); tắt lịch cũ `trig_01QirWvTiZFgoeBm5Ah3LCdt`
+- [x] Tạo lại lịch nhắc thành lịch của project, mỗi lần chạy mở thread mới, với lời nhắc đầy đủ không cần lịch sử (theo câu hỏi 2); tắt lịch cũ `trig_01QirWvTiZFgoeBm5Ah3LCdt`. Đã làm 2026-11-19: lịch mới `trig_01TtaWWBuGbCC6JscBSV7xL8`, cùng giờ 18:47 thứ Hai và thứ Năm; lịch cũ đã tắt (chưa xoá, để còn lịch sử chạy). Lời nhắc mới thêm một bước: ghi số dùng của lần chạy vào project memory, file `reminder-runs.md`
 - [ ] Ghi số của lần chạy đầu vào bảng "Kết quả đo"
 
 ### 3. Thử ở sakubun và đo
@@ -59,7 +59,7 @@ Xong khi: ở buổi xem lại chung ngày 01/12, luật được giữ, sửa h
 Ước: mốc
 - [ ] Gộp vào danh sách xem lại 01/12 của kế hoạch `2026-11-17-workflow-review.md` (mục đối chiếu tính năng mới của Claude)
 
-## Câu hỏi
+## Câu hỏi (thien đã trả lời 2026-11-19 bằng nút trên trang: "ok, theo cả 3 đề xuất")
 1. Đưa luật số 2 (tin tới sau hơn 1 giờ thì mở thread mới) tới chat điều phối bằng cách nào?
    - Thêm một câu vào đoạn chuẩn setup bản beta (lên v6), bạn dán lại ở các project beta một lần; lệnh khởi động tự nhắc project nào còn bản cũ (đề xuất)
    - Bạn nhắn câu đó ở chat điều phối từng project, Claude tự ghi vào memory của project đó; nhanh hơn nhưng không chắc nguyên văn và không đồng bộ giữa các project
@@ -116,6 +116,7 @@ Rút ra:
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-19 | Lịch nhắc mới tự ghi số dùng của mỗi lần chạy vào project memory (`reminder-runs.md`) | Thread này không phải thức dậy để đo, đúng luật 2; checkpoint 3 đọc file đó |
 | 2026-11-19 | Mở rộng từ "chia thread" sang cả lịch nhắc và theo dõi PR; thêm checkpoint 2 (lịch nhắc) và câu hỏi 2 | thien nhờ nghiên cứu kỹ thêm cả quy trình với project beta; số đo cho thấy lịch nhắc cũng đánh thức thread cũ mỗi lần chạy |
 
 ## Lỗi gặp
