@@ -33,6 +33,10 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
 .g-board .tray { display: flex; flex-wrap: wrap; gap: 12px; padding: 26px 12px 12px; }
 .g-board .bd-card { position: relative; }
 .g-knobs { width: 100%; }
+.g-ink { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; align-items: start; }
+.g-ink-h { font: 800 22px/1.2 var(--font); letter-spacing: -.01em; margin-bottom: 10px; }
+.g-bars { width: 100%; max-width: 420px; height: auto; display: block; margin-top: 6px; }
+.g-bars text { font: 600 12px var(--font); fill: var(--ink); } .g-bars text.m { font-weight: 400; fill: var(--muted); }
 .g-switch { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; max-width: 100%; }
 #g-palette { flex-wrap: wrap; max-width: 100%; }
 .g-icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
@@ -294,6 +298,31 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
       <p class="note good"><i class="ic ic-circle-check" aria-hidden="true"></i>Đã gửi cho Claude.</p>
       <p class="note warn"><i class="ic ic-triangle-alert" aria-hidden="true"></i>Chưa đọc được bản đã lưu.</p>
       <p class="note bad"><i class="ic ic-circle-alert" aria-hidden="true"></i>Gửi không được, đã chép thay.</p>
+    </section>
+
+    <section class="card g-sec wide">
+      <h2>Mực hình</h2>
+      <p>Hai mực có nghĩa cố định (vòng gu 3, theo slide MLN122): <em class="k1">xanh</em> cho khái niệm, công cụ, dữ liệu; <em class="k2">cam</em> cho người học, điểm cần làm. Dùng ở chữ khoá (em.k1, em.k2), khối sơ đồ (kind), biểu đồ (.fill-k1, .fill-k2), ý riêng (.callout). Không dùng cho nút.</p>
+      <div class="g-ink">
+        <div>
+          <h3 class="g-ink-h">Màu <em class="k1">công cụ</em> nói đây là gì, màu <em class="k2">người học</em> nói nhìn vào đâu</h3>
+          <div class="legend"><span><i class="bg-k1"></i>Không có chỗ nhấn</span><span><i class="bg-k2"></i>Một chỗ nhấn</span></div>
+          <svg class="g-bars" viewBox="0 0 300 130" role="img" aria-label="Biểu đồ cột minh hoạ: màn đơn giản 3,1 và 1,4 giây; màn nhiều dữ liệu 5,2 và 2,0 giây">
+            <line x1="10" y1="104" x2="290" y2="104" style="stroke: var(--line-strong)"/>
+            <path class="fill-k1" d="M40 104V57a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4V104z"/><path class="fill-k2" d="M78 104V82a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4V104z"/>
+            <path class="fill-k1" d="M180 104V24a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4V104z"/><path class="fill-k2" d="M218 104V73a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4V104z"/>
+            <text x="58" y="47" text-anchor="middle">3,1</text><text x="96" y="72" text-anchor="middle">1,4</text><text x="198" y="14" text-anchor="middle">5,2</text><text x="236" y="63" text-anchor="middle">2,0</text>
+            <text x="77" y="122" text-anchor="middle" class="m">Màn đơn giản</text><text x="217" y="122" text-anchor="middle" class="m">Màn nhiều dữ liệu</text>
+          </svg>
+          <p class="muted small">Số minh hoạ, giây tìm nút chính.</p>
+        </div>
+        <div style="display:grid; gap:12px; align-content:start">
+          <div data-diagram><script type="application/json">
+{ "nodes": [ { "id": "a", "label": "Một màu nhấn", "kind": "k1" }, { "id": "b", "label": "Mắt người học", "kind": "k2" } ], "edges": [["a", "b"]], "dir": "TB" }
+</script></div>
+          <div class="callout"><p class="label k2">Quan điểm của mình</p><p>Màu đẹp lúc đầu chưa đủ; màu đúng nghĩa thì nhìn lâu vẫn dễ chịu.</p></div>
+        </div>
+      </div>
     </section>
 
     <section class="card g-sec wide">

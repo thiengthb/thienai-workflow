@@ -4,7 +4,7 @@
 
    Diagram.mount(host, spec)  vẽ sơ đồ vào host, trả về { go(i), next(), prev(), layout() }.
    spec = {
-     nodes: [{ id, label, note? }],              note: chú thích hiện trong khối khi tới bước đó
+     nodes: [{ id, label, note?, kind? }],       note: chú thích hiện trong khối khi tới bước đó; kind: lớp dg-<kind> để tô viền
      edges: [[from, to, label?]] hay [{ from, to, label }],
      steps: [id, ...]  hay  [{ id, note }],       không có thì sơ đồ đứng yên, không có thanh bấm
      dir:   'auto' (mặc định) | 'LR' | 'TB'       auto: ngang nếu vừa khung, không vừa thì dọc (điện thoại)
@@ -19,7 +19,7 @@
   const sv = (tag, attrs) => { const e = document.createElementNS(SVG, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
 
   function normalise(spec) {
-    const nodes = (spec.nodes || []).map((n) => ({ id: String(n.id), label: n.label || String(n.id), note: n.note || '' }));
+    const nodes = (spec.nodes || []).map((n) => ({ id: String(n.id), label: n.label || String(n.id), note: n.note || '', kind: /^[\w-]+$/.test(n.kind || '') ? n.kind : '' }));
     const ids = new Set(nodes.map((n) => n.id));
     const edges = (spec.edges || []).map((e) => Array.isArray(e) ? { from: String(e[0]), to: String(e[1]), label: e[2] || '' } : { from: String(e.from), to: String(e.to), label: e.label || '' })
       .filter((e) => ids.has(e.from) && ids.has(e.to));
@@ -135,6 +135,7 @@
       const note = el('span', 'dg-note');
       b.appendChild(note);
       b.dataset.id = n.id;
+      if (n.kind) b.classList.add('dg-' + n.kind);   // loại khối (ví dụ k1, k2): trang tô viền theo mực của loại đó
       stage.appendChild(b);
       boxes.set(n.id, { box: b, note, node: n });
     });
