@@ -16,7 +16,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 0–2 xong; 3: đã đo BA 5 và Frontend 10, ôn tự sinh chạy đúng, nhưng lượt dựng bài chưa giảm (Frontend 10 khoảng 65), xét ở 01/12; 4 bỏ (thien chọn 2026-11-17) | 8/11 |
 | [Các hành động giữa thien và AI còn thiếu luật](plans/2026-11-17-action-gaps.md) | 1 đã merge (PR #104), kiểm ở 4 chat: 4 trên 6 PR đủ điều kiện được AI tự merge, quyết sửa gì ở 01/12; 2 xong; 3 ở mốc 01/12 | 11/16 |
 | [Sửa theo review Codex 17/11](plans/2026-11-18-codex-review.md) | 1 (hai lệnh không còn xoá hay ghi đè dữ liệu) và 2 (sửa chỗ ghi sai) đã merge (PR #121); 3 đã gộp vào mốc 01/12 | 11/12 |
-| [Quy trình nhìn được, gu lớn dần](plans/2026-11-18-visual-workflow.md) | 0 xong (vòng gu 1: B Một nấc); 1 xong (thien bấm sơ đồ trên điện thoại, không lỗi); vòng gu 2: giấy trắng với xanh petrol, kit mới đã merge (PR #127); tiếp theo 2: mẫu kế hoạch nhìn được. Luật gom vào mốc 01/12 | 7/24 |
+| [Quy trình nhìn được, gu lớn dần](plans/2026-11-18-visual-workflow.md) | 0 xong (vòng gu 1: B Một nấc); 1 xong (thien bấm sơ đồ trên điện thoại, không lỗi); vòng gu 2 giấy trắng xanh petrol, vòng gu 3 mực hình xanh cam (PR #127, #130, #131 đã merge); tiếp theo 2: mẫu kế hoạch nhìn được. Luật gom vào mốc 01/12 | 7/24 |
 | [Trang mở nhanh](plans/2026-11-17-quick-access.md) | 1, 2, 4 xong, thien đã dùng tab "Mở nhanh" trên điện thoại; 3: sơ đồ đã vào README (PR #118), còn xem trên điện thoại và xem lại ở mốc 01/12; lối tắt tuỳ thien | 9/11 |
 
 ## Việc dở
@@ -34,7 +34,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- Merge PR #130 (nút dịu hơn) rồi #131 (mực hình xanh, cam từ vòng gu 3, thien chọn A).
+- Không có.
 
 ## Đang vướng
-- Merge PR #130 (nút dịu hơn) rồi #131 (mực hình xanh, cam từ vòng gu 3, thien chọn A). Trang tổng quan đọc sakubun bằng bản clone công khai.
+- Không có. Trang tổng quan đọc sakubun bằng bản clone công khai.
