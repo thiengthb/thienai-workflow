@@ -5,13 +5,13 @@ Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien: "ok, duyệt theo c�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 0 và 1 xong; tiếp theo checkpoint 2. Lớp sơ đồ: `artifacts/kit/diagram.js` và mục Sơ đồ trong trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (nick tnt697). Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
+- Đang ở: checkpoint 0, 1, 2 xong; tiếp theo checkpoint 3 (mẫu luồng chạy, theo 3 đề xuất thien chọn 19/11). Lớp sơ đồ: `artifacts/kit/diagram.js` và mục Sơ đồ trong trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (nick tnt697). Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
 - Vòng gu 2 (bảng màu) chạy sớm theo lời thien 18/11: trang chọn https://claude.ai/artifact/Ci6FBx4ThzEEh4SYZESph7 (nick tnt697), nguồn ở `round-2/`. thien chọn C trên trang, rồi nhắn "à tôi muốn giấy trắng với xanh petrol": kit dùng nền của A với màu nhấn của C (đã vào `kit.css`). Cùng đợt: nút mới, icon Lucide, chuyển động, thành phần mới, trang nhẹ (`kit/pack.mjs`). PR #126 và #127 đã merge (19/11, thien nhắn "merge").
 - Vòng gu 3 (19/11, thien hỏi mang style slide MLN122 vào trang học): trang chọn https://claude.ai/artifact/RMSfapmLBg7FvoQ5PFDgad, trang mẫu bấm A/B/C https://claude.ai/artifact/9tkpy5E3vqvs5AXqnWJor2 (cả hai nick tnt697); nguồn ở `round-3/` (PR #131). thien chọn "A · Thêm mực cam" (01:11, đề xuất là B): không kẻ ô, giữ bo góc, giấy trắng; vì sao đã chép nguyên văn vào hàng chờ gu. Mực hình đã vào kit ở PR #131.
 - Checkpoint 1 xong (19/11): mục Sơ đồ trong trang mẫu chỉ có một luồng, chính là luồng 5 bước "một buổi học đi qua những đâu"; thien nhắn "mình đã bấm sơ đồ trên điện thoại và nó không bị lỗi UI nào". Câu vì sao của bảng màu đã vào hàng chờ gu.
-- Còn thiếu: checkpoint 2 chỉ còn chờ PR #137 merge rồi đăng lại trang tổng quan; điều kiện "Xong khi" đã đạt (thien trả lời 3 câu hỏi bằng nút trên trang 19/11 02:53). Tiếp theo checkpoint 3 theo cả 3 đề xuất, rồi 4, 5.
+- Còn thiếu: checkpoint 3 tới 5. Mẫu trang kế hoạch `artifacts/plan/` và link từ trang tổng quan đã merge (PR #135, #137); trang tổng quan nằm ở nick khác, đổi ở lần đăng lại kế tiếp.
 - thien đã chọn "B · Một nấc" (2026-11-18, giống đề xuất), vì sao: "mình cảm thấy hiện tại 3 bản thì bản một nấc, không đi quá xa, có phần quen thuộc cũng như mới lạ nho nhỏ, nhưng phần C thì quá mới làm mình chưa thích ứng". Checkpoint 0 xong.
-- thien cần làm: merge PR #137 (trang tổng quan dẫn sang trang kế hoạch).
+- thien cần làm: không có. Muốn link "Mở trang kế hoạch" mở được từ nick khác thì mời các nick vào trang kế hoạch (Share, quyền xem).
 
 ## Mục tiêu
 Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu của thien đi lên từng nấc, nhất quán mà không đứng yên (lời thien 2026-11-18: gu "phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn").
@@ -56,13 +56,13 @@ Xong khi: trang mẫu thành phần (`artifacts/kit/gallery.html`) có mục Sơ
 - [x] Bấm từng bước: khối sáng lên, chữ chú thích hiện cạnh khối (2026-11-18: bắt đầu ở toàn cảnh; chú thích mở ngay dưới tên trong khối, sơ đồ xếp lại nên không đè khối khác)
 - [x] Qua `check-tokens.mjs` và `check-pages.mjs` (2026-11-18: 0 lỗi, trang mẫu thành phần không có cảnh báo ở 3 khổ, sáng và tối)
 
-### 2. Mẫu kế hoạch nhìn được
+### 2. Mẫu kế hoạch nhìn được (xong 2026-11-19: thien trả lời 3 câu hỏi bằng nút trên trang)
 Xong khi: kế hoạch kế tiếp được gửi thien duyệt bằng trang sinh từ file `docs/plans/`, và thien trả lời câu hỏi bằng nút trên trang, không gõ lại.
 Ước: 2 phiên
 - [x] Lệnh mới make-plan.mjs trong thư mục mới artifacts/plan đọc file theo `templates/PLAN.template.md`, dựng tuyến checkpoint, phương án, câu hỏi (PR #135, merge 2026-11-19)
 - [x] Câu trả lời lưu vào db của trang để Claude đọc, có nút chép làm đường lui (PR #135; thien gửi thử từ trang 19/11 và Claude nhận được)
 - [x] Thử trên mọi file đang có trong `docs/plans/`; file lệch mẫu thì lệnh báo rõ chỗ lệch (`make-plan.mjs --check docs/plans`, test chạy cả 10 file, PR #135; file không có `## Checkpoint` thì lệnh coi là viết trước mẫu, in "bỏ qua" và không kiểm thêm)
-- [ ] Trang tổng quan dẫn sang trang này thay vì file markdown
+- [x] Trang tổng quan dẫn sang trang này thay vì file markdown (PR #137, merge 2026-11-19: dòng `Trang:` ở đầu file kế hoạch; trang tổng quan nằm ở nick khác nên bản đăng đổi ở lần đăng lại kế tiếp từ nick đó)
 - [x] Mẫu dựng từ bản B nên mang theo 7 ý review của CodeRabbit ở PR #124 (bản nguồn `round-1/mot-nac.html` giữ nguyên như thien đã xem): chừa chỗ thanh mục lục khi nhảy tới một ga, thẻ nhánh là link `#...` để Tab đi đúng, kết quả thanh trượt có `role="status"`, nhãn vùng khớp ngưỡng, không ghi đè phần thien đã gõ, xoá chữ "Đã chép" khi câu đổi, mục lục bỏ sáng khi không còn mục nào; nếu lấy núm vặn của C: mốc 01/12 đứng yên thật, chọn lại ga khi cuộn ngược (PR #135; vùng "trễ" bỏ hẳn)
 
 ### 3. Mẫu luồng chạy
