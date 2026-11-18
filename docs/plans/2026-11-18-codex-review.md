@@ -5,15 +5,15 @@ Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien bấm "Duyệt, bỏ B
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 và 2 xong trong PR #121, chờ merge; checkpoint 3 đã ghi vào danh sách mốc 01/12 của kế hoạch `action-gaps` trong cùng PR.
-- Còn thiếu: merge PR #121, đăng lại trang lộ trình sau khi merge; ba việc ở mốc 01/12.
-- thien cần làm: merge [PR #121](https://github.com/thiengthb/thienai-workflow/pull/121) (có `templates/`, `.github/`), trước 24/11.
+- Đang ở: checkpoint 1 và 2 xong, PR #121 đã merge ngày 2026-11-18 (thien bảo AI merge trong thread), trang lộ trình đã đăng lại. Checkpoint 3 đã nằm trong danh sách mốc 01/12 của kế hoạch `action-gaps`.
+- Còn thiếu: buổi xem lại 01/12 trả lời từng ý.
+- thien cần làm: không có.
 
 ## Mục tiêu
 Sửa những chỗ review của Codex (commit `721a116`, 17/11) chỉ ra mà kiểm lại thấy đúng, ưu tiên hai lệnh có thể xoá hay ghi đè dữ liệu, mà không thêm luật mới hay script mới trước mốc 01/12.
 
 ## Kiểm từng ý
-Main hiện tại vẫn là `721a116` (kiểm 2026-11-18, `git ls-remote`), nên mọi ý của Codex đều nói về đúng bản đang chạy. CI `Test` trên commit đó xanh ([lượt chạy](https://github.com/thiengthb/thienai-workflow/actions/runs/44116199219)).
+Lúc kiểm (2026-11-18, `git ls-remote`), main là `721a116`, đúng bản Codex review. Bảng dưới ghi trạng thái lúc đó; phần sửa đã vào main ở PR #121. CI `Test` trên commit đó xanh ([lượt chạy](https://github.com/thiengthb/thienai-workflow/actions/runs/44116199219)).
 
 | Ý của Codex | Mình kiểm thấy | Đồng ý? | Làm gì |
 |---|---|---|---|
@@ -53,23 +53,23 @@ Thêm một chỗ Codex không nêu: thread cũ "Cải thiện workflow AI từ 
 
 ### 1. Hai lệnh không còn xoá hay ghi đè dữ liệu
 Xong khi: CI có test dựng một thư mục chứa file của người dùng rồi chạy `publish-progress --out` vào đó, lệnh dừng và file còn nguyên; thien đọc dòng `check-open-work` cho PR không còn ref merge thấy chữ "chưa rõ, mở PR xem trước", không thấy "xoá nhánh"; CodeRabbit đã review và mọi ý đã được trả lời.
-- [ ] `publish-progress.mjs`: chỉ xoá hay ghi vào thư mục chưa có, rỗng, nằm trong `build/` hay có file dấu do chính lệnh tạo; thư mục khác có file thì dừng. Test trong `.github/scripts/publish-progress.test.mjs` (chờ merge PR #121)
-- [ ] `check-open-work.mjs` và `start-session.mjs`: PR không còn ref merge thì báo "chưa rõ: đã merge, đã đóng, hay đang mở nhưng conflict", bảo mở PR xem trước, không gọi là nhánh cũ (chờ merge PR #121)
-- [ ] `start-session.mjs`: dò thêm mục "Đang ở đâu" của các kế hoạch đang chạy; chỉ xét vế câu có chữ chờ, để số PR cũ cùng dòng không bị báo nhầm (chờ merge PR #121)
-- [ ] `sync-agents-md.mjs`: mô tả PR bot mở có câu "nhánh do Action quản lý, đừng đẩy commit lên" (chờ merge PR #121)
+- [x] `publish-progress.mjs`: chỉ xoá hay ghi vào thư mục chưa có, rỗng, nằm trong `build/` hay có file dấu do chính lệnh tạo; thư mục khác có file thì dừng. Test trong `.github/scripts/publish-progress.test.mjs` (PR #121, merge 2026-11-18)
+- [x] `check-open-work.mjs` và `start-session.mjs`: PR không còn ref merge thì báo "chưa rõ: đã merge, đã đóng, hay đang mở nhưng conflict", bảo mở PR xem trước, không gọi là nhánh cũ (PR #121, merge 2026-11-18)
+- [x] `start-session.mjs`: dò thêm mục "Đang ở đâu" của các kế hoạch đang chạy; chỉ xét vế câu có chữ chờ, để số PR cũ cùng dòng không bị báo nhầm (PR #121, merge 2026-11-18)
+- [x] `sync-agents-md.mjs`: mô tả PR bot mở có câu "nhánh do Action quản lý, đừng đẩy commit lên" (PR #121, merge 2026-11-18)
 
 ### 2. Chỗ ghi sai được sửa
 Xong khi: thien mở kế hoạch `action-gaps`, `learning/roadmap.md`, `learning/usage.md` không thấy câu nào trái với STATUS; trang lộ trình trên điện thoại khớp file.
-- [ ] Kế hoạch `action-gaps`: bỏ chữ "chờ merge PR #110"; bảng sáu lần kiểm tự merge (chờ merge PR #121)
-- [ ] `learning/roadmap.md`: câu chặng 2 frontend, số buổi còn lại môn chiến tranh, trang Chiến tranh 6, 7 trong "Bài đã học" (chờ merge PR #121)
-- [ ] Đăng lại trang lộ trình sau khi merge
-- [ ] `learning/usage.md`: ý nghĩa cột "Phút", ghi chú hai dòng 311 và 952 (chờ merge PR #121)
-- [ ] Bảng học tuần: bỏ link ở `README.md`, `artifacts/README.md`, `learning/README.md`; `artifacts/lesson/README.md` giữ cách dựng lại (chờ merge PR #121)
-- [ ] Dòng kế hoạch này trong STATUS, STATUS vẫn 40 dòng (chờ merge PR #121)
+- [x] Kế hoạch `action-gaps`: bỏ chữ "chờ merge PR #110"; bảng sáu lần kiểm tự merge (PR #121, merge 2026-11-18)
+- [x] `learning/roadmap.md`: câu chặng 2 frontend, số buổi còn lại môn chiến tranh, trang Chiến tranh 6, 7 trong "Bài đã học" (PR #121, merge 2026-11-18)
+- [x] Đăng lại trang lộ trình sau khi merge (2026-11-18, https://claude.ai/artifact/Vubbj6ghT9L7eKYegTfT9n)
+- [x] `learning/usage.md`: ý nghĩa cột "Phút", ghi chú hai dòng 311 và 952 (PR #121, merge 2026-11-18)
+- [x] Bảng học tuần: bỏ link ở `README.md`, `artifacts/README.md`, `learning/README.md`; `artifacts/lesson/README.md` giữ cách dựng lại (PR #121, merge 2026-11-18)
+- [x] Dòng kế hoạch này trong STATUS, STATUS vẫn 40 dòng (PR #121, merge 2026-11-18)
 
 ### 3. Gộp phần đo vào mốc 01/12 (không có việc riêng)
 Xong khi: danh sách việc ở mốc 01/12 (kế hoạch `action-gaps`, checkpoint 3) có các ý dưới, và buổi xem lại 01/12 trả lời được từng ý.
-- [ ] Ghi vào danh sách mốc 01/12: quyết phần tự merge từ bảng "Kiểm đợt 1"; vùng soi trước khi review theo giai đoạn; dòng "CI không tự chặn merge" cho bảng ủy quyền; thử sổ bàn giao lần tới thien nói "tiếp tục" (chờ merge PR #121)
+- [x] Ghi vào danh sách mốc 01/12: quyết phần tự merge từ bảng "Kiểm đợt 1"; vùng soi trước khi review theo giai đoạn; dòng "CI không tự chặn merge" cho bảng ủy quyền; thử sổ bàn giao lần tới thien nói "tiếp tục" (PR #121, merge 2026-11-18)
 - [ ] Buổi xem lại 01/12 trả lời từng ý
 
 Thời gian: đợt 1 và 2 làm trong thread này, một PR (#121) thien merge. Đợt 3 không tốn thêm phiên.
