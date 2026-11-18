@@ -56,7 +56,6 @@
     const W = svg.clientWidth || 600, H = svg.clientHeight || 84, Y = 42, L = 16, R = W - 16;
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     svg.textContent = '';
-    el('title', { id: 'map-t' }).textContent = 'Các ga trên trục ngày';
     if (!pts.length) return;
     const t0 = Math.min(today, ...pts.map((p) => p.t)) - DAY, t1 = Math.max(today, ...pts.map((p) => p.t)) + DAY;
     const x = (t) => L + (R - L) * (t - t0) / Math.max(DAY, t1 - t0);
@@ -80,13 +79,12 @@
       const cx = xs[i];
       up = i > 0 && cx - xs[i - 1] < 40 ? !up : false;
       const cls = ['st', p.c.state, p.fixed ? 'gate' : '', p.c.id === sel ? 'sel' : ''].filter(Boolean).join(' ');
-      const g = el('g', { class: cls, tabindex: '0', role: 'button', 'aria-label': `Ga ${p.c.num}: ${p.c.name}, ${p.c.state === 'done' ? 'xong ' : p.fixed ? 'mốc ' : 'dự kiến '}${ddmm(p.t)}` });
+      const g = el('g', { class: cls });
       el('circle', { class: 'c', cx, cy: Y, r: p.c.id === sel ? 12 : 10 }, g);
       el('text', { class: 'n', x: cx, y: Y }, g).textContent = p.c.num;
       if (i === 0 || ddmm(p.t) !== ddmm(pts[i - 1].t)) el('text', { class: 'd', x: cx, y: up ? Y - 19 : Y + 28, 'text-anchor': cx < L + 14 ? 'start' : cx > R - 14 ? 'end' : 'middle' }, g).textContent = ddmm(p.t);
       const go = () => { const s = $(p.c.id); if (s) { select(p.c.id); s.scrollIntoView(); } };
       g.addEventListener('click', go);
-      g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
     });
     const out = $('readout');
     if (out) {

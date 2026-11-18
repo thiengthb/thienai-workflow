@@ -60,7 +60,7 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   const legend = `<p class="legend"><span><i class="lg done"></i>xong</span><span><i class="lg now"></i>đang chạy</span><span><i class="lg todo"></i>chưa tới</span>${plan.checkpoints.some((c) => c.gate) ? '<span><i class="lg gate"></i>mốc cố định</span>' : ''}</p>`;
   const mapNeeded = plan.checkpoints.filter((c) => c.state !== 'dropped' && (c.doneDate || c.gate || c.estimate != null)).length >= 2;
   const daymap = mapNeeded ? `<div class="daymap card" id="daymap">
-    <svg id="map" role="img" aria-labelledby="map-t"><title id="map-t">Các ga trên trục ngày</title></svg>
+    <svg id="map" aria-hidden="true"></svg>
     <div class="knob" id="knob" hidden>
       <label for="pace"><b id="pace-v">3</b> phiên mỗi tuần</label>
       <input id="pace" type="range" min="1" max="6" step="1" value="3">
