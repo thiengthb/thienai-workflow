@@ -1,6 +1,6 @@
 # Quy trình nhìn được, và gu lớn dần theo ngày
 
-Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien: "ok, duyệt theo cả 4 đề xuất") · Cập nhật: 2026-11-18 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBWDbXVGqmzESXaXn7P, https://claude.ai/code/session_01WXAvBX3kxdpafP9q92LUbo · Bản duyệt: https://claude.ai/artifact/7hVBYXwyHZbfVp7mL4GsV4 (nick tnt697)
+Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien: "ok, duyệt theo cả 4 đề xuất") · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBWDbXVGqmzESXaXn7P, https://claude.ai/code/session_01WXAvBX3kxdpafP9q92LUbo · Bản duyệt: https://claude.ai/artifact/7hVBYXwyHZbfVp7mL4GsV4 (nick tnt697)
 
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
@@ -9,9 +9,9 @@ Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick
 - Vòng gu 2 (bảng màu) chạy sớm theo lời thien 18/11: trang chọn https://claude.ai/artifact/Ci6FBx4ThzEEh4SYZESph7 (nick tnt697), nguồn ở `round-2/`. thien chọn C trên trang, rồi nhắn "à tôi muốn giấy trắng với xanh petrol": kit dùng nền của A với màu nhấn của C (đã vào `kit.css`). Cùng đợt: nút mới, icon Lucide, chuyển động, thành phần mới, trang nhẹ (`kit/pack.mjs`). PR #126 và #127 đã merge (19/11, thien nhắn "merge").
 - Vòng gu 3 (19/11, thien hỏi mang style slide MLN122 vào trang học): trang chọn https://claude.ai/artifact/RMSfapmLBg7FvoQ5PFDgad, trang mẫu bấm A/B/C https://claude.ai/artifact/9tkpy5E3vqvs5AXqnWJor2 (cả hai nick tnt697); nguồn ở `round-3/` (PR #131). thien chọn "A · Thêm mực cam" (01:11, đề xuất là B): không kẻ ô, giữ bo góc, giấy trắng; vì sao đã chép nguyên văn vào hàng chờ gu. Mực hình đã vào kit ở PR #131.
 - Checkpoint 1 xong (19/11): mục Sơ đồ trong trang mẫu chỉ có một luồng, chính là luồng 5 bước "một buổi học đi qua những đâu"; thien nhắn "mình đã bấm sơ đồ trên điện thoại và nó không bị lỗi UI nào". Câu vì sao của bảng màu đã vào hàng chờ gu.
-- Còn thiếu: checkpoint 2 (tiếp theo) tới 5. Ở ga 2 thử lấy riêng bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử, không lấy nền tối và chữ khổng lồ.
+- Còn thiếu: checkpoint 2 đang làm (19/11): lệnh `artifacts/plan/make-plan.mjs` và trang đã dựng, chi tiết thử là bản đồ ga theo ngày kèm núm vặn của bản C (nền sáng, chữ thường); trang thử của chính kế hoạch này https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (nick tnt697). Còn: trang tổng quan dẫn sang trang kế hoạch, và kế hoạch kế tiếp gửi duyệt bằng trang này. Sau đó checkpoint 3 tới 5.
 - thien đã chọn "B · Một nấc" (2026-11-18, giống đề xuất), vì sao: "mình cảm thấy hiện tại 3 bản thì bản một nấc, không đi quá xa, có phần quen thuộc cũng như mới lạ nho nhỏ, nhưng phần C thì quá mới làm mình chưa thích ứng". Checkpoint 0 xong.
-- thien cần làm: không có, tới khi mẫu kế hoạch (checkpoint 2) có trang để duyệt. PR #130, #131 đã merge 19/11.
+- thien cần làm: mở trang thử trên điện thoại, bấm Thích hay Không ở ô "Chi tiết thử" cuối trang (bản đồ ga theo ngày), rồi xem PR của checkpoint 2.
 
 ## Mục tiêu
 Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu của thien đi lên từng nấc, nhất quán mà không đứng yên (lời thien 2026-11-18: gu "phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn").
