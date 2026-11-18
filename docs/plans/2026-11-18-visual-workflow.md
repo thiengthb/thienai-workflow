@@ -9,9 +9,9 @@ Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick
 - Vòng gu 2 (bảng màu) chạy sớm theo lời thien 18/11: trang chọn https://claude.ai/artifact/Ci6FBx4ThzEEh4SYZESph7 (nick tnt697), nguồn ở `round-2/`. thien chọn C trên trang, rồi nhắn "à tôi muốn giấy trắng với xanh petrol": kit dùng nền của A với màu nhấn của C (đã vào `kit.css`). Cùng đợt: nút mới, icon Lucide, chuyển động, thành phần mới, trang nhẹ (`kit/pack.mjs`). PR #126 và #127 đã merge (19/11, thien nhắn "merge").
 - Vòng gu 3 (19/11, thien hỏi mang style slide MLN122 vào trang học): trang chọn https://claude.ai/artifact/RMSfapmLBg7FvoQ5PFDgad, trang mẫu bấm A/B/C https://claude.ai/artifact/9tkpy5E3vqvs5AXqnWJor2 (cả hai nick tnt697); nguồn ở `round-3/` (PR #131). thien chọn "A · Thêm mực cam" (01:11, đề xuất là B): không kẻ ô, giữ bo góc, giấy trắng; vì sao đã chép nguyên văn vào hàng chờ gu. Mực hình đã vào kit ở PR #131.
 - Checkpoint 1 xong (19/11): mục Sơ đồ trong trang mẫu chỉ có một luồng, chính là luồng 5 bước "một buổi học đi qua những đâu"; thien nhắn "mình đã bấm sơ đồ trên điện thoại và nó không bị lỗi UI nào". Câu vì sao của bảng màu đã vào hàng chờ gu.
-- Còn thiếu: checkpoint 2 đang làm (19/11): lệnh `artifacts/plan/make-plan.mjs` và trang đã dựng, chi tiết thử là bản đồ ga theo ngày kèm núm vặn của bản C (nền sáng, chữ thường); trang thử của chính kế hoạch này https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (nick tnt697). Còn: trang tổng quan dẫn sang trang kế hoạch, và kế hoạch kế tiếp gửi duyệt bằng trang này. Sau đó checkpoint 3 tới 5.
+- Còn thiếu: checkpoint 2 còn một việc (trang tổng quan dẫn sang trang kế hoạch) và điều kiện "Xong khi" (kế hoạch kế tiếp gửi thien duyệt bằng trang này). Mẫu trang kế hoạch `artifacts/plan/` đã merge (PR #135, 19/11); trang thử https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (nick tnt697). Sau đó checkpoint 3 tới 5.
 - thien đã chọn "B · Một nấc" (2026-11-18, giống đề xuất), vì sao: "mình cảm thấy hiện tại 3 bản thì bản một nấc, không đi quá xa, có phần quen thuộc cũng như mới lạ nho nhỏ, nhưng phần C thì quá mới làm mình chưa thích ứng". Checkpoint 0 xong.
-- thien cần làm: mở trang thử trên điện thoại, bấm Thích hay Không ở ô "Chi tiết thử" cuối trang (bản đồ ga theo ngày), rồi xem PR của checkpoint 2.
+- thien cần làm: không có. Lần tới gửi kế hoạch mới, Claude gửi bằng trang dựng từ `make-plan.mjs`.
 
 ## Mục tiêu
 Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu của thien đi lên từng nấc, nhất quán mà không đứng yên (lời thien 2026-11-18: gu "phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn").
@@ -59,11 +59,11 @@ Xong khi: trang mẫu thành phần (`artifacts/kit/gallery.html`) có mục Sơ
 ### 2. Mẫu kế hoạch nhìn được
 Xong khi: kế hoạch kế tiếp được gửi thien duyệt bằng trang sinh từ file `docs/plans/`, và thien trả lời câu hỏi bằng nút trên trang, không gõ lại.
 Ước: 2 phiên
-- [ ] Lệnh mới make-plan.mjs trong thư mục mới artifacts/plan đọc file theo `templates/PLAN.template.md`, dựng tuyến checkpoint, phương án, câu hỏi
-- [ ] Câu trả lời lưu vào db của trang để Claude đọc, có nút chép làm đường lui
-- [ ] Thử trên mọi file đang có trong `docs/plans/`; file lệch mẫu thì lệnh báo rõ chỗ lệch
+- [x] Lệnh mới make-plan.mjs trong thư mục mới artifacts/plan đọc file theo `templates/PLAN.template.md`, dựng tuyến checkpoint, phương án, câu hỏi (PR #135, merge 2026-11-19)
+- [x] Câu trả lời lưu vào db của trang để Claude đọc, có nút chép làm đường lui (PR #135; thien gửi thử từ trang 19/11 và Claude nhận được)
+- [x] Thử trên mọi file đang có trong `docs/plans/`; file lệch mẫu thì lệnh báo rõ chỗ lệch (`make-plan.mjs --check docs/plans`, test chạy cả 10 file, PR #135)
 - [ ] Trang tổng quan dẫn sang trang này thay vì file markdown
-- [ ] Mẫu dựng từ bản B nên mang theo 7 ý review của CodeRabbit ở PR #124 (bản nguồn `round-1/mot-nac.html` giữ nguyên như thien đã xem): chừa chỗ thanh mục lục khi nhảy tới một ga, thẻ nhánh là link `#...` để Tab đi đúng, kết quả thanh trượt có `role="status"`, nhãn vùng khớp ngưỡng, không ghi đè phần thien đã gõ, xoá chữ "Đã chép" khi câu đổi, mục lục bỏ sáng khi không còn mục nào; nếu lấy núm vặn của C: mốc 01/12 đứng yên thật, chọn lại ga khi cuộn ngược
+- [x] Mẫu dựng từ bản B nên mang theo 7 ý review của CodeRabbit ở PR #124 (bản nguồn `round-1/mot-nac.html` giữ nguyên như thien đã xem): chừa chỗ thanh mục lục khi nhảy tới một ga, thẻ nhánh là link `#...` để Tab đi đúng, kết quả thanh trượt có `role="status"`, nhãn vùng khớp ngưỡng, không ghi đè phần thien đã gõ, xoá chữ "Đã chép" khi câu đổi, mục lục bỏ sáng khi không còn mục nào; nếu lấy núm vặn của C: mốc 01/12 đứng yên thật, chọn lại ga khi cuộn ngược (PR #135; vùng "trễ" bỏ hẳn)
 
 ### 3. Mẫu luồng chạy
 Xong khi: thien xem luồng "một buổi học đi qua những đâu" và tự kể lại bằng lời mà không mở `profile/MAP.md`.
