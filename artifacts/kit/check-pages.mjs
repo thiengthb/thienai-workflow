@@ -254,7 +254,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const asRepo = async (f) => ({ name: relative(join(root, 'learning'), f).replace(/[\\/]pages[\\/]/, '-').replace(/\.html$/, ''), file: await buildRepoPage(f, tmp), own: true });
   let pages;
   const inRepo = (f) => /[\\/]learning[\\/][^\\/]+[\\/]pages[\\/][^\\/]+\.html$/.test(f) && f.startsWith(root);
-  if (args.length) pages = await Promise.all(args.map(resolve).map(async (f) => ({ name: basename(f, '.html'), file: inRepo(f) ? await buildRepoPage(f, tmp) : f, own: true })));
+  if (args.length) pages = await Promise.all(args.map((f) => resolve(f)).map(async (f) => ({ name: basename(f, '.html'), file: inRepo(f) ? await buildRepoPage(f, tmp) : f, own: true })));
   else {
     const fx = await buildFixtures(tmp, browser);
     const repo = ref ? changedPages(ref) : repoPages();

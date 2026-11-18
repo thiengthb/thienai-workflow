@@ -9,7 +9,10 @@
    Kit.ask(prompt, out, opts)  hỏi Claude ngay trên trang (khả năng sample), chữ hiện dần vào out; trả về câu trả lời hoặc null.
    Kit.askJson(prompt, out, opts)  như ask nhưng Claude trả về một giá trị JSON; out chỉ hiện chữ chờ và lỗi.
    Kit.dictate(btn, field, partial, onUse)  nút mic nói thay gõ (khả năng dictation) cho một ô chữ; nút ẩn nơi không có mic.
-   Kit.listen(btn, getText, onUse)  nút loa đọc to một đoạn chữ (khả năng tts); nút ẩn nơi không đọc được (Safari, app điện thoại). */
+   Kit.listen(btn, getText, onUse)  nút loa đọc to một đoạn chữ (khả năng tts); nút ẩn nơi không đọc được (Safari, app điện thoại).
+   Kit.icon(name, label?)  một thẻ <i> icon Lucide theo màu chữ (tên trong khối ICONS của kit.css).
+   Kit.tabs(root)        tab có phím mũi tên và gạch dưới trượt; tự gắn cho mọi [data-tabs] khi trang tải.
+   Kit.reveal(root)      các con hiện dần lần lượt; tự gắn cho mọi [data-reveal]. */
 (() => {
   const caps = {};
   function cap(name, ms = 10000) {
@@ -267,5 +270,49 @@
     return partial;
   }
 
-  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude, ask, askJson, dictate, micRow, listen };
+  /** Một icon Lucide của kit (danh sách trong khối ICONS của kit.css), theo màu chữ. label: tên đọc cho icon đứng một mình. */
+  function icon(name, label) {
+    const i = document.createElement('i'); i.className = 'ic ic-' + name;
+    if (label) { i.setAttribute('role', 'img'); i.setAttribute('aria-label', label); } else i.setAttribute('aria-hidden', 'true');
+    return i;
+  }
+
+  /** Tab: root chứa .tabs (các nút) và .tab-panel theo cùng thứ tự. Gắn role, aria, phím ← → Home End, gạch dưới trượt. */
+  function tabs(root) {
+    if (root.dataset.tabsOn) return; root.dataset.tabsOn = '1';
+    const bar = root.querySelector('.tabs'), btns = [...bar.querySelectorAll('button')], panels = [...root.querySelectorAll(':scope > .tab-panel')];
+    const uid = 'kt' + Math.random().toString(36).slice(2, 7);
+    const ink = document.createElement('span'); ink.className = 'tab-ink'; ink.setAttribute('aria-hidden', 'true'); bar.appendChild(ink);
+    bar.setAttribute('role', 'tablist');
+    btns.forEach((b, k) => {
+      b.type = 'button'; b.setAttribute('role', 'tab'); b.id = uid + 't' + k;
+      const p = panels[k]; if (p) { p.setAttribute('role', 'tabpanel'); p.id = uid + 'p' + k; p.setAttribute('aria-labelledby', b.id); b.setAttribute('aria-controls', p.id); }
+    });
+    const place = (b) => { ink.style.width = b.offsetWidth + 'px'; ink.style.transform = `translateX(${b.offsetLeft}px)`; };
+    function show(k, focus) {
+      btns.forEach((b, j) => { const on = j === k; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; if (panels[j]) panels[j].hidden = !on; });
+      place(btns[k]); if (focus) btns[k].focus();
+    }
+    bar.addEventListener('click', (e) => { const b = e.target.closest('[role="tab"]'); if (b) show(btns.indexOf(b)); });
+    bar.addEventListener('keydown', (e) => {
+      const k = btns.indexOf(document.activeElement); if (k < 0) return;
+      const n = { ArrowRight: k + 1, ArrowLeft: k - 1, Home: 0, End: btns.length - 1 }[e.key];
+      if (n === undefined) return; e.preventDefault(); show((n + btns.length) % btns.length, true);
+    });
+    if ('ResizeObserver' in window) new ResizeObserver(() => { const b = btns.find((x) => x.getAttribute('aria-selected') === 'true'); if (b) place(b); }).observe(bar);
+    const start = btns.findIndex((b) => b.getAttribute('aria-selected') === 'true');
+    show(start < 0 ? 0 : start);
+    return { show };
+  }
+
+  /** Hiện dần các con của khung có data-reveal: đặt --i theo thứ tự để CSS lùi giờ từng con. */
+  function reveal(root) { [...root.children].forEach((c, k) => c.style.setProperty('--i', k)); }
+
+  function autoInit() {
+    document.querySelectorAll('[data-tabs]').forEach(tabs);
+    document.querySelectorAll('[data-reveal]').forEach(reveal);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', autoInit); else autoInit();
+
+  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude, ask, askJson, dictate, micRow, listen, icon, tabs, reveal };
 })();

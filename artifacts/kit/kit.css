@@ -2,7 +2,7 @@
    Sửa ở đây; make-round.mjs và các script dựng trang chép file này vào trang lúc dựng.
    Gu: Onest, nền trắng ngà, chữ gần đen, một màu nhấn teal cho thứ quan trọng. Màu đúng/sai tách khỏi màu nhấn. */
 :root {
-  --bg: #faf8f3; --card: #ffffff; --soft: #f3f1ec; --line: #e7e3da; --ink: #1b1b1a; --muted: #6b6862;
+  --bg: #faf8f3; --card: #ffffff; --soft: #f3f1ec; --line: #e7e3da; --line-strong: #d3cec3; --ink: #1b1b1a; --muted: #6b6862;
   --accent: #308e84; --accent-soft: #e3f1ef; --accent-ink: #1f6b63;
   --good: #277a4c; --good-soft: #e6f3eb; --bad: #c2410c; --bad-soft: #fdeee6; --warn: #8a5a12; --warn-soft: #f6ecd6;
   --accent-fill: #2a7d74; --on-accent: #fff;   /* nền đặc màu nhấn (nút Gửi, nút đang chọn) và chữ trên nền đặc nhấn, đúng, sai */
@@ -12,13 +12,13 @@
   --r: 8px; --r-lg: 8px;   /* one radius for buttons, inputs, chips and cards (thienui docs/taste.md); round only for dots and knobs */
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #161615; --card: #1f1f1d; --soft: #262523; --line: #34322e; --ink: #ecebe7; --muted: #a19e97;
+  --bg: #161615; --card: #1f1f1d; --soft: #262523; --line: #34322e; --line-strong: #46433e; --ink: #ecebe7; --muted: #a19e97;
   --accent: #4fb3a6; --accent-soft: #1c3330; --accent-ink: #8fd9c9;
   --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
   --accent-fill: #4fb3a6; --on-accent: #161615;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; } }
 :root[data-theme="dark"] {
-  --bg: #161615; --card: #1f1f1d; --soft: #262523; --line: #34322e; --ink: #ecebe7; --muted: #a19e97;
+  --bg: #161615; --card: #1f1f1d; --soft: #262523; --line: #34322e; --line-strong: #46433e; --ink: #ecebe7; --muted: #a19e97;
   --accent: #4fb3a6; --accent-soft: #1c3330; --accent-ink: #8fd9c9;
   --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
   --accent-fill: #4fb3a6; --on-accent: #161615;
@@ -28,6 +28,13 @@
 :root {
   --on-fill: #fff; --accent-edge: color-mix(in srgb, var(--accent-fill) 75%, #000);   /* chữ trắng trên màu riêng của bài hay khung máy, viền đậm của nút nhấn */
   --shadow-sm: 0 1px 2px rgb(0 0 0 / .06); --shadow-pop: 0 4px 14px rgb(0 0 0 / .18); --shadow-lift: 0 8px 20px rgb(0 0 0 / .16);
+  /* Nút nổi (gu thienui "nút nổi có gờ dưới 2px", nút đặc kiểu app FAP): bóng rất nhẹ cho nút viền, gờ tối 2px ở đáy nút đặc. */
+  --shadow-btn: 0 1px 2px rgb(0 0 0 / .07); --lip: inset 0 -2px 0 rgb(0 0 0 / .18); --lip-soft: inset 0 -2px 0 rgb(0 0 0 / .06);
+  --glow-accent: 0 2px 8px -2px color-mix(in srgb, var(--accent-fill) 55%, transparent);
+  --skel: color-mix(in srgb, var(--line) 70%, var(--card)); --skel-hi: var(--card);
+  /* Chuyển động: lò xo nhẹ, không nảy rõ (thienui docs/taste.md). Vào chậm hơn ra. */
+  --ease-spring: linear(0, .32 8%, .72 18%, .95 30%, 1.03 42%, 1.01 58%, 1); --ease-out: cubic-bezier(.2, .8, .2, 1);
+  --t-fast: .12s; --t-base: .2s; --t-slow: .32s;
   --shadow-device: 0 10px 30px rgb(0 0 0 / .12); --scrim: rgb(0 0 0 / .55); --lit: rgb(79 179 166 / .2); --lit-strong: rgb(79 179 166 / .65);
   /* Màu nội dung: khung điện thoại và giấy của màn mô phỏng, khối code, bút soi, nhãn trên sa bàn. Luôn giữ như nhau vì là một phần của bài. */
   --paper: #fff; --device: #1b1b1a; --code-bg: #1f1f1d; --code-ink: #d6d3cc; --code-muted: #8a877f; --code-key: #8fd9c9; --code-val: #fff;
@@ -54,37 +61,50 @@ code, .mono { font-family: var(--mono); font-size: .88em; }
 .label { font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* Nút: viền 2px cùng màu, bo 8px, bấm thì lún nhẹ. */
-.btn { font: 600 14px/1 var(--font); color: var(--ink); background: var(--card); border: 2px solid var(--line); border-bottom-width: 3px;
-  border-radius: var(--r); min-height: 36px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  cursor: pointer; white-space: nowrap; }
-.btn:hover { border-color: color-mix(in srgb, var(--line) 60%, var(--muted)); }
-.btn:active { transform: translateY(1px); border-bottom-width: 2px; }
-.btn[disabled] { opacity: .45; cursor: default; }
-.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--bg); }
-.btn.accent { background: var(--accent-fill); border-color: var(--accent-edge); color: var(--on-accent); }
-.btn.ghost { background: transparent; border-color: transparent; }
-.btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); }
+/* Nút: viền 1px, bo 8px, nổi nhẹ. Nút đặc (primary, accent) không viền, có gờ tối 2px ở đáy; bấm thì lún 1px theo lò xo, mất gờ. */
+.btn { font: 600 14px/1 var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--line-strong);
+  border-radius: var(--r); min-height: 36px; padding: 0 14px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  cursor: pointer; white-space: nowrap; box-shadow: var(--shadow-btn), var(--lip-soft); -webkit-tap-highlight-color: transparent;
+  transition: transform var(--t-base) var(--ease-spring), box-shadow var(--t-fast), background-color var(--t-fast), border-color var(--t-fast), color var(--t-fast); }
+.btn:hover { background: var(--soft); }
+.btn:active { transform: translateY(1px) scale(.985); box-shadow: none; transition-duration: var(--t-fast); }
+.btn[disabled] { opacity: .45; cursor: default; transform: none; box-shadow: none; }
+.btn.primary { background: var(--ink); border-color: transparent; color: var(--bg); box-shadow: var(--shadow-btn), var(--lip); }
+.btn.primary:hover { background: color-mix(in srgb, var(--ink) 88%, var(--bg)); }
+.btn.accent { background: var(--accent-fill); border-color: transparent; color: var(--on-accent); box-shadow: var(--glow-accent), var(--lip); }
+.btn.accent:hover { background: color-mix(in srgb, var(--accent-fill) 90%, var(--ink)); }
+.btn.primary:active, .btn.accent:active { box-shadow: none; }
+.btn.ghost { background: transparent; border-color: transparent; box-shadow: none; }
+.btn.ghost:hover { background: var(--soft); }
+.btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); box-shadow: none; }
 .btn.good[aria-pressed="true"] { background: var(--good-soft); border-color: var(--good); color: var(--good); }
 .btn.bad[aria-pressed="true"] { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+.btn .ic { font-size: 16px; }
+.btn.busy { pointer-events: none; }
+.btn.busy::before { content: ""; width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: kit-spin .7s linear infinite; }
 @media (pointer: coarse) { .btn { min-height: 40px; } }
 
 /* Nhóm nút chọn một (segmented). */
 .seg { display: inline-flex; background: var(--soft); border-radius: var(--r); padding: 3px; gap: 2px; }
 .seg button { font: 500 13px/1 var(--font); color: var(--muted); background: transparent; border: 0; border-radius: calc(var(--r) - 3px); min-height: 30px;
   padding: 0 10px; cursor: pointer; white-space: nowrap; }
-.seg button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: var(--shadow); font-weight: 600; }
+.seg button { transition: background-color var(--t-fast), color var(--t-fast), box-shadow var(--t-fast); }
+.seg button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: var(--shadow-btn), 0 0 0 1px var(--line); font-weight: 600; }
 @media (pointer: coarse) { .seg button { min-height: 36px; } }
 
-.chip { font: 600 12px/1 var(--font); padding: 4px 8px; border-radius: var(--r); background: var(--soft); color: var(--muted); white-space: nowrap; }
+.chip { font: 600 12px/1 var(--font); min-height: 22px; padding: 0 8px; border-radius: var(--r); background: var(--soft); color: var(--muted); white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 4px; vertical-align: middle; }
+.chip .ic { font-size: 13px; }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
 .chip.good { background: var(--good-soft); color: var(--good); }
 .chip.bad { background: var(--bad-soft); color: var(--bad); }
 .chip.accent { background: var(--accent-soft); color: var(--accent-ink); }
 
-.card { background: var(--card); border: 2px solid var(--line); border-radius: var(--r-lg); }
-textarea, input[type="text"] { font: 15px/1.45 var(--font); color: var(--ink); background: var(--card); border: 2px solid var(--line);
-  border-radius: 8px; padding: 8px 10px; width: 100%; }
-textarea:focus, input[type="text"]:focus { border-color: var(--accent); outline: none; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-btn); }
+textarea, input[type="text"] { font: 15px/1.45 var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--line-strong);
+  border-radius: 8px; padding: 8px 10px; width: 100%; transition: border-color var(--t-fast), box-shadow var(--t-fast); }
+textarea:hover, input[type="text"]:hover { border-color: var(--muted); }
+textarea:focus, input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: none; }
 
 /* Thanh tiến độ. */
 .bar { height: 6px; background: var(--soft); border-radius: 99px; overflow: hidden; }
@@ -121,10 +141,10 @@ html:not(.kit-ask-on) .kit-ask { display: none !important; }
 .ai-ask { display: grid; gap: 8px; }
 .ai-open { justify-self: start; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 0; border: 0; background: none;
   font: 500 14px var(--font); color: var(--accent-ink); cursor: pointer; }
-.ai-open::before { content: "?"; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid currentColor; font: 700 11px/15px var(--font); text-align: center; flex: none; }
+.ai-open::before { content: ""; width: 18px; height: 18px; flex: none; background: currentColor; -webkit-mask: var(--ic-circle-help) center / contain no-repeat; mask: var(--ic-circle-help) center / contain no-repeat; }
 .ai-form { display: flex; gap: 8px; }
 .ai-form[hidden] { display: none; }
-.ai-form input { flex: 1; min-width: 0; min-height: 40px; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--r);
+.ai-form input { flex: 1; min-width: 0; min-height: 40px; padding: 8px 10px; border: 1px solid var(--line-strong); border-radius: var(--r);
   background: var(--card); color: var(--ink); font: 15px var(--font); }
 .ai-form .btn { flex: none; }
 @media (pointer: coarse) { .ai-open { min-height: 40px; } }
@@ -150,7 +170,7 @@ html:not(.kit-ask-on) .kit-ask { display: none !important; }
 
 /* Claude làm mẫu (lesson.js, Lesson.demo): nút mở, lời nhắc khi chưa tự làm xong, danh sách thao tác kèm lý do. */
 .demo { display: grid; gap: 8px; }
-.demo-open::before { content: "▶"; font-size: 8px; line-height: 15px; }
+.demo-open::before { -webkit-mask-image: var(--ic-circle-play); mask-image: var(--ic-circle-play); }
 .demo-hint { font-size: 13px; color: var(--muted); margin: -4px 0 0; }
 .demo-open:not(:disabled) ~ .demo-hint { display: none; }
 .demo-log { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; counter-reset: demo; }
@@ -193,3 +213,167 @@ button.dg-node:hover { border-color: var(--accent); }
 .dg-count { flex: 1; min-width: 0; font-size: 13.5px; color: var(--muted); text-align: center; }
 @keyframes dg-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .dg-node, .dg-note { transition: none; animation: none; } }
+
+
+/* ── Thành phần mở rộng (2026-11-18). Hành vi ở kit.js: Kit.icon, Kit.tabs, Kit.reveal. ── */
+/* Tab: một hàng chữ, gạch dưới màu nhấn trượt theo tab đang mở. <div data-tabs> chứa .tabs (nút role=tab) rồi các .tab-panel. */
+.tabs { position: relative; display: flex; gap: 2px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+.tabs button { font: 500 14px/1 var(--font); color: var(--muted); background: none; border: 0; padding: 10px 12px; cursor: pointer; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 6px; border-radius: var(--r) var(--r) 0 0; transition: color var(--t-fast), background-color var(--t-fast); }
+.tabs button:hover { color: var(--ink); background: var(--soft); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; }
+.tabs .tab-ink { position: absolute; bottom: -1px; left: 0; height: 2px; width: 0; background: var(--accent); border-radius: 2px;
+  transition: transform var(--t-slow) var(--ease-spring), width var(--t-slow) var(--ease-spring); }
+.tab-panel { padding-top: 12px; }
+.tab-panel[hidden] { display: none; }
+.tab-panel:not([hidden]) { animation: kit-in var(--t-base) var(--ease-out); }
+
+/* Mục gập mở: <details class="acc"><summary>…</summary><div>…</div></details>. Mũi tên xoay, phần thân trượt xuống. */
+.acc { border: 1px solid var(--line); border-radius: var(--r); background: var(--card); }
+.acc + .acc { margin-top: -1px; }
+.acc summary { list-style: none; display: flex; align-items: center; gap: 8px; padding: 10px 12px; font-weight: 600; cursor: pointer; border-radius: var(--r); }
+.acc summary::-webkit-details-marker { display: none; }
+.acc summary:hover { background: var(--soft); }
+.acc summary::after { content: ""; margin-left: auto; width: 16px; height: 16px; flex: none; background: var(--muted);
+  -webkit-mask: var(--ic-chevron-down) center / contain no-repeat; mask: var(--ic-chevron-down) center / contain no-repeat; transition: transform var(--t-base) var(--ease-spring); }
+.acc[open] summary::after { transform: rotate(180deg); }
+.acc > :not(summary) { padding: 0 12px 12px; color: var(--ink); }
+.acc[open] > :not(summary) { animation: kit-down var(--t-base) var(--ease-out); }
+
+/* Thanh bước: <ol class="steps"><li class="done">…</li><li class="now">…</li><li>…</li></ol>. Ngang, chữ xuống dòng dưới vòng; nhiều hơn 5 bước thì dùng sơ đồ. */
+.steps { list-style: none; margin: 0; padding: 0; display: flex; gap: 0; counter-reset: st; }
+.steps li { counter-increment: st; flex: 1 1 0; min-width: 0; display: grid; justify-items: center; gap: 6px; text-align: center; font-size: 13px; color: var(--muted); position: relative; }
+.steps li::before { content: counter(st); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 600 12px/1 var(--font);
+  background: var(--card); border: 1px solid var(--line-strong); color: var(--muted); position: relative; z-index: 1; transition: background-color var(--t-base), border-color var(--t-base), color var(--t-base); }
+.steps li:not(:last-child)::after { content: ""; position: absolute; top: 13px; left: calc(50% + 17px); right: calc(-50% + 17px); height: 1px; background: var(--line-strong); }
+.steps li.done { color: var(--ink); }
+/* Bước xong: vòng đặc màu nhấn, dấu check khoét rỗng (mask trừ nhau) nên luôn nằm đúng giữa vòng, không phụ thuộc font. */
+.steps li.done::before { content: ""; background: var(--accent-fill); border-color: transparent;
+  -webkit-mask: var(--ic-check) center / 14px no-repeat, linear-gradient(black 0 0); -webkit-mask-composite: xor;
+  mask: var(--ic-check) center / 14px no-repeat exclude, linear-gradient(black 0 0); }
+.steps li.done:not(:last-child)::after { background: var(--accent); }
+.steps li.now { color: var(--ink); font-weight: 600; }
+.steps li.now::before { border-color: var(--accent); color: var(--accent-ink); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+/* Gợi ý khi trỏ hay đưa phím Tab tới: data-hint="…" (nên đặt trên nút đã có aria-label). Chỉ dựng chữ lúc hiện, nên không làm trang rộng ra. */
+[data-hint] { position: relative; }
+[data-hint]:hover::after, [data-hint]:focus-visible::after { content: attr(data-hint); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); z-index: 40;
+  width: max-content; max-width: min(220px, 70vw); padding: 6px 8px; border-radius: 6px; background: var(--ink); color: var(--bg); font: 500 12.5px/1.4 var(--font);
+  white-space: normal; text-align: left; pointer-events: none; animation: kit-tip var(--t-base) var(--ease-spring) .2s both; }
+[data-hint].hint-end:hover::after, [data-hint].hint-end:focus-visible::after { left: auto; right: 0; transform: none; }
+@keyframes kit-tip { from { opacity: 0; translate: 0 4px; } }
+
+/* Thẻ số: một con số lớn, nhãn nhỏ, dòng thay đổi có màu. */
+.stat { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); }
+.stat .label { font-size: 11.5px; }
+.stat b { font: 700 24px/1.15 var(--font); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.stat small { font-size: 12.5px; color: var(--muted); display: inline-flex; align-items: center; gap: 4px; }
+.stat small.up { color: var(--good); } .stat small.down { color: var(--bad); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap: 8px; }
+
+/* Đang tải: khung xám có vệt sáng chạy qua. .skel một dòng, .skel.block khối, .skel.circle tròn. */
+.skel { display: block; height: 12px; border-radius: 6px; background: var(--skel); position: relative; overflow: hidden; }
+.skel.block { height: 72px; border-radius: var(--r); }
+.skel.circle { width: 36px; height: 36px; border-radius: 50%; }
+.skel::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--skel-hi) 70%, transparent), transparent); animation: kit-shimmer 1.4s ease-in-out infinite; }
+.skel-group { display: grid; gap: 8px; }
+
+/* Màn rỗng: <span class="empty-ic"> chứa icon trong vòng nhạt, một câu nói vì sao rỗng, một nút làm việc tiếp theo. */
+.empty { display: grid; justify-items: center; gap: 8px; padding: 24px 16px; text-align: center; border: 1px dashed var(--line-strong); border-radius: var(--r); }
+.empty-ic { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-ink); }
+.empty-ic .ic { font-size: 22px; }
+.empty b { font-size: 15px; }
+.empty p { color: var(--muted); font-size: 13.5px; max-width: 32ch; }
+
+/* Báo trong dòng: một icon, một câu. .note.info, .note.good, .note.warn, .note.bad. */
+.note { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border-radius: var(--r); font-size: 14px; line-height: 1.5; background: var(--soft); color: var(--ink); }
+.note > .ic { font-size: 16px; margin-top: 2px; }
+.note.info { background: var(--accent-soft); } .note.info > .ic { color: var(--accent-ink); }
+.note.good { background: var(--good-soft); } .note.good > .ic { color: var(--good); }
+.note.warn { background: var(--warn-soft); } .note.warn > .ic { color: var(--warn); }
+.note.bad { background: var(--bad-soft); } .note.bad > .ic { color: var(--bad); }
+
+/* Hiện dần khi mở trang: thêm data-reveal vào khung, Kit.reveal đặt --i cho từng con (cách nhau 40ms, tối đa 12 con). */
+[data-reveal] > * { animation: kit-up var(--t-slow) var(--ease-out) both; animation-delay: calc(min(var(--i, 0), 12) * 40ms); }
+
+@keyframes kit-in { from { opacity: 0; } }
+@keyframes kit-up { from { opacity: 0; transform: translateY(6px); } }
+@keyframes kit-down { from { opacity: 0; transform: translateY(-4px); } }
+@keyframes kit-spin { to { transform: rotate(360deg); } }
+@keyframes kit-shimmer { to { transform: translateX(100%); } }
+/* Giảm chuyển động: không trượt, không lò xo, chỉ đổi độ mờ, để mọi thao tác vẫn có phản hồi. */
+@media (prefers-reduced-motion: reduce) {
+  .btn, .seg button, .tabs .tab-ink, .acc summary::after { transition-duration: 0s; }
+  [data-hint]::after { animation-name: kit-in; }
+  .btn:active { transform: none; }
+  [data-reveal] > *, .tab-panel:not([hidden]), .acc[open] > :not(summary) { animation-name: kit-in; }
+  .skel::after { animation: none; }
+}
+
+/* ICONS:START: sinh bởi make-icons.mjs từ lucide-static v1.75.0 (ISC), đừng sửa tay. */
+:root {
+  --ic-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+  --ic-x: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18'/%3E%3Cpath d='m6 6 12 12'/%3E%3C/svg%3E");
+  --ic-plus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='M12 5v14'/%3E%3C/svg%3E");
+  --ic-minus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+  --ic-chevron-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m15 18-6-6 6-6'/%3E%3C/svg%3E");
+  --ic-chevron-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");
+  --ic-chevron-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  --ic-arrow-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 19-7-7 7-7'/%3E%3Cpath d='M19 12H5'/%3E%3C/svg%3E");
+  --ic-arrow-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m12 5 7 7-7 7'/%3E%3C/svg%3E");
+  --ic-circle-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m16 9-5.5 5.5L8 12'/%3E%3C/svg%3E");
+  --ic-circle-alert: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' x2='12' y1='8' y2='12'/%3E%3Cline x1='12' x2='12.01' y1='16' y2='16'/%3E%3C/svg%3E");
+  --ic-circle-help: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M9 9.5a3 2.5 0 016 0c0 2-2 2-3 3.5'/%3E%3Cpath d='M12 17h.01'/%3E%3C/svg%3E");
+  --ic-info: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 16v-4'/%3E%3Cpath d='M12 8h.01'/%3E%3C/svg%3E");
+  --ic-triangle-alert: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3'/%3E%3Cpath d='M12 9v4'/%3E%3Cpath d='M12 17h.01'/%3E%3C/svg%3E");
+  --ic-circle-play: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z'/%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3C/svg%3E");
+  --ic-play: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z'/%3E%3C/svg%3E");
+  --ic-rotate-ccw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8'/%3E%3Cpath d='M3 3v5h5'/%3E%3C/svg%3E");
+  --ic-copy: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='14' height='14' x='8' y='8' rx='2' ry='2'/%3E%3Cpath d='M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2'/%3E%3C/svg%3E");
+  --ic-external-link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 3h6v6'/%3E%3Cpath d='M10 14 21 3'/%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/%3E%3C/svg%3E");
+  --ic-search: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21 21-4.34-4.34'/%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3C/svg%3E");
+  --ic-sparkles: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z'/%3E%3Cpath d='M20 2v4'/%3E%3Cpath d='M22 4h-4'/%3E%3Ccircle cx='4' cy='20' r='2'/%3E%3C/svg%3E");
+  --ic-lightbulb: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5'/%3E%3Cpath d='M9 18h6'/%3E%3Cpath d='M10 22h4'/%3E%3C/svg%3E");
+  --ic-inbox: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='22 12 16 12 14 15 10 15 8 12 2 12'/%3E%3Cpath d='M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z'/%3E%3C/svg%3E");
+  --ic-file-text: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z'/%3E%3Cpath d='M14 2v5a1 1 0 0 0 1 1h5'/%3E%3Cpath d='M10 9H8'/%3E%3Cpath d='M16 13H8'/%3E%3Cpath d='M16 17H8'/%3E%3C/svg%3E");
+  --ic-list-checks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 5h8'/%3E%3Cpath d='M13 12h8'/%3E%3Cpath d='M13 19h8'/%3E%3Cpath d='m3 17 2 2 4-4'/%3E%3Cpath d='m3 7 2 2 4-4'/%3E%3C/svg%3E");
+  --ic-clock: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 6v6l4 2'/%3E%3C/svg%3E");
+  --ic-calendar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 2v3'/%3E%3Cpath d='M16 2v3'/%3E%3Crect x='3' y='3' width='18' height='18' rx='2'/%3E%3Cpath d='M3 9h18'/%3E%3C/svg%3E");
+  --ic-volume-2: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z'/%3E%3Cpath d='M16 9a5 5 0 0 1 0 6'/%3E%3Cpath d='M19.364 18.364a9 9 0 0 0 0-12.728'/%3E%3C/svg%3E");
+  --ic-mic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 19v3'/%3E%3Cpath d='M19 10v2a7 7 0 0 1-14 0v-2'/%3E%3Crect x='9' y='2' width='6' height='13' rx='3'/%3E%3C/svg%3E");
+  --ic-exclaim: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' x2='12' y1='8' y2='12'/%3E%3Cline x1='12' x2='12.01' y1='16' y2='16'/%3E%3C/svg%3E");
+}
+.ic { display: inline-block; width: 1em; height: 1em; flex: none; vertical-align: -.14em; background: currentColor;
+  -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat; }
+.ic-check { --i: var(--ic-check); }
+.ic-x { --i: var(--ic-x); }
+.ic-plus { --i: var(--ic-plus); }
+.ic-minus { --i: var(--ic-minus); }
+.ic-chevron-left { --i: var(--ic-chevron-left); }
+.ic-chevron-right { --i: var(--ic-chevron-right); }
+.ic-chevron-down { --i: var(--ic-chevron-down); }
+.ic-arrow-left { --i: var(--ic-arrow-left); }
+.ic-arrow-right { --i: var(--ic-arrow-right); }
+.ic-circle-check { --i: var(--ic-circle-check); }
+.ic-circle-alert { --i: var(--ic-circle-alert); }
+.ic-circle-help { --i: var(--ic-circle-help); }
+.ic-info { --i: var(--ic-info); }
+.ic-triangle-alert { --i: var(--ic-triangle-alert); }
+.ic-circle-play { --i: var(--ic-circle-play); }
+.ic-play { --i: var(--ic-play); }
+.ic-rotate-ccw { --i: var(--ic-rotate-ccw); }
+.ic-copy { --i: var(--ic-copy); }
+.ic-external-link { --i: var(--ic-external-link); }
+.ic-search { --i: var(--ic-search); }
+.ic-sparkles { --i: var(--ic-sparkles); }
+.ic-lightbulb { --i: var(--ic-lightbulb); }
+.ic-inbox { --i: var(--ic-inbox); }
+.ic-file-text { --i: var(--ic-file-text); }
+.ic-list-checks { --i: var(--ic-list-checks); }
+.ic-clock { --i: var(--ic-clock); }
+.ic-calendar { --i: var(--ic-calendar); }
+.ic-volume-2 { --i: var(--ic-volume-2); }
+.ic-mic { --i: var(--ic-mic); }
+.ic-exclaim { --i: var(--ic-exclaim); }
+/* ICONS:END */

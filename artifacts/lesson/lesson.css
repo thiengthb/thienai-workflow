@@ -26,17 +26,19 @@ body { font-size: 16px; line-height: 1.55; -webkit-text-size-adjust: 100%; }
 .next { width: 100%; min-height: 44px; font-size: 15px; }
 
 /* Một dòng đáp án: cả dòng là vùng chạm; chọn, đúng, sai đều có chữ đi kèm, không chỉ đổi màu. */
-.opt { font: 15px/1.45 var(--font); color: var(--ink); background: var(--card); border: 2px solid var(--line); border-radius: var(--r);
+.opt { font: 15px/1.45 var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--r);
   min-height: 44px; padding: 10px 12px; width: 100%; text-align: left; display: flex; align-items: center; gap: 10px; cursor: pointer;
-  -webkit-tap-highlight-color: transparent; transition: border-color .15s, background-color .15s; }
-.opt:hover:not([disabled]) { border-color: color-mix(in srgb, var(--line) 55%, var(--muted)); }
+  -webkit-tap-highlight-color: transparent; box-shadow: var(--shadow-btn);
+  transition: border-color .15s, background-color .15s, box-shadow .15s, transform var(--t-base) var(--ease-spring); }
+.opt:hover:not([disabled]) { border-color: var(--muted); }
+.opt:active:not([disabled]) { transform: scale(.995); }
 .opt[disabled] { cursor: default; }
 .opt::after { margin-left: auto; font-size: 12px; font-weight: 700; flex: none; }
-.opt[aria-pressed="true"] { border-color: var(--ink); background: var(--soft); }
+.opt[aria-pressed="true"] { border-color: var(--ink); background: var(--soft); box-shadow: inset 0 0 0 1px var(--ink); }
 .opt[aria-pressed="true"]::after { content: "Đã chọn"; }
-.opt.right { border-color: var(--good); background: var(--good-soft); }
+.opt.right { border-color: var(--good); background: var(--good-soft); box-shadow: inset 0 0 0 1px var(--good); }
 .opt.right::after { content: "Đúng"; color: var(--good); }
-.opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-soft); box-shadow: inset 0 0 0 1px var(--bad); }
 .opt.wrong::after { content: "Bạn chọn"; color: var(--bad); }
 
 .q { display: grid; gap: 8px; }

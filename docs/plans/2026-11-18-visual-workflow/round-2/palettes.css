@@ -1,0 +1,40 @@
+/* Vòng thử gu 2 (2026-11-18): ba bảng màu cho kit, đều giữ font Onest, bo 8px và màu nhấn họ xanh ngọc.
+   Mỗi bảng là một khối :root[data-palette="…"] (sáng) và hai khối tối, đặt sau kit.css để đè tên màu.
+   make-gallery.mjs --palettes <file này> gắn vào trang mẫu kèm nút đổi bảng màu. Bản thien chọn sẽ thay khối :root của kit.css.
+   Nhãn hiện trên nút lấy từ dòng "palette <khóa>: <nhãn>". */
+
+/* palette a: A · Giấy trắng */
+:root[data-palette="a"] {
+  --bg: #f7f7f5; --card: #ffffff; --soft: #f0f0ed; --line: #e5e5e1; --line-strong: #d4d4cf; --ink: #1c1c1b; --muted: #666662;
+  --accent: #308e84; --accent-soft: #e3f1ef; --accent-ink: #1f6b63; --accent-fill: #2a7d74; --on-accent: #fff;
+}
+@media (prefers-color-scheme: dark) { :root[data-palette="a"]:not([data-theme="light"]) {
+  --bg: #171716; --card: #1f1f1e; --soft: #272726; --line: #333331; --line-strong: #444441; --ink: #ededeb; --muted: #a3a39e;
+  --accent: #4fb3a6; --accent-soft: #1c3330; --accent-ink: #8fd9c9; --accent-fill: #4fb3a6; --on-accent: #171716; } }
+:root[data-palette="a"][data-theme="dark"] {
+  --bg: #171716; --card: #1f1f1e; --soft: #272726; --line: #333331; --line-strong: #444441; --ink: #ededeb; --muted: #a3a39e;
+  --accent: #4fb3a6; --accent-soft: #1c3330; --accent-ink: #8fd9c9; --accent-fill: #4fb3a6; --on-accent: #171716; }
+
+/* palette b: B · Slate lạnh */
+:root[data-palette="b"] {
+  --bg: #f5f7f8; --card: #ffffff; --soft: #edf1f3; --line: #dfe5e8; --line-strong: #c9d2d7; --ink: #15191c; --muted: #5a6670;
+  --accent: #2b8a80; --accent-soft: #e1f1ee; --accent-ink: #1c665e; --accent-fill: #24786f; --on-accent: #fff;
+}
+@media (prefers-color-scheme: dark) { :root[data-palette="b"]:not([data-theme="light"]) {
+  --bg: #111518; --card: #181d21; --soft: #20262b; --line: #2b3338; --line-strong: #3a444a; --ink: #e6ebee; --muted: #98a4ab;
+  --accent: #4fb3a6; --accent-soft: #163029; --accent-ink: #8fd9c9; --accent-fill: #4fb3a6; --on-accent: #0e1215; } }
+:root[data-palette="b"][data-theme="dark"] {
+  --bg: #111518; --card: #181d21; --soft: #20262b; --line: #2b3338; --line-strong: #3a444a; --ink: #e6ebee; --muted: #98a4ab;
+  --accent: #4fb3a6; --accent-soft: #163029; --accent-ink: #8fd9c9; --accent-fill: #4fb3a6; --on-accent: #0e1215; }
+
+/* palette c: C · Trắng tinh, xanh petrol */
+:root[data-palette="c"] {
+  --bg: #ffffff; --card: #ffffff; --soft: #f4f5f6; --line: #e6e8ea; --line-strong: #d0d4d8; --ink: #111418; --muted: #5d636b;
+  --accent: #0e7490; --accent-soft: #e3f3f8; --accent-ink: #0b5a70; --accent-fill: #0e7490; --on-accent: #fff;
+}
+@media (prefers-color-scheme: dark) { :root[data-palette="c"]:not([data-theme="light"]) {
+  --bg: #0d0f12; --card: #15181c; --soft: #1c2026; --line: #272c33; --line-strong: #363c45; --ink: #e8eaed; --muted: #9aa1aa;
+  --accent: #38b2cf; --accent-soft: #11303a; --accent-ink: #8fd8ea; --accent-fill: #38b2cf; --on-accent: #0d0f12; } }
+:root[data-palette="c"][data-theme="dark"] {
+  --bg: #0d0f12; --card: #15181c; --soft: #1c2026; --line: #272c33; --line-strong: #363c45; --ink: #e8eaed; --muted: #9aa1aa;
+  --accent: #38b2cf; --accent-soft: #11303a; --accent-ink: #8fd8ea; --accent-fill: #38b2cf; --on-accent: #0d0f12; }
