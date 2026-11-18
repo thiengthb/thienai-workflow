@@ -18,6 +18,9 @@
   const bulb = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>';
 
   const pros = (o) => el('ul', { className: 'pc' }, ...(o.pros || []).map((t) => el('li', { className: 'p', textContent: t })), ...(o.cons || []).map((t) => el('li', { className: 'c', textContent: t })));
+  // Ví dụ thật kèm một câu "để ý chỗ này" (vòng thử gu), mở ở tab mới.
+  const links = (o) => (o.links || []).length ? el('ul', { className: 'lk' }, ...o.links.map((l) => el('li', {},
+    el('a', { href: l.url, target: '_blank', rel: 'noopener', textContent: l.text }), l.note ? el('span', { className: 'muted', textContent: l.note }) : null))) : null;
   const shot = (o) => {
     if (!o.image) return null;
     const img = el('img', { src: o.image.src, alt: 'Ảnh ' + o.name, loading: 'lazy' });
@@ -58,7 +61,7 @@
       const p = el('div', { className: 'pane', role: 'tabpanel', id: 'view-' + o.key, hidden: j !== i },
         el('div', { className: 'im' }, shot(o) || el('span', { className: 'none', textContent: 'Bản này không có ảnh.' })),
         el('div', { className: 'side' }, el('span', { className: 'label', textContent: `Bản ${j + 1} / ${opts.length}` }), el('h2', { textContent: o.name }),
-          o.summary ? el('p', { className: 'muted', textContent: o.summary }) : null, pros(o),
+          o.summary ? el('p', { className: 'muted', textContent: o.summary }) : null, pros(o), links(o),
           pickBtn(o, S.pick === o.key ? 'Đã chọn ' + o.short : 'Chọn ' + o.short), opts.length > 1 ? nav : null));
       p.setAttribute('aria-labelledby', 'tab-' + o.key);
       return p;
@@ -94,7 +97,7 @@
       const card = el('article', { className: 'card opt' + (S.pick === o.key ? ' chosen' : ''), id: 'opt-' + o.key },
         shot(o),
         el('div', { className: 'ob' }, el('h2', { textContent: o.name }), o.summary ? el('p', { className: 'muted', textContent: o.summary }) : null,
-          crit.length ? el('div', { className: 'crit' }, ...crit) : null, pros(o)),
+          crit.length ? el('div', { className: 'crit' }, ...crit) : null, pros(o), links(o)),
         el('div', { className: 'of' }, pickBtn(o, S.pick === o.key ? 'Đã chọn bản này' : 'Chọn bản này')));
       return card;
     }));

@@ -26,6 +26,7 @@ Trang dùng mỗi khi AI cần thien chọn 1 trong 2–4 cách có hình: bố 
      "criteria": [{ "name": "Dễ dùng trên điện thoại", "values": { "a": "tốt", "b": { "text": "thấp", "tone": "good" } } }],
      "recommend": { "key": "a", "why": "Một hai câu lý do." } }
    ```
+   Phương án cần ví dụ thật (hướng "thật xa" của vòng thử gu) thì thêm `"links": [{ "text", "url", "note" }]`: link https, `note` là một câu "để ý chỗ này"; trang hiện dưới ưu nhược, mở ở tab mới.
    Chữ "tốt" tự có màu xanh, "kém" màu đỏ, chữ khác màu trung tính; muốn khác thì ghi `{ "text", "tone": "good" | "bad" }`.
 3. `node artifacts/decide/make-decision.mjs decision.json out` chụp các `shot` (cần Playwright), dựng `out/index.html` (đã gộp kit), `out/img/*` và `out/preview.html` để mở thử.
 4. Gọi Artifact với đúng tham số trong `out/publish.json` (script ghi sẵn file, ảnh và capabilities). Kiểm ở cỡ khung claude.ai (khoảng 1180×760) và điện thoại trước khi gửi link.

@@ -44,6 +44,11 @@ bad({ options: [spec.options[0]] }, /2 đến 4/);
 bad({ options: [spec.options[0], { key: 'a ', name: 'x' }] }, /trùng/);
 bad({ recommend: { key: 'z' } }, /Đề xuất/);
 bad({ criteria: [{ name: 't', values: { z: 'tốt' } }] }, /không có/);
+// Real examples for the "far" option of a taste round: https only, note kept.
+const withLinks = build({ ...spec, options: [spec.options[0], { key: 'b', name: 'B', links: [{ text: 'R2D3', url: 'https://r2d3.us/', note: 'để ý' }] }] }, dir, join(dir, 'o3'));
+assert.deepEqual(withLinks.decision.options[1].links, [{ text: 'R2D3', url: 'https://r2d3.us/', note: 'để ý' }]);
+assert.deepEqual(withLinks.decision.options[0].links, []);
+bad({ options: [spec.options[0], { key: 'b', name: 'B', links: [{ text: 'x', url: 'javascript:alert(1)' }] }] }, /https/);
 // Options given as a link or html file get screenshotted @2x into <out>/src and then built like any image.
 writeFileSync(join(dir, 'b.html'), '<p>b</p>');
 const shotSpec = { id: 's', question: 'q', shotSize: '600x400', options: [{ key: 'a', name: 'A', shot: 'https://example.com/a' }, { key: 'b', name: 'B', shot: 'b.html' }, { key: 'c', name: 'C', image: 'a.png' }] };

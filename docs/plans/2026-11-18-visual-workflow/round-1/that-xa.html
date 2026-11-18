@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bản Thật xa · trang kế hoạch kể bằng cuộn</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Vòng gu 1, bản "Thật xa": kế hoạch kể bằng cuộn (scrollytelling) kèm một núm vặn.
+   Sân khấu tối dính một chỗ, chữ cuộn qua từng ga; ga nào đang đọc thì sáng trên bản đồ thời gian.
+   Kéo núm "mỗi tuần làm được mấy phiên" thì các ga trượt theo ngày. Màu vẫn lấy từ token của kit (bộ tối cho sân khấu),
+   chỗ xa nằm ở bố cục, cỡ chữ và cách đọc. Ví dụ thật: The Pudding (sticky graphic), R2D3, Bartosz Ciechanowski. */
+:root {
+  --bg: #faf8f3; --card: #ffffff; --soft: #f3f1ec; --line: #e7e3da; --ink: #1b1b1a; --muted: #6b6862;
+  --accent: #308e84; --accent-soft: #e3f1ef; --accent-ink: #1f6b63; --accent-fill: #2a7d74; --on-accent: #fff;
+  --warn: #8a5a12; --warn-soft: #f6ecd6;
+  /* sân khấu: bộ tối của kit */
+  --s-bg: #161615; --s-card: #1f1f1d; --s-line: #34322e; --s-ink: #ecebe7; --s-muted: #a19e97; --s-accent: #4fb3a6; --s-accent-soft: #1c3330; --s-warn: #e9c27a; --s-bad: #f0763f;
+  --font: "Onest", system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, monospace; --r: 8px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--font); }
+p { margin: 0; }
+.page { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
+
+/* Sân khấu dính */
+.stage { position: sticky; top: 0; height: 100vh; background: var(--s-bg); color: var(--s-ink); display: grid; grid-template-rows: auto 1fr auto auto; gap: 18px; padding: 28px 34px; overflow: hidden; }
+.top { display: flex; justify-content: space-between; gap: 12px; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--s-muted); }
+.hero { align-self: center; display: grid; gap: 10px; }
+.hero .no { font: 700 120px/.86 var(--font); letter-spacing: -.05em; color: var(--s-accent); display: flex; align-items: baseline; gap: 18px; }
+.hero .no small { font: 500 15px/1.2 var(--mono); letter-spacing: .04em; color: var(--s-muted); }
+.hero h1 { font: 700 40px/1.08 var(--font); letter-spacing: -.03em; margin: 0; max-width: 16ch; }
+.hero p { color: var(--s-muted); font-size: 17px; max-width: 46ch; }
+.hero p b { color: var(--s-ink); font-weight: 600; }
+.swap { transition: opacity .25s; }
+.swap.fade { opacity: 0; }
+
+.map { width: 100%; height: auto; display: block; overflow: visible; }
+.map .axis { stroke: var(--s-line); stroke-width: 2; }
+.map .track { stroke: var(--s-accent); stroke-width: 3; }
+.map .tick text, .map .lbl { font: 500 11px var(--mono); fill: var(--s-muted); }
+.map .tick line { stroke: var(--s-line); }
+.map .today line { stroke: var(--s-accent); stroke-dasharray: 3 4; }
+.map .today text { fill: var(--s-accent); font: 600 11px var(--mono); }
+.map .goal line { stroke: var(--s-warn); stroke-dasharray: 2 3; }
+.map .goal text { fill: var(--s-warn); font: 600 11px var(--mono); }
+.map .st circle { fill: var(--s-bg); stroke: var(--s-muted); stroke-width: 2; transition: r .25s, fill .25s; }
+.map .st text.n { font: 700 12px var(--mono); fill: var(--s-muted); text-anchor: middle; dominant-baseline: central; }
+.map .st.gate circle { stroke-dasharray: 3 3; }
+.map .st.on circle { fill: var(--s-accent); stroke: var(--s-accent); }
+.map .st.on text.n { fill: var(--s-bg); }
+.map .st.on .lbl { fill: var(--s-ink); font-weight: 600; }
+.map .st.late circle { stroke: var(--s-bad); }
+.map .ring { fill: none; stroke: var(--s-accent); stroke-width: 2; opacity: .45; animation: ping 2.2s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes ping { from { transform: scale(1); opacity: .5; } to { transform: scale(2.1); opacity: 0; } }
+
+.knob { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; background: var(--s-card); border: 1px solid var(--s-line); border-radius: var(--r); padding: 12px 14px; font-size: 14px; }
+.knob input { width: 100%; accent-color: var(--s-accent); min-height: 28px; }
+.knob .out { font: 600 14px var(--mono); color: var(--s-accent); white-space: nowrap; }
+.knob .out.late { color: var(--s-bad); }
+.nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--s-line); border-radius: var(--r); overflow: hidden; }
+.nums div { background: var(--s-bg); padding: 10px 12px; display: grid; gap: 2px; }
+.nums b { font: 700 26px/1 var(--font); letter-spacing: -.02em; }
+.nums span { font-size: 12px; color: var(--s-muted); }
+
+/* Chữ cuộn */
+.steps { padding: 0 40px; }
+.step { min-height: 92vh; display: grid; align-content: center; gap: 14px; padding: 40px 0; opacity: .35; transition: opacity .3s; }
+.step.on { opacity: 1; }
+.step:first-child { min-height: 100vh; }
+.step:last-child { min-height: 100vh; }
+.k { font: 600 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent-ink); }
+.step h2 { font: 700 30px/1.15 var(--font); letter-spacing: -.025em; margin: 0; }
+.step p { font-size: 17px; max-width: 40ch; }
+.step .done { border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; font-size: 15px; color: var(--muted); }
+.step .done b { color: var(--ink); }
+.step ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 15px; color: var(--muted); }
+.pick { display: grid; gap: 8px; }
+.pick button { text-align: left; font: 500 15px/1.35 var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; min-height: 48px; cursor: pointer; }
+.pick button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.hint { font-size: 13px; color: var(--muted); }
+
+@media (max-width: 760px) {
+  .page { display: block; }
+  .stage { height: auto; max-height: 52vh; z-index: 2; padding: 14px 16px 12px; gap: 10px; grid-template-rows: auto auto auto; }
+  .top span:last-child { display: none; }
+  .hero { gap: 4px; }
+  .hero .no { font-size: 56px; gap: 10px; }
+  .hero h1 { font-size: 22px; }
+  .hero p { display: none; }
+  .nums { display: none; }
+  .knob { padding: 8px 10px; grid-template-columns: 1fr auto; font-size: 13px; }
+  .knob label { grid-column: 1 / -1; }
+  .steps { padding: 0 18px; }
+  .step, .step:first-child, .step:last-child { min-height: 70vh; }
+  .step h2 { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <aside class="stage" aria-label="Bản đồ kế hoạch">
+    <div class="top"><span>Kế hoạch · thienai-workflow</span><span>Quy trình nhìn được · 18/11 → 13/12</span></div>
+    <div class="hero swap" id="hero">
+      <div class="no"><span id="h-no">Ga 0</span><small id="h-tag">/ 5 · đang chạy</small></div>
+      <h1 id="h-t">Vòng thử gu đầu tiên</h1>
+      <p id="h-p"><b>Việc của bạn bây giờ:</b> chọn một trong ba hướng cho trang kế hoạch, viết một câu vì sao.</p>
+    </div>
+    <svg class="map" id="map" viewBox="0 0 640 150" role="img" aria-label="Các ga trên trục ngày"></svg>
+    <div style="display:grid;gap:10px">
+      <div class="knob">
+        <label for="pace">Mỗi tuần làm được <b id="pace-v">3</b> phiên</label>
+        <input id="pace" type="range" min="2" max="5" step="1" value="3">
+        <span class="out" id="eta">xong ~06/12</span>
+      </div>
+      <div class="nums"><div><b>0/23</b><span>việc đã tick</span></div><div><b>~8</b><span>phiên cho cả kế hoạch</span></div><div><b id="left">25</b><span>ngày tới mốc số đo 13/12</span></div></div>
+    </div>
+  </aside>
+
+  <main class="steps" id="steps">
+    <section class="step on" data-ga="0">
+      <span class="k">Đọc trong 10 giây</span>
+      <h2>Ba nhánh nhỏ, đứng chung trên một lớp sơ đồ. Bạn đang ở ga đầu tiên.</h2>
+      <p>Cuộn xuống: mỗi đoạn là một ga, ga đó sáng lên bên trái. Kéo núm để xem nếu tuần bận thì các ga trượt tới đâu.</p>
+    </section>
+    <section class="step" data-ga="0">
+      <span class="k">Bây giờ · Ga 0</span>
+      <h2>Vòng thử gu đầu tiên</h2>
+      <p class="done"><b>Xong khi</b> bạn chọn một trong ba hướng cho trang kế hoạch trên điện thoại và viết một câu vì sao.</p>
+      <div class="pick" role="group" aria-label="Hướng bạn chọn">
+        <button type="button" aria-pressed="false">Quen: bảng và danh sách như hôm nay</button>
+        <button type="button" aria-pressed="false">Một nấc: tuyến ga, một cột đọc</button>
+        <button type="button" aria-pressed="false">Thật xa: kể bằng cuộn, có núm vặn</button>
+      </div>
+    </section>
+    <section class="step" data-ga="1">
+      <span class="k">Tiếp theo · Ga 1</span>
+      <h2>Lớp sơ đồ dùng chung</h2>
+      <p class="done"><b>Xong khi</b> bạn bấm qua một luồng 5 bước trên điện thoại, không khối nào tràn hay đè chữ.</p>
+      <ul><li>Khối trơn viền mảnh, không tô màu, không bóng</li><li>Xếp chỗ bằng thư viện có sẵn, hạn một phiên</li></ul>
+    </section>
+    <section class="step" data-ga="2">
+      <span class="k">Ga 2</span>
+      <h2>Mẫu kế hoạch nhìn được</h2>
+      <p class="done"><b>Xong khi</b> kế hoạch kế tiếp đến tay bạn là một trang như thế này, và bạn trả lời bằng nút.</p>
+    </section>
+    <section class="step" data-ga="5">
+      <span class="k">Mốc cố định · Ga 5</span>
+      <h2>Gom luật vào mốc 01/12</h2>
+      <p>Ga này không trượt theo núm: luật chỉ đổi đúng ngày đã hẹn. Kéo núm xuống 2 phiên một tuần để thấy các ga phía sau dồn lại.</p>
+    </section>
+    <section class="step" data-ga="3">
+      <span class="k">Ga 3</span>
+      <h2>Mẫu luồng chạy</h2>
+      <p class="done"><b>Xong khi</b> bạn tự kể lại một buổi học đi qua những đâu mà không mở MAP.md.</p>
+    </section>
+    <section class="step" data-ga="4">
+      <span class="k">Ga cuối · Ga 4</span>
+      <h2>Đánh bóng mẫu học</h2>
+      <p>Ghép vào BA 6 và Frontend 11, không mở buổi riêng. Sau đó là mốc số đo 13/12.</p>
+      <p class="hint">Chi tiết thử của bản này: núm vặn ngay trên bản đồ. Thích hay không, nói một câu.</p>
+    </section>
+  </main>
+</div>
+
+<script>
+(function () {
+  var GA = {
+    0: { t: "Vòng thử gu đầu tiên", p: "<b>Việc của bạn bây giờ:</b> chọn một trong ba hướng cho trang kế hoạch, viết một câu vì sao.", tag: "/ 5 · đang chạy", s: "Gu 1" },
+    1: { t: "Lớp sơ đồ dùng chung", p: "Khối trơn, mũi tên, bấm từng bước. Ba nhánh sau đều đứng trên lớp này.", tag: "/ 5 · tiếp theo", s: "Sơ đồ" },
+    2: { t: "Mẫu kế hoạch nhìn được", p: "Trang sinh thẳng từ file trong docs/plans, không ai phải gõ tay lại.", tag: "/ 5 · 2 phiên", s: "Kế hoạch" },
+    5: { t: "Gom luật vào mốc 01/12", p: "Mốc cố định: núm vặn không đẩy được ga này.", tag: "/ 5 · mốc", s: "Luật 01/12", gate: true },
+    3: { t: "Mẫu luồng chạy", p: "Một sơ đồ, đi từng bước; điện thoại thì sơ đồ dính trên, chữ cuộn dưới.", tag: "/ 5 · 1,5 phiên", s: "Luồng" },
+    4: { t: "Đánh bóng mẫu học", p: "Ghép vào hai buổi học đã có lịch.", tag: "/ 5 · ghép buổi học", s: "Mẫu học" }
+  };
+  var ORDER = [[0, 1], [1, 1], [2, 2], [5, 0.5], [3, 1.5], [4, 2]];
+  var D0 = Date.UTC(2026, 10, 18), DAY = 864e5, SPAN = 32, PIN5 = 13, GOAL = 25;   // 01/12 là ngày 13, 13/12 là ngày 25
+  var active = 0, pace = 3;
+  var svg = document.getElementById("map"), NS = "http://www.w3.org/2000/svg";
+  function x(day) { return 24 + (640 - 48) * day / SPAN; }
+  function dd(day) { var d = new Date(D0 + Math.round(day) * DAY); return ("0" + d.getUTCDate()).slice(-2) + "/" + ("0" + (d.getUTCMonth() + 1)).slice(-2); }
+  function mk(tag, attrs, parent) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; }
+  function plan() {
+    var t = 0, out = [];
+    ORDER.forEach(function (o) { t += o[1] * 7 / pace; if (o[0] === 5) t = Math.max(t, PIN5); out.push([o[0], t]); });
+    return out;
+  }
+  function draw() {
+    svg.innerHTML = "";
+    var Y = 78, pts = plan();
+    for (var w = 0; w <= SPAN; w += 7) { var g = mk("g", { class: "tick" }); mk("line", { x1: x(w), x2: x(w), y1: Y - 6, y2: Y + 6 }, g); var tx = mk("text", { x: x(w), y: 146, "text-anchor": "middle" }, g); tx.textContent = dd(w); }
+    mk("line", { class: "axis", x1: x(0), x2: x(SPAN), y1: Y, y2: Y });
+    var end = pts[pts.length - 1][1];
+    mk("line", { class: "track", x1: x(0), x2: x(Math.min(end, SPAN)), y1: Y, y2: Y, "stroke-opacity": .35 });
+    var g1 = mk("g", { class: "goal" }); mk("line", { x1: x(GOAL), x2: x(GOAL), y1: 8, y2: 130 }, g1); var gt = mk("text", { x: x(GOAL) + 5, y: 16 }, g1); gt.textContent = "13/12 số đo";
+    var g0 = mk("g", { class: "today" }); mk("line", { x1: x(0), x2: x(0), y1: 8, y2: 130 }, g0); var tt = mk("text", { x: x(0) + 5, y: 16 }, g0); tt.textContent = "hôm nay";
+    pts.forEach(function (p, i) {
+      var id = p[0], info = GA[id], cx = x(Math.min(p[1], SPAN));
+      var g = mk("g", { class: "st" + (id === active ? " on" : "") + (info.gate ? " gate" : "") + (p[1] > GOAL ? " late" : "") });
+      if (id === active) mk("circle", { class: "ring", cx: cx, cy: Y, r: 13 }, g);
+      mk("circle", { cx: cx, cy: Y, r: id === active ? 15 : 12 }, g);
+      var n = mk("text", { class: "n", x: cx, y: Y }, g); n.textContent = id;
+      var up = i % 2 === 0, l = mk("text", { class: "lbl", x: cx, y: up ? Y - 26 : Y + 34, "text-anchor": "middle" }, g); l.textContent = info.s;
+      var d = mk("text", { class: "lbl", x: cx, y: up ? Y - 40 : Y + 48, "text-anchor": "middle", "fill-opacity": .7 }, g); d.textContent = dd(p[1]);
+    });
+    var eta = document.getElementById("eta");
+    eta.textContent = "xong ~" + dd(end); eta.classList.toggle("late", end > GOAL);
+  }
+  function hero(id) {
+    var h = document.getElementById("hero"), info = GA[id];
+    h.classList.add("fade");
+    setTimeout(function () {
+      document.getElementById("h-no").textContent = "Ga " + id;
+      document.getElementById("h-tag").textContent = info.tag;
+      document.getElementById("h-t").textContent = info.t;
+      document.getElementById("h-p").innerHTML = info.p;
+      h.classList.remove("fade");
+    }, 180);
+  }
+  document.getElementById("pace").addEventListener("input", function (e) { pace = +e.target.value; document.getElementById("pace-v").textContent = pace; draw(); });
+  var steps = Array.prototype.slice.call(document.querySelectorAll(".step"));
+  function setStep(s) {
+    steps.forEach(function (o) { o.classList.toggle("on", o === s); });
+    var id = +s.dataset.ga; if (id !== active) { active = id; hero(id); } draw();
+  }
+  try {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) setStep(e.target); }); }, { rootMargin: "-48% 0px -48% 0px" });
+    steps.forEach(function (s) { io.observe(s); });
+  } catch (e) {}
+  document.querySelectorAll(".pick button").forEach(function (b) {
+    b.addEventListener("click", function () { document.querySelectorAll(".pick button").forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); }); });
+  });
+  draw();
+})();
+</script>
+</body>
+</html>

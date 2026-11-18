@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bản Quen · trang kế hoạch</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Vòng gu 1, bản "Quen": kế hoạch hiện ra đúng như hôm nay, file markdown đặt vào kit (bảng và danh sách).
+   Màu và chữ lấy y nguyên artifacts/kit/kit.css. */
+:root {
+  --bg: #faf8f3; --card: #ffffff; --soft: #f3f1ec; --line: #e7e3da; --ink: #1b1b1a; --muted: #6b6862;
+  --accent: #308e84; --accent-soft: #e3f1ef; --accent-ink: #1f6b63; --warn: #8a5a12; --warn-soft: #f6ecd6; --good: #277a4c; --good-soft: #e6f3eb;
+  --font: "Onest", system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, monospace; --r: 8px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 var(--font); }
+.wrap { max-width: 760px; margin: 0 auto; padding: 28px 18px 60px; display: grid; gap: 22px; }
+h1 { font-size: 26px; line-height: 1.25; margin: 0; letter-spacing: -.02em; }
+h2 { font-size: 18px; margin: 6px 0 0; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+p, ul { margin: 0; }
+ul { padding-left: 20px; display: grid; gap: 4px; }
+.meta { font-size: 13px; color: var(--muted); }
+.chip { font: 600 12px/1 var(--font); padding: 5px 8px; border-radius: var(--r); background: var(--soft); color: var(--muted); white-space: nowrap; }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.acc { background: var(--accent-soft); color: var(--accent-ink); }
+.row { display: flex; gap: 6px; flex-wrap: wrap; }
+code { font: 500 12px var(--mono); background: var(--soft); padding: 1px 5px; border-radius: 4px; }
+.tbl { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); background: var(--soft); font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+td.n { font: 600 13px var(--mono); color: var(--muted); width: 36px; }
+td.p { white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--muted); }
+tr.now td { background: var(--accent-soft); }
+tr.now td.n { color: var(--accent-ink); }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div style="display:grid;gap:10px">
+    <h1>Quy trình nhìn được, và gu lớn dần theo ngày</h1>
+    <p class="meta">Trạng thái: đang chạy · Duyệt: 2026-11-18 · Cập nhật: 2026-11-18 · nick tnt697</p>
+    <div class="row"><span class="chip acc">Checkpoint 0</span><span class="chip">0/23 việc</span><span class="chip">Khoảng 8 phiên, tới 09/12</span></div>
+  </div>
+
+  <h2>Đang ở đâu</h2>
+  <ul>
+    <li>Đang ở: vừa duyệt, sắp vào checkpoint 0 (vòng thử gu đầu tiên).</li>
+    <li>Còn thiếu: mọi checkpoint.</li>
+    <li>thien cần làm: chọn một trong ba hướng ở trang chọn của vòng gu 1.</li>
+  </ul>
+
+  <h2>Mục tiêu</h2>
+  <p>Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu đi lên từng nấc.</p>
+
+  <h2>Checkpoint</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th>Checkpoint</th><th>Xong khi</th><th>Tick</th></tr></thead>
+    <tbody>
+      <tr class="now"><td class="n">0</td><td><b>Vòng thử gu đầu tiên</b></td><td>thien chọn một trong ba hướng cho màn "trang kế hoạch" và viết một câu vì sao</td><td class="p">0/3</td></tr>
+      <tr><td class="n">1</td><td><b>Lớp sơ đồ dùng chung</b></td><td>gallery có mục Sơ đồ; bấm qua luồng 5 bước trên điện thoại, không khối nào tràn</td><td class="p">0/4</td></tr>
+      <tr><td class="n">2</td><td><b>Mẫu kế hoạch nhìn được</b></td><td>kế hoạch kế tiếp gửi duyệt bằng trang sinh từ <code>docs/plans/</code>, trả lời bằng nút</td><td class="p">0/4</td></tr>
+      <tr><td class="n">3</td><td><b>Mẫu luồng chạy</b></td><td>thien tự kể lại luồng một buổi học mà không mở <code>profile/MAP.md</code></td><td class="p">0/3</td></tr>
+      <tr><td class="n">4</td><td><b>Đánh bóng mẫu học</b></td><td>sau BA 6 và Frontend 11, bảng dán không còn bị chấm "chưa thỏa mãn"</td><td class="p">0/5</td></tr>
+      <tr><td class="n">5</td><td><b>Gom luật vào mốc 01/12</b></td><td>thien duyệt các dòng luật; vòng gu 2 chạy khoảng 02/12</td><td class="p">0/4</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Các phương án đã xét</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Phương án</th><th>Hợp khi</th><th>Lý do không chọn</th></tr></thead>
+    <tbody>
+      <tr><td>A. Làm lại cả kit một lần</td><td>gu đã chốt</td><td>gu đang đổi; nhảy xa một lần dễ mất cảm giác quen</td></tr>
+      <tr><td>B. Chỉ đánh bóng mẫu học</td><td>tuần bận</td><td>không chạm chỗ quy trình toàn chữ</td></tr>
+      <tr><td>C. Dùng hẳn trang có sẵn của claude.ai</td><td>không muốn giữ code</td><td>không đọc file repo, không theo gu</td></tr>
+      <tr><td><b>D. Ba nhánh trên một lớp sơ đồ (chọn)</b></td><td></td><td>chạm trần 8 mẫu; vòng gu cần 5 phút mỗi hai tuần</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Không làm</h2>
+  <ul>
+    <li>Không thêm nút hỏi Claude, đọc to hay nói thay gõ vào mẫu mới.</li>
+    <li>Không đổi bộ màu hay font gốc; đổi gu chỉ đi qua vòng thử gu.</li>
+    <li>Không bỏ chữ: hình luôn đi kèm câu ngắn đặt ngay cạnh.</li>
+  </ul>
+</main>
+</body>
+</html>
