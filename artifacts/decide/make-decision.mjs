@@ -53,7 +53,9 @@ export function build(spec, specDir, out) {
       return { key, name: String(o.name || key), short: String(o.short || String(o.name || key).split(' · ')[0]), summary: o.summary || '',
         image, pros: (o.pros || []).map(String), cons: (o.cons || []).map(String),
         links: (o.links || []).map((l) => {
-          if (!/^https:\/\/\S+$/.test(String(l.url || ''))) fail(`Link của phương án ${key} phải là https: ${l.url}`);
+          let u = null;
+          try { u = new URL(String(l.url || '')); } catch { /* báo lỗi ngay dưới */ }
+          if (!u || u.protocol !== 'https:') fail(`Link của phương án ${key} phải là https và mở được: ${l.url}`);
           return { text: String(l.text || l.url), url: String(l.url), note: String(l.note || '') };
         }) };
     }),

@@ -49,6 +49,7 @@ const withLinks = build({ ...spec, options: [spec.options[0], { key: 'b', name: 
 assert.deepEqual(withLinks.decision.options[1].links, [{ text: 'R2D3', url: 'https://r2d3.us/', note: 'để ý' }]);
 assert.deepEqual(withLinks.decision.options[0].links, []);
 bad({ options: [spec.options[0], { key: 'b', name: 'B', links: [{ text: 'x', url: 'javascript:alert(1)' }] }] }, /https/);
+bad({ options: [spec.options[0], { key: 'b', name: 'B', links: [{ text: 'x', url: 'https://[' }] }] }, /https/);
 // Options given as a link or html file get screenshotted @2x into <out>/src and then built like any image.
 writeFileSync(join(dir, 'b.html'), '<p>b</p>');
 const shotSpec = { id: 's', question: 'q', shotSize: '600x400', options: [{ key: 'a', name: 'A', shot: 'https://example.com/a' }, { key: 'b', name: 'B', shot: 'b.html' }, { key: 'c', name: 'C', image: 'a.png' }] };

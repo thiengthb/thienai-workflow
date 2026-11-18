@@ -4,13 +4,13 @@
 //   node docs/plans/2026-11-18-visual-workflow/round-1/shoot.mjs     chạy ở thư mục có Playwright, như make-decision
 //   FONTSOURCE=<node_modules/@fontsource> node ...                   máy không tải được Google Fonts: dùng Onest cài từ npm
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { chromium as findChromium } from '../../../../artifacts/kit/shoot.mjs';
 const chromium = findChromium();
 const dir = dirname(fileURLToPath(import.meta.url)), out = join(dir, 'shots');
 mkdirSync(out, { recursive: true });
-const fs = process.env.FONTSOURCE || '';
+const fs = process.env.FONTSOURCE ? resolve(process.env.FONTSOURCE) : '';   // đường dẫn tuyệt đối, để file:// không coi node_modules là tên máy
 const fontCss = fs && existsSync(fs) ? [['onest', [400, 500, 600, 700]], ['jetbrains-mono', [500]]].flatMap(([f, ws]) => ws.map((w) =>
   readFileSync(`${fs}/${f}/${w}.css`, 'utf8').replace(/url\(\.\/files\//g, `url(file://${fs}/${f}/files/`))).join('\n') : '';
 const jobs = [
