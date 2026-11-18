@@ -34,10 +34,12 @@ const ok = {
   'GET /repos/o/r/pulls?state=open&head=o:chore/sync-agents-md': [200, []],
   'POST /repos/o/r/pulls': [201, { html_url: 'https://pr' }],
 };
+let prBody = '';
 const sync = async (overrides) => {
   const answers = { ...ok, ...overrides };
   globalThis.fetch = async (url, init) => {
     const key = `${init.method} ${url.replace('https://api.github.com', '')}`;
+    if (key === 'POST /repos/o/r/pulls') prBody = JSON.parse(init.body).body;
     if (!answers[key]) throw new Error('unexpected call ' + key);
     const [status, body] = answers[key];
     return { status, json: async () => body };
@@ -45,6 +47,8 @@ const sync = async (overrides) => {
   return syncRepo('t', 'o/r', template, 'abcdef0', false);
 };
 assert.match(await sync({}), /^đã mở PR/);
+// The sync branch is reset on every run, so the PR says nobody should push to it (Codex review 17/11).
+assert.match(prBody, /Nhánh `chore\/sync-agents-md` do Action quản lý: đừng đẩy commit lên đó/);
 for (const status of [403, 404, 500]) {
   const r = await sync({ 'GET /repos/o/r': [status, null] });
   assert.match(r, /^lỗi: không đọc được repo/, `HTTP ${status} on the repo must fail, not skip`);

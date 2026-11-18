@@ -40,7 +40,7 @@ Chi tiết từng mẫu ở README trong thư mục của mẫu.
 
 **Bộ màu trên claude.ai.** Màu, chữ, khoảng cách, bo góc của thienui có trang Design System riêng (https://claude.ai/artifact/2kM7som4ok6kmh7QaCSXZJ, nguồn và cách đăng lại ở [`design-system/`](design-system/README.md)). Claude trên claude.ai dựng slide hay bản thiết kế cho thien thì chọn bộ này; trang dựng từ mẫu ở đây vẫn dùng `kit/kit.css`.
 
-**Bảng học tuần.** Số buổi từng môn theo tuần, thẻ đến hạn, chỗ còn vướng: https://claude.ai/artifact/LijnAF7tSR4gBMrspPuQtV, làm mới mỗi Chủ nhật (cách làm ở [`lesson/README.md`](lesson/README.md), mục "Bảng học tuần").
+**Bảng học tuần.** Không còn trang: trang cũ bị xoá, thien chọn bỏ ngày 2026-11-18. Lệnh dựng vẫn giữ, cách dựng lại khi cần ở [`lesson/README.md`](lesson/README.md), mục "Bảng học tuần".
 
 ## Trang tự hỏi Claude (thử từ 2026-11-14)
 

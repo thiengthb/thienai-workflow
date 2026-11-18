@@ -19,7 +19,7 @@ Xong khi: bài so sánh mù ngày 2026-11-22, thien chấm lại các màn cũ v
 - [x] So sánh mù các màn đã xem (buổi 9, 2026-11-17, sớm hơn mốc 2026-11-22, [bài](frontend/lessons/09-blind-comparison-milestone.md)): chọn đúng bản tốt 4/5, gọi đúng tên ý 3/5, tự sửa đúng một màn chưa gặp; phần nói ra vì sao còn yếu, mang sang chặng 2
 
 ### Chặng 2: Áp vào app của mình
-Xong khi: thien tự sửa được một màn của sakubun hoặc todo và viết được 3 luật cho thienui. Bắt đầu sau mốc 2026-11-22.
+Xong khi: thien tự sửa được một màn của sakubun hoặc todo và viết được 3 luật cho thienui. Đã bắt đầu ở buổi 10 (2026-11-17), sớm hơn mốc 2026-11-22 vì mốc so sánh mù chạy ở buổi 9.
 - [ ] Soi một màn của app mình dùng hằng ngày, chọn một chỗ sửa (bắt đầu ở buổi 10, 2026-11-17, màn "Xong buổi ôn" của sakubun, [bài](frontend/lessons/10-pick-a-fix-session-summary.md): thấy đúng chỗ cấn và chọn đúng bản sửa; thien muốn xem thêm các màn khác trước khi sửa thật)
 - [x] Chép lại một màn tốt theo đúng con số, rồi nói ra mẹo vừa thấy (làm sớm ở buổi 8, 2026-11-17, trên màn tự dựng, [bài](frontend/lessons/08-copy-a-screen-spacing-scale.md); chặng 2 làm lại với màn thật)
 - [ ] Viết luật đầu tiên cho thienui, kiểm bằng hai màn thật
@@ -93,7 +93,7 @@ Xong khi: thien xếp xong 10 ý lớn và học được vài ý đầu qua cá
 - [ ] Ý 10, chiến tranh nhân dân và du kích
 
 ### Chặng 2: Đi sâu một chiến dịch (thien chọn hướng 1 ngày 2026-11-12)
-Bắt đầu khi: xong 10 ý ở chặng 1, khoảng 5 buổi nữa (ý 6, 7, 8, 9, 10), mỗi ý một buổi. Quyết định ở mốc 2026-12-13: đi sâu, giữ ở mức ôn, hay cho môn nghỉ. Bốn hướng, đều lấy từ mục "Mục tiêu" trong `war.md`:
+Bắt đầu khi: xong 10 ý ở chặng 1, còn 4 buổi (ý 7, 8, 9, 10), mỗi ý một buổi. Quyết định ở mốc 2026-12-13: đi sâu, giữ ở mức ôn, hay cho môn nghỉ. Bốn hướng, đều lấy từ mục "Mục tiêu" trong `war.md`:
 1. Đi sâu một chiến dịch từ đầu đến cuối (ví dụ Điện Biên Phủ): dàn binh bố trận, hậu cần, từng đợt đánh. **thien đã chọn hướng này.** Chiến dịch cụ thể chốt khi gần xong chặng 1; ứng viên đầu là Điện Biên Phủ vì đã học buổi 3 và 4.
 2. Ngồi ghế người lãnh đạo: mỗi buổi một quyết định lớn có thật, cả Á lẫn Âu.
 3. So học thuyết Đông và Tây: Tôn Tử, Clausewitz, chiến tranh nhân dân, mỗi học thuyết thử trên một trận thật.
@@ -105,6 +105,8 @@ Bắt đầu khi: xong 10 ý ở chặng 1, khoảng 5 buổi nữa (ý 6, 7, 8,
 - Trang buổi 3: [Ba tầng](https://claude.ai/artifact/3JnZLK7bgfqWoqRfoEtZWr)
 - Trang buổi 4: [Hậu cần](https://claude.ai/artifact/8w59Y36sfADf6oy8wQuGfJ), phần 2: [Hậu cần trên đường núi](https://claude.ai/artifact/5vgaCmHzUkfnWvpMo1Ybrg)
 - Trang buổi 5: [Ải Chi Lăng 1427](https://claude.ai/artifact/78bt9y5mACF7uRi1AjyYxt)
+- Trang buổi 6: [Đánh chỗ yếu ở Điện Biên Phủ](https://claude.ai/artifact/1Zke1t8icMLJ3nvZ64WJ9L) (nick tnt697)
+- Trang buổi 7: [Giấu pháo ở Điện Biên Phủ](https://claude.ai/artifact/CQ2iET5gASC1awXFhaYmtt) (nick tnt697)
 
 ### Nguồn học
 - Cách dạy môn này (bắt người học quyết định trước khi biết kết cục, như trường quân sự Mỹ): ở mục "Cách dạy môn này" của `war.md`.

@@ -92,6 +92,8 @@ export async function syncRepo(token, repo, template, sourceSha, dryRun) {
       '',
       'Phần riêng của project (từ dòng "## Phần riêng của project" trở xuống) được giữ nguyên. Bạn chỉ cần xem diff rồi merge.',
       '',
+      `Nhánh \`${BRANCH}\` do Action quản lý: đừng đẩy commit lên đó. Lần đồng bộ sau đặt lại nhánh theo nhánh chính rồi dựng lại cả file, nên commit thêm tay sẽ mất. Muốn sửa phần riêng thì sửa ở nhánh chính; muốn sửa phần chung thì sửa ở thienai-workflow.`,
+      '',
       `Nguồn: thienai-workflow@${sourceSha.slice(0, 7)}`,
     ].join('\n'),
   });

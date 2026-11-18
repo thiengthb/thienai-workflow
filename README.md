@@ -9,7 +9,7 @@ Mọi link hay mở nằm ở mục này, và chỉ ở đây. Trang Tổng quan
 **Trang hay xem**
 - [Tổng quan tiến độ](https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n): việc đang chờ bạn và kế hoạch đang chạy của mọi repo, kể cả repo này (nick tnt628)
 - [Lộ trình học](https://claude.ai/artifact/Vubbj6ghT9L7eKYegTfT9n): mỗi môn đang ở chặng nào, bài đã học (nick tnt628)
-- [Ôn thẻ đến hạn](https://claude.ai/artifact/L612hHx2vHUokcPBgH7RPu) và [Bảng học tuần](https://claude.ai/artifact/LijnAF7tSR4gBMrspPuQtV) (không ở nick tnt628, chưa ghi nick nào)
+- [Ôn thẻ đến hạn](https://claude.ai/artifact/L612hHx2vHUokcPBgH7RPu) (không ở nick tnt628, chưa ghi nick nào)
 - [Bộ màu thienui](https://claude.ai/artifact/2kM7som4ok6kmh7QaCSXZJ) (nick tnt024)
 
 **Kế hoạch**
