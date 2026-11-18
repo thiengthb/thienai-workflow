@@ -1,6 +1,6 @@
 // publish-progress finds the old page links in the repo files and writes publish.json as an update in place.
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, mkdirSync, writeFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, readFileSync, mkdirSync, writeFileSync, existsSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -64,6 +64,16 @@ assert.equal(claimOut(join(t, 'build', '..preview'), join(t, 'build')), '', 'a n
 mkdirSync(join(t, 'fake', MARK), { recursive: true });
 writeFileSync(join(t, 'fake', 'index.html'), 'mine');
 assert.match(claimOut(join(t, 'fake'), join(t, 'build')), /không phải/, 'a folder named like the mark does not count as the mark');
+const outside = join(t, 'outside.txt');
+writeFileSync(outside, 'keep');
+mkdirSync(join(t, 'build', 'linked'), { recursive: true });
+symlinkSync(outside, join(t, 'build', 'linked', MARK));
+assert.match(claimOut(join(t, 'build', 'linked'), join(t, 'build')), /không phải file thường/, 'a mark that is a link is refused, even under build/');
+assert.equal(readFileSync(outside, 'utf8'), 'keep', 'and the file it points to is not written');
+mkdirSync(join(t, 'build', 'dangling'), { recursive: true });
+symlinkSync(join(t, 'nowhere.txt'), join(t, 'build', 'dangling', MARK));
+assert.match(claimOut(join(t, 'build', 'dangling'), join(t, 'build')), /không phải file thường/, 'a dangling link as the mark is refused too');
+assert.ok(!existsSync(join(t, 'nowhere.txt')), 'and nothing is created where it points');
 const typo = join(t, 'typo');
 assert.equal(spawnSync(process.execPath, [script, 'overveiw', '--out', typo], { encoding: 'utf8' }).status, 1);
 assert.ok(!existsSync(typo), 'a wrong mode creates and marks nothing');

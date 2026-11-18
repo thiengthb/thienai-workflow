@@ -32,7 +32,10 @@ export function claimOut(out, buildDir = join(root, 'build')) {
   const rel = relative(resolve(buildDir), resolve(out));
   const inBuild = rel !== '' && rel.split(sep)[0] !== '..' && !isAbsolute(rel);   // build/..preview is inside build/
   const mark = join(out, MARK);
-  const marked = existsSync(mark) && lstatSync(mark).isFile();   // a folder or a link named like the mark is not the mark
+  const markStat = existsSync(out) ? lstatSync(mark, { throwIfNoEntry: false }) : undefined;   // lstat: sees a dangling link too
+  const marked = !!markStat?.isFile();
+  // A folder or a link named like the mark is not the mark, and writing the mark through a link would change a file elsewhere.
+  if (markStat && !marked) return `${mark} không phải file thường (là thư mục hay link). Xoá nó rồi chạy lại.`;
   if (existsSync(out) && !inBuild && !marked && readdirSync(out).length) {
     return `Thư mục ${out} đã có file mà không phải do lệnh này tạo. Lệnh sẽ xoá ${join(out, 'repos')} và ghi đè index.html ở đó, nên dừng. Bỏ --out (dùng build/), hoặc chọn thư mục chưa có hay rỗng.`;
   }
