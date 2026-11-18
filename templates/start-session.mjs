@@ -55,22 +55,45 @@ export function planNow(md) {
  */
 export function stalePrNotes(md, prs, otherRepos = ['sakubun', 'thienui', 'tiktok', 'nuc-infra'], { pick = statusParts, file = 'STATUS', wait = /chờ|merge|đang mở/i } = {}) {
   if (!prs) return [];
-  const lines = pick(md).split('\n');
   const out = [];
-  for (const line of lines) {
-    for (const clause of line.split(/[;]|\.(?=\s)/).filter((c) => wait.test(c))) {
-      for (const m of clause.matchAll(/#(\d+)/g)) {
-        const before = clause.slice(Math.max(0, m.index - 16), m.index);
+  for (const line of pick(md).split('\n')) {
+    const clauses = line.split(/;|\.(?=\s)/);
+    clauses.forEach((clause, k) => {
+      if (!wait.test(clause)) return;
+      // "PR #97; chờ thien duyệt": a waiting clause with no number of its own means the one PR of the clause before it.
+      let src = clause;
+      if (!/#\d+/.test(clause) && k > 0 && (clauses[k - 1].match(/#\d+/g) || []).length === 1) src = clauses[k - 1];
+      for (const m of src.matchAll(/#(\d+)/g)) {
+        const before = src.slice(Math.max(0, m.index - 16), m.index);
         if (new RegExp(`(${otherRepos.join('|')})\\s*(PR\\s*)?$`, 'i').test(before)) continue;
-        // History next to the number ("đã merge (PR #81)", "PR #60 đã đóng") is not waiting.
-        const near = clause.slice(Math.max(0, m.index - 30), m.index + m[0].length + 14);
-        if (/đã (merge|đóng|vào|xong)/i.test(near)) continue;
+        // History right next to this number ("đã merge (PR #81)", "PR #60 đã đóng") is not waiting. Stop at a comma, so
+        // in "PR #98 đã merge, chờ PR #110" the history belongs to #98 only.
+        const left = src.slice(Math.max(0, m.index - 30), m.index).split(',').pop();
+        const right = src.slice(m.index + m[0].length, m.index + m[0].length + 14).split(',')[0];
+        if (/đã (merge|đóng|vào|xong)/i.test(left + ' ' + right)) continue;
         const pr = prs.byNumber.get(Number(m[1]));
         if (pr && !pr.open) out.push(`${file} còn chờ PR #${m[1]} mà PR đó không còn mở bình thường (đã merge, đã đóng, hay đang mở nhưng conflict): mở PR xem trước, rồi sửa dòng «${line.trim().slice(0, 90)}» trong PR của phiên này.`);
       }
-    }
+    });
   }
   return [...new Set(out)];
+}
+
+/**
+ * The same reminder for plans still running (or paused) in <repo>/docs/plans: their "Đang ở đâu" repeats waiting lines
+ * ("thien cần làm: merge PR #110") and went stale there (Codex review 17/11). A plan's top reads like history
+ * ("PR #98 merge 2026-11-17"), so only "chờ", "đang mở" and "cần làm" mean waiting.
+ */
+export const PLAN_WAIT = /chờ|đang mở|cần làm/i;
+export function planNotes(dir, prs) {
+  const plans = join(dir, 'docs/plans');
+  const out = [];
+  for (const f of existsSync(plans) ? readdirSync(plans).filter((x) => x.endsWith('.md')).sort() : []) {
+    const md = readFileSync(join(plans, f), 'utf8');
+    if (!/^Trạng thái:\s*(đang chạy|tạm dừng)/m.test(normalize(md))) continue;
+    out.push(...stalePrNotes(md, prs, undefined, { pick: planNow, file: `docs/plans/${f}`, wait: PLAN_WAIT }));
+  }
+  return out;
 }
 
 /**
@@ -213,14 +236,7 @@ function main(argv) {
   if (existsSync(status) && !noFetch) {
     const prs = prRefs({ cwd: here });
     for (const n of stalePrNotes(readFileSync(status, 'utf8'), prs)) console.log('nhắc: ' + n);
-    // Plans repeat the waiting line at their top ("thien cần làm: merge PR #110"), and it went stale there (Codex review 17/11).
-    const plans = join(here, 'docs/plans');
-    for (const f of existsSync(plans) ? readdirSync(plans).filter((x) => x.endsWith('.md')) : []) {
-      const md = readFileSync(join(plans, f), 'utf8');
-      if (!/^Trạng thái:\s*(đang chạy|tạm dừng)/m.test(md)) continue;
-      // A plan's top reads like history ("PR #98 merge 2026-11-17"), so only "chờ", "đang mở" and "cần làm" mean waiting there.
-      for (const n of stalePrNotes(md, prs, undefined, { pick: planNow, file: `docs/plans/${f}`, wait: /chờ|đang mở|cần làm/i })) console.log('nhắc: ' + n);
-    }
+    for (const n of planNotes(here, prs)) console.log('nhắc: ' + n);
   }
   if (task && task.repo !== SELF) console.log(`\nViệc nằm ở ${task.repo}: clone repo đó, đọc docs/STATUS.md của nó trước khi làm.`);
   console.log('\n## Nhánh chưa merge (thienai-workflow)');

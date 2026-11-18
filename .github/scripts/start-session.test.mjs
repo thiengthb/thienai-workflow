@@ -1,12 +1,12 @@
 // Tests for templates/start-session.mjs, run in CI by .github/workflows/test.yml.
 // Uses local bare repos as remotes for the handoff book, so nothing touches GitHub.
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, readFileSync, rmSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { statusParts, claimText, claimBy, otherNickNote, branchOf, stalePrNotes, planNow } from '../../templates/start-session.mjs';
+import { statusParts, claimText, claimBy, otherNickNote, branchOf, stalePrNotes, planNow, planNotes, PLAN_WAIT } from '../../templates/start-session.mjs';
 import { skeleton } from '../../templates/handoff.mjs';
 
 // STATUS: only the parts a new session needs, history left out.
@@ -114,13 +114,24 @@ assert.match(r.stdout, /## Sổ bàn giao/);
   // Only the clause that waits counts: "(#107) qua kiểm" and "thienui `taste.md` (PR #8)" are history in the same line.
   const plan = '# K\n\nTrạng thái: đang chạy\n\n## Đang ở đâu\n- Đang ở: PR sau buổi (#107) qua kiểm; gu đã vào thienui `taste.md` (PR #8); sửa tên trục ở PR #110, chờ thien merge.\n- thien cần làm: merge PR #110 trước BA 5.\n\n## Mục tiêu\nchờ merge PR #97\n';
   const closed = { byNumber: new Map([[107, { open: false }], [8, { open: false }], [110, { open: false }], [97, { open: false }]]), byHead: new Map() };
-  const planWait = /chờ|đang mở|cần làm/i;   // what start-session passes for plans
-  const pn = stalePrNotes(plan, closed, undefined, { pick: planNow, file: 'docs/plans/k.md', wait: planWait });
+  // Through planNotes, the function start-session itself calls: a running plan is read, a finished one is not.
+  const pdir = mkdtempSync(join(tmpdir(), 'plans-'));
+  mkdirSync(join(pdir, 'docs/plans'), { recursive: true });
+  writeFileSync(join(pdir, 'docs/plans/k.md'), plan);
+  writeFileSync(join(pdir, 'docs/plans/old.md'), plan.replace('Trạng thái: đang chạy', 'Trạng thái: xong'));
+  const pn = planNotes(pdir, closed);
+  rmSync(pdir, { recursive: true, force: true });
   assert.equal(pn.length, 2, 'both lines that wait on #110, nothing else: ' + pn.join(' / '));
   assert.ok(pn.every((n) => /^docs\/plans\/k\.md còn chờ PR #110/.test(n)));
   assert.equal(planNow(plan).includes('#97'), false, 'only the "Đang ở đâu" section is read');
   const history = '## Đang ở đâu\n- Đang ở: đợt 0, 1, 2 xong, PR #98 merge 2026-11-17. Đợt 2 xong: bảng (PR #106), sửa tên trục (PR #110, đã merge).\n';
-  assert.deepEqual(stalePrNotes(history, { byNumber: new Map([[98, { open: false }], [106, { open: false }], [110, { open: false }]]), byHead: new Map() }, undefined, { pick: planNow, wait: planWait }), [], 'history at the top of a plan is not waiting');
+  assert.deepEqual(stalePrNotes(history, { byNumber: new Map([[98, { open: false }], [106, { open: false }], [110, { open: false }]]), byHead: new Map() }, undefined, { pick: planNow, wait: PLAN_WAIT }), [], 'history at the top of a plan is not waiting');
+  // History belongs to the number it sits next to; a waiting clause with no number means the PR just before it.
+  const two = { byNumber: new Map([[98, { open: false }], [110, { open: false }], [97, { open: false }]]), byHead: new Map() };
+  const mixed = stalePrNotes('## Đang ở đâu\n- PR #98 đã merge, chờ PR #110.\n', two, undefined, { pick: planNow, wait: PLAN_WAIT });
+  assert.equal(mixed.length, 1); assert.match(mixed[0], /PR #110/);
+  const semi = stalePrNotes('## Đang chờ thien\n- PR #97; chờ thien duyệt.\n', two);
+  assert.equal(semi.length, 1, 'a waiting clause right after its PR number'); assert.match(semi[0], /PR #97/);
 }
 // Unknown options stop before anything is read or claimed (2026-11-17: --dry-run was ignored and a task got claimed).
 {

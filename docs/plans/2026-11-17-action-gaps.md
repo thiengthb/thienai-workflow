@@ -46,7 +46,7 @@ Xong khi: ở 3 chat kế tiếp có PR thuộc dòng đầu của `profile/DELE
 - [x] `profile/CHATS.md` mục Đầu chat: dòng mục tiêu ba phần cho việc nhiều bước, chỉ hỏi lại khi câu trả lời đổi thứ sẽ ra (PR #104)
 - [x] `profile/VOICE.md` mục "Báo cáo khi xong việc"; `PROFILE.md` (bản tóm tắt 2 phút) và `skills/start-project/STEPS.md` trỏ tới mục đó (PR #104)
 - [x] thien chọn câu mẫu A (2026-11-17), đã thêm vào bảng câu mẫu của `VOICE.md` (PR #104)
-- [ ] Kiểm ở 3 chat kế tiếp: đã kiểm ở 4 chat, chưa đạt (2 chat thien vẫn phải merge tay; bảng ở mục "Kiểm đợt 1"). Quyết sửa gì ở mốc 01/12
+- [ ] Kiểm ở 3 chat kế tiếp: đã kiểm ở 4 chat, chưa đạt: ở chat Chiến tranh 7 công cụ chặn lệnh merge nên thien merge tay (#107); ở chat Frontend 10 AI quên, thien nhắn "merge" thì lệnh chạy được (#117). Bảng ở mục "Kiểm đợt 1". Quyết sửa gì ở mốc 01/12
 
 ### 2. Đường chảy cho góp ý (cùng buổi học kế tiếp)
 Xong khi: PR sau buổi kế tiếp có dòng bảng thuật ngữ (hay "không có từ mới"), thiếu thì `after-lesson --check` báo; lệnh in câu gu của buổi và nơi ghi (hàng chờ gom 2 tuần một PR vào thienui, không có lệnh kiểm); thien mở `taste.md` thấy mục "Đang thử" có gu từ các buổi frontend.

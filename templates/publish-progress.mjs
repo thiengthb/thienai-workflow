@@ -13,8 +13,8 @@
 // --out: chỉ nhận thư mục chưa có, rỗng, nằm trong build/ của repo, hay do chính lệnh này tạo lần trước (có file dấu).
 //   Lệnh xoá rồi clone lại <out>/repos/<tên> và ghi đè index.html, nên thư mục khác có file thì dừng
 //   (review Codex 17/11: chạy thử với --out vào thư mục có sẵn thì mất file của người dùng).
-import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, realpathSync, readdirSync } from 'node:fs';
-import { dirname, join, resolve, basename, relative, isAbsolute } from 'node:path';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, realpathSync, readdirSync, lstatSync } from 'node:fs';
+import { dirname, join, resolve, basename, relative, isAbsolute, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { buildPage } from './progress-page.mjs';
@@ -30,12 +30,14 @@ export const MARK = '.made-by-publish-progress';
 /** '' when out may be written (and marks it), else why not. Never deletes anything itself. */
 export function claimOut(out, buildDir = join(root, 'build')) {
   const rel = relative(resolve(buildDir), resolve(out));
-  const inBuild = rel !== '' && !rel.startsWith('..') && !isAbsolute(rel);
-  if (existsSync(out) && !inBuild && !existsSync(join(out, MARK)) && readdirSync(out).length) {
+  const inBuild = rel !== '' && rel.split(sep)[0] !== '..' && !isAbsolute(rel);   // build/..preview is inside build/
+  const mark = join(out, MARK);
+  const marked = existsSync(mark) && lstatSync(mark).isFile();   // a folder or a link named like the mark is not the mark
+  if (existsSync(out) && !inBuild && !marked && readdirSync(out).length) {
     return `Thư mục ${out} đã có file mà không phải do lệnh này tạo. Lệnh sẽ xoá ${join(out, 'repos')} và ghi đè index.html ở đó, nên dừng. Bỏ --out (dùng build/), hoặc chọn thư mục chưa có hay rỗng.`;
   }
   mkdirSync(out, { recursive: true });
-  writeFileSync(join(out, MARK), 'Thư mục do templates/publish-progress.mjs tạo; lệnh được xoá và ghi lại mọi thứ ở đây.\n');
+  if (!marked) writeFileSync(mark, 'Thư mục do templates/publish-progress.mjs tạo; lệnh được xoá và ghi lại mọi thứ ở đây.\n');
   return '';
 }
 
@@ -96,6 +98,10 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const bool = (n) => { const i = args.indexOf('--' + n); return i >= 0 ? (args.splice(i, 1), true) : false; };
   const outArg = flag('out'), fresh = bool('new');
   const kind = args[0] || 'overview';
+  if (!['overview', 'repo', 'roadmap'].includes(kind)) {   // before claimOut: a typo must not create or mark a folder
+    console.error('Cách dùng: node templates/publish-progress.mjs [overview|repo|roadmap] [--out <thư-mục>] [--new]');
+    process.exit(1);
+  }
   const out = resolve(outArg || join(root, 'build', `progress-${kind}`));
   const refuse = claimOut(out);
   if (refuse) { console.error(refuse); process.exit(1); }
