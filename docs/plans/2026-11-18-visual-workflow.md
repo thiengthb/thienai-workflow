@@ -5,9 +5,10 @@ Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien: "ok, duyệt theo c�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 0. Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
-- Còn thiếu: câu vì sao của thien; checkpoint 1 tới 5.
-- thien đã chọn "B · Một nấc" (2026-11-18 22:02, giống đề xuất); ô ghi chú để trống. thien cần làm: gửi một câu vì sao, rồi mới tick việc cuối của checkpoint 0.
+- Đang ở: checkpoint 0 xong, sắp vào 1. Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
+- Còn thiếu: checkpoint 1 tới 5. Ở ga 2 thử lấy riêng bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử, không lấy nền tối và chữ khổng lồ.
+- thien đã chọn "B · Một nấc" (2026-11-18, giống đề xuất), vì sao: "mình cảm thấy hiện tại 3 bản thì bản một nấc, không đi quá xa, có phần quen thuộc cũng như mới lạ nho nhỏ, nhưng phần C thì quá mới làm mình chưa thích ứng". Checkpoint 0 xong; tiếp theo checkpoint 1 (lớp sơ đồ dùng chung).
+- thien cần làm: merge PR #124 khi CodeRabbit xong.
 
 ## Mục tiêu
 Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu của thien đi lên từng nấc, nhất quán mà không đứng yên (lời thien 2026-11-18: gu "phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn").
@@ -43,7 +44,7 @@ Chi tiết thử của trang duyệt (checkpoint vẽ như tuyến tàu): thien 
 Xong khi: thien mở trang chọn trên điện thoại, chọn một trong ba hướng (quen, một nấc, thật xa) cho màn "trang kế hoạch" và viết một câu vì sao; câu đó nằm trong `learning/frontend/taste-queue.md`.
 - [x] Ba bản của cùng một màn, dựng bằng `artifacts/decide/`; trang duyệt kế hoạch này là bản "một nấc" (2026-11-18, `round-1/`, trang chọn đã đăng)
 - [x] 3 ví dụ thật cho hướng "thật xa", mỗi cái một câu để ý (The Pudding, Ciechanowski, R2D3; `decide` thêm trường `links` để hiện ví dụ)
-- [ ] Ghi kết quả vào hàng chờ gu
+- [x] Ghi kết quả vào hàng chờ gu (2026-11-18, B · Một nấc, câu vì sao chép nguyên văn)
 
 ### 1. Lớp sơ đồ dùng chung
 Xong khi: trang mẫu thành phần (`artifacts/kit/gallery.html`) có mục Sơ đồ; thien mở trên điện thoại, bấm qua một luồng 5 bước, không khối nào tràn hay đè chữ.
