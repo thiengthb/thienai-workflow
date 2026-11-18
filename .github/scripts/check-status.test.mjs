@@ -17,7 +17,7 @@ const plan = readFileSync(new URL('../../templates/PLAN.template.md', import.met
 assert.deepEqual(checkPlan(plan.replace('<ngày>', '2026-01-01')), [], 'plan template must pass');
 assert.deepEqual(checkPlan('# Kế hoạch cũ\n\n## Tóm tắt\n'), [], 'plans written before the template are skipped');
 assert.equal(checkPlan(plan.replace('## Lỗi gặp', '## Lỗi')).length, 1, 'missing section must fail');
-for (const st of ['đang chạy', 'tạm dừng', 'xong', 'bỏ']) {
+for (const st of ['đang chạy', 'chờ duyệt', 'tạm dừng', 'xong', 'bỏ']) {
   assert.deepEqual(checkPlan(plan.replace(/^Trạng thái: đang chạy/m, `Trạng thái: ${st}`)), [], `status "${st}" must pass`);
   assert.deepEqual(checkPlan(plan.replace(/^Trạng thái: đang chạy.*$/m, `Trạng thái: ${st}`)), [], `status "${st}" at end of line must pass`);
 }

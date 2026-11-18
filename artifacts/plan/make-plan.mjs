@@ -116,7 +116,7 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   ${acc('Lỗi gặp', table(['Ngày', 'Lỗi', 'Đã xử lý'], plan.errors), plan.errors.length)}</div></section>`;
 
   const metaChips = [stateChip,
-    plan.approvedDate ? `<span class="chip">Duyệt ${ddmm(plan.approvedDate)}</span>` : '',
+    plan.approved && plan.approvedDate ? `<span class="chip">Duyệt ${ddmm(plan.approvedDate)}</span>` : '',
     plan.updated ? `<span class="chip">Cập nhật ${ddmm(plan.updated)}</span>` : '',
     plan.nick ? `<span class="chip">Nick ${esc(plan.nick)}</span>` : ''].join('');
   // Mục lục: thanh trên ở điện thoại và máy tính bảng; cột bên trái ở màn rộng, kèm tiến độ gọn (side-prog chỉ hiện ở đó).
