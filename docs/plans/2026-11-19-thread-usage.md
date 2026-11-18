@@ -42,8 +42,8 @@ Rút ra:
 Bạn đúng là kế hoạch dài nên chia ra nhiều thread, nhưng chỗ chia không phải theo độ dài mà theo **lúc phải chờ bạn**. Tiền bị đốt nhiều nhất khi một thread lớn ngồi chờ bạn duyệt trang, chọn phương án hay merge PR qua vài giờ, rồi được gọi dậy: lúc đó cả ngữ cảnh 300 tới 500 nghìn token phải ghi lại từ đầu. Trong lúc làm liên tục thì cứ để thread tự tóm tắt, chia nhỏ hơn không lời bao nhiêu mà còn mất giá vào cửa.
 
 Cụ thể mình đề xuất ba điều, đều dựa trên tính năng sẵn có của Claude Projects:
-1. **Một thread cho một checkpoint của kế hoạch.** Checkpoint vốn là chỗ bạn kiểm bằng mắt hay bằng tay (`profile/PLANNING.md`), tức là chỗ phải chờ bạn. Xong checkpoint thì thread sửa "Đang ở đâu" của file kế hoạch và sổ bàn giao, báo kết quả rồi thôi. Đây cũng là cách tài liệu Claude Projects mô tả việc lớn: chia thành nhiều thread, mỗi thread một phần.
-2. **Tin của bạn tới sau hơn 1 giờ thì sang thread mới.** Chat điều phối là chỗ quyết gửi tin vào thread nào. Khi thread đích đã nghỉ hơn 1 giờ và đã xong ít nhất một checkpoint hay một PR, chat điều phối mở thread mới đọc kế hoạch và sổ bàn giao, thay vì gửi vào thread cũ. Câu hỏi nhanh về chính việc vừa làm (dưới 1 giờ) thì vẫn gửi thread cũ.
+1. **Một thread cho một checkpoint của kế hoạch.** Checkpoint vốn là chỗ bạn kiểm bằng mắt hay bằng tay (`profile/PLANNING.md`), tức là chỗ phải chờ bạn. Xong checkpoint thì thread sửa "Đang ở đâu" của file kế hoạch và sổ bàn giao rồi báo kết quả. Bạn trả lời trong vòng 1 giờ thì thread làm tiếp checkpoint sau ngay tại chỗ, vì cache còn sống nên không tốn khoản đánh thức. Quá 1 giờ thì checkpoint sau sang thread mới, như luật 2. Đây cũng là cách tài liệu Claude Projects mô tả việc lớn: chia thành nhiều thread, mỗi thread một phần.
+2. **Tin của bạn tới sau hơn 1 giờ thì sang thread mới.** Chat điều phối là chỗ quyết gửi tin vào thread nào. Khi thread đích đã nghỉ hơn 1 giờ và đã xong ít nhất một checkpoint hay một PR, chat điều phối mở thread mới đọc kế hoạch và sổ bàn giao, thay vì gửi vào thread cũ. Tin tới trong vòng 1 giờ (câu hỏi nhanh, hay bảo làm tiếp checkpoint sau) thì vẫn gửi thread cũ.
 3. **Thread thôi theo dõi PR khi chỉ còn chờ bạn merge.** Thread đang theo dõi PR thức dậy mỗi lần có comment, CI hay merge, và lần thức sau hơn 1 giờ là một lần ghi lại cả ngữ cảnh. Khi CodeRabbit đã xong và PR chỉ còn chờ bạn, thread ghi "chờ merge PR #…" vào kế hoạch và thôi theo dõi. Việc dọn sau merge (tick kế hoạch, sửa STATUS) đã có luật gộp vào PR kế tiếp.
 
 Với thread "Tiếp tục làm Sakubun" bây giờ: theo sổ bàn giao, việc U4 đang chờ bạn chọn cách tô vạch ở vòng 3. Chọn xong thì bạn nhắn ở chat điều phối của Sakubun "mở thread mới làm tiếp U4 từ sổ bàn giao", đừng trả lời vào thread 176 triệu kia. Việc này làm được ngay, không cần chờ kế hoạch được duyệt.
@@ -52,7 +52,7 @@ Với thread "Tiếp tục làm Sakubun" bây giờ: theo sổ bàn giao, việc
 | Phương án | Lý do mạnh nhất để không chọn |
 |---|---|
 | A. Giữ nguyên: một thread làm cả kế hoạch, để thread tự tóm tắt | Mỗi lần bạn quay lại sau vài giờ là một lần ghi lại 300 tới 500 nghìn token (số đo ý 2). Với cách bạn làm (duyệt trên điện thoại, cách nhau nhiều giờ), lần đánh thức xảy ra ở hầu hết checkpoint. Tóm tắt nhiều lần cũng làm mất chi tiết. |
-| B. Một thread cho mỗi checkpoint, sang thread mới khi phải chờ bạn lâu (đề xuất) | Thread mới tốn khoảng 1 tới 1,5 USD vào cửa, và thread mới không nhớ những gì chưa ghi vào repo. Đỡ được vì kế hoạch, sổ bàn giao và PR đã giữ đủ; thí nghiệm 4 của nick tnt697 cho thấy chat mới không làm bản ghi thiếu ý. Còn lại: checkpoint quá ngắn (dưới khoảng 15 lần gọi) thì không lời, nên checkpoint nhỏ được làm tiếp trong cùng thread nếu bạn trả lời trong 1 giờ. |
+| B. Một thread cho mỗi checkpoint, sang thread mới khi phải chờ bạn lâu (đề xuất) | Thread mới tốn khoảng 1 tới 1,5 USD vào cửa, và thread mới không nhớ những gì chưa ghi vào repo. Đỡ được vì kế hoạch, sổ bàn giao và PR đã giữ đủ; thí nghiệm 4 của nick tnt697 cho thấy chat mới không làm bản ghi thiếu ý. Còn lại: checkpoint quá ngắn (dưới khoảng 15 lần gọi) thì tách ra không lời. Luật đã tính chỗ này: bạn trả lời trong 1 giờ thì checkpoint sau làm tiếp trong cùng thread, chỉ sang thread mới khi quá 1 giờ. |
 | C. Chia nhỏ hơn nữa: mỗi bước, mỗi PR nhỏ một thread | Mỗi thread trả giá vào cửa, và thí nghiệm 4 ở bản cũ cho thấy tách các bước nhỏ ra chat riêng đắt hơn làm tiếp tại chỗ. |
 | D. Đặt ngưỡng tự tóm tắt thấp hơn (ví dụ 250 nghìn) bằng biến môi trường của project | Chỉ đỡ phần đọc lại khi làm liên tục, khoảng 15% [suy luận], mà tóm tắt nhiều lần làm mất chi tiết. Chưa biết biến mình đặt có thắng được biến máy đã đặt sẵn không [chưa kiểm]. Không chữa được khoản đánh thức, là khoản lớn nhất. |
 | E. Dùng Sonnet 5.5 cho thread | Giá mọi loại token bằng nửa Opus 5.5, nên tiết kiệm nhiều nhất và không phải đổi quy trình. Nhưng chất lượng giao diện và kế hoạch là thứ bạn đặt lên trước tiết kiệm, và chọn model là việc của bạn (`CHATS.md`). Mình để thành câu hỏi, không đưa vào luật. |
@@ -75,7 +75,8 @@ Xong khi: bạn đọc mục "Project bản beta" mới của `profile/CHATS.md`
 - [ ] `docs/STATUS.md`: thêm dòng kế hoạch này vào "Kế hoạch đang chạy" (STATUS đang đủ 40 dòng, nên gộp hay bớt một dòng cũ cho vừa).
 
 ### 2. Thử ở sakubun và đo
-Xong khi: bảng "Kết quả đo" có số của ít nhất 2 checkpoint làm theo luật mới (mỗi checkpoint một thread), đặt cạnh số của thread "Tiếp tục làm Sakubun"; bạn xem và thấy cách mới có rẻ hơn mỗi checkpoint không.
+Xong khi: bảng "Kết quả đo" có số của ít nhất 2 checkpoint làm theo luật mới, đặt cạnh số mỗi checkpoint của thread "Tiếp tục làm Sakubun"; bạn xem và thấy cách mới có rẻ hơn mỗi checkpoint không.
+- [ ] Mức nền: thread đầu tiên ở project Sakubun đọc bản ghi kết quả của thread "Tiếp tục làm Sakubun" (ở project đó mới đọc được), đếm số checkpoint thread đó đã xong theo dấu tick trong kế hoạch U4, rồi chia tổng USD cho số checkpoint. Bản ghi chỉ có tổng cộng dồn sau mỗi lượt, nên chia theo checkpoint là ước lượng; không đếm được thì ghi rõ trong cột "Ghi chú" và chỉ so tổng.
 - [ ] Checkpoint kế tiếp của việc U4 (sakubun) làm ở thread mới. Lúc xong, thread đọc bản ghi kết quả của chính nó và ghi: tổng token, phần ghi cache, số lần đánh thức sau hơn 1 giờ, số USD quy đổi.
 - [ ] Một checkpoint nữa, bất kỳ kế hoạch nào, cũng ghi như vậy.
 - [ ] Ghi số vào bảng "Kết quả đo" của file này và một dòng vào `docs/usage-log.md`.
@@ -94,8 +95,8 @@ Xong khi: ở buổi xem lại chung ngày 01/12, luật được giữ, sửa h
 2. **Có thử Sonnet 5.5 cho thread làm code theo kế hoạch đã duyệt không?** Đề xuất: chưa, đo checkpoint 2 với Opus trước. Nếu tuần sau vẫn hết usage giữa tuần thì thử một checkpoint bằng Sonnet.
 
 ## Kết quả đo
-| Ngày | Thread | Việc | Tổng token | Ghi cache | Số lần đánh thức sau hơn 1 giờ | Quy ra USD | Ghi chú |
-|---|---|---|---|---|---|---|---|
+| Ngày | Thread | Việc | Số checkpoint | Tổng token | Ghi cache | Số lần đánh thức sau hơn 1 giờ | Quy ra USD | USD mỗi checkpoint | Ghi chú |
+|---|---|---|---|---|---|---|---|---|---|
 
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
