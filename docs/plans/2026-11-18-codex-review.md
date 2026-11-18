@@ -13,7 +13,7 @@ Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đ�
 Sửa những chỗ review của Codex (commit `721a116`, 17/11) chỉ ra mà kiểm lại thấy đúng, ưu tiên hai lệnh có thể xoá hay ghi đè dữ liệu, mà không thêm luật mới hay script mới trước mốc 01/12.
 
 ## Kiểm từng ý
-Main hiện tại vẫn là `721a116` (kiểm 2026-11-18, `git ls-remote`), nên mọi ý của Codex đều nói về đúng bản đang chạy. CI `Test` trên commit đó xanh ([lượt chạy](https://github.com/thiengthb/thienai-workflow/actions/runs/44116199219)).
+Lúc kiểm (2026-11-18, `git ls-remote`), main là `721a116`, đúng bản Codex review. Bảng dưới ghi trạng thái lúc đó; phần sửa đã vào main ở PR #121. CI `Test` trên commit đó xanh ([lượt chạy](https://github.com/thiengthb/thienai-workflow/actions/runs/44116199219)).
 
 | Ý của Codex | Mình kiểm thấy | Đồng ý? | Làm gì |
 |---|---|---|---|
