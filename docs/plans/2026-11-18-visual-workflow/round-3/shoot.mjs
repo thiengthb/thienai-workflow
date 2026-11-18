@@ -16,7 +16,7 @@ execFileSync(process.execPath, [join(dir, 'build.mjs'), join(out, 'pages')], { s
 const KEYS = ['a', 'b', 'c'];
 const fs = process.env.FONTSOURCE ? resolve(process.env.FONTSOURCE) : '';
 const fontCss = fs && existsSync(fs) ? [['onest', [400, 500, 600, 700, 800]], ['jetbrains-mono', [500, 600]], ['bricolage-grotesque', [700, 800]]].flatMap(([f, ws]) => ws.map((w) =>
-  readFileSync(`${fs}/${f}/${w}.css`, 'utf8').replace(/url\(\.\/files\//g, `url(file://${fs}/${f}/files/`))).join('\n') : '';
+  readFileSync(`${fs}/${f}/${w}.css`, 'utf8').replace(/url\(\.\/files\/([^)]+)\)/g, (m, file) => `url("${pathToFileURL(`${fs}/${f}/files/${file}`).href}")`))).join('\n') : '';
 const browser = await chromium.launch();
 
 async function snap(key, w, h, scheme, path) {
