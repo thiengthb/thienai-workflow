@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 2, mẫu kế hoạch nhìn được
 
 Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo nhánh mới từ main cho checkpoint 3) · PR: #135–#138 đã merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtptJ · Cập nhật: 2026-11-18T20:05Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWaXMmKxxBCbsYY4cB · Cập nhật: 2026-11-18T20:13Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
