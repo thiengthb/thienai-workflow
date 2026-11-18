@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien: "ok, duyệt theo c�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 dựng xong (18/11): `artifacts/kit/diagram.js` và mục Sơ đồ trong trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (nick tnt697); chờ thien bấm thử trên điện thoại. Checkpoint 0 xong. Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
+- Đang ở: checkpoint 0 và 1 xong; tiếp theo checkpoint 2. Lớp sơ đồ: `artifacts/kit/diagram.js` và mục Sơ đồ trong trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (nick tnt697). Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
 - Vòng gu 2 (bảng màu) chạy sớm theo lời thien 18/11: trang chọn https://claude.ai/artifact/Ci6FBx4ThzEEh4SYZESph7 (nick tnt697), nguồn ở `round-2/`. thien chọn C trên trang, rồi nhắn "à tôi muốn giấy trắng với xanh petrol": kit dùng nền của A với màu nhấn của C (đã vào `kit.css`). Cùng đợt: nút mới, icon Lucide, chuyển động, thành phần mới, trang nhẹ (`kit/pack.mjs`). PR #126 và #127 đã merge (19/11, thien nhắn "merge").
-- Checkpoint 1 xong (19/11): thien bấm mục Sơ đồ trên điện thoại, "không bị lỗi UI nào". Câu vì sao của bảng màu đã vào hàng chờ gu.
+- Checkpoint 1 xong (19/11): mục Sơ đồ trong trang mẫu chỉ có một luồng, chính là luồng 5 bước "một buổi học đi qua những đâu"; thien nhắn "mình đã bấm sơ đồ trên điện thoại và nó không bị lỗi UI nào". Câu vì sao của bảng màu đã vào hàng chờ gu.
 - Còn thiếu: checkpoint 2 (tiếp theo) tới 5. Ở ga 2 thử lấy riêng bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử, không lấy nền tối và chữ khổng lồ.
 - thien đã chọn "B · Một nấc" (2026-11-18, giống đề xuất), vì sao: "mình cảm thấy hiện tại 3 bản thì bản một nấc, không đi quá xa, có phần quen thuộc cũng như mới lạ nho nhỏ, nhưng phần C thì quá mới làm mình chưa thích ứng". Checkpoint 0 xong.
 - thien cần làm: không có, tới khi mẫu kế hoạch (checkpoint 2) có trang để duyệt.
