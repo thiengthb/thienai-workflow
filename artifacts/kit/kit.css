@@ -7,6 +7,10 @@
   --accent: #0e7490; --accent-soft: #e3f3f8; --accent-ink: #0b5a70;
   --good: #277a4c; --good-soft: #e6f3eb; --bad: #c2410c; --bad-soft: #fdeee6; --warn: #8a5a12; --warn-soft: #f6ecd6;
   --accent-fill: #0e7490; --on-accent: #fff; --primary-fill: var(--ink);   /* nền đặc màu nhấn (nút Gửi, nút đang chọn) và chữ trên nền đặc nhấn, đúng, sai */
+  /* Mực hình (vòng gu 3, thien chọn A · Thêm mực cam, 19/11): hai mực có nghĩa cố định cho chữ khoá, sơ đồ, biểu đồ.
+     --ink-1 xanh = khái niệm, công cụ, dữ liệu; --ink-2 cam = người học, điểm cần làm; --ink-3 tím = loạt thứ ba của biểu đồ.
+     Đã qua bộ kiểm màu biểu đồ (sáu mục, cả sáng và tối; cặp gần nhất khi mù màu ΔE 19,4). Không dùng làm màu nút. */
+  --ink-1: #0b6fa0; --ink-2: #c2480f; --ink-3: #7a5bc7;
   --shadow: 0 1px 2px rgba(28, 28, 27, .06), 0 6px 18px rgba(28, 28, 27, .06);
   --font: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -17,12 +21,14 @@
   --accent: #38b2cf; --accent-soft: #11303a; --accent-ink: #8fd8ea;
   --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
   --accent-fill: #1b7a91; --on-accent: #fff; --primary-fill: #c4c4c0;
+  --ink-1: #3a9fd0; --ink-2: #e0703a; --ink-3: #8a74e0;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #171716; --card: #1f1f1e; --soft: #272726; --line: #333331; --line-strong: #444441; --ink: #ededeb; --muted: #a3a39e;
   --accent: #38b2cf; --accent-soft: #11303a; --accent-ink: #8fd8ea;
   --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
   --accent-fill: #1b7a91; --on-accent: #fff; --primary-fill: #c4c4c0;
+  --ink-1: #3a9fd0; --ink-2: #e0703a; --ink-3: #8a74e0;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; }
 /* Bộ token thứ hai, như nhau ở sáng và tối. Mọi màu của các mẫu (lesson, it, war, review, decide, compare) lấy từ đây hay từ trên;
    check-tokens.mjs báo khi có mã màu viết thẳng ngoài file này. Riêng màu của màn mô phỏng và địa hình trong từng bài là nội dung bài. */
@@ -297,6 +303,23 @@ button.dg-node:hover { border-color: var(--accent); }
 .empty-ic .ic { font-size: 22px; }
 .empty b { font-size: 15px; }
 .empty p { color: var(--muted); font-size: 13.5px; max-width: 32ch; }
+
+/* Mực hình: chữ khoá trong tiêu đề hay câu (em.k1 xanh, em.k2 cam), khối sơ đồ theo loại (kind "k1", "k2" trong diagram.js),
+   cột và chấm biểu đồ (.fill-k1/2/3 cho SVG, .bg-k1/2/3 cho ô chú giải). Giữ đúng nghĩa trên mọi hình của một trang.
+   Chữ giá trị, nhãn, chú giải vẫn màu chữ thường; màu mực chỉ ở dấu hình bên cạnh (skill dataviz). */
+em.k1, em.k2 { font-style: normal; }
+em.k1 { color: var(--ink-1); } em.k2 { color: var(--ink-2); }
+.label.k2 { color: var(--ink-2); } .label.k1 { color: var(--ink-1); }
+.dg-node.dg-k1 { border-color: var(--ink-1); } .dg-node.dg-k2 { border-color: var(--ink-2); }
+.dg-node.dg-k1.on { box-shadow: 0 0 0 1px var(--ink-1); } .dg-node.dg-k2.on { box-shadow: 0 0 0 1px var(--ink-2); }
+.fill-k1 { fill: var(--ink-1); } .fill-k2 { fill: var(--ink-2); } .fill-k3 { fill: var(--ink-3); }
+.bg-k1 { background: var(--ink-1); } .bg-k2 { background: var(--ink-2); } .bg-k3 { background: var(--ink-3); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+/* Ý riêng, quan điểm: thẻ trắng có vạch cam bên trái, nhãn cam ở đầu (.label.k2). */
+.callout { display: grid; gap: 6px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--ink-2);
+  border-radius: 0 var(--r) var(--r) 0; }
+.callout p { font-size: 15px; line-height: 1.55; }
 
 /* Báo trong dòng: một icon, một câu. .note.info, .note.good, .note.warn, .note.bad. */
 .note { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border-radius: var(--r); font-size: 14px; line-height: 1.5; background: var(--soft); color: var(--ink); }

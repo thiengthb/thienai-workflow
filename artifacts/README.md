@@ -38,6 +38,8 @@ Chi tiết từng mẫu ở README trong thư mục của mẫu.
 
 **Icon, thành phần, chuyển động.** Icon là bộ Lucide nhỏ sinh vào cuối `kit/kit.css` bằng `kit/make-icons.mjs` (`<i class="ic ic-check">` hay `Kit.icon('check')`), luôn theo màu chữ và nằm giữa ô 1em; không dùng ký tự như ✓ ! ▶ làm icon. Kit có sẵn tab (`data-tabs`), mục gập mở (`details.acc`), thanh bước (`ol.steps`), gợi ý (`data-hint`), thẻ số (`.stats`, `.stat`), đang tải (`.skel`), màn rỗng (`.empty`), báo trong dòng (`.note`), hiện dần (`data-reveal`). Nút viền 1px, nút đặc nổi có gờ dưới, bấm lún theo lò xo; máy bật giảm chuyển động thì chỉ đổi độ mờ. Xem tất cả ở trang mẫu thành phần.
 
+**Mực hình.** Hai mực có nghĩa cố định cho hình và chữ khoá, rút từ slide MLN122 (vòng gu 3, thien chọn "A · Thêm mực cam" ngày 19/11): `--ink-1` xanh cho khái niệm, công cụ, dữ liệu; `--ink-2` cam cho người học, điểm cần làm; `--ink-3` tím cho loạt thứ ba của biểu đồ. Dùng qua `em.k1`, `em.k2`, `kind` của khối sơ đồ, `.fill-k1..3`, `.bg-k1..3`, `.legend`, `.callout`. Không dùng cho nút; nút vẫn là xanh petrol. Giữ bo góc và nền giấy trắng của kit, không kẻ ô.
+
 **Trang nhẹ.** Mọi lệnh dựng trang gọi `kit/pack.mjs` ở bước cuối: bỏ chú thích và khoảng trắng thừa trong CSS, bỏ dòng chú thích trong JS (không đổi code), bỏ icon trang không dùng. Phần kit của một trang học từ khoảng 102 KB còn 74 KB (đo 19/11). Gọi `Kit.icon` thì viết thẳng tên icon, để lệnh dựng thấy mà giữ lại.
 
 **Sơ đồ.** `kit/diagram.js` vẽ sơ đồ khối trơn, viền mảnh, mũi tên (`Diagram.mount(host, spec)`, hay thẻ có `data-diagram`; cách dùng ở đầu file), bấm từng bước được. Xếp chỗ bằng dagre gắn sẵn ở `kit/vendor/` (MIT); trang không gắn dagre thì xếp theo tầng. CSS ở mục Sơ đồ của `kit.css`.
