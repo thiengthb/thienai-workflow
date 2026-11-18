@@ -5,10 +5,10 @@ Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien: "ok, duyệt theo c�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 0 xong, sắp vào 1. Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
-- Còn thiếu: checkpoint 1 tới 5. Ở ga 2 thử lấy riêng bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử, không lấy nền tối và chữ khổng lồ.
+- Đang ở: checkpoint 1 dựng xong (18/11): `artifacts/kit/diagram.js` và mục Sơ đồ trong trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (nick tnt697); chờ thien bấm thử trên điện thoại. Checkpoint 0 xong. Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
+- Còn thiếu: thien bấm thử checkpoint 1; checkpoint 2 tới 5. Ở ga 2 thử lấy riêng bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử, không lấy nền tối và chữ khổng lồ.
 - thien đã chọn "B · Một nấc" (2026-11-18, giống đề xuất), vì sao: "mình cảm thấy hiện tại 3 bản thì bản một nấc, không đi quá xa, có phần quen thuộc cũng như mới lạ nho nhỏ, nhưng phần C thì quá mới làm mình chưa thích ứng". Checkpoint 0 xong; tiếp theo checkpoint 1 (lớp sơ đồ dùng chung).
-- thien cần làm: không có, tới khi lớp sơ đồ có trang mẫu để bấm thử (PR #124 đã merge 18/11).
+- thien cần làm: mở trang mẫu thành phần ở trên bằng điện thoại (nick tnt697), kéo tới mục Sơ đồ, bấm Bắt đầu rồi Tiếp qua 5 bước; báo chỗ nào tràn, đè chữ hay khó đọc.
 
 ## Mục tiêu
 Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu của thien đi lên từng nấc, nhất quán mà không đứng yên (lời thien 2026-11-18: gu "phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn").
@@ -48,10 +48,10 @@ Xong khi: thien mở trang chọn trên điện thoại, chọn một trong ba h
 
 ### 1. Lớp sơ đồ dùng chung
 Xong khi: trang mẫu thành phần (`artifacts/kit/gallery.html`) có mục Sơ đồ; thien mở trên điện thoại, bấm qua một luồng 5 bước, không khối nào tràn hay đè chữ.
-- [ ] File mới diagram.js trong kit: khối trơn viền mảnh, mũi tên, không tô màu, không bóng (lời thien 2026-11-17 trong hàng chờ gu)
-- [ ] Xếp chỗ tự động bằng thư viện có sẵn, hạn một phiên; quá hạn thì xếp theo lưới
-- [ ] Bấm từng bước: khối sáng lên, chữ chú thích hiện cạnh khối
-- [ ] Qua `check-tokens.mjs` và `check-pages.mjs`
+- [x] File mới diagram.js trong kit: khối trơn viền mảnh, mũi tên, không tô màu, không bóng (lời thien 2026-11-17 trong hàng chờ gu) (2026-11-18, `artifacts/kit/diagram.js`, CSS ở mục Sơ đồ của `kit.css`)
+- [x] Xếp chỗ tự động bằng thư viện có sẵn, hạn một phiên; quá hạn thì xếp theo lưới (2026-11-18, dagre 3.1.3 MIT gắn sẵn ở `artifacts/kit/vendor/`, 49 KB; trang không gắn dagre thì xếp theo tầng, vòng lặp đi vòng ngoài; khung hẹp tự chuyển dọc)
+- [x] Bấm từng bước: khối sáng lên, chữ chú thích hiện cạnh khối (2026-11-18: bắt đầu ở toàn cảnh; chú thích mở ngay dưới tên trong khối, sơ đồ xếp lại nên không đè khối khác)
+- [x] Qua `check-tokens.mjs` và `check-pages.mjs` (2026-11-18: 0 lỗi, trang mẫu thành phần không có cảnh báo ở 3 khổ, sáng và tối)
 
 ### 2. Mẫu kế hoạch nhìn được
 Xong khi: kế hoạch kế tiếp được gửi thien duyệt bằng trang sinh từ file `docs/plans/`, và thien trả lời câu hỏi bằng nút trên trang, không gõ lại.
@@ -108,3 +108,4 @@ Dễ sa lầy: tự viết thuật toán xếp sơ đồ; đọc markdown kế h
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
 |---|---|---|
+| 2026-11-18 | Chú thích đầu `diagram.js` có chữ `</script>`: chép vào trang thì thẻ script đóng sớm, sơ đồ không vẽ, không báo lỗi JavaScript | Bỏ chữ đó khỏi chú thích; file JS gắn vào trang không được chứa `</script>` |

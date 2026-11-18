@@ -217,6 +217,26 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
     </section>
 
     <section class="card g-sec wide">
+      <h2>Sơ đồ</h2>
+      <p>diagram.js: khối trơn viền mảnh, mũi tên, không tô màu. Bấm Bắt đầu hay chạm một khối: khối sáng lên, chú thích mở ngay dưới tên. Khung hẹp thì sơ đồ tự chuyển sang dọc.</p>
+      <div data-diagram id="g-diagram"><script type="application/json">
+{
+  "title": "Một buổi học đi qua những đâu",
+  "nodes": [
+    { "id": "prep", "label": "Chuẩn bị buổi", "note": "prepare-lesson.mjs in gói buổi: bài kế tiếp, hồ sơ môn, 3 thẻ đến hạn." },
+    { "id": "make", "label": "Dựng trang học", "note": "make-lesson.mjs gắn kit vào trang, Claude đăng thành artifact." },
+    { "id": "learn", "label": "thien học trên trang", "note": "Mỗi câu trả lời lưu vào db của trang, Claude đọc lại được." },
+    { "id": "after", "label": "Ghi sau buổi", "note": "after-lesson.mjs --write: nhật ký môn, thẻ mới, lộ trình." },
+    { "id": "pr", "label": "Mở PR", "note": "thien xem và merge; bài đã học thành bài đóng băng." },
+    { "id": "cards", "label": "learning/cards.md" }
+  ],
+  "edges": [["prep", "make"], ["make", "learn"], ["learn", "after"], ["after", "pr"], ["after", "cards", "thẻ mới"], ["cards", "prep", "thẻ đến hạn"]],
+  "steps": ["prep", "make", "learn", "after", "pr"]
+}
+</script></div>
+    </section>
+
+    <section class="card g-sec wide">
       <h2>Bảng dán</h2>
       <p>Bảng của bài BA: ô .zone để thả thẻ, thẻ người .bd-card (màu riêng của từng người là nội dung bài), .say-bar là lời người đó nói.</p>
       <div class="pane board on g-board">
@@ -239,6 +259,8 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
     </section>
   </div>
 </main>
+<script>/*DAGRE_JS*/</script>
+<script>/*DIAGRAM_JS*/</script>
 <script>
 // Bảng màu: đọc thẳng từ kit.css lúc chạy, nên luôn khớp với file.
 (function () {

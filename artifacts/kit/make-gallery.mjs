@@ -3,7 +3,7 @@
 //
 //   node artifacts/kit/make-gallery.mjs [--out <thư-mục>] [--url <artifact đã đăng>]
 //
-// Sửa kit.css, lesson.css, it.css hay war.css xong thì dựng lại và đăng đè (--url) để xem mọi thành phần một lượt.
+// Sửa kit.css, diagram.js, lesson.css, it.css hay war.css xong thì dựng lại và đăng đè (--url) để xem mọi thành phần một lượt.
 import { readFileSync, writeFileSync, mkdirSync, realpathSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,7 +12,8 @@ import { writePublish } from './publish.mjs';
 const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const here = dirname(fileURLToPath(import.meta.url));
-const PARTS = { '/*KIT_CSS*/': 'kit.css', '/*LESSON_CSS*/': '../lesson/lesson.css', '/*IT_CSS*/': '../it/it.css', '/*WAR_CSS*/': '../war/war.css' };
+const PARTS = { '/*KIT_CSS*/': 'kit.css', '/*LESSON_CSS*/': '../lesson/lesson.css', '/*IT_CSS*/': '../it/it.css', '/*WAR_CSS*/': '../war/war.css',
+  '/*DAGRE_JS*/': 'vendor/dagre.min.js', '/*DIAGRAM_JS*/': 'diagram.js' };
 
 export function render() {
   let html = lf(readFileSync(join(here, 'gallery.html'), 'utf8'));
