@@ -34,7 +34,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- Không có.
+- Chọn mức mang style slide MLN122 vào trang học (vòng gu 3): https://claude.ai/artifact/RMSfapmLBg7FvoQ5PFDgad (nick tnt697); merge PR #130 (nút dịu hơn) và #131 (nguồn vòng gu 3).
 
 ## Đang vướng
-- Không có. Trang tổng quan đọc sakubun bằng bản clone công khai.
+- Chọn mức mang style slide MLN122 vào trang học (vòng gu 3): https://claude.ai/artifact/RMSfapmLBg7FvoQ5PFDgad (nick tnt697); merge PR #130 (nút dịu hơn) và #131 (nguồn vòng gu 3). Trang tổng quan đọc sakubun bằng bản clone công khai.
