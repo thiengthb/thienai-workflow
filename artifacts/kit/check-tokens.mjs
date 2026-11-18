@@ -17,7 +17,7 @@ const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 /** CSS dùng chung: cả file. */
 export const CSS_FILES = ['artifacts/kit/kit.css', 'artifacts/lesson/lesson.css', 'artifacts/it/it.css', 'artifacts/war/war.css'];
 /** Mẫu trang có khối <style> riêng của khung trang (không phải nội dung bài). */
-export const TEMPLATE_FILES = ['artifacts/review/template.html', 'artifacts/decide/template.html', 'artifacts/compare/template.html', 'artifacts/kit/gallery.html'];
+export const TEMPLATE_FILES = ['artifacts/review/template.html', 'artifacts/decide/template.html', 'artifacts/compare/template.html', 'artifacts/plan/template.html', 'artifacts/kit/gallery.html'];
 
 const COLOUR = /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?)\(/g;
 const lineAt = (text, i) => text.slice(0, i).split('\n').length;

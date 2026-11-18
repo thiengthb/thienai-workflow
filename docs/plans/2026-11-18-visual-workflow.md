@@ -58,6 +58,7 @@ Xong khi: trang mẫu thành phần (`artifacts/kit/gallery.html`) có mục Sơ
 
 ### 2. Mẫu kế hoạch nhìn được
 Xong khi: kế hoạch kế tiếp được gửi thien duyệt bằng trang sinh từ file `docs/plans/`, và thien trả lời câu hỏi bằng nút trên trang, không gõ lại.
+Ước: 2 phiên
 - [ ] Lệnh mới make-plan.mjs trong thư mục mới artifacts/plan đọc file theo `templates/PLAN.template.md`, dựng tuyến checkpoint, phương án, câu hỏi
 - [ ] Câu trả lời lưu vào db của trang để Claude đọc, có nút chép làm đường lui
 - [ ] Thử trên mọi file đang có trong `docs/plans/`; file lệch mẫu thì lệnh báo rõ chỗ lệch
@@ -66,12 +67,14 @@ Xong khi: kế hoạch kế tiếp được gửi thien duyệt bằng trang sin
 
 ### 3. Mẫu luồng chạy
 Xong khi: thien xem luồng "một buổi học đi qua những đâu" và tự kể lại bằng lời mà không mở `profile/MAP.md`.
+Ước: 1–2 phiên
 - [ ] Mẫu mới ở thư mục artifacts/flow: một sơ đồ, đi từng bước; trên điện thoại sơ đồ dính trên, chữ cuộn dưới
 - [ ] Dùng cho: quy trình vừa đổi gì, kiến trúc sakubun, luồng nghiệp vụ trong bài BA
 - [ ] Sau mẫu này là 8/8 mẫu; mẫu sau phải thay mẫu cũ
 
 ### 4. Đánh bóng mẫu học (ghép vào buổi học)
 Xong khi: sau BA 6 và Frontend 11, thien không còn chấm bảng dán là "chưa thỏa mãn", và số lượt dựng một trang học không tăng.
+Ước: 2 phiên
 - [ ] Bảng dán BA: một vòng so sánh cũ và mới trước BA 6
 - [ ] Màn kết có hình cho mọi buổi (quy luật đỉnh và kết)
 - [ ] Hai màn cạnh nhau để so trước và sau trên bàn thử
@@ -80,6 +83,7 @@ Xong khi: sau BA 6 và Frontend 11, thien không còn chấm bảng dán là "ch
 
 ### 5. Gom luật vào mốc 01/12
 Xong khi: thien duyệt các dòng luật ở mốc 01/12, và vòng thử gu thứ hai chạy khoảng 02/12 theo luật mới.
+Ước: mốc
 - [ ] `artifacts/README.md`: thêm hai mẫu mới, luật "một chi tiết thử mỗi trang" (có nút Thích, Không)
 - [ ] Vòng thử gu hai tuần một lần; dòng "Đang thử" trong thienui có ngày xem lại sau 4 tuần
 - [ ] `profile/VOICE.md`: giải thích luồng hay báo việc nhiều bước trong chat thì vẽ sơ đồ ngay trong chat
