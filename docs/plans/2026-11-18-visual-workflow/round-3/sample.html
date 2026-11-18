@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi" data-variant="__VARIANT__">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vòng gu 3 · __VARIANT__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>/*KIT_CSS*/</style>
+<style>
+/* Trang mẫu của vòng gu 3: cùng một trang học thuật, ba cách mang style slide MLN122 vào kit. Bố cục chung ở đây; màu và chất liệu ở variants.css. */
+main { max-width: 880px; margin: 0 auto; padding: 28px 18px 56px; display: grid; gap: 22px; }
+.eyebrow { font: 600 12px/1.3 var(--font); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 800 clamp(28px, 5vw, 40px)/1.12 var(--font); letter-spacing: -.02em; }
+h1 em, p em { font-style: normal; }
+em.k1 { color: var(--ink-1); } em.k2 { color: var(--ink-2); }
+.lead { font-size: 17px; line-height: 1.55; color: var(--ink); max-width: 62ch; }
+.fig { padding: 16px; display: grid; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+.fig-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 12px; }
+.fig-head h2 { font-size: 16px; }
+.fig-head small { font-size: 12.5px; color: var(--muted); }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+.dg-k1 { border-color: var(--ink-1) !important; } .dg-k2 { border-color: var(--ink-2) !important; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { font: 12px var(--font); fill: var(--muted); }
+.chart .val { fill: var(--ink); font-weight: 600; }
+.chart .axis { stroke: var(--line-strong); stroke-width: 1; }
+.s1 { fill: var(--ink-1); } .s2 { fill: var(--ink-2); } .s1-bg { background: var(--ink-1); } .s2-bg { background: var(--ink-2); }
+.view { padding: 14px 16px; border-radius: var(--r); border: 1px solid var(--line); background: var(--soft); display: grid; gap: 6px; }
+.view p { font-size: 15.5px; line-height: 1.55; }
+.big { font: 700 34px/1.1 var(--font); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.src { text-decoration: underline dotted var(--muted); text-underline-offset: 4px; }
+.foot { font-size: 12.5px; color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+</style>
+<style>/*VARIANT_CSS*/</style>
+</head>
+<body>
+<main>
+  <header style="display:grid; gap:10px">
+    <p class="eyebrow">Frontend · Buổi 11 · Màu nhấn</p>
+    <h1>Màu <em class="k1">công cụ</em> nói đây là gì, màu <em class="k2">người học</em> nói nhìn vào đâu</h1>
+    <p class="lead">Một trang học dùng hai mực có nghĩa cố định: <em class="k1">xanh</em> cho khái niệm, công cụ, dữ liệu; <em class="k2">cam</em> cho người học, điểm cần làm. Giữ nghĩa đó trên mọi hình thì mắt tự biết đọc.</p>
+  </header>
+
+  <section class="fig paper">
+    <div class="fig-head"><h2>Hình 1 · Một chỗ nhấn đi qua những đâu</h2><small>bấm Bắt đầu để đi từng bước</small></div>
+    <div data-diagram id="d1"><script type="application/json">
+{ "title": "Một chỗ nhấn đi qua những đâu",
+  "nodes": [
+    { "id": "s", "label": "Màn hình", "kind": "k1", "note": "Nhiều thứ cùng tranh mắt." },
+    { "id": "a", "label": "Một màu nhấn", "kind": "k1", "note": "Chỉ tô việc chính của màn." },
+    { "id": "e", "label": "Mắt người học", "kind": "k2", "note": "Tìm được chỗ cần nhìn trước." },
+    { "id": "d", "label": "Làm đúng việc", "kind": "k2", "note": "Bấm nút chính, không lạc." } ],
+  "edges": [["s", "a"], ["a", "e"], ["e", "d"]],
+  "steps": ["s", "a", "e", "d"] }
+</script></div>
+  </section>
+
+  <div class="two">
+    <section class="fig paper chart">
+      <div class="fig-head"><h2>Hình 2 · Thời gian tìm nút chính</h2><small>giây, số minh hoạ</small></div>
+      <div class="legend"><span><i class="s1-bg"></i>Không có chỗ nhấn</span><span><i class="s2-bg"></i>Một chỗ nhấn</span></div>
+      <svg viewBox="0 0 300 150" role="img" aria-label="Biểu đồ cột minh hoạ: màn đơn giản 3,1 giây không nhấn và 1,4 giây có nhấn; màn nhiều dữ liệu 5,2 và 2,0 giây">
+        <line class="axis" x1="10" y1="120" x2="290" y2="120"/>
+        <g><title>Màn đơn giản, không nhấn: 3,1 giây</title><path class="s1" d="M40 120V64.2a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4V120z"/></g>
+        <g><title>Màn đơn giản, có nhấn: 1,4 giây</title><path class="s2" d="M78 120V94.8a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4V120z"/></g>
+        <g><title>Màn nhiều dữ liệu, không nhấn: 5,2 giây</title><path class="s1" d="M180 120V26.4a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4V120z"/></g>
+        <g><title>Màn nhiều dữ liệu, có nhấn: 2,0 giây</title><path class="s2" d="M218 120V84a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4V120z"/></g>
+        <text class="val" x="58" y="54" text-anchor="middle">3,1</text><text class="val" x="96" y="85" text-anchor="middle">1,4</text>
+        <text class="val" x="198" y="16" text-anchor="middle">5,2</text><text class="val" x="236" y="74" text-anchor="middle">2,0</text>
+        <text x="77" y="138" text-anchor="middle">Màn đơn giản</text><text x="217" y="138" text-anchor="middle">Màn nhiều dữ liệu</text>
+      </svg>
+    </section>
+    <section class="fig">
+      <div class="fig-head"><h2>Điều cần nhớ</h2></div>
+      <p class="big"><span class="src" title="Số minh hoạ cho trang mẫu">1 chỗ</span></p>
+      <p class="foot">mỗi màn chỉ một vùng dùng màu nhấn đặc; phần còn lại để viền hay chữ.</p>
+      <div class="view hatch"><p class="eyebrow ink2">Quan điểm của mình</p><p>Màu đẹp lúc đầu chưa đủ; màu đúng nghĩa thì nhìn lâu vẫn dễ chịu.</p></div>
+      <div class="actions"><button class="btn" type="button">Xem lại</button><button class="btn accent" type="button">Làm bài tập</button><span class="chip accent">Mới</span><span class="chip">Bài 11</span></div>
+    </section>
+  </div>
+  <p class="foot">Trang mẫu của vòng thử gu 3. Số trong hình 2 là số minh hoạ, không phải số liệu thật.</p>
+</main>
+<script>/*KIT_JS*/</script>
+<script>/*DAGRE_JS*/</script>
+<script>/*DIAGRAM_JS*/</script>
+</body>
+</html>

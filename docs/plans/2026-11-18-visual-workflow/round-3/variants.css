@@ -1,0 +1,46 @@
+/* Vòng thử gu 3 (2026-11-19): mang style slide MLN122 ("Bản vẽ kỹ thuật động": giấy kẻ ô, mực xanh cobalt, nhấn cam,
+   khung vuông nét mực, nhãn mono, gạch chéo cho quan điểm) vào kit. Ba mức, cùng một trang mẫu (sample.html).
+   Mực hình (--ink-1 xanh, --ink-2 cam, --ink-3 tím) đã qua bộ kiểm màu biểu đồ: sáng #0b6fa0/#c2480f/#7a5bc7 và
+   tối #3a9fd0/#e0703a/#8a74e0 đạt cả sáu mục (mù màu đỏ, lục: ΔE ≥ 19); bản C dùng cobalt #1f4fd8 / tối #4a8df0. */
+
+/* ── Chung: mực hình của A và B (giữ giao diện giấy trắng, nút xanh petrol) ── */
+:root { --ink-1: #0b6fa0; --ink-2: #c2480f; --ink-3: #7a5bc7; --grid: color-mix(in srgb, var(--ink-1) 7%, transparent); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ink-1: #3a9fd0; --ink-2: #e0703a; --ink-3: #8a74e0; --grid: color-mix(in srgb, var(--ink-1) 9%, transparent); } }
+
+/* ── A · Thêm mực cam: chỉ thêm mực thứ hai cho chữ khoá, sơ đồ, biểu đồ. Khung, bo góc, nền như kit hiện tại. ── */
+[data-variant="a"] .hatch { border-left: 3px solid var(--ink-2); border-radius: 0 var(--r) var(--r) 0; background: var(--card); }
+[data-variant="a"] .eyebrow.ink2 { color: var(--ink-2); }
+
+/* ── B · Giấy kỹ thuật: A + chất liệu bản vẽ cho riêng vùng hình: giấy kẻ ô, khung vuông nét mực, nhãn mono cam có gạch
+   đầu, quan điểm gạch chéo, số có nguồn gạch chấm. Nền trang, nút, thẻ thường giữ như kit. ── */
+[data-variant="b"] .eyebrow { font: 600 12px/1.3 var(--mono); letter-spacing: .08em; color: var(--ink-2); display: flex; align-items: center; gap: 10px; }
+[data-variant="b"] header > .eyebrow::before { content: ""; width: 28px; height: 1.5px; background: currentColor; flex: none; }
+[data-variant="b"] .fig { border-radius: 0; border: 1.5px solid color-mix(in srgb, var(--ink) 75%, transparent); box-shadow: none; }
+[data-variant="b"] .fig.paper { background-color: var(--card);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; }
+[data-variant="b"] .fig-head h2 { font: 600 12.5px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+[data-variant="b"] .dg-node { border-radius: 0; border-width: 1.5px; }
+[data-variant="b"] .view { border-radius: 0; border: 1.5px solid color-mix(in srgb, var(--ink) 75%, transparent);
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--ink-1) 9%, transparent) 0 1px, transparent 1px 9px), var(--card); }
+[data-variant="b"] .view .eyebrow { color: var(--ink-1); }
+[data-variant="b"] .big { font-family: var(--mono); font-weight: 600; letter-spacing: -.02em; }
+
+/* ── C · Bản vẽ MLN: thay hẳn. Cả trang là giấy kẻ ô, mực xanh cobalt thay xanh petrol (cả nút), góc vuông mọi nơi,
+   tiêu đề Bricolage Grotesque 800, mọi nhãn mono. Gần nhất với slide MLN122. ── */
+:root[data-variant="c"] { --bg: #f2f4f0; --card: #fbfcfa; --soft: #e8ebe5; --line: #d3d9d0; --line-strong: #bec6bc; --ink: #141e2b; --muted: #55606c;
+  --accent: #1f4fd8; --accent-soft: #e4eafb; --accent-ink: #1a3fae; --accent-fill: #1f4fd8; --on-accent: #fff; --primary-fill: #141e2b;
+  --ink-1: #1f4fd8; --ink-2: #c2480f; --ink-3: #7a5bc7; --grid: rgb(31 79 216 / .07); --r: 0px; --r-lg: 0px; }
+@media (prefers-color-scheme: dark) { :root[data-variant="c"]:not([data-theme="light"]) { --bg: #121821; --card: #18202b; --soft: #212b38; --line: #2c3746;
+  --line-strong: #3a4757; --ink: #eef1f5; --muted: #9ba7b5; --accent: #4a8df0; --accent-soft: #17284a; --accent-ink: #9cc0ff; --accent-fill: #2f62d9;
+  --on-accent: #fff; --primary-fill: #c9d1dc; --ink-1: #4a8df0; --ink-2: #e0703a; --ink-3: #8a74e0; --grid: rgb(74 141 240 / .08); } }
+[data-variant="c"] body { background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 32px 32px; }
+[data-variant="c"] h1 { font-family: "Bricolage Grotesque", var(--font); font-weight: 800; letter-spacing: -.015em; }
+[data-variant="c"] .eyebrow, [data-variant="c"] .fig-head h2 { font: 600 12.5px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+[data-variant="c"] header > .eyebrow { display: flex; align-items: center; gap: 10px; }
+[data-variant="c"] header > .eyebrow::before { content: ""; width: 28px; height: 1.5px; background: currentColor; }
+[data-variant="c"] .fig, [data-variant="c"] .view, [data-variant="c"] .dg-node { border: 1.5px solid var(--ink); box-shadow: none; }
+[data-variant="c"] .fig { background: transparent; }
+[data-variant="c"] .view { background: repeating-linear-gradient(135deg, var(--grid) 0 1px, transparent 1px 9px); }
+[data-variant="c"] .view .eyebrow { color: var(--ink-1); }
+[data-variant="c"] .big { font-family: var(--mono); font-weight: 600; }
+[data-variant="c"] .btn { box-shadow: none; }

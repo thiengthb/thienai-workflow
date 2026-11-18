@@ -1,0 +1,125 @@
+{
+  "id": "visual-workflow-taste-r3",
+  "title": "Vòng thử gu 3 · style slide MLN122",
+  "question": "Mang style slide MLN122 vào trang học tới mức nào?",
+  "context": "Slide MLN122 dùng giấy kẻ ô, hai mực có nghĩa cố định (xanh cobalt cho công nghệ, dữ liệu; cam cho con người, năng lực), khung vuông nét mực, nhãn chữ máy (mono) màu cam, gạch chéo cho quan điểm. Ba bản dưới cùng một trang mẫu học thuật, từ giữ giao diện giấy trắng và xanh petrol bạn vừa chọn (A, B) tới thay hẳn bằng style slide (C). Mở trang mẫu thật để bấm đổi A, B, C và Sáng, Tối trên điện thoại, rồi chọn một bản và viết một câu vì sao.",
+  "options": [
+    {
+      "key": "a",
+      "name": "A · Thêm mực cam",
+      "short": "Thêm mực cam",
+      "image": "shots/a.png",
+      "scale": 2,
+      "summary": "Giữ nguyên kit. Chỉ thêm mực thứ hai: xanh cho khái niệm, công cụ, dữ liệu; cam cho người học, điểm cần làm. Dùng ở chữ khoá trong tiêu đề, viền khối sơ đồ, cột biểu đồ.",
+      "pros": [
+        "Đổi ít nhất, không đụng nút, nền, bo góc",
+        "Hai mực có nghĩa cố định giúp đọc hình nhanh hơn"
+      ],
+      "cons": [
+        "Mất phần đẹp nhất của slide: giấy kẻ ô, khung nét mực, nhãn mono",
+        "Hình vẫn trông như thẻ giao diện, chưa có chất học thuật"
+      ],
+      "links": [
+        {
+          "text": "Trang mẫu thật · bấm A, B, C và Sáng, Tối ở đầu trang (mở ở nick tnt697)",
+          "url": "https://claude.ai/artifact/9tkpy5E3vqvs5AXqnWJor2",
+          "note": "Bấm Bắt đầu ở hình 1 để xem sơ đồ đi từng bước với từng bản."
+        }
+      ]
+    },
+    {
+      "key": "b",
+      "name": "B · Giấy kỹ thuật cho vùng hình",
+      "short": "Giấy kỹ thuật",
+      "image": "shots/b.png",
+      "scale": 2,
+      "summary": "A cộng chất liệu bản vẽ, nhưng chỉ ở vùng hình: giấy kẻ ô mờ, khung vuông nét mực, nhãn hình bằng chữ mono, quan điểm gạch chéo, số có nguồn gạch chấm. Nền trang, nút, thẻ thường giữ giấy trắng và xanh petrol.",
+      "pros": [
+        "Lấy đúng phần làm slide đẹp, đặt vào chỗ cần (hình, biểu đồ, sơ đồ)",
+        "Giao diện vẫn đồng bộ với Claude như lý do bạn chọn giấy trắng",
+        "Hình và giao diện tách bạch: nhìn là biết đâu là nội dung, đâu là nút"
+      ],
+      "cons": [
+        "Hai kiểu khung trên một trang: thẻ bo góc và hình góc vuông",
+        "Kẻ ô cần tiết chế, dày quá thì rối trên điện thoại"
+      ],
+      "links": [
+        {
+          "text": "Trang mẫu thật · bấm A, B, C và Sáng, Tối ở đầu trang (mở ở nick tnt697)",
+          "url": "https://claude.ai/artifact/9tkpy5E3vqvs5AXqnWJor2",
+          "note": "Bấm Bắt đầu ở hình 1 để xem sơ đồ đi từng bước với từng bản."
+        }
+      ]
+    },
+    {
+      "key": "c",
+      "name": "C · Bản vẽ MLN",
+      "short": "Bản vẽ MLN",
+      "image": "shots/c.png",
+      "scale": 2,
+      "summary": "Thay hẳn bằng style slide: cả trang là giấy kẻ ô, xanh cobalt thay xanh petrol (cả nút), góc vuông mọi nơi, tiêu đề Bricolage Grotesque, mọi nhãn chữ mono cam.",
+      "pros": [
+        "Giống slide MLN nhất, cá tính mạnh",
+        "Cobalt và cam tương phản rõ nhất trong ba bản"
+      ],
+      "cons": [
+        "Bỏ giấy trắng và xanh petrol bạn vừa chọn, và bo 8px của thienui",
+        "Kẻ ô cả trang hợp màn chiếu, đọc lâu trên điện thoại dễ rối",
+        "Nút cobalt đặc khá chói, dễ lặp lại chuyện \"nút sáng hẳn ra\""
+      ],
+      "links": [
+        {
+          "text": "Trang mẫu thật · bấm A, B, C và Sáng, Tối ở đầu trang (mở ở nick tnt697)",
+          "url": "https://claude.ai/artifact/9tkpy5E3vqvs5AXqnWJor2",
+          "note": "Bấm Bắt đầu ở hình 1 để xem sơ đồ đi từng bước với từng bản."
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "name": "Có chất học thuật như slide",
+      "values": {
+        "a": "vừa",
+        "b": "tốt",
+        "c": "tốt"
+      }
+    },
+    {
+      "name": "Giữ giấy trắng, xanh petrol vừa chọn",
+      "values": {
+        "a": "tốt",
+        "b": "tốt",
+        "c": "kém"
+      }
+    },
+    {
+      "name": "Đọc lâu trên điện thoại",
+      "values": {
+        "a": "tốt",
+        "b": "tốt",
+        "c": "vừa"
+      }
+    },
+    {
+      "name": "Hình đọc được khi mù màu (đã chạy bộ kiểm)",
+      "values": {
+        "a": "tốt",
+        "b": "tốt",
+        "c": "tốt"
+      }
+    },
+    {
+      "name": "Xa gu hôm nay bao nhiêu",
+      "values": {
+        "a": "quen",
+        "b": "một nấc",
+        "c": "xa"
+      }
+    }
+  ],
+  "recommend": {
+    "key": "b",
+    "why": "B lấy đúng ba thứ làm slide MLN đẹp (hai mực có nghĩa, giấy kẻ ô, khung nét mực) nhưng chỉ đặt vào vùng hình, nơi chúng giúp đọc; giao diện vẫn giấy trắng, xanh petrol như lý do bạn chọn tối qua. C đẹp trên màn chiếu nhưng kẻ ô cả trang và nút cobalt đặc dễ mỏi mắt khi đọc lâu trên điện thoại."
+  }
+}
