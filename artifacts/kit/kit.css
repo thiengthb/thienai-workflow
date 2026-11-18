@@ -165,3 +165,31 @@ html:not(.kit-ask-on) .kit-ask { display: none !important; }
 .extra { padding: 14px; display: grid; gap: 10px; }
 .extra-q { display: grid; gap: 8px; }
 .extra-q:empty { display: none; }
+
+/* Sơ đồ (kit/diagram.js): khối trơn kiểu draw.io, viền mảnh, mũi tên, không tô màu, không bóng (gu 2026-11-17).
+   Khối đang tới bước thì viền nhấn và mở chú thích ngay dưới tên; khung xếp lại nên không khối nào đè lên chú thích. */
+.dg { display: grid; gap: 12px; min-width: 0; }
+.dg-scroll { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+.dg-stage { position: relative; margin: 0 auto; }
+.dg-wires { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.dg-wire { fill: none; stroke: var(--muted); stroke-width: 1.25; }
+.dg-wire.on { stroke: var(--accent); stroke-width: 2; }
+.dg-head { fill: var(--muted); }
+.dg-head-on { fill: var(--accent); }
+.dg-node { position: absolute; display: grid; gap: 6px; align-content: start; text-align: center; padding: 10px 12px; margin: 0;
+  font: 500 14px/1.35 var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--ink); border-radius: var(--r);
+  transition: border-color .15s, box-shadow .15s; }
+button.dg-node { cursor: pointer; }
+button.dg-node:hover { border-color: var(--accent); }
+.dg-node.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.dg-num { position: absolute; top: 4px; left: 6px; font: 600 11px/1 var(--font); color: var(--muted); }
+.dg-node.on .dg-num { color: var(--accent-ink); }
+.dg-label { overflow-wrap: anywhere; }
+.dg-note { display: block; padding-top: 6px; border-top: 1px solid var(--line); font-size: 13px; font-weight: 400; line-height: 1.45; color: var(--ink);
+  text-align: left; overflow-wrap: anywhere; animation: dg-in .2s ease-out; }
+.dg-note[hidden] { display: none; }
+.dg-tag { position: absolute; padding: 0 4px; font-size: 12px; line-height: 1.4; color: var(--muted); background: var(--card); white-space: nowrap; }
+.dg-bar { display: flex; align-items: center; gap: 8px; }
+.dg-count { flex: 1; min-width: 0; font-size: 13.5px; color: var(--muted); text-align: center; }
+@keyframes dg-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .dg-node, .dg-note { transition: none; animation: none; } }

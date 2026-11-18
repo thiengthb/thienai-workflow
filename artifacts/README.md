@@ -36,7 +36,9 @@ Chi tiết từng mẫu ở README trong thư mục của mẫu.
 
 **Một bộ màu.** Mọi màu của khung trang là tên trong `kit/kit.css` (`--bg`, `--accent`, `--accent-fill`, `--code-bg`...). CSS dùng chung (kit, lesson, it, war) và khối `<style>` của các mẫu ôn, chọn, so sánh không được viết thẳng mã màu: `kit/check-tokens.mjs` báo chỗ viết thẳng và chỗ dùng tên chưa có, CI chạy ở mọi PR. Màu riêng của từng bài (màn app mô phỏng, màu từng người trên bảng dán, địa hình sa bàn) là nội dung bài nên không tính.
 
-**Trang mẫu thành phần.** `kit/gallery.html` gom mọi mảnh dùng chung (nút, nhãn, câu hỏi, hỏi Claude, thông báo, núm vặn, bảng dán) vào một trang, có nút đổi sáng, tối. Sửa lõi xong thì dựng `node artifacts/kit/make-gallery.mjs --url https://claude.ai/artifact/HuyQj149mQAYpicvQrY7Ne` rồi đăng đè để nhìn mọi thứ một lượt; CI cũng mở trang này như mọi trang khác.
+**Sơ đồ.** `kit/diagram.js` vẽ sơ đồ khối trơn, viền mảnh, mũi tên (`Diagram.mount(host, spec)`, hay thẻ có `data-diagram`; cách dùng ở đầu file), bấm từng bước được. Xếp chỗ bằng dagre gắn sẵn ở `kit/vendor/` (MIT); trang không gắn dagre thì xếp theo tầng. CSS ở mục Sơ đồ của `kit.css`.
+
+**Trang mẫu thành phần.** `kit/gallery.html` gom mọi mảnh dùng chung (nút, nhãn, câu hỏi, hỏi Claude, thông báo, núm vặn, bảng dán, sơ đồ) vào một trang, có nút đổi sáng, tối. Sửa lõi xong thì dựng `node artifacts/kit/make-gallery.mjs --url https://claude.ai/artifact/HuyQj149mQAYpicvQrY7Ne` rồi đăng đè để nhìn mọi thứ một lượt (link đó ở nick khác; bản ở nick tnt697: https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst); CI cũng mở trang này như mọi trang khác.
 
 **Bộ màu trên claude.ai.** Màu, chữ, khoảng cách, bo góc của thienui có trang Design System riêng (https://claude.ai/artifact/2kM7som4ok6kmh7QaCSXZJ, nguồn và cách đăng lại ở [`design-system/`](design-system/README.md)). Claude trên claude.ai dựng slide hay bản thiết kế cho thien thì chọn bộ này; trang dựng từ mẫu ở đây vẫn dùng `kit/kit.css`.
 
