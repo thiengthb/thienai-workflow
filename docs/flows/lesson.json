@@ -1,0 +1,72 @@
+{
+  "title": "Một buổi học đi qua những đâu",
+  "intro": "Từ lúc bạn nhắn \"học\" tới lúc bài thành bài đóng băng: 7 bước, một vòng lặp kiểm cho đủ, và một vòng thẻ ôn nối buổi này với buổi sau.",
+  "updated": "2026-11-19",
+  "sources": ["learning/README.md", "profile/MAP.md", "artifacts/lesson/README.md"],
+  "page": "https://claude.ai/artifact/S9B86U6MGpnkYTa8enDtVM",
+  "nodes": [
+    { "id": "ask", "label": "Bạn nhắn \"học\"", "kind": "k2" },
+    { "id": "prep", "label": "Gói buổi", "kind": "k1" },
+    { "id": "make", "label": "Dựng trang học", "kind": "k1" },
+    { "id": "learn", "label": "Bạn học trên trang", "kind": "k2" },
+    { "id": "after", "label": "Ghi sau buổi", "kind": "k1" },
+    { "id": "check", "label": "Kiểm đủ chưa", "kind": "k1" },
+    { "id": "pr", "label": "PR, bạn merge", "kind": "k2" },
+    { "id": "cards", "label": "Thẻ ôn", "note": "`learning/cards.md`: thẻ nào đến hạn thì vào phần ôn đầu buổi sau; ôn ở trang ôn thẻ lúc nào cũng được." }
+  ],
+  "edges": [
+    ["ask", "prep"],
+    ["prep", "make"],
+    ["make", "learn"],
+    ["learn", "after", "kết quả buổi"],
+    ["after", "check"],
+    ["check", "after", "thiếu"],
+    ["check", "pr", "toàn ✓"],
+    ["after", "cards", "thẻ mới"],
+    ["cards", "prep", "3 thẻ đến hạn"]
+  ],
+  "steps": [
+    {
+      "id": "ask",
+      "note": "Bạn nhắn \"học\" (hay \"học tiếp\", \"dạy mình\"). Không nói môn thì Claude lấy buổi kế tiếp trong bảng \"Trạng thái\".",
+      "more": "Muốn học môn khác thì nói tên môn; Claude chạy lệnh với môn đó.",
+      "chips": ["AGENTS.md", "learning/README.md"]
+    },
+    {
+      "id": "prep",
+      "note": "Claude chạy `prepare-lesson.mjs` và đọc gói buổi nó in: buổi kế tiếp, khung 7 bước, hồ sơ môn, 3 thẻ đến hạn kèm đáp án.",
+      "more": "Gói thay cho việc mở cả `learning/README.md`, file môn và `cards.md`, nên đọc ít mà vẫn đủ. Chỗ nào lệnh không chắc thì gói ghi \"chưa kiểm\" để Claude tự mở file.",
+      "chips": ["artifacts/lesson/prepare-lesson.mjs", "profile/TUTOR.md"]
+    },
+    {
+      "id": "make",
+      "note": "Claude viết bài vào một trang theo khung 7 bước, `make-lesson.mjs` gắn kit và tự kiểm, rồi Claude đăng thành artifact.",
+      "more": "Câu trả lời đầu tiên bạn nhận là trang đã dựng xong kèm cách mở, không phải dạy từng câu trong chat.",
+      "chips": ["artifacts/lesson/make-lesson.mjs", "learning/<môn>/pages/"]
+    },
+    {
+      "id": "learn",
+      "note": "Bạn làm 7 bước trên trang: ôn trộn, nhớ lại, thử trước, hiểu sau, câu hỏi nhanh, tự nói lại, góp ý.",
+      "more": "Bấm \"Xong buổi học\" thì kết quả lưu vào db của trang (`sessions/<id>-<thời điểm>`) và gửi cho Claude. Mở lại trang thì phần ôn tự ẩn.",
+      "chips": ["sessions/ trong db của trang"]
+    },
+    {
+      "id": "after",
+      "note": "Claude đọc kết quả trong db, chạy `after-lesson.mjs --write`: lệnh ghi phần máy làm được, Claude viết phần còn lại từ nháp.",
+      "more": "Máy ghi: chỗ còn vướng, dòng nhật ký nháp, dòng usage, kết quả 3 thẻ ôn. Claude viết: file bài, 2–3 thẻ mới kèm câu trắc nghiệm, bảng \"Trạng thái\", roadmap, góp ý của bạn vào đúng file đích.",
+      "chips": ["artifacts/lesson/after-lesson.mjs", "learning/<môn>.md", "learning/cards.md"]
+    },
+    {
+      "id": "check",
+      "note": "`after-lesson.mjs --check <lesson-id>` phải ra toàn ✓. Thiếu chỗ nào thì quay lại ghi tiếp.",
+      "more": "CI còn chạy `--check-all` ở mọi PR, nên bài nào cũng có nhật ký, thẻ và roadmap.",
+      "chips": ["after-lesson.mjs --check"]
+    },
+    {
+      "id": "pr",
+      "note": "Claude mở PR, bạn xem và merge. Từ đó bài là bài đóng băng: không dựng lại với kit mới.",
+      "more": "Thẻ mới vừa ghi sẽ đến hạn ở các buổi sau, nên vòng thẻ ôn nối buổi này với gói buổi lần tới.",
+      "chips": ["profile/DELEGATION.md"]
+    }
+  ]
+}

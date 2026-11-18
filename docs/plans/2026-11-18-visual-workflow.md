@@ -5,13 +5,13 @@ Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien: "ok, duyệt theo c�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 0, 1 xong; 2 đạt "Xong khi" (thien trả lời 3 câu hỏi bằng nút trên trang 19/11), còn chờ đăng lại trang tổng quan; tiếp theo checkpoint 3 (mẫu luồng chạy, theo 3 đề xuất thien chọn). Lớp sơ đồ: `artifacts/kit/diagram.js` và mục Sơ đồ trong trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (nick tnt697). Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
+- Đang ở: checkpoint 0, 1 xong; 2 đạt "Xong khi" (thien trả lời 3 câu hỏi bằng nút trên trang 19/11), còn chờ đăng lại trang tổng quan; 3: mẫu `artifacts/flow/` đã dựng, trang luồng "một buổi học đi qua những đâu" đã đăng https://claude.ai/artifact/S9B86U6MGpnkYTa8enDtVM (nick tnt697), chờ thien tự kể lại ở ô cuối trang. Lớp sơ đồ: `artifacts/kit/diagram.js` và mục Sơ đồ trong trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (nick tnt697). Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
 - Vòng gu 2 (bảng màu) chạy sớm theo lời thien 18/11: trang chọn https://claude.ai/artifact/Ci6FBx4ThzEEh4SYZESph7 (nick tnt697), nguồn ở `round-2/`. thien chọn C trên trang, rồi nhắn "à tôi muốn giấy trắng với xanh petrol": kit dùng nền của A với màu nhấn của C (đã vào `kit.css`). Cùng đợt: nút mới, icon Lucide, chuyển động, thành phần mới, trang nhẹ (`kit/pack.mjs`). PR #126 và #127 đã merge (19/11, thien nhắn "merge").
 - Vòng gu 3 (19/11, thien hỏi mang style slide MLN122 vào trang học): trang chọn https://claude.ai/artifact/RMSfapmLBg7FvoQ5PFDgad, trang mẫu bấm A/B/C https://claude.ai/artifact/9tkpy5E3vqvs5AXqnWJor2 (cả hai nick tnt697); nguồn ở `round-3/` (PR #131). thien chọn "A · Thêm mực cam" (01:11, đề xuất là B): không kẻ ô, giữ bo góc, giấy trắng; vì sao đã chép nguyên văn vào hàng chờ gu. Mực hình đã vào kit ở PR #131.
 - Checkpoint 1 xong (19/11): mục Sơ đồ trong trang mẫu chỉ có một luồng, chính là luồng 5 bước "một buổi học đi qua những đâu"; thien nhắn "mình đã bấm sơ đồ trên điện thoại và nó không bị lỗi UI nào". Câu vì sao của bảng màu đã vào hàng chờ gu.
 - Còn thiếu: đăng lại trang tổng quan https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n từ nick đang giữ nó (`node templates/publish-progress.mjs overview`), để link "Mở trang kế hoạch" (PR #137) lên trang; rồi checkpoint 3 tới 5.
 - thien đã chọn "B · Một nấc" (2026-11-18, giống đề xuất), vì sao: "mình cảm thấy hiện tại 3 bản thì bản một nấc, không đi quá xa, có phần quen thuộc cũng như mới lạ nho nhỏ, nhưng phần C thì quá mới làm mình chưa thích ứng". Checkpoint 0 xong.
-- thien cần làm: không có. Muốn link "Mở trang kế hoạch" mở được từ nick khác thì mời các nick vào trang kế hoạch (Share, quyền xem).
+- thien cần làm: mở trang luồng https://claude.ai/artifact/S9B86U6MGpnkYTa8enDtVM, cuộn hết các bước, rồi kể lại luồng ở ô cuối trang và bấm "Gửi cho Claude" (đó là phép kiểm "Xong khi" của checkpoint 3); bấm Thích hay Không cho chi tiết thử. Muốn link "Mở trang kế hoạch" mở được từ nick khác thì mời các nick vào trang kế hoạch (Share, quyền xem).
 
 ## Mục tiêu
 Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu của thien đi lên từng nấc, nhất quán mà không đứng yên (lời thien 2026-11-18: gu "phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn").
@@ -68,8 +68,8 @@ Xong khi: kế hoạch kế tiếp được gửi thien duyệt bằng trang sin
 ### 3. Mẫu luồng chạy
 Xong khi: thien xem luồng "một buổi học đi qua những đâu" và tự kể lại bằng lời mà không mở `profile/MAP.md`.
 Ước: 1–2 phiên
-- [ ] Mẫu mới ở thư mục artifacts/flow: một sơ đồ, đi từng bước; trên điện thoại sơ đồ dính trên, chữ cuộn dưới
-- [ ] Dùng cho: quy trình vừa đổi gì, kiến trúc sakubun, luồng nghiệp vụ trong bài BA
+- [x] Mẫu mới ở thư mục artifacts/flow: một sơ đồ, đi từng bước; trên điện thoại sơ đồ dính trên, chữ cuộn dưới (2026-11-19, `make-flow.mjs`, file luồng JSON đúng định dạng `Diagram.mount`, ô tự kể lại lưu ở `flows/<id>`; từ 1024px sơ đồ dính bên phải; check-pages 0 lỗi; luồng đầu tiên `docs/flows/lesson.json`)
+- [ ] Dùng cho: quy trình vừa đổi gì, kiến trúc sakubun, luồng nghiệp vụ trong bài BA (đã có: một buổi học; còn kiến trúc sakubun, luồng nghiệp vụ BA)
 - [ ] Sau mẫu này là 8/8 mẫu; mẫu sau phải thay mẫu cũ
 
 ### 4. Đánh bóng mẫu học (ghép vào buổi học)
@@ -126,10 +126,12 @@ Cho checkpoint 3 (mẫu luồng chạy). Nguyên văn câu trả lời gửi t�
 | 2026-11-19 | Thêm bước đóng gói trang (`artifacts/kit/pack.mjs`) vào mọi lệnh dựng trang; trau chuốt tab, gập mở, nút chỉ có icon (`.btn.icon`) | thien: "trau chuốt component và tối ưu để không bị nặng khi bạn generate ra tài liệu"; phần kit của trang học từ 102 KB còn 74 KB |
 | 2026-11-19 | Trang kế hoạch: mục lục thành cột bên trái ở màn rộng (từ 1160px); bản đồ ga theo ngày không dính nữa, cuộn qua thì hiện bản gọn (chấm và tên ga đang đọc) cách mục lục 8px; trên điện thoại thanh mục lục tự ẩn khi cuộn xuống, hiện khi cuộn lên (thien chọn cách a, 02:30) | thien bấm Thích chi tiết thử bản đồ ngày, ghi chú muốn sidebar, bản đồ dính bớt sát và gọn lại khi lướt (nguyên văn trong hàng chờ gu) |
 | 2026-11-19 | Điều kiện "Xong khi" của checkpoint 2 kiểm bằng ba câu hỏi của checkpoint 3 đặt ngay trên trang của kế hoạch này, thay vì chờ một kế hoạch mới | thien nhắn "bạn thực hiện cho xong nốt đi để tiến tới các phần tiếp theo" (02:48); câu hỏi của ga 3 là thật, trả lời đổi cách làm ga 3 |
+| 2026-11-19 | Trang luồng: màn rộng (từ 1024px) đặt sơ đồ dính bên phải thay vì dải trên; mũi tên của sơ đồ viết lại thành chữ dưới mỗi bước; khối không phải bước nằm ở "Ngoài luồng chính" | Dải trên cùng ở màn rộng phải cuộn ngang mới thấy hết 7 bước; "không bỏ chữ" nên rẽ nhánh và vòng lặp cũng có chữ |
 | 2026-11-18 | Checkpoint 2 thêm một việc: mang các ý review PR #124 vào mẫu kế hoạch | Bản nguồn của vòng gu giữ đúng như thien đã xem, nên sửa ở mẫu mới chứ không sửa bản cũ |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
 |---|---|---|
 | 2026-11-18 | Tooltip chung đặt sẵn chữ ẩn trên mọi `[data-tip]`, đụng tooltip riêng của trang so sánh: chữ ẩn làm trang rộng 414px trên điện thoại (check-pages bắt) | Đổi tên thành `data-hint`, chỉ dựng chữ lúc trỏ hay focus |
+| 2026-11-19 | Trang luồng đặt tên lớp `.steps`, `.step` trùng thanh bước của kit: chữ canh giữa, số đếm tự thêm, điện thoại tràn 535px | Đổi thành `.beats`, `.beat`; tên lớp mới của mẫu nên tìm trong `kit.css` trước |
 | 2026-11-18 | Chú thích đầu `diagram.js` có chữ `</script>`: chép vào trang thì thẻ script đóng sớm, sơ đồ không vẽ, không báo lỗi JavaScript | Bỏ chữ đó khỏi chú thích; file JS gắn vào trang không được chứa `</script>` |

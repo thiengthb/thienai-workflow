@@ -1,0 +1,26 @@
+{
+  "title": "Một PR đi qua những đâu",
+  "intro": "Luồng mẫu cho test và `kit/check-pages.mjs`: có rẽ nhánh, vòng lặp và một khối phụ.",
+  "updated": "2026-11-19",
+  "sources": ["profile/DELEGATION.md"],
+  "nodes": [
+    { "id": "branch", "label": "Tạo nhánh", "kind": "k1" },
+    { "id": "pr", "label": "Mở PR", "kind": "k1" },
+    { "id": "review", "label": "CodeRabbit và CI", "kind": "k1" },
+    { "id": "merge", "label": "Bạn merge", "kind": "k2" },
+    { "id": "rules", "label": "DELEGATION.md", "note": "Bảng việc AI được tự merge; còn lại chờ **thien** bấm." }
+  ],
+  "edges": [
+    ["branch", "pr"],
+    ["pr", "review"],
+    ["review", "pr", "có ý cần sửa"],
+    ["review", "merge", "xanh"],
+    ["rules", "merge", "ai merge"]
+  ],
+  "steps": [
+    { "id": "branch", "note": "Mọi thay đổi đi qua nhánh, tên nhánh viết tiếng Anh.", "chips": ["git checkout -b"] },
+    { "id": "pr", "note": "Mở PR kèm mô tả và dòng nick.", "more": "PR nháp khi còn đang làm." },
+    { "id": "review", "note": "CodeRabbit đọc, CI chạy test. Có ý cần sửa thì sửa rồi đẩy lại." },
+    { "id": "merge", "note": "Bạn merge, hay AI tự merge khi [bảng](https://github.com/thiengthb/thienai-workflow/blob/main/profile/DELEGATION.md) cho phép." }
+  ]
+}
