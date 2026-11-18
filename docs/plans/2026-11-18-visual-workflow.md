@@ -7,9 +7,10 @@ Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick
 ## Đang ở đâu
 - Đang ở: checkpoint 1 dựng xong (18/11): `artifacts/kit/diagram.js` và mục Sơ đồ trong trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (nick tnt697); chờ thien bấm thử trên điện thoại. Checkpoint 0 xong. Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
 - Vòng gu 2 (bảng màu) chạy sớm theo lời thien 18/11: trang chọn https://claude.ai/artifact/Ci6FBx4ThzEEh4SYZESph7 (nick tnt697), nguồn ở `round-2/`. thien chọn C trên trang, rồi nhắn "à tôi muốn giấy trắng với xanh petrol": kit dùng nền của A với màu nhấn của C (đã vào `kit.css`). Cùng đợt: nút mới, icon Lucide, chuyển động, thành phần mới, trang nhẹ (`kit/pack.mjs`). PR #126 và #127 đã merge (19/11, thien nhắn "merge").
-- Còn thiếu: thien bấm thử checkpoint 1 và câu vì sao của bảng màu; checkpoint 2 (tiếp theo) tới 5. Ở ga 2 thử lấy riêng bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử, không lấy nền tối và chữ khổng lồ.
+- Checkpoint 1 xong (19/11): thien bấm mục Sơ đồ trên điện thoại, "không bị lỗi UI nào". Câu vì sao của bảng màu đã vào hàng chờ gu.
+- Còn thiếu: checkpoint 2 (tiếp theo) tới 5. Ở ga 2 thử lấy riêng bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử, không lấy nền tối và chữ khổng lồ.
 - thien đã chọn "B · Một nấc" (2026-11-18, giống đề xuất), vì sao: "mình cảm thấy hiện tại 3 bản thì bản một nấc, không đi quá xa, có phần quen thuộc cũng như mới lạ nho nhỏ, nhưng phần C thì quá mới làm mình chưa thích ứng". Checkpoint 0 xong.
-- thien cần làm: viết một câu vì sao chọn giấy trắng với xanh petrol (ô ghi chú trên trang chọn còn trống); mở trang mẫu thành phần ở trên bằng điện thoại (nick tnt697), kéo tới mục Sơ đồ, bấm Bắt đầu rồi Tiếp qua 5 bước; báo chỗ nào tràn, đè chữ hay khó đọc.
+- thien cần làm: không có, tới khi mẫu kế hoạch (checkpoint 2) có trang để duyệt.
 
 ## Mục tiêu
 Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu của thien đi lên từng nấc, nhất quán mà không đứng yên (lời thien 2026-11-18: gu "phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn").
@@ -47,7 +48,7 @@ Xong khi: thien mở trang chọn trên điện thoại, chọn một trong ba h
 - [x] 3 ví dụ thật cho hướng "thật xa", mỗi cái một câu để ý (The Pudding, Ciechanowski, R2D3; `decide` thêm trường `links` để hiện ví dụ)
 - [x] Ghi kết quả vào hàng chờ gu (2026-11-18, B · Một nấc, câu vì sao chép nguyên văn)
 
-### 1. Lớp sơ đồ dùng chung
+### 1. Lớp sơ đồ dùng chung (xong 2026-11-19: thien bấm trên điện thoại, "không bị lỗi UI nào")
 Xong khi: trang mẫu thành phần (`artifacts/kit/gallery.html`) có mục Sơ đồ; thien mở trên điện thoại, bấm qua một luồng 5 bước, không khối nào tràn hay đè chữ.
 - [x] File mới diagram.js trong kit: khối trơn viền mảnh, mũi tên, không tô màu, không bóng (lời thien 2026-11-17 trong hàng chờ gu) (2026-11-18, `artifacts/kit/diagram.js`, CSS ở mục Sơ đồ của `kit.css`)
 - [x] Xếp chỗ tự động bằng thư viện có sẵn, hạn một phiên; quá hạn thì xếp theo lưới (2026-11-18, dagre 3.1.3 MIT gắn sẵn ở `artifacts/kit/vendor/`, 49 KB; trang không gắn dagre thì xếp theo tầng, vòng lặp đi vòng ngoài; khung hẹp tự chuyển dọc)
