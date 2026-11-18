@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 2, mẫu kế hoạch nhìn được
 
 Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo nhánh mới từ main) · PR: chưa có
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYey4CuVVfhKvuPEUY · Cập nhật: 2026-11-18T17:39Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYey4CuVVfhKvuPEUY · Cập nhật: 2026-11-18T17:56Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -22,15 +22,17 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYey4CuVVfhKvuPEU
 - PR #126 (lớp sơ đồ) và #127 (làm mới kit: nút, icon Lucide, thành phần mới, bảng màu giấy trắng xanh petrol, `kit/pack.mjs`) đã merge 19/11 (thien nhắn "merge"); PR #128 ghi STATUS
 - thien bấm sơ đồ trên điện thoại, không lỗi: checkpoint 1 xong; câu vì sao bảng màu đã vào hàng chờ gu (PR #129, tự merge)
 - thien chê nút Nhấn sáng hẳn ra (00:31): PR #130 bỏ quầng sáng, chế độ tối dùng petrol đậm chữ trắng và --primary-fill; trang mẫu đã đăng đè; chờ thien merge #130
+- Vòng gu 3 (00:42): thien muốn rút style slide MLN122 (repo thiengthb/mln122-nhom9) áp vào sơ đồ, hình, biểu đồ, nền. Đã nghiên cứu, chạy bộ kiểm màu, dựng 3 mức; trang chọn https://claude.ai/artifact/RMSfapmLBg7FvoQ5PFDgad, trang bấm thử https://claude.ai/artifact/9tkpy5E3vqvs5AXqnWJor2; nguồn PR #131 (nháp, chồng #130), kế hoạch PR #132
 
 ## Bước tiếp theo
-1. Checkpoint 2: thư mục mới `artifacts/plan/`, lệnh `make-plan.mjs` đọc file `docs/plans/*.md` theo `templates/PLAN.template.md`, dựng tuyến checkpoint (dùng `Diagram.mount` hay `ol.steps` của kit), phương án, câu hỏi trả lời bằng nút, lưu vào db trang; xem đủ việc trong mục checkpoint 2 của kế hoạch (cả 7 ý review PR #124)
-2. Ở ga 2 thử bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử; không lấy nền tối, chữ khổng lồ
-1. Checkpoint 2: thư mục mới `artifacts/plan/`, lệnh `make-plan.mjs` đọc file `docs/plans/*.md` theo `templates/PLAN.template.md`, dựng tuyến checkpoint (dùng `Diagram.mount` hay `ol.steps` của kit), phương án, câu hỏi trả lời bằng nút, lưu vào db trang; xem đủ việc trong mục checkpoint 2 của kế hoạch (cả 7 ý review PR #124)
-2. Ở ga 2 thử bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử; không lấy nền tối, chữ khổng lồ
+1. Khi thien chọn vòng gu 3: đưa bản được chọn vào kit (token `--ink-1/2/3`, nhãn mono, vùng `.paper` kẻ ô, `.hatch`, `.src`, `em.k1/k2`), thêm mục vào trang mẫu thành phần, ghi câu vì sao vào hàng chờ gu
+2. Checkpoint 2: thư mục mới `artifacts/plan/`, lệnh `make-plan.mjs` đọc file `docs/plans/*.md` theo `templates/PLAN.template.md`, dựng tuyến checkpoint (dùng `Diagram.mount` hay `ol.steps` của kit), phương án, câu hỏi trả lời bằng nút, lưu vào db trang; xem đủ việc trong mục checkpoint 2 của kế hoạch (cả 7 ý review PR #124)
+3. Ở ga 2 thử bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử; không lấy nền tối, chữ khổng lồ
 
 ## Đang chờ thien
-- Xem nút ở https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mở ở nick tnt697) rồi merge PR #130
+- Trang: https://claude.ai/artifact/RMSfapmLBg7FvoQ5PFDgad (mở ở nick tnt697) · Hỏi gì: mang style slide MLN122 tới mức nào (A thêm mực cam, B giấy kỹ thuật cho vùng hình, C bản vẽ MLN); đề xuất ẩn là B. Kết quả ở db trang `decisions/visual-workflow-taste-r3`
+- Merge PR #130 rồi #131 (chồng nhau)
+- Đăng lại: `FONTSOURCE=<@fontsource> node docs/plans/2026-11-18-visual-workflow/round-3/shoot.mjs` rồi `make-decision.mjs round-3/decision.json <out>`; trang bấm thử là `shots/pages/live.html` từ `round-3/build.mjs`
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
