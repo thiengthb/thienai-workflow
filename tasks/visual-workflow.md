@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 2, mẫu kế hoạch nhìn được
 
 Repo: thiengthb/thienai-workflow · Nhánh: plan-page · PR: #135 (nháp)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtptJ · Cập nhật: 2026-11-18T19:03Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtptJ · Cập nhật: 2026-11-18T19:22Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -30,8 +30,10 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtpt
 
 - README `artifacts/plan/README.md`, trang thử đăng https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (nick tnt697, capabilities comments + db), PR #135 nháp, STATUS sửa dòng kế hoạch và "Đang chờ thien"; commit cuối 4f4f491. Bản đồ ngày để `aria-hidden` vì axe báo lỗi khi các ga trong SVG là nút.
 
+- 19/11 02:22: thien gửi từ trang thử: chi tiết thử bản đồ ngày "Thích" + góp ý sidebar, bản đồ dính bớt sát, gọn lại khi lướt (nguyên văn ở hàng chờ gu). Đã sửa (commit 4c7f62b), đăng đè trang thử. Thread comment không trả lời được bằng công cụ (not found), đã trả lời trong chat.
+
 ## Bước tiếp theo
-1. Đọc lựa chọn của thien trên trang thử (db `plans/2026-11-18-visual-workflow`, comment), chép nguyên văn vào hàng chờ gu và PR #135; chờ CodeRabbit rồi sửa
+1. Chờ thien chọn cách cho mobile: (a) thanh trên tự ẩn khi cuộn xuống, hiện khi cuộn lên, hay (b) nút Mục lục nổi góc dưới mở bảng từ dưới lên; chờ CodeRabbit ở PR #135 rồi sửa
 2. Còn của checkpoint 2: trang tổng quan (`templates/progress-page.mjs`) dẫn sang trang kế hoạch; "Xong khi" cần kế hoạch kế tiếp gửi thien duyệt bằng trang này
 
 ## Đang chờ thien
