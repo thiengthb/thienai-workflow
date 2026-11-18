@@ -6,10 +6,10 @@ Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick
 
 ## Đang ở đâu
 - Đang ở: checkpoint 1 dựng xong (18/11): `artifacts/kit/diagram.js` và mục Sơ đồ trong trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (nick tnt697); chờ thien bấm thử trên điện thoại. Checkpoint 0 xong. Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
-- Vòng gu 2 (bảng màu) chạy sớm theo lời thien 18/11: trang chọn https://claude.ai/artifact/Ci6FBx4ThzEEh4SYZESph7 (nick tnt697), nguồn ở `round-2/`. Cùng đợt: nút mới, icon Lucide, chuyển động, thành phần mới (nhánh `kit-refresh`, chồng lên PR #126).
-- Còn thiếu: thien bấm thử checkpoint 1 và chọn bảng màu; checkpoint 2 tới 5. Ở ga 2 thử lấy riêng bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử, không lấy nền tối và chữ khổng lồ.
+- Vòng gu 2 (bảng màu) chạy sớm theo lời thien 18/11: trang chọn https://claude.ai/artifact/Ci6FBx4ThzEEh4SYZESph7 (nick tnt697), nguồn ở `round-2/`. thien chọn C trên trang, rồi nhắn "à tôi muốn giấy trắng với xanh petrol": kit dùng nền của A với màu nhấn của C (đã vào `kit.css`). Cùng đợt: nút mới, icon Lucide, chuyển động, thành phần mới (nhánh `kit-refresh`, chồng lên PR #126).
+- Còn thiếu: thien bấm thử checkpoint 1 và câu vì sao của bảng màu; checkpoint 2 tới 5. Ở ga 2 thử lấy riêng bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử, không lấy nền tối và chữ khổng lồ.
 - thien đã chọn "B · Một nấc" (2026-11-18, giống đề xuất), vì sao: "mình cảm thấy hiện tại 3 bản thì bản một nấc, không đi quá xa, có phần quen thuộc cũng như mới lạ nho nhỏ, nhưng phần C thì quá mới làm mình chưa thích ứng". Checkpoint 0 xong; tiếp theo checkpoint 1 (lớp sơ đồ dùng chung).
-- thien cần làm: chọn một bảng màu ở trang chọn vòng gu 2 và viết một câu vì sao; mở trang mẫu thành phần ở trên bằng điện thoại (nick tnt697), kéo tới mục Sơ đồ, bấm Bắt đầu rồi Tiếp qua 5 bước; báo chỗ nào tràn, đè chữ hay khó đọc.
+- thien cần làm: viết một câu vì sao chọn giấy trắng với xanh petrol (ô ghi chú trên trang chọn còn trống); mở trang mẫu thành phần ở trên bằng điện thoại (nick tnt697), kéo tới mục Sơ đồ, bấm Bắt đầu rồi Tiếp qua 5 bước; báo chỗ nào tràn, đè chữ hay khó đọc.
 
 ## Mục tiêu
 Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu của thien đi lên từng nấc, nhất quán mà không đứng yên (lời thien 2026-11-18: gu "phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn").

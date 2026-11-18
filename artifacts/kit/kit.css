@@ -1,27 +1,28 @@
 /* Lõi chung cho mọi trang artifact của thien (xem artifacts/README.md).
    Sửa ở đây; make-round.mjs và các script dựng trang chép file này vào trang lúc dựng.
-   Gu: Onest, nền trắng ngà, chữ gần đen, một màu nhấn teal cho thứ quan trọng. Màu đúng/sai tách khỏi màu nhấn. */
+   Gu: Onest, nền giấy trắng (xám rất nhẹ, thẻ trắng), chữ gần đen, một màu nhấn xanh petrol cho thứ quan trọng.
+   Bảng màu thien chọn ở vòng gu 2 (2026-11-18): nền của A · Giấy trắng với màu nhấn của C · xanh petrol (docs/plans/2026-11-18-visual-workflow/round-2/). Màu đúng/sai tách khỏi màu nhấn. */
 :root {
-  --bg: #faf8f3; --card: #ffffff; --soft: #f3f1ec; --line: #e7e3da; --line-strong: #d3cec3; --ink: #1b1b1a; --muted: #6b6862;
-  --accent: #308e84; --accent-soft: #e3f1ef; --accent-ink: #1f6b63;
+  --bg: #f7f7f5; --card: #ffffff; --soft: #f0f0ed; --line: #e5e5e1; --line-strong: #d4d4cf; --ink: #1c1c1b; --muted: #666662;
+  --accent: #0e7490; --accent-soft: #e3f3f8; --accent-ink: #0b5a70;
   --good: #277a4c; --good-soft: #e6f3eb; --bad: #c2410c; --bad-soft: #fdeee6; --warn: #8a5a12; --warn-soft: #f6ecd6;
-  --accent-fill: #2a7d74; --on-accent: #fff;   /* nền đặc màu nhấn (nút Gửi, nút đang chọn) và chữ trên nền đặc nhấn, đúng, sai */
-  --shadow: 0 1px 2px rgba(27, 27, 26, .06), 0 6px 18px rgba(27, 27, 26, .06);
+  --accent-fill: #0e7490; --on-accent: #fff;   /* nền đặc màu nhấn (nút Gửi, nút đang chọn) và chữ trên nền đặc nhấn, đúng, sai */
+  --shadow: 0 1px 2px rgba(28, 28, 27, .06), 0 6px 18px rgba(28, 28, 27, .06);
   --font: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --r: 8px; --r-lg: 8px;   /* one radius for buttons, inputs, chips and cards (thienui docs/taste.md); round only for dots and knobs */
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #161615; --card: #1f1f1d; --soft: #262523; --line: #34322e; --line-strong: #46433e; --ink: #ecebe7; --muted: #a19e97;
-  --accent: #4fb3a6; --accent-soft: #1c3330; --accent-ink: #8fd9c9;
+  --bg: #171716; --card: #1f1f1e; --soft: #272726; --line: #333331; --line-strong: #444441; --ink: #ededeb; --muted: #a3a39e;
+  --accent: #38b2cf; --accent-soft: #11303a; --accent-ink: #8fd8ea;
   --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
-  --accent-fill: #4fb3a6; --on-accent: #161615;
+  --accent-fill: #38b2cf; --on-accent: #171716;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; } }
 :root[data-theme="dark"] {
-  --bg: #161615; --card: #1f1f1d; --soft: #262523; --line: #34322e; --line-strong: #46433e; --ink: #ecebe7; --muted: #a19e97;
-  --accent: #4fb3a6; --accent-soft: #1c3330; --accent-ink: #8fd9c9;
+  --bg: #171716; --card: #1f1f1e; --soft: #272726; --line: #333331; --line-strong: #444441; --ink: #ededeb; --muted: #a3a39e;
+  --accent: #38b2cf; --accent-soft: #11303a; --accent-ink: #8fd8ea;
   --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
-  --accent-fill: #4fb3a6; --on-accent: #161615;
+  --accent-fill: #38b2cf; --on-accent: #171716;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; }
 /* Bộ token thứ hai, như nhau ở sáng và tối. Mọi màu của các mẫu (lesson, it, war, review, decide, compare) lấy từ đây hay từ trên;
    check-tokens.mjs báo khi có mã màu viết thẳng ngoài file này. Riêng màu của màn mô phỏng và địa hình trong từng bài là nội dung bài. */
@@ -35,7 +36,7 @@
   /* Chuyển động: lò xo nhẹ, không nảy rõ (thienui docs/taste.md). Vào chậm hơn ra. */
   --ease-spring: linear(0, .32 8%, .72 18%, .95 30%, 1.03 42%, 1.01 58%, 1); --ease-out: cubic-bezier(.2, .8, .2, 1);
   --t-fast: .12s; --t-base: .2s; --t-slow: .32s;
-  --shadow-device: 0 10px 30px rgb(0 0 0 / .12); --scrim: rgb(0 0 0 / .55); --lit: rgb(79 179 166 / .2); --lit-strong: rgb(79 179 166 / .65);
+  --shadow-device: 0 10px 30px rgb(0 0 0 / .12); --scrim: rgb(0 0 0 / .55); --lit: rgb(56 178 207 / .2); --lit-strong: rgb(56 178 207 / .65);
   /* Màu nội dung: khung điện thoại và giấy của màn mô phỏng, khối code, bút soi, nhãn trên sa bàn. Luôn giữ như nhau vì là một phần của bài. */
   --paper: #fff; --device: #1b1b1a; --code-bg: #1f1f1d; --code-ink: #d6d3cc; --code-muted: #8a877f; --code-key: #8fd9c9; --code-val: #fff;
   --mark: #e11d48; --mark-ink: #be123c;
