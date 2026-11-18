@@ -1,0 +1,126 @@
+{
+  "id": "visual-workflow-taste-r2",
+  "title": "Vòng thử gu 2 · bảng màu",
+  "question": "Bảng màu nào làm nền chung cho mọi trang?",
+  "context": "Bạn muốn nền hợp nhiều loại tài liệu hơn nền ngà hiện tại. Cả ba bản đã dùng nút mới (viền mỏng, nút đặc nổi có gờ dưới), icon Lucide và các thành phần mới; chỉ khác màu. Mở trang mẫu thật để bấm đổi bảng màu, sáng và tối, rồi chọn một bản và viết một câu vì sao. Bản bạn chọn thay bảng màu gốc của kit.",
+  "options": [
+    {
+      "key": "a",
+      "name": "A · Giấy trắng",
+      "short": "Giấy trắng",
+      "image": "shots/a.png",
+      "scale": 2,
+      "summary": "Gần bản hiện tại nhất: bỏ sắc vàng của nền ngà, còn lại xám ấm rất nhẹ như giấy in. Giữ nguyên màu xanh ngọc.",
+      "pros": [
+        "Quen mắt nhất, đổi ít nhất",
+        "Hợp bài học, ghi chép, văn bản dài"
+      ],
+      "cons": [
+        "Vẫn hơi ấm: bảng số liệu và sơ đồ kỹ thuật trông hơi mềm",
+        "Xanh ngọc là màu lạnh đặt trên nền ấm, lệch luật \"ấm đi với ấm, lạnh đi với lạnh\" của thienui"
+      ],
+      "links": [
+        {
+          "text": "Trang mẫu thật · bấm đổi bảng màu ở đầu trang (mở ở nick tnt697)",
+          "url": "https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst",
+          "note": "Bấm A, B, C và Sáng, Tối ở đầu trang; kéo xuống xem nút, nhãn, sơ đồ trên đúng máy của bạn."
+        }
+      ]
+    },
+    {
+      "key": "b",
+      "name": "B · Slate lạnh",
+      "short": "Slate lạnh",
+      "image": "shots/b.png",
+      "scale": 2,
+      "summary": "Nền trắng hơi lạnh, viền và chữ phụ ngả xám xanh (họ slate), cùng họ với xanh ngọc. Giống theme Slate Teal đã có trong thienui.",
+      "pros": [
+        "Hợp cả tài liệu, kế hoạch, bảng số, sơ đồ: trung tính mà vẫn có màu riêng",
+        "Đúng luật màu lạnh đi với nền lạnh; đồng bộ được với thienui"
+      ],
+      "cons": [
+        "Mất cảm giác ấm của trang học hiện tại",
+        "Ở chế độ tối nền hơi ngả xanh, cần quen"
+      ],
+      "links": [
+        {
+          "text": "Trang mẫu thật · bấm đổi bảng màu ở đầu trang (mở ở nick tnt697)",
+          "url": "https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst",
+          "note": "Bấm A, B, C và Sáng, Tối ở đầu trang; kéo xuống xem nút, nhãn, sơ đồ trên đúng máy của bạn."
+        }
+      ]
+    },
+    {
+      "key": "c",
+      "name": "C · Trắng tinh, xanh petrol",
+      "short": "Trắng tinh",
+      "image": "shots/c.png",
+      "scale": 2,
+      "summary": "Nền trắng tinh như trang tài liệu, thẻ chỉ tách bằng viền mảnh; màu nhấn chuyển sang xanh petrol đậm hơn, ngả lam.",
+      "pros": [
+        "Sạch nhất, giống trang tài liệu và bản in",
+        "Màu nhấn đậm nên nút chính nổi rõ"
+      ],
+      "cons": [
+        "Xa gu hôm nay nhất: đổi cả màu nhấn bạn đã chọn hai lần",
+        "Nền và thẻ cùng màu trắng, màn dài dễ thấy phẳng, mỏi mắt"
+      ],
+      "links": [
+        {
+          "text": "Trang mẫu thật · bấm đổi bảng màu ở đầu trang (mở ở nick tnt697)",
+          "url": "https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst",
+          "note": "Bấm A, B, C và Sáng, Tối ở đầu trang; kéo xuống xem nút, nhãn, sơ đồ trên đúng máy của bạn."
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "name": "Hợp nhiều loại tài liệu",
+      "values": {
+        "a": "vừa",
+        "b": "tốt",
+        "c": "tốt"
+      }
+    },
+    {
+      "name": "Đọc lâu không mỏi",
+      "values": {
+        "a": "tốt",
+        "b": "tốt",
+        "c": "vừa"
+      }
+    },
+    {
+      "name": "Giữ màu xanh ngọc của bạn",
+      "values": {
+        "a": "tốt",
+        "b": "tốt",
+        "c": {
+          "text": "đổi sang petrol",
+          "tone": "bad"
+        }
+      }
+    },
+    {
+      "name": "Khớp luật màu của thienui",
+      "values": {
+        "a": "kém",
+        "b": "tốt",
+        "c": "vừa"
+      }
+    },
+    {
+      "name": "Xa gu hôm nay bao nhiêu",
+      "values": {
+        "a": "quen",
+        "b": "một nấc",
+        "c": "xa"
+      }
+    }
+  ],
+  "recommend": {
+    "key": "b",
+    "why": "B là nấc mới vừa đủ: nền trung tính hợp mọi loại tài liệu, vẫn giữ xanh ngọc, và đúng luật \"màu lạnh đi với nền trắng lạnh\" trong gu của bạn ở thienui (theme Slate Teal). A đổi quá ít so với điều bạn muốn; C đổi cả màu nhấn bạn đã chọn hai lần."
+  }
+}

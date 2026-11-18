@@ -10,6 +10,7 @@
 // Trang phải có các thẻ rỗng (hoặc bản cũ) với id: kit-css, lesson-css (style), kit-js, lesson-js, lesson-kit (script).
 // lesson-id: tham số, hoặc "id" trong <script id="lesson">, hoặc đoán từ đường dẫn (frontend-06).
 import { readFileSync, writeFileSync, realpathSync, existsSync, mkdirSync, copyFileSync } from 'node:fs';
+import { packHtml } from '../kit/pack.mjs';
 import { dirname, join, basename, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { writePublish } from '../kit/publish.mjs';
@@ -251,7 +252,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   mkdirSync(out, { recursive: true });
   // Bản đầy đủ ra thư mục out; file trong repo giữ là nguồn (không kit, không dữ liệu trận chép lần hai).
   const built = join(out, basename(file));
-  writeFileSync(built, fill(html, lid, file, { stuck, cards }));
+  writeFileSync(built, packHtml(fill(html, lid, file, { stuck, cards })));   // thu gọn kit, bỏ icon không dùng (kit/pack.mjs)
   const src = strip(html);
   if (src !== html) { writeFileSync(file, src); console.log(`Đã làm gọn nguồn ${file}: bỏ kit đã điền, ${Math.round(html.length / 1024)} KB còn ${Math.round(src.length / 1024)} KB.`); }
   console.log(`Đã dựng ${built} (id ${lid})${stuck.length ? `, kèm ${stuck.length} chỗ còn vướng từ ${sf}` : ''}. Mở file này để xem, đừng mở nguồn.`);

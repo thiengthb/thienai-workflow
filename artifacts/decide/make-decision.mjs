@@ -10,6 +10,7 @@
 //   recommend?: { key, why } }                                                                (ẩn trên màn tới khi thien chọn)
 // Ra: <out-dir>/index.html (trang để đăng, đã gộp kit), <out-dir>/img/*, <out-dir>/preview.html, và in danh sách file cần đăng.
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync, realpathSync } from 'node:fs';
+import { packHtml } from '../kit/pack.mjs';
 import { dirname, join, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { imageSize } from '../compare/make-round.mjs';
@@ -72,12 +73,12 @@ export function build(spec, specDir, out) {
     decision.recommend = { key, why: String(spec.recommend.why || '') };
   }
   const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-  const html = readFileSync(join(here, 'template.html'), 'utf8')
+  const html = packHtml(readFileSync(join(here, 'template.html'), 'utf8')
     .replace('__TITLE__', () => esc(decision.title))
     .replace('/*KIT_CSS*/', () => readFileSync(join(here, '../kit/kit.css'), 'utf8'))
     .replace('/*KIT_JS*/', () => readFileSync(join(here, '../kit/kit.js'), 'utf8'))
     .replace('/*DECIDE_JS*/', () => readFileSync(join(here, 'decide.js'), 'utf8'))
-    .replace('__DECISION__', () => JSON.stringify(decision).replace(/</g, '\\u003c'));
+    .replace('__DECISION__', () => JSON.stringify(decision).replace(/</g, '\\u003c')));
   writeFileSync(join(out, 'index.html'), html);
   writeFileSync(join(out, 'preview.html'), `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>\n${html}\n</body></html>\n`);
   return { decision, files };

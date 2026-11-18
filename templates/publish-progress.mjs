@@ -19,6 +19,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { buildPage } from './progress-page.mjs';
 import { writePublish } from '../artifacts/kit/publish.mjs';
+import { packHtml } from '../artifacts/kit/pack.mjs';
 // Windows checkouts (git core.autocrlf) and files saved by Windows editors use CRLF; every parser below expects LF.
 const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
@@ -142,7 +143,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     console.error('Cách dùng: node templates/publish-progress.mjs [overview|repo|roadmap] [--out <thư-mục>] [--new]');
     process.exit(1);
   }
-  writeFileSync(join(out, 'index.html'), buildPage(pageArgs));
+  writeFileSync(join(out, 'index.html'), packHtml(buildPage(pageArgs)));
   console.log(`Đã dựng ${join(out, 'index.html')}`);
   for (const l of writePublish(out, { file_path: join(out, 'index.html'), url: fresh ? '' : url, capabilities, icon: 'chart', description })) console.log(l);
   if (!url && !fresh) console.log('Chưa có link trang cũ trong repo: đăng thành trang mới rồi ghi link vào file nói ở đầu script.');

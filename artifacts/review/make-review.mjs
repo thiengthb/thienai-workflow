@@ -8,6 +8,7 @@
 // để trang cho xem đáp án và để Claude chấm câu trả lời chỉ dựa trên bài. Ra <out>/index.html, preview.html, publish.json.
 // --url: đăng đè lên trang ôn thẻ đã có (giữ một link cố định); link ghi trong README.md.
 import { readFileSync, writeFileSync, mkdirSync, existsSync, realpathSync } from 'node:fs';
+import { packHtml } from '../kit/pack.mjs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { writePublish } from '../kit/publish.mjs';
@@ -155,7 +156,7 @@ export function render(review) {
 export function build(cardsFile, out, { today = new Date().toISOString().slice(0, 10), max = 10 } = {}) {
   const review = buildReview(lf(readFileSync(cardsFile, 'utf8')), dirname(resolve(cardsFile)), today, max);
   mkdirSync(out, { recursive: true });
-  const html = render(review);
+  const html = packHtml(render(review));
   writeFileSync(join(out, 'index.html'), html);
   writeFileSync(join(out, 'preview.html'), `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>\n${html}\n</body></html>\n`);
   return review;

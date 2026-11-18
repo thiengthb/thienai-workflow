@@ -12,6 +12,7 @@
 // Ra: <out-dir>/index.html (trang để đăng, đã gộp kit), <out-dir>/shots/*, <out-dir>/preview.html (mở thử trên máy),
 // và in ra danh sách file cần đăng kèm trang.
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync, realpathSync, readdirSync, statSync } from 'node:fs';
+import { packHtml } from '../kit/pack.mjs';
 import { dirname, join, extname, resolve } from 'node:path';
 import { writePublish } from '../kit/publish.mjs';
 import { fileURLToPath } from 'node:url';
@@ -85,12 +86,12 @@ export function build(spec, specDir, out) {
     })),
   };
   const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-  const html = readFileSync(join(here, 'template.html'), 'utf8')
+  const html = packHtml(readFileSync(join(here, 'template.html'), 'utf8')
     .replace('__TITLE__', () => esc(spec.title))
     .replace('/*KIT_CSS*/', () => readFileSync(join(here, '../kit/kit.css'), 'utf8'))
     .replace('/*KIT_JS*/', () => readFileSync(join(here, '../kit/kit.js'), 'utf8'))
     .replace('/*COMPARE_JS*/', () => readFileSync(join(here, 'compare.js'), 'utf8'))
-    .replace('__ROUND__', () => JSON.stringify(round).replace(/</g, '\\u003c'));
+    .replace('__ROUND__', () => JSON.stringify(round).replace(/</g, '\\u003c')));
   writeFileSync(join(out, 'index.html'), html);
   writeFileSync(join(out, 'preview.html'), `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>\n${html}\n</body></html>\n`);
   return { round, files };

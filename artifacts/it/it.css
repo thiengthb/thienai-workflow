@@ -116,11 +116,13 @@ html[data-stage="on"] #stage { display: block; }
   font-style: normal; text-align: center; }
 .bd-card.sel { outline: 2px dashed var(--ink); outline-offset: 3px; box-shadow: var(--shadow-lift); z-index: 3; }
 .bd-card.heard > i { box-shadow: 0 0 0 2px var(--card), 0 0 0 3.5px var(--c, var(--muted)); }
-/* Sau khi kiểm: ký hiệu thay cho chữ. Dấu ✓ xanh là khớp bản mẫu, dấu ! cam là khác bản mẫu. */
-.bd-card.ok::after, .bd-card.no::after { position: absolute; top: -8px; right: -8px; width: 18px; height: 18px; border-radius: 50%; color: var(--on-fill);
-  font: 700 11px/18px var(--font); text-align: center; }
-.bd-card.ok::after { content: "✓"; background: var(--good); }
-.bd-card.no::after { content: "!"; background: var(--bad); }
+/* Sau khi kiểm: ký hiệu thay cho chữ. Dấu check xanh là khớp bản mẫu, dấu ! cam là khác bản mẫu. Icon Lucide khoét rỗng
+   trong vòng đặc (mask trừ nhau), nên luôn nằm giữa vòng; vòng ngồi lên góc thẻ, có viền màu thẻ để tách khỏi thẻ. */
+.bd-card.ok::after, .bd-card.no::after { content: ""; position: absolute; top: -7px; right: -7px; width: 18px; height: 18px; border-radius: 50%;
+  -webkit-mask: var(--bd-ic) center / 12px no-repeat, linear-gradient(black 0 0); -webkit-mask-composite: xor;
+  mask: var(--bd-ic) center / 12px no-repeat exclude, linear-gradient(black 0 0); }
+.bd-card.ok::after { --bd-ic: var(--ic-check); background: var(--good); }
+.bd-card.no::after { --bd-ic: var(--ic-exclaim); background: var(--bad); }
 .board.locked .bd-card { cursor: default; }
 .board[data-mode="listen"] .zone { cursor: default; }
 @media (prefers-reduced-motion: reduce) { .bd-card { transition: none; } }

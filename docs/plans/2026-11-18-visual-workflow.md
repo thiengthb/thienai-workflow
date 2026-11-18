@@ -6,9 +6,10 @@ Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick
 
 ## Đang ở đâu
 - Đang ở: checkpoint 1 dựng xong (18/11): `artifacts/kit/diagram.js` và mục Sơ đồ trong trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (nick tnt697); chờ thien bấm thử trên điện thoại. Checkpoint 0 xong. Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
-- Còn thiếu: thien bấm thử checkpoint 1; checkpoint 2 tới 5. Ở ga 2 thử lấy riêng bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử, không lấy nền tối và chữ khổng lồ.
+- Vòng gu 2 (bảng màu) chạy sớm theo lời thien 18/11: trang chọn https://claude.ai/artifact/Ci6FBx4ThzEEh4SYZESph7 (nick tnt697), nguồn ở `round-2/`. thien chọn C trên trang, rồi nhắn "à tôi muốn giấy trắng với xanh petrol": kit dùng nền của A với màu nhấn của C (đã vào `kit.css`). Cùng đợt: nút mới, icon Lucide, chuyển động, thành phần mới (nhánh `kit-refresh`, chồng lên PR #126).
+- Còn thiếu: thien bấm thử checkpoint 1 và câu vì sao của bảng màu; checkpoint 2 tới 5. Ở ga 2 thử lấy riêng bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử, không lấy nền tối và chữ khổng lồ.
 - thien đã chọn "B · Một nấc" (2026-11-18, giống đề xuất), vì sao: "mình cảm thấy hiện tại 3 bản thì bản một nấc, không đi quá xa, có phần quen thuộc cũng như mới lạ nho nhỏ, nhưng phần C thì quá mới làm mình chưa thích ứng". Checkpoint 0 xong; tiếp theo checkpoint 1 (lớp sơ đồ dùng chung).
-- thien cần làm: mở trang mẫu thành phần ở trên bằng điện thoại (nick tnt697), kéo tới mục Sơ đồ, bấm Bắt đầu rồi Tiếp qua 5 bước; báo chỗ nào tràn, đè chữ hay khó đọc.
+- thien cần làm: viết một câu vì sao chọn giấy trắng với xanh petrol (ô ghi chú trên trang chọn còn trống); mở trang mẫu thành phần ở trên bằng điện thoại (nick tnt697), kéo tới mục Sơ đồ, bấm Bắt đầu rồi Tiếp qua 5 bước; báo chỗ nào tràn, đè chữ hay khó đọc.
 
 ## Mục tiêu
 Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu của thien đi lên từng nấc, nhất quán mà không đứng yên (lời thien 2026-11-18: gu "phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn").
@@ -103,9 +104,12 @@ Dễ sa lầy: tự viết thuật toán xếp sơ đồ; đọc markdown kế h
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-18 | Vòng thử gu 2 (bảng màu) chạy ngay, không chờ khoảng 02/12; cùng đợt sửa nút (viền 1px, nút đặc nổi có gờ dưới), thay icon ký tự bằng Lucide, thêm chuyển động và thành phần mới (tab, gập mở, thanh bước, gợi ý, thẻ số, đang tải, màn rỗng, báo trong dòng) | thien nhắn 23:03: muốn nền hợp nhiều loại tài liệu, nút nổi như app FAP vì viền đang dày, icon chip và huy hiệu lệch; chọn "3 bản cho mình chọn" và mở rộng cả bốn hướng |
+| 2026-11-19 | Thêm bước đóng gói trang (`artifacts/kit/pack.mjs`) vào mọi lệnh dựng trang; trau chuốt tab, gập mở, nút chỉ có icon (`.btn.icon`) | thien: "trau chuốt component và tối ưu để không bị nặng khi bạn generate ra tài liệu"; phần kit của trang học từ 102 KB còn 74 KB |
 | 2026-11-18 | Checkpoint 2 thêm một việc: mang các ý review PR #124 vào mẫu kế hoạch | Bản nguồn của vòng gu giữ đúng như thien đã xem, nên sửa ở mẫu mới chứ không sửa bản cũ |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
 |---|---|---|
+| 2026-11-18 | Tooltip chung đặt sẵn chữ ẩn trên mọi `[data-tip]`, đụng tooltip riêng của trang so sánh: chữ ẩn làm trang rộng 414px trên điện thoại (check-pages bắt) | Đổi tên thành `data-hint`, chỉ dựng chữ lúc trỏ hay focus |
 | 2026-11-18 | Chú thích đầu `diagram.js` có chữ `</script>`: chép vào trang thì thẻ script đóng sớm, sơ đồ không vẽ, không báo lỗi JavaScript | Bỏ chữ đó khỏi chú thích; file JS gắn vào trang không được chứa `</script>` |

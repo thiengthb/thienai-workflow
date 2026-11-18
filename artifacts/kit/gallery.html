@@ -33,6 +33,12 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
 .g-board .tray { display: flex; flex-wrap: wrap; gap: 12px; padding: 26px 12px 12px; }
 .g-board .bd-card { position: relative; }
 .g-knobs { width: 100%; }
+.g-switch { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; max-width: 100%; }
+#g-palette { flex-wrap: wrap; max-width: 100%; }
+.g-icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
+.g-icons div { display: grid; justify-items: center; gap: 6px; padding: 10px 4px; border-radius: var(--r); font-size: 11.5px; color: var(--muted); }
+.g-icons div:hover { background: var(--soft); color: var(--ink); }
+.g-icons .ic { font-size: 20px; color: var(--ink); }
 </style>
 <main>
   <header class="g-head">
@@ -40,14 +46,17 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
       <h1>Thành phần trang học</h1>
       <p>Mọi mảnh dùng chung của trang học, trang ôn và trang chọn phương án. Sửa màu hay kiểu ở kit.css thì trang này đổi theo, nhìn một lần là biết có vỡ chỗ nào.</p>
     </div>
+    <div class="g-switch">
+    <div class="seg" role="group" aria-label="Bảng màu đang thử" id="g-palette" hidden></div>
     <div class="seg" role="group" aria-label="Chế độ màu" id="g-theme">
       <button type="button" data-t="" aria-pressed="true">Theo máy</button>
       <button type="button" data-t="light" aria-pressed="false">Sáng</button>
       <button type="button" data-t="dark" aria-pressed="false">Tối</button>
     </div>
+    </div>
   </header>
 
-  <div class="g-grid">
+  <div class="g-grid" data-reveal>
     <section class="card g-sec wide">
       <h2>Màu</h2>
       <p>Chỉ dùng các tên này, không viết thẳng mã màu. check-tokens.mjs báo khi có chỗ viết thẳng.</p>
@@ -68,6 +77,12 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
         <button class="btn good" type="button" aria-pressed="true">Nhớ</button>
         <button class="btn bad" type="button" aria-pressed="true">Quên</button>
         <button class="btn" type="button" disabled>Chưa bấm được</button>
+      </div>
+      <div class="g-row">
+        <button class="btn" type="button"><i class="ic ic-copy" aria-hidden="true"></i>Chép</button>
+        <button class="btn accent" type="button">Gửi cho Claude<i class="ic ic-arrow-right" aria-hidden="true"></i></button>
+        <button class="btn busy" type="button">Đang gửi</button>
+        <button class="btn ghost icon" type="button" aria-label="Làm lại" data-hint="Làm lại từ đầu"><i class="ic ic-rotate-ccw" aria-hidden="true"></i></button>
       </div>
       <button class="btn primary next" type="button">Tiếp</button>
     </section>
@@ -95,6 +110,12 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
         <span class="chip bad">Sai</span>
         <span class="chip accent">Mới</span>
         <span class="chip sim">Mô phỏng</span>
+      </div>
+      <div class="g-row">
+        <span class="chip good"><i class="ic ic-circle-check" aria-hidden="true"></i>Đã xong</span>
+        <span class="chip bad"><i class="ic ic-circle-alert" aria-hidden="true"></i>Cần sửa</span>
+        <span class="chip warn"><i class="ic ic-clock" aria-hidden="true"></i>Chờ duyệt</span>
+        <span class="chip accent"><i class="ic ic-sparkles" aria-hidden="true"></i>Mới</span>
       </div>
       <p class="label">Nhãn mục</p>
       <p class="muted small">Chữ phụ dùng .muted, chữ nhỏ dùng .small.</p>
@@ -217,6 +238,65 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
     </section>
 
     <section class="card g-sec wide">
+      <h2>Icon</h2>
+      <p>Bộ icon Lucide của kit: <code>&lt;i class="ic ic-check"&gt;</code> hay <code>Kit.icon('check')</code>. Icon theo màu chữ và luôn nằm giữa ô 1em, không dùng ký tự như ✓ ! ▶ nữa. Thêm icon bằng make-icons.mjs.</p>
+      <div class="g-icons" id="g-icons"></div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Tab</h2>
+      <p>data-tabs: phím ← → để chuyển, gạch dưới trượt theo tab.</p>
+      <div data-tabs>
+        <div class="tabs"><button aria-selected="true">Tổng quan</button><button>Bước làm</button><button><i class="ic ic-list-checks" aria-hidden="true"></i>Kiểm</button></div>
+        <div class="tab-panel"><p>Một màn chỉ một việc chính. Tab gom phần ít dùng xuống lớp thứ hai.</p></div>
+        <div class="tab-panel" hidden><p>Đọc, làm thử, nói lại bằng lời của mình.</p></div>
+        <div class="tab-panel" hidden><p>Chạy check-pages trước khi gửi link.</p></div>
+      </div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Gập mở</h2>
+      <p>details.acc: phần phụ gập lại, mũi tên xoay khi mở.</p>
+      <div>
+        <details class="acc" open><summary>Vì sao nền trung tính?</summary><p>Hợp cả bài học, kế hoạch, báo cáo: màu của nội dung không bị nền ngả vàng kéo lệch.</p></details>
+        <details class="acc"><summary>Khi nào dùng nút đặc?</summary><p>Một màn một nút đặc, cho việc chính.</p></details>
+        <details class="acc"><summary>Giảm chuyển động</summary><p>Máy bật giảm chuyển động thì chỉ còn đổi độ mờ.</p></details>
+      </div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Thanh bước</h2>
+      <p>ol.steps: li.done, li.now. Từ 6 bước trở lên thì dùng sơ đồ.</p>
+      <ol class="steps"><li class="done">Đọc</li><li class="done">Làm thử</li><li class="now">Nói lại</li><li>Ôn</li></ol>
+      <div class="g-row"><button class="btn" type="button" data-hint="Chữ gợi ý hiện khi trỏ hay đưa phím Tab tới" aria-label="Xem gợi ý"><i class="ic ic-info" aria-hidden="true"></i>Gợi ý</button></div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Thẻ số</h2>
+      <p>.stats chứa .stat: một số lớn, nhãn nhỏ, dòng đổi có màu.</p>
+      <div class="stats">
+        <div class="stat"><span class="label">Buổi tuần này</span><b>4</b><small class="up"><i class="ic ic-arrow-right" aria-hidden="true"></i>đúng nhịp</small></div>
+        <div class="stat"><span class="label">Thẻ đến hạn</span><b>12</b><small>3 thẻ khó</small></div>
+      </div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Đang tải và rỗng</h2>
+      <p>.skel khi chờ dữ liệu; .empty khi chưa có gì, kèm việc nên làm tiếp.</p>
+      <div class="skel-group" aria-hidden="true"><div class="g-row"><span class="skel circle"></span><span class="skel" style="flex:1"></span></div><span class="skel"></span><span class="skel" style="width:60%"></span></div>
+      <div class="empty"><span class="empty-ic"><i class="ic ic-inbox" aria-hidden="true"></i></span><b>Chưa có thẻ nào đến hạn</b><p>Học một buổi mới, thẻ sẽ hiện ở đây.</p><button class="btn" type="button">Học buổi mới</button></div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Báo trong dòng</h2>
+      <p>.note.info, .good, .warn, .bad: một icon, một câu.</p>
+      <p class="note info"><i class="ic ic-info" aria-hidden="true"></i>Trang tự lưu nháp vào máy.</p>
+      <p class="note good"><i class="ic ic-circle-check" aria-hidden="true"></i>Đã gửi cho Claude.</p>
+      <p class="note warn"><i class="ic ic-triangle-alert" aria-hidden="true"></i>Chưa đọc được bản đã lưu.</p>
+      <p class="note bad"><i class="ic ic-circle-alert" aria-hidden="true"></i>Gửi không được, đã chép thay.</p>
+    </section>
+
+    <section class="card g-sec wide">
       <h2>Sơ đồ</h2>
       <p>diagram.js: khối trơn viền mảnh, mũi tên, không tô màu. Bấm Bắt đầu hay chạm một khối: khối sáng lên, chú thích mở ngay dưới tên. Khung hẹp thì sơ đồ tự chuyển sang dọc.</p>
       <div data-diagram id="g-diagram"><script type="application/json">
@@ -259,6 +339,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
     </section>
   </div>
 </main>
+<script>/*KIT_JS*/</script>
 <script>/*DAGRE_JS*/</script>
 <script>/*DIAGRAM_JS*/</script>
 <script>
@@ -273,6 +354,26 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
     seg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.t === t)));
   };
   seg.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) set(b.dataset.t); });
+  // Bảng màu đang thử (make-gallery --palettes): nút "Hiện tại" và một nút cho mỗi bảng; nhớ lựa chọn trong máy.
+  const pals = window.G_PALETTES, pseg = document.getElementById('g-palette');
+  if (pals && pals.length) {
+    pseg.hidden = false;
+    const all = [{ key: '', label: 'Hiện tại' }, ...pals];
+    pseg.replaceChildren(...all.map((p) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.p = p.key; b.textContent = p.label; return b; }));
+    const setP = (k) => {
+      if (k) document.documentElement.dataset.palette = k; else delete document.documentElement.dataset.palette;
+      pseg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.p === k)));
+      try { localStorage.setItem('g-palette', k); } catch (e) {}
+    };
+    pseg.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) setP(b.dataset.p); });
+    let saved = null; try { saved = localStorage.getItem('g-palette'); } catch (e) {}
+    setP(saved !== null && all.some((p) => p.key === saved) ? saved : pals[0].key);
+  }
+  // Bảng icon: đọc tên từ các biến --ic-* có trong kit.css lúc chạy.
+  const icons = document.getElementById('g-icons');
+  const icNames = [];
+  for (const sh of document.styleSheets) { try { for (const r of sh.cssRules) if (r.selectorText === ':root' && r.style.getPropertyValue('--ic-check')) for (const p of r.style) if (p.startsWith('--ic-')) icNames.push(p.slice(5)); } catch (e) {} }
+  icons.replaceChildren(...icNames.map((n) => { const d = document.createElement('div'); d.append(Kit.icon(n), n); return d; }));
   // Các nút mẫu khác chỉ để xem: bấm vào không làm gì.
 })();
 </script>
