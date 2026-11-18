@@ -38,6 +38,7 @@ Trạng thái "chờ duyệt" dùng cho bản gửi thien duyệt (file nằm tr
 
 1. `node artifacts/plan/make-plan.mjs docs/plans/<file>.md /tmp/plan` (thêm `--url <link trang cũ>` để đăng đè, `--trial "..."` để đổi chi tiết thử). Lệnh in chỗ lệch mẫu kèm số dòng; chỉ thiếu tiêu đề hay thiếu checkpoint mới chặn dựng.
 2. Gọi Artifact với đúng tham số trong `/tmp/plan/publish.json`. Mở thử: `/tmp/plan/preview.html`.
+   Trang mới thì thêm ` · Trang: <link> (nick tntXXX)` vào dòng "Trạng thái:" của file kế hoạch: trang tổng quan (`templates/progress-page.mjs`) dẫn sang link đó thay vì file markdown, và lần sau đăng đè bằng `--url <link>`.
 3. Khi thien gửi: đọc comment và `plans/<tên file>` (ArtifactData), chép câu trả lời nguyên văn vào file kế hoạch hay PR.
 
 Chỉ kiểm, không dựng: `node artifacts/plan/make-plan.mjs --check docs/plans` (thoát 1 khi có lỗi chặn dựng).

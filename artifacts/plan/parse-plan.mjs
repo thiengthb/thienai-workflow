@@ -201,7 +201,10 @@ export function parsePlanFile(md, opts = {}) {
       const name = r[0].replace(/\*\*/g, '').replace(/\s*\(chọn\)\s*/i, '').trim();
       const km = /^([A-Z])[.)]\s*(.*)$/.exec(name);
       return { key: km ? km[1] : '', nameHtml: ln(km ? km[2] : name), chosen,
-        rows: head.slice(1).map((h, j) => ({ label: chosen && /không chọn/i.test(h) ? 'Chỗ yếu' : h, html: ln(r[j + 1] || '') })).filter((x) => x.html) };
+        rows: head.slice(1).map((h, j) => {
+          const label = chosen && /không chọn/i.test(h) ? 'Chỗ yếu' : h;
+          return { label, html: ln((r[j + 1] || '').replace(new RegExp('^' + label + ':\\s*', 'i'), '')) };   // ô đã tự ghi "Chỗ yếu: ..." thì không lặp nhãn
+        }).filter((x) => x.html) };
     });
   }
 
@@ -226,13 +229,15 @@ export function parsePlanFile(md, opts = {}) {
     title: doc.title, titleHtml: ln(doc.title), state: state || 'đang chạy', stateFull: meta.fields['Trạng thái'] || '',
     approved: meta.fields['Duyệt'] ? ln(meta.fields['Duyệt']) : '', approvedDate: approved,
     updated: lastDate(meta.fields['Cập nhật'] || ''),
+    page: (/https:\/\/\S+?(?=[\s),]|$)/.exec(meta.fields.Trang || '') || [''])[0],
     nick: (meta.free.find((f) => /^nick\s+\S+/i.test(f)) || '').replace(/^nick\s+/i, ''),
-    links: [...Object.entries(meta.fields).filter(([k]) => !['Trạng thái', 'Duyệt', 'Cập nhật'].includes(k)).map(([k, v]) => ({ key: k, html: ln(v) })),
+    links: [...Object.entries(meta.fields).filter(([k]) => !['Trạng thái', 'Duyệt', 'Cập nhật', 'Trang'].includes(k)).map(([k, v]) => ({ key: k, html: ln(v) })),
       ...meta.free.filter((f) => !/^nick\s/i.test(f)).map((f) => ({ key: '', html: ln(f) }))],
     goal: goalSec ? ln(goalSec.lines.map((l) => l.text.trim()).filter(Boolean).join(' ')) : '',
     where, notDo: list('Không làm'), options, checkpoints, current,
     ticks: checkpoints.reduce((a, c) => ({ done: a.done + c.done, total: a.total + c.total }), { done: 0, total: 0 }),
     questions: qs, answered, questionsTitle: qSec ? ln(qSec.title) : '',
+    questionsIntro: qSec ? ln(qSec.lines.filter((l) => l.text.trim() && !/^(\s|[-*]\s|\d+\.\s)/.test(l.text)).map((l) => l.text.trim()).join(' ')) : '',
     changes: tableRows(find('Đã đổi')?.lines.map((l) => l.text) ?? []).map((r) => r.map((c) => ln(c))),
     errors: tableRows(find('Lỗi gặp')?.lines.map((l) => l.text) ?? []).map((r) => r.map((c) => ln(c))),
     extras: extras.map((e) => ({ title: e.title, html: e.html.join('\n') })),

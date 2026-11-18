@@ -1,6 +1,6 @@
 # Quy trình nhìn được, và gu lớn dần theo ngày
 
-Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien: "ok, duyệt theo cả 4 đề xuất") · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBWDbXVGqmzESXaXn7P, https://claude.ai/code/session_01WXAvBX3kxdpafP9q92LUbo · Bản duyệt: https://claude.ai/artifact/7hVBYXwyHZbfVp7mL4GsV4 (nick tnt697)
+Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien: "ok, duyệt theo cả 4 đề xuất") · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBWDbXVGqmzESXaXn7P, https://claude.ai/code/session_01WXAvBX3kxdpafP9q92LUbo · Bản duyệt: https://claude.ai/artifact/7hVBYXwyHZbfVp7mL4GsV4 (nick tnt697) · Trang: https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (nick tnt697)
 
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
@@ -9,9 +9,9 @@ Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick
 - Vòng gu 2 (bảng màu) chạy sớm theo lời thien 18/11: trang chọn https://claude.ai/artifact/Ci6FBx4ThzEEh4SYZESph7 (nick tnt697), nguồn ở `round-2/`. thien chọn C trên trang, rồi nhắn "à tôi muốn giấy trắng với xanh petrol": kit dùng nền của A với màu nhấn của C (đã vào `kit.css`). Cùng đợt: nút mới, icon Lucide, chuyển động, thành phần mới, trang nhẹ (`kit/pack.mjs`). PR #126 và #127 đã merge (19/11, thien nhắn "merge").
 - Vòng gu 3 (19/11, thien hỏi mang style slide MLN122 vào trang học): trang chọn https://claude.ai/artifact/RMSfapmLBg7FvoQ5PFDgad, trang mẫu bấm A/B/C https://claude.ai/artifact/9tkpy5E3vqvs5AXqnWJor2 (cả hai nick tnt697); nguồn ở `round-3/` (PR #131). thien chọn "A · Thêm mực cam" (01:11, đề xuất là B): không kẻ ô, giữ bo góc, giấy trắng; vì sao đã chép nguyên văn vào hàng chờ gu. Mực hình đã vào kit ở PR #131.
 - Checkpoint 1 xong (19/11): mục Sơ đồ trong trang mẫu chỉ có một luồng, chính là luồng 5 bước "một buổi học đi qua những đâu"; thien nhắn "mình đã bấm sơ đồ trên điện thoại và nó không bị lỗi UI nào". Câu vì sao của bảng màu đã vào hàng chờ gu.
-- Còn thiếu: checkpoint 2 còn một việc (trang tổng quan dẫn sang trang kế hoạch) và điều kiện "Xong khi" (kế hoạch kế tiếp gửi thien duyệt bằng trang này). Mẫu trang kế hoạch `artifacts/plan/` đã merge (PR #135, 19/11); trang thử https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (nick tnt697). Sau đó checkpoint 3 tới 5.
+- Còn thiếu: checkpoint 2 chờ hai thứ: PR nối trang tổng quan sang trang kế hoạch (dòng "Trang:" ở đầu file) được merge, và thien trả lời câu hỏi bằng nút trên trang. Mẫu `artifacts/plan/` đã merge (PR #135). Sau đó checkpoint 3 tới 5.
 - thien đã chọn "B · Một nấc" (2026-11-18, giống đề xuất), vì sao: "mình cảm thấy hiện tại 3 bản thì bản một nấc, không đi quá xa, có phần quen thuộc cũng như mới lạ nho nhỏ, nhưng phần C thì quá mới làm mình chưa thích ứng". Checkpoint 0 xong.
-- thien cần làm: không có. Lần tới gửi kế hoạch mới, Claude gửi bằng trang dựng từ `make-plan.mjs`.
+- thien cần làm: trả lời 3 câu hỏi của checkpoint 3 bằng nút cuối trang kế hoạch https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (nick tnt697), bấm "Gửi cho Claude".
 
 ## Mục tiêu
 Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu của thien đi lên từng nấc, nhất quán mà không đứng yên (lời thien 2026-11-18: gu "phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn").
@@ -108,6 +108,16 @@ Dễ sa lầy: tự viết thuật toán xếp sơ đồ; đọc markdown kế h
 - Suy luận của AI: gu đi lên khi chỗ "mới vừa đủ" dịch dần; cách đẩy là mỗi lần đưa thứ xa hơn một nấc, không nhảy hẳn ra xa.
 - Vòng gu 3 (đọc 2026-11-19). Xanh với cam là cặp an toàn nhất cho người mù màu: mù đỏ thấy xanh và ô liu, mù lục thấy xanh và cam ([Datawrapper](https://www.datawrapper.de/blog/colorblindness-part2), đọc đoạn trích); bảng Okabe-Ito và Paul Tol đều có cặp này ([Tol 2021](https://personal.sron.nl/~pault/data/colourschemes.pdf), đọc qua tài liệu gói khroma). Tô màu theo nghĩa giúp học: 42 sinh viên học lập trình qua video, bản tô màu cho tải nhận thức thấp hơn và kết quả tốt hơn bản xám ([Liu và cộng sự, 2021](https://doi.org/10.3389/fpsyg.2021.773328), đọc tóm tắt). Màu ấm kéo mắt hơn màu lạnh trong một thử nghiệm theo dõi mắt ([SPIE 2013](https://medicalimaging.spiedigitallibrary.org/conference-proceedings-of-spie/8651/86510W/Investigation-of-eye-catching-colors-using-eye-tracking/10.1117/12.2001141.full), đọc tóm tắt), nên cam dành cho chỗ cần nhìn. Bộ kiểm màu biểu đồ (skill dataviz, sáu mục): xanh petrol #0e7490 có độ rực 0,094, dưới ngưỡng 0,10, tô cột trông hơi xám; mực hình #0b6fa0/#c2480f/#7a5bc7 (sáng) và #3a9fd0/#e0703a/#8a74e0 (tối) đạt cả sáu, cặp gần nhất khi mù màu ΔE 19,4.
 
+## Câu hỏi
+Cho checkpoint 3 (mẫu luồng chạy), trả lời ngay trên trang kế hoạch bằng nút.
+1. Mỗi luồng lấy nội dung từ đâu?
+   - Một file JSON nhỏ mỗi luồng, đúng định dạng `Diagram.mount` của kit: vẽ được rẽ nhánh, vòng lặp, chú thích từng bước (đề xuất)
+   - Đọc thẳng bảng "Một việc đi qua những đâu" trong `profile/MAP.md`: không gõ lại, nhưng mỗi luồng chỉ có 4 ô xếp thẳng
+2. Trên điện thoại đi từng bước kiểu nào?
+   - Sơ đồ dính trên, chữ từng bước cuộn bên dưới, khối đang đọc sáng lên (đề xuất)
+   - Bấm Trước, Tiếp, mỗi lần một bước, không cuộn
+3. Cuối trang luồng có ô để bạn tự kể lại luồng không? Đề xuất: có, gõ vài câu rồi gửi, Claude đọc và chỉ chỗ thiếu. Đó cũng là cách kiểm "Xong khi" của checkpoint 3, không cần mở `profile/MAP.md`.
+
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
@@ -115,6 +125,7 @@ Dễ sa lầy: tự viết thuật toán xếp sơ đồ; đọc markdown kế h
 | 2026-11-19 | Vòng gu 3: style slide MLN122 (hai mực xanh, cam có nghĩa cố định; giấy kẻ ô; khung nét mực; nhãn mono) áp vào trang học, ba mức A thêm mực, B giấy kỹ thuật cho vùng hình, C thay hẳn; `diagram.js` thêm `kind` để tô viền khối theo mực | thien: "rút ra style đó ... áp dụng vào các sơ đồ, hình ảnh, biểu đồ, background ... Adapt hoặc thay thế tùy theo đề xuất của bạn, hãy nghiên cứu kĩ" |
 | 2026-11-19 | Thêm bước đóng gói trang (`artifacts/kit/pack.mjs`) vào mọi lệnh dựng trang; trau chuốt tab, gập mở, nút chỉ có icon (`.btn.icon`) | thien: "trau chuốt component và tối ưu để không bị nặng khi bạn generate ra tài liệu"; phần kit của trang học từ 102 KB còn 74 KB |
 | 2026-11-19 | Trang kế hoạch: mục lục thành cột bên trái ở màn rộng (từ 1160px); bản đồ ga theo ngày không dính nữa, cuộn qua thì hiện bản gọn (chấm và tên ga đang đọc) cách mục lục 8px; trên điện thoại thanh mục lục tự ẩn khi cuộn xuống, hiện khi cuộn lên (thien chọn cách a, 02:30) | thien bấm Thích chi tiết thử bản đồ ngày, ghi chú muốn sidebar, bản đồ dính bớt sát và gọn lại khi lướt (nguyên văn trong hàng chờ gu) |
+| 2026-11-19 | Điều kiện "Xong khi" của checkpoint 2 kiểm bằng ba câu hỏi của checkpoint 3 đặt ngay trên trang của kế hoạch này, thay vì chờ một kế hoạch mới | thien nhắn "bạn thực hiện cho xong nốt đi để tiến tới các phần tiếp theo" (02:48); câu hỏi của ga 3 là thật, trả lời đổi cách làm ga 3 |
 | 2026-11-18 | Checkpoint 2 thêm một việc: mang các ý review PR #124 vào mẫu kế hoạch | Bản nguồn của vòng gu giữ đúng như thien đã xem, nên sửa ở mẫu mới chứ không sửa bản cũ |
 
 ## Lỗi gặp
