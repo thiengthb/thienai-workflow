@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 0, vòng thử gu đầu tiên
 
 Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo nhánh mới từ main) · PR: chưa có
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWDbXVGqmzESXaXn7P · Cập nhật: 2026-11-18T14:33Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX3kxdpafP9q92LUbo · Cập nhật: 2026-11-18T14:42Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
