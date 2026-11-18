@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 2, mẫu kế hoạch nhìn được
 
 Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo nhánh mới từ main) · PR: chưa có
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYey4CuVVfhKvuPEUY · Cập nhật: 2026-11-18T17:17Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYey4CuVVfhKvuPEUY · Cập nhật: 2026-11-18T17:39Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -20,13 +20,17 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYey4CuVVfhKvuPEU
 - Checkpoint 1 dựng xong (18/11, 22:59): `artifacts/kit/diagram.js` (dagre 3.1.3 gắn ở `artifacts/kit/vendor/`, lưới dự phòng), mục Sơ đồ trong `gallery.html`; check-pages 0 lỗi; kế hoạch tick 4 việc, STATUS 7/24; PR #126 (nháp)
 - Trang mẫu thành phần có mục Sơ đồ đã đăng: https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (nick tnt697; link HuyQj… trong artifacts/README.md là của nick khác)
 - PR #126 (lớp sơ đồ) và #127 (làm mới kit: nút, icon Lucide, thành phần mới, bảng màu giấy trắng xanh petrol, `kit/pack.mjs`) đã merge 19/11 (thien nhắn "merge"); PR #128 ghi STATUS
+- thien bấm sơ đồ trên điện thoại, không lỗi: checkpoint 1 xong; câu vì sao bảng màu đã vào hàng chờ gu (PR #129, tự merge)
+- thien chê nút Nhấn sáng hẳn ra (00:31): PR #130 bỏ quầng sáng, chế độ tối dùng petrol đậm chữ trắng và --primary-fill; trang mẫu đã đăng đè; chờ thien merge #130
 
 ## Bước tiếp theo
 1. Checkpoint 2: thư mục mới `artifacts/plan/`, lệnh `make-plan.mjs` đọc file `docs/plans/*.md` theo `templates/PLAN.template.md`, dựng tuyến checkpoint (dùng `Diagram.mount` hay `ol.steps` của kit), phương án, câu hỏi trả lời bằng nút, lưu vào db trang; xem đủ việc trong mục checkpoint 2 của kế hoạch (cả 7 ý review PR #124)
 2. Ở ga 2 thử bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử; không lấy nền tối, chữ khổng lồ
+1. Checkpoint 2: thư mục mới `artifacts/plan/`, lệnh `make-plan.mjs` đọc file `docs/plans/*.md` theo `templates/PLAN.template.md`, dựng tuyến checkpoint (dùng `Diagram.mount` hay `ol.steps` của kit), phương án, câu hỏi trả lời bằng nút, lưu vào db trang; xem đủ việc trong mục checkpoint 2 của kế hoạch (cả 7 ý review PR #124)
+2. Ở ga 2 thử bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử; không lấy nền tối, chữ khổng lồ
 
 ## Đang chờ thien
-- Bấm thử mục Sơ đồ ở https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mở ở nick tnt697); một câu vì sao chọn giấy trắng với xanh petrol (chép vào `learning/frontend/taste-queue.md`)
+- Xem nút ở https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mở ở nick tnt697) rồi merge PR #130
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
