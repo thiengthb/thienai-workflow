@@ -28,6 +28,7 @@ jobs:
       - run: node .github/scripts/cli-paths.test.mjs
       - run: node .github/scripts/make-round.test.mjs
       - run: node .github/scripts/make-decision.test.mjs
+      - run: node .github/scripts/make-plan.test.mjs
       - run: node .github/scripts/make-lesson.test.mjs
       - run: node .github/scripts/publish-progress.test.mjs
       - run: node .github/scripts/make-review.test.mjs
