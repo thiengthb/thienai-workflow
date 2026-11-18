@@ -53,12 +53,9 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 
 ## Bảng học tuần
 
-Trang https://claude.ai/artifact/LijnAF7tSR4gBMrspPuQtV (loại trang Data của claude.ai): số buổi từng môn theo tuần, thẻ đến hạn, chỗ còn vướng, môn hay hỏi Claude. Bấm vào một số để xem nó lấy từ dòng nào, tính thế nào.
-
-Trang không đọc repo được, nên số liệu là 4 file JSON tải lên trang. Mỗi Chủ nhật (hoặc khi thien hỏi), AI làm:
+Không còn trang. Trang cũ (loại trang Data của claude.ai: số buổi từng môn theo tuần, thẻ đến hạn, chỗ còn vướng, môn hay hỏi Claude) bị xoá, và ngày 2026-11-18 thien chọn bỏ thay vì dựng lại: trang không đọc repo được nên phải có AI tải số liệu lên tay mỗi tuần, việc nhớ theo lịch kiểu đó hay trôi. Lệnh và giao diện vẫn giữ, để dựng lại khi thien cần:
 
 1. `node artifacts/lesson/learning-week.mjs --out <thư-mục>` ghi `sessions.json`, `cards.json`, `stuck.json`, `asks.json`. Mỗi file mang luôn code của script, để trên trang ai cũng xem được.
-2. Tải từng file lên trang: công cụ Artifact, `asset: true`, `url` là link trang trên.
-3. Ghi đè nguồn `datasets/<tên>` của trang (công cụ ArtifactData, `update`): `source.url` là `/_blob/<id>` vừa nhận, `updated: {at, by: "Claude"}`, `edit: {via: "claude", at}`. Xóa file cũ (`delete` với id cũ) khi không còn nguồn nào trỏ tới.
-
-Giao diện trang là `learning-week.html` trong thư mục này; sửa thì ghi lại vào `files/index.html` của trang. Tài khoản Claude khác không ghi được vào trang này: khi đó tạo trang mới từ loại Data, ghi `dash/meta` (`{title: "Học tuần này", lang: "vi"}`), 4 nguồn và `files/index.html`, rồi sửa link ở đây, trong `artifacts/README.md` và trong `learning/README.md`.
+2. Tạo trang mới từ loại Data, ghi `dash/meta` (`{title: "Học tuần này", lang: "vi"}`) và `files/index.html` lấy từ `learning-week.html` trong thư mục này.
+3. Tải từng file JSON lên trang (`asset: true`), rồi ghi nguồn `datasets/<tên>` (công cụ ArtifactData): `source.url` là `/_blob/<id>` vừa nhận, `updated: {at, by: "Claude"}`, `edit: {via: "claude", at}`.
+4. Ghi link trang mới vào mục "Mở nhanh" của `README.md`, kèm nick.

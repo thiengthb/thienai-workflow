@@ -1,9 +1,11 @@
 // publish-progress finds the old page links in the repo files and writes publish.json as an update in place.
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { linkAfter, trackedRepos, openPrs } from '../../templates/publish-progress.mjs';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { linkAfter, trackedRepos, openPrs, claimOut, MARK } from '../../templates/publish-progress.mjs';
 import { writePublish } from '../../artifacts/kit/publish.mjs';
 
 const root = new URL('../../', import.meta.url);
@@ -30,4 +32,29 @@ assert.deepEqual([gh[0].baseRepo, gh[0].headRepo], ['o/r', 'f/r'], 'which repo e
 const pub2 = await openPrs('o/r', () => ({ status: 1 }), async () => ({ ok: true, json: async () => api }));
 assert.equal(pub2[0].url, 'u', 'falls back to the public API');
 assert.equal(await openPrs('o/r', () => ({ status: null, error: new Error('no gh') }), async () => ({ ok: false })), null);
+
+// --out never deletes or overwrites a folder the command did not make (Codex review 2026-11-17: user files were lost).
+const t = mkdtempSync(join(tmpdir(), 'out-'));
+const mine = join(t, 'mine');
+mkdirSync(join(mine, 'repos', 'sakubun'), { recursive: true });
+writeFileSync(join(mine, 'repos', 'sakubun', 'my-notes.txt'), 'việc chưa commit');
+writeFileSync(join(mine, 'index.html'), '<p>trang của mình</p>');
+assert.match(claimOut(mine, join(t, 'build')), /không phải do lệnh này tạo/, 'a folder with files of its own is refused');
+assert.ok(!existsSync(join(mine, MARK)), 'a refused folder is not marked');
+const script = fileURLToPath(new URL('templates/publish-progress.mjs', root));
+const run = spawnSync(process.execPath, [script, 'overview', '--out', mine], { encoding: 'utf8', timeout: 30000 });
+assert.equal(run.status, 1, 'the command stops before cloning anything');
+assert.equal(readFileSync(join(mine, 'repos', 'sakubun', 'my-notes.txt'), 'utf8'), 'việc chưa commit', 'user file kept');
+assert.equal(readFileSync(join(mine, 'index.html'), 'utf8'), '<p>trang của mình</p>', 'user page kept');
+assert.equal(claimOut(join(t, 'new', 'dir'), join(t, 'build')), '', 'a folder that does not exist yet is fine');
+assert.ok(existsSync(join(t, 'new', 'dir', MARK)), 'and gets the mark');
+assert.equal(claimOut(join(t, 'new', 'dir'), join(t, 'build')), '', 'a marked folder can be reused even with files in it');
+mkdirSync(join(t, 'empty'));
+assert.equal(claimOut(join(t, 'empty'), join(t, 'build')), '', 'an empty folder is fine');
+mkdirSync(join(t, 'build', 'progress-overview'), { recursive: true });
+writeFileSync(join(t, 'build', 'progress-overview', 'index.html'), 'old build');
+assert.equal(claimOut(join(t, 'build', 'progress-overview'), join(t, 'build')), '', 'the default place under build/ is always the command\'s own, marked or not');
+mkdirSync(join(t, 'buildx'));
+writeFileSync(join(t, 'buildx', 'f'), '');
+assert.match(claimOut(join(t, 'buildx'), join(t, 'build')), /không phải/, 'a sibling whose name starts with build is not under build/');
 console.log('publish-progress: ok');

@@ -1,11 +1,11 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-17 · Claude nick tnt697 (project Claude, chat Frontend 10) · Trang tiến độ: https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n (trang tổng quan, tab thienai-workflow)
+Cập nhật lần cuối: 2026-11-18 · Claude nick tnt628 (project Claude, thread Phản biện review Codex) · Trang tiến độ: https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n (trang tổng quan, tab thienai-workflow)
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu. Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
 
 ## Đang ở đâu
-Bộ quy trình chung, bộ khung artifact (4 mẫu, dựng bằng một lệnh) và hệ thống học 3 môn xoay vòng đều đang dùng hằng ngày. Kế hoạch sửa sau review 2026-11-17 đã merge đợt 0–3 (PR #98–#103); đợt 4, 5 đang làm sớm để CodeRabbit kịp review trước 2026-11-24.
+Bộ quy trình chung, bộ khung artifact (4 mẫu, dựng bằng một lệnh) và hệ thống học 3 môn xoay vòng đều đang dùng hằng ngày. Kế hoạch sửa sau review 2026-11-17 đã merge đợt 0–3 (PR #98–#103); phần làm được của đợt 4, 5 đã làm sớm (PR #105). Review của Codex ngày 17/11 đã kiểm từng ý, phần sửa ở PR #121.
 
 ## Kế hoạch đang chạy
 Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
@@ -14,7 +14,8 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 |---|---|---|
 | [Sửa quy trình sau review 2026-11-17](plans/2026-11-17-workflow-review.md) | 0–3 đã merge (PR #98–#103); 5: phần làm được đã làm sớm, còn đối chiếu với tính năng mới của Claude ở 2026-12-01; 4: phần máy xong (bước ôn tự sinh), chờ đo ở hai buổi học kế tiếp | 21/22 |
 | [Học càng nhiều, repo không nặng thêm](plans/2026-11-15-lean-learning.md) | 0–2 xong; 3: đã đo BA 5 và Frontend 10, ôn tự sinh chạy đúng, nhưng lượt dựng bài chưa giảm (Frontend 10 khoảng 65), xét ở 01/12; 4 bỏ (thien chọn 2026-11-17) | 8/11 |
-| [Các hành động giữa thien và AI còn thiếu luật](plans/2026-11-17-action-gaps.md) | 1 đã merge (PR #104), đang kiểm ở 3 chat (chat Frontend 10 trượt: thien vẫn phải nhắn merge); 2: lệnh, bảng file đích, thuật ngữ đã merge (PR #106), gu đã vào thienui (PR #8), sửa tên trục đã merge (PR #110); 3 ở mốc 01/12 | 11/16 |
+| [Các hành động giữa thien và AI còn thiếu luật](plans/2026-11-17-action-gaps.md) | 1 đã merge (PR #104), kiểm ở 4 chat: 4 trên 6 PR đủ điều kiện được AI tự merge, quyết sửa gì ở 01/12; 2 xong; 3 ở mốc 01/12 | 11/16 |
+| [Sửa theo review Codex 17/11](plans/2026-11-18-codex-review.md) | 1 (hai lệnh không còn xoá hay ghi đè dữ liệu) và 2 (sửa chỗ ghi sai) ở PR #121, chờ merge; 3 đã gộp vào mốc 01/12 | 0/12 |
 | [Trang mở nhanh](plans/2026-11-17-quick-access.md) | 1, 2, 4 xong, thien đã dùng tab "Mở nhanh" trên điện thoại; 3: sơ đồ đã vào README (PR #118), còn xem trên điện thoại và xem lại ở mốc 01/12; lối tắt tuỳ thien | 9/11 |
 
 ## Việc dở
@@ -26,7 +27,6 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 - Frontend 10 mở chặng 2 (chọn bản sửa cho màn "Xong buổi ôn" của sakubun, PR #117): ôn 5/5, chọn đúng bản sửa, tự nói lại lần đầu có "vì sao"; "nổi = thêm màu" còn vướng.
 - Chiến tranh 7 (bất ngờ và lừa địch, giấu pháo ở Điện Biên Phủ), buổi đầu dùng bước ôn tự sinh: ôn 4/4, thien chấm "khó". Số lượt dựng bài không tách được, vì cùng chat còn làm đợt 2 rà soát hành động (PR #106).
 - Frontend 9, buổi mốc so sánh mù (sớm hơn mốc 2026-11-22): xong chặng 1 frontend, chọn học a11y trước ở chặng 3.
-- Sửa quy trình sau review: đợt 0–2 (PR #98); sakubun nhận phần chung mới của `AGENTS.md` (sakubun PR #327).
 
 ## Việc tiếp theo
 1. Buổi học kế tiếp: Chiến tranh 8, rồi Frontend 11. Trước buổi chiến tranh: sửa "Xem Claude làm" lấy nhầm track của bài khác (`learning/war.md`). BA 6 cần ngắn lại (BA 5 tốn 60 phút, "dài", "khó"). Ngày 17/11 thien học 7 buổi, quá nhịp 4 buổi một tuần: tuần này không cần thêm buổi.
@@ -34,7 +34,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- Trang "Bảng học tuần" (LijnAF7tSR4gBMrspPuQtV) đã bị xoá (thien báo 2026-11-17), nhưng `README.md`, `artifacts/README.md`, `artifacts/lesson/README.md`, `learning/README.md` vẫn trỏ tới: chọn dựng lại hay bỏ.
+- Merge [PR #121](https://github.com/thiengthb/thienai-workflow/pull/121) (sửa `templates/`, `.github/`, nên theo `profile/DELEGATION.md` là thien merge), trước 24/11 để CodeRabbit kịp review.
 
 ## Đang vướng
 - Không có. Trang tổng quan đọc sakubun bằng bản clone công khai.

@@ -12,7 +12,8 @@
 // --beta: project bản beta (chat điều phối, mỗi việc một thread cloud). AGENTS.md đã tự nạp qua CLAUDE.md nên không in lại;
 //          setup-check kiểm theo đoạn instructions bản beta và bỏ phần knowledge (profile/SETUP.md, "Hai kiểu project").
 // Tham số lạ làm lệnh dừng trước khi đụng tới sổ (lỗi 2026-11-17: --dry-run bị bỏ qua lặng lẽ và việc bị nhận thật).
-// STATUS nói chờ một PR mà PR đó đã đóng (đọc refs/pull trên origin) thì in "nhắc:" để phiên này sửa STATUS trong PR của nó.
+// STATUS hay mục "Đang ở đâu" của kế hoạch đang chạy nói chờ một PR mà PR đó không còn mở (đọc refs/pull trên origin)
+// thì in "nhắc:" để phiên này mở PR xem rồi sửa dòng đó trong PR của nó.
 //
 // --claim: thien said "tiếp tục". Sets "Ghi bởi" of the task to this value and saves it right away (profile/HANDOFF.md,
 //          step 3); the working copy is written next to the repo folder (../<việc>.md), outside git.
@@ -39,23 +40,34 @@ export function statusParts(md) {
   return [head, ...parts.map((p) => p.trim())].filter(Boolean).join('\n\n');
 }
 
+/** The "## Đang ở đâu" section of a plan file, where its waiting lines live. */
+export function planNow(md) {
+  const m = normalize(md).match(/^## Đang ở đâu\n([\s\S]*?)(?=^## |(?![\s\S]))/m);
+  return m ? m[1] : '';
+}
+
 /**
- * Lines of STATUS that wait on a PR of this repo which is no longer open ("chờ merge PR #97" after #97 merged).
- * prs: prRefs() of the repo. A "#N" right after another repo's name (sakubun PR #326) belongs to that repo: skipped.
+ * Lines of STATUS (or of a plan's "Đang ở đâu") that wait on a PR of this repo which is no longer open
+ * ("chờ merge PR #97" after #97 merged). prs: prRefs() of the repo. A "#N" right after another repo's name
+ * (sakubun PR #326) belongs to that repo: skipped. Only the clause (between ; or .) that says it waits counts,
+ * so "PR sau buổi (#107) qua kiểm; tên trục ở PR #110, chờ thien merge" flags #110 only.
+ * No merge ref does not tell merged from closed from open with a conflict, so the note says to open the PR.
  */
-export function stalePrNotes(md, prs, otherRepos = ['sakubun', 'thienui', 'tiktok', 'nuc-infra']) {
+export function stalePrNotes(md, prs, otherRepos = ['sakubun', 'thienui', 'tiktok', 'nuc-infra'], { pick = statusParts, file = 'STATUS', wait = /chờ|merge|đang mở/i } = {}) {
   if (!prs) return [];
-  const parts = statusParts(md).split('\n').filter((l) => /chờ|merge|đang mở/i.test(l));
+  const lines = pick(md).split('\n');
   const out = [];
-  for (const line of parts) {
-    for (const m of line.matchAll(/#(\d+)/g)) {
-      const before = line.slice(Math.max(0, m.index - 16), m.index);
-      if (new RegExp(`(${otherRepos.join('|')})\\s*(PR\\s*)?$`, 'i').test(before)) continue;
-      // History next to the number ("đã merge (PR #81)", "PR #60 đã đóng") is not waiting.
-      const near = line.slice(Math.max(0, m.index - 30), m.index + m[0].length + 14);
-      if (/đã (merge|đóng|vào|xong)/i.test(near)) continue;
-      const pr = prs.byNumber.get(Number(m[1]));
-      if (pr && !pr.open) out.push(`STATUS còn chờ PR #${m[1]} nhưng PR đó đã đóng (hay đang conflict): kiểm PR rồi sửa dòng «${line.trim().slice(0, 90)}» trong PR của phiên này.`);
+  for (const line of lines) {
+    for (const clause of line.split(/[;]|\.(?=\s)/).filter((c) => wait.test(c))) {
+      for (const m of clause.matchAll(/#(\d+)/g)) {
+        const before = clause.slice(Math.max(0, m.index - 16), m.index);
+        if (new RegExp(`(${otherRepos.join('|')})\\s*(PR\\s*)?$`, 'i').test(before)) continue;
+        // History next to the number ("đã merge (PR #81)", "PR #60 đã đóng") is not waiting.
+        const near = clause.slice(Math.max(0, m.index - 30), m.index + m[0].length + 14);
+        if (/đã (merge|đóng|vào|xong)/i.test(near)) continue;
+        const pr = prs.byNumber.get(Number(m[1]));
+        if (pr && !pr.open) out.push(`${file} còn chờ PR #${m[1]} mà PR đó không còn mở bình thường (đã merge, đã đóng, hay đang mở nhưng conflict): mở PR xem trước, rồi sửa dòng «${line.trim().slice(0, 90)}» trong PR của phiên này.`);
+      }
     }
   }
   return [...new Set(out)];
@@ -198,7 +210,18 @@ function main(argv) {
   console.log('\n## STATUS (thienai-workflow, phần cần cho phiên mới)');
   const status = join(here, 'docs/STATUS.md');
   console.log(existsSync(status) ? statusParts(readFileSync(status, 'utf8')) : 'Không có docs/STATUS.md.');
-  if (existsSync(status) && !noFetch) for (const n of stalePrNotes(readFileSync(status, 'utf8'), prRefs({ cwd: here }))) console.log('nhắc: ' + n);
+  if (existsSync(status) && !noFetch) {
+    const prs = prRefs({ cwd: here });
+    for (const n of stalePrNotes(readFileSync(status, 'utf8'), prs)) console.log('nhắc: ' + n);
+    // Plans repeat the waiting line at their top ("thien cần làm: merge PR #110"), and it went stale there (Codex review 17/11).
+    const plans = join(here, 'docs/plans');
+    for (const f of existsSync(plans) ? readdirSync(plans).filter((x) => x.endsWith('.md')) : []) {
+      const md = readFileSync(join(plans, f), 'utf8');
+      if (!/^Trạng thái:\s*(đang chạy|tạm dừng)/m.test(md)) continue;
+      // A plan's top reads like history ("PR #98 merge 2026-11-17"), so only "chờ", "đang mở" and "cần làm" mean waiting there.
+      for (const n of stalePrNotes(md, prs, undefined, { pick: planNow, file: `docs/plans/${f}`, wait: /chờ|đang mở|cần làm/i })) console.log('nhắc: ' + n);
+    }
+  }
   if (task && task.repo !== SELF) console.log(`\nViệc nằm ở ${task.repo}: clone repo đó, đọc docs/STATUS.md của nó trước khi làm.`);
   console.log('\n## Nhánh chưa merge (thienai-workflow)');
   let open = openWork({ fetch: !noFetch, cwd: here });

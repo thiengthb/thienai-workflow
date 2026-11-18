@@ -38,8 +38,6 @@ Hàng chờ: testing, kinh tế, chính trị. Tiếng Nhật đã có app sakub
 
 ## Trạng thái
 
-Bảng học tuần (số buổi mỗi tuần, thẻ đến hạn, chỗ còn vướng): https://claude.ai/artifact/LijnAF7tSR4gBMrspPuQtV. AI làm mới số liệu mỗi Chủ nhật, cách làm trong [`artifacts/lesson/README.md`](../artifacts/lesson/README.md).
-
 | Buổi gần nhất | Ngày | Môn | Buổi kế tiếp |
 |---|---|---|---|
 | Frontend 10 (chọn bản sửa cho màn "Xong buổi ôn" của sakubun) | 2026-11-17 | Frontend | **Chiến tranh 8**, rồi Frontend 11 |

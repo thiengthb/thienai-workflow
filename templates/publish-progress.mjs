@@ -10,8 +10,11 @@
 //   thienai-workflow không có trang riêng (dòng đó trỏ về trang tổng quan), lệnh dừng và bảo chạy overview.
 // roadmap: lộ trình học learning/roadmap.md, link ở dòng "Trang để xem trên điện thoại:" của file đó.
 // --new: bỏ link, đăng thành trang mới (khi trang cũ thuộc tài khoản Claude khác, đăng đè sẽ bị từ chối).
-import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, realpathSync } from 'node:fs';
-import { dirname, join, resolve, basename } from 'node:path';
+// --out: chỉ nhận thư mục chưa có, rỗng, nằm trong build/ của repo, hay do chính lệnh này tạo lần trước (có file dấu).
+//   Lệnh xoá rồi clone lại <out>/repos/<tên> và ghi đè index.html, nên thư mục khác có file thì dừng
+//   (review Codex 17/11: chạy thử với --out vào thư mục có sẵn thì mất file của người dùng).
+import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, realpathSync, readdirSync } from 'node:fs';
+import { dirname, join, resolve, basename, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { buildPage } from './progress-page.mjs';
@@ -21,6 +24,20 @@ const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SELF = 'thiengthb/thienai-workflow';
+
+export const MARK = '.made-by-publish-progress';
+
+/** '' when out may be written (and marks it), else why not. Never deletes anything itself. */
+export function claimOut(out, buildDir = join(root, 'build')) {
+  const rel = relative(resolve(buildDir), resolve(out));
+  const inBuild = rel !== '' && !rel.startsWith('..') && !isAbsolute(rel);
+  if (existsSync(out) && !inBuild && !existsSync(join(out, MARK)) && readdirSync(out).length) {
+    return `Thư mục ${out} đã có file mà không phải do lệnh này tạo. Lệnh sẽ xoá ${join(out, 'repos')} và ghi đè index.html ở đó, nên dừng. Bỏ --out (dùng build/), hoặc chọn thư mục chưa có hay rỗng.`;
+  }
+  mkdirSync(out, { recursive: true });
+  writeFileSync(join(out, MARK), 'Thư mục do templates/publish-progress.mjs tạo; lệnh được xoá và ghi lại mọi thứ ở đây.\n');
+  return '';
+}
 
 /** The first claude.ai artifact link on the line that contains marker, or ''. */
 export function linkAfter(md, marker) {
@@ -80,7 +97,8 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const outArg = flag('out'), fresh = bool('new');
   const kind = args[0] || 'overview';
   const out = resolve(outArg || join(root, 'build', `progress-${kind}`));
-  mkdirSync(out, { recursive: true });
+  const refuse = claimOut(out);
+  if (refuse) { console.error(refuse); process.exit(1); }
   let pageArgs, url, capabilities = { db: {} }, description;
   if (kind === 'overview') {
     const md = read(join(root, 'life/tracked-repos.md'));

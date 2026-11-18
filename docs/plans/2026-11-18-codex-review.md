@@ -1,13 +1,13 @@
 # Sửa theo review của Codex ngày 17/11
 
-Trạng thái: tạm dừng (chờ thien duyệt) · Viết: 2026-11-18 · nick tnt628 · Thread: [Phản biện review Codex và lên kế hoạch](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRQpMiaEPExtTy4gXkaYnx4n)
+Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien bấm "Duyệt, bỏ Bảng học tuần" trên thẻ hỏi) · Cập nhật: 2026-11-18 · nick tnt628 · Thread: [Phản biện review Codex và lên kế hoạch](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRQpMiaEPExtTy4gXkaYnx4n)
 
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: chờ thien duyệt. Chưa sửa code.
-- Còn thiếu: cả ba checkpoint.
-- thien cần làm: đọc mục "Kiểm từng ý" và "Câu hỏi", trả lời "ok" hoặc chọn khác.
+- Đang ở: checkpoint 1 và 2 xong trong PR #121, chờ merge; checkpoint 3 đã ghi vào danh sách mốc 01/12 của kế hoạch `action-gaps` trong cùng PR.
+- Còn thiếu: merge PR #121, đăng lại trang lộ trình sau khi merge; ba việc ở mốc 01/12.
+- thien cần làm: merge [PR #121](https://github.com/thiengthb/thienai-workflow/pull/121) (có `templates/`, `.github/`), trước 24/11.
 
 ## Mục tiêu
 Sửa những chỗ review của Codex (commit `721a116`, 17/11) chỉ ra mà kiểm lại thấy đúng, ưu tiên hai lệnh có thể xoá hay ghi đè dữ liệu, mà không thêm luật mới hay script mới trước mốc 01/12.
@@ -51,39 +51,41 @@ Thêm một chỗ Codex không nêu: thread cũ "Cải thiện workflow AI từ 
 
 ## Checkpoint
 
-### 1. Hai lệnh không còn xoá hay ghi đè dữ liệu (một PR, trước 24/11)
+### 1. Hai lệnh không còn xoá hay ghi đè dữ liệu
 Xong khi: CI có test dựng một thư mục chứa file của người dùng rồi chạy `publish-progress --out` vào đó, lệnh dừng và file còn nguyên; thien đọc dòng `check-open-work` cho PR không còn ref merge thấy chữ "chưa rõ, mở PR xem trước", không thấy "xoá nhánh"; CodeRabbit đã review và mọi ý đã được trả lời.
-- [ ] `publish-progress.mjs`: chỉ xoá hay ghi vào thư mục mà chính lệnh đã tạo (có file dấu); thư mục `--out` có sẵn và có file khác thì dừng, báo cách chạy. Test trong `.github/scripts/publish-progress.test.mjs`
-- [ ] `check-open-work.mjs` và `start-session.mjs`: PR không còn ref merge thì báo "đã đóng, đã merge, hoặc đang mở nhưng conflict: mở PR xem trước", không gọi là nhánh cũ. Sửa test có sẵn
-- [ ] `start-session.mjs`: hàm dò "STATUS còn chờ PR đã đóng" dò thêm mục "Đang ở đâu" của các kế hoạch đang chạy. Test có sẵn thêm một ca
-- [ ] `sync-agents-md.mjs`: mô tả PR bot mở thêm câu "nhánh do bot quản lý, đừng đẩy commit lên"
-- [ ] Merge: thien (PR sửa `templates/`, `.github/`)
+- [ ] `publish-progress.mjs`: chỉ xoá hay ghi vào thư mục chưa có, rỗng, nằm trong `build/` hay có file dấu do chính lệnh tạo; thư mục khác có file thì dừng. Test trong `.github/scripts/publish-progress.test.mjs` (chờ merge PR #121)
+- [ ] `check-open-work.mjs` và `start-session.mjs`: PR không còn ref merge thì báo "chưa rõ: đã merge, đã đóng, hay đang mở nhưng conflict", bảo mở PR xem trước, không gọi là nhánh cũ (chờ merge PR #121)
+- [ ] `start-session.mjs`: dò thêm mục "Đang ở đâu" của các kế hoạch đang chạy; chỉ xét vế câu có chữ chờ, để số PR cũ cùng dòng không bị báo nhầm (chờ merge PR #121)
+- [ ] `sync-agents-md.mjs`: mô tả PR bot mở có câu "nhánh do Action quản lý, đừng đẩy commit lên" (chờ merge PR #121)
 
-### 2. Chỗ ghi sai được sửa (một PR, AI tự merge nếu chỉ đụng `learning/`, `docs/`)
+### 2. Chỗ ghi sai được sửa
 Xong khi: thien mở kế hoạch `action-gaps`, `learning/roadmap.md`, `learning/usage.md` không thấy câu nào trái với STATUS; trang lộ trình trên điện thoại khớp file.
-- [ ] Kế hoạch `action-gaps`: bỏ chữ "chờ merge PR #110"; ghi đủ sáu lần kiểm tự merge kèm số PR
-- [ ] `learning/roadmap.md`: sửa câu chặng 2 frontend và số buổi còn lại môn chiến tranh, thêm trang Chiến tranh 6, 7 vào "Bài đã học"; đăng lại trang lộ trình
-- [ ] `learning/usage.md`: ghi rõ cột "Phút" tính từ lúc mở trang tới lúc bấm xong, quá 60 phút thì không dùng để tính độ dài buổi; ghi chú hai dòng 311 và 952
-- [ ] Bảng học tuần: làm theo câu hỏi 2 (đụng `README.md`, `artifacts/` thì PR này thành thien merge)
-- [ ] Thêm dòng kế hoạch này vào STATUS, giữ STATUS dưới 40 dòng
+- [ ] Kế hoạch `action-gaps`: bỏ chữ "chờ merge PR #110"; bảng sáu lần kiểm tự merge (chờ merge PR #121)
+- [ ] `learning/roadmap.md`: câu chặng 2 frontend, số buổi còn lại môn chiến tranh, trang Chiến tranh 6, 7 trong "Bài đã học" (chờ merge PR #121)
+- [ ] Đăng lại trang lộ trình sau khi merge
+- [ ] `learning/usage.md`: ý nghĩa cột "Phút", ghi chú hai dòng 311 và 952 (chờ merge PR #121)
+- [ ] Bảng học tuần: bỏ link ở `README.md`, `artifacts/README.md`, `learning/README.md`; `artifacts/lesson/README.md` giữ cách dựng lại (chờ merge PR #121)
+- [ ] Dòng kế hoạch này trong STATUS, STATUS vẫn 40 dòng (chờ merge PR #121)
 
 ### 3. Gộp phần đo vào mốc 01/12 (không có việc riêng)
-Xong khi: danh sách việc ở mốc 01/12 (kế hoạch `action-gaps`, checkpoint 3) có ba dòng dưới, và buổi xem lại 01/12 trả lời được từng dòng.
-- [ ] Tự merge: quyết sửa công cụ, sửa luật hay để nguyên, dựa trên bảng các lần kiểm ở đợt 2
-- [ ] Review theo giai đoạn: soi trước lệnh xoá hay ghi file, git, token, đồng bộ sang repo khác; ghi vào bảng ủy quyền một dòng "CI không tự chặn merge, AI tự xem CI xanh trước khi merge"
-- [ ] Sổ bàn giao: lần tới thien nói "tiếp tục", ghi lại nick mới có làm tiếp được không và thiếu gì (không làm thử riêng)
+Xong khi: danh sách việc ở mốc 01/12 (kế hoạch `action-gaps`, checkpoint 3) có các ý dưới, và buổi xem lại 01/12 trả lời được từng ý.
+- [ ] Ghi vào danh sách mốc 01/12: quyết phần tự merge từ bảng "Kiểm đợt 1"; vùng soi trước khi review theo giai đoạn; dòng "CI không tự chặn merge" cho bảng ủy quyền; thử sổ bàn giao lần tới thien nói "tiếp tục" (chờ merge PR #121)
+- [ ] Buổi xem lại 01/12 trả lời từng ý
 
-Thời gian: đợt 1 và 2 làm trong thread này, khoảng 2 PR, thien merge một cái. Đợt 3 không tốn thêm phiên.
+Thời gian: đợt 1 và 2 làm trong thread này, một PR (#121) thien merge. Đợt 3 không tốn thêm phiên.
 
 Chỗ dễ sa lầy: phần dừng của `publish-progress` làm phiền khi AI chạy lại vào chính `build/` (phải nhận ra thư mục do lệnh tạo lần trước); sửa lời báo PR rồi trượt sang gọi API GitHub (phiên cloud không có `gh` đăng nhập, không làm).
 
-## Câu hỏi
+## Câu hỏi (thien đã trả lời 2026-11-18: duyệt, bỏ Bảng học tuần)
 1. Duyệt kế hoạch và làm đợt 1, 2 ngay để CodeRabbit kịp review trước 24/11? Đề xuất: có.
 2. Bảng học tuần (trang đã bị xoá): dựng lại hay bỏ? Đề xuất: bỏ trang và bỏ link ở bốn file, giữ lệnh `learning-week.mjs` để dựng lại khi cần. Lý do: trang loại Data phải có AI tải số liệu lên tay mỗi Chủ nhật, việc nhớ theo lịch kiểu này hay trôi; gói buổi và trang ôn thẻ đã có thẻ đến hạn. Lý do mạnh nhất để không bỏ: ngày 17/11 bạn học 7 buổi, quá nhịp 4 buổi một tuần, mà không chỗ nào khác cho thấy số buổi trong tuần. Nếu cần thấy số đó, mình sẽ đưa ý "gói buổi in số buổi tuần này" vào mốc 01/12 thay vì dựng lại trang.
 
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-18 | Một PR (#121) thay cho hai: script và phần sửa chữ đi chung, thien merge cả | Phiên cloud chỉ đẩy được một nhánh của mình; PR sửa chữ cũng đụng `README.md`, `artifacts/` (bỏ link Bảng học tuần) nên đằng nào thien cũng merge |
+| 2026-11-18 | Ba việc đo ghi thẳng vào danh sách mốc 01/12 của kế hoạch `action-gaps`, không để ở đây | Một chỗ cho mọi việc của mốc 01/12 |
+| 2026-11-18 | `start-session` chỉ xét vế câu có chữ chờ, cả với STATUS | Thử trên kế hoạch `action-gaps` thì số PR cũ cùng dòng (#107, thienui PR #8) bị báo nhầm |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |

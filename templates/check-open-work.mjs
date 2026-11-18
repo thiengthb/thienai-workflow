@@ -4,8 +4,8 @@
 //   node templates/check-open-work.mjs [đường-dẫn ...] [--base <nhánh chính>] [--no-fetch]
 //
 // Tải nhánh mới nhất từ origin, rồi in mọi nhánh trên origin có commit chưa vào nhánh chính, kèm file nó sửa
-// và PR của nhánh (đang mở, đã đóng hay chưa có), đọc từ refs/pull của GitHub: PR đóng thì nhánh chỉ là nhánh cũ
-// cần xem lại hay xoá, không phải việc đang làm dở.
+// và PR của nhánh (đang mở, chưa rõ hay chưa có), đọc từ refs/pull của GitHub. PR không còn ref merge thì có thể đã
+// merge, đã đóng, hay vẫn mở nhưng conflict (việc đang cần xử lý), nên lệnh không gọi đó là nhánh cũ (review Codex 17/11).
 // Nhánh chính: --base nếu có; không thì nhánh mặc định của origin (origin/HEAD), rồi main, rồi master.
 // Có đường dẫn (ví dụ learning/war.md learning/war/): chỉ báo nhánh sửa đúng những chỗ đó, và thoát mã 1 nếu có,
 // để script khác (make-lesson.mjs) dừng lại. Nhánh đang đứng, và nhánh đã gộp hết vào nhánh đang đứng, không tính.
@@ -82,7 +82,7 @@ export function openWork({ base, paths = [], fetch = true, cwd = process.cwd() }
 
 /** ", PR #N đang mở" and the like; nothing when PRs were not read. */
 const prNote = (w) => w.pr === undefined ? '' : !w.pr ? ', chưa có PR'
-  : w.pr.open ? `, PR #${w.pr.number} đang mở` : `, PR #${w.pr.number} đã đóng hay đang conflict: nhánh cũ, xem PR rồi xoá nhánh nếu không cần`;
+  : w.pr.open ? `, PR #${w.pr.number} đang mở` : `, PR #${w.pr.number} chưa rõ: đã merge, đã đóng, hay đang mở nhưng conflict. Mở PR xem trước, đừng xoá nhánh khi chưa xem`;
 
 export function report(list, paths = []) {
   if (list.missingBase) return `Không thấy nhánh chính origin/${list.base}. Chạy lại với --base <tên nhánh chính>, hoặc tự xem trang Pull requests trước khi làm.`;
