@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 2, mẫu kế hoạch nhìn được
 
-Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo nhánh mới từ main) · PR: chưa có (mọi PR trước đã merge, tới #134)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtptJ · Cập nhật: 2026-11-18T18:46Z
+Repo: thiengthb/thienai-workflow · Nhánh: plan-page · PR: chưa mở
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtptJ · Cập nhật: 2026-11-18T18:57Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -26,9 +26,11 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtpt
 - thien chọn A · Thêm mực cam (01:11): mực hình --ink-1/2/3, em.k1/k2, kind sơ đồ, .fill-k*, .callout đã vào kit trong PR #131; trang mẫu đăng đè; kết quả ghi ở PR #133 (tự merge)
 - 19/11 01:21 thien nhắn merge: #130 (sửa thêm hover nút Nhấn theo CodeRabbit) và #131 (sửa hai ý CodeRabbit ở nguồn vòng 3) đã merge; #134 ghi STATUS và một dòng usage-log (277 lượt, đọc lại 110,9 triệu token)
 
+- 19/11 (phiên mới, cùng link chat): checkpoint 2 dựng phần máy trên nhánh `plan-page`, commit 55f7725: `artifacts/plan/` (parse-plan.mjs, make-plan.mjs, template.html, plan.js, fixture.md), test `.github/scripts/make-plan.test.mjs`, trang mẫu trong check-pages, check-tokens; kế hoạch thêm dòng "Ước:" cho ga 2–5. Bản đồ ga theo ngày và núm vặn đã vào làm chi tiết thử; 7 ý review đã áp. check-pages 0 lỗi.
+
 ## Bước tiếp theo
-1. Checkpoint 2: thư mục mới `artifacts/plan/`, lệnh `make-plan.mjs` đọc file `docs/plans/*.md` theo `templates/PLAN.template.md`, dựng tuyến checkpoint (dùng `Diagram.mount` hay `ol.steps` của kit, mực hình cho loại ga), phương án, câu hỏi trả lời bằng nút, lưu vào db trang; xem đủ việc trong mục checkpoint 2 của kế hoạch (cả 7 ý review PR #124)
-2. Ở ga 2 thử bản đồ ga theo ngày và núm vặn của bản C (vòng 1) làm chi tiết thử; không lấy nền tối, chữ khổng lồ; giữ bo góc, không kẻ ô
+1. Viết `artifacts/plan/README.md`, đăng trang thử của chính kế hoạch này (`node artifacts/plan/make-plan.mjs docs/plans/2026-11-18-visual-workflow.md /tmp/plan-vw`), mở PR nháp, sửa STATUS (dòng kế hoạch còn ghi chờ PR #127, #130 đã merge)
+2. Còn của checkpoint 2: trang tổng quan dẫn sang trang kế hoạch; điều kiện xong là kế hoạch kế tiếp gửi thien duyệt bằng trang này
 
 ## Đang chờ thien
 Không.
