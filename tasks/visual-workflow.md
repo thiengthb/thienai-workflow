@@ -1,7 +1,7 @@
-# Quy trình nhìn được: checkpoint 2, mẫu kế hoạch nhìn được
+# Quy trình nhìn được: checkpoint 3, mẫu luồng chạy
 
-Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo nhánh mới từ main cho checkpoint 3) · PR: #135–#138 đã merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWaXMmKxxBCbsYY4cB · Cập nhật: 2026-11-18T20:13Z
+Repo: thiengthb/thienai-workflow · Nhánh: flow-page · PR: #140 (chờ thien merge); #135–#138 đã merge
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWaXMmKxxBCbsYY4cB · Cập nhật: 2026-11-18T20:25Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -40,12 +40,16 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWaXMmKxxBCbsYY4c
 
 - 02:53 thien trả lời 3 câu hỏi checkpoint 3 bằng nút trên trang: ok cả 3 đề xuất (nguyên văn trong kế hoạch). 02:54 nhắn merge: #137 merge; #138 (STATUS, kế hoạch 11/24) tự merge sau khi sửa ý CodeRabbit (giữ chưa tick việc trang tổng quan). Trang kế hoạch đăng lại (câu hỏi đã trả lời). Trang tổng quan SZGp85… ở nick khác: nick này không đăng đè được (not found).
 
+- 19/11 03:30 (phiên mới, cùng link chat, "tiếp tục"): checkpoint 3 dựng xong trên nhánh `flow-page`: `artifacts/flow/` (make-flow.mjs, template.html, flow.js, fixture.json, README), luồng đầu `docs/flows/lesson.json`, test make-flow trong CI, check-pages có trang luồng (0 lỗi). Trang đăng: https://claude.ai/artifact/S9B86U6MGpnkYTa8enDtVM (nick tnt697, capabilities comments + db). Kế hoạch tick việc 1 của ga 3 (12/24). PR #140.
+
 ## Bước tiếp theo
-1. Checkpoint 3: mẫu `artifacts/flow/` theo 3 lựa chọn của thien: mỗi luồng một file JSON đúng định dạng `Diagram.mount`; điện thoại sơ đồ dính trên, chữ từng bước cuộn dưới, khối đang đọc sáng lên; cuối trang ô tự kể lại luồng, gửi cho Claude
-2. Khi một nick giữ trang tổng quan (SZGp85…) mở phiên: `node templates/publish-progress.mjs overview` rồi đăng đè, tick việc 4 của checkpoint 2
+1. Khi thien gửi bản kể lại từ trang luồng: đọc comment và db `flows/lesson`, so với 7 bước, chỉ chỗ thiếu; đạt thì ghi "Xong khi" của ga 3 vào kế hoạch.
+2. Sau merge #140: luồng thứ hai (kiến trúc sakubun hay luồng nghiệp vụ BA) để tick việc 2 của ga 3; việc 3 (8/8 mẫu) tick cùng lúc.
+3. Khi một nick giữ trang tổng quan (SZGp85…) mở phiên: `node templates/publish-progress.mjs overview` rồi đăng đè, tick việc 4 của checkpoint 2
 
 ## Đang chờ thien
-Không.
+- Kể lại luồng ở ô cuối trang https://claude.ai/artifact/S9B86U6MGpnkYTa8enDtVM rồi bấm "Gửi cho Claude"; bấm Thích/Không cho chi tiết thử.
+- Merge PR #140.
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
