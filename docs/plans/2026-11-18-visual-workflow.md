@@ -6,8 +6,8 @@ Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick
 
 ## Đang ở đâu
 - Đang ở: checkpoint 0. Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
-- Còn thiếu: thien chọn và câu vì sao; checkpoint 1 tới 5.
-- thien cần làm: mở trang chọn trên điện thoại, chọn một trong ba bản, viết một câu vì sao vào ô ghi chú, bấm "Gửi cho Claude".
+- Còn thiếu: câu vì sao của thien; checkpoint 1 tới 5.
+- thien đã chọn "B · Một nấc" (2026-11-18 22:02, giống đề xuất); ô ghi chú để trống. thien cần làm: gửi một câu vì sao, rồi mới tick việc cuối của checkpoint 0.
 
 ## Mục tiêu
 Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu của thien đi lên từng nấc, nhất quán mà không đứng yên (lời thien 2026-11-18: gu "phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn").
