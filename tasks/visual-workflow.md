@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 1, lớp sơ đồ dùng chung
 
-Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo nhánh mới từ main) · PR: #125 (chỉ STATUS và kế hoạch, CI xanh, chờ merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX3kxdpafP9q92LUbo · Cập nhật: 2026-11-18T15:35Z
+Repo: thiengthb/thienai-workflow · Nhánh: chưa có (tạo nhánh mới từ main) · PR: chưa có
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX3kxdpafP9q92LUbo · Cập nhật: 2026-11-18T15:37Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -15,15 +15,14 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX3kxdpafP9q92LUb
 - thien chọn B · Một nấc (15:02Z, giống đề xuất), ô ghi chú trống; đã ghi vào hàng chờ gu, kế hoạch, STATUS (commit a6409f9 trên nhánh)
 - Câu vì sao của thien đã chép nguyên văn vào `learning/frontend/taste-queue.md`; checkpoint 0 tick đủ 3/3; PR #124 chuyển sẵn sàng
 - CodeRabbit 15 ý: sửa 3 (link https bằng new URL, ví dụ JSON trong README, đường dẫn FONTSOURCE), 12 ý trên hai bản phác đã đóng băng thì trả lời và ghi vào việc mới của checkpoint 2; mọi thread đã resolve; CI xanh ở d8f1a6a
-- PR #124 đã merge (thien nhắn "ok bạn merge giúp mình", 22:31); PR #125 sửa STATUS sau merge, CI xanh, chưa merge
+- PR #124 đã merge (thien nhắn "ok bạn merge giúp mình", 22:31); PR #125 sửa STATUS sau merge, đã merge (thien nhắn "merge #125")
 
 ## Bước tiếp theo
-1. Merge PR #125 nếu thien bảo (chỉ đụng `docs/STATUS.md` và `docs/plans/`)
-2. Checkpoint 1: `artifacts/kit/diagram.js` (khối trơn viền mảnh, mũi tên, không tô, không bóng), xếp chỗ bằng thư viện có sẵn hạn một phiên, mục Sơ đồ trong `artifacts/kit/gallery.html`; nhánh mới từ main sau khi #124 merge
-3. Nhớ ở ga 2: thử bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử; không lấy nền tối, chữ khổng lồ (thien thấy C "quá mới")
+1. Checkpoint 1: `artifacts/kit/diagram.js` (khối trơn viền mảnh, mũi tên, không tô, không bóng), xếp chỗ bằng thư viện có sẵn hạn một phiên, mục Sơ đồ trong `artifacts/kit/gallery.html`; nhánh mới từ main sau khi #124 merge
+2. Nhớ ở ga 2: thử bản đồ ga theo ngày và núm vặn của bản C làm chi tiết thử; không lấy nền tối, chữ khổng lồ (thien thấy C "quá mới")
 
 ## Đang chờ thien
-- Merge PR #125, hay nhắn "merge #125"
+Không.
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
