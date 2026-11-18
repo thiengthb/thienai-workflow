@@ -7,7 +7,7 @@ Trang dựng thẳng từ một file `docs/plans/*.md`, để thien nắm kế h
 - Đầu trang: tên, mục tiêu, trạng thái, ngày duyệt, thanh tiến độ theo số việc đã tick.
 - Đang ở đâu: ba dòng có nhãn; "thien cần làm" tô cam. Dòng không nhãn gập vào "Ghi chú thêm". Thẻ "Ga đang chạy" là link `#ck-N`, Tab tới được.
 - Tuyến checkpoint: ga xong tô xanh (mực `--ink-1`), ga đang chạy viền cam (`--ink-2`), ga mốc (tên có "mốc 01/12") viền nét đứt vàng, ga bỏ gạch ngang. Mỗi ga có "Xong khi", số việc, số phiên ước, việc con gập mở (ga đang chạy mở sẵn).
-- Mục lục: thanh dính trên cùng ở điện thoại và máy tính bảng; từ 1160px là cột bên trái kèm tiến độ gọn (thien góp ý 19/11).
+- Mục lục: thanh dính trên cùng ở điện thoại và máy tính bảng, tự ẩn khi cuộn xuống đọc, hiện lại khi cuộn lên hay khi Tab vào (thien chọn 19/11); từ 1160px là cột bên trái kèm tiến độ gọn (thien góp ý 19/11).
 - Bản đồ ga theo ngày (chi tiết thử, lấy từ bản Thật xa của vòng gu 1, nền sáng; thien bấm Thích 19/11): ga xong ở ngày xong, mốc đứng yên đúng ngày, ga còn lại nối nhau từ hôm nay. Núm "mấy phiên mỗi tuần" chỉ hiện khi mọi ga còn lại có dòng `Ước:`. Cuộn qua bản đồ đầy đủ thì bản gọn hiện dính dưới mục lục (cách 8px): chỉ chấm và tên ga đang đọc, sáng theo ga cả khi cuộn ngược; bấm một ga thì nhảy tới ga đó.
 - Phương án: bảng "Các phương án đã xét" thành thẻ; hàng in đậm là phương án đã chọn, cột cuối của nó đổi tên thành "Chỗ yếu".
 - Câu hỏi: mỗi câu là một nhóm nút, đề xuất chọn sẵn ("để nguyên là ok"). Ô ghi chú của thien không bao giờ bị ghi đè; câu trả lời sẽ gửi hiện ở ô xem trước riêng. "Gửi cho Claude" gửi comment; không gửi được thì tự chép. Đổi bất cứ gì thì dòng "Đã chép" hay "Đã gửi" cũ tự xoá.

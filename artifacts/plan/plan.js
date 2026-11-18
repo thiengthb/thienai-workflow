@@ -11,10 +11,22 @@
   const links = [...toc.querySelectorAll('.in a')];
   const secs = links.map((a) => document.querySelector(a.getAttribute('href')));
   /** Chiều cao mục lục che phía trên cột đọc: 0 khi nó là cột bên trái. */
-  const tocH = () => (getComputedStyle(toc).position === 'fixed' ? 0 : toc.offsetHeight);
+  const side = () => getComputedStyle(toc).position === 'fixed';
+  const tocH = () => (side() || toc.classList.contains('away') ? 0 : toc.offsetHeight);
+  // Thanh trên (không phải cột bên) tự ẩn khi cuộn xuống đọc, hiện lại ngay khi cuộn lên hay khi phím Tab vào (thien chọn 19/11).
+  let lastY = scrollY;
+  function hideBar() {
+    const y = scrollY, d = y - lastY;
+    if (Math.abs(d) < 6) return;
+    lastY = y;
+    const away = !side() && d > 0 && y > 120 && !toc.contains(document.activeElement);
+    toc.classList.toggle('away', away);
+    document.documentElement.classList.toggle('toc-away', away);
+  }
+  toc.addEventListener('focusin', () => { toc.classList.remove('away'); document.documentElement.classList.remove('toc-away'); });
   const mini = $('mapmini');
   function measure() {
-    document.documentElement.style.setProperty('--toc-h', tocH() + 'px');
+    document.documentElement.style.setProperty('--toc-h', (side() ? 0 : toc.offsetHeight) + 'px');
     document.documentElement.style.setProperty('--map-h', mini ? mini.offsetHeight + 8 + 'px' : '0px');
   }
   function lightToc() {
@@ -205,7 +217,7 @@
 
   // ---------- Khởi động ----------
   let raf = 0;
-  const onScroll = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; lightToc(); miniShow(); readStop(); }); };
+  const onScroll = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; hideBar(); lightToc(); miniShow(); readStop(); }); };
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('resize', () => { measure(); draw(); onScroll(); });
   if (sel) { const s = $(sel); if (s) s.classList.add('sel'); }

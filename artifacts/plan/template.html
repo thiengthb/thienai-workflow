@@ -33,8 +33,13 @@ nav.toc .in { max-width: 760px; margin: 0 auto; padding: 6px 12px; display: flex
 nav.toc a { font: 500 13.5px/1 var(--font); color: var(--muted); text-decoration: none; padding: 10px 10px; border-radius: var(--r); white-space: nowrap; }
 nav.toc a:hover { color: var(--ink); }
 nav.toc a.on { background: var(--card); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
+nav.toc { transition: transform var(--t-base) var(--ease-out); }
+nav.toc.away { transform: translateY(-100%); }
+html.toc-away .mapmini { top: 8px; }
+@media (prefers-reduced-motion: reduce) { nav.toc { transition: none; } }
 .side-prog { display: none; }
 @media (min-width: 1160px) {
+  nav.toc, nav.toc.away { transform: none; }
   nav.toc { position: fixed; top: 0; bottom: 0; left: max(8px, calc(50% - 380px - 196px)); width: 180px; padding: 32px 0;
     background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border: 0; display: flex; flex-direction: column; gap: 24px; }
   nav.toc .in { flex-direction: column; margin: 0; padding: 0; gap: 0; overflow: visible; }
@@ -71,7 +76,7 @@ nav.toc a.on { background: var(--card); color: var(--ink); box-shadow: 0 0 0 1px
 .daymap svg { width: 100%; height: 84px; display: block; overflow: visible; }
 .mapmini { position: fixed; z-index: 5; top: calc(var(--toc-h) + 8px); left: 50%; width: min(728px, calc(100vw - 24px)); padding: 6px 12px 6px;
   box-shadow: var(--shadow-pop); opacity: 0; visibility: hidden; transform: translate(-50%, -6px);
-  transition: opacity var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out), visibility 0s linear var(--t-base); }
+  transition: opacity var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out), top var(--t-base) var(--ease-out), visibility 0s linear var(--t-base); }
 .mapmini.on { opacity: 1; visibility: visible; transform: translate(-50%, 0); transition-delay: 0s; }
 .mapmini svg { width: 100%; height: 34px; display: block; overflow: visible; }
 .mini-cap { min-height: 1.5em; font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
