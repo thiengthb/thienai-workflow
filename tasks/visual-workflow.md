@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 2, mẫu kế hoạch nhìn được
 
-Repo: thiengthb/thienai-workflow · Nhánh: plan-page · PR: #135 (nháp)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtptJ · Cập nhật: 2026-11-18T19:32Z
+Repo: thiengthb/thienai-workflow · Nhánh: chưa có (plan-page đã merge qua #135) · PR: #135, #136 đã merge
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtptJ · Cập nhật: 2026-11-18T19:45Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -34,12 +34,14 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtpt
 
 - 02:30 thien chọn cách (a) cho điện thoại: thanh trên tự ẩn khi cuộn xuống, hiện khi cuộn lên; đã làm (commit 1376b3f), đăng đè trang thử.
 
+- 02:35 thien nhắn "merge giúp tôi": PR #135 đã merge (squash c4bbd87; CodeRabbit không review vì PR nháp). PR #136 tick 4 việc checkpoint 2 (11/24), sửa STATUS, sửa một ý CodeRabbit, tự merge theo DELEGATION. Nhánh plan-page chưa xoá được (proxy chặn xoá nhánh).
+
 ## Bước tiếp theo
-1. Chờ CodeRabbit ở PR #135 rồi sửa; thien merge
-2. Còn của checkpoint 2: trang tổng quan (`templates/progress-page.mjs`) dẫn sang trang kế hoạch; "Xong khi" cần kế hoạch kế tiếp gửi thien duyệt bằng trang này
+1. Checkpoint 2 còn: trang tổng quan (`templates/progress-page.mjs`) dẫn sang trang kế hoạch; lần gửi kế hoạch kế tiếp thì dựng trang bằng `artifacts/plan/make-plan.mjs` (điều kiện xong)
+2. Rồi checkpoint 3 (mẫu luồng chạy `artifacts/flow/`)
 
 ## Đang chờ thien
-- Trang thử https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (mở ở nick tnt697): bấm Thích hay Không ở "Chi tiết thử" (bản đồ ga theo ngày), xem PR #135. Dựng lại: `node artifacts/plan/make-plan.mjs docs/plans/2026-11-18-visual-workflow.md /tmp/plan-vw` trên nhánh plan-page, đăng `/tmp/plan-vw/preview.html` (có doctype) làm index.html, khai capabilities comments + db
+Không.
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
