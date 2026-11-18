@@ -7,26 +7,28 @@
   const DAY = 864e5;
   const toc = $('toc');
 
-  // ---------- Mục lục: đo chiều cao thật để nhảy tới mục không bị che; sáng mục đang đọc, tắt khi không còn mục nào ----------
-  const links = [...toc.querySelectorAll('a')];
+  // ---------- Mục lục: thanh trên (điện thoại, máy tính bảng) hay cột trái (màn rộng). Sáng mục đang đọc, tắt khi không còn mục nào ----------
+  const links = [...toc.querySelectorAll('.in a')];
   const secs = links.map((a) => document.querySelector(a.getAttribute('href')));
+  /** Chiều cao mục lục che phía trên cột đọc: 0 khi nó là cột bên trái. */
+  const tocH = () => (getComputedStyle(toc).position === 'fixed' ? 0 : toc.offsetHeight);
+  const mini = $('mapmini');
   function measure() {
-    document.documentElement.style.setProperty('--toc-h', toc.offsetHeight + 'px');
-    const map = $('daymap');
-    document.documentElement.style.setProperty('--map-h', map ? map.offsetHeight + 'px' : '0px');
+    document.documentElement.style.setProperty('--toc-h', tocH() + 'px');
+    document.documentElement.style.setProperty('--map-h', mini ? mini.offsetHeight + 8 + 'px' : '0px');
   }
   function lightToc() {
-    const top = toc.offsetHeight + 16;
+    const top = tocH() + 16;
     let on = -1;
     secs.forEach((s, k) => { if (s) { const r = s.getBoundingClientRect(); if (r.top <= top + 40 && r.bottom > top) on = k; } });
     links.forEach((a, k) => { a.classList.toggle('on', k === on); if (k === on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
-    if (on >= 0) { const a = links[on], box = toc.firstElementChild; if (a.offsetLeft < box.scrollLeft || a.offsetLeft + a.offsetWidth > box.scrollLeft + box.clientWidth) box.scrollLeft = a.offsetLeft - 12; }
+    const box = toc.firstElementChild;
+    if (on >= 0 && box.scrollWidth > box.clientWidth) { const a = links[on]; if (a.offsetLeft < box.scrollLeft || a.offsetLeft + a.offsetWidth > box.scrollLeft + box.clientWidth) box.scrollLeft = a.offsetLeft - 12; }
   }
 
-  // ---------- Bản đồ ga theo ngày ----------
-  const svg = $('map');
+  // ---------- Bản đồ ga theo ngày: bản đầy đủ (#map, có núm) và bản gọn dính trên khi đọc các ga (#map-mini) ----------
+  const svg = $('map'), svgMini = $('map-mini');
   const NS = 'http://www.w3.org/2000/svg';
-  const iso = (t) => new Date(t).toISOString().slice(0, 10);
   const day = (s) => Date.parse(s + 'T00:00:00Z');
   const ddmm = (t) => { const d = new Date(t); return ('0' + d.getUTCDate()).slice(-2) + '/' + ('0' + (d.getUTCMonth() + 1)).slice(-2); };
   const now = new Date();
@@ -49,28 +51,26 @@
     }
     return out;
   }
-  function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; }
-  function draw() {
-    if (!svg) return;
-    const pts = place();
-    const W = svg.clientWidth || 600, H = svg.clientHeight || 84, Y = 42, L = 16, R = W - 16;
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    svg.textContent = '';
+  function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; }
+  /** Vẽ một bản đồ. compact: bản gọn, chỉ trục, chấm và vạch hôm nay, không chữ ngày. */
+  function drawInto(box, pts, compact) {
+    const W = box.clientWidth || 600, H = box.clientHeight || (compact ? 34 : 84), Y = compact ? 17 : 42, L = 16, R = W - 16;
+    box.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    box.textContent = '';
     if (!pts.length) return;
     const t0 = Math.min(today, ...pts.map((p) => p.t)) - DAY, t1 = Math.max(today, ...pts.map((p) => p.t)) + DAY;
     const x = (t) => L + (R - L) * (t - t0) / Math.max(DAY, t1 - t0);
-    const span = (t1 - t0) / DAY, step = span > 70 ? 28 : span > 35 ? 14 : 7;
-    for (let t = t0 + DAY; t < t1; t += step * DAY) {
-      const g = el('g', { class: 'tick' }); el('line', { x1: x(t), x2: x(t), y1: Y - 4, y2: Y + 4 }, g);
+    if (!compact) {
+      const span = (t1 - t0) / DAY, step = span > 70 ? 28 : span > 35 ? 14 : 7;
+      for (let t = t0 + DAY; t < t1; t += step * DAY) { const g = el('g', { class: 'tick' }, box); el('line', { x1: x(t), x2: x(t), y1: Y - 4, y2: Y + 4 }, g); }
     }
-    el('line', { class: 'axis', x1: L, x2: R, y1: Y, y2: Y });
+    el('line', { class: 'axis', x1: L, x2: R, y1: Y, y2: Y }, box);
     const done = pts.filter((p) => p.c.state === 'done');
-    if (done.length) el('line', { class: 'done-track', x1: x(Math.min(...done.map((p) => p.t))), x2: x(Math.min(today, Math.max(...done.map((p) => p.t)))), y1: Y, y2: Y });
-    const g0 = el('g', { class: 'today' }); el('line', { x1: x(today), x2: x(today), y1: 14, y2: Y + 12 }, g0);
-    const tt = el('text', { x: x(today), y: 10, 'text-anchor': x(today) > W - 60 ? 'end' : x(today) < 60 ? 'start' : 'middle' }, g0); tt.textContent = 'hôm nay';
+    if (done.length) el('line', { class: 'done-track', x1: x(Math.min(...done.map((p) => p.t))), x2: x(Math.min(today, Math.max(...done.map((p) => p.t)))), y1: Y, y2: Y }, box);
+    const g0 = el('g', { class: 'today' }, box); el('line', { x1: x(today), x2: x(today), y1: compact ? 2 : 14, y2: compact ? H - 2 : Y + 12 }, g0);
+    if (!compact) el('text', { x: x(today), y: 10, 'text-anchor': x(today) > W - 60 ? 'end' : x(today) < 60 ? 'start' : 'middle' }, g0).textContent = 'hôm nay';
     // Hai ga cùng ngày (hay quá sát) thì đẩy cách nhau ít nhất GAP điểm ảnh; ngày ghi dưới vẫn là ngày thật.
-    const GAP = 26;
-    pts.sort((a, b) => a.t - b.t || P.checkpoints.indexOf(a.c) - P.checkpoints.indexOf(b.c));
+    const GAP = compact ? 22 : 26;
     const xs = pts.map((p) => x(p.t));
     for (let i = 1; i < xs.length; i++) xs[i] = Math.max(xs[i], xs[i - 1] + GAP);
     if (xs.length && xs[xs.length - 1] > R) { xs[xs.length - 1] = R; for (let i = xs.length - 2; i >= 0; i--) xs[i] = Math.min(xs[i], xs[i + 1] - GAP); }
@@ -79,13 +79,27 @@
       const cx = xs[i];
       up = i > 0 && cx - xs[i - 1] < 40 ? !up : false;
       const cls = ['st', p.c.state, p.fixed ? 'gate' : '', p.c.id === sel ? 'sel' : ''].filter(Boolean).join(' ');
-      const g = el('g', { class: cls });
-      el('circle', { class: 'c', cx, cy: Y, r: p.c.id === sel ? 12 : 10 }, g);
+      const g = el('g', { class: cls }, box);
+      el('circle', { class: 'c', cx, cy: Y, r: compact ? (p.c.id === sel ? 10 : 8) : (p.c.id === sel ? 12 : 10) }, g);
       el('text', { class: 'n', x: cx, y: Y }, g).textContent = p.c.num;
-      if (i === 0 || ddmm(p.t) !== ddmm(pts[i - 1].t)) el('text', { class: 'd', x: cx, y: up ? Y - 19 : Y + 28, 'text-anchor': cx < L + 14 ? 'start' : cx > R - 14 ? 'end' : 'middle' }, g).textContent = ddmm(p.t);
-      const go = () => { const s = $(p.c.id); if (s) { select(p.c.id); s.scrollIntoView(); } };
-      g.addEventListener('click', go);
+      if (!compact && (i === 0 || ddmm(p.t) !== ddmm(pts[i - 1].t))) el('text', { class: 'd', x: cx, y: up ? Y - 19 : Y + 28, 'text-anchor': cx < L + 14 ? 'start' : cx > R - 14 ? 'end' : 'middle' }, g).textContent = ddmm(p.t);
+      g.addEventListener('click', () => { const s = $(p.c.id); if (s) { select(p.c.id); s.scrollIntoView(); } });
     });
+  }
+  function draw() {
+    if (!svg) return;
+    const pts = place().sort((a, b) => a.t - b.t || P.checkpoints.indexOf(a.c) - P.checkpoints.indexOf(b.c));
+    drawInto(svg, pts, false);
+    if (svgMini && mini.classList.contains('on')) {
+      drawInto(svgMini, pts, true);
+      const c = P.checkpoints.find((k) => k.id === sel), p = pts.find((k) => k.c.id === sel);
+      const cap = $('mini-cap');
+      cap.textContent = '';
+      if (c) {
+        const b = document.createElement('b'); b.textContent = `Ga ${c.num} · ${c.name}`;
+        cap.append(b, p ? ` · ${c.state === 'done' ? 'xong' : p.fixed ? 'mốc' : 'dự kiến'} ${ddmm(p.t)}` : '');
+      }
+    }
     const out = $('readout');
     if (out) {
       const left = pts.filter((p) => p.c.state !== 'done' && !p.fixed);
@@ -106,11 +120,18 @@
     $('knob').hidden = false;
     $('pace').addEventListener('input', (e) => { pace = +e.target.value; $('pace-v').textContent = pace; draw(); });
   }
-  // Ga đang đọc là ga có đầu nằm gần dưới bản đồ nhất; chạy cả khi cuộn ngược lên.
+  /** Bản gọn hiện khi bản đầy đủ đã cuộn khuất mà còn đang đọc các ga; ra khỏi tuyến (hay cuộn ngược lên) thì ẩn. */
+  function miniShow() {
+    if (!mini) return;
+    const top = tocH() + 8, full = $('daymap').getBoundingClientRect(), line = $('tuyen').querySelector('ol.line').getBoundingClientRect();
+    const on = full.bottom < top && line.bottom > top + mini.offsetHeight + 40;
+    if (on !== mini.classList.contains('on')) { mini.classList.toggle('on', on); if (on) draw(); }
+  }
+  // Ga đang đọc là ga có đầu nằm gần dưới bản đồ gọn nhất; chạy cả khi cuộn ngược lên.
   const stops = [...document.querySelectorAll('.stop')];
   function readStop() {
     if (!svg) return;
-    const line = toc.offsetHeight + ($('daymap') ? $('daymap').offsetHeight : 0) + 24;
+    const line = tocH() + (mini && mini.classList.contains('on') ? mini.offsetHeight + 8 : 0) + 24;
     let best = null;
     for (const s of stops) { const r = s.getBoundingClientRect(); if (r.top <= line + 60 && r.bottom > line) best = s; }
     if (best) select(best.id);
@@ -184,7 +205,7 @@
 
   // ---------- Khởi động ----------
   let raf = 0;
-  const onScroll = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; lightToc(); readStop(); }); };
+  const onScroll = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; lightToc(); miniShow(); readStop(); }); };
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('resize', () => { measure(); draw(); onScroll(); });
   if (sel) { const s = $(sel); if (s) s.classList.add('sel'); }

@@ -118,7 +118,13 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
     plan.approvedDate ? `<span class="chip">Duyệt ${ddmm(plan.approvedDate)}</span>` : '',
     plan.updated ? `<span class="chip">Cập nhật ${ddmm(plan.updated)}</span>` : '',
     plan.nick ? `<span class="chip">Nick ${esc(plan.nick)}</span>` : ''].join('');
-  const body = `<nav class="toc" id="toc" aria-label="Mục lục"><div class="in">${toc.map(([h, t]) => `<a href="#${h}">${t}</a>`).join('')}</div></nav>
+  // Mục lục: thanh trên ở điện thoại và máy tính bảng; cột bên trái ở màn rộng, kèm tiến độ gọn (side-prog chỉ hiện ở đó).
+  const sideProg = `<div class="side-prog"><span class="label">Tiến độ</span><div class="bar"><span style="width:${pct}%"></span></div>
+    <span class="small">${plan.ticks.done}/${plan.ticks.total} việc${now ? ` · đang ở ga ${esc(now.num)}` : ''}</span></div>`;
+  // Bản đồ gọn: hiện dính dưới mục lục khi đã cuộn qua bản đồ đầy đủ mà còn ở trong tuyến; chỉ để xem đang tới đâu.
+  const mini = mapNeeded ? `<div class="mapmini card" id="mapmini" aria-hidden="true"><svg id="map-mini"></svg><p class="mini-cap" id="mini-cap"></p></div>` : '';
+  const body = `<nav class="toc" id="toc" aria-label="Mục lục"><div class="in">${toc.map(([h, t]) => `<a href="#${h}">${t}</a>`).join('')}</div>${sideProg}</nav>
+${mini}
 <main class="wrap">
 <header class="ph">
   <span class="label">Kế hoạch${repo ? ' · ' + esc(repo.split('/').pop()) : ''}</span>
