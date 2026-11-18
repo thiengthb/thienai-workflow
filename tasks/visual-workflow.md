@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 2, mẫu kế hoạch nhìn được
 
-Repo: thiengthb/thienai-workflow · Nhánh: chưa có (plan-page đã merge qua #135) · PR: #135, #136 đã merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtptJ · Cập nhật: 2026-11-18T19:45Z
+Repo: thiengthb/thienai-workflow · Nhánh: plan-page-links · PR: #137 (chờ thien merge)
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtptJ · Cập nhật: 2026-11-18T19:51Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -36,12 +36,16 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXA5E7aCCYQ6jZtpt
 
 - 02:35 thien nhắn "merge giúp tôi": PR #135 đã merge (squash c4bbd87; CodeRabbit không review vì PR nháp). PR #136 tick 4 việc checkpoint 2 (11/24), sửa STATUS, sửa một ý CodeRabbit, tự merge theo DELEGATION. Nhánh plan-page chưa xoá được (proxy chặn xoá nhánh).
 
+- 02:48 thien: "thực hiện cho xong nốt". PR #137 (commit 9c408c4): trang tổng quan dẫn sang trang kế hoạch qua dòng `Trang:`; kế hoạch thêm "## Câu hỏi" 3 câu cho checkpoint 3; trang kế hoạch đăng đè (có câu hỏi).
+
 ## Bước tiếp theo
-1. Checkpoint 2 còn: trang tổng quan (`templates/progress-page.mjs`) dẫn sang trang kế hoạch; lần gửi kế hoạch kế tiếp thì dựng trang bằng `artifacts/plan/make-plan.mjs` (điều kiện xong)
-2. Rồi checkpoint 3 (mẫu luồng chạy `artifacts/flow/`)
+1. thien nhắn merge #137 thì merge, rồi `node templates/publish-progress.mjs overview` và đăng đè trang tổng quan; tick việc 4 của checkpoint 2
+2. Đọc câu trả lời 3 câu hỏi (db `plans/2026-11-18-visual-workflow` hay comment), chép nguyên văn vào kế hoạch; khi thien đã trả lời bằng nút thì checkpoint 2 xong
+3. Checkpoint 3: mẫu `artifacts/flow/` theo câu trả lời
 
 ## Đang chờ thien
-Không.
+- Merge PR #137
+- Trả lời 3 câu hỏi cuối trang https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (mở ở nick tnt697). Dựng lại: `node artifacts/plan/make-plan.mjs docs/plans/2026-11-18-visual-workflow.md /tmp/plan-vw --url https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v`, đăng preview.html làm index.html
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
