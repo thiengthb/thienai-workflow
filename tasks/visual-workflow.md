@@ -1,7 +1,7 @@
-# KH9 kit lắp ghép: ga 3 thien chọn B cả ba loại, tiếp đưa vào make-plan
+# KH9 kit lắp ghép: ga 3 tiếp việc 3 (đưa ba bản B vào make-plan)
 
-Repo: thiengthb/thienai-workflow · Nhánh: plan-layouts · PR: #160 (ga 3 vòng gu 5, chờ thien merge); #158, #159 đã merge 19/11
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZUoAG29Ms2veKqNkH · Cập nhật: 2026-11-19T17:06Z
+Repo: thiengthb/thienai-workflow · Nhánh: chưa có (việc 3 tạo nhánh mới từ main) · PR: #160, #161, #162 đã merge 20/11
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZUoAG29Ms2veKqNkH · Cập nhật: 2026-11-19T17:28Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -71,6 +71,7 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZUoAG29Ms2veKqNk
 
 - 19/11 23:38 thien gửi từ trang chọn (comment, thread 635ef771…): chọn B cả ba câu (đề xuất C), chưa ghi vì sao; xin sửa ô hỏi Claude, kiểm lỗi UI khác, thêm phóng to và phím trái phải. Đã làm trên PR #160 (commit thứ hai): ô hỏi có lề và nhãn, icon rec đổi lớp `.ri` (lớp `.ic` của kit đè), 760–999px ảnh trên chữ dưới, hộp phóng to nấc 100–300% + kéo + ← → đổi bản + vuốt, ← → ở màn thường. Trang chọn đăng đè. Lựa chọn ghi vào kế hoạch (7/10) và taste-queue. Trả lời thread bằng công cụ báo not found: đã trả lời trong chat.
 - 19/11 23:56 thien: "màu chính là màu trắng, mình không muốn chạy đua với màu sắc nữa", chọn "Trắng đen, màu chỉ để báo". PR #161 (nhánh white-kit, từ main): kit.css nền và thẻ #fff, nhấn gần đen (tối: trắng ngà), ink-1..3 thành ba mức xám, good/bad/warn giữ; artifacts/README đoạn Mực hình, taste-queue. check-pages 34 trang 0 lỗi, test CI 0 lỗi. Khi merge cả #160 và #161: thêm một dòng "Đã đổi" vào KH9 (đổi bộ màu do thien chọn thẳng, không qua vòng gu); bố cục B dựng ở ga 3 việc 3 phải hợp trắng đen (ô số, cột, thẻ phân biệt bằng viền và độ đậm).
+- 20/11 00:15 thien nhắn "merge hết": sửa 4 ý CodeRabbit ở #160 (đường dẫn Windows trong test làm job scripts đỏ, picks chỉ đọc thuộc tính riêng, focus sau khi đổi câu, mỗi câu một thư mục ảnh `img/<câu>/`), trả lời 4 ý ở file thử đóng băng; mọi thread resolve. #161 merge (squash 2950391); #160 gộp main (xung đột taste-queue, giữ cả hai dòng; force push bị chặn nên dùng merge), thêm dòng "Đã đổi" bộ màu vào KH9, CI xanh cả bốn job, merge (squash 36dfce4). #162 ghi STATUS, tự merge.
 
 ## Bước tiếp theo
 1. KH9 ga 3 việc 3: đưa ba bản B (pending: phiếu hỏi trước; running: bảng tiến độ; closed: thẻ kết quả) vào `artifacts/plan/` làm mặc định theo trạng thái (viết gọn lại từ `round-5/variants.js` và `variants.css`, không chép nguyên), cập nhật `artifacts/kit/sizes.json` nếu cỡ đổi, test make-plan; dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 bằng `--url`. Cũ (đã xong): khi thien gửi từ trang chọn https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG (đọc comment và db `decisions/modular-kit-plan-layout-r5`, khóa `picks.pending|running|closed`): chép nguyên văn vào kế hoạch và `learning/frontend/taste-queue.md`; viết lại bản chọn gọn trong `artifacts/plan/` (make-plan.mjs, template.html, plan.js) thành mặc định theo trạng thái trong `pickBlocks` (bản A thì giữ); dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 bằng `--url`. Nguồn thử ở `docs/plans/2026-11-18-visual-workflow/round-5/` (variants.js là bản phác, không chép nguyên).
@@ -78,7 +79,6 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZUoAG29Ms2veKqNk
 3. Repo public tạm tới 01/12; không ghi thông tin riêng mới.
 
 ## Đang chờ thien
-- Merge PR #160 (vòng gu 5 và sửa trang chọn) và PR #161 (kit trắng đen).
 - Xem hai mục mới ở trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mở ở nick tnt697).
 
 ## Lưu ý
