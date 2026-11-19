@@ -172,13 +172,13 @@ for (const name of ['lesson', 'frontend']) {
   await a.p.locator('[data-peek]').first().click({ force: true });
   await a.p.waitForTimeout(1300);
   const saved = await savedOf(a.p);
-  const peek = await a.p.evaluate(() => { const k = Object.keys(localStorage).find((x) => x.startsWith('lesson-peek:')); return [k, localStorage.getItem(k)]; });
-  assert.ok(peek[0], 'lần bấm thật ghi giờ bắt đầu vào máy');
+  const peek = await a.p.evaluate(() => { const k = Object.keys(sessionStorage).find((x) => x.startsWith('lesson-peek:')); return [k, sessionStorage.getItem(k)]; });
+  assert.ok(peek[0], 'lần bấm thật ghi giờ bắt đầu vào tab (sessionStorage)');
   assert.ok(JSON.parse(saved[1]).log.some((x) => x.k && x.k.includes('[data-peek=')), 'lần bấm nhìn có trong bản lưu');
   await a.ctx.close();
 
   const ctx = await browser.newContext({ viewport: { width: 1180, height: 760 } });
-  await ctx.addInitScript((pairs) => { for (const [k, v] of pairs) localStorage.setItem(k, v); }, [saved, peek]);
+  await ctx.addInitScript(([s, k]) => { localStorage.setItem(...s); sessionStorage.setItem(...k); }, [saved, peek]);   // cùng tab tải lại: sessionStorage còn
   const p = await ctx.newPage();
   await p.goto(pathToFileURL(fx.frontend).href);
   await p.waitForTimeout(300);
@@ -194,7 +194,7 @@ for (const name of ['lesson', 'frontend']) {
   assert.ok(end.seen && !/^Còn/.test(end.text), 'hết giờ thì tính là đã xem');
   await ctx.close();
 
-  // Không có giờ ghi trong máy (mở ở máy khác): coi như đã xem, như trước.
+  // Tab khác hay máy khác (không có giờ ghi trong tab): coi như đã xem, như trước.
   const c = await open(fx.frontend, saved);
   assert.ok(await c.p.evaluate(() => (window.R.peeked || []).length > 0), 'máy khác: coi như đã xem');
   await c.ctx.close();

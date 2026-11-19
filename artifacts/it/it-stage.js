@@ -169,11 +169,12 @@
   // ---------- Nhìn 5 giây ----------
   // Bước data-stage="food@cover": màn bị che. <button data-peek="food" data-sec="5">: mở màn N giây rồi che lại, mở khóa peek-food.
   // <button data-uncover="food">: bỏ che hẳn.
-  // Đồng hồ giữ qua lần tải lại: lần bấm thật ghi giờ bắt đầu vào máy (localStorage). Phần tự lưu bấm lại bằng code
-  // (isTrusted = false): còn giây thì đếm tiếp số giây còn lại, hết rồi (hay máy khác, không có giờ ghi) thì xong ngay.
+  // Đồng hồ giữ qua lần tải lại: lần bấm thật ghi giờ bắt đầu vào sessionStorage (riêng từng tab, còn qua lần tải lại, nên tab khác
+  // mở cùng bài không ghi đè). Phần tự lưu bấm lại bằng code (isTrusted = false): còn giây thì đếm tiếp số giây còn lại,
+  // hết rồi (hay tab, máy khác, không có giờ ghi) thì xong ngay.
   const uncovered = new Set();
   const PID = 'lesson-peek:' + ((document.querySelector('meta[name="lesson-id"]') || {}).content || document.title) + ':peek:';
-  const peekStart = (name, t) => { try { if (t) localStorage.setItem(PID + name, String(t)); return +localStorage.getItem(PID + name) || 0; } catch { return 0; } };
+  const peekStart = (name, t) => { try { if (t) sessionStorage.setItem(PID + name, String(t)); return +sessionStorage.getItem(PID + name) || 0; } catch { return 0; } };
   $$('[data-peek]').forEach((bt) => bt.addEventListener('click', (e) => {
     const name = bt.dataset.peek, b = pane(name); if (!b) return;
     const sec = +(bt.dataset.sec || 5), cnt = $('.peek-count', b);
