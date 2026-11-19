@@ -1,6 +1,6 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-19 · Claude nick tnt697 (project Claude, KH9 duyệt, ga 1 ở PR #156) · Trang tiến độ: https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n (trang tổng quan, tab thienai-workflow)
+Cập nhật lần cuối: 2026-11-19 · Claude nick tnt697 (project Claude, KH8 xong, KH9 ga 1 merge) · Trang tiến độ: https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n (trang tổng quan, tab thienai-workflow)
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu. Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
 
@@ -12,8 +12,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
-| KH8 · [Đóng KH1–KH7, làm sớm buổi xem lại 01/12](plans/2026-11-19-close-plans.md) | 1 xong (ok cả 10 đề xuất); 2: PR luật #153 và PR mã #154 chờ thien merge; 3: bảy kế hoạch đã đóng (PR #152). Sau đó: KH9 kit lắp ghép, kế hoạch MCP cho nhóm SEP490 | 4/5 |
-| KH9 · [Kit lắp ghép, bố cục theo nội dung](plans/2026-11-19-modular-kit.md) | Duyệt 19/11 (ok cả 4 đề xuất), làm trước kế hoạch MCP; 1: khối gửi, nút chọn một, chi tiết thử vào kit, PR #156 chờ merge (sau #154); rồi 2 trang dựng từ danh sách khối, 3 vòng gu bố cục trang kế hoạch | 0/10 |
+| KH9 · [Kit lắp ghép, bố cục theo nội dung](plans/2026-11-19-modular-kit.md) | Duyệt 19/11, làm trước kế hoạch MCP; 1: khối gửi, nút chọn một, chi tiết thử đã vào kit (PR #156 merge), chờ thien xem trang mẫu thành phần; tiếp theo 2 trang dựng từ danh sách khối, 3 vòng gu bố cục trang kế hoạch | 2/10 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |

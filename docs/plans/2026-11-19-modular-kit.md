@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 dựng xong, PR #156 chờ thien merge (merge sau #154). thien trả lời 21:15: ok cả 4 đề xuất; KH9 làm trước kế hoạch MCP.
+- Đang ở: checkpoint 1: PR #156 đã merge (thien nhắn "bạn hãy merge hộ mình" 21:56), trang mẫu thành phần đã đăng lại; chờ thien xem hai mục mới để đóng ga 1. Tiếp theo checkpoint 2. thien trả lời 21:15: ok cả 4 đề xuất; KH9 làm trước kế hoạch MCP.
 - Còn thiếu: cả bốn checkpoint.
-- thien cần làm: merge #154 rồi #156; mở trang mẫu thành phần xem hai mục mới.
+- thien cần làm: mở trang mẫu thành phần (https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst, nick tnt697) xem mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử".
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
@@ -33,8 +33,8 @@ Lời thien (2026-11-19 20:40, ghi chú kèm câu trả lời KH8): "bạn phả
 ### 1. Rút khối dùng chung vào kit
 Xong khi: trang mẫu thành phần có đủ các khối trùng thật (khối gửi, nút chọn một, chi tiết thử); mọi mẫu từng tự viết các khối đó (kế hoạch, luồng, chọn phương án, ôn thẻ) dùng khối của kit, `check-pages` 0 lỗi, và thien mở trang mẫu thành phần thấy từng khối một lần.
 Ước: 1–2 phiên
-- [ ] Khối câu hỏi có nút, ô trả lời gửi Claude, núm, khung ảnh vào `kit/` (CSS và JS), có tên trong trang mẫu thành phần (đổi sau khi kiểm kỹ, xem "Đã đổi": khối gửi `Kit.sendBox` + `.kit-send`, nút chọn một `.choice`, chi tiết thử `.trial`, HTML ở `kit/blocks.mjs`; trang mẫu thành phần có hai mục mới; PR #156)
-- [ ] Bốn mẫu đang tự viết các khối đó chuyển sang dùng khối của kit; bài đã học không đổi (trang kế hoạch, luồng, chọn phương án, ôn thẻ dùng `Kit.sendBox`; ảnh chụp trước và sau trùng từng điểm ảnh; PR #156)
+- [x] Khối câu hỏi có nút, ô trả lời gửi Claude, núm, khung ảnh vào `kit/` (CSS và JS), có tên trong trang mẫu thành phần (đổi sau khi kiểm kỹ, xem "Đã đổi": khối gửi `Kit.sendBox` + `.kit-send`, nút chọn một `.choice`, chi tiết thử `.trial`, HTML ở `kit/blocks.mjs`; trang mẫu thành phần có hai mục mới; PR #156, đã merge 2026-11-19; trang mẫu thành phần đăng lại https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst, nick tnt697)
+- [x] Bốn mẫu đang tự viết các khối đó chuyển sang dùng khối của kit; bài đã học không đổi (trang kế hoạch, luồng, chọn phương án, ôn thẻ dùng `Kit.sendBox`; ảnh chụp trước và sau trùng từng điểm ảnh; PR #156)
 
 ### 2. Trang dựng từ danh sách khối
 Xong khi: một trang kế hoạch và một trang luồng dựng từ danh sách khối khai báo trong file nguồn (không còn khung HTML cố định); bỏ một khối khỏi danh sách thì trang không còn khối đó và không nặng thêm; `check-pages` báo khi một trang nặng hơn cỡ gốc của nó quá 20%.
