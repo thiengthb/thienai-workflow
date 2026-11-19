@@ -1,7 +1,7 @@
-# KH9 kit lắp ghép: tiếp ga 4 (vòng gu ôn thẻ và trang học ở khổ hẹp)
+# KH9 kit lắp ghép: ga 4 (vòng gu 6: ôn thẻ và trang học ở khổ nửa màn hình)
 
-Repo: thiengthb/thienai-workflow · Nhánh: chưa có (ga 4 tạo nhánh mới từ main) · PR: #163 đã merge 20/11 (squash e99afaa)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKf9sjziwakTXcoio · Cập nhật: 2026-11-19T18:41Z
+Repo: thiengthb/thienai-workflow · Nhánh: wide-layouts (từ main e99afaa+) · PR: #163 đã merge 20/11 (squash e99afaa)
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-19T18:58Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -80,6 +80,8 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKf9sjziwakTXcoi
 - 20/11 01:16 thien gửi ảnh: "menu đè lên nội dung" là cột mục lục bên trái ở màn rộng (không phải bản đồ gọn như Claude hiểu lúc đầu). Bảng tiến độ rộng 960px mà mục lục đặt cho cột 760px, từ khoảng 1366px thì đè lên ô số. Sửa trên PR #163 (commit 35c6436): mục lục tính vị trí từ `--main-w` (lớp `wide`); test mới `.github/scripts/plan-layout.test.mjs` (job pages) đo ở 1160–1920px cho cả ba bố cục. Ghi ở "Lỗi gặp" KH9. Trang KH9 đăng đè.
 
 - 20/11 01:34 thien: "ok bạn merge giúp mình, và phần xem trang mẫu mình đã xem rồi". CodeRabbit 5 ý trên #163: sửa 4 (ghi chú ga trong thẻ kết quả, đếm ngày chỉ ga xong, ô "Bạn cần làm" chỉ gập khi là link, câu chờ duyệt có/không câu hỏi), ý mục lục đè đã sửa ở 35c6436; trả lời và resolve cả 5. Job Windows đỏ vì plan-layout.test.mjs cần Playwright: thêm vào danh sách bỏ qua ở windows.yml. CI xanh, #163 merge (squash e99afaa). Ga 1 KH9 đóng (thien đã xem trang mẫu thành phần), KH9 8/10, STATUS sửa trong cùng PR. Trang KH9 đăng đè.
+
+- 20/11 01:42 (phiên mới, thien nhắn "làm ga 4"): nhận việc, nhánh `wide-layouts`; vòng 6 ở `docs/plans/2026-11-18-visual-workflow/round-6/` (đang dựng).
 
 ## Bước tiếp theo
 1. KH9 ga 4 (mốc, vòng gu hai tuần một lần): vòng đầu là trang ôn thẻ và trang học. thien hay mở artifact ở nửa màn hình cạnh chat (khoảng 860px) hay 2/3 màn hình project beta (khoảng 950px), nên dựng và chụp ở hai khổ đó, rồi trang chọn có hình như vòng 5 (`docs/plans/2026-11-18-visual-workflow/round-5/` làm mẫu). Luật vòng gu hai tuần một lần vào `artifacts/README.md` ở mốc sau.
