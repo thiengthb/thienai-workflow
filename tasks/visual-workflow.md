@@ -1,7 +1,7 @@
-# KH9 kit lắp ghép: ga 2 ở PR #158
+# KH9 kit lắp ghép: ga 2 xong, tiếp ga 3
 
-Repo: thiengthb/thienai-workflow · Nhánh: kit-block-list · PR: #158 (ga 2, chờ thien merge); #153, #154, #156, #157 và sakubun #339 đã merge 19/11
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXn7Pu4RGGg4jUh9s5 · Cập nhật: 2026-11-19T15:51Z
+Repo: thiengthb/thienai-workflow · Nhánh: chưa có (ga 3 tạo nhánh mới từ main) · PR: #158 (ga 2) merge 19/11, #159 (STATUS); #153, #154, #156, #157 và sakubun #339 đã merge 19/11
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXn7Pu4RGGg4jUh9s5 · Cập nhật: 2026-11-19T16:01Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -65,15 +65,15 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXn7Pu4RGGg4jUh9s
 - 19/11 22:08 (phiên mới, cùng link chat, "tiếp tục"): ga 2 KH9 trên nhánh `kit-block-list`, PR #158 (sẵn sàng, chờ CodeRabbit và thien merge). `pack.mjs` trimBlocks bỏ vùng `/* @block */` không dùng; kit.css bọc 14 mục; trang kế hoạch đọc dòng `Khối: … · Vì: …`, trang luồng đọc `"blocks"`/`"blocksWhy"`; check-pages mục 8 so với `artifacts/kit/sizes.json` (main f45b0be), `--write-sizes`. Ảnh chụp 10 trang mẫu trùng main; mọi test CI 0 lỗi. Kế hoạch tick 3 việc ga 2 (5/10), STATUS sửa.
 - CodeRabbit 6 ý trên #158 (chuỗi "/*" không phải chú thích, vùng chỉ trong <style>/<script>, `drop` từ lệnh dựng, `.empty`, link ga khi bỏ tuyen, guard plan.js): sửa cả 6 ở 5e93a5e, trả lời và resolve mọi thread; ảnh chụp 10 trang mẫu vẫn trùng main.
 
+- 19/11 23:00 thien nhắn "merge đi": #158 merge (squash b5dde6a). #159 ghi kế hoạch và STATUS, tự merge theo DELEGATION. Nhánh kit-block-list chưa xoá được (proxy chặn).
+
 ## Bước tiếp theo
-0. PR #158: CodeRabbit đã xong và đã sửa; chờ CI xanh ở 5e93a5e rồi chờ thien nhắn merge. Sau merge: xoá nhánh nếu được.
 1. KH9 ga 3: vòng gu bố cục trang kế hoạch (3 loại nội dung x 2–3 bố cục) trên trang `decide/`; bố cục chọn được thì thành mặc định theo trạng thái trong `pickBlocks` (make-plan.mjs) hay một lớp bố cục; dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 theo bố cục chọn.
 2. Kế hoạch MCP cho nhóm SEP490 sau KH9; mở mục "Chuyển sang kế hoạch sau" của KH8 trước.
 3. Repo public tạm tới 01/12; không ghi thông tin riêng mới.
 
 ## Đang chờ thien
 - Xem hai mục mới ở trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mở ở nick tnt697).
-- Merge PR #158 (ga 2).
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
