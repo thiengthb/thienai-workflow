@@ -162,6 +162,7 @@ html:not(.kit-ask-on) .kit-ask { display: none !important; }
 @media (pointer: coarse) { .ai-open { min-height: 40px; } }
 .ai-open:disabled { color: var(--muted); cursor: default; }
 
+/* @block autosave-bar kit-bar kit-review-off */
 /* Thông báo của phần tự lưu (kit/autosave.js), cùng kiểu với thông báo của lõi chung. */
 #kit-bar { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; display: none;
   align-items: center; gap: 10px; width: min(480px, calc(100% - 24px)); background: var(--ink); color: var(--bg); border-radius: var(--r);
@@ -171,6 +172,7 @@ html:not(.kit-ask-on) .kit-ask { display: none !important; }
 #kit-bar button { font: 600 13px var(--font); border: 0; border-radius: var(--r); min-height: 32px; padding: 0 10px; cursor: pointer; background: var(--bg); color: var(--ink); flex: none; }
 #kit-bar button.x { background: transparent; color: var(--bg); }
 .kit-review-off [data-part~="review"] { display: none !important; }
+/* @end autosave-bar */
 
 /* Nghe thay đọc (Kit.listen): nút chữ nhỏ có loa, ẩn nơi không đọc được. Đang đọc thì thành "Dừng". */
 .listen { justify-self: start; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 0; border: 0; background: none;
@@ -180,6 +182,7 @@ html:not(.kit-ask-on) .kit-ask { display: none !important; }
 .listen[hidden] { display: none; }
 @media (pointer: coarse) { .listen { min-height: 40px; } }
 
+/* @block demo demo demo-open demo-log demo-hint */
 /* Claude làm mẫu (lesson.js, Lesson.demo): nút mở, lời nhắc khi chưa tự làm xong, danh sách thao tác kèm lý do. */
 .demo { display: grid; gap: 8px; }
 .demo-open::before { -webkit-mask-image: var(--ic-circle-play); mask-image: var(--ic-circle-play); }
@@ -192,12 +195,16 @@ html:not(.kit-ask-on) .kit-ask { display: none !important; }
   font: 700 11px/22px var(--font); text-align: center; }
 .demo-log li b { font-weight: 600; }
 .demo .btn[hidden] { display: none; }
+/* @end demo */
 
+/* @block extra extra extra-q */
 /* Tình huống thêm (lesson.js, đề xuất T3) ở bước cuối. */
 .extra { padding: 14px; display: grid; gap: 10px; }
 .extra-q { display: grid; gap: 8px; }
 .extra-q:empty { display: none; }
+/* @end extra */
 
+/* @block send kit-send */
 /* Khối dùng chung (KH9, 2026-11-19; trước đó trang kế hoạch và trang luồng mỗi trang tự viết một bản):
    .kit-send bọc ô chữ, hai nút (Chép, Gửi cho Claude) trong .acts và dòng báo .status, hành vi ở Kit.sendBox.
    .choice là nút chọn một có chấm tròn (câu hỏi có lựa chọn, chi tiết thử), .rec cho nhãn "đề xuất", .why cho dòng lý do.
@@ -206,6 +213,8 @@ html:not(.kit-ask-on) .kit-ask { display: none !important; }
 .kit-send .acts { display: flex; gap: 8px; flex-wrap: wrap; }
 @media (max-width: 480px) { .kit-send .acts .btn { flex: 1; } }
 .kit-send .status { font-size: 13px; color: var(--muted); min-height: 1.4em; }
+/* @end send */
+/* @block choice choice trial */
 .choice { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; text-align: left; font: inherit; font-size: 14.5px; color: var(--ink);
   background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; cursor: pointer; min-height: 44px; }
 .choice:disabled { cursor: default; opacity: .6; }
@@ -220,6 +229,8 @@ html:not(.kit-ask-on) .kit-ask { display: none !important; }
 .trial .row { display: flex; gap: 8px; flex-wrap: wrap; }
 .trial .choice { grid-template-columns: 20px auto; }
 
+/* @end choice */
+/* @block diagram dg dg-node dg-host Diagram */
 /* Sơ đồ (kit/diagram.js): khối trơn kiểu draw.io, viền mảnh, mũi tên, không tô màu, không bóng (gu 2026-11-17).
    Khối đang tới bước thì viền nhấn và mở chú thích ngay dưới tên; khung xếp lại nên không khối nào đè lên chú thích. */
 .dg { display: grid; gap: 12px; min-width: 0; }
@@ -247,6 +258,10 @@ button.dg-node:hover { border-color: var(--accent); }
 .dg-count { flex: 1; min-width: 0; font-size: 13.5px; color: var(--muted); text-align: center; }
 @keyframes dg-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .dg-node, .dg-note { transition: none; animation: none; } }
+/* Viền khối theo mực (kind "k1", "k2"), xem mục "Mực hình". */
+.dg-node.dg-k1 { border-color: var(--ink-1); } .dg-node.dg-k2 { border-color: var(--ink-2); }
+.dg-node.dg-k1.on { box-shadow: 0 0 0 1px var(--ink-1); } .dg-node.dg-k2.on { box-shadow: 0 0 0 1px var(--ink-2); }
+/* @end diagram */
 
 
 /* ── Thành phần mở rộng (2026-11-18). Hành vi ở kit.js: Kit.icon, Kit.tabs, Kit.reveal. ── */
@@ -263,6 +278,7 @@ button.dg-node:hover { border-color: var(--accent); }
 .tab-panel[hidden] { display: none; }
 .tab-panel:not([hidden]) { animation: kit-in var(--t-base) var(--ease-out); }
 
+/* @block acc acc */
 /* Mục gập mở: <details class="acc"><summary>…</summary><div>…</div></details>. Mũi tên xoay, phần thân trượt xuống. */
 .acc { border: 1px solid var(--line); border-radius: var(--r); background: var(--card); }
 .acc + .acc { margin-top: -1px; }
@@ -278,7 +294,10 @@ button.dg-node:hover { border-color: var(--accent); }
 .acc[open] summary::after { transform: rotate(180deg); }
 .acc > :not(summary) { padding: 0 12px 12px; color: var(--ink); }
 .acc[open] > :not(summary) { animation: kit-down var(--t-base) var(--ease-out); }
+@media (prefers-reduced-motion: reduce) { .acc summary::after { transition-duration: 0s; } .acc[open] > :not(summary) { animation-name: kit-in; } }
+/* @end acc */
 
+/* @block steps steps */
 /* Thanh bước: <ol class="steps"><li class="done">…</li><li class="now">…</li><li>…</li></ol>. Ngang, chữ xuống dòng dưới vòng; nhiều hơn 5 bước thì dùng sơ đồ. */
 .steps { list-style: none; margin: 0; padding: 0; display: flex; gap: 0; counter-reset: st; }
 .steps li { counter-increment: st; flex: 1 1 0; min-width: 0; display: grid; justify-items: center; align-content: start; gap: 6px; text-align: center; font-size: 13px;
@@ -294,7 +313,9 @@ button.dg-node:hover { border-color: var(--accent); }
 .steps li.done:not(:last-child)::after { background: var(--accent); }
 .steps li.now { color: var(--ink); font-weight: 600; }
 .steps li.now::before { border-color: var(--accent); color: var(--accent-ink); box-shadow: 0 0 0 3px var(--accent-soft); }
+/* @end steps */
 
+/* @block hint data-hint */
 /* Gợi ý khi trỏ hay đưa phím Tab tới: data-hint="…" (nên đặt trên nút đã có aria-label). Chỉ dựng chữ lúc hiện, nên không làm trang rộng ra. */
 [data-hint] { position: relative; }
 [data-hint]:hover::after, [data-hint]:focus-visible::after { content: attr(data-hint); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); z-index: 40;
@@ -302,7 +323,10 @@ button.dg-node:hover { border-color: var(--accent); }
   white-space: normal; text-align: left; pointer-events: none; animation: kit-tip var(--t-base) var(--ease-spring) .2s both; }
 [data-hint].hint-end:hover::after, [data-hint].hint-end:focus-visible::after { left: auto; right: 0; transform: none; }
 @keyframes kit-tip { from { opacity: 0; translate: 0 4px; } }
+@media (prefers-reduced-motion: reduce) { [data-hint]::after { animation-name: kit-in; } }
+/* @end hint */
 
+/* @block stat stat stats */
 /* Thẻ số: một con số lớn, nhãn nhỏ, dòng thay đổi có màu. */
 .stat { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); }
 .stat .label { font-size: 11.5px; }
@@ -310,7 +334,9 @@ button.dg-node:hover { border-color: var(--accent); }
 .stat small { font-size: 12.5px; color: var(--muted); display: inline-flex; align-items: center; gap: 4px; }
 .stat small.up { color: var(--good); } .stat small.down { color: var(--bad); }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap: 8px; }
+/* @end stat */
 
+/* @block skel skel skel-group */
 /* Đang tải: khung xám có vệt sáng chạy qua. .skel một dòng, .skel.block khối, .skel.circle tròn. */
 .skel { display: block; height: 12px; border-radius: 6px; background: var(--skel); position: relative; overflow: hidden; }
 .skel.block { height: 72px; border-radius: var(--r); }
@@ -318,13 +344,17 @@ button.dg-node:hover { border-color: var(--accent); }
 .skel::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%);
   background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--skel-hi) 70%, transparent), transparent); animation: kit-shimmer 1.4s ease-in-out infinite; }
 .skel-group { display: grid; gap: 8px; }
+@media (prefers-reduced-motion: reduce) { .skel::after { animation: none; } }
+/* @end skel */
 
+/* @block empty empty-ic */
 /* Màn rỗng: <span class="empty-ic"> chứa icon trong vòng nhạt, một câu nói vì sao rỗng, một nút làm việc tiếp theo. */
 .empty { display: grid; justify-items: center; gap: 8px; padding: 24px 16px; text-align: center; border: 1px dashed var(--line-strong); border-radius: var(--r); }
 .empty-ic { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-ink); }
 .empty-ic .ic { font-size: 22px; }
 .empty b { font-size: 15px; }
 .empty p { color: var(--muted); font-size: 13.5px; max-width: 32ch; }
+/* @end empty */
 
 /* Mực hình: chữ khoá trong tiêu đề hay câu (em.k1 xanh, em.k2 cam), khối sơ đồ theo loại (kind "k1", "k2" trong diagram.js),
    cột và chấm biểu đồ (.fill-k1/2/3 cho SVG, .bg-k1/2/3 cho ô chú giải). Giữ đúng nghĩa trên mọi hình của một trang.
@@ -332,17 +362,18 @@ button.dg-node:hover { border-color: var(--accent); }
 em.k1, em.k2 { font-style: normal; }
 em.k1 { color: var(--ink-1); } em.k2 { color: var(--ink-2); }
 .label.k2 { color: var(--ink-2); } .label.k1 { color: var(--ink-1); }
-.dg-node.dg-k1 { border-color: var(--ink-1); } .dg-node.dg-k2 { border-color: var(--ink-2); }
-.dg-node.dg-k1.on { box-shadow: 0 0 0 1px var(--ink-1); } .dg-node.dg-k2.on { box-shadow: 0 0 0 1px var(--ink-2); }
 .fill-k1 { fill: var(--ink-1); } .fill-k2 { fill: var(--ink-2); } .fill-k3 { fill: var(--ink-3); }
 .bg-k1 { background: var(--ink-1); } .bg-k2 { background: var(--ink-2); } .bg-k3 { background: var(--ink-3); }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--muted); }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+/* @block callout callout */
 /* Ý riêng, quan điểm: thẻ trắng có vạch cam bên trái, nhãn cam ở đầu (.label.k2). */
 .callout { display: grid; gap: 6px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--ink-2);
   border-radius: 0 var(--r) var(--r) 0; }
 .callout p { font-size: 15px; line-height: 1.55; }
+/* @end callout */
 
+/* @block note note */
 /* Báo trong dòng: một icon, một câu. .note.info, .note.good, .note.warn, .note.bad. */
 .note { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border-radius: var(--r); font-size: 14px; line-height: 1.5; background: var(--soft); color: var(--ink); }
 .note > .ic { font-size: 16px; margin-top: 3px; }
@@ -351,6 +382,7 @@ em.k1 { color: var(--ink-1); } em.k2 { color: var(--ink-2); }
 .note.good { background: var(--good-soft); } .note.good > .ic { color: var(--good); }
 .note.warn { background: var(--warn-soft); } .note.warn > .ic { color: var(--warn); }
 .note.bad { background: var(--bad-soft); } .note.bad > .ic { color: var(--bad); }
+/* @end note */
 
 /* Hiện dần khi mở trang: thêm data-reveal vào khung, Kit.reveal đặt --i cho từng con (cách nhau 40ms, tối đa 12 con). */
 [data-reveal] > * { animation: kit-up var(--t-slow) var(--ease-out) both; animation-delay: calc(min(var(--i, 0), 12) * 40ms); }
@@ -362,11 +394,9 @@ em.k1 { color: var(--ink-1); } em.k2 { color: var(--ink-2); }
 @keyframes kit-shimmer { to { transform: translateX(100%); } }
 /* Giảm chuyển động: không trượt, không lò xo, chỉ đổi độ mờ, để mọi thao tác vẫn có phản hồi. */
 @media (prefers-reduced-motion: reduce) {
-  .btn, .seg button, .tabs .tab-ink, .acc summary::after { transition-duration: 0s; }
-  [data-hint]::after { animation-name: kit-in; }
+  .btn, .seg button, .tabs .tab-ink { transition-duration: 0s; }
   .btn:active { transform: none; }
-  [data-reveal] > *, .tab-panel:not([hidden]), .acc[open] > :not(summary) { animation-name: kit-in; }
-  .skel::after { animation: none; }
+  [data-reveal] > *, .tab-panel:not([hidden]) { animation-name: kit-in; }
 }
 
 /* ICONS:START: sinh bởi make-icons.mjs từ lucide-static v1.75.0 (ISC), đừng sửa tay. */

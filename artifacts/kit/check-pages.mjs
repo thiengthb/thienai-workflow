@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Mở từng trang trong trình duyệt và bắt lỗi trước khi thien thấy. CI chạy file này ở mọi PR (.github/workflows/test.yml).
 //
-//   node artifacts/kit/check-pages.mjs [trang.html ...] [--changed <git-ref>] [--out <thư-mục-ảnh>]
+//   node artifacts/kit/check-pages.mjs [trang.html ...] [--changed <git-ref>] [--out <thư-mục-ảnh>] [--write-sizes]
 //
 // Không đưa trang nào: kiểm mọi trang bài trong learning/*/pages/ và một trang mẫu dựng từ mỗi mẫu trong artifacts/
 // (bài thường, bài chiến tranh, bài frontend, bài BA, trang chọn phương án, trang so sánh, trang ôn thẻ, trang kế hoạch, trang luồng, trang mẫu thành phần).
@@ -18,6 +18,9 @@
 //   6. Thiếu thẻ viewport: điện thoại dựng trang rộng 980px rồi thu nhỏ.
 //   7. axe-core (kiểm truy cập theo WCAG 2.1 AA) thấy lỗi mức nặng: nút không có tên, ô nhập không nhãn, aria sai...
 //      Lỗi mức vừa và nhẹ chỉ cảnh báo. Độ tương phản do mục 4 kiểm, nên tắt luật đó của axe.
+//   8. Một trang mẫu (bản sẽ đăng) nặng hơn cỡ gốc trong sizes.json quá 20% (KH9 ga 2: kit lớn dần, mỗi trang chỉ mang
+//      khối nó dùng). Chỉ kiểm khi không đưa trang nào. thien duyệt bố cục mới làm trang nặng hơn thì ghi lại cỡ gốc:
+//      node artifacts/kit/check-pages.mjs --write-sizes (dựng trang mẫu, ghi cỡ vào sizes.json, không mở trình duyệt kiểm).
 // Ảnh chụp cả trang ở mọi khổ nằm trong thư mục ảnh (mặc định .check-pages/), CI đính kèm vào lần chạy để xem lại.
 // Cần Playwright (máy Claude cloud có sẵn; CI cài trong bước riêng) và axe-core (npm install --no-save axe-core@4.14.0;
 // thiếu thì bỏ qua mục 7 và nói rõ).
@@ -199,6 +202,30 @@ export async function axeCheck(p, source) {
     msg: `${v.id} (${v.impact}): ${v.help}, ${v.count} chỗ, ví dụ ${v.nodes.join(' | ')}` }));
 }
 
+/** Cỡ bản sẽ đăng của một trang mẫu: index.html cạnh preview.html (đã đóng gói), không thì đóng gói file (trang bài). */
+export async function publishedBytes(file) {
+  const idx = join(dirname(file), 'index.html');
+  if (basename(file) === 'preview.html' && existsSync(idx)) return Buffer.byteLength(readFileSync(idx, 'utf8'));
+  const { packHtml } = await import('./pack.mjs');
+  return Buffer.byteLength(packHtml(readFileSync(file, 'utf8')));
+}
+
+/** Mục 8: so cỡ từng trang mẫu với cỡ gốc. fx: [{ name, file }] từ buildFixtures. Trả về { fails, lines, sizes }. */
+export async function checkSizes(fx, base = JSON.parse(readFileSync(join(here, 'sizes.json'), 'utf8'))) {
+  const lines = [], sizes = {};
+  let fails = 0;
+  const kb = (b) => (b / 1024).toFixed(1).replace('.', ',') + ' KB';
+  for (const { name, file } of fx) {
+    const now = sizes[name] = name === 'gallery' ? Buffer.byteLength(readFileSync(file, 'utf8')) : await publishedBytes(file);
+    const was = base.pages[name];
+    if (!was) { lines.push(`cảnh báo [mau-${name}] chưa có cỡ gốc trong sizes.json (${kb(now)})`); continue; }
+    const pct = Math.round(100 * (now - was) / was);
+    if (now > was * (base.limit || 1.2)) { fails++; lines.push(`LỖI [mau-${name}] nặng ${kb(now)}, hơn cỡ gốc ${kb(was)} ${pct}% (giới hạn +${Math.round(100 * ((base.limit || 1.2) - 1))}%): bỏ khối không dùng, hay thien duyệt rồi chạy --write-sizes`); }
+    else lines.push(`cỡ [mau-${name}] ${kb(now)} (gốc ${kb(was)}, ${pct >= 0 ? '+' : ''}${pct}%)`);
+  }
+  return { fails, lines, sizes };
+}
+
 /** Kiểm các trang; trả về { fails, warns, lines }. */
 export async function checkPages(pages, { out = join(root, '.check-pages'), browser, log = console.log } = {}) {
   let fails = 0, warns = 0;
@@ -254,22 +281,37 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const args = process.argv.slice(2);
   const oi = args.indexOf('--out');
   const out = resolve(oi >= 0 ? args.splice(oi, 2)[1] : join(root, '.check-pages'));
+  const wi = args.indexOf('--write-sizes');
+  const writeSizes = wi >= 0 && !!args.splice(wi, 1);
   const ci = args.indexOf('--changed');
   const ref = ci >= 0 ? args.splice(ci, 2)[1] : '';
   const { chromium } = createRequire(import.meta.url)('playwright');
   const browser = await chromium.launch();
   const tmp = mkdtempSync(join(tmpdir(), 'check-pages-'));
   const asRepo = async (f) => ({ name: relative(join(root, 'learning'), f).replace(/[\\/]pages[\\/]/, '-').replace(/\.html$/, ''), file: await buildRepoPage(f, tmp), own: true });
-  let pages;
+  let pages, sizeFails = 0;
   const inRepo = (f) => /[\\/]learning[\\/][^\\/]+[\\/]pages[\\/][^\\/]+\.html$/.test(f) && f.startsWith(root);
   if (args.length) pages = await Promise.all(args.map((f) => resolve(f)).map(async (f) => ({ name: basename(f, '.html'), file: inRepo(f) ? await buildRepoPage(f, tmp) : f, own: true })));
   else {
     const fx = await buildFixtures(tmp, browser);
+    if (writeSizes) {
+      const file = join(here, 'sizes.json'), base = JSON.parse(readFileSync(file, 'utf8'));
+      const { sizes } = await checkSizes(fx, base);
+      const sha = execFileSync('git', ['-C', root, 'rev-parse', '--short', 'HEAD'], { encoding: 'utf8' }).trim();
+      writeFileSync(file, JSON.stringify({ ...base, measured: `${new Date().toISOString().slice(0, 10)} · ${sha}`, pages: sizes }, null, 2) + '\n');
+      console.log(`Đã ghi cỡ gốc mới vào ${relative(root, file)}:`, sizes);
+      await browser.close();
+      process.exit(0);
+    }
+    const sz = await checkSizes(fx);
+    for (const l of sz.lines) console.log(l);
+    sizeFails = sz.fails;
     const repo = ref ? changedPages(ref) : repoPages();
     if (ref) console.log(`Chỉ kiểm trang bài đổi so với ${ref}: ${repo.length ? repo.map((f) => relative(root, f)).join(', ') : 'không có'}; bài khác đóng băng.`);
     pages = [...fx.map((f) => ({ ...f, name: 'mau-' + f.name })), ...(await Promise.all(repo.map(asRepo)))];
   }
-  const { fails, warns } = await checkPages(pages, { out, browser });
+  const res = await checkPages(pages, { out, browser });
+  const fails = res.fails + sizeFails, warns = res.warns;
   await browser.close();
   console.log(`\nXong ${pages.length} trang x ${SIZES.length} khổ x ${SCHEMES.length} chế độ: ${fails} lỗi, ${warns} cảnh báo. Ảnh chụp ở ${out}`);
   process.exit(fails ? 1 : 0);

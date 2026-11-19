@@ -32,6 +32,14 @@ Xong khi: ...
    - Trong `templates/`
 ```
 
+**Khối của trang (KH9, từ 2026-11-19).** Trang lắp từ các khối `dang-o` (Đang ở đâu), `tuyen` (tuyến ga), `ban-do` (bản đồ ga theo ngày, nằm trong `tuyen`), `phuong-an`, `cau-hoi` (câu hỏi hay góp ý, kèm khối gửi), `them`, `nhat-ky`. Mặc định khối nào có nội dung thì có, theo thứ tự đó. Muốn khác (bỏ khối, đổi thứ tự) thì thêm một dòng dưới dòng "Trạng thái:", có lý do:
+
+```markdown
+Khối: cau-hoi, tuyen, nhat-ky · Vì: kế hoạch chờ duyệt, câu hỏi là việc chính
+```
+
+Khối không có trên trang thì CSS và JS của nó cũng không (`kit/pack.mjs`), nên bỏ khối là trang nhẹ đi. Lệnh in danh sách khối đã dùng; tên sai hay thiếu "Vì:" thì báo "lệch". Bố cục riêng cho kế hoạch chờ duyệt, đang chạy, đã đóng là việc của KH9 ga 3.
+
 Trạng thái "chờ duyệt" dùng cho bản gửi thien duyệt (file nằm trên nhánh, chưa merge). Dòng "Ước:" và mục "Câu hỏi" chưa có trong mẫu PLAN; luật thêm vào mẫu gom ở mốc 01/12 (checkpoint 5 của kế hoạch).
 
 ## Cách AI dựng một trang

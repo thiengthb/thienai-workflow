@@ -1,13 +1,21 @@
 // Đóng gói trang trước khi đăng: trang nhẹ hơn mà không đổi cách chạy. Mọi lệnh dựng trang gọi packHtml ở bước cuối
 // (make-lesson, make-review, make-decision, make-round, progress-page; make-gallery chỉ thu gọn, giữ đủ icon để xem).
 //
-//   packHtml(html, { icons = true })  thu gọn mọi khối <style> và <script> viết trong trang, bỏ icon không dùng
+//   packHtml(html, { icons = true, blocks = true })  bỏ khối không dùng, thu gọn mọi khối <style> và <script> viết trong trang,
+//                 bỏ icon không dùng
+//   trimBlocks(html)  bỏ vùng CSS, JS của khối mà trang không dùng (KH9 ga 2), như bỏ icon thừa
 //   minCss(css)   bỏ chú thích và khoảng trắng thừa; giữ nguyên chuỗi trong ngoặc kép (content, url("data:…"))
 //   minJs(js)     chỉ bỏ dòng chú thích đứng riêng (// … hay khối /* … */ chiếm trọn dòng); không đổi một ký tự code nào
 //   trimIcons(html)  bỏ biến --ic-<tên> và lớp .ic-<tên> mà trang không nhắc tới
 //
 // Icon được giữ khi trang có "ic-<tên>" (class, var(--ic-<tên>)) hay Kit.icon('<tên>') viết thẳng tên. Gọi Kit.icon với
 // tên nằm trong biến thì lệnh không thấy: viết thẳng tên, hay dựng với { icons: false }.
+// Vùng của một khối (trong CSS hay JS, kể cả trong template của từng mẫu):
+//   /* @block <tên> <dấu> <dấu>… */ … /* @end <tên> */
+// Khối được giữ khi một dấu của nó (tên lớp, id, Kit.sendBox…) có trong trang ngoài mọi vùng khối và ngoài chú thích, hay
+// trong vùng của một khối đang được giữ. Không ghi dấu thì tên khối là dấu. Dấu so trọn chữ: "qs" không khớp "qs-x". Lệnh dựng không vẽ một
+// khối thì thân trang không còn dấu của nó, nên CSS và JS của khối đi theo. Vùng không lồng nhau. JS của một vùng có thể
+// bị bỏ: code ngoài vùng không được gọi thẳng tên định nghĩa trong vùng (dùng biến có giá trị mặc định, xem plan.js).
 // Đo 2026-11-18: chú thích chiếm 15–20% mỗi file kit; bộ icon khoảng 9 KB, một trang thường dùng dưới 6 icon.
 
 /** CSS: bỏ chú thích, gộp khoảng trắng, bỏ khoảng trắng quanh { } ; , — trừ trong chuỗi. */
@@ -75,8 +83,30 @@ export function trimIcons(html) {
   return html;
 }
 
-/** Thu gọn các khối <style> và <script> viết trong trang (bỏ qua script có src hay type khác JS), rồi bỏ icon không dùng. */
-export function packHtml(html, { icons = true } = {}) {
+const BLOCK = /\/\*\s*@block\s+([a-z0-9-]+)([^*]*)\*\/([\s\S]*?)\/\*\s*@end\s+\1\s*\*\//g;
+// Chú thích không tính là dùng: đầu kit.js kể tên mọi hàm, chú thích CSS nhắc tên lớp của mẫu khác.
+const noComments = (t) => t.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^[ \t]*\/\/.*$/gm, ' ');
+const has = (text, tok) => new RegExp(`(?<![\\w-])${tok.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w-])`).test(text);
+
+/** Bỏ vùng của khối không dùng. Trả về html; danh sách khối đã bỏ ở trimBlocks.last (để lệnh dựng in ra, test xem). */
+export function trimBlocks(html) {
+  const regions = [...html.matchAll(BLOCK)].map((m) => ({ name: m[1], toks: m[2].trim().split(/\s+/).filter(Boolean), body: m[3] }));
+  if (!regions.length) { trimBlocks.last = []; return html; }
+  for (const r of regions) if (!r.toks.length) r.toks = [r.name];
+  let seen = noComments(html.replace(BLOCK, ' '));
+  const keep = new Set();
+  for (let grew = true; grew;) {
+    grew = false;
+    for (const r of regions) if (!keep.has(r.name) && r.toks.some((t) => has(seen, t))) { keep.add(r.name); seen += ' ' + noComments(regions.filter((x) => x.name === r.name).map((x) => x.body).join(' ')); grew = true; }
+  }
+  trimBlocks.last = [...new Set(regions.map((r) => r.name).filter((n) => !keep.has(n)))];
+  return html.replace(BLOCK, (m, name, toks, body) => keep.has(name) ? body : '');
+}
+trimBlocks.last = [];
+
+/** Bỏ khối không dùng, thu gọn các khối <style> và <script> viết trong trang (bỏ qua script có src hay type khác JS), rồi bỏ icon không dùng. */
+export function packHtml(html, { icons = true, blocks = true } = {}) {
+  if (blocks) html = trimBlocks(html);
   html = html.replace(/(<style\b[^>]*>)([\s\S]*?)(<\/style>)/g, (m, a, css, z) => a + minCss(css) + z)
     .replace(/(<script\b([^>]*)>)([\s\S]*?)(<\/script>)/g, (m, a, attrs, js, z) =>
       /\bsrc=|type=["'](?!module|text\/javascript)/.test(attrs) ? m : a + minJs(js) + z);

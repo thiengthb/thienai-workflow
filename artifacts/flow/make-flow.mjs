@@ -6,11 +6,13 @@
 //
 // Ra: <out-dir>/index.html (đã gộp kit, dagre, diagram.js), <out-dir>/preview.html để mở thử, <out-dir>/publish.json để đăng.
 // File luồng là một spec của Diagram.mount (kit/diagram.js) cộng vài trường của trang; "lỗi" chặn dựng, "lệch" chỉ báo.
+// Khối của trang (KH9 ga 2): mặc định khối nào có nội dung thì có (FLOW_BLOCKS); "blocks": [...] cùng "blocksWhy": "<lý do>"
+// chọn khối và thứ tự. Các bước luôn có. Khối không có trên trang thì CSS, JS của nó cũng không (vùng @block, kit/pack.mjs).
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, statSync, realpathSync } from 'node:fs';
 import { dirname, join, resolve, basename, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
-import { packHtml } from '../kit/pack.mjs';
+import { packHtml, trimBlocks } from '../kit/pack.mjs';
 import { trialHtml, sendActsHtml } from '../kit/blocks.mjs';
 import { writePublish } from '../kit/publish.mjs';
 
@@ -20,6 +22,9 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const ddmm = (iso) => { const m = /^\d{4}-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? `${m[2]}/${m[1]}` : ''; };
 const icon = (n) => `<i class="ic ic-${n}" aria-hidden="true"></i>`;
 const isStr = (v) => typeof v === 'string' && v.trim() !== '';
+
+/** Khối của trang luồng, theo thứ tự mặc định. so-do là dải sơ đồ đi cùng các bước (luôn đứng đầu khi có). */
+export const FLOW_BLOCKS = ['so-do', 'ngoai-luong', 'ke-lai'];
 
 /** Chữ một dòng: escape hết, rồi chỉ cho `code`, **đậm** và [chữ](https://...). */
 export function inline(s) {
@@ -85,8 +90,16 @@ export function readFlow(raw) {
   nodes.forEach((n, i) => { if (!seen.has(n.id) && !n.note) off(`nodes[${i}]`, `khối phụ "${n.label}" chưa có note: trang không giải thích được nó`); });
 
   const sources = Array.isArray(j.sources) ? j.sources.filter(isStr) : [];
+  let blocks = null;
+  if (j.blocks != null) {
+    const names = Array.isArray(j.blocks) ? j.blocks.filter(isStr).map((b) => b.trim().toLowerCase()) : [];
+    if (!Array.isArray(j.blocks)) off('blocks', 'blocks phải là danh sách tên khối');
+    for (const b of names) if (!FLOW_BLOCKS.includes(b)) off('blocks', `khối "${b}" không có; khối của trang luồng: ${FLOW_BLOCKS.join(', ')}`);
+    if (!isStr(j.blocksWhy)) off('blocksWhy', 'đổi khối so với mặc định thì ghi một dòng lý do ("blocksWhy")');
+    blocks = { names: [...new Set(names.filter((b) => FLOW_BLOCKS.includes(b)))], why: isStr(j.blocksWhy) ? j.blocksWhy : '' };
+  }
   const flow = { title: isStr(j.title) ? j.title : '', intro: isStr(j.intro) ? j.intro : '', updated: j.updated || '', page: isStr(j.page) ? j.page : '',
-    sources, nodes, edges, steps, dir: j.dir || 'auto' };
+    sources, nodes, edges, steps, dir: j.dir || 'auto', blocks };
   return { flow, issues };
 }
 
@@ -94,8 +107,15 @@ export function readFlow(raw) {
 export function render(flow, { id, repo = '', source = '', trial = '' } = {}) {
   const node = new Map(flow.nodes.map((n) => [n.id, n]));
   const stepIdx = new Map(flow.steps.map((s, i) => [s.id, i]));
-  const ref = (nid) => stepIdx.has(nid) ? `<a href="#b-${esc(nid)}">${esc(node.get(nid).label)}</a>` : `<a href="#n-${esc(nid)}">${esc(node.get(nid).label)}</a>`;
+  // Khối phụ chỉ có chỗ để nhảy tới khi trang có khối "ngoai-luong".
+  const ref = (nid) => stepIdx.has(nid) ? `<a href="#b-${esc(nid)}">${esc(node.get(nid).label)}</a>`
+    : on('ngoai-luong') ? `<a href="#n-${esc(nid)}">${esc(node.get(nid).label)}</a>` : `<b>${esc(node.get(nid).label)}</b>`;
   const aside = flow.nodes.filter((n) => !stepIdx.has(n.id));
+  const has = { 'so-do': true, 'ngoai-luong': aside.length > 0, 'ke-lai': true };
+  const notes = [];
+  const blocks = flow.blocks ? flow.blocks.names.filter((b) => has[b] || !notes.push({ level: 'ghi chú', at: 'blocks', msg: `khối "${b}" không có nội dung, trang bỏ qua` }))
+    : FLOW_BLOCKS.filter((b) => has[b]);
+  const on = (b) => blocks.includes(b);
 
   const steps = flow.steps.map((s, i) => {
     const n = node.get(s.id);
@@ -116,7 +136,7 @@ export function render(flow, { id, repo = '', source = '', trial = '' } = {}) {
 </li>`;
   }).join('\n');
 
-  const asideHtml = aside.length ? `<section class="aside" aria-labelledby="h-aside"><span class="label">Ngoài luồng chính</span><h2 id="h-aside" class="vh">Ngoài luồng chính</h2>
+  const asideHtml = on('ngoai-luong') ? `<section class="aside" aria-labelledby="h-aside"><span class="label">Ngoài luồng chính</span><h2 id="h-aside" class="vh">Ngoài luồng chính</h2>
   <ul class="nodes">${aside.map((n) => `<li class="card pad" id="n-${esc(n.id)}"><b>${esc(n.label)}</b>${n.note ? `<p class="small">${inline(n.note)}</p>` : ''}</li>`).join('')}</ul></section>` : '';
 
   const spec = { title: flow.title, nodes: flow.nodes.map((n) => ({ id: n.id, label: n.label, kind: n.kind })), edges: flow.edges.map((e) => [e.from, e.to, e.label]), steps: flow.steps.map((s) => s.id) };
@@ -127,25 +147,7 @@ export function render(flow, { id, repo = '', source = '', trial = '' } = {}) {
     flow.updated ? `<span class="chip">Cập nhật ${ddmm(flow.updated)}</span>` : ''].join('');
   const srcLinks = flow.sources.map((p) => repo ? `<a href="https://github.com/${esc(repo)}/blob/main/${esc(p)}">${esc(p)}</a>` : `<code>${esc(p)}</code>`).join(', ');
 
-  const body = `<main class="wrap">
-<header class="ph">
-  <span class="label">Luồng${repo ? ' · ' + esc(repo.split('/').pop()) : ''}</span>
-  <h1>${esc(flow.title)}</h1>
-  ${flow.intro ? `<p class="lead">${inline(flow.intro)}</p>` : ''}
-  <div class="meta">${chips}</div>
-  <p class="hint small">${icon('info')}<span>Cuộn xuống để đi từng bước: sơ đồ đứng yên ${'<span class="only-narrow">ở trên</span><span class="only-wide">bên phải</span>'}, khối đang đọc sáng lên. Chạm một khối để nhảy tới bước đó.</span></p>
-</header>
-<div class="story">
-  <div class="band" id="band">
-    <div class="dg-host" id="flow-dg"></div>
-    <p class="cap" id="cap" role="status"></p>
-  </div>
-  <ol class="beats" id="beats">
-${steps}
-  </ol>
-</div>
-${asideHtml}
-<section id="ke-lai" class="retell" aria-labelledby="h-retell">
+  const retell = `<section id="ke-lai" class="retell" aria-labelledby="h-retell">
   <span class="label">Tự kể lại</span>
   <h2 id="h-retell">Luồng rẽ ở đâu? Quay lại ở đâu?</h2>
   <p class="muted">Kể bằng lời của bạn, đừng chép tên khối. Đừng cuộn lên, đừng mở file nào. Vài câu là đủ: bắt đầu từ đâu, chỗ nào chia hai đường, chỗ nào vòng lại và vì sao. Claude đọc và chỉ chỗ thiếu.</p>
@@ -155,11 +157,29 @@ ${asideHtml}
     ${trialHtml(trial)}
     ${sendActsHtml()}
   </div>
-</section>
+</section>`;
+  const body = `<main class="wrap">
+<header class="ph">
+  <span class="label">Luồng${repo ? ' · ' + esc(repo.split('/').pop()) : ''}</span>
+  <h1>${esc(flow.title)}</h1>
+  ${flow.intro ? `<p class="lead">${inline(flow.intro)}</p>` : ''}
+  <div class="meta">${chips}</div>
+  ${on('so-do') ? `<p class="hint small">${icon('info')}<span>Cuộn xuống để đi từng bước: sơ đồ đứng yên ${'<span class="only-narrow">ở trên</span><span class="only-wide">bên phải</span>'}, khối đang đọc sáng lên. Chạm một khối để nhảy tới bước đó.</span></p>` : ''}
+</header>
+<div class="story">
+  ${on('so-do') ? `<div class="band" id="band">
+    <div class="dg-host" id="flow-dg"></div>
+    <p class="cap" id="cap" role="status"></p>
+  </div>` : ''}
+  <ol class="beats" id="beats">
+${steps}
+  </ol>
+</div>
+${blocks.filter((b) => b !== 'so-do').map((b) => ({ 'ngoai-luong': asideHtml, 'ke-lai': retell })[b]).join('\n')}
 <footer>${source ? `Sinh từ <a href="${esc(source)}">${esc(source.replace(/^https:\/\/github\.com\//, ''))}</a>` : ''}${srcLinks ? `${source ? ' · ' : ''}Theo ${srcLinks}` : ''}</footer>
 </main>`;
-  const data = { id, title: flow.title, trial, spec, labels: flow.steps.map((s) => node.get(s.id).label) };
-  return { body, data };
+  const data = { id, title: flow.title, trial: on('ke-lai') ? trial : '', ...(on('so-do') ? { spec, labels: flow.steps.map((s) => node.get(s.id).label) } : {}) };
+  return { body, data, blocks, notes };
 }
 
 export function build(jsonPath, out, { repo = '', url = '', trial = '' } = {}) {
@@ -168,8 +188,9 @@ export function build(jsonPath, out, { repo = '', url = '', trial = '' } = {}) {
   if (fatal.length) { const e = new Error(fatal.map((i) => `${jsonPath}: ${i.at ? i.at + ': ' : ''}${i.msg}`).join('\n')); e.issues = issues; throw e; }
   const rel = repoPath(jsonPath);
   const id = basename(jsonPath).replace(/\.json$/i, '').toLowerCase().replace(/[^a-z0-9-]+/g, '-');
-  const { body, data } = render(flow, { id, repo, source: repo && rel ? `https://github.com/${repo}/blob/main/${rel}` : '',
+  const { body, data, blocks, notes } = render(flow, { id, repo, source: repo && rel ? `https://github.com/${repo}/blob/main/${rel}` : '',
     trial });   // chi tiết thử chỉ khi truyền --trial (KH8, 2026-11-19)
+  issues.push(...notes);
   const html = packHtml(lf(readFileSync(join(here, 'template.html'), 'utf8'))
     .replace('__TITLE__', () => esc(flow.title))
     .replace('/*KIT_CSS*/', () => lf(readFileSync(join(here, '../kit/kit.css'), 'utf8')))
@@ -183,7 +204,7 @@ export function build(jsonPath, out, { repo = '', url = '', trial = '' } = {}) {
   writeFileSync(join(out, 'index.html'), html);
   writeFileSync(join(out, 'preview.html'), `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>\n${html}\n</body></html>\n`);
   const lines = writePublish(out, { url: url || flow.page, capabilities: { comments: {}, db: {} }, icon: 'flow', description: 'Luồng: ' + flow.title });
-  return { flow, issues, lines, id };
+  return { flow, issues, lines, id, blocks, dropped: trimBlocks.last };
 }
 
 /** Đường dẫn của file trong repo git chứa nó (để link về GitHub), hay '' khi không trong repo. */
@@ -215,9 +236,10 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const [jsonPath, out] = args;
   if (!jsonPath || !out) { console.error('Cách dùng: node make-flow.mjs <luồng.json> <out-dir> [--repo owner/repo] [--url <link trang cũ>] [--trial "<chi tiết thử>"]'); process.exit(2); }
   try {
-    const { flow, issues, lines } = build(jsonPath, resolve(out), { repo, url, trial });
+    const { flow, issues, lines, blocks } = build(jsonPath, resolve(out), { repo, url, trial });
     if (issues.length) report(jsonPath, issues);
     console.log(`Đã dựng "${flow.title}" (${flow.steps.length} bước, ${flow.nodes.length} khối) vào ${resolve(out)}/index.html`);
+    console.log(`Khối trang: ${blocks.join(', ')}${flow.blocks ? ` (theo "blocks", vì: ${flow.blocks.why || 'chưa ghi'})` : ' (mặc định theo nội dung)'}`);
     for (const l of lines) console.log(l);
     if (!flow.page) console.log(`Đăng xong: thêm "page": "<link>" vào ${jsonPath} để lần sau tự đăng đè.`);
   } catch (e) { console.error(e.message); process.exit(1); }

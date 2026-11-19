@@ -36,7 +36,7 @@ export function render({ palettes } = {}) {
 
 export function build(out, opts) {
   mkdirSync(out, { recursive: true });
-  const html = packHtml(render(opts), { icons: false });   // trang mẫu giữ đủ icon để xem
+  const html = packHtml(render(opts), { icons: false, blocks: false });   // trang mẫu giữ đủ icon và mọi khối để xem
   writeFileSync(join(out, 'index.html'), html);
   writeFileSync(join(out, 'preview.html'), `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>\n${html}\n</body></html>\n`);
   return join(out, 'preview.html');

@@ -114,4 +114,34 @@ for (const f of readdirSync(join(root, 'docs/plans')).filter((f) => f.endsWith('
   assert.match(bad.stdout, /bad\.md:3: lỗi: mục Checkpoint chưa có checkpoint nào/);
 }
 
+// Blocks (KH9 ga 2): by default every block with content; a "Khối:" line picks blocks and order, and a dropped block
+// takes its CSS and JS with it, so the page gets lighter.
+{
+  const dir = mkdtempSync(join(tmpdir(), 'plan-blocks-'));
+  const full = build(fixture, join(dir, 'full'), { today: '2026-11-21' });
+  assert.deepEqual(full.blocks, ['dang-o', 'tuyen', 'ban-do', 'phuong-an', 'cau-hoi', 'them', 'nhat-ky']);
+  const md = readFileSync(fixture, 'utf8').replace('\nLuật ghi file', '\nKhối: cau-hoi, tuyen · Vì: chờ duyệt, câu hỏi lên trước\n\nLuật ghi file');
+  writeFileSync(join(dir, 'some.md'), md);
+  const some = build(join(dir, 'some.md'), join(dir, 'some'), { today: '2026-11-21' });
+  assert.deepEqual(some.blocks, ['cau-hoi', 'tuyen']);
+  assert.ok(some.plan.blocks.why.startsWith('chờ duyệt'));
+  for (const b of ['dang-o', 'ban-do', 'phuong-an', 'them-nhat-ky']) assert.ok(some.dropped.includes(b), `${b} dropped`);
+  const a = readFileSync(join(dir, 'full/index.html'), 'utf8'), b = readFileSync(join(dir, 'some/index.html'), 'utf8');
+  assert.ok(b.length < a.length - 8000, `lighter without the blocks (${a.length} -> ${b.length})`);
+  assert.doesNotMatch(b, /id="daymap"|\.daymap|\.opts\{|id="phuong-an"|href="#dang-o"/, 'no markup, CSS or menu entry of dropped blocks');
+  assert.ok(b.indexOf('id="cau-hoi"') < b.indexOf('id="tuyen"'), 'order follows the line');
+  assert.ok(/drawInto/.test(a) && !/drawInto/.test(b), 'day-map code dropped with its block');
+  // Wrong names and a missing reason are reported; no valid name falls back to the default.
+  const bad = parsePlanFile(md.replace('Khối: cau-hoi, tuyen · Vì: chờ duyệt, câu hỏi lên trước', 'Khối: cau-hoi, bang-x'));
+  assert.ok(bad.issues.some((i) => /khối "bang-x" không có/.test(i.msg)));
+  assert.ok(bad.issues.some((i) => /thiếu " · Vì:/.test(i.msg)));
+  assert.equal(parsePlanFile(md.replace('Khối: cau-hoi, tuyen', 'Khối: bang-x')).plan.blocks, null);
+  // A listed block with no content is skipped with a note.
+  const noOpts = md.replace(/## Các phương án đã xét[\s\S]*?(?=## Checkpoint)/, '').replace('Khối: cau-hoi, tuyen', 'Khối: phuong-an, tuyen');
+  writeFileSync(join(dir, 'no-opts.md'), noOpts);
+  const n = build(join(dir, 'no-opts.md'), join(dir, 'no-opts'), { today: '2026-11-21' });
+  assert.deepEqual(n.blocks, ['tuyen']);
+  assert.ok(n.issues.some((i) => i.level === 'ghi chú' && /phuong-an/.test(i.msg)));
+}
+
 console.log('ok make-plan');

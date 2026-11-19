@@ -8,7 +8,8 @@
 /* Trang luồng chạy (kế hoạch docs/plans/2026-11-18-visual-workflow.md, checkpoint 3). Theo 3 lựa chọn của thien (19/11):
    nội dung từ một file JSON đúng định dạng Diagram.mount; sơ đồ dính trên, chữ từng bước cuộn dưới, khối đang đọc sáng lên;
    cuối trang ô tự kể lại luồng, gửi cho Claude. Màn rộng (từ 1024px): chữ bên trái, sơ đồ dính bên phải.
-   Màu, chữ, bo góc là của kit; viền khối theo mực (k1 xanh công cụ, k2 cam người). Bố cục "Một nấc": một cột đọc, toàn cảnh trước. */
+   Màu, chữ, bo góc là của kit; viền khối theo mực (k1 xanh công cụ, k2 cam người). Bố cục "Một nấc": một cột đọc, toàn cảnh trước.
+   Mỗi khối (so-do, ngoai-luong, ke-lai) nằm trong vùng @block (KH9 ga 2): trang không có khối thì kit/pack.mjs bỏ CSS, JS của nó. */
 :root { --band-h: 0px; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -31,6 +32,7 @@ section, header.ph { display: grid; grid-template-columns: minmax(0, 1fr); gap: 
 .hint .ic { flex: none; margin-top: 3px; color: var(--accent); }
 .only-wide { display: none; }
 
+/* @block so-do flow-dg */
 /* Sơ đồ dính: điện thoại và máy tính bảng là dải trên cùng, sơ đồ ngang tự cuộn theo khối đang đọc. */
 .story { display: grid; grid-template-columns: minmax(0, 1fr); }
 .band { position: sticky; top: 0; z-index: 5; margin: 0 -16px; padding: 8px 12px 6px; display: grid; gap: 4px;
@@ -48,6 +50,7 @@ section, header.ph { display: grid; grid-template-columns: minmax(0, 1fr); gap: 
 .dg-node.seen:not(.on) .dg-num::before { content: ""; width: 10px; height: 10px; background: currentColor;
   -webkit-mask: var(--seen-tick) center / contain no-repeat; mask: var(--seen-tick) center / contain no-repeat; }
 :root { --seen-tick: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E"); }
+/* @end so-do */
 
 /* Từng bước */
 ol.beats { list-style: none; margin: 0; padding: 8px 0 28vh; display: grid; }
@@ -71,6 +74,7 @@ ul.ways li.back .ic { color: var(--ink-2); }
 ul.ways li.in .ic { color: var(--ink-1); }
 @media (prefers-reduced-motion: reduce) { .beat, .s-num { transition: none; } }
 
+/* @block so-do flow-dg */
 /* Màn rộng: chữ bên trái, sơ đồ dính bên phải (sơ đồ tự chọn ngang hay dọc theo cột). */
 @media (min-width: 1024px) {
   .only-wide { display: inline; } .only-narrow { display: none; }
@@ -80,14 +84,20 @@ ul.ways li.in .ic { color: var(--ink-1); }
   .beats { grid-column: 1; grid-row: 1; }
   .beat { scroll-margin-top: 24px; }
 }
+/* @end so-do */
 
+/* @block ngoai-luong h-aside */
 /* Ngoài luồng chính */
 ul.nodes { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 ul.nodes li { scroll-margin-top: calc(var(--band-h) + 12px); }
+/* @end ngoai-luong */
 
+/* @block ke-lai */
 /* Tự kể lại */
 /* Ô kể lại cao hơn ô ghi chú mặc định; .choice, .trial, nút và dòng báo của khối gửi: trong kit.css (KH9). */
 .retell .kit-send textarea { min-height: 120px; }
+/* @end ke-lai */
+
 footer { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
 </style>
 
@@ -95,6 +105,10 @@ footer { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
 
 <script type="application/json" id="flow">__FLOW__</script>
 <script>/*KIT_JS*/</script>
-<script>/*DAGRE_JS*/</script>
-<script>/*DIAGRAM_JS*/</script>
+<script>/* @block so-do flow-dg */
+/*DAGRE_JS*/
+/* @end so-do */</script>
+<script>/* @block so-do flow-dg */
+/*DIAGRAM_JS*/
+/* @end so-do */</script>
 <script>/*FLOW_JS*/</script>
