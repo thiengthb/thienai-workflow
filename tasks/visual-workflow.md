@@ -1,7 +1,7 @@
-# Quy trình nhìn được: checkpoint 3, mẫu luồng chạy
+# KH8 đóng KH1–KH7, rồi KH9 kit lắp ghép
 
-Repo: thiengthb/thienai-workflow · Nhánh: chưa có (bench-compare, kh6-sakubun-flow đã merge) · PR: #149, #150 đã merge; sakubun #339 chờ thien merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Cập nhật: 2026-11-19T13:27Z
+Repo: thiengthb/thienai-workflow · Nhánh: kh9-modular-kit · PR: #155 (nháp KH9); #153 luật, #154 mã chờ thien merge; #152 đã merge; sakubun #339 chờ thien merge
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Cập nhật: 2026-11-19T14:06Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -54,15 +54,18 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kth
 - 19/11 19:30 thien nhắn "ok ổn rồi bạn hãy merge giúp tôi và tiếp tục kế hoạch 6": sửa hai ý CodeRabbit ở #149 (data-before thiếu núm thì giữ giá trị lúc mở; cỡ màn so chỉ áp trong .pair), CI xanh, merge (squash c43a8cd).
 - Luồng kiến trúc sakubun "Một câu luyện đi qua những đâu" (`docs/flows/practice-turn.json` ở sakubun, 9 bước, 11 khối): trang https://claude.ai/artifact/Xx8GxEfRauxKujP1er9H5v (nick tnt697, comments + db), PR sakubun #339 (risk:low, CI xanh, CodeRabbit một ý: hạn mức ngữ pháp mặc định là 3, đã sửa cả trang). Lệnh merge #339 bị chặn vì thien chỉ nhắn merge #149: chờ thien merge. PR #150 tick ga 3 đủ (19/24), tự merge theo DELEGATION.
 
+- 19/11 20:40 thien trả lời KH8: ok cả 10 đề xuất, kèm ghi chú (chi tiết thử lặp ở mọi trang; mẫu phải là bộ lắp ghép; bố cục theo nội dung, kiểm kỹ artifact). Đã làm: PR #153 luật (DELEGATION, README 3 luật/mốc, quyết định 003 review theo giai đoạn, skill viet-de-hieu vào repo, ngôn ngữ về VOICE, plan/flow vào danh sách mẫu 8/8, MAP), PR #154 mã (start-session không nhận việc ở repo chưa gắn, bỏ Nghe và mic khỏi mẫu học, chi tiết thử thành --trial, ô kể lại hỏi rẽ ở đâu quay lại ở đâu), PR #152 đóng KH1–KH7 và STATUS (tự merge). Mọi góp ý CodeRabbit đã sửa và resolve; CI xanh cả ba.
+- KH9 nháp `docs/plans/2026-11-19-modular-kit.md` (PR #155), trang 4 câu hỏi https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (nick tnt697). Trang lộ trình học (Vubbj6...) ở nick khác: nick đó chạy `publish-progress.mjs roadmap` rồi đăng đè (learning/roadmap.md đổi ở #152).
+
 ## Bước tiếp theo
-00. 19/11 20:21 thien chọn "Làm nốt rồi đóng" cả KH1–KH7 (đang nhiều kế hoạch quá), rồi mới bàn kế hoạch MCP cho nhóm capstone SEP490. Đã soạn KH8 `docs/plans/2026-11-19-close-plans.md` (nhánh kh8-close-plans, PR nháp #152), trang 10 câu hỏi https://claude.ai/artifact/AZyzE1wW6dwEvC758uDgna (nick tnt697). thien trả lời xong thì đọc db `plans/<tên file>`, chép nguyên văn vào kế hoạch, làm PR luật (thien merge) rồi đóng bảy kế hoạch.
-0. KH6 không còn việc làm được trước mốc: checkpoint 4 còn nút Nghe và Nói (quyết ở 13/12) và điều kiện xong (sau BA 6 và Frontend 11; Frontend 11 có thể dùng `data-compare`); checkpoint 5 gom luật ở mốc 01/12.
-1. Repo đang public tạm (thien mở 19/11 10:46) để CI không bị trừ phút; 01/12 chuyển lại private, lịch nhắc trig_011nfKi6X5kZe3HTRTZkYmHh, dòng nhắc trong STATUS (PR #143 đã tự merge). Tới lúc đó không ghi thông tin riêng mới vào repo.
-2. thien kể lại luồng sakubun từ trang thì đọc comment và `flows/<id>` (ArtifactData), so với 9 bước, ghi vào kế hoạch.
+0. thien trả lời KH9 (đọc db `plans/2026-11-19-modular-kit` hay file gửi kèm), chép nguyên văn vào kế hoạch, rồi làm checkpoint 1 (rút khối dùng chung vào kit).
+1. Sau khi thien merge #153 và #154: tick ga 2 của KH8 và đóng KH8 (dòng STATUS).
+2. Kế hoạch MCP cho nhóm SEP490: mở mục "Chuyển sang kế hoạch sau" của KH8 trước (đối chiếu tính năng Claude, ba luật thread). Thứ tự với KH9 theo câu 1 của KH9.
+3. Repo đang public tạm tới 01/12 (lịch nhắc trig_011nfKi6X5kZe3HTRTZkYmHh); không ghi thông tin riêng mới.
 
 ## Đang chờ thien
-- Trả lời 10 câu hỏi KH8 trên trang https://claude.ai/artifact/AZyzE1wW6dwEvC758uDgna (mở ở nick tnt697).
-- Merge PR sakubun #339 (chỉ thêm một file luồng, CI xanh).
+- Merge PR #153 (luật) và #154 (mã); merge sakubun #339.
+- Trả lời 4 câu hỏi KH9: https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (mở ở nick tnt697).
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
