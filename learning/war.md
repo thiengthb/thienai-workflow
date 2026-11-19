@@ -71,7 +71,7 @@ AI ghi sau mỗi buổi (nháp từ `artifacts/lesson/after-lesson.mjs`), xóa d
 - Trận mới cần độ cao thật: máy cloud vẫn không tải được AWS Terrain Tiles (s3.amazonaws.com bị chặn, kiểm lại 2026-11-17). Trước buổi 8 hỏi thien mở tên miền đó trong Settings > Capabilities, hoặc chạy `artifacts/war/fetch-terrain.mjs` trên laptop của thien; có sẵn chỉ Chi Lăng, Điện Biên Phủ.
 - Buổi 7 chấm "khó": buổi 8 giữ độ dài như buổi 6, 7 (12–14 phút) nhưng bớt một bước suy luận: lựa chọn ở bước làm chỉ huy nói rõ lợi và cái giá của từng cách ngay trên nút.
 - Câu nhớ lại (bước `data-part="review"` riêng sau bước ôn tự sinh): sao không giấu pháo hẳn sau núi (vế tự nói lại buổi 7 còn thiếu: sườn trong bắn thẳng, thấy mục tiêu, đạn ít).
-- Lỗi trang cần sửa trước buổi chiến tranh kế tiếp (PR kit riêng): "Xem Claude làm" ở bước có sa bàn lấy cả track của bài khác trong cùng file trận (buổi 7 dẫn qua `real`, `A` của bài 3). Chỉ cho dùng track của bước đó và các track trong nút "Xem", "Nếu chọn".
+- Đã sửa (2026-11-19, PR kit `fix-war-demo-tracks`): "Xem Claude làm" ở bước có sa bàn giờ chỉ dùng track của bước đó và các track trong nút "Xem", "Nếu chọn" của bước, không còn lấy track của bài khác trong cùng file trận. Trang buổi 8 dựng sau khi PR merge thì có bản sửa.
 - Tự nói lại tiếp tục kiểu một người nhắn hỏi trong tình huống cụ thể; câu hỏi nên đòi cả lợi lẫn cái giá của lựa chọn.
 - Còn lại của chặng 1 sau buổi 8: ý 8 vũ khí và công nghệ, 9 sương mù chiến tranh, 10 chiến tranh nhân dân và du kích. Xong chặng 1 thì sang chặng 2: đi sâu một chiến dịch từ đầu đến cuối (thien chọn 2026-11-12, xem `roadmap.md`).
 - Không xếp quá 2 buổi một ngày: hôm 2026-11-12 thien học 4 buổi chiến tranh cộng BA 2 và tự nói là không theo kịp.

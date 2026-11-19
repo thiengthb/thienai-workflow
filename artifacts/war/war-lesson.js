@@ -66,17 +66,23 @@
   // Claude làm mẫu (lesson.js, Lesson.demo): dẫn người học qua các mốc trên sa bàn, mỗi mốc một câu vì sao xem mốc đó.
   // Chỉ được dùng chữ của các mốc (đã có nguồn), không thêm chi tiết lịch sử mới (luật 10 trong profile/TUTOR.md).
   // Bước khóa ở một mốc (data-board="real@0") thì không có làm mẫu, vì bước đó chưa cho xem tiếp.
+  // Chỉ đưa Claude track của bước đó và các track trong nút "Xem" (data-track), "Nếu chọn" (data-plan) ngay trong bước.
+  // Một file trận dùng cho nhiều bài (Điện Biên Phủ có real, A, B của bài 3 và p7… của bài 7): không lọc thì Claude dẫn qua mốc của bài khác.
+  const stepTracks = (step, spec) => [...new Set([spec, ...$$('[data-track], [data-plan]', step).map((b) => b.dataset.track || b.dataset.plan)])]
+    .filter((t) => t && Object.prototype.hasOwnProperty.call(battle.tracks, t));
   const keyAt = (t, i) => { const k = battle.tracks[t].keys[i]; if (k.same && !k.text) { const [t2, j] = k.same.split(':'); return { ...battle.tracks[t2].keys[+j], ...k, text: battle.tracks[t2].keys[+j].text, src: battle.tracks[t2].keys[+j].src }; } return k; };
   const trackName = (t) => battle.tracks[t].label || (t === 'real' ? 'Chuyện thật' : t);
   if (window.Lesson && Lesson.demo) Lesson.demo({ match(step) {
     const spec = step.dataset.board || '';
     if (!spec || spec.includes('@')) return null;
-    const ts = Object.keys(battle.tracks);
+    const ts = stepTracks(step, spec);
+    if (!ts.length) return null;
     return {
       context() {
         // Luật và lựa chọn của người học đứng trước danh sách mốc (dài), để không bị cắt mất khi lời dặn quá dài.
         return ['Sân khấu: sa bàn 3D của trận đánh; mỗi "track" là một diễn biến (chuyện thật, hay mô phỏng nếu chọn khác), mỗi mốc là một thời điểm.',
           'Luật: chỉ dùng chữ của các mốc dưới đây (đã có nguồn), không thêm chi tiết lịch sử nào khác. Mốc mô phỏng thì nói rõ là mô phỏng.',
+          'Chỉ dẫn qua các track dưới đây: đó là track của bước này; file trận còn track của bài khác, không dùng.',
           'Người học đã chọn: ' + (Object.entries(R.choices || {}).map(([k, c]) => `${k}: ${c.pick} (chuyện thật là ${c.real})`).join('; ') || 'chưa chọn'),
           'Các mốc (track:số thứ tự từ 0, ngày, tên, chữ, nguồn): ' + ts.map((t) => `[${t} = ${trackName(t)}${battle.tracks[t].tag === 'sim' ? ', mô phỏng' : ''}] `
             + battle.tracks[t].keys.map((_, i) => { const k = keyAt(t, i); return `${t}:${i} ${k.date || ''} ${k.title || ''}: ${k.text || ''}${k.src ? ' (nguồn: ' + k.src + ')' : ''}`; }).join(' / ')).join(' || ')].join('\n');
@@ -87,7 +93,7 @@
           why: { type: 'string', description: 'một câu ngắn: vì sao xem mốc này, nhìn vào đâu trên sa bàn' } } },
         execute({ track, index }) {
           const t = battle.tracks[track];
-          if (!t || !Number.isInteger(index) || index < 0 || index >= t.keys.length) throw new Error(`Không có mốc ${track}:${index}. Các track: ` + ts.map((x) => `${x} (0 đến ${battle.tracks[x].keys.length - 1})`).join(', '));
+          if (!t || !ts.includes(track) || !Number.isInteger(index) || index < 0 || index >= t.keys.length) throw new Error(`Không có mốc ${track}:${index}. Các track: ` + ts.map((x) => `${x} (0 đến ${battle.tracks[x].keys.length - 1})`).join(', '));
           st.show(track, { at: index }); reveal();
           const k = keyAt(track, index);
           return { did: `${trackName(track)} · ${k.date || 'mốc ' + (index + 1)}${k.title ? ': ' + k.title : ''}.`, result: 'Đang hiện mốc ' + track + ':' + index };
