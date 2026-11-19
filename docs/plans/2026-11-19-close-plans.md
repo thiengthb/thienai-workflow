@@ -1,13 +1,13 @@
 # KH8 · Đóng KH1–KH7, làm sớm buổi xem lại 01/12
 
-Trạng thái: chờ duyệt · Duyệt: chưa · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Trang: https://claude.ai/artifact/AZyzE1wW6dwEvC758uDgna (nick tnt697)
+Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 10 đề xuất") · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Trang: https://claude.ai/artifact/AZyzE1wW6dwEvC758uDgna (nick tnt697)
 
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: chờ thien trả lời các câu hỏi dưới (bấm nút trên trang).
-- Còn thiếu: cả ba checkpoint.
-- thien cần làm: trả lời các câu hỏi; sau đó duyệt một PR luật và merge.
+- Đang ở: checkpoint 1 xong (20:40, ok cả 10 đề xuất); đang làm checkpoint 2 (PR luật, PR mã) và 3.
+- Còn thiếu: PR luật và PR mã cho thien merge; đóng bảy kế hoạch.
+- thien cần làm: merge hai PR khi báo.
 
 ## Mục tiêu
 Đóng cả bảy kế hoạch đang chạy trong một đợt: việc còn làm được thì làm, phần cần số đo thật thì ghi "thien quyết đóng sớm" kèm việc còn lại. Sau đó mới bàn kế hoạch MCP cho nhóm capstone SEP490 (thien 2026-11-19: "cần bàn thêm sau khi đóng các kế hoạch trước").
@@ -23,7 +23,7 @@ Lời thien (2026-11-19 20:21): đang có quá nhiều kế hoạch, muốn duy�
 
 ### 1. thien trả lời câu hỏi
 Xong khi: mọi câu hỏi dưới có câu trả lời chép nguyên văn vào file này.
-- [ ] Trả lời các câu hỏi trên trang
+- [x] Trả lời các câu hỏi trên trang (2026-11-19 20:40, gửi file từ trang: ok cả 10 đề xuất, nguyên văn ở mục Câu hỏi)
 
 ### 2. Một PR luật cho cả đợt
 Xong khi: thien đọc một PR gom mọi dòng luật đã chọn ở checkpoint 1 và merge.
@@ -34,7 +34,7 @@ Xong khi: STATUS không còn bảng "Kế hoạch đang chạy" cho KH1–KH7; m
 - [ ] Mỗi kế hoạch: tick việc có bằng chứng, việc còn lại ghi "đóng sớm", "Đã đổi" ghi quyết định này
 - [ ] STATUS: bỏ bảy dòng, thêm dòng KH8; việc còn sống (mốc 01/12 chuyển private, mốc 13/12 chấm `SKILL-LEVEL.md`) sang "Việc tiếp theo"
 
-## Câu hỏi
+## Câu hỏi (thien đã trả lời 2026-11-19 20:40 bằng nút trên trang: "ok, theo cả 10 đề xuất")
 Mỗi câu có đề xuất; bấm "ok" là theo đề xuất.
 
 1. Phần tự merge (KH2 ga 1, KH5): kiểm ở 6 chat thì 2 lần trượt vì công cụ chặn lệnh merge hay AI quên. Hôm nay AI tự merge #150, #151 trơn tru; lệnh merge sakubun #339 bị công cụ chặn vì thien chỉ nhắn merge #149. Sửa thế nào?
@@ -70,9 +70,13 @@ Mỗi câu có đề xuất; bấm "ok" là theo đề xuất.
    - Chuyển sang "Việc tiếp theo" của STATUS và lộ trình học, không giữ kế hoạch mở vì chúng (đề xuất)
    - Bỏ cả hai
 
+## Ghi chú của thien kèm câu trả lời (nguyên văn)
+"sao tôi thấy trong mẫu kế hoạch nào cũng có phần chi tiết thử trang này mãi vậy. tôi đã không đụng nó mấy kế hoạch trở lại đây rồi, bạn phải tối ưu các artifact như các bộ lắp ghép chứ, chứ đâu cứ phải đưa nó thành một khung rồi áp dụng mãi, nó là bộ kit mà, mà bộ kit là bạn có thể lấy bất kì thứ nào tốt đã có sẵn rồi ghép vào, có đúng không. Vậy tính ra hiện tại các artiact vẫn chưa được ổn lắm, tôi cũng chưa kiểm tra kĩ cần bạn phải kiểm tra kĩ. Và hơn nữa giúp tôi sáng tạo thêm bố cục của artifact kế hoạch, lẫn cả các artifact khác cho phù hợp với nội dung không phải khi nào cũng cứng ngắc một khung mãi. Như vậy thì cũng sẽ nặng kit lên từng ngày nhưng mà đổi lại là luôn có cái mới refresh."
+
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-19 | Luật "một chi tiết thử mỗi trang" (KH6 ga 5) không đưa vào `artifacts/README.md`; chi tiết thử thành tuỳ chọn, mặc định tắt ở lệnh dựng trang kế hoạch và trang luồng (PR mã của đợt này). Việc làm lại các mẫu thành kit lắp ghép, kiểm kỹ, và bố cục theo nội dung tách thành kế hoạch riêng (KH9), soạn sau khi đóng đợt này | Ghi chú của thien ở trên: chi tiết thử lặp ở mọi trang, mấy kế hoạch gần đây không đụng tới; mẫu phải là bộ lắp ghép chứ không phải một khung áp mãi |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
