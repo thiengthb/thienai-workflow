@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 3, mẫu luồng chạy
 
 Repo: thiengthb/thienai-workflow · Nhánh: flow-page · PR: #140 (chờ thien merge); #135–#138 đã merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWaXMmKxxBCbsYY4cB · Cập nhật: 2026-11-18T20:25Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWaXMmKxxBCbsYY4cB · Cập nhật: 2026-11-19T02:21Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -43,12 +43,12 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWaXMmKxxBCbsYY4c
 - 19/11 03:30 (phiên mới, cùng link chat, "tiếp tục"): checkpoint 3 dựng xong trên nhánh `flow-page`: `artifacts/flow/` (make-flow.mjs, template.html, flow.js, fixture.json, README), luồng đầu `docs/flows/lesson.json`, test make-flow trong CI, check-pages có trang luồng (0 lỗi). Trang đăng: https://claude.ai/artifact/S9B86U6MGpnkYTa8enDtVM (nick tnt697, capabilities comments + db). Kế hoạch tick việc 1 của ga 3 (12/24). PR #140.
 
 ## Bước tiếp theo
-1. Khi thien gửi bản kể lại từ trang luồng: đọc comment và db `flows/lesson`, so với 7 bước, chỉ chỗ thiếu; đạt thì ghi "Xong khi" của ga 3 vào kế hoạch.
+1. thien đã kể lại (19/11 09:20): đúng bước 1–4, thiếu 5–7; đã ghi vào kế hoạch và hàng chờ gu (chi tiết thử: Thích), commit trên #140. Chờ thien chọn: kể lại thêm nửa sau, hay tính là xong; rồi tick "Xong khi" ga 3.
 2. Sau merge #140: luồng thứ hai (kiến trúc sakubun hay luồng nghiệp vụ BA) để tick việc 2 của ga 3; việc 3 (8/8 mẫu) tick cùng lúc.
 3. Khi một nick giữ trang tổng quan (SZGp85…) mở phiên: `node templates/publish-progress.mjs overview` rồi đăng đè, tick việc 4 của checkpoint 2
 
 ## Đang chờ thien
-- Kể lại luồng ở ô cuối trang https://claude.ai/artifact/S9B86U6MGpnkYTa8enDtVM rồi bấm "Gửi cho Claude"; bấm Thích/Không cho chi tiết thử.
+- Chọn cho ga 3: kể lại thêm bước 5–7 hay tính là xong.
 - Merge PR #140.
 
 ## Lưu ý
