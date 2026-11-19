@@ -57,7 +57,7 @@ Xong khi: bảng "Kết quả đo" có số của ít nhất 2 checkpoint làm t
 ### 4. Xem lại ở mốc 01/12
 Xong khi: ở buổi xem lại chung ngày 01/12, luật được giữ, sửa hay bỏ dựa trên bảng số ở checkpoint 2 và 3.
 Ước: mốc
-- [x] Gộp vào danh sách xem lại 01/12 của kế hoạch `2026-11-17-workflow-review.md` (mục đối chiếu tính năng mới của Claude) (gộp vào kế hoạch MCP cùng việc đối chiếu tính năng, KH8 câu 8)
+- [ ] Gộp vào danh sách xem lại 01/12 của kế hoạch `2026-11-17-workflow-review.md` (mục đối chiếu tính năng mới của Claude) (chuyển sang mục "Chuyển sang kế hoạch sau" của KH8 `2026-11-19-close-plans.md`, làm khi soạn kế hoạch MCP)
 
 ## Câu hỏi (thien đã trả lời 2026-11-19 bằng nút trên trang: "ok, theo cả 3 đề xuất")
 1. Đưa luật số 2 (tin tới sau hơn 1 giờ thì mở thread mới) tới chat điều phối bằng cách nào?

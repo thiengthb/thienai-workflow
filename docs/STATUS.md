@@ -12,7 +12,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
-| KH8 · [Đóng KH1–KH7, làm sớm buổi xem lại 01/12](plans/2026-11-19-close-plans.md) | 1 xong (ok cả 10 đề xuất); 2: PR luật #153 và PR mã #154 chờ thien merge; 3: bảy kế hoạch đã đóng (PR #152). Sau đó: KH9 kit lắp ghép, kế hoạch MCP cho nhóm SEP490 | 3/4 |
+| KH8 · [Đóng KH1–KH7, làm sớm buổi xem lại 01/12](plans/2026-11-19-close-plans.md) | 1 xong (ok cả 10 đề xuất); 2: PR luật #153 và PR mã #154 chờ thien merge; 3: bảy kế hoạch đã đóng (PR #152). Sau đó: KH9 kit lắp ghép, kế hoạch MCP cho nhóm SEP490 | 4/5 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |

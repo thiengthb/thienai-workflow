@@ -32,7 +32,13 @@ Xong khi: thien đọc một PR gom mọi dòng luật đã chọn ở checkpoin
 ### 3. Đóng bảy kế hoạch
 Xong khi: STATUS không còn bảng "Kế hoạch đang chạy" cho KH1–KH7; mỗi file kế hoạch có dòng "Trạng thái: đóng" và phần còn lại ghi rõ.
 - [x] Mỗi kế hoạch: tick việc có bằng chứng, việc còn lại ghi "đóng sớm", "Đã đổi" ghi quyết định này (2026-11-19, PR #152: bảy file đổi "Trạng thái: xong (đóng sớm ...)")
+- [x] Hai việc học của KH2 vào `learning/roadmap.md`: mốc 13/12 chấm lại `SKILL-LEVEL.md`, buổi "Viết luật cho thienui" gắn vào việc cuối chặng 2 Frontend (PR #152)
 - [x] STATUS: bỏ bảy dòng, thêm dòng KH8; việc còn sống (mốc 01/12 chuyển private, mốc 13/12 chấm `SKILL-LEVEL.md`) sang "Việc tiếp theo" (2026-11-19, PR #152)
+
+## Chuyển sang kế hoạch sau
+Việc của các kế hoạch đã đóng mà chưa có nơi nhận; kế hoạch nào soạn tiếp thì mở mục này trước.
+- Kế hoạch MCP cho nhóm SEP490 (thien: "cần bàn thêm sau khi đóng các kế hoạch trước"): đối chiếu phần tự làm với tính năng mới của Claude (KH4 ga 5); xem lại ba luật thread của KH7 (giữ, sửa hay bỏ) cùng lúc đó, vì cả hai đều hỏi "Claude đã có sẵn gì".
+- KH9 (kit lắp ghép, bố cục theo nội dung, theo ghi chú của thien): vòng thử gu hai tuần một lần (KH6 ga 5); kiểm kỹ các mẫu artifact hiện có.
 
 ## Câu hỏi (thien đã trả lời 2026-11-19 20:40 bằng nút trên trang: "ok, theo cả 10 đề xuất")
 Mỗi câu có đề xuất; bấm "ok" là theo đề xuất.

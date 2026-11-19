@@ -64,7 +64,7 @@ Ngưỡng và cách làm ở checkpoint 3, 4 của `2026-11-15-lean-learning.md`
 
 ### 5. Chiều bớt (làm sớm phần làm được, 2026-11-17, thien muốn tận dụng CodeRabbit trước khi hết dùng thử 2026-11-24)
 - [x] Phần chung `AGENTS.template.md`, dòng xem nhánh chưa merge: khi không có `check-open-work.mjs` thì xem cả nhánh đã đẩy mà chưa có PR và sổ bàn giao (góp ý đúng của CodeRabbit trên sakubun PR #327)
-- [ ] Đối chiếu phần tự làm với tính năng mới của Claude: để tới 2026-12-01, vì làm bây giờ thì tới ngày đó phải đối chiếu lại với tài liệu mới (gộp vào kế hoạch MCP, KH8 câu 8)
+- [ ] Đối chiếu phần tự làm với tính năng mới của Claude: để tới 2026-12-01, vì làm bây giờ thì tới ngày đó phải đối chiếu lại với tài liệu mới (chuyển sang mục "Chuyển sang kế hoạch sau" của KH8 `2026-11-19-close-plans.md`, KH8 câu 8)
 
 ## Phối hợp với kế hoạch song song (nick tnt697)
 Ngày 2026-11-17 nick tnt697 soạn báo cáo "Rà soát quy trình làm việc thien và Claude" (bảng ủy quyền, dòng mục tiêu khi nhận việc, mẫu báo cáo khi xong việc, đường chảy cho góp ý), dự định ghi thành file `2026-11-17-action-gaps.md` trong thư mục kế hoạch. thien giao nick đó làm. Nick tnt628 so với kế hoạch này và đề xuất ba chỗ chỉnh, nick nào làm kế hoạch kia thì áp:
