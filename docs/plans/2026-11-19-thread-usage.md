@@ -1,13 +1,13 @@
 # KH7 · Dùng project bản beta tốn ít usage hơn: thread, lịch nhắc, theo dõi PR
 
-Trạng thái: đang chạy · Duyệt: 2026-11-19 · Trang: https://claude.ai/artifact/S9H1zuVfHSZhSs5DfdURjZ (nick tnt628) · Viết: 2026-11-19 · Cập nhật: 2026-11-19 · nick tnt628 · Thread: [Tối ưu token khi làm kế hoạch dài trong thread](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRHS9xoyPanZaP9rntnrf9nJ)
+Trạng thái: xong (đóng sớm 2026-11-19, thien quyết ở KH8) · Duyệt: 2026-11-19 · Trang: https://claude.ai/artifact/S9H1zuVfHSZhSs5DfdURjZ (nick tnt628) · Viết: 2026-11-19 · Cập nhật: 2026-11-19 · nick tnt628 · Thread: [Tối ưu token khi làm kế hoạch dài trong thread](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRHS9xoyPanZaP9rntnrf9nJ)
 
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 xong (PR #139 đã merge, thien đã dán chuẩn v6 ở mọi project); checkpoint 2: lịch nhắc mới đã tạo, chạy lần đầu tối thứ Năm 19/11.
-- Còn thiếu: số của lần nhắc đầu tiên; checkpoint 3 đo ở sakubun; xem lại ở mốc 01/12.
-- thien cần làm: không có.
+- Đang ở: đã đóng. Đóng sớm 2026-11-19 (KH8 câu 8): ba luật thread giữ mà chưa đo; số đo ở project Sakubun không đọc được từ phiên này.
+- Còn thiếu: không; việc chưa làm ghi "đóng sớm" hay chỗ chuyển tới ngay ở dòng việc đó.
+- thien cần làm: không có (PR luật #153, PR mã #154 nằm ở KH8).
 
 ## Mục tiêu
 Quy trình thienai-workflow ở project bản beta không đốt usage vào những chỗ không làm ra gì: đánh thức thread lớn đã nghỉ lâu, lịch nhắc chạy trong thread cũ, thread thức dậy vì PR chỉ còn chờ merge. Dùng đúng tính năng sẵn có của Claude Projects, không viết thêm công cụ.
@@ -44,20 +44,20 @@ Xong khi: bạn mở `profile/CHATS.md` trên GitHub, mục "Project bản beta"
 Xong khi: lần nhắc thứ Hai hay thứ Năm kế tiếp chạy ở một thread mới trong project Claude, tin nhắn tới bạn như cũ, và bản ghi của lần chạy đó không còn khoản ghi lại lịch sử cũ.
 Ước: 0,5 phiên
 - [x] Tạo lại lịch nhắc thành lịch của project, mỗi lần chạy mở thread mới, với lời nhắc đầy đủ không cần lịch sử (theo câu hỏi 2); tắt lịch cũ `trig_01QirWvTiZFgoeBm5Ah3LCdt`. Đã làm 2026-11-19: lịch mới `trig_01TtaWWBuGbCC6JscBSV7xL8`, cùng giờ 18:47 thứ Hai và thứ Năm; lịch cũ đã tắt (chưa xoá, để còn lịch sử chạy). Lời nhắc mới thêm một bước: ghi số dùng của lần chạy vào project memory, file `reminder-runs.md`
-- [ ] Ghi số của lần chạy đầu vào bảng "Kết quả đo"
+- [ ] Ghi số của lần chạy đầu vào bảng "Kết quả đo" (đóng sớm 2026-11-19, KH8)
 
 ### 3. Thử ở sakubun và đo
 Xong khi: bảng "Kết quả đo" có số của ít nhất 2 checkpoint làm theo luật mới, đặt cạnh số mỗi checkpoint của thread "Tiếp tục làm Sakubun"; bạn xem và thấy cách mới có rẻ hơn mỗi checkpoint không.
 Ước: 1 phiên
-- [ ] Mức nền: thread đầu tiên ở project Sakubun đọc bản ghi kết quả của thread "Tiếp tục làm Sakubun" (chỉ đọc được từ project đó), đếm số checkpoint thread đó đã xong theo dấu tick trong kế hoạch U4, rồi chia tổng USD cho số checkpoint. Bản ghi chỉ có tổng cộng dồn sau mỗi lượt, nên chia theo checkpoint là ước lượng; không đếm được thì ghi rõ ở cột "Ghi chú" và chỉ so tổng
-- [ ] Checkpoint kế tiếp của việc U4 (sakubun) làm ở thread mới. Lúc xong, thread đọc bản ghi kết quả của chính nó và ghi: tổng token, phần ghi cache, số lần đánh thức sau hơn 1 giờ, số USD quy đổi
-- [ ] Một checkpoint nữa, bất kỳ kế hoạch nào, cũng ghi như vậy
-- [ ] Ghi số vào bảng "Kết quả đo" của file này và một dòng vào `docs/usage-log.md`
+- [ ] Mức nền: thread đầu tiên ở project Sakubun đọc bản ghi kết quả của thread "Tiếp tục làm Sakubun" (chỉ đọc được từ project đó), đếm số checkpoint thread đó đã xong theo dấu tick trong kế hoạch U4, rồi chia tổng USD cho số checkpoint. Bản ghi chỉ có tổng cộng dồn sau mỗi lượt, nên chia theo checkpoint là ước lượng; không đếm được thì ghi rõ ở cột "Ghi chú" và chỉ so tổng (đóng sớm 2026-11-19, KH8)
+- [ ] Checkpoint kế tiếp của việc U4 (sakubun) làm ở thread mới. Lúc xong, thread đọc bản ghi kết quả của chính nó và ghi: tổng token, phần ghi cache, số lần đánh thức sau hơn 1 giờ, số USD quy đổi (đóng sớm 2026-11-19, KH8)
+- [ ] Một checkpoint nữa, bất kỳ kế hoạch nào, cũng ghi như vậy (đóng sớm 2026-11-19, KH8)
+- [ ] Ghi số vào bảng "Kết quả đo" của file này và một dòng vào `docs/usage-log.md` (đóng sớm 2026-11-19, KH8)
 
 ### 4. Xem lại ở mốc 01/12
 Xong khi: ở buổi xem lại chung ngày 01/12, luật được giữ, sửa hay bỏ dựa trên bảng số ở checkpoint 2 và 3.
 Ước: mốc
-- [ ] Gộp vào danh sách xem lại 01/12 của kế hoạch `2026-11-17-workflow-review.md` (mục đối chiếu tính năng mới của Claude)
+- [ ] Gộp vào danh sách xem lại 01/12 của kế hoạch `2026-11-17-workflow-review.md` (mục đối chiếu tính năng mới của Claude) (chuyển sang mục "Chuyển sang kế hoạch sau" của KH8 `2026-11-19-close-plans.md`, làm khi soạn kế hoạch MCP)
 
 ## Câu hỏi (thien đã trả lời 2026-11-19 bằng nút trên trang: "ok, theo cả 3 đề xuất")
 1. Đưa luật số 2 (tin tới sau hơn 1 giờ thì mở thread mới) tới chat điều phối bằng cách nào?
@@ -118,6 +118,7 @@ Rút ra:
 |---|---|---|
 | 2026-11-19 | Lịch nhắc mới tự ghi số dùng của mỗi lần chạy vào project memory (`reminder-runs.md`) | Thread này không phải thức dậy để đo, đúng luật 2; checkpoint 3 đọc file đó |
 | 2026-11-19 | Mở rộng từ "chia thread" sang cả lịch nhắc và theo dõi PR; thêm checkpoint 2 (lịch nhắc) và câu hỏi 2 | thien nhờ nghiên cứu kỹ thêm cả quy trình với project beta; số đo cho thấy lịch nhắc cũng đánh thức thread cũ mỗi lần chạy |
+| 2026-11-19 | Đóng kế hoạch | thien chọn "Làm nốt rồi đóng" (KH8, `2026-11-19-close-plans.md`): đang có quá nhiều kế hoạch; mốc 01/12 làm sớm, việc cần số đo thật ghi đóng sớm thay vì tick đạt |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |

@@ -1,13 +1,13 @@
 # KH4 · Sửa quy trình sau review 2026-11-17
 
-Trạng thái: đang chạy · Duyệt: 2026-11-17 (thien: "ok mình duyệt và bạn hãy bắt đầu làm", đợt 0, 1, 2 và 5 câu hỏi theo đề xuất) · Cập nhật: 2026-11-17 · Thread: [Review sâu và tối ưu thienai-workflow](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRL6Rmzan9FkewxyJuLWWw6Z) · nick tnt628 · Đầu vào: [bản review và kế hoạch gộp](https://claude.ai/artifact/Wi411et6UDhnH1Eo147PM4) (gộp cả review của Codex cùng ngày, cùng commit 08334ae)
+Trạng thái: xong (đóng sớm 2026-11-19, thien quyết ở KH8) · Duyệt: 2026-11-17 (thien: "ok mình duyệt và bạn hãy bắt đầu làm", đợt 0, 1, 2 và 5 câu hỏi theo đề xuất) · Cập nhật: 2026-11-17 · Thread: [Review sâu và tối ưu thienai-workflow](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRL6Rmzan9FkewxyJuLWWw6Z) · nick tnt628 · Đầu vào: [bản review và kế hoạch gộp](https://claude.ai/artifact/Wi411et6UDhnH1Eo147PM4) (gộp cả review của Codex cùng ngày, cùng commit 08334ae)
 
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 0, 1, 2 xong, PR #98 merge 2026-11-17; sakubun nhận phần chung mới qua PR #327 (merge cùng ngày).
-- Còn thiếu: đợt 3 xong (BA 4: 15,8 triệu token; Frontend 9: 23,1 triệu). Đã sửa các lượt phí đợt 3 tìm ra (xem "Kết luận đợt 3"). Đợt 4 và 5 làm sớm để CodeRabbit kịp review trước khi hết dùng thử 2026-11-24: phần máy của checkpoint 3 bên `2026-11-15-lean-learning.md` đã xong, còn đo ở hai buổi học kế tiếp; đối chiếu tính năng mới của Claude vẫn để 2026-12-01.
-- thien cần làm: không có.
+- Đang ở: đã đóng. Đóng 2026-11-19 (KH8 câu 8): việc đối chiếu với tính năng mới của Claude gộp vào kế hoạch MCP cho nhóm SEP490.
+- Còn thiếu: không; việc chưa làm ghi "đóng sớm" hay chỗ chuyển tới ngay ở dòng việc đó.
+- thien cần làm: không có (PR luật #153, PR mã #154 nằm ở KH8).
 
 ## Mục tiêu
 Bộ quy trình đúng và gọn hơn mà không mất luật nào: sửa chỗ ghi sai, luật áp theo điều kiện thay vì áp mọi lúc, có đường riêng cho project bản beta, và bám tính năng có sẵn của Claude thay vì tự làm lại.
@@ -64,7 +64,7 @@ Ngưỡng và cách làm ở checkpoint 3, 4 của `2026-11-15-lean-learning.md`
 
 ### 5. Chiều bớt (làm sớm phần làm được, 2026-11-17, thien muốn tận dụng CodeRabbit trước khi hết dùng thử 2026-11-24)
 - [x] Phần chung `AGENTS.template.md`, dòng xem nhánh chưa merge: khi không có `check-open-work.mjs` thì xem cả nhánh đã đẩy mà chưa có PR và sổ bàn giao (góp ý đúng của CodeRabbit trên sakubun PR #327)
-- [ ] Đối chiếu phần tự làm với tính năng mới của Claude: để tới 2026-12-01, vì làm bây giờ thì tới ngày đó phải đối chiếu lại với tài liệu mới
+- [ ] Đối chiếu phần tự làm với tính năng mới của Claude: để tới 2026-12-01, vì làm bây giờ thì tới ngày đó phải đối chiếu lại với tài liệu mới (chuyển sang mục "Chuyển sang kế hoạch sau" của KH8 `2026-11-19-close-plans.md`, KH8 câu 8)
 
 ## Phối hợp với kế hoạch song song (nick tnt697)
 Ngày 2026-11-17 nick tnt697 soạn báo cáo "Rà soát quy trình làm việc thien và Claude" (bảng ủy quyền, dòng mục tiêu khi nhận việc, mẫu báo cáo khi xong việc, đường chảy cho góp ý), dự định ghi thành file `2026-11-17-action-gaps.md` trong thư mục kế hoạch. thien giao nick đó làm. Nick tnt628 so với kế hoạch này và đề xuất ba chỗ chỉnh, nick nào làm kế hoạch kia thì áp:
@@ -92,6 +92,7 @@ Thêm: bảng ủy quyền chỉ áp cho repo này (sakubun có luật mức r�
 | 2026-11-17 | Bản instructions beta làm ngay trong PR này thay vì chờ sau đợt 2 | thien vừa dán v3 vào project beta; v3 bảo gọi `project_info` mà beta không có |
 | 2026-11-17 | Xoá 5 nhánh cũ chuyển cho thien | Phiên cloud bị chặn đẩy (403) lên nhánh khác nhánh làm việc |
 | 2026-11-17 | Đợt 5 làm sớm dòng mẫu AGENTS; bỏ việc chuyển kế hoạch xong vào thư mục `done`; bỏ bảng "luật nằm ở đâu kèm mốc xem lại" khỏi đợt này | thien muốn làm đợt 4, 5 ngay để CodeRabbit review trước 2026-11-24. Trang tiến độ đã tự ẩn kế hoạch có "Trạng thái: xong" (`templates/progress-page.mjs`), còn chuyển thư mục thì phải sửa link ở nhiều file mà không được gì thêm. Mốc xem lại của luật đã nằm trong đợt 3 của kế hoạch `2026-11-17-action-gaps.md` (PR #104), không làm hai lần |
+| 2026-11-19 | Đóng kế hoạch | thien chọn "Làm nốt rồi đóng" (KH8, `2026-11-19-close-plans.md`): đang có quá nhiều kế hoạch; mốc 01/12 làm sớm, việc cần số đo thật ghi đóng sớm thay vì tick đạt |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |

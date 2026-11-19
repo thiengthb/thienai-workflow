@@ -4,6 +4,8 @@ Mỗi môn đi từ người mới đến khá qua vài chặng. Mỗi chặng g
 
 Cách cập nhật: sau mỗi buổi học, AI tick việc đã xong trong chặng và thêm link bài vào mục "Bài đã học" của môn đó, trong cùng PR ghi nhật ký buổi. Vòng xoay và buổi tới học gì ở [README.md](README.md); trạng thái chi tiết từng môn ở file của môn. Nguồn học ghi rõ đã đọc hay chưa, theo `profile/RESEARCH.md`. Trang để xem trên điện thoại: https://claude.ai/artifact/Vubbj6ghT9L7eKYegTfT9n, AI đăng lại bằng `node templates/publish-progress.mjs roadmap` sau mỗi lần sửa file này.
 
+Mốc chung 2026-12-13: AI soạn bản chấm lại `profile/SKILL-LEVEL.md` từ nhật ký các môn, thien duyệt (chuyển từ kế hoạch KH2 ngày 2026-11-19).
+
 ## Frontend
 Môn chính, một nửa số buổi. Đích sau 6 tháng: nhìn một màn bất kỳ, chỉ ra được chỗ cấn mắt ở mức cả màn, sửa được và nói được vì sao; viết được luật cho thienui từ những gì đã học. Chi tiết ở [frontend.md](frontend.md).
 
@@ -22,7 +24,7 @@ Xong khi: bài so sánh mù ngày 2026-11-22, thien chấm lại các màn cũ v
 Xong khi: thien tự sửa được một màn của sakubun hoặc todo và viết được 3 luật cho thienui. Đã bắt đầu ở buổi 10 (2026-11-17), sớm hơn mốc 2026-11-22 vì mốc so sánh mù chạy ở buổi 9.
 - [ ] Soi một màn của app mình dùng hằng ngày, chọn một chỗ sửa (bắt đầu ở buổi 10, 2026-11-17, màn "Xong buổi ôn" của sakubun, [bài](frontend/lessons/10-pick-a-fix-session-summary.md): thấy đúng chỗ cấn và chọn đúng bản sửa; thien muốn xem thêm các màn khác trước khi sửa thật)
 - [x] Chép lại một màn tốt theo đúng con số, rồi nói ra mẹo vừa thấy (làm sớm ở buổi 8, 2026-11-17, trên màn tự dựng, [bài](frontend/lessons/08-copy-a-screen-spacing-scale.md); chặng 2 làm lại với màn thật)
-- [ ] Viết luật đầu tiên cho thienui, kiểm bằng hai màn thật
+- [ ] Viết luật đầu tiên cho thienui, kiểm bằng hai màn thật (một buổi kiểu "Viết luật cho thienui" trong vòng học sau 22/11, chuyển từ kế hoạch KH2 ngày 2026-11-19)
 
 ### Chặng 3: Phần kỹ thuật nền
 Chưa chốt. Ở mốc 2026-11-22 sẽ chọn học phần nào trước trong: trình duyệt và mạng, TypeScript, kiến trúc, dễ truy cập (a11y), hiệu năng, test.
@@ -124,3 +126,4 @@ Testing, kinh tế, chính trị. Một môn chỉ vào học khi có môn khác
 | 2026-11-12 | Học chiến tranh 4 trước Frontend 6; phác chặng 2 môn chiến tranh | thien nhắn "học chiến tranh"; thien hỏi học xong tổng quan thì học gì tiếp |
 | 2026-11-14 | Ý 5 và 6 môn chiến tranh có buổi riêng, chặng 1 còn khoảng 7 buổi thay vì 5 | Luật 10 buổi đầu là mỗi buổi một ý; buổi 1 mới chạm qua. thien chọn trên thẻ quyết định |
 | 2026-11-17 | Chạy mốc so sánh mù frontend ở buổi 9 thay vì chờ 2026-11-22; chặng 3 học dễ truy cập (a11y) trước | Buổi 9 tới lượt trước ngày mốc; thien chọn a11y trong bài |
+| 2026-11-19 | Thêm mốc 13/12 chấm lại `SKILL-LEVEL.md`; buổi "Viết luật cho thienui" gắn vào việc cuối chặng 2 Frontend | Đóng kế hoạch KH2 (KH8 câu 10): hai việc học chuyển về lộ trình học |
