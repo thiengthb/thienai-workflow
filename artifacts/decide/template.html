@@ -45,7 +45,12 @@ main { max-width: 1180px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
 .stage .side h2 { font-size: 16px; }
 .stage .side .btn { width: 100%; }
 .stage .nav { display: flex; gap: 8px; }
-@media (max-width: 999px) { .stage .pane { grid-template-columns: minmax(0, 1fr) 260px; } }
+/* Khung vừa (máy tính bảng, cửa sổ hẹp): ảnh lên trên đủ rộng, chữ xuống dưới, để ảnh không bé lại bằng con tem. */
+@media (max-width: 999px) { .stage .pane { grid-template-columns: minmax(0, 1fr); } .stage .im { border-right: 0; border-bottom: 1px solid var(--line); }
+  .stage .im .shot img { max-height: min(70vh, 640px); } .stage .side .btn { width: auto; } .stage .side .pick { width: 100%; } }
+.stage .keys { margin-left: auto; align-self: center; font-size: 12.5px; color: var(--muted); }
+.stage .keys kbd, .zfoot kbd { font: 600 11.5px var(--mono); padding: 1px 5px; border: 1px solid var(--line-strong); border-radius: 4px; background: var(--card); }
+@media (pointer: coarse) { .stage .keys { display: none; } }
 
 /* Bảng so sánh (khung rộng, dưới phần xem từng bản) */
 .tbl { overflow-x: auto; }
@@ -76,12 +81,30 @@ main { max-width: 1180px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
 @media (max-width: 759px) { .view-table { display: none; } .view-cards { display: grid; } }
 
 /* Đề xuất của Claude, ẩn tới khi chọn */
+/* Nhiều câu trên một trang: thanh câu (nút đánh số, chữ bản đã chọn), rồi tên câu đang xem. */
+.parts { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 8px; }
+.parts[hidden], .pq[hidden] { display: none; }
+.part { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: center; text-align: left; font: inherit; color: var(--ink);
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 8px 12px; min-height: 52px; cursor: pointer; }
+.part:hover { border-color: var(--line-strong); }
+.part .pn { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--line-strong); font: 600 13px var(--mono); color: var(--muted); }
+.part.done .pn { background: var(--ink-1); border-color: var(--ink-1); color: var(--on-fill); }
+.part[aria-current] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.part .pt { display: grid; font-size: 13px; line-height: 1.35; }
+.part .pt b { font-size: 14px; font-weight: 600; }
+.pq { display: grid; gap: 2px; }
+.pq h2 { font-size: 18px; }
+.pq .why { color: var(--muted); max-width: 80ch; }
+.rec .next { margin-left: 8px; margin-top: 6px; }
+@media (max-width: 480px) { .part { grid-template-columns: 1fr; justify-items: start; gap: 4px; padding: 8px 10px; } .part .pt b { font-size: 13.5px; } }
 .rec { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border: 1px dashed var(--line); border-radius: var(--r); color: var(--muted); font-size: 13.5px; }
-.rec .ic { flex: none; width: 16px; height: 16px; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.rec .ri { flex: none; width: 16px; height: 16px; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .rec.open { border-style: solid; background: var(--card); color: var(--ink); }
 .rec.open b { font-weight: 600; }
 .rec .same { color: var(--good); font-weight: 600; }
 
+.ai-ask { padding: 12px 14px; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .ask { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 10px; align-items: end; padding: 12px 14px; }
 .ask .label { grid-column: 1 / -1; }
 .ask textarea { width: 100%; min-height: 44px; resize: vertical; }
@@ -89,10 +112,28 @@ main { max-width: 1180px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
 @media (max-width: 640px) { .ask { grid-template-columns: 1fr; } .ask .acts .btn { flex: 1; } }
 .status { font-size: 13px; color: var(--muted); }
 
-dialog#zoom { width: min(1100px, calc(100vw - 32px)); max-height: calc(100vh - 32px); padding: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); color: var(--ink); }
+/* Hộp phóng to: gần kín màn; đầu là tên bản và nút (bản trước, bản sau, nấc phóng, đóng), giữa là ảnh cuộn được. */
+dialog#zoom { width: calc(100vw - 16px); max-width: 1600px; height: calc(100dvh - 16px); max-height: none; padding: 0; border: 1px solid var(--line); border-radius: var(--r);
+  background: var(--card); color: var(--ink); overflow: hidden; }
+dialog#zoom[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
 dialog#zoom::backdrop { background: var(--scrim); }
-dialog#zoom .zh { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 12px; background: var(--card); border-bottom: 1px solid var(--line); }
-dialog#zoom img { display: block; width: 100%; height: auto; }
+dialog#zoom .zh { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 8px 10px 8px 14px; border-bottom: 1px solid var(--line); }
+dialog#zoom .zt { display: grid; margin-right: auto; min-width: 0; }
+dialog#zoom .zt b { font-size: 15px; } dialog#zoom .zt span { font-size: 12.5px; color: var(--muted); }
+dialog#zoom .zc { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+dialog#zoom .zc .btn { min-height: 40px; min-width: 40px; padding: 0 10px; }
+dialog#zoom .zc .lv { min-width: 96px; font-variant-numeric: tabular-nums; }
+dialog#zoom .zc .gap { width: 1px; height: 24px; background: var(--line); margin: 0 2px; }
+.zb { overflow: auto; background: var(--soft); outline: none; overscroll-behavior: contain; touch-action: pan-x pan-y pinch-zoom; }
+.zb:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
+.zb img { display: block; max-width: none; height: auto; margin: 0 auto; user-select: none; -webkit-user-drag: none; }
+.zb.fit { display: grid; place-items: center; padding: 8px; cursor: zoom-in; }
+.zb.fit img { width: auto; max-width: 100%; max-height: 100%; object-fit: contain; }
+.zb:not(.fit) { cursor: grab; } .zb.drag { cursor: grabbing; }
+.zfoot { padding: 6px 14px; font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--line); }
+@media (pointer: coarse) { .zfoot .keys { display: none; } }
+@media (pointer: fine) { .zfoot .touch { display: none; } }
+@media (max-width: 560px) { dialog#zoom { width: 100vw; height: 100dvh; border-radius: 0; border: 0; } dialog#zoom .zc .lv { min-width: 0; } }
 </style>
 
 <main>
@@ -101,12 +142,15 @@ dialog#zoom img { display: block; width: 100%; height: auto; }
     <h1 id="q"></h1>
     <p class="why" id="why"></p>
   </header>
+  <nav class="parts" id="parts" aria-label="Các câu cần chọn" hidden></nav>
+  <div class="pq" id="pq" hidden><h2 id="pq-t"></h2><p class="why" id="pq-why"></p></div>
   <section class="view-table card stage" id="stage" data-area="stage" aria-label="Xem từng phương án"></section>
   <section class="view-table card tbl" id="table" data-area="table" aria-label="Bảng so sánh"></section>
   <section class="view-cards cards" id="cards" data-area="cards" aria-label="Các phương án"></section>
   <div class="rec" id="rec" role="status" aria-live="polite"></div>
   <!-- Hỏi Claude về các phương án (Kit.ask, khả năng sample). Chỉ hiện khi trang hỏi được. -->
   <div class="card ai-ask kit-ask">
+    <label class="label" for="ai-q">Hỏi Claude về các phương án</label>
     <form class="ai-form" id="ai-form"><input id="ai-q" type="text" maxlength="300" placeholder="Hỏi Claude, ví dụ: B khác C ở chỗ nào?" aria-label="Câu hỏi cho Claude về các phương án"><button class="btn" type="submit" id="ai-send">Hỏi</button></form>
     <p class="ai-out" id="ai-out" role="status"></p>
   </div>
@@ -120,7 +164,23 @@ dialog#zoom img { display: block; width: 100%; height: auto; }
     <p class="status" id="status"></p>
   </div>
 </main>
-<dialog id="zoom" aria-labelledby="zoom-t"><div class="zh"><b id="zoom-t"></b><button class="btn" id="zoom-x" type="button">Đóng</button></div><img id="zoom-img" alt=""></dialog>
+<dialog id="zoom" aria-labelledby="zoom-t">
+  <div class="zh">
+    <div class="zt"><b id="zoom-t"></b><span id="zoom-n"></span></div>
+    <div class="zc" role="group" aria-label="Điều khiển ảnh">
+      <button class="btn" id="zoom-prev" type="button" aria-label="Bản trước" title="Bản trước (←)">←</button>
+      <button class="btn" id="zoom-next" type="button" aria-label="Bản sau" title="Bản sau (→)">→</button>
+      <span class="gap" aria-hidden="true"></span>
+      <button class="btn" id="zoom-out" type="button" aria-label="Thu nhỏ" title="Thu nhỏ (−)">−</button>
+      <button class="btn lv" id="zoom-lv" type="button" title="Vừa khung hay 200% (0)" aria-label="Đổi giữa vừa khung và 200%">Vừa khung</button>
+      <button class="btn" id="zoom-in" type="button" aria-label="Phóng to" title="Phóng to (+)">+</button>
+      <button class="btn" id="zoom-x" type="button">Đóng</button>
+    </div>
+  </div>
+  <div class="zb fit" id="zoom-body" tabindex="0" aria-label="Ảnh phóng to, cuộn hay kéo để xem chỗ khác"><img id="zoom-img" alt="" draggable="false"></div>
+  <p class="zfoot"><span class="keys"><kbd>←</kbd> <kbd>→</kbd> đổi bản · <kbd>+</kbd> <kbd>−</kbd> phóng, <kbd>0</kbd> vừa khung · bấm đúp hay Ctrl + lăn chuột để phóng chỗ đó · kéo để xem chỗ khác · <kbd>Esc</kbd> đóng</span><span class="touch">Vuốt ngang để đổi bản · bấm nút + để phóng, rồi kéo để xem chỗ khác</span></p>
+  <p class="vh" id="zoom-live" role="status" aria-live="polite"></p>
+</dialog>
 
 <script type="application/json" id="decision">__DECISION__</script>
 <script>/*KIT_JS*/</script>

@@ -1,0 +1,95 @@
+{
+  "id": "modular-kit-plan-layout-r5",
+  "title": "Vòng 5 · bố cục trang kế hoạch",
+  "question": "Trang kế hoạch nên bố cục thế nào cho từng loại?",
+  "context": "KH9 ga 3. Mọi trang kế hoạch hiện cùng một khung, dù kế hoạch chờ duyệt, đang chạy hay đã đóng. Mỗi loại một câu, mỗi câu ba bản: A là trang hiện nay, B và C là bố cục mới (ảnh trái máy tính, phải điện thoại). Bản bạn chọn thành mặc định cho loại đó; link dưới mỗi bản mở trang bấm thử cả chín bản.",
+  "parts": [
+    {
+      "key": "pending",
+      "name": "Chờ duyệt",
+      "question": "Kế hoạch chờ bạn duyệt (việc chính là trả lời câu hỏi)",
+      "context": "Mẫu: KH9 lúc còn là bản nháp, 4 câu hỏi chưa trả lời.",
+      "options": [
+        { "key": "a", "name": "A · Như hiện nay", "short": "Như hiện nay", "image": "shots/pending-a.png", "scale": 2,
+          "summary": "Đang ở đâu, tuyến ga, rồi câu hỏi ở cuối trang. Ảnh điện thoại đã cuộn tới câu hỏi.",
+          "pros": ["Bạn đã quen, đọc hết rồi mới trả lời"],
+          "cons": ["Câu hỏi nằm cuối, phải cuộn qua cả kế hoạch mới tới", "Mục tiêu dài chiếm nửa màn đầu"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP", "note": "Chọn Chờ duyệt rồi A ở đầu trang." }] },
+        { "key": "b", "name": "B · Phiếu hỏi trước", "short": "Phiếu hỏi", "image": "shots/pending-b.png", "scale": 2,
+          "summary": "Câu hỏi thành một phiếu ngay dưới tên kế hoạch, có dải số 1–4 bấm để nhảy tới câu. Tuyến ga, phần thêm và nhật ký nằm dưới phiếu, gọi là bối cảnh để trả lời.",
+          "pros": ["Mở trang là thấy việc cần làm và có mấy câu", "Trên điện thoại phiếu nằm ngay màn đầu"],
+          "cons": ["Trả lời trước khi đọc kế hoạch, dễ để nguyên đề xuất mà chưa hiểu", "Muốn đọc ga nào phải cuộn xuống rồi quay lại phiếu"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP", "note": "Bấm số trong dải 1–4 để nhảy tới câu." }] },
+        { "key": "c", "name": "C · Hỏi bên cạnh", "short": "Hỏi bên cạnh", "image": "shots/pending-c.png", "scale": 2,
+          "summary": "Màn rộng chia hai cột: kế hoạch bên trái, phiếu hỏi dính bên phải nên cuộn đọc ga nào cũng thấy câu hỏi. Điện thoại: phiếu nằm ngay sau Đang ở đâu.",
+          "pros": ["Đọc tới ga nào thì trả lời câu liên quan ngay cạnh", "Điện thoại vẫn gần như phiếu hỏi trước"],
+          "cons": ["Cột phiếu hẹp, câu lựa chọn dài thì xuống dòng nhiều", "Trên điện thoại không có dải số như B"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP", "note": "Trên máy tính, cuộn cột trái để xem phiếu bên phải đứng yên." }] }
+      ],
+      "criteria": [
+        { "name": "Thấy việc cần làm ngay", "values": { "a": "kém", "b": "tốt", "c": "tốt" } },
+        { "name": "Đọc kế hoạch trong lúc trả lời", "values": { "a": "vừa", "b": "kém", "c": "tốt" } },
+        { "name": "Điện thoại", "values": { "a": "vừa", "b": "tốt", "c": "tốt" } }
+      ],
+      "recommend": { "key": "c", "why": "Duyệt kế hoạch là đọc rồi quyết, nên câu hỏi nên đứng cạnh phần đang đọc thay vì đứng trước nó. Trên điện thoại C cũng đưa phiếu lên gần đầu như B; dải số của B có thể thêm vào C nếu bạn thích." }
+    },
+    {
+      "key": "running",
+      "name": "Đang chạy",
+      "question": "Kế hoạch đang chạy (việc chính là theo dõi đang ở đâu)",
+      "context": "Mẫu: KH9 hôm nay, 5/10 việc, đang ở ga 3.",
+      "options": [
+        { "key": "a", "name": "A · Như hiện nay", "short": "Như hiện nay", "image": "shots/running-a.png", "scale": 2,
+          "summary": "Tuyến ga dọc, mỗi ga một hộp kèm Xong khi và việc con; ga đang chạy mở sẵn. Ảnh đã cuộn tới phần ga.",
+          "pros": ["Đủ chi tiết mọi ga trên một đường đọc", "Bản bạn đã chọn ở vòng 1"],
+          "cons": ["Ga đã xong vẫn chiếm chỗ như ga đang chạy", "Phải cuộn mới thấy ga đang chạy khi có nhiều ga xong"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP", "note": "Chọn Đang chạy rồi A." }] },
+        { "key": "b", "name": "B · Bảng tiến độ", "short": "Bảng tiến độ", "image": "shots/running-b.png", "scale": 2,
+          "summary": "Bốn ô số ngay dưới tên (việc xong, ga xong, còn ước mấy phiên, bạn cần làm gì), rồi ga xếp vào ba cột Xong, Đang chạy, Chưa tới như bảng việc.",
+          "pros": ["Màn đầu trả lời ngay: tới đâu, còn bao lâu, mình cần làm gì", "Ga xong gọn lại trong cột Xong"],
+          "cons": ["Mất cảm giác một tuyến có chiều đi", "Ba cột hẹp, ở điện thoại thành ba khối xếp chồng"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP", "note": "Để ý ô Bạn cần làm, bấm vào là tới Đang ở đâu." }] },
+        { "key": "c", "name": "C · Tuyến ngang", "short": "Tuyến ngang", "image": "shots/running-c.png", "scale": 2,
+          "summary": "Các ga chạy ngang như sơ đồ tàu điện, tên ga nằm dưới chấm. Khung dưới mở ga đang chạy; bấm ga khác thì khung đổi sang ga đó.",
+          "pros": ["Nhìn một hàng là biết đang ở ga mấy trên tổng số", "Chỉ một ga mở chi tiết, không phải cuộn qua ga đã xong", "Giữ kiểu tuyến tàu bạn đã Thích"],
+          "cons": ["Hơn 6 ga thì tên ga bị cắt, phải bấm mới đọc đủ", "Muốn so hai ga phải bấm qua lại"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP", "note": "Bấm chấm của từng ga để đổi khung bên dưới." }] }
+      ],
+      "criteria": [
+        { "name": "Biết ngay đang ở đâu", "values": { "a": "vừa", "b": "tốt", "c": "tốt" } },
+        { "name": "Đọc chi tiết ga đang chạy", "values": { "a": "tốt", "b": "vừa", "c": "tốt" } },
+        { "name": "Điện thoại", "values": { "a": "vừa", "b": "vừa", "c": "tốt" } }
+      ],
+      "recommend": { "key": "c", "why": "Khi đang chạy bạn cần ga hiện tại hơn là các ga đã xong, và tuyến ngang cho cả hai trong một màn mà vẫn giữ kiểu tuyến tàu bạn đã Thích. Ô Bạn cần làm của B đáng lấy sang C nếu bạn thấy hay." }
+    },
+    {
+      "key": "closed",
+      "name": "Đã đóng",
+      "question": "Kế hoạch đã đóng (việc chính là xem lại được gì)",
+      "context": "Mẫu: KH6 (đóng sớm 19/11, 23/24 việc, 8 lần đổi kế hoạch).",
+      "options": [
+        { "key": "a", "name": "A · Như hiện nay", "short": "Như hiện nay", "image": "shots/closed-a.png", "scale": 2,
+          "summary": "Vẫn là tuyến ga dọc như lúc đang chạy, ga nào cũng xanh. Ảnh đã cuộn tới phần ga.",
+          "pros": ["Không có gì mới phải học"],
+          "cons": ["Trang của kế hoạch đã xong trông y như lúc đang chạy", "Việc chưa làm, chuyển đi đâu, phải mở từng ga mới thấy"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP", "note": "Chọn Đã đóng rồi A." }] },
+        { "key": "b", "name": "B · Thẻ kết quả", "short": "Thẻ kết quả", "image": "shots/closed-b.png", "scale": 2,
+          "summary": "Đầu trang là bốn con số (ga xong, việc đã tick, số ngày làm, số lần đổi kế hoạch). Mỗi ga thành một thẻ ghi đạt hay chưa đạt điều kiện xong; việc chưa làm gom vào thẻ Chuyển đi.",
+          "pros": ["Mỗi ga ra gì đọc trong một thẻ", "Ga đóng khi chưa xong nổi lên bằng viền đứt vàng"],
+          "cons": ["Không thấy đã đổi gì trong lúc làm, phải mở nhật ký", "Nhiều ga thì thành lưới dài"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP", "note": "Để ý thẻ Chuyển đi ở cuối lưới." }] },
+        { "key": "c", "name": "C · Ba cột tổng kết", "short": "Ba cột", "image": "shots/closed-c.png", "scale": 2,
+          "summary": "Ngay dưới tên là ba cột Được gì (ga xong), Đổi gì (bảng Đã đổi theo ngày), Còn lại (việc chưa tick). Chi tiết từng ga gập lại ở dưới.",
+          "pros": ["Một màn trả lời đủ ba câu khi nhìn lại một kế hoạch", "Đổi gì lên ngang hàng với được gì: thấy kế hoạch đã lệch bao nhiêu"],
+          "cons": ["Cột Đổi gì dài khi kế hoạch đổi nhiều", "Trên điện thoại ba cột thành ba khối xếp chồng, cột Còn lại nằm xa"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP", "note": "Mục lục có thêm mục Tổng kết ở đầu." }] }
+      ],
+      "criteria": [
+        { "name": "Thấy được gì, còn gì", "values": { "a": "kém", "b": "tốt", "c": "tốt" } },
+        { "name": "Thấy đã đổi gì", "values": { "a": "kém", "b": "kém", "c": "tốt" } },
+        { "name": "Điện thoại", "values": { "a": "vừa", "b": "tốt", "c": "vừa" } }
+      ],
+      "recommend": { "key": "c", "why": "Lúc nhìn lại một kế hoạch đã đóng, câu đáng hỏi là được gì, đổi gì, còn gì; C trả lời cả ba ở màn đầu. Trên điện thoại có thể đưa cột Còn lại lên trước nếu bạn thấy nó quan trọng hơn." }
+    }
+  ]
+}

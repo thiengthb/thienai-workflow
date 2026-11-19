@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 2 xong: PR #158 đã merge (thien nhắn "merge đi" 23:00). Tiếp theo checkpoint 3 (vòng gu bố cục trang kế hoạch). Ga 1 vẫn chờ thien xem trang mẫu thành phần.
-- Còn thiếu: ga 3, ga 4; đóng ga 1 khi thien xem xong trang mẫu thành phần.
-- thien cần làm: mở trang mẫu thành phần (https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst, nick tnt697) xem mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử".
+- Đang ở: checkpoint 3: thien chọn B cả ba loại (phiếu hỏi trước, bảng tiến độ, thẻ kết quả). Tiếp theo chuyển ba bản B vào `artifacts/plan/` làm mặc định theo trạng thái, rồi dựng lại trang KH9. Ga 1 vẫn chờ thien xem trang mẫu thành phần.
+- Còn thiếu: việc 3 của ga 3; ga 4; đóng ga 1.
+- thien cần làm: merge PR #160. Xem thêm trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử").
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
@@ -46,8 +46,8 @@ Xong khi: một trang kế hoạch và một trang luồng dựng từ danh sác
 ### 3. Vòng gu bố cục cho trang kế hoạch
 Xong khi: thien chọn bố cục cho ba loại kế hoạch trên một trang chọn có hình; trang của chính KH9 được dựng lại và đăng đè theo bố cục đã chọn (câu 3), và trang kế hoạch kế tiếp dựng theo bố cục đó.
 Ước: 1 phiên
-- [ ] Ba loại nội dung, mỗi loại 2–3 bố cục: chờ duyệt (nhiều câu hỏi: dạng phiếu hỏi), đang chạy (theo dõi: dạng bảng tiến độ, tuyến ga), đã đóng (tổng kết: dạng thẻ kết quả, việc chuyển đi)
-- [ ] thien chọn trên trang `decide/`, câu vì sao vào hàng chờ gu
+- [x] Ba loại nội dung, mỗi loại 2–3 bố cục: chờ duyệt (nhiều câu hỏi: dạng phiếu hỏi), đang chạy (theo dõi: dạng bảng tiến độ, tuyến ga), đã đóng (tổng kết: dạng thẻ kết quả, việc chuyển đi) (vòng 5 ở `docs/plans/2026-11-18-visual-workflow/round-5/`: mỗi loại A hiện nay, chờ duyệt B phiếu hỏi trước, C hỏi bên cạnh; đang chạy B bảng tiến độ, C tuyến ngang; đã đóng B thẻ kết quả, C ba cột tổng kết. Trang chọn ba câu https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG, trang bấm thử https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP, nick tnt697, 2026-11-19)
+- [x] thien chọn trên trang `decide/`, câu vì sao vào hàng chờ gu (2026-11-19 23:38, comment trên trang chọn: B cả ba câu, đề xuất là C cả ba; chưa ghi vì sao, ghi chú xin sửa ô hỏi Claude và thêm trợ năng phóng to, phím trái phải; đã ghi vào `learning/frontend/taste-queue.md`)
 - [ ] Dựng lại trang KH9 bằng bố cục đã chọn, đăng đè link trong dòng "Trang:" (câu 3)
 
 ### 4. Bố cục mới cho các mẫu khác, đều đặn
@@ -75,9 +75,12 @@ Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang h�
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-19 | Bộ màu của kit đổi sang trắng đen (PR #161): nền và thẻ trắng tinh, nhấn gần đen, mực hình thành ba mức xám, màu chỉ để báo xong, lỗi, cảnh báo. Mục "Không làm" ghi không đổi bộ màu gốc; lần này thien quyết thẳng, không qua vòng gu | thien 23:56: "màu chính là màu trắng, mình không muốn chạy đua với màu sắc nữa", chọn "Trắng đen, màu chỉ để báo". Ba bố cục B của ga 3 dựng theo bộ màu này |
+| 2026-11-19 | Ga 3: trang `decide/` hỏi được nhiều câu trên một trang (`parts`), thay vì ba trang chọn | Kế hoạch ghi "một trang chọn có hình" cho ba loại; mỗi loại cần đề xuất ẩn và ảnh riêng, nên mẫu chọn phương án cần chọn nhiều câu |
 | 2026-11-19 | Ga 2: mặc định "theo nội dung" chỉ quyết khối nào có (khối có nội dung thì có), giữ thứ tự như trước | Đổi thứ tự hay bố cục theo loại kế hoạch là vòng gu của ga 3, thien chọn; ga 2 chỉ làm phần máy, nên trang mặc định không đổi so với main |
 | 2026-11-19 | Checkpoint 1 rút khối gửi, `.choice`, `.trial` thay vì câu hỏi, núm, khung ảnh | Đọc từng chỗ thì `.q`, `.opt` là trùng tên chứ không trùng khối (thẻ phương án, dòng lựa chọn, câu trắc nghiệm là ba thứ khác nhau); núm và khung ảnh cũng khác theo mẫu. Khối trùng thật là chép và gửi (bốn bản) và chi tiết thử (hai bản) |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
 |---|---|---|
+| 2026-11-19 | Trang chọn phương án: ô hỏi Claude dính sát viền thẻ (không có lề), icon khoá và bóng đèn hiện thành ô vuông đặc (lớp `.ic` của kit là icon mặt nạ từ PR #127, đè lên svg); ảnh bé ở khung 760–999px; phóng to chỉ vừa khung, không đổi bản được (thien báo 23:38) | PR #160: ô hỏi có lề và nhãn; icon đổi lớp `.ri`; khung vừa xếp ảnh trên chữ dưới; hộp phóng to có nấc 100–300%, kéo, bấm đúp, Ctrl + lăn, ← → đổi bản, vuốt trên điện thoại; ← → ở màn chọn thường |
