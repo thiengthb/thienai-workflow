@@ -20,7 +20,8 @@ html[data-stage="on"] #stage { display: block; }
 }
 @media (min-width: 900px) { html[data-stage="on"] .wrap { grid-template-columns: 26px minmax(0, 1fr) 380px; column-gap: 16px; } }
 @media (min-width: 760px) and (max-width: 899px) {
-  .bench { align-content: center; }
+  /* Sân khấu cao cố định ở khổ này: núm không vừa thì bàn thử cuộn, căn từ đầu để phần trên không bị cắt. */
+  .bench { align-content: safe center; overflow-y: auto; }
   .bench .phone { --pw: 190px; height: 380px; }
   .bench .screen { zoom: .72; }
 }

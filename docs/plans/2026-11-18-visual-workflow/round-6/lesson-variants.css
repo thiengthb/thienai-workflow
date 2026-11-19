@@ -41,6 +41,7 @@
 }
 
 /* C · Theo nội dung */
+.lesson-c .step.k-split .col-l, .lesson-c .step.k-split .col-r { display: grid; gap: 12px; align-content: start; min-width: 0; }
 @media (min-width: 760px) {
   .wrap.lesson-c { max-width: 980px; }
   html[data-lay="lesson-c"][data-stage="on"] .wrap.lesson-c { max-width: 1240px; }
@@ -50,7 +51,6 @@
   .lesson-c .step.k-grid > .cell { height: 100%; align-content: start; }
   .lesson-c .step.k-grid > .next { justify-self: end; width: auto; min-width: 280px; }
   .lesson-c .step.k-split.on { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: 28px; align-items: start; }
-  .lesson-c .step.k-split .col-l, .lesson-c .step.k-split .col-r { display: grid; gap: 12px; align-content: start; min-width: 0; }
   .lesson-c .step.k-split .col-l { position: sticky; top: 64px; }
   .lesson-c .step.k-split .col-r > textarea { min-height: 220px; }
   .lesson-c .step.k-split .col-r { padding-top: 16px; }

@@ -12,6 +12,8 @@
     // Tuyến bước: cột trái là các bước của buổi như tuyến ga (đã qua có dấu tick, đang làm chấm đen, chưa tới chấm rỗng).
     // Bước có sân khấu thì tuyến thu lại còn chấm, nhường chỗ cho sân khấu và chữ.
     const name = (s, i) => (i === 0 ? 'Bắt đầu' : ($('h1, h2', s)?.textContent || 'Bước ' + i).replace(/:.*$/, '').trim());
+    // Khung đã có tuyến bước (lesson.js sau vòng 6) thì để nó lo; build.mjs dựng từ khung trước vòng 6 nên chưa có.
+    if ($('.wrap > .rail')) return;
     const rail = el('nav', 'rail');
     rail.setAttribute('aria-label', 'Các bước của buổi');
     rail.innerHTML = '<ol>' + steps.map((s, i) => `<li data-s="${s.dataset.s}"><span class="dot"></span><span class="nm">${name(s, i)}</span></li>`).join('') + '</ol>';

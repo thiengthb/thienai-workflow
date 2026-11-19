@@ -12,6 +12,12 @@
   const verdict = {};
   const curId = () => ($('#subj').textContent.split(' · ').pop() || '').trim();
   let onChange = () => {};
+  // Tải lại giữa lượt: review.js khôi phục trạng thái từ Kit.store rồi vẽ lại; đọc cùng chỗ đó để cột bên và hàng chấm khớp.
+  if (window.Kit && Kit.store) Kit.store(D.id, 'reviews/' + D.today).load().then((saved) => {
+    if (!saved || saved.today !== D.today) return;
+    for (const [id, x] of Object.entries(saved.items || {})) if (x && x.verdict) verdict[id] = verdict[id] || x.verdict;
+    onChange();
+  });
   for (const [b, v] of [['#yes', 'nho'], ['#no', 'quen']]) $(b).addEventListener('click', () => { verdict[curId()] = verdict[curId()] || v; }, true);
   // Nghe đúng các chỗ review.js đổi khi sang thẻ hay lật đáp án (không nghe cả main: khối mới ghi vào đó sẽ tự gọi lại mãi).
   const mo = new MutationObserver(() => onChange());
@@ -54,7 +60,7 @@
     left.append($('.tags', card), $('#q'), $('.mic-row', card), $('#partial'));
     const cover = el('div', 'cover', '<span class="label">Đáp án</span><p>Gõ điều bạn nhớ bên trái trước, chưa cần đúng. Rồi lật đáp án ra so từng ý.</p>');
     cover.append($('#show'));
-    $('.acts', card).remove();
+    $('.acts', card)?.remove();   // mẫu trước vòng 6: hàng nút cũ của thẻ, rỗng sau khi dời #show
     right.append(cover, $('#reveal'));
     card.prepend(left, right);
     card.classList.add('split');

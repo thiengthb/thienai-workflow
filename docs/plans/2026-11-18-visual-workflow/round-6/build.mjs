@@ -3,15 +3,26 @@
 // là bố cục mới, lắp lại bằng <loại>-variants.css và <loại>-variants.js (chạy sau script của mẫu). Bản thien chọn sẽ viết
 // gọn vào artifacts/review/ hay artifacts/lesson/ ở PR sau; bản không chọn thì bỏ, file ở đây đóng băng như các vòng trước.
 //   node docs/plans/2026-11-18-visual-workflow/round-6/build.mjs [out]      ra <out>/<loại>-<bản>.html (không vào git)
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync, mkdtempSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
+import { tmpdir } from 'node:os';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-const dir = dirname(fileURLToPath(import.meta.url)), root = join(dir, '../../../..');
+const dir = dirname(fileURLToPath(import.meta.url)), repo = join(dir, '../../../..');
 const out = resolve(process.argv[2] || join(dir, 'shots/pages'));
 mkdirSync(out, { recursive: true });
 
-// Mẫu: thẻ thật trong learning/cards.md ngày 20/11 (10 thẻ đến hạn, ba môn); buổi frontend 10 (có bàn thử ở bước 3–5).
-// Thẻ đổi hộp sau này thì danh sách khác đi; muốn đúng như ảnh thì dựng từ cards.md ở commit của PR vòng này.
+// Đóng băng: dựng từ main lúc làm vòng 6 (BASE, trước khi bản chọn vào mẫu), không từ cây đang làm. Sau vòng này
+// artifacts/review/ và artifacts/lesson/ đã đổi, dựng từ cây hiện tại thì bản A không còn là "như hiện nay" của vòng 6.
+// Lấy artifacts/ và learning/ (thẻ, đáp án trong file môn, buổi frontend 10) của BASE bằng git archive ra thư mục tạm (cần commit đó trong clone; clone nông thì
+// git fetch --depth=1 origin <BASE> trước).
+const BASE = 'e99afaa0d5b6d1c26b636311d9ce00917569255e';
+const root = mkdtempSync(join(tmpdir(), 'round6-base-'));
+process.on('exit', () => rmSync(root, { recursive: true, force: true }));
+const tar = execFileSync('git', ['-C', repo, 'archive', BASE, 'artifacts', 'learning'], { maxBuffer: 1 << 28 });
+execFileSync('tar', ['-x', '-C', root], { input: tar });
+
+// Mẫu: thẻ thật trong learning/cards.md của BASE, ngày 20/11 (10 thẻ đến hạn, ba môn); buổi frontend 10 (có bàn thử ở bước 3–5).
 const TODAY = '2026-11-20', LESSON = 'learning/frontend/pages/lesson-10.html';
 export const VARIANTS = [
   { kind: 'review', key: 'a', name: 'A · Như hiện nay' },
