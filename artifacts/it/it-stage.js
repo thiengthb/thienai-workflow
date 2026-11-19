@@ -168,9 +168,12 @@
 
   // ---------- Nhìn 5 giây ----------
   // Bước data-stage="food@cover": màn bị che. <button data-peek="food" data-sec="5">: mở màn N giây rồi che lại, mở khóa peek-food.
-  // <button data-uncover="food">: bỏ che hẳn. Hẹn giờ không được phần tự lưu giữ lại: tải lại thì bấm lại là xem lại N giây.
+  // <button data-uncover="food">: bỏ che hẳn.
+  // Đồng hồ giữ qua lần tải lại: lần bấm thật ghi giờ bắt đầu vào máy (localStorage). Phần tự lưu bấm lại bằng code
+  // (isTrusted = false): còn giây thì đếm tiếp số giây còn lại, hết rồi (hay máy khác, không có giờ ghi) thì xong ngay.
   const uncovered = new Set();
-  // Phần tự lưu bấm lại bằng code (isTrusted = false) và không chờ: khi đó xong ngay, không đếm.
+  const PID = 'lesson-peek:' + ((document.querySelector('meta[name="lesson-id"]') || {}).content || document.title) + ':peek:';
+  const peekStart = (name, t) => { try { if (t) localStorage.setItem(PID + name, String(t)); return +localStorage.getItem(PID + name) || 0; } catch { return 0; } };
   $$('[data-peek]').forEach((bt) => bt.addEventListener('click', (e) => {
     const name = bt.dataset.peek, b = pane(name); if (!b) return;
     const sec = +(bt.dataset.sec || 5), cnt = $('.peek-count', b);
@@ -182,9 +185,15 @@
     // Đếm ngược hiện ngay trên nút (và trong .peek-count nếu màn có), xong thì nút ghi data-after.
     const show = (left) => { bt.textContent = `Còn ${left} giây`; if (cnt) cnt.textContent = left; };
     bt.disabled = true;
-    if (!e.isTrusted) { bt.textContent = bt.dataset.after || 'Đã xem'; return end(); }
+    let left = sec;
+    if (e.isTrusted) peekStart(name, Date.now());
+    else {
+      const t0 = peekStart(name);
+      left = t0 ? Math.min(sec, Math.ceil((t0 + sec * 1000 - Date.now()) / 1000)) : 0;
+      if (left <= 0) { bt.textContent = bt.dataset.after || 'Đã xem'; return end(); }
+    }
     b.classList.remove('covered'); b.classList.add('peeking');
-    let left = sec; show(left);
+    show(left);
     reveal();
     const tick = setInterval(() => {
       left--; show(left);

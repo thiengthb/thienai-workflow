@@ -120,8 +120,42 @@
 
   const extras = [];
   const fin = $('#finish'), copyBtn = $('#copy'), msg = $('#done-msg');
+  /** Màn kết (quy luật đỉnh và kết): tuyến các bước vừa đi qua, đánh dấu từng ga, vài con số, và câu người học tự viết.
+      Tự dựng từ R và tên các bước, không cần bài soạn gì thêm. Ga của phần ôn bị ẩn khi học lại thì không vẽ. */
+  function endCard() {
+    const old = $('#end-card'); if (old) old.remove();
+    const n = (o) => Object.values(o || {}), right = (o) => n(o).filter((x) => x.ok).length;
+    const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+    const card = el('section', 'end-card'); card.id = 'end-card'; card.setAttribute('aria-label', 'Tóm tắt buổi học');
+    card.append(el('p', 'end-kicker', 'Xong buổi'), el('h3', 'end-title', C.title || ID));
+    const route = el('ol', 'end-route');
+    steps.filter((s) => !skip(s) && !s.querySelector('#finish')).forEach((s, i) => {
+      const li = el('li'); li.style.setProperty('--i', i);
+      li.append(el('span', 'end-dot'), el('span', 'end-name', clip((s.querySelector('h2, h1') || {}).textContent || 'Bước ' + (i + 1), 40)));
+      route.append(li);
+    });
+    const last = el('li', 'end-last'); last.style.setProperty('--i', route.children.length);
+    last.append(el('span', 'end-dot'), el('span', 'end-name', 'Xong'));
+    route.append(last);
+    const stats = el('dl', 'end-stats');
+    const stat = (k, v) => { const d = el('div'); d.append(el('dt', '', k), el('dd', '', v)); stats.append(d); };
+    if (n(R.review).length && !reviewOff()) stat('Ôn', right(R.review) + '/' + n(R.review).length);
+    if (n(R.quiz).length) stat('Câu hỏi nhanh', right(R.quiz) + '/' + n(R.quiz).length);
+    const mins = Math.round((Date.parse(R.end) - Date.parse(R.start)) / 60000);
+    if (mins > 0) stat('Phút trên trang', String(mins));
+    card.append(route);
+    if (stats.children.length) card.append(stats);
+    const said = clip(R.teach, 180);
+    if (said) {
+      const q = el('blockquote', 'end-quote');
+      q.append(el('b', '', 'Bạn đã tự nói'), el('span', '', '“' + said + (String(R.teach).trim().length > 180 ? '…' : '') + '”'));
+      card.append(q);
+    }
+    (msg || fin).after(card);
+  }
   if (fin) fin.addEventListener('click', async () => {
     fin.disabled = true; R.end = new Date().toISOString();
+    try { endCard(); } catch (e) {}
     if (msg) msg.textContent = 'Đang lưu…';
     const doc = 'sessions/' + String(ID).replace(/[^a-z0-9-]/gi, '-') + '-' + Date.now();
     const saved = window.Kit ? await Kit.put(doc, R) : false;

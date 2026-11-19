@@ -158,5 +158,47 @@ for (const name of ['lesson', 'frontend']) {
   await c.ctx.close(); await d.ctx.close();
 }
 
+// 6. Nhìn N giây (it-stage.js): tải lại giữa lúc đếm thì đếm tiếp số giây còn lại, không coi như đã xem.
+{
+  const a = await open(fx.frontend);
+  const has = await a.p.evaluate(() => {
+    const bt = document.querySelector('[data-peek]'); if (!bt) return false;
+    const st = bt.closest('.step');
+    document.querySelectorAll('.step.on').forEach((x) => x.classList.remove('on'));
+    st.classList.add('on'); st.dispatchEvent(new Event('step', { bubbles: true }));
+    return true;
+  });
+  assert.ok(has, 'trang mẫu frontend có nút nhìn N giây');
+  await a.p.locator('[data-peek]').first().click({ force: true });
+  await a.p.waitForTimeout(1300);
+  const saved = await savedOf(a.p);
+  const peek = await a.p.evaluate(() => { const k = Object.keys(localStorage).find((x) => x.startsWith('lesson-peek:')); return [k, localStorage.getItem(k)]; });
+  assert.ok(peek[0], 'lần bấm thật ghi giờ bắt đầu vào máy');
+  assert.ok(JSON.parse(saved[1]).log.some((x) => x.k && x.k.includes('[data-peek=')), 'lần bấm nhìn có trong bản lưu');
+  await a.ctx.close();
+
+  const ctx = await browser.newContext({ viewport: { width: 1180, height: 760 } });
+  await ctx.addInitScript((pairs) => { for (const [k, v] of pairs) localStorage.setItem(k, v); }, [saved, peek]);
+  const p = await ctx.newPage();
+  await p.goto(pathToFileURL(fx.frontend).href);
+  await p.waitForTimeout(300);
+  const mid = await p.evaluate(() => {
+    const bt = document.querySelector('[data-peek]'), name = bt.dataset.peek;
+    const pane = document.querySelector(`.pane[data-pane="${name}"]`);
+    return { text: bt.textContent, peeking: pane.classList.contains('peeking'), seen: (window.R.peeked || []).includes(name) };
+  });
+  assert.match(mid.text, /^Còn [1-4] giây$/, 'tải lại giữa lúc đếm: đếm tiếp (' + mid.text + ')');
+  assert.ok(mid.peeking && !mid.seen, 'màn còn mở, chưa tính là đã xem');
+  await p.waitForTimeout(4500);
+  const end = await p.evaluate(() => { const bt = document.querySelector('[data-peek]'); return { text: bt.textContent, seen: (window.R.peeked || []).includes(bt.dataset.peek) }; });
+  assert.ok(end.seen && !/^Còn/.test(end.text), 'hết giờ thì tính là đã xem');
+  await ctx.close();
+
+  // Không có giờ ghi trong máy (mở ở máy khác): coi như đã xem, như trước.
+  const c = await open(fx.frontend, saved);
+  assert.ok(await c.p.evaluate(() => (window.R.peeked || []).length > 0), 'máy khác: coi như đã xem');
+  await c.ctx.close();
+}
+
 await browser.close();
 console.log('ok autosave');
