@@ -1,7 +1,7 @@
-# KH9 kit lắp ghép: ga 3 tiếp việc 3 (đưa ba bản B vào make-plan)
+# KH9 kit lắp ghép: ga 3 xong, chờ thien merge PR #163
 
-Repo: thiengthb/thienai-workflow · Nhánh: chưa có (việc 3 tạo nhánh mới từ main) · PR: #160, #161, #162 đã merge 20/11
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKf9sjziwakTXcoio · Cập nhật: 2026-11-19T17:30Z
+Repo: thiengthb/thienai-workflow · Nhánh: plan-layouts-default · PR: #163 (chờ thien merge); #160, #161, #162 đã merge 20/11
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKf9sjziwakTXcoio · Cập nhật: 2026-11-19T17:53Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -73,12 +73,16 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKf9sjziwakTXcoi
 - 19/11 23:56 thien: "màu chính là màu trắng, mình không muốn chạy đua với màu sắc nữa", chọn "Trắng đen, màu chỉ để báo". PR #161 (nhánh white-kit, từ main): kit.css nền và thẻ #fff, nhấn gần đen (tối: trắng ngà), ink-1..3 thành ba mức xám, good/bad/warn giữ; artifacts/README đoạn Mực hình, taste-queue. check-pages 34 trang 0 lỗi, test CI 0 lỗi. Khi merge cả #160 và #161: thêm một dòng "Đã đổi" vào KH9 (đổi bộ màu do thien chọn thẳng, không qua vòng gu); bố cục B dựng ở ga 3 việc 3 phải hợp trắng đen (ô số, cột, thẻ phân biệt bằng viền và độ đậm).
 - 20/11 00:15 thien nhắn "merge hết": sửa 4 ý CodeRabbit ở #160 (đường dẫn Windows trong test làm job scripts đỏ, picks chỉ đọc thuộc tính riêng, focus sau khi đổi câu, mỗi câu một thư mục ảnh `img/<câu>/`), trả lời 4 ý ở file thử đóng băng; mọi thread resolve. #161 merge (squash 2950391); #160 gộp main (xung đột taste-queue, giữ cả hai dòng; force push bị chặn nên dùng merge), thêm dòng "Đã đổi" bộ màu vào KH9, CI xanh cả bốn job, merge (squash 36dfce4). #162 ghi STATUS, tự merge.
 
+- 20/11 00:30 (phiên mới, cùng link chat, "tiếp tục"): KH9 ga 3 việc 3 trên nhánh `plan-layouts-default`, PR #163. `make-plan.mjs` có `pickLayout`: chờ duyệt còn câu hỏi → phiếu hỏi, đang chạy → bảng tiến độ, xong/bỏ → thẻ kết quả, còn lại một cột; dòng `Bố cục: <tên> · Vì: …` đổi được (`parse-plan.mjs`). HTML dựng sẵn, mỗi bố cục một vùng `@block` trong `template.html`, trắng đen. Khác bản phác 4 chỗ (ghi ở "Đã đổi" KH9). Trang mẫu `fixture-running.md`, `fixture-closed.md` vào check-pages và sizes.json; test bố cục. Mọi lệnh node của CI 0 lỗi, check-pages 36 trang 0 lỗi. Trang KH9 đăng đè bằng bảng tiến độ (9f8VSi8…, nick tnt697). KH9 8/10, STATUS sửa.
+
 ## Bước tiếp theo
-1. KH9 ga 3 việc 3: đưa ba bản B (pending: phiếu hỏi trước; running: bảng tiến độ; closed: thẻ kết quả) vào `artifacts/plan/` làm mặc định theo trạng thái (viết gọn lại từ `round-5/variants.js` và `variants.css`, không chép nguyên), cập nhật `artifacts/kit/sizes.json` nếu cỡ đổi, test make-plan; dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 bằng `--url`. Cũ (đã xong): khi thien gửi từ trang chọn https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG (đọc comment và db `decisions/modular-kit-plan-layout-r5`, khóa `picks.pending|running|closed`): chép nguyên văn vào kế hoạch và `learning/frontend/taste-queue.md`; viết lại bản chọn gọn trong `artifacts/plan/` (make-plan.mjs, template.html, plan.js) thành mặc định theo trạng thái trong `pickBlocks` (bản A thì giữ); dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 bằng `--url`. Nguồn thử ở `docs/plans/2026-11-18-visual-workflow/round-5/` (variants.js là bản phác, không chép nguyên).
-2. Kế hoạch MCP cho nhóm SEP490 sau KH9; mở mục "Chuyển sang kế hoạch sau" của KH8 trước.
-3. Repo public tạm tới 01/12; không ghi thông tin riêng mới.
+1. Khi thien nhắn merge: xem góp ý CodeRabbit trên #163, sửa, trả lời và resolve thread, chờ CI xanh, merge (squash); rồi PR nhỏ sửa dòng KH9 trong STATUS và "Đang ở đâu" của kế hoạch thành "đã merge" (tự merge theo DELEGATION). Trang KH9 dựng lại: `node artifacts/plan/make-plan.mjs docs/plans/2026-11-19-modular-kit.md out --url https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5` (nick tnt697; nick khác thì đăng trang mới, ghi link vào dòng "Trang:").
+2. KH9 còn ga 4 (mốc, vòng gu hai tuần một lần: ôn thẻ và trang học ở màn rộng) và đóng ga 1 khi thien xem trang mẫu thành phần.
+3. Kế hoạch MCP cho nhóm SEP490 sau KH9; mở mục "Chuyển sang kế hoạch sau" của KH8 trước.
+4. Repo public tạm tới 01/12; không ghi thông tin riêng mới.
 
 ## Đang chờ thien
+- Merge PR #163 https://github.com/thiengthb/thienai-workflow/pull/163; xem trang KH9 mới https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (nick tnt697).
 - Xem hai mục mới ở trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mở ở nick tnt697).
 
 ## Lưu ý
