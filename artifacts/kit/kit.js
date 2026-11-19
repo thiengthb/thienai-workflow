@@ -6,6 +6,7 @@
    Kit.store(key, path)  nháp trong máy (localStorage) + bản trong db của trang ở `path`, để Claude đọc lại.
    Kit.put(path, obj)    ghi một document một lần (không qua hàng đợi), ví dụ bản chụp của lần gửi.
    Kit.sendToClaude(text, el)  gửi một comment cho Claude (người sửa được trang); trả về true nếu đã gửi.
+   Kit.sendBox(o)        khối "Chép, Gửi cho Claude, dòng báo" dùng chung (KH9): gửi không được thì tự chép; trả về { clear() }.
    Kit.ask(prompt, out, opts)  hỏi Claude ngay trên trang (khả năng sample), chữ hiện dần vào out; trả về câu trả lời hoặc null.
    Kit.askJson(prompt, out, opts)  như ask nhưng Claude trả về một giá trị JSON; out chỉ hiện chữ chờ và lỗi.
    Kit.dictate(btn, field, partial, onUse)  nút mic nói thay gõ (khả năng dictation) cho một ô chữ; nút ẩn nơi không có mic.
@@ -125,6 +126,33 @@
       await c.sendToClaude({ anchor, text: text.slice(0, 3900) });
       return true;
     } catch (e) { return false; }
+  }
+
+  /** Khối gửi dùng chung (KH9, 2026-11-19; trước đó bốn mẫu mỗi mẫu tự viết một bản):
+      o.copy, o.send: hai nút; o.status: dòng báo (không có thì báo bằng toast); o.text(st): chữ gửi đi;
+      o.snapshot(sending): một bản trạng thái, để thứ được lưu đúng là thứ được gửi; o.save(st, sending): lưu (có thể async);
+      o.check(): chữ lý do khi chưa gửi được (ví dụ ô còn trống), rỗng là gửi; o.anchor: chỗ gắn comment; o.sent: câu báo khi đã gửi. */
+  function sendBox(o) {
+    const say = (t, ms) => { if (o.status) o.status.textContent = t; else if (t) toast(t, ms); };
+    const snap = (sending) => (o.snapshot ? o.snapshot(sending) : null);
+    if (o.copy) o.copy.addEventListener('click', async () => {
+      const st = snap(false);
+      if (o.save) await o.save(st, false);
+      say((await copy(o.text(st))) ? 'Đã chép. Dán vào chat gửi Claude.' : '');
+    });
+    if (o.send) o.send.addEventListener('click', async () => {
+      const why = o.check ? o.check() : '';
+      if (why) { say(why); return; }
+      o.send.disabled = true;
+      try {
+        const st = snap(true);
+        if (o.save) await o.save(st, true);
+        const text = o.text(st);
+        if (await sendToClaude(text, o.anchor)) say(o.sent || 'Đã gửi cho Claude. Claude trả lời trong comment.', 5000);
+        else say((await copy(text)) ? 'Chưa gửi thẳng được, đã chép: dán vào chat cho Claude.' : 'Chưa gửi thẳng được. Chép đoạn trong ô hiện ra rồi dán vào chat.', 8000);
+      } finally { o.send.disabled = false; }
+    });
+    return { clear() { if (o.status) o.status.textContent = ''; } };
   }
 
   /** Writes one document once (no queue), e.g. a frozen copy of what was sent. True once db holds it. */
@@ -314,5 +342,5 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', autoInit); else autoInit();
 
-  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude, ask, askJson, dictate, micRow, listen, icon, tabs, reveal };
+  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude, sendBox, ask, askJson, dictate, micRow, listen, icon, tabs, reveal };
 })();

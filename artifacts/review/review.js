@@ -108,15 +108,10 @@
     S.again = items.filter((x) => (S.items[x.id] || {}).verdict === 'quen').map((x) => x.id);
     S.i = 0; S.finished = false; save(); show();
   });
-  $('copy').addEventListener('click', () => Kit.copy(summary()));
-  $('send').addEventListener('click', async () => {
-    $('send').disabled = true;
-    await save(true);
-    await Kit.put(`reviews/${D.today}-sent`, { ...S, sentAt: new Date().toISOString() });
-    const sent = await Kit.sendToClaude(summary(), $('done'));
-    $('status').textContent = sent ? 'Đã gửi cho Claude. Claude sẽ dời lịch các thẻ trong learning/cards.md.' : 'Chưa gửi được. Bấm "Chép kết quả" rồi dán vào chat với Claude.';
-    $('send').disabled = false;
-  });
+  // Chép và gửi: khối dùng chung của kit (Kit.sendBox, KH9). Gửi thì lưu và ghi một bản chụp trước; gửi không được thì tự chép.
+  Kit.sendBox({ copy: $('copy'), send: $('send'), status: $('status'), anchor: $('done'), text: () => summary(),
+    sent: 'Đã gửi cho Claude. Claude sẽ dời lịch các thẻ trong learning/cards.md.',
+    save: async (st, sending) => { if (!sending) return; await save(true); await Kit.put(`reviews/${D.today}-sent`, { ...S, sentAt: new Date().toISOString() }); } });
 
   // Nói thay gõ (khả năng dictation, Kit.dictate): chỉ có ở Chrome và app Claude trên máy tính; nơi khác nút mic tự ẩn.
   // Đếm số lần nói vào S.spoke để biết tính năng này có thật sự được dùng (learning/usage.md).

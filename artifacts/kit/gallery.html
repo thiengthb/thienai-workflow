@@ -157,6 +157,28 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
     </section>
 
     <section class="card g-sec">
+      <h2>Gửi cho Claude</h2>
+      <p>Khối dùng chung (KH9): ô chữ, Chép, Gửi cho Claude, dòng báo. Bọc trong .kit-send, gắn bằng Kit.sendBox; gửi không được thì tự chép. Trang kế hoạch, luồng, chọn phương án, ôn thẻ đều dùng khối này.</p>
+      <div class="kit-send" id="g-send">
+        <label class="label" for="g-send-note">Ghi chú của bạn</label>
+        <textarea id="g-send-note">Ga 3 làm trước ga 4 được không?</textarea>
+        <div class="acts"><button class="btn" id="g-send-copy" type="button"><i class="ic ic-copy" aria-hidden="true"></i>Chép</button><button class="btn accent" id="g-send-send" type="button">Gửi cho Claude</button></div>
+        <p class="status" id="g-send-status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="card g-sec">
+      <h2>Chọn một có lý do, chi tiết thử</h2>
+      <p>.choice là nút chọn một có chấm tròn, .rec cho nhãn đề xuất, .why cho lý do. .trial chỉ đặt khi trang thật sự thử thứ mới.</p>
+      <div class="opts2" role="group" aria-label="Ví dụ chọn một" style="display:grid;gap:6px">
+        <button class="choice" type="button" aria-pressed="true"><i></i><span>KH9 trước<span class="rec">đề xuất</span><span class="why">Kit gọn rồi mới chia sẻ cho nhóm.</span></span></button>
+        <button class="choice" type="button" aria-pressed="false"><i></i><span>MCP trước</span></button>
+      </div>
+      <div class="trial"><h3><i class="ic ic-sparkles" aria-hidden="true"></i>Chi tiết thử của trang này</h3><p class="small">Một câu nói trang đang thử gì.</p>
+        <div class="row" role="group" aria-label="Chi tiết thử"><button class="choice" type="button" aria-pressed="false"><i></i>Thích</button><button class="choice" type="button" aria-pressed="false"><i></i>Không</button></div></div>
+    </section>
+
+    <section class="card g-sec">
       <h2>Ô chữ và nói thay gõ</h2>
       <p>textarea trong .mic-row, nút mic ẩn khi máy không có mic.</p>
       <div class="mic-row">
@@ -374,6 +396,11 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
 <script>
 // Bảng màu: đọc thẳng từ kit.css lúc chạy, nên luôn khớp với file.
 (function () {
+  const $id = (x) => document.getElementById(x);
+  Kit.sendBox({ copy: $id('g-send-copy'), send: $id('g-send-send'), status: $id('g-send-status'), anchor: $id('g-send'), text: () => $id('g-send-note').value });
+  document.querySelectorAll('.g-sec .choice').forEach((b) => b.addEventListener('click', () => {
+    b.parentElement.querySelectorAll('.choice').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  }));
   const names = ['--bg', '--card', '--soft', '--line', '--ink', '--muted', '--accent', '--accent-soft', '--accent-ink', '--accent-fill', '--good', '--good-soft', '--bad', '--bad-soft', '--warn', '--warn-soft', '--on-fill', '--mark', '--code-bg'];
   const box = document.getElementById('g-tokens');
   box.innerHTML = names.map((n) => `<div><i style="background:var(${n})"></i><code>${n}</code></div>`).join('');

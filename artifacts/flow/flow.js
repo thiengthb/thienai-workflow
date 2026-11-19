@@ -82,19 +82,15 @@
   function paint() {
     document.querySelectorAll('[data-trial]').forEach((b) => b.setAttribute('aria-pressed', String(S.trial === b.dataset.trial)));
   }
+  // Chép, gửi và dòng báo: khối dùng chung của kit (Kit.sendBox, KH9). Chưa viết gì thì chưa gửi.
+  const box = Kit.sendBox({ copy: $('copy'), send: $('send'), status: $('status'), anchor: $('ke-lai'), text: compose,
+    snapshot: (sending) => (sending ? { ...S, sentAt: new Date().toISOString() } : { ...S }),
+    save: (st) => store.save(st, true),
+    check: () => { if (S.tell.trim()) return ''; tell.focus(); return 'Viết vài câu trước đã.'; } });
   // Mỗi lần đổi: xoá dòng "Đã chép"/"Đã gửi" cũ vì nó nói về bản trước, rồi lưu.
-  function changed() { paint(); $('status').textContent = ''; store.save({ ...S }); }
+  function changed() { paint(); box.clear(); store.save({ ...S }); }
   tell.addEventListener('input', () => { S.tell = tell.value; changed(); });
   document.querySelectorAll('[data-trial]').forEach((b) => b.addEventListener('click', () => { S.trial = S.trial === b.dataset.trial ? '' : b.dataset.trial; changed(); }));
-  $('copy').addEventListener('click', async () => { store.save({ ...S }, true); $('status').textContent = (await Kit.copy(compose(S))) ? 'Đã chép. Dán vào chat gửi Claude.' : ''; });
-  $('send').addEventListener('click', async () => {
-    if (!S.tell.trim()) { $('status').textContent = 'Viết vài câu trước đã.'; tell.focus(); return; }
-    const st = { ...S, sentAt: new Date().toISOString() };
-    store.save(st, true);
-    const text = compose(st);
-    if (await Kit.sendToClaude(text, $('ke-lai'))) $('status').textContent = 'Đã gửi cho Claude. Claude trả lời trong comment.';
-    else $('status').textContent = (await Kit.copy(text)) ? 'Chưa gửi thẳng được, đã chép: dán vào chat cho Claude.' : 'Chưa gửi thẳng được. Chép đoạn trong ô hiện ra rồi dán vào chat.';
-  });
   // Ô và nút chỉ bật sau khi đã đọc bản lưu, để không ghi đè chữ cũ bằng ô trống.
   store.load().then((saved) => {
     if (saved && typeof saved.tell === 'string') S.tell = saved.tell;

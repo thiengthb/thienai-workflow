@@ -186,22 +186,17 @@
     document.querySelectorAll('[data-trial]').forEach((b) => b.setAttribute('aria-pressed', String(S.trial === b.dataset.trial)));
     $('preview').textContent = compose(S);
   }
+  // Chép, gửi và dòng báo: khối dùng chung của kit (Kit.sendBox, KH9). Bản được lưu đúng là bản được gửi.
+  const box = Kit.sendBox({ copy: $('copy'), send: $('send'), status: $('status'), anchor: $('cau-hoi'), text: compose,
+    snapshot: (sending) => (sending ? { ...S, sentAt: new Date().toISOString() } : { ...S }),
+    save: (st) => store.save(st, true) });
   // Mỗi lần đổi: vẽ lại, xoá dòng "Đã chép"/"Đã gửi" cũ vì nó nói về câu trả lời trước, rồi lưu.
   function changed(typing) {
     if (!typing) $('note').value = S.note;
     paint();
-    $('status').textContent = '';
+    box.clear();
     store.save({ ...S });
   }
-  async function send() {
-    const st = { ...S, sentAt: new Date().toISOString() };
-    const text = compose(st);
-    store.save(st, true);
-    if (await Kit.sendToClaude(text, $('cau-hoi'))) $('status').textContent = 'Đã gửi cho Claude. Claude trả lời trong comment.';
-    else $('status').textContent = (await Kit.copy(text)) ? 'Chưa gửi thẳng được, đã chép: dán vào chat cho Claude.' : 'Chưa gửi thẳng được. Chép đoạn trong ô hiện ra rồi dán vào chat.';
-  }
-  $('copy').addEventListener('click', async () => { store.save({ ...S }, true); $('status').textContent = (await Kit.copy(compose(S))) ? 'Đã chép. Dán vào chat gửi Claude.' : ''; });
-  $('send').addEventListener('click', send);
 
   // Nút chỉ bật sau khi đã đọc bản lưu, để không ghi đè lựa chọn cũ bằng mặc định.
   paint();
