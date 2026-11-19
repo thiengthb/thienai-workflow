@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 3, mẫu luồng chạy
 
 Repo: thiengthb/thienai-workflow · Nhánh: chưa có (nhánh flow-ba đã merge, proxy chặn xoá nhánh) · PR: #142 đã merge (19/11 10:27, thien nhắn "merge giúp mình"); #135–#140 đã merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX67M6JBCiq3SbaoEV · Cập nhật: 2026-11-19T03:31Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX67M6JBCiq3SbaoEV · Cập nhật: 2026-11-19T03:51Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -46,7 +46,7 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX67M6JBCiq3SbaoE
 - 10:24 thien kể lại luồng BA từ trang: đủ 8 bước đúng thứ tự nhưng chép tên khối, thiếu hai vòng lặp và ngăn "để sau" (đã nhận xét trong chat, thread comment báo not found); chi tiết thử "Thích" lần hai. Đã ghi vào kế hoạch và hàng chờ gu. 10:27 thien nhắn merge: PR #142 squash 09b6a2b. CI GitHub không chạy (lỗi billing của tài khoản), đã chạy đủ lệnh test của CI trên máy: 0 lỗi.
 
 ## Bước tiếp theo
-1. CI trên GitHub đang không chạy vì lỗi billing: nhắc thien kiểm "Billing & plans" nếu còn gặp; trong lúc đó chạy test như CI trên máy trước khi merge.
+1. Repo đang public tạm (thien mở 19/11 10:46) để CI không bị trừ phút; 01/12 chuyển lại private, lịch nhắc trig_011nfKi6X5kZe3HTRTZkYmHh, dòng nhắc trong STATUS (PR #143 đã tự merge). Tới lúc đó không ghi thông tin riêng mới vào repo.
 2. Luồng kiến trúc sakubun (để ở `docs/flows/` của repo sakubun, dựng bằng `--repo thiengthb/sakubun`) để tick việc 2 của ga 3; việc 3 (8/8 mẫu) tick cùng lúc. Nên làm ở phiên có gắn repo sakubun.
 3. Khi một nick giữ trang tổng quan (SZGp85…) mở phiên: `node templates/publish-progress.mjs overview` rồi đăng đè, tick việc 4 của checkpoint 2
 
