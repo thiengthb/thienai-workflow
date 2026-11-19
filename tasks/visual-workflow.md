@@ -1,7 +1,7 @@
-# KH9 kit lắp ghép: ga 2 xong, tiếp ga 3
+# KH9 kit lắp ghép: ga 3 vòng gu 5 đã đăng, chờ thien chọn
 
-Repo: thiengthb/thienai-workflow · Nhánh: chưa có (ga 3 tạo nhánh mới từ main) · PR: #158 (ga 2) merge 19/11, #159 (STATUS); #153, #154, #156, #157 và sakubun #339 đã merge 19/11
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZUoAG29Ms2veKqNkH · Cập nhật: 2026-11-19T16:18Z
+Repo: thiengthb/thienai-workflow · Nhánh: plan-layouts · PR: #160 (ga 3 vòng gu 5, chờ thien merge); #158, #159 đã merge 19/11
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZUoAG29Ms2veKqNkH · Cập nhật: 2026-11-19T16:48Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -67,12 +67,15 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZUoAG29Ms2veKqNk
 
 - 19/11 23:00 thien nhắn "merge đi": #158 merge (squash b5dde6a). #159 ghi kế hoạch và STATUS, tự merge theo DELEGATION. Nhánh kit-block-list chưa xoá được (proxy chặn).
 
+- 19/11 23:17 (phiên mới, cùng link chat, "tiếp tục"): ga 3 việc 1 trên nhánh `plan-layouts`, PR #160. Vòng gu 5 ở `round-5/` (3 file mẫu: KH9 chờ duyệt, KH9 đang chạy, KH6 đã đóng; build.mjs, variants.css/js, shoot.mjs). Trang `decide/` có `parts` để hỏi nhiều câu trên một trang (test thêm). Đăng trang chọn https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG (comments, db, sample) và trang bấm thử https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP (nick tnt697). Đề xuất ẩn: C cả ba câu. Mọi test CI 0 lỗi trên máy. Kế hoạch 6/10.
+
 ## Bước tiếp theo
-1. KH9 ga 3: vòng gu bố cục trang kế hoạch (3 loại nội dung x 2–3 bố cục) trên trang `decide/`; bố cục chọn được thì thành mặc định theo trạng thái trong `pickBlocks` (make-plan.mjs) hay một lớp bố cục; dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 theo bố cục chọn.
+1. KH9 ga 3: khi thien gửi từ trang chọn https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG (đọc comment và db `decisions/modular-kit-plan-layout-r5`, khóa `picks.pending|running|closed`): chép nguyên văn vào kế hoạch và `learning/frontend/taste-queue.md`; viết lại bản chọn gọn trong `artifacts/plan/` (make-plan.mjs, template.html, plan.js) thành mặc định theo trạng thái trong `pickBlocks` (bản A thì giữ); dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 bằng `--url`. Nguồn thử ở `docs/plans/2026-11-18-visual-workflow/round-5/` (variants.js là bản phác, không chép nguyên).
 2. Kế hoạch MCP cho nhóm SEP490 sau KH9; mở mục "Chuyển sang kế hoạch sau" của KH8 trước.
 3. Repo public tạm tới 01/12; không ghi thông tin riêng mới.
 
 ## Đang chờ thien
+- Chọn bố cục cho ba loại kế hoạch ở https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG (bấm thử ở https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP), rồi merge PR #160.
 - Xem hai mục mới ở trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mở ở nick tnt697).
 
 ## Lưu ý
