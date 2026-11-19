@@ -1,7 +1,7 @@
 # KH9 kit lắp ghép: ga 3 xong, chờ thien merge PR #163
 
 Repo: thiengthb/thienai-workflow · Nhánh: plan-layouts-default · PR: #163 (chờ thien merge); #160, #161, #162 đã merge 20/11
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKf9sjziwakTXcoio · Cập nhật: 2026-11-19T18:10Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKf9sjziwakTXcoio · Cập nhật: 2026-11-19T18:26Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -76,6 +76,8 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKf9sjziwakTXcoi
 - 20/11 00:30 (phiên mới, cùng link chat, "tiếp tục"): KH9 ga 3 việc 3 trên nhánh `plan-layouts-default`, PR #163. `make-plan.mjs` có `pickLayout`: chờ duyệt còn câu hỏi → phiếu hỏi, đang chạy → bảng tiến độ, xong/bỏ → thẻ kết quả, còn lại một cột; dòng `Bố cục: <tên> · Vì: …` đổi được (`parse-plan.mjs`). HTML dựng sẵn, mỗi bố cục một vùng `@block` trong `template.html`, trắng đen. Khác bản phác 4 chỗ (ghi ở "Đã đổi" KH9). Trang mẫu `fixture-running.md`, `fixture-closed.md` vào check-pages và sizes.json; test bố cục. Mọi lệnh node của CI 0 lỗi, check-pages 36 trang 0 lỗi. Trang KH9 đăng đè bằng bảng tiến độ (9f8VSi8…, nick tnt697). KH9 8/10, STATUS sửa.
 
 - 20/11 00:59 thien: "bố cục checkpoint vẫn chưa hợp ý", trang hay mở nửa màn hình cạnh chat (khoảng 860px) hay 2/3 màn hình project beta (khoảng 950px); bản đồ gọn hiện thay thanh mục lục thì đè lên nội dung. Đã sửa trên PR #163 (commit 2b669f8): bảng tiến độ bản 2 (thẻ lớn ga đang chạy, cột bên "Chưa tới"/"Xong" gập mở, cột trống không vẽ, rộng tới 1000px, hai cột từ 820px); bản đồ gọn nổi chỉ còn ở bố cục một cột; "Ước: mốc" ghi đúng ở dòng dưới bản đồ. Trang KH9 đăng đè. Ghi ở "Đã đổi" KH9. Chờ thien xem lại.
+
+- 20/11 01:16 thien gửi ảnh: "menu đè lên nội dung" là cột mục lục bên trái ở màn rộng (không phải bản đồ gọn như Claude hiểu lúc đầu). Bảng tiến độ rộng 960px mà mục lục đặt cho cột 760px, từ khoảng 1366px thì đè lên ô số. Sửa trên PR #163 (commit 35c6436): mục lục tính vị trí từ `--main-w` (lớp `wide`); test mới `.github/scripts/plan-layout.test.mjs` (job pages) đo ở 1160–1920px cho cả ba bố cục. Ghi ở "Lỗi gặp" KH9. Trang KH9 đăng đè.
 
 ## Bước tiếp theo
 1. Khi thien nhắn merge: xem góp ý CodeRabbit trên #163, sửa, trả lời và resolve thread, chờ CI xanh, merge (squash); rồi PR nhỏ sửa dòng KH9 trong STATUS và "Đang ở đâu" của kế hoạch thành "đã merge" (tự merge theo DELEGATION). Trang KH9 dựng lại: `node artifacts/plan/make-plan.mjs docs/plans/2026-11-19-modular-kit.md out --url https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5` (nick tnt697; nick khác thì đăng trang mới, ghi link vào dòng "Trang:").
