@@ -188,7 +188,7 @@
   }
   // Chép, gửi và dòng báo: khối dùng chung của kit (Kit.sendBox, KH9). Bản được lưu đúng là bản được gửi.
   const box = Kit.sendBox({ copy: $('copy'), send: $('send'), status: $('status'), anchor: $('cau-hoi'), text: compose,
-    snapshot: (sending) => (sending ? { ...S, sentAt: new Date().toISOString() } : { ...S }),
+    snapshot: (sending) => ({ ...S, answers: { ...S.answers }, ...(sending ? { sentAt: new Date().toISOString() } : {}) }),
     save: (st) => store.save(st, true) });
   // Mỗi lần đổi: vẽ lại, xoá dòng "Đã chép"/"Đã gửi" cũ vì nó nói về câu trả lời trước, rồi lưu.
   function changed(typing) {

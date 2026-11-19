@@ -66,6 +66,21 @@ for (const canSend of [true, false]) {
   assert.deepEqual(r.saved, [['abc', true]], 'lưu đúng bản được gửi, chỉ khi gửi thật');
   assert.match(r.after, /đã chép/);
   assert.equal(r.cleared, '');
+  // Chép không chờ lưu (db treo); clear() trong lúc đang gửi thì câu báo của lần gửi đó không hiện bên bản mới.
+  const r2 = await p.evaluate(async () => {
+    const host = document.createElement('div'); host.innerHTML = '<button id="c2">c</button><button id="s2">s</button><p id="st2"></p>';
+    document.body.append(host);
+    const st = host.querySelector('#st2');
+    const box = Kit.sendBox({ copy: host.querySelector('#c2'), send: host.querySelector('#s2'), status: st, text: () => 'x',
+      save: (s, sending) => (sending ? new Promise((r) => setTimeout(r, 300)) : new Promise(() => {})) });
+    host.querySelector('#c2').click(); await new Promise((r) => setTimeout(r, 100));
+    const copied = st.textContent;
+    box.clear(); host.querySelector('#s2').click(); await new Promise((r) => setTimeout(r, 50)); box.clear();
+    await new Promise((r) => setTimeout(r, 3600));
+    return { copied, afterClear: st.textContent };
+  });
+  assert.match(r2.copied, /Đã chép/, 'chép không chờ lần lưu bị treo');
+  assert.equal(r2.afterClear, '', 'câu báo của lần gửi trước clear() không hiện');
   await ctx.close();
 }
 await browser.close();

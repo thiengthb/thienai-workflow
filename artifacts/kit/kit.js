@@ -133,26 +133,29 @@
       o.snapshot(sending): một bản trạng thái, để thứ được lưu đúng là thứ được gửi; o.save(st, sending): lưu (có thể async);
       o.check(): chữ lý do khi chưa gửi được (ví dụ ô còn trống), rỗng là gửi; o.anchor: chỗ gắn comment; o.sent: câu báo khi đã gửi. */
   function sendBox(o) {
-    const say = (t, ms) => { if (o.status) o.status.textContent = t; else if (t) toast(t, ms); };
+    // gen: clear() tăng số này, nên câu báo của một lần chép hay gửi bắt đầu trước đó (nói về bản cũ) không hiện nữa.
+    let gen = 0;
+    const say = (my, t, ms) => { if (my !== gen) return; if (o.status) o.status.textContent = t; else if (t) toast(t, ms); };
     const snap = (sending) => (o.snapshot ? o.snapshot(sending) : null);
     if (o.copy) o.copy.addEventListener('click', async () => {
-      const st = snap(false);
-      if (o.save) await o.save(st, false);
-      say((await copy(o.text(st))) ? 'Đã chép. Dán vào chat gửi Claude.' : '');
+      const my = gen, st = snap(false);
+      // Chép không chờ lưu: db treo thì nút Chép vẫn chép ngay.
+      if (o.save) Promise.resolve().then(() => o.save(st, false)).catch(() => {});
+      say(my, (await copy(o.text(st))) ? 'Đã chép. Dán vào chat gửi Claude.' : '');
     });
     if (o.send) o.send.addEventListener('click', async () => {
-      const why = o.check ? o.check() : '';
-      if (why) { say(why); return; }
+      const my = gen, why = o.check ? o.check() : '';
+      if (why) { say(my, why); return; }
       o.send.disabled = true;
       try {
         const st = snap(true);
         if (o.save) await o.save(st, true);
         const text = o.text(st);
-        if (await sendToClaude(text, o.anchor)) say(o.sent || 'Đã gửi cho Claude. Claude trả lời trong comment.', 5000);
-        else say((await copy(text)) ? 'Chưa gửi thẳng được, đã chép: dán vào chat cho Claude.' : 'Chưa gửi thẳng được. Chép đoạn trong ô hiện ra rồi dán vào chat.', 8000);
+        if (await sendToClaude(text, o.anchor)) say(my, o.sent || 'Đã gửi cho Claude. Claude trả lời trong comment.', 5000);
+        else say(my, (await copy(text)) ? 'Chưa gửi thẳng được, đã chép: dán vào chat cho Claude.' : 'Chưa gửi thẳng được. Chép đoạn trong ô hiện ra rồi dán vào chat.', 8000);
       } finally { o.send.disabled = false; }
     });
-    return { clear() { if (o.status) o.status.textContent = ''; } };
+    return { clear() { gen++; if (o.status) o.status.textContent = ''; } };
   }
 
   /** Writes one document once (no queue), e.g. a frozen copy of what was sent. True once db holds it. */
