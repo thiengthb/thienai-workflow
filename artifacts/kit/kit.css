@@ -347,7 +347,7 @@ button.dg-node:hover { border-color: var(--accent); }
 @media (prefers-reduced-motion: reduce) { .skel::after { animation: none; } }
 /* @end skel */
 
-/* @block empty empty-ic */
+/* @block empty empty empty-ic */
 /* Màn rỗng: <span class="empty-ic"> chứa icon trong vòng nhạt, một câu nói vì sao rỗng, một nút làm việc tiếp theo. */
 .empty { display: grid; justify-items: center; gap: 8px; padding: 24px 16px; text-align: center; border: 1px dashed var(--line-strong); border-radius: var(--r); }
 .empty-ic { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-ink); }

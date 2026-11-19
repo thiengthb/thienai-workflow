@@ -58,7 +58,8 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   const where = plan.where.length ? `<div class="where card">${keyed.map((w) =>
     `<div class="w-row${w.ask ? ' ask' : ''}"><span class="label ${w.ask ? 'k2' : 'k1'}">${esc(w.key)}</span><p>${w.html}</p></div>`).join('')}${loose.length
     ? `<details class="acc w-more"><summary>Ghi chú thêm <span class="chip">${loose.length}</span></summary><ul class="list">${loose.map((w) => `<li>${w.html}</li>`).join('')}</ul></details>` : ''}</div>` : '';
-  const jump = now ? `<a class="jump" href="#${now.id}"><span>Ga đang chạy · <b>${now.num}. ${esc(now.name)}</b></span>${icon('arrow-right')}</a>` : '';
+  // Link tới ga đang chạy chỉ khi trang có tuyến ga.
+  const jump = now && on('tuyen') ? `<a class="jump" href="#${now.id}"><span>Ga đang chạy · <b>${now.num}. ${esc(now.name)}</b></span>${icon('arrow-right')}</a>` : '';
 
   const stops = plan.checkpoints.map((c) => {
     const chips = [
@@ -171,7 +172,11 @@ ${blocks.filter((n) => sections[n]).map((n) => sections[n]).join('\n')}
     questions: open && on('cau-hoi') ? plan.questions.map((q) => ({ id: q.id, q: q.q, qText: q.qText, options: q.options.map((o) => ({ html: o.html, text: o.text.replace(/\*\*|`/g, ''), rec: !!o.rec, other: !!o.other, why: o.why })) })) : [],
     checkpoints: plan.checkpoints.map((c) => ({ id: c.id, num: c.num, name: c.name.replace(/\*\*|`/g, ''), state: c.state, est: c.estimate, gate: c.gate, doneDate: c.doneDate })),
   };
-  return { body, data, blocks, notes };
+  // Khối đã bỏ: báo cho pack.mjs, để chữ trong trang có tên khối (tiêu đề nhắc "cau-hoi") không giữ lại CSS, JS của nó.
+  // Tên vùng ở template.html, plan.js; them và nhat-ky chung một vùng CSS.
+  const drop = ['dang-o', 'tuyen', 'ban-do', 'phuong-an', 'cau-hoi'].filter((n) => !on(n));
+  if (!on('them') && !on('nhat-ky')) drop.push('them-nhat-ky');
+  return { body, data, blocks, notes, drop };
 }
 
 export function build(mdPath, out, { repo = '', url = '', trial = '', today = '' } = {}) {
@@ -182,7 +187,7 @@ export function build(mdPath, out, { repo = '', url = '', trial = '', today = ''
   const fatal = issues.filter((i) => i.level === 'lỗi');
   if (fatal.length) { const e = new Error(fatal.map((i) => `${mdPath}:${i.line}: ${i.msg}`).join('\n')); e.issues = issues; throw e; }
   const id = basename(mdPath).replace(/\.md$/i, '').toLowerCase().replace(/[^a-z0-9-]+/g, '-');
-  const { body, data, blocks, notes } = render(plan, { id, repo, source: repo && rel ? `https://github.com/${repo}/blob/main/${rel}` : '',
+  const { body, data, blocks, notes, drop } = render(plan, { id, repo, source: repo && rel ? `https://github.com/${repo}/blob/main/${rel}` : '',
     // Chi tiết thử chỉ có khi truyền --trial: mặc định không có (thien 2026-11-19, KH8: trang nào cũng một chi tiết thử
     // thì thành khung lặp, mấy kế hoạch gần đây không bấm tới).
     trial });
@@ -193,7 +198,7 @@ export function build(mdPath, out, { repo = '', url = '', trial = '', today = ''
     .replace('/*KIT_JS*/', () => readFileSync(join(here, '../kit/kit.js'), 'utf8'))
     .replace('/*PLAN_JS*/', () => readFileSync(join(here, 'plan.js'), 'utf8'))
     .replace('<!--BODY-->', () => body)
-    .replace('__PLAN__', () => JSON.stringify(data).replace(/</g, '\\u003c')));
+    .replace('__PLAN__', () => JSON.stringify(data).replace(/</g, '\\u003c')), { drop });
   mkdirSync(out, { recursive: true });
   writeFileSync(join(out, 'index.html'), html);
   writeFileSync(join(out, 'preview.html'), `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>\n${html}\n</body></html>\n`);

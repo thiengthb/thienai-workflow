@@ -88,6 +88,10 @@ assert.equal(inline('`**not bold**`'), '<code>**not bold**</code>');
   assert.doesNotMatch(b, /id="flow-dg"|Diagram\.mount|dagre|href="#n-/);
   assert.match(b, /class="beat"/);
   assert.match(b, /Nhận từ <b>DELEGATION\.md<\/b>/);
+  // Page text naming a dropped block's mark does not keep it (PR #158 review).
+  writeFileSync(join(dir, 'named.json'), JSON.stringify({ ...j, title: 'Luồng flow-dg và Diagram', blocks: ['ke-lai'], blocksWhy: 'thử' }));
+  build(join(dir, 'named.json'), join(dir, 'named'));
+  assert.doesNotMatch(readFileSync(join(dir, 'named/index.html'), 'utf8'), /dagre|Diagram\.mount/);
   const bad = readFlow({ ...j, blocks: ['so-do', 'bang-x'] });
   assert.ok(bad.issues.some((i) => /khối "bang-x" không có/.test(i.msg)));
   assert.ok(bad.issues.some((i) => i.at === 'blocksWhy'));

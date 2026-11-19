@@ -17,6 +17,7 @@
   /* @block so-do flow-chart */
   chart = (() => {
     const host = $('flow-dg'), band = $('band'), cap = $('cap');
+    if (!host || !F.spec) return chart;   // trang không có khối sơ đồ
     const idx = new Map(F.spec.steps.map((id, i) => [id, i]));
     let D = null;
     // Điện thoại và máy tính bảng: luôn ngang, dải sơ đồ tự cuộn ngang theo khối đang đọc (không chiếm nửa màn).
@@ -88,6 +89,7 @@
 
   /* @block ke-lai */
   (() => {
+    if (!$('tell')) return;   // trang không có ô kể lại
     const store = Kit.store('flow:' + F.id, 'flows/' + F.id);
     const S = { tell: '', trial: '' };
     const tell = $('tell');

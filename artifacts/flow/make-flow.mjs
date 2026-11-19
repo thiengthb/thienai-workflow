@@ -179,7 +179,8 @@ ${blocks.filter((b) => b !== 'so-do').map((b) => ({ 'ngoai-luong': asideHtml, 'k
 <footer>${source ? `Sinh từ <a href="${esc(source)}">${esc(source.replace(/^https:\/\/github\.com\//, ''))}</a>` : ''}${srcLinks ? `${source ? ' · ' : ''}Theo ${srcLinks}` : ''}</footer>
 </main>`;
   const data = { id, title: flow.title, trial: on('ke-lai') ? trial : '', ...(on('so-do') ? { spec, labels: flow.steps.map((s) => node.get(s.id).label) } : {}) };
-  return { body, data, blocks, notes };
+  // Khối đã bỏ: báo cho pack.mjs, để chữ trong trang có tên hay dấu của khối không giữ lại CSS, JS của nó.
+  return { body, data, blocks, notes, drop: FLOW_BLOCKS.filter((b) => !on(b)) };
 }
 
 export function build(jsonPath, out, { repo = '', url = '', trial = '' } = {}) {
@@ -188,7 +189,7 @@ export function build(jsonPath, out, { repo = '', url = '', trial = '' } = {}) {
   if (fatal.length) { const e = new Error(fatal.map((i) => `${jsonPath}: ${i.at ? i.at + ': ' : ''}${i.msg}`).join('\n')); e.issues = issues; throw e; }
   const rel = repoPath(jsonPath);
   const id = basename(jsonPath).replace(/\.json$/i, '').toLowerCase().replace(/[^a-z0-9-]+/g, '-');
-  const { body, data, blocks, notes } = render(flow, { id, repo, source: repo && rel ? `https://github.com/${repo}/blob/main/${rel}` : '',
+  const { body, data, blocks, notes, drop } = render(flow, { id, repo, source: repo && rel ? `https://github.com/${repo}/blob/main/${rel}` : '',
     trial });   // chi tiết thử chỉ khi truyền --trial (KH8, 2026-11-19)
   issues.push(...notes);
   const html = packHtml(lf(readFileSync(join(here, 'template.html'), 'utf8'))
@@ -199,7 +200,7 @@ export function build(jsonPath, out, { repo = '', url = '', trial = '' } = {}) {
     .replace('/*DIAGRAM_JS*/', () => lf(readFileSync(join(here, '../kit/diagram.js'), 'utf8')))
     .replace('/*FLOW_JS*/', () => lf(readFileSync(join(here, 'flow.js'), 'utf8')))
     .replace('<!--BODY-->', () => body)
-    .replace('__FLOW__', () => JSON.stringify(data).replace(/</g, '\\u003c')));
+    .replace('__FLOW__', () => JSON.stringify(data).replace(/</g, '\\u003c')), { drop });
   mkdirSync(out, { recursive: true });
   writeFileSync(join(out, 'index.html'), html);
   writeFileSync(join(out, 'preview.html'), `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>\n${html}\n</body></html>\n`);

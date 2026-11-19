@@ -160,6 +160,7 @@
 
   /* @block cau-hoi */
   (() => {
+    if (!$('cau-hoi')) return;   // trang không có khối câu hỏi
     // ---------- Câu hỏi, chi tiết thử, ghi chú ----------
     const store = Kit.store('plan:' + P.id, 'plans/' + P.id);
     // Bộ câu hỏi đổi (kế hoạch thêm câu mới) thì bản lưu cũ là câu trả lời cho bộ khác: không nạp lựa chọn và ghi chú cũ.

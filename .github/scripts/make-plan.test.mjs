@@ -136,6 +136,12 @@ for (const f of readdirSync(join(root, 'docs/plans')).filter((f) => f.endsWith('
   assert.ok(bad.issues.some((i) => /khối "bang-x" không có/.test(i.msg)));
   assert.ok(bad.issues.some((i) => /thiếu " · Vì:/.test(i.msg)));
   assert.equal(parsePlanFile(md.replace('Khối: cau-hoi, tuyen', 'Khối: bang-x')).plan.blocks, null);
+  // A dropped block stays dropped when the page text names it; no link to a stop when the line is gone (PR #158 review).
+  writeFileSync(join(dir, 'named.md'), md.replace('# Kế hoạch mẫu để kiểm trang', '# Kế hoạch về cau-hoi và tuyen').replace('Khối: cau-hoi, tuyen', 'Khối: dang-o, nhat-ky'));
+  const named = build(join(dir, 'named.md'), join(dir, 'named'), { today: '2026-11-21' });
+  const nh = readFileSync(join(dir, 'named/index.html'), 'utf8');
+  assert.ok(named.dropped.includes('cau-hoi') && named.dropped.includes('tuyen'));
+  assert.doesNotMatch(nh, /addEventListener\('input'|class="jump"/, 'no question code, no jump link to a missing stop');
   // A listed block with no content is skipped with a note.
   const noOpts = md.replace(/## Các phương án đã xét[\s\S]*?(?=## Checkpoint)/, '').replace('Khối: cau-hoi, tuyen', 'Khối: phuong-an, tuyen');
   writeFileSync(join(dir, 'no-opts.md'), noOpts);

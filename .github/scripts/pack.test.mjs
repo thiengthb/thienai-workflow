@@ -67,6 +67,25 @@ assert.equal(packHtml('<script type="application/json">{"a": "// x"}\n// y</scri
   assert.match(packHtml(page, { blocks: false }), /\.bar\{\}/, 'blocks: false keeps everything (component gallery)');
 }
 
+// Review of PR #158: only real comments are ignored ("/*" inside a JS string is not one), HTML comments are ignored,
+// markers outside <style>/<script> are page text and stay, ":empty" is not the class "empty", and blocks the builder
+// dropped stay dropped even when page text names them.
+{
+  const css = '<style>/* @block callout */.callout{}/* @end callout */ /* @block empty empty empty-ic */.empty{}/* @end empty */ p:empty{}'
+    + '/* @block q cau-hoi */.qs{}/* @end q */</style>';
+  const strings = trimBlocks(css + '<script>a = "/*"; el.className = "callout"; b = "*/";</script>');
+  assert.match(strings, /\.callout\{\}/, 'a class between the strings "/*" and "*/" still counts');
+  assert.doesNotMatch(trimBlocks(css + '<!-- class="callout" --><p>x</p>'), /\.callout\{\}/, 'HTML comments do not count');
+  assert.doesNotMatch(trimBlocks(css + '<p>x</p>'), /\.empty\{\}/, ':empty is not a use of .empty');
+  assert.match(trimBlocks(css + '<div class="empty">x</div>'), /\.empty\{\}/, '.empty without .empty-ic keeps the block');
+  const text = '<pre>/* @block example unused */ code /* @end example */</pre>';
+  assert.equal(trimBlocks(css + text).endsWith(text), true, 'markers in page text are left alone');
+  const named = css + '<h1>Trả lời ở cau-hoi</h1>';
+  assert.match(trimBlocks(named), /\.qs\{\}/);
+  assert.doesNotMatch(trimBlocks(named, { drop: ['q'] }), /\.qs\{\}/, 'drop wins over page text');
+  assert.doesNotMatch(packHtml(named, { drop: ['q'] }), /\.qs\{\}/, 'packHtml passes drop on');
+}
+
 // The real kit: a page with none of the optional blocks loses their CSS; a page that uses one keeps it.
 {
   const kitCss = readFileSync(new URL('../../artifacts/kit/kit.css', import.meta.url), 'utf8');
