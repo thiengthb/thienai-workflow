@@ -25,5 +25,8 @@ Trước khi thien chọn D, AI đề xuất chia ba mức (không review giao d
 ## Kết luận
 Không review PR bằng Claude trong lúc làm. Đã gỡ `profile/REVIEW.md`, `check-review.mjs`, `review-check.yml`, `claude.yml` khỏi PR #66 và sakubun#316 trước khi merge. Bản đã dựng còn trong lịch sử git của hai PR đó (thienai-workflow commit 299bdaa, sakubun d26efac) nếu sau này cần lấy lại.
 
+## Review theo giai đoạn (thien chọn 2026-11-19, KH8 câu 3)
+Từ sau 2026-11-24 (CodeRabbit hết dùng thử), mỗi mốc trong `docs/STATUS.md` có một lượt review bằng một phiên Claude riêng, không phải phiên đã viết code. Lượt đó chỉ soi các PR đã merge từ mốc trước mà đụng: lệnh xoá hay ghi đè file, lệnh git, token hay secret, đồng bộ sang repo khác. PR chỉ sửa chữ, giao diện hay bài học thì bỏ qua. Lỗi tìm được thành PR sửa riêng.
+
 ## Tóm tắt bằng lời của thien
 <thien tự viết, hoặc "bỏ qua">

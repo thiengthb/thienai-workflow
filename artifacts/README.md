@@ -11,7 +11,11 @@ Các trang artifact thien đã dùng và khen. Ở project nào, tài khoản n�
 | [`it/`](it/README.md) | Bài frontend và BA: mẫu buổi học có thêm sân khấu. Frontend có bàn thử (màn app, núm vặn, soi, dòng CSS sáng lên), BA có bảng dán (xếp thẻ người vào ô, nghe họ nói, xếp luồng) | thien chọn kiểu "bàn thử và bảng dán" ở vòng `it-lesson-stage-r1` (2026-11-14) |
 | [`war/`](war/README.md) | Bài chiến tranh: mẫu buổi học có thêm sa bàn 3D từ độ cao thật, thanh thời gian chuyện thật và mô phỏng | thien chọn kiểu địa hình 3D ở vòng `war-kit-sandtable-r1` (2026-11-13) |
 | [`review/`](review/README.md) | Ôn thẻ đến hạn trong `learning/cards.md` lúc nào cũng được: gõ hay nói điều mình nhớ, xem đáp án, Claude chấm, tự chấm Nhớ/Quên | Mới, thêm 2026-11-14 (đợt 2 của tài liệu đề xuất) |
+| [`plan/`](plan/README.md) | Kế hoạch cần thien duyệt hay theo dõi: tuyến checkpoint, phương án, câu hỏi trả lời bằng nút | thien chọn bản "Một nấc" ở vòng gu 1 (2026-11-18, KH6) |
+| [`flow/`](flow/README.md) | Kể một luồng (quy trình, kiến trúc, nghiệp vụ) bằng sơ đồ dính và chữ từng bước, có ô tự kể lại | Dựng 2026-11-19 (KH6); đã dùng cho buổi học, luồng BA, kiến trúc sakubun |
 | [`lesson/`](lesson/README.md) | Một buổi học khoảng 15 phút theo khung 7 bước; xong buổi tự lưu và gửi kết quả cho Claude | Kiểu trang học "rất thích" từ buổi frontend 1 (2026-11-07): đủ dài, độ khó vừa, làm trọn trên điện thoại. Chuyển lên lõi chung 2026-11-14 |
+
+Danh sách đủ 8 mẫu (2026-11-19): mẫu sau phải thay một mẫu cũ, không thêm thứ chín. Cần thứ mới thì lắp từ thành phần có sẵn của lõi chung trước (KH8; cách lắp ghép đang làm ở kế hoạch sau đó).
 
 ## Dùng nhanh
 

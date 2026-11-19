@@ -41,6 +41,7 @@ Nick đổi kiểu (Anthropic chuyển lên beta, hay thien vào danh sách ch�
 - PR: dòng `Nick: tntXXX` trong mô tả.
 - Sổ bàn giao: dòng `Ghi bởi: Claude tntXXX, <link thread>`. `handoff.mjs list` in nick của từng việc.
 - Link trang: luôn kèm "(mở ở nick tntXXX)", vì trang chỉ mở được ở nick tạo ra nó.
+- Lịch nhắc việc dở thứ Hai, thứ Năm 18:47 (`trig_01TtaWWBuGbCC6JscBSV7xL8`, mỗi lần chạy một thread mới, tạo 2026-11-19 thay lịch cũ `trig_01QirWvTiZFgoeBm5Ah3LCdt` đã tắt) nằm ở nick tnt628; lịch nhắc chuyển repo về private ngày 01/12 là `trig_011nfKi6X5kZe3HTRTZkYmHh` ở nick tnt697. Sửa hay tắt lịch thì làm ở đúng nick đó.
 - Memory và chat của project nằm ở nick đã làm. Chỉ để ở đó chuyện ngắn hạn; điều gì cần nhớ lâu phải ghi vào repo, vì nick khác không đọc được memory.
 
 ## Nhiều nick làm cùng một repo
