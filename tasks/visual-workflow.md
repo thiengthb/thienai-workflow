@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 3, mẫu luồng chạy
 
-Repo: thiengthb/thienai-workflow · Nhánh: chưa có (nhánh flow-ba đã merge, proxy chặn xoá nhánh) · PR: #142 đã merge (19/11 10:27, thien nhắn "merge giúp mình"); #135–#140 đã merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX67M6JBCiq3SbaoEV · Cập nhật: 2026-11-19T03:51Z
+Repo: thiengthb/thienai-workflow · Nhánh: lesson-polish · PR: #144 (chờ thien merge); #142, #143 đã merge
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX67M6JBCiq3SbaoEV · Cập nhật: 2026-11-19T04:15Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -45,13 +45,16 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX67M6JBCiq3SbaoE
 - 19/11 10:05 (phiên mới, cùng link chat, "tiếp tục"): luồng thứ hai `docs/flows/ba-request-to-story.json` "Từ một lời nhờ tới việc giao được" (gom BA 1–5 theo chuyện Hà, ngăn "để sau" cho cách làm; không vẽ một tối Hà học để khỏi lộ bài BA 6). Trang đăng: https://claude.ai/artifact/QBi7zKgMnEWsAKj6ygBnHw (nick tnt697, comments + db), check-pages 0 lỗi. Kế hoạch ghi tiến độ, chưa tick việc 2 của ga 3 (còn kiến trúc sakubun). STATUS sửa dòng PR #139 thành "đã merge". PR #142.
 - 10:24 thien kể lại luồng BA từ trang: đủ 8 bước đúng thứ tự nhưng chép tên khối, thiếu hai vòng lặp và ngăn "để sau" (đã nhận xét trong chat, thread comment báo not found); chi tiết thử "Thích" lần hai. Đã ghi vào kế hoạch và hàng chờ gu. 10:27 thien nhắn merge: PR #142 squash 09b6a2b. CI GitHub không chạy (lỗi billing của tài khoản), đã chạy đủ lệnh test của CI trên máy: 0 lỗi.
 
+- 19/11 10:53 thien chọn làm checkpoint 4 trước buổi học. Nhánh lesson-polish, PR #144: đồng hồ nhìn N giây giữ khi tải lại (it-stage.js, test trong autosave.test.mjs), màn kết có hình (lesson.js endCard, end-card.test.mjs), vòng 4 bảng dán (round-4/: build.mjs, variants.css, shoot.mjs, decision.json). Trang chọn https://claude.ai/artifact/VaxABzqfhzqqF98sgFye2L, trang bấm thử https://claude.ai/artifact/4oPPXDxqm7jSgtAiYmn3yy (nick tnt697). Đề xuất ẩn: B · Tuyến ga. Kế hoạch 14/24.
+
 ## Bước tiếp theo
+0. Khi thien chọn ở vòng 4: đọc `decisions/visual-workflow-board-r4` (db_list trang chọn) và comment, chép lựa chọn và vì sao vào kế hoạch và `learning/frontend/taste-queue.md`; chuyển bản được chọn vào `artifacts/it/it.css` và `it-stage.js` (B: lớp `.zones.flow.line`, `.filled` trong layout(); C: `.zones.lanes`, đáp án theo làn), sửa `template-ba.html`, tick việc 1 của checkpoint 4. Còn lại của checkpoint 4: hai màn cạnh nhau để so trước và sau trên bàn thử; nút Nghe và Nói ở mục "Thêm" (quyết ở 13/12).
 1. Repo đang public tạm (thien mở 19/11 10:46) để CI không bị trừ phút; 01/12 chuyển lại private, lịch nhắc trig_011nfKi6X5kZe3HTRTZkYmHh, dòng nhắc trong STATUS (PR #143 đã tự merge). Tới lúc đó không ghi thông tin riêng mới vào repo.
 2. Luồng kiến trúc sakubun (để ở `docs/flows/` của repo sakubun, dựng bằng `--repo thiengthb/sakubun`) để tick việc 2 của ga 3; việc 3 (8/8 mẫu) tick cùng lúc. Nên làm ở phiên có gắn repo sakubun.
 3. Khi một nick giữ trang tổng quan (SZGp85…) mở phiên: `node templates/publish-progress.mjs overview` rồi đăng đè, tick việc 4 của checkpoint 2
 
 ## Đang chờ thien
-Không.
+Chọn bảng dán ở vòng 4; merge PR #144.
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
