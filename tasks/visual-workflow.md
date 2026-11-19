@@ -1,7 +1,7 @@
 # KH9 kit lắp ghép: ga 3 tiếp việc 3 (đưa ba bản B vào make-plan)
 
 Repo: thiengthb/thienai-workflow · Nhánh: chưa có (việc 3 tạo nhánh mới từ main) · PR: #160, #161, #162 đã merge 20/11
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZUoAG29Ms2veKqNkH · Cập nhật: 2026-11-19T17:28Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKf9sjziwakTXcoio · Cập nhật: 2026-11-19T17:30Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
