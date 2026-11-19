@@ -1,4 +1,4 @@
-# Dùng project bản beta tốn ít usage hơn: thread, lịch nhắc, theo dõi PR
+# KH7 · Dùng project bản beta tốn ít usage hơn: thread, lịch nhắc, theo dõi PR
 
 Trạng thái: đang chạy · Duyệt: 2026-11-19 · Trang: https://claude.ai/artifact/S9H1zuVfHSZhSs5DfdURjZ (nick tnt628) · Viết: 2026-11-19 · Cập nhật: 2026-11-19 · nick tnt628 · Thread: [Tối ưu token khi làm kế hoạch dài trong thread](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRHS9xoyPanZaP9rntnrf9nJ)
 

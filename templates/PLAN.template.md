@@ -1,4 +1,4 @@
-# <Tên kế hoạch bằng tiếng Việt>
+# KH<số> · <Tên kế hoạch bằng tiếng Việt>
 
 Trạng thái: đang chạy · Duyệt: <ngày> · Cập nhật: <ngày> · Thread: <link>
 

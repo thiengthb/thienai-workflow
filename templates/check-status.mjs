@@ -72,8 +72,12 @@ export const PLAN_SECTIONS = ['Đang ở đâu', 'Mục tiêu', 'Không làm', '
 
 /** Returns problems for one plan file; plans written before the template (no "## Checkpoint") are skipped. */
 export function checkPlan(text) {
-  if (!/^## Checkpoint/m.test(text)) return [];
-  const problems = [];
+  // A plan not done or dropped needs a code, even one written before the template (no "## Checkpoint").
+  const unfinished = /^Trạng thái:\s*(đang chạy|chờ duyệt|tạm dừng)(?=[\s.,;·]|$)/m.test(text);
+  const noCode = unfinished && planCode(text) == null
+    ? ['tiêu đề chưa có mã kế hoạch: "# KH<số> · <tên>", số kế tiếp sau mã lớn nhất trong docs/plans/ (luật ở profile/PLANNING.md).'] : [];
+  if (!/^## Checkpoint/m.test(text)) return noCode;
+  const problems = [...noCode];
   if (!/^Trạng thái:\s*(đang chạy|chờ duyệt|tạm dừng|xong|bỏ)(?=[\s.,;·]|$)/m.test(text)) {
     problems.push('thiếu dòng "Trạng thái: đang chạy | chờ duyệt | tạm dừng | xong | bỏ" ở đầu file.');
   }
@@ -81,6 +85,26 @@ export function checkPlan(text) {
     if (!new RegExp(`^## ${name}`, 'm').test(text)) problems.push(`thiếu mục "## ${name}".`);
   }
   if (!/^### /m.test(text)) problems.push('mục Checkpoint chưa có checkpoint nào ("### 1. ...").');
+  return problems;
+}
+
+/** Plan code from the title line "# KH6 · ...": the number, or null. thien calls plans by this code (profile/PLANNING.md). */
+export function planCode(text) {
+  // Only the title (first "# " line): a "# KH7 · ..." inside a code block further down is not this plan's code.
+  const title = /^# .*$/m.exec(text);
+  const m = title && /^# KH(\d+) · /.exec(title[0]);
+  return m ? Number(m[1]) : null;
+}
+
+/** Problems for codes shared by two plan files ([[name, text]]). Codes are never reused, even after a plan is done. */
+export function duplicateCodes(files) {
+  const seen = new Map(), problems = [];
+  for (const [name, text] of files) {
+    const c = planCode(text);
+    if (c == null) continue;
+    if (seen.has(c)) problems.push(`mã KH${c} trùng ở ${seen.get(c)} và ${name}: mỗi kế hoạch một mã riêng, không dùng lại.`);
+    else seen.set(c, name);
+  }
   return problems;
 }
 
@@ -118,9 +142,9 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   for (const n of notes) console.log(process.env.GITHUB_ACTIONS ? `::warning::${n}` : `nhắc: ${n}`);
   const plansDir = join(dirname(file), 'plans');
   if (existsSync(plansDir)) {
-    for (const f of readdirSync(plansDir).filter((n) => n.endsWith('.md'))) {
-      for (const p of checkPlan(lf(readFileSync(join(plansDir, f), 'utf8')))) problems.push(`${join(plansDir, f)}: ${p}`);
-    }
+    const planFiles = readdirSync(plansDir).filter((n) => n.endsWith('.md')).map((f) => [join(plansDir, f), lf(readFileSync(join(plansDir, f), 'utf8'))]);
+    for (const [f, t] of planFiles) for (const p of checkPlan(t)) problems.push(`${f}: ${p}`);
+    problems.push(...duplicateCodes(planFiles));
   }
   for (const p of problems) console.error(p);
   if (problems.length) process.exit(1);

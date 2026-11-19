@@ -1,4 +1,4 @@
-# Sửa theo review của Codex ngày 17/11
+# KH5 · Sửa theo review của Codex ngày 17/11
 
 Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien bấm "Duyệt, bỏ Bảng học tuần" trên thẻ hỏi) · Cập nhật: 2026-11-18 · nick tnt628 · Thread: [Phản biện review Codex và lên kế hoạch](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRQpMiaEPExtTy4gXkaYnx4n)
 

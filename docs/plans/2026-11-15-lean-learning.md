@@ -1,4 +1,4 @@
-# Học càng nhiều, repo không nặng thêm
+# KH1 · Học càng nhiều, repo không nặng thêm
 
 Trạng thái: đang chạy · Duyệt: 2026-11-15 · Cập nhật: 2026-11-17 · nick tnt697 (ghi trạng thái 2026-11-17: nick tnt628) · Đầu vào: review lần 3 của Codex (bd5c611), số đo trên main bd5c611 và PR #76
 

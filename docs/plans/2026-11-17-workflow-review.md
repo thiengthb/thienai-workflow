@@ -1,4 +1,4 @@
-# Sửa quy trình sau review 2026-11-17
+# KH4 · Sửa quy trình sau review 2026-11-17
 
 Trạng thái: đang chạy · Duyệt: 2026-11-17 (thien: "ok mình duyệt và bạn hãy bắt đầu làm", đợt 0, 1, 2 và 5 câu hỏi theo đề xuất) · Cập nhật: 2026-11-17 · Thread: [Review sâu và tối ưu thienai-workflow](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRL6Rmzan9FkewxyJuLWWw6Z) · nick tnt628 · Đầu vào: [bản review và kế hoạch gộp](https://claude.ai/artifact/Wi411et6UDhnH1Eo147PM4) (gộp cả review của Codex cùng ngày, cùng commit 08334ae)
 
