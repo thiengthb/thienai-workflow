@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 3, mẫu luồng chạy
 
 Repo: thiengthb/thienai-workflow · Nhánh: chưa có (lesson-polish, peek-per-tab đã merge; proxy chặn xoá nhánh) · PR: #144, #145 đã merge (19/11 11:21–11:35, thien nhắn "merge giúp mình luôn", bấm "Merge luôn")
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX67M6JBCiq3SbaoEV · Cập nhật: 2026-11-19T04:37Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Cập nhật: 2026-11-19T12:14Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
