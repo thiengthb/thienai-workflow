@@ -1,6 +1,6 @@
 # Chuẩn setup cho mọi nick và project Claude
 
-Phiên bản chuẩn: **5**
+Phiên bản chuẩn: **6**
 
 thien dùng 3 nick Claude (tên ngắn và việc của từng nick ở [`ACCOUNTS.md`](ACCOUNTS.md)), nick nào cũng có các project giống nhau (project "Claude" gắn repo thienai-workflow, project "sakubun" gắn repo sakubun), cộng vài project riêng. Setting của nick và của project không tự đồng bộ giữa các nick: mỗi nick, mỗi project phải được cài tay. File này là chuẩn chung, và AI tự kiểm theo nó ở đầu mỗi phiên, nên đổi chuẩn ở đây một lần là mọi nick tự nhắc thien cập nhật ở lần mở tiếp theo.
 
@@ -55,10 +55,11 @@ Project instructions: xoá bản cũ rồi dán đúng đoạn của kiểu proj
 Bản beta, dán ở Project settings > Memory > Project instructions:
 
 ```text
-chuẩn setup v5 beta · project: <tên project> · nick: <tên nick>
+chuẩn setup v6 beta · project: <tên project> · nick: <tên nick>
 Mình là thien. Repo là nguồn sự thật duy nhất. Mình có 3 nick Claude dùng chung các repo, nhưng không dùng chung project, thread hay memory, nên chuyện gì quan trọng đều phải ghi vào repo.
 Thread mới: repo của project đã được clone sẵn và AGENTS.md đã tự nạp, nên không clone lại, không tìm project_info. Lượt đầu, trong thư mục repo thienai-workflow, chạy node templates/start-session.mjs --beta --project (tên ở dòng đầu) --instructions "(cả đoạn này)" --repos (các repo của project) --skills (skill@số bản). Lệnh in kết quả kiểm setup, sổ bàn giao, STATUS và nhánh chưa merge. Thiếu setup thì nhắc mình làm trước, kèm đoạn cần dán và chỗ bấm.
 Việc dở: chat điều phối nhắc trước khi mở thread, theo mục "Nhắc việc dở" trong profile/PROFILE.md; thread không hỏi lại.
+Tin của mình gửi tới một thread đã nghỉ hơn 1 giờ và đã xong ít nhất một checkpoint hay một PR: chat điều phối mở thread mới đọc kế hoạch và sổ bàn giao, không gửi vào thread cũ (luật ở mục "Project bản beta" của profile/CHATS.md).
 Khi mình nói "tiếp tục": thêm --claim "Claude (nick ở dòng đầu), (link thread)" vào lệnh trên, rồi làm tiếp theo profile/HANDOFF.md.
 Mọi commit, PR, sổ bàn giao và link trang đều ghi tên nick ở dòng đầu, theo profile/ACCOUNTS.md.
 Trả lời bằng tiếng Việt tự nhiên.
@@ -67,7 +68,7 @@ Trả lời bằng tiếng Việt tự nhiên.
 Bản cũ, dán ở Project settings > Instructions:
 
 ```text
-chuẩn setup v5 · project: <tên project> · nick: <tên nick>
+chuẩn setup v6 · project: <tên project> · nick: <tên nick>
 Mình là thien. Repo là nguồn sự thật duy nhất. Mình có 3 nick Claude dùng chung các repo, nhưng không dùng chung chat, thread hay memory, nên chuyện gì quan trọng đều phải ghi vào repo.
 Đầu mỗi phiên, khởi động trong 3 lượt, không đọc file repo qua công cụ Project (file đồng bộ từ GitHub không đọc theo tên được). Lượt 1: gọi project_info và gắn repo thiengthb/thienai-workflow cùng lúc. Lượt 2: một lệnh Bash clone repo đó (--depth 1) rồi chạy node templates/start-session.mjs --project (tên ở dòng đầu) --instructions "(cả đoạn này)" --repos (các repo đang gắn) --skills (skill@số bản) --sync "(bộ lọc đồng bộ của project_info)". Lượt 3: làm việc.
 Gắn repo bị chặn thì không thử cách khác và không kết thúc lượt: hỏi mình ngay bằng câu hỏi có nút bấm (AskUserQuestion) "Cho gắn repo thienai-workflow quyền ghi?", mình bấm cho phép thì gắn lại rồi đi tiếp.
@@ -107,6 +108,7 @@ Repo khác (sakubun) cũng vậy: tích tài liệu và luật, bỏ ảnh, buil
 - Không cần nhớ đã sửa ở nick nào: ở mỗi nick, phiên đầu tiên sau khi merge sẽ thấy project instructions còn số cũ và nhắc thien dán bản mới.
 
 ## Lịch sử
+- v6 (2026-11-19): bản beta thêm một dòng: tin tới thread đã nghỉ hơn 1 giờ và đã xong một checkpoint hay PR thì chat điều phối mở thread mới, vì đánh thức thread lớn tốn bằng 55 tới 75 lần gọi bình thường. Bản cũ chỉ đổi số. Kế hoạch `docs/plans/2026-11-19-thread-usage.md`.
 - v5 (2026-11-17): bản cũ thêm một dòng: gắn repo bị chặn thì hỏi thien ngay bằng câu hỏi có nút bấm, chờ cho phép rồi gắn lại, không dừng để báo lỗi. Bản beta chỉ đổi số (không gắn repo lúc khởi động). Lỗi gặp ở `docs/plans/2026-11-15-claude-usage.md`.
 - v4 (2026-11-17): thêm đoạn riêng cho project bản beta (không `project_info`, không clone, `start-session --beta` không in lại AGENTS.md); bản cũ đổi số, nội dung giữ nguyên. Gắn repo ở bản cũ qua ô Project knowledge (lấy lại từ PR #74 đã đóng), thêm danh sách tích cho sakubun. Kế hoạch `docs/plans/2026-11-17-workflow-review.md`.
 - v3 (2026-11-15): khởi động 3 lượt bằng `templates/start-session.mjs` (kiểm setup, AGENTS.md, sổ bàn giao, STATUS, nhánh chưa merge trong một lệnh; `--claim` khi "tiếp tục"); không đọc file repo qua công cụ Project.

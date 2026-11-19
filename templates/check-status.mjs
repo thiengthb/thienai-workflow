@@ -74,8 +74,8 @@ export const PLAN_SECTIONS = ['Đang ở đâu', 'Mục tiêu', 'Không làm', '
 export function checkPlan(text) {
   if (!/^## Checkpoint/m.test(text)) return [];
   const problems = [];
-  if (!/^Trạng thái:\s*(đang chạy|tạm dừng|xong|bỏ)(?=[\s.,;·]|$)/m.test(text)) {
-    problems.push('thiếu dòng "Trạng thái: đang chạy | tạm dừng | xong | bỏ" ở đầu file.');
+  if (!/^Trạng thái:\s*(đang chạy|chờ duyệt|tạm dừng|xong|bỏ)(?=[\s.,;·]|$)/m.test(text)) {
+    problems.push('thiếu dòng "Trạng thái: đang chạy | chờ duyệt | tạm dừng | xong | bỏ" ở đầu file.');
   }
   for (const name of PLAN_SECTIONS) {
     if (!new RegExp(`^## ${name}`, 'm').test(text)) problems.push(`thiếu mục "## ${name}".`);

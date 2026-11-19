@@ -39,14 +39,17 @@ Không ước số lượt bằng cảm giác. Tra số lượt của việc k�
 - Loại việc chưa có trong bảng: đo lần đầu rồi thêm một dòng.
 
 ## Project bản beta
-Nguồn: [tài liệu Claude Projects](https://code.claude.com/docs/en/claude-projects), mục "Choose models and let Claude manage context" và "Usage and cost" (đọc 2026-11-17). Đây là cách Claude đã làm sẵn, nên không thêm ngưỡng hay bước đo riêng.
-- Một thread một việc; việc mới thì chat điều phối mở thread mới. Không cần dòng "Mục tiêu chat này": tên thread đã nói việc.
-- Thread tự nén khi dài, không phải tự quản ngữ cảnh, nên không có ngưỡng 30 lượt.
-- Thread nghỉ quá khoảng 1 giờ (thời gian giữ cache của gói Pro, Max) mà nhận tin mới thì đọc lại cả cuộc trò chuyện trước khi làm. Việc mới thì mở thread mới, thường rẻ hơn hồi sinh một thread cũ lớn.
-- Thread đang theo dõi PR sẽ thức dậy và tốn usage mỗi khi có CI hay comment trên PR đó. PR đã xong thì bảo thread thôi theo dõi.
-- Xem usage ở Project settings > Usage: token theo từng thread, từng model, và phần của chat điều phối. Đây là chỗ đo cho đợt 3 ở bản beta, không cần `explain-usage` hay chụp màn.
-- Thread mặc định chạy Opus với effort cao, tốn usage nhanh nhất; đổi ở Project settings > General. Chọn model nào là việc của thien.
-- Buổi học: dựng trang và "sau buổi" trong cùng thread như bản cũ. [Chưa kiểm ở beta] kết quả bấm "Xong buổi học" có quay về đúng thread đã dựng trang không.
+Nguồn: [tài liệu Claude Projects](https://code.claude.com/docs/en/claude-projects), mục "Choose models and let Claude manage context" và "Usage and cost" (đọc 2026-11-17, đọc lại 2026-11-19), và số đo ở [`docs/plans/2026-11-19-thread-usage.md`](../docs/plans/2026-11-19-thread-usage.md).
+
+Căn cứ (bản ghi kết quả của 4 thread, nick tnt628): tổng token trên trang Usage gần như toàn là phần đọc lại từ cache (97 tới 99%), phần rẻ nhất. Khoản đắt nhất là đánh thức một thread lớn đã nghỉ quá 1 giờ (thời gian giữ cache của gói Pro, Max): cả ngữ cảnh phải ghi lại, một lần bằng khoảng 55 tới 75 lần gọi bình thường. Thread tự tóm tắt khi ngữ cảnh tới khoảng 400 tới 500 nghìn token, nên trong lúc làm liên tục thì chia nhỏ không lời bao nhiêu.
+
+- **Một thread cho một checkpoint.** Xong checkpoint thì thread sửa "Đang ở đâu" của file kế hoạch và sổ bàn giao rồi báo kết quả. thien trả lời trong vòng 1 giờ thì làm tiếp checkpoint sau ngay tại chỗ; quá 1 giờ thì checkpoint sau sang thread mới. Không cần dòng "Mục tiêu chat này": tên thread đã nói việc.
+- **Tin tới sau hơn 1 giờ thì sang thread mới.** Thread đích đã nghỉ hơn 1 giờ và đã xong ít nhất một checkpoint hay một PR: chat điều phối mở thread mới đọc kế hoạch và sổ bàn giao, không gửi vào thread cũ (dòng này nằm trong project instructions từ chuẩn setup v6). Tin trong vòng 1 giờ vẫn gửi thread cũ.
+- **Thôi theo dõi PR khi chỉ còn chờ merge.** Thread theo dõi PR thức dậy mỗi lần có comment, CI hay merge. CodeRabbit đã xong, CI xanh, PR chỉ còn chờ thien: thread ghi "chờ merge PR #…" vào kế hoạch rồi thôi theo dõi; việc dọn sau merge gộp vào PR kế tiếp.
+- **Lịch chạy định kỳ mở thread mới mỗi lần**, không gắn vào một thread cũ: lời nhắc phải đủ để chạy không cần lịch sử.
+- Buổi học: dựng trang và "sau buổi" trong cùng thread như bản cũ (lúc gửi trang thread còn khoảng 150 tới 200 nghìn token, đánh thức nó gần bằng mở thread mới). [Chưa kiểm ở beta] kết quả bấm "Xong buổi học" có quay về đúng thread đã dựng trang không.
+- Xem usage ở Project settings > Usage (token theo thread, theo model, phần của chat điều phối). Số token ở đó gồm cả phần đọc lại rẻ; muốn biết tiền thật của một thread thì đọc bản ghi kết quả của nó (`list_events`, sự kiện `result`: đọc lại, ghi cache, viết ra).
+- Thread mặc định chạy Opus với effort cao; đổi ở Project settings > General. Chọn model nào là việc của thien (2026-11-19 thien chọn chưa thử Sonnet).
 
 ## Xem lại luật này
 Sau 10 dòng mới trong `docs/usage-log.md` hoặc ngày 2026-12-01, mốc nào tới trước: so các chat theo luật này với số cũ, sửa bảng nếu số lượt đổi. Chỗ chưa chắc: con số 7 nghìn mỗi lượt mới tính từ một chat; Settings làm tròn tới 1%; mọi số đo ở một nick và một kiểu phiên (bản cũ). Mục "Project bản beta" xem lại khi tài liệu Claude Projects đổi.
