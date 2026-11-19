@@ -1,7 +1,7 @@
-# KH9 kit lắp ghép: ga 3 xong, chờ thien merge PR #163
+# KH9 kit lắp ghép: tiếp ga 4 (vòng gu ôn thẻ và trang học ở khổ hẹp)
 
-Repo: thiengthb/thienai-workflow · Nhánh: plan-layouts-default · PR: #163 (chờ thien merge); #160, #161, #162 đã merge 20/11
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKf9sjziwakTXcoio · Cập nhật: 2026-11-19T18:26Z
+Repo: thiengthb/thienai-workflow · Nhánh: chưa có (ga 4 tạo nhánh mới từ main) · PR: #163 đã merge 20/11 (squash e99afaa)
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKf9sjziwakTXcoio · Cập nhật: 2026-11-19T18:41Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -79,15 +79,15 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBWKf9sjziwakTXcoi
 
 - 20/11 01:16 thien gửi ảnh: "menu đè lên nội dung" là cột mục lục bên trái ở màn rộng (không phải bản đồ gọn như Claude hiểu lúc đầu). Bảng tiến độ rộng 960px mà mục lục đặt cho cột 760px, từ khoảng 1366px thì đè lên ô số. Sửa trên PR #163 (commit 35c6436): mục lục tính vị trí từ `--main-w` (lớp `wide`); test mới `.github/scripts/plan-layout.test.mjs` (job pages) đo ở 1160–1920px cho cả ba bố cục. Ghi ở "Lỗi gặp" KH9. Trang KH9 đăng đè.
 
+- 20/11 01:34 thien: "ok bạn merge giúp mình, và phần xem trang mẫu mình đã xem rồi". CodeRabbit 5 ý trên #163: sửa 4 (ghi chú ga trong thẻ kết quả, đếm ngày chỉ ga xong, ô "Bạn cần làm" chỉ gập khi là link, câu chờ duyệt có/không câu hỏi), ý mục lục đè đã sửa ở 35c6436; trả lời và resolve cả 5. Job Windows đỏ vì plan-layout.test.mjs cần Playwright: thêm vào danh sách bỏ qua ở windows.yml. CI xanh, #163 merge (squash e99afaa). Ga 1 KH9 đóng (thien đã xem trang mẫu thành phần), KH9 8/10, STATUS sửa trong cùng PR. Trang KH9 đăng đè.
+
 ## Bước tiếp theo
-1. Khi thien nhắn merge: xem góp ý CodeRabbit trên #163, sửa, trả lời và resolve thread, chờ CI xanh, merge (squash); rồi PR nhỏ sửa dòng KH9 trong STATUS và "Đang ở đâu" của kế hoạch thành "đã merge" (tự merge theo DELEGATION). Trang KH9 dựng lại: `node artifacts/plan/make-plan.mjs docs/plans/2026-11-19-modular-kit.md out --url https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5` (nick tnt697; nick khác thì đăng trang mới, ghi link vào dòng "Trang:").
-2. KH9 còn ga 4 (mốc, vòng gu hai tuần một lần: ôn thẻ và trang học ở màn rộng) và đóng ga 1 khi thien xem trang mẫu thành phần.
-3. Kế hoạch MCP cho nhóm SEP490 sau KH9; mở mục "Chuyển sang kế hoạch sau" của KH8 trước.
-4. Repo public tạm tới 01/12; không ghi thông tin riêng mới.
+1. KH9 ga 4 (mốc, vòng gu hai tuần một lần): vòng đầu là trang ôn thẻ và trang học. thien hay mở artifact ở nửa màn hình cạnh chat (khoảng 860px) hay 2/3 màn hình project beta (khoảng 950px), nên dựng và chụp ở hai khổ đó, rồi trang chọn có hình như vòng 5 (`docs/plans/2026-11-18-visual-workflow/round-5/` làm mẫu). Luật vòng gu hai tuần một lần vào `artifacts/README.md` ở mốc sau.
+2. Kế hoạch MCP cho nhóm SEP490 sau KH9; mở mục "Chuyển sang kế hoạch sau" của KH8 trước.
+3. Repo public tạm tới 01/12; không ghi thông tin riêng mới.
 
 ## Đang chờ thien
-- Merge PR #163 https://github.com/thiengthb/thienai-workflow/pull/163; xem trang KH9 mới https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (nick tnt697).
-- Xem hai mục mới ở trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mở ở nick tnt697).
+- Không có.
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
