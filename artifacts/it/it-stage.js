@@ -270,6 +270,7 @@
       const groups = new Map();
       visible().forEach((c) => { const z = where[c.dataset.c]; const box = (z && zones.find((x) => x.dataset.z === z)) || tray; if (!groups.has(box)) groups.set(box, []); groups.get(box).push(c); });
       if (tray) tray.classList.toggle('empty', !groups.has(tray));
+      zones.forEach((z) => z.classList.toggle('filled', groups.has(z)));   // ga có thẻ hiện tick (.zones.flow.line)
       let trayH = 0;
       groups.forEach((list, box) => {
         const B = box.getBoundingClientRect(), isTray = box === tray, top0 = isTray ? 22 : 26;
