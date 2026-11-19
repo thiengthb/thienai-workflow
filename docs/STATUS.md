@@ -17,7 +17,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | [Các hành động giữa thien và AI còn thiếu luật](plans/2026-11-17-action-gaps.md) | 1 đã merge (PR #104), kiểm ở 4 chat: 4 trên 6 PR đủ điều kiện được AI tự merge, quyết sửa gì ở 01/12; 2 xong; 3 ở mốc 01/12 | 11/16 |
 | [Sửa theo review Codex 17/11](plans/2026-11-18-codex-review.md) | 1 (hai lệnh không còn xoá hay ghi đè dữ liệu) và 2 (sửa chỗ ghi sai) đã merge (PR #121); 3 đã gộp vào mốc 01/12 | 11/12 |
 | [Quy trình nhìn được, gu lớn dần](plans/2026-11-18-visual-workflow.md) | 0, 1 xong; vòng gu 2 giấy trắng xanh petrol, vòng gu 3 mực hình xanh cam đã vào kit; 2: mẫu trang kế hoạch đã merge, thien đã trả lời câu hỏi bằng nút trên trang; còn đăng lại trang tổng quan từ nick đang giữ nó; tiếp theo 3: mẫu luồng chạy. Luật gom vào mốc 01/12 | 11/24 |
-| [Dùng project bản beta tốn ít usage hơn](plans/2026-11-19-thread-usage.md) | 1: luật thread mới và chuẩn setup v6 trong PR #139, chờ merge rồi dán lại ở các project beta; 2: lịch nhắc đã chuyển sang thread mới mỗi lần, chờ số lần chạy 19/11; 3 đo ở sakubun; 4 ở mốc 01/12 | 3/10 |
+| [Dùng project bản beta tốn ít usage hơn](plans/2026-11-19-thread-usage.md) | 1 xong (PR #139, chuẩn v6 đã dán ở mọi project); 2: lịch nhắc đã chuyển sang thread mới mỗi lần, chờ số lần chạy 19/11; 3 đo ở sakubun; 4 ở mốc 01/12 | 4/10 |
 | [Trang mở nhanh](plans/2026-11-17-quick-access.md) | 1, 2, 4 xong, thien đã dùng tab "Mở nhanh" trên điện thoại; 3: sơ đồ đã vào README (PR #118), còn xem trên điện thoại và xem lại ở mốc 01/12; lối tắt tuỳ thien | 9/11 |
 
 ## Việc dở
@@ -34,7 +34,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 3. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- Merge PR #139, rồi dán project instructions bản v6 (khối bản beta trong `profile/SETUP.md`) ở từng project beta.
+- Không có.
 
 ## Đang vướng
 - Không có. Trang tổng quan đọc sakubun bằng bản clone công khai.
