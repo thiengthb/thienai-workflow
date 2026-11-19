@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: ga 4 việc 1 xong (20/11): thien chọn ôn thẻ C · Hai nửa thẻ và trang học B · Tuyến bước ở vòng gu 6 (giống đề xuất); cả hai đã vào `artifacts/review/` và `artifacts/lesson/`, sân khấu và sa bàn đứng cạnh chữ từ 760px (PR #164).
+- Đang ở: ga 4 việc 1 xong (20/11): thien chọn ôn thẻ C · Hai nửa thẻ và trang học B · Tuyến bước ở vòng gu 6 (giống đề xuất); cả hai đã vào `artifacts/review/` và `artifacts/lesson/`, sân khấu và sa bàn đứng cạnh chữ từ 760px (PR #164 đã merge 20/11).
 - Còn thiếu: luật vòng gu hai tuần một lần vào `artifacts/README.md` (việc 2 của ga 4); vòng gu sau khoảng 04/12 (luồng hay so sánh).
-- thien cần làm: merge PR #164.
+- thien cần làm: chưa có.
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
