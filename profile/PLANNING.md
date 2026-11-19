@@ -24,8 +24,8 @@ thien gọi kế hoạch bằng mã, không nhắc tên dài: nhiều kế hoạ
 - Mỗi kế hoạch có một mã `KH<số>`, ghi ở đầu tiêu đề file (`# KH6 · Quy trình nhìn được…`) và đầu dòng trong bảng "Kế hoạch đang chạy" của `docs/STATUS.md` (bảng xếp theo mã). Trang tiến độ lấy tiêu đề nên tự hiện mã.
 - Số kế tiếp = mã lớn nhất trong `docs/plans/` cộng 1. Không dùng lại số, kể cả khi kế hoạch đã xong hay bỏ. Kế hoạch xong trước ngày 2026-11-19 không có mã. Mã chỉ áp ở repo này; repo khác có kế hoạch riêng thì đánh số riêng.
 - Gửi kế hoạch mới cho thien duyệt thì ghi sẵn mã; thien duyệt kế hoạch là duyệt luôn mã.
-- thien nhắn "KH6 tới đâu", "làm tiếp kh 6", "kế hoạch 6", hay gọi gần đúng tên: AI tra bảng trong STATUS. Chỉ nhắn "kế hoạch": gửi lại bảng mã, tên ngắn, số tick. Không chắc thien nói kế hoạch nào thì hỏi bằng nút bấm, không đoán.
-- `templates/check-status.mjs` chặn kế hoạch chưa xong mà thiếu mã, và hai file trùng mã.
+- thien nhắn "KH6 tới đâu", "làm tiếp kh 6", "kế hoạch 6", hay gọi gần đúng tên: AI tra bảng trong STATUS; mã không có trong bảng (kế hoạch đã xong hay bỏ) thì tìm tiêu đề `# KH<số> · ` trong `docs/plans/`. Chỉ nhắn "kế hoạch": gửi lại bảng mã, tên ngắn, số tick. Không chắc thien nói kế hoạch nào thì hỏi bằng nút bấm, không đoán.
+- `templates/check-status.mjs` chặn kế hoạch chưa xong (đang chạy, chờ duyệt, tạm dừng) mà tiêu đề thiếu mã, và hai file trùng mã.
 
 ## Sau khi thien duyệt
 

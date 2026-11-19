@@ -72,8 +72,12 @@ export const PLAN_SECTIONS = ['Đang ở đâu', 'Mục tiêu', 'Không làm', '
 
 /** Returns problems for one plan file; plans written before the template (no "## Checkpoint") are skipped. */
 export function checkPlan(text) {
-  if (!/^## Checkpoint/m.test(text)) return [];
-  const problems = [];
+  // A plan not done or dropped needs a code, even one written before the template (no "## Checkpoint").
+  const unfinished = /^Trạng thái:\s*(đang chạy|chờ duyệt|tạm dừng)(?=[\s.,;·]|$)/m.test(text);
+  const noCode = unfinished && planCode(text) == null
+    ? ['tiêu đề chưa có mã kế hoạch: "# KH<số> · <tên>", số kế tiếp sau mã lớn nhất trong docs/plans/ (luật ở profile/PLANNING.md).'] : [];
+  if (!/^## Checkpoint/m.test(text)) return noCode;
+  const problems = [...noCode];
   if (!/^Trạng thái:\s*(đang chạy|chờ duyệt|tạm dừng|xong|bỏ)(?=[\s.,;·]|$)/m.test(text)) {
     problems.push('thiếu dòng "Trạng thái: đang chạy | chờ duyệt | tạm dừng | xong | bỏ" ở đầu file.');
   }
@@ -81,15 +85,14 @@ export function checkPlan(text) {
     if (!new RegExp(`^## ${name}`, 'm').test(text)) problems.push(`thiếu mục "## ${name}".`);
   }
   if (!/^### /m.test(text)) problems.push('mục Checkpoint chưa có checkpoint nào ("### 1. ...").');
-  if (!/^Trạng thái:\s*(xong|bỏ)(?=[\s.,;·]|$)/m.test(text) && planCode(text) == null) {
-    problems.push('tiêu đề chưa có mã kế hoạch: "# KH<số> · <tên>", số kế tiếp sau mã lớn nhất trong docs/plans/ (luật ở profile/PLANNING.md).');
-  }
   return problems;
 }
 
 /** Plan code from the title line "# KH6 · ...": the number, or null. thien calls plans by this code (profile/PLANNING.md). */
 export function planCode(text) {
-  const m = /^# KH(\d+) · /m.exec(text);
+  // Only the title (first "# " line): a "# KH7 · ..." inside a code block further down is not this plan's code.
+  const title = /^# .*$/m.exec(text);
+  const m = title && /^# KH(\d+) · /.exec(title[0]);
   return m ? Number(m[1]) : null;
 }
 
