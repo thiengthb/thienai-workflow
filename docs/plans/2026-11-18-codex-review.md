@@ -1,13 +1,13 @@
 # KH5 · Sửa theo review của Codex ngày 17/11
 
-Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien bấm "Duyệt, bỏ Bảng học tuần" trên thẻ hỏi) · Cập nhật: 2026-11-18 · nick tnt628 · Thread: [Phản biện review Codex và lên kế hoạch](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRQpMiaEPExtTy4gXkaYnx4n)
+Trạng thái: xong (đóng sớm 2026-11-19, thien quyết ở KH8) · Duyệt: 2026-11-18 (thien bấm "Duyệt, bỏ Bảng học tuần" trên thẻ hỏi) · Cập nhật: 2026-11-18 · nick tnt628 · Thread: [Phản biện review Codex và lên kế hoạch](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRQpMiaEPExtTy4gXkaYnx4n)
 
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 và 2 xong, PR #121 đã merge ngày 2026-11-18 (thien bảo AI merge trong thread), trang lộ trình đã đăng lại. Checkpoint 3 đã nằm trong danh sách mốc 01/12 của kế hoạch `action-gaps`.
-- Còn thiếu: buổi xem lại 01/12 trả lời từng ý.
-- thien cần làm: không có.
+- Đang ở: đã đóng. Đóng 2026-11-19: buổi xem lại làm sớm ở KH8 trả lời từng ý (câu 1, 3, 6).
+- Còn thiếu: không; việc chưa làm ghi "đóng sớm" hay chỗ chuyển tới ngay ở dòng việc đó.
+- thien cần làm: không có (PR luật #153, PR mã #154 nằm ở KH8).
 
 ## Mục tiêu
 Sửa những chỗ review của Codex (commit `721a116`, 17/11) chỉ ra mà kiểm lại thấy đúng, ưu tiên hai lệnh có thể xoá hay ghi đè dữ liệu, mà không thêm luật mới hay script mới trước mốc 01/12.
@@ -70,7 +70,7 @@ Xong khi: thien mở kế hoạch `action-gaps`, `learning/roadmap.md`, `learnin
 ### 3. Gộp phần đo vào mốc 01/12 (không có việc riêng)
 Xong khi: danh sách việc ở mốc 01/12 (kế hoạch `action-gaps`, checkpoint 3) có các ý dưới, và buổi xem lại 01/12 trả lời được từng ý.
 - [x] Ghi vào danh sách mốc 01/12: quyết phần tự merge từ bảng "Kiểm đợt 1"; vùng soi trước khi review theo giai đoạn; dòng "CI không tự chặn merge" cho bảng ủy quyền; thử sổ bàn giao lần tới thien nói "tiếp tục" (PR #121, merge 2026-11-18)
-- [ ] Buổi xem lại 01/12 trả lời từng ý
+- [x] Buổi xem lại 01/12 trả lời từng ý (làm sớm 2026-11-19 ở KH8: tự merge câu 1, vùng soi câu 3, sổ bàn giao câu 6)
 
 Thời gian: đợt 1 và 2 làm trong thread này, một PR (#121) thien merge. Đợt 3 không tốn thêm phiên.
 
@@ -86,6 +86,7 @@ Chỗ dễ sa lầy: phần dừng của `publish-progress` làm phiền khi AI 
 | 2026-11-18 | Một PR (#121) thay cho hai: script và phần sửa chữ đi chung, thien merge cả | Phiên cloud chỉ đẩy được một nhánh của mình; PR sửa chữ cũng đụng `README.md`, `artifacts/` (bỏ link Bảng học tuần) nên đằng nào thien cũng merge |
 | 2026-11-18 | Ba việc đo ghi thẳng vào danh sách mốc 01/12 của kế hoạch `action-gaps`, không để ở đây | Một chỗ cho mọi việc của mốc 01/12 |
 | 2026-11-18 | `start-session` chỉ xét vế câu có chữ chờ, cả với STATUS | Thử trên kế hoạch `action-gaps` thì số PR cũ cùng dòng (#107, thienui PR #8) bị báo nhầm |
+| 2026-11-19 | Đóng kế hoạch | thien chọn "Làm nốt rồi đóng" (KH8, `2026-11-19-close-plans.md`): đang có quá nhiều kế hoạch; mốc 01/12 làm sớm, việc cần số đo thật ghi đóng sớm thay vì tick đạt |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |

@@ -1,13 +1,13 @@
 # KH1 · Học càng nhiều, repo không nặng thêm
 
-Trạng thái: đang chạy · Duyệt: 2026-11-15 · Cập nhật: 2026-11-17 · nick tnt697 (ghi trạng thái 2026-11-17: nick tnt628) · Đầu vào: review lần 3 của Codex (bd5c611), số đo trên main bd5c611 và PR #76
+Trạng thái: xong (đóng sớm 2026-11-19, thien quyết ở KH8) · Duyệt: 2026-11-15 · Cập nhật: 2026-11-17 · nick tnt697 (ghi trạng thái 2026-11-17: nick tnt628) · Đầu vào: review lần 3 của Codex (bd5c611), số đo trên main bd5c611 và PR #76
 
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 0–2 xong và đã merge (PR #77, #78, #81). Đợt 3: phần máy đã làm (bước ôn 3 thẻ tự sinh từ câu trắc nghiệm lưu sẵn, sau buổi tự ghi kết quả ôn), chờ đo ở hai buổi học thật. Đợt 4 (sau buổi chỉ ghi một bản ghi) bỏ.
-- Còn thiếu: số lượt dựng bài và bản chấm của thien ở hai buổi học kế tiếp, để biết đợt 3 có bớt lượt mà không làm buổi học kém đi không. Đợt 4 bỏ (thien chọn 2026-11-17, xem "Đã đổi").
-- thien cần làm: không có; nhắn "học" như thường.
+- Đang ở: đã đóng. Đóng sớm 2026-11-19 (KH8 câu 8). Kết luận: ôn 3 thẻ tự sinh giữ, chạy đúng ở BA 5 và Frontend 10; số lượt dựng một buổi chưa giảm (Frontend 10 khoảng 65 lượt); chưa áp cho BA và chiến tranh.
+- Còn thiếu: không; việc chưa làm ghi "đóng sớm" hay chỗ chuyển tới ngay ở dòng việc đó.
+- thien cần làm: không có (PR luật #153, PR mã #154 nằm ở KH8).
 
 ## Mục tiêu
 Chi phí của một buổi học (AI phải đọc bao nhiêu, phải viết bao nhiêu, CI chạy bao lâu, PR đụng bao nhiêu file chung) giữ gần như **cố định** dù đã học 10 hay 200 buổi. Trải nghiệm 7 bước và mọi luật thien đã chốt giữ nguyên.
@@ -98,7 +98,7 @@ Một mẹo thử ở đợt 0: hội thoại dài thì tốn usage hơn, nên p
 ### 0. Đo một buổi thật (Frontend 6)
 Xong khi: thien thấy một bảng trong file này ghi số token của buổi Frontend 6 chia theo đọc luật, đọc mẫu, viết trang, sửa lỗi, đăng, sau buổi; kèm mức Settings > Usage trước và sau.
 - [x] Dựng Frontend 6 như hiện nay, cuối phiên chạy `explain-usage`, ghi số (2026-11-15, bảng dưới; số lẫn cả việc khác, xem ghi chú)
-- [ ] Làm phần "sau buổi" ở chat mới, ghi số để so (lần này chưa được: thien bấm "Xong buổi học" trong chính chat đã dựng bài, nên phần sau buổi chạy luôn ở đó; thử lại ở buổi sau)
+- [ ] Làm phần "sau buổi" ở chat mới, ghi số để so (lần này chưa được: thien bấm "Xong buổi học" trong chính chat đã dựng bài, nên phần sau buổi chạy luôn ở đó; thử lại ở buổi sau) (đóng sớm 2026-11-19, KH8: không đo nữa)
 
 Số đo đầu tiên (`explain-usage`, 2026-11-15, nick tnt697). Một chat làm cả ba việc: đề xuất kế hoạch này và PR #77, #78; mở lại bài chiến tranh 3, 4; dựng và ghi buổi Frontend 6. Nên chưa tách được riêng một buổi học.
 
@@ -127,7 +127,7 @@ Xong khi: `reading-cost.mjs` in luồng "học" khoảng 50 KB; thêm 10 buổi 
 Xong khi: thien học một bài dựng theo cách mới và chấm độ dài, độ khó, độ thú vị không kém các buổi trước; số token phần dựng thấp hơn đợt 0 ở ít nhất 2 lần đo.
 - [x] Thẻ lưu sẵn câu hỏi, lựa chọn, lời giải thích (viết một lần khi tạo thẻ): `learning/cards-quiz.json`, 23/48 thẻ lấy lại từ các trang học cũ; thẻ còn lại AI viết khi thẻ đến hạn (`make-lesson.mjs` in sẵn dòng cần thêm), thẻ mới viết lúc sau buổi (`after-lesson.mjs --check` đòi)
 - [x] Script sinh phần ôn (`make-lesson.mjs`, bước `data-auto="cards"`), sau buổi tự ghi kết quả ôn vào `cards.md` (`after-lesson.mjs --write`). Góp ý và kết thúc vốn đã có sẵn trong mẫu; phần nhớ lại buổi trước vẫn để AI viết, vì nó dựa vào chỗ còn vướng của thien, không sinh máy móc được
-- [ ] Hai buổi học thật dựng theo cách mới: thien chấm không kém, số lượt dựng bài thấp hơn
+- [ ] Hai buổi học thật dựng theo cách mới: thien chấm không kém, số lượt dựng bài thấp hơn (đóng sớm 2026-11-19, KH8 câu 8: ôn tự sinh không làm buổi kém đi, số lượt chưa giảm; không đo thêm)
   - Số đo (2026-11-17): BA 5 ôn tự sinh chạy đúng 3/3 nhưng thien chấm "dài", "khó"; Frontend 10 (nick tnt697, project Claude) ôn tự sinh chạy đúng 5/5, thien chấm "vừa", "vừa", nhưng dựng bài khoảng 65 lượt gọi (BA 4: 35, Frontend 9: 43), vì chặng 2 phải clone sakubun và đọc code để dựng lại màn thật, cộng hai lượt chạy thử trang bằng Playwright. Bước ôn tự sinh không làm buổi kém đi; số lượt chưa thấp hơn. Chưa tick, xét lại ở mốc 2026-12-01
 
 ### 4. Sau buổi chỉ ghi file mới (bỏ 2026-11-17, lý do ở "Đã đổi")
@@ -135,7 +135,7 @@ Xong khi: thien học một bài dựng theo cách mới và chấm độ dài, 
 
 ### 5. Mở rộng sang BA và chiến tranh
 Xong khi: một bài BA và một bài chiến tranh dựng theo cách mới, sa bàn và bảng dán vẫn như cũ.
-- [ ] Áp đợt 3 cho BA, chiến tranh; giữ luật nguồn và nhãn "Mô phỏng"
+- [ ] Áp đợt 3 cho BA, chiến tranh; giữ luật nguồn và nhãn "Mô phỏng" (đóng sớm 2026-11-19, KH8 câu 8: không áp)
 
 Thời gian dự kiến: đợt 0 đi cùng buổi học kế tiếp; đợt 1 và 2 mỗi đợt một phiên; đợt 3 hai phiên cộng một buổi học thật; đợt 4 một phiên; đợt 5 làm dần theo vòng học.
 
@@ -155,6 +155,7 @@ Chỗ dễ sa lầy: đợt 3, nếu cứ muốn phần khung tự sinh phủ h�
 | 2026-11-15 | Làm đợt 1 trước đợt 0 | Đợt 1 chỉ đổi phần máy, không đụng trải nghiệm học, nên không cần số đo của đợt 0 để quyết. Đợt 0 vẫn đo ở buổi Frontend 6 |
 | 2026-11-15 | Đợt 2 dừng ở 64,0 KB, không ép xuống 50 | Gói chép nguyên văn mọi mục luật của file môn (cả "Cách một buổi chạy", "Các kiểu buổi để luân phiên" của frontend), vì kế hoạch ghi không tóm luật. Con số gồm 6,5 KB learning/codex.md (đã xoá ở checkpoint 3) mà Claude trên claude.ai không đọc, nên ở Claude là khoảng 57,5 KB. Phần lớn còn lại là phần cố định (tầng 1 23,2 KB, `TUTOR.md`, `artifacts/lesson/README.md` 10 KB); đợt 3 bỏ việc đọc mẫu nên sẽ giảm tiếp. Điều quan trọng hơn đã đạt: số không tăng theo số buổi |
 | 2026-11-15 | Thứ tự merge: PR #77 trước, PR #76 sau khi học xong | Ban đầu định merge #76 trước. Nhưng bài chưa học thì CI của #76 đỏ sẵn (`after-lesson --check-all` cần thẻ và dòng roadmap của bài), merge vào sẽ làm main đỏ. Nên #76 chờ học như mọi bài; khi rebase thì làm gọn nguồn và thêm chữ "kit" vào tiêu đề, vẫn giữ câu 3 là không tách |
+| 2026-11-19 | Đóng kế hoạch | thien chọn "Làm nốt rồi đóng" (KH8, `2026-11-19-close-plans.md`): đang có quá nhiều kế hoạch; mốc 01/12 làm sớm, việc cần số đo thật ghi đóng sớm thay vì tick đạt |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |

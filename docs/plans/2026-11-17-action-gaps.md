@@ -1,13 +1,13 @@
 # KH2 · Các hành động giữa thien và AI còn thiếu luật
 
-Trạng thái: đang chạy · Duyệt: 2026-11-17 · Cập nhật: 2026-11-18 · nick tnt697 · Báo cáo gốc: [Rà soát quy trình làm việc thien và Claude](https://claude.ai/artifact/PWo1UdCofcZ49baViSbe6Q) (mở ở nick tnt697)
+Trạng thái: xong (đóng sớm 2026-11-19, thien quyết ở KH8) · Duyệt: 2026-11-17 · Cập nhật: 2026-11-18 · nick tnt697 · Báo cáo gốc: [Rà soát quy trình làm việc thien và Claude](https://claude.ai/artifact/PWo1UdCofcZ49baViSbe6Q) (mở ở nick tnt697)
 
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: đợt 1 đã merge (PR #104), đã kiểm ở 4 chat: 4 trên 6 PR đủ điều kiện được AI tự merge (bảng ở mục "Kiểm đợt 1"). Đợt 2 xong: lệnh, bảng file đích, bù thuật ngữ (PR #106), gu vào thienui (PR #8), sửa tên trục lưới 2×2 (PR #110, đã merge 2026-11-17).
-- Còn thiếu: đợt 3 ở mốc 2026-12-01, gồm quyết định sửa gì cho phần tự merge.
-- thien cần làm: không có.
+- Đang ở: đã đóng. Đóng 2026-11-19: đợt 3 làm sớm ở KH8. Luật mới ở PR #153 (thien merge); hai việc học (chấm lại `SKILL-LEVEL.md` mốc 13/12, buổi "Viết luật cho thienui") sang "Việc tiếp theo" của STATUS.
+- Còn thiếu: không; việc chưa làm ghi "đóng sớm" hay chỗ chuyển tới ngay ở dòng việc đó.
+- thien cần làm: không có (PR luật #153, PR mã #154 nằm ở KH8).
 
 ## Mục tiêu
 Những gì thien nói với AI (chê, khen, chọn, giao việc) đi tới đúng file và được làm, mà thien không phải nhắc lại hay duyệt thêm.
@@ -46,7 +46,7 @@ Xong khi: ở 3 chat kế tiếp có PR thuộc dòng đầu của `profile/DELE
 - [x] `profile/CHATS.md` mục Đầu chat: dòng mục tiêu ba phần cho việc nhiều bước, chỉ hỏi lại khi câu trả lời đổi thứ sẽ ra (PR #104)
 - [x] `profile/VOICE.md` mục "Báo cáo khi xong việc"; `PROFILE.md` (bản tóm tắt 2 phút) và `skills/start-project/STEPS.md` trỏ tới mục đó (PR #104)
 - [x] thien chọn câu mẫu A (2026-11-17), đã thêm vào bảng câu mẫu của `VOICE.md` (PR #104)
-- [ ] Kiểm ở 3 chat kế tiếp: đã kiểm ở 4 chat, chưa đạt: ở chat Chiến tranh 7 công cụ chặn lệnh merge nên thien merge tay (#107); ở chat Frontend 10 AI quên, thien nhắn "merge" thì lệnh chạy được (#117). Bảng ở mục "Kiểm đợt 1". Quyết sửa gì ở mốc 01/12
+- [x] Kiểm ở 3 chat kế tiếp: đã kiểm ở 4 chat, chưa đạt: ở chat Chiến tranh 7 công cụ chặn lệnh merge nên thien merge tay (#107); ở chat Frontend 10 AI quên, thien nhắn "merge" thì lệnh chạy được (#117). Bảng ở mục "Kiểm đợt 1". Quyết sửa gì ở mốc 01/12 Quyết 2026-11-19 (KH8 câu 1): sửa luật, thêm hai dòng vào `DELEGATION.md` (PR #153)
 
 ### 2. Đường chảy cho góp ý (cùng buổi học kế tiếp)
 Xong khi: PR sau buổi kế tiếp có dòng bảng thuật ngữ (hay "không có từ mới"), thiếu thì `after-lesson --check` báo; lệnh in câu gu của buổi và nơi ghi (hàng chờ gom 2 tuần một PR vào thienui, không có lệnh kiểm); thien mở `taste.md` thấy mục "Đang thử" có gu từ các buổi frontend.
@@ -57,10 +57,10 @@ Xong khi: PR sau buổi kế tiếp có dòng bảng thuật ngữ (hay "không 
 
 ### 3. Cho luật "mỗi milestone" một ngày thật (mốc 2026-12-01)
 Xong khi: STATUS có hai mốc 01/12 và 13/12, mỗi mốc kèm danh sách việc; thien duyệt luật "3 thay đổi" mới; `SKILL-LEVEL.md` có ngày chấm mới sau 13/12.
-- [ ] `README.md` mục Sửa quy trình: milestone là các mốc ghi trong STATUS; "tối đa 3 luật mới mỗi mốc, sửa chỗ ghi sai không tính"
-- [ ] Mốc 01/12 thêm: review code theo giai đoạn cho các PR sau 24/11 (phạm vi theo quyết định 003); câu hỏi "AI có đổi ý chỉ vì thien nói mạnh hơn không"; dọn luật ngôn ngữ về `VOICE.md`; skill `viet-de-hieu` vào repo hay bỏ; ba mức nghiên cứu và bảng công cụ trong `RESEARCH.md`; ghi lịch nhắc thứ Hai, thứ Năm (ở nick tnt628) vào `ACCOUNTS.md`; xem lại bảng ủy quyền, thêm vào đó một dòng "CI không tự chặn merge (repo riêng tư gói Free không có bảo vệ nhánh), AI tự xem CI xanh trước khi merge"; quyết sửa công cụ, sửa luật hay để nguyên phần tự merge, dựa trên bảng "Kiểm đợt 1"; review theo giai đoạn soi trước lệnh xoá hay ghi file, git, token, đồng bộ sang repo khác; lần tới thien nói "tiếp tục" thì ghi nick mới có làm tiếp được từ sổ bàn giao không, thiếu gì (ba ý cuối từ [kế hoạch review Codex 18/11](2026-11-18-codex-review.md)). Gộp phần đụng mẫu AGENTS chung vào đợt 5 của kế hoạch review để chỉ sinh một PR đồng bộ
-- [ ] Mốc 13/12: chấm lại `SKILL-LEVEL.md` (AI soạn từ nhật ký, thien duyệt)
-- [ ] Trong vòng học sau 22/11: một buổi kiểu "Viết luật cho thienui"
+- [x] `README.md` mục Sửa quy trình: milestone là các mốc ghi trong STATUS; "tối đa 3 luật mới mỗi mốc, sửa chỗ ghi sai không tính" (KH8 câu 2, PR #153)
+- [x] Mốc 01/12 thêm: review code theo giai đoạn cho các PR sau 24/11 (phạm vi theo quyết định 003); câu hỏi "AI có đổi ý chỉ vì thien nói mạnh hơn không"; dọn luật ngôn ngữ về `VOICE.md`; skill `viet-de-hieu` vào repo hay bỏ; ba mức nghiên cứu và bảng công cụ trong `RESEARCH.md`; ghi lịch nhắc thứ Hai, thứ Năm (ở nick tnt628) vào `ACCOUNTS.md`; xem lại bảng ủy quyền, thêm vào đó một dòng "CI không tự chặn merge (repo riêng tư gói Free không có bảo vệ nhánh), AI tự xem CI xanh trước khi merge"; quyết sửa công cụ, sửa luật hay để nguyên phần tự merge, dựa trên bảng "Kiểm đợt 1"; review theo giai đoạn soi trước lệnh xoá hay ghi file, git, token, đồng bộ sang repo khác; lần tới thien nói "tiếp tục" thì ghi nick mới có làm tiếp được từ sổ bàn giao không, thiếu gì (ba ý cuối từ [kế hoạch review Codex 18/11](2026-11-18-codex-review.md)). Gộp phần đụng mẫu AGENTS chung vào đợt 5 của kế hoạch review để chỉ sinh một PR đồng bộ Làm sớm 2026-11-19 ở KH8: review theo giai đoạn (câu 3, quyết định 003); "AI đổi ý" đã có dòng trong `VOICE.md`; luật ngôn ngữ về `VOICE.md` (câu 5); `viet-de-hieu` vào repo (câu 4); lịch nhắc vào `ACCOUNTS.md`; bảng ủy quyền và tự merge (câu 1); sổ bàn giao khi "tiếp tục" (câu 6, PR #154). Ba mức nghiên cứu trong `RESEARCH.md`: đóng sớm, bảng công cụ đã có
+- [ ] Mốc 13/12: chấm lại `SKILL-LEVEL.md` (AI soạn từ nhật ký, thien duyệt) (chuyển sang "Việc tiếp theo" của STATUS, KH8 câu 10)
+- [ ] Trong vòng học sau 22/11: một buổi kiểu "Viết luật cho thienui" (chuyển sang lộ trình học, KH8 câu 10)
 
 Thời gian: đợt 1 một chat; đợt 2 một chat cộng một PR kit nhỏ, kiểm ở buổi học kế tiếp; đợt 3 một chat ngày 01/12, một chat ngắn ngày 13/12.
 
@@ -94,6 +94,7 @@ Các PR đủ điều kiện tự merge (mọi file trong dòng đầu của `DE
 | 2026-11-17 | Bộ tình huống của đợt 1 để trong file này, không thêm vào kế hoạch review | File kế hoạch review đang được sửa ở PR #103 |
 | 2026-11-17 | Lịch nhắc thứ Hai, thứ Năm: không còn là câu hỏi, chỉ cần ghi vào `ACCOUNTS.md` ở đợt 3 | Nick tnt628 xác nhận lịch nằm ở nick đó, vẫn chạy (lần gần nhất 2026-11-16) |
 | 2026-11-18 | Kiểm đợt 1 dừng sau 4 chat, không chờ thêm; mốc 01/12 nhận thêm ba việc từ review Codex | Đủ số liệu để quyết (2 kiểu trượt khác nhau đã lộ ra); thêm việc vào mốc có sẵn thay vì mở mốc mới (nick tnt628, [kế hoạch review Codex](2026-11-18-codex-review.md)) |
+| 2026-11-19 | Đóng kế hoạch | thien chọn "Làm nốt rồi đóng" (KH8, `2026-11-19-close-plans.md`): đang có quá nhiều kế hoạch; mốc 01/12 làm sớm, việc cần số đo thật ghi đóng sớm thay vì tick đạt |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |

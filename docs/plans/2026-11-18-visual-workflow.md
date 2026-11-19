@@ -1,17 +1,13 @@
 # KH6 · Quy trình nhìn được, và gu lớn dần theo ngày
 
-Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien: "ok, duyệt theo cả 4 đề xuất") · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBWDbXVGqmzESXaXn7P, https://claude.ai/code/session_01WXAvBX3kxdpafP9q92LUbo · Bản duyệt: https://claude.ai/artifact/7hVBYXwyHZbfVp7mL4GsV4 (nick tnt697) · Trang: https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (nick tnt697)
+Trạng thái: xong (đóng sớm 2026-11-19, thien quyết ở KH8) · Duyệt: 2026-11-18 (thien: "ok, duyệt theo cả 4 đề xuất") · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBWDbXVGqmzESXaXn7P, https://claude.ai/code/session_01WXAvBX3kxdpafP9q92LUbo · Bản duyệt: https://claude.ai/artifact/7hVBYXwyHZbfVp7mL4GsV4 (nick tnt697) · Trang: https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (nick tnt697)
 
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 0, 1 xong; 2 xong (thien trả lời 3 câu hỏi bằng nút trên trang; trang tổng quan đăng lại 19/11 từ nick tnt628); 3: mẫu `artifacts/flow/` đã dựng, trang luồng "một buổi học đi qua những đâu" đã đăng https://claude.ai/artifact/S9B86U6MGpnkYTa8enDtVM (nick tnt697); thien kể lại đúng bước 1–4 (phần của thien), nửa sau là việc của Claude: checkpoint 3 xong (thien quyết 19/11 09:51, PR #140 merge cùng ngày); luồng kiến trúc sakubun đã đăng https://claude.ai/artifact/Xx8GxEfRauxKujP1er9H5v (nick tnt697, PR sakubun #339 chờ merge), nên ga 3 tick đủ; checkpoint 4: thien chọn làm phần máy trước buổi học (19/11 10:53); đồng hồ nhìn N giây, màn kết, bảng dán tuyến ga (vòng 4, thien chọn B), hai màn so trước và sau trên bàn thử đã xong (PR #149 đã merge); còn nút Nghe và Nói (13/12); rồi 5. Lớp sơ đồ: `artifacts/kit/diagram.js` và mục Sơ đồ trong trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (nick tnt697). Trang chọn của vòng gu 1 đã đăng: https://claude.ai/artifact/7sM41GEbSa4kw3hxGwbqMK (nick tnt697). Nguồn ba bản, decision.json và lệnh chụp ở `docs/plans/2026-11-18-visual-workflow/round-1/`.
-- Vòng gu 2 (bảng màu) chạy sớm theo lời thien 18/11: trang chọn https://claude.ai/artifact/Ci6FBx4ThzEEh4SYZESph7 (nick tnt697), nguồn ở `round-2/`. thien chọn C trên trang, rồi nhắn "à tôi muốn giấy trắng với xanh petrol": kit dùng nền của A với màu nhấn của C (đã vào `kit.css`). Cùng đợt: nút mới, icon Lucide, chuyển động, thành phần mới, trang nhẹ (`kit/pack.mjs`). PR #126 và #127 đã merge (19/11, thien nhắn "merge").
-- Vòng gu 3 (19/11, thien hỏi mang style slide MLN122 vào trang học): trang chọn https://claude.ai/artifact/RMSfapmLBg7FvoQ5PFDgad, trang mẫu bấm A/B/C https://claude.ai/artifact/9tkpy5E3vqvs5AXqnWJor2 (cả hai nick tnt697); nguồn ở `round-3/` (PR #131). thien chọn "A · Thêm mực cam" (01:11, đề xuất là B): không kẻ ô, giữ bo góc, giấy trắng; vì sao đã chép nguyên văn vào hàng chờ gu. Mực hình đã vào kit ở PR #131.
-- Checkpoint 1 xong (19/11): mục Sơ đồ trong trang mẫu chỉ có một luồng, chính là luồng 5 bước "một buổi học đi qua những đâu"; thien nhắn "mình đã bấm sơ đồ trên điện thoại và nó không bị lỗi UI nào". Câu vì sao của bảng màu đã vào hàng chờ gu.
-- Còn thiếu: phần còn lại của checkpoint 4 (nút Nghe và Nói, quyết ở 13/12; và điều kiện xong sau BA 6, Frontend 11); rồi checkpoint 5.
-- thien đã chọn "B · Một nấc" (2026-11-18, giống đề xuất), vì sao: "mình cảm thấy hiện tại 3 bản thì bản một nấc, không đi quá xa, có phần quen thuộc cũng như mới lạ nho nhỏ, nhưng phần C thì quá mới làm mình chưa thích ứng". Checkpoint 0 xong.
-- thien cần làm: không có việc mới. Muốn link "Mở trang kế hoạch" mở được từ nick khác thì mời các nick vào trang kế hoạch (Share, quyền xem).
+- Đang ở: đã đóng. Đóng 2026-11-19 (KH8): Nghe và Nói bỏ khỏi mẫu học (câu 7, PR #154); luật ga 5 ở PR #153, trừ luật "một chi tiết thử mỗi trang" (thien chê chi tiết thử lặp, nay là tuỳ chọn); vòng thử gu và kit lắp ghép chuyển sang KH9; điều kiện xong của ga 4 (sau BA 6, Frontend 11) đóng sớm.
+- Còn thiếu: không; việc chưa làm ghi "đóng sớm" hay chỗ chuyển tới ngay ở dòng việc đó.
+- thien cần làm: không có (PR luật #153, PR mã #154 nằm ở KH8).
 
 ## Mục tiêu
 Hoàn thiện các mẫu artifact đang có và thêm mẫu, công cụ để quy trình giữa thien và Claude dễ nắm bắt bằng hình, bố cục, sơ đồ, luồng và tương tác; kèm một vòng thử gu đều đặn để gu của thien đi lên từng nấc, nhất quán mà không đứng yên (lời thien 2026-11-18: gu "phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn").
@@ -82,15 +78,15 @@ Xong khi: sau BA 6 và Frontend 11, thien không còn chấm bảng dán là "ch
 - [x] Màn kết có hình cho mọi buổi (quy luật đỉnh và kết) (2026-11-19: bấm "Xong buổi học" thì hiện tuyến các bước đã đi qua, ga lần lượt có tick rồi tới ga "Xong", số câu ôn và câu hỏi nhanh đúng, số phút, câu tự nói lại; `lesson.js` tự dựng, bài không soạn thêm; test `end-card.test.mjs`)
 - [x] Hai màn cạnh nhau để so trước và sau trên bàn thử (2026-11-19, nick tnt697, PR #149 đã merge: nút `data-compare` hay bước `@compare` đặt màn lúc đầu, bản chép đứng yên, cạnh màn đang vặn, cùng cỡ; màn trước lấy `data-before` hay giá trị lúc mở trang; sang bước khác thì gập. Mẫu frontend dùng ở bước "Nhìn 5 giây" sau khi vặn về Ít. Test `bench-compare.test.mjs`; check-pages 0 lỗi. Trang thử mở thẳng bước đó: https://claude.ai/artifact/1TjXknw69z6hMDhKaNXeeo, nick tnt697)
 - [x] Giữ đồng hồ "nhìn N giây" khi tải lại trang (2026-11-19: giờ bắt đầu ghi trong máy, tải lại giữa lúc đếm thì đếm tiếp số giây còn lại; máy khác vẫn coi như đã xem; test trong `autosave.test.mjs`)
-- [ ] Nút Nghe và Nói thay gõ vào mục "Thêm"; bỏ hẳn hay không quyết ở mốc 13/12
+- [x] Nút Nghe và Nói thay gõ vào mục "Thêm"; bỏ hẳn hay không quyết ở mốc 13/12 Quyết sớm 2026-11-19 (KH8 câu 7): bỏ khỏi mẫu học, PR #154
 
 ### 5. Gom luật vào mốc 01/12
 Xong khi: thien duyệt các dòng luật ở mốc 01/12, và vòng thử gu thứ hai chạy khoảng 02/12 theo luật mới.
 Ước: mốc
-- [ ] `artifacts/README.md`: thêm hai mẫu mới, luật "một chi tiết thử mỗi trang" (có nút Thích, Không), luật "đã đủ 8/8 mẫu, mẫu sau phải thay mẫu cũ" (ga 3 đã tick đủ 8/8 ngày 19/11)
-- [ ] Vòng thử gu hai tuần một lần; dòng "Đang thử" trong thienui có ngày xem lại sau 4 tuần
-- [ ] `profile/VOICE.md`: giải thích luồng hay báo việc nhiều bước trong chat thì vẽ sơ đồ ngay trong chat
-- [ ] `profile/MAP.md`, STATUS cập nhật theo
+- [x] `artifacts/README.md`: thêm hai mẫu mới, luật "một chi tiết thử mỗi trang" (có nút Thích, Không), luật "đã đủ 8/8 mẫu, mẫu sau phải thay mẫu cũ" (ga 3 đã tick đủ 8/8 ngày 19/11) Làm 2026-11-19 ở PR #153, trừ luật chi tiết thử (ghi chú của thien: chi tiết thử thành tuỳ chọn, PR #154)
+- [ ] Vòng thử gu hai tuần một lần; dòng "Đang thử" trong thienui có ngày xem lại sau 4 tuần (chuyển sang KH9 kit lắp ghép, theo ghi chú của thien 2026-11-19)
+- [x] `profile/VOICE.md`: giải thích luồng hay báo việc nhiều bước trong chat thì vẽ sơ đồ ngay trong chat (PR #153)
+- [x] `profile/MAP.md`, STATUS cập nhật theo (STATUS ở PR #152; `MAP.md` không cần đổi)
 
 ## Thời gian và chỗ dễ sa lầy
 Khoảng 8 phiên, 18/11 tới 09/12: tuần 18–23/11 checkpoint 0 và 1; tuần 24–30/11 checkpoint 2 và 4 (ghép BA 6); tuần 01–07/12 checkpoint 5, 3 và vòng gu 2; 08–13/12 checkpoint 4 (ghép Frontend 11) và mốc số đo 13/12.
@@ -131,6 +127,7 @@ Cho checkpoint 3 (mẫu luồng chạy). Nguyên văn câu trả lời gửi t�
 | 2026-11-19 | Điều kiện "Xong khi" của checkpoint 2 kiểm bằng ba câu hỏi của checkpoint 3 đặt ngay trên trang của kế hoạch này, thay vì chờ một kế hoạch mới | thien nhắn "bạn thực hiện cho xong nốt đi để tiến tới các phần tiếp theo" (02:48); câu hỏi của ga 3 là thật, trả lời đổi cách làm ga 3 |
 | 2026-11-19 | Trang luồng: màn rộng (từ 1024px) đặt sơ đồ dính bên phải thay vì dải trên; mũi tên của sơ đồ viết lại thành chữ dưới mỗi bước; khối không phải bước nằm ở "Ngoài luồng chính" | Dải trên cùng ở màn rộng phải cuộn ngang mới thấy hết 7 bước; "không bỏ chữ" nên rẽ nhánh và vòng lặp cũng có chữ |
 | 2026-11-18 | Checkpoint 2 thêm một việc: mang các ý review PR #124 vào mẫu kế hoạch | Bản nguồn của vòng gu giữ đúng như thien đã xem, nên sửa ở mẫu mới chứ không sửa bản cũ |
+| 2026-11-19 | Đóng kế hoạch | thien chọn "Làm nốt rồi đóng" (KH8, `2026-11-19-close-plans.md`): đang có quá nhiều kế hoạch; mốc 01/12 làm sớm, việc cần số đo thật ghi đóng sớm thay vì tick đạt |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |

@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 10 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 xong (20:40, ok cả 10 đề xuất); đang làm checkpoint 2 (PR luật, PR mã) và 3.
-- Còn thiếu: PR luật và PR mã cho thien merge; đóng bảy kế hoạch.
-- thien cần làm: merge hai PR khi báo.
+- Đang ở: checkpoint 1 và 3 xong; checkpoint 2 chờ thien merge PR luật #153 và PR mã #154.
+- Còn thiếu: merge hai PR đó, rồi tick ga 2 và đóng KH8. Sau đó: KH9 (kit lắp ghép, theo ghi chú của thien) và kế hoạch MCP cho nhóm SEP490.
+- thien cần làm: merge #153 và #154 (và sakubun #339).
 
 ## Mục tiêu
 Đóng cả bảy kế hoạch đang chạy trong một đợt: việc còn làm được thì làm, phần cần số đo thật thì ghi "thien quyết đóng sớm" kèm việc còn lại. Sau đó mới bàn kế hoạch MCP cho nhóm capstone SEP490 (thien 2026-11-19: "cần bàn thêm sau khi đóng các kế hoạch trước").
@@ -27,12 +27,12 @@ Xong khi: mọi câu hỏi dưới có câu trả lời chép nguyên văn vào 
 
 ### 2. Một PR luật cho cả đợt
 Xong khi: thien đọc một PR gom mọi dòng luật đã chọn ở checkpoint 1 và merge.
-- [ ] PR sửa `profile/`, `README.md`, `artifacts/README.md` (và mã nhỏ nếu câu 6, 7 chọn sửa) theo câu trả lời
+- [ ] PR sửa `profile/`, `README.md`, `artifacts/README.md` (và mã nhỏ nếu câu 6, 7 chọn sửa) theo câu trả lời: PR luật #153 (câu 1–5, ga 5 của KH6), PR mã #154 (câu 6, 7, 9, chi tiết thử thành tuỳ chọn); chờ thien merge
 
 ### 3. Đóng bảy kế hoạch
 Xong khi: STATUS không còn bảng "Kế hoạch đang chạy" cho KH1–KH7; mỗi file kế hoạch có dòng "Trạng thái: đóng" và phần còn lại ghi rõ.
-- [ ] Mỗi kế hoạch: tick việc có bằng chứng, việc còn lại ghi "đóng sớm", "Đã đổi" ghi quyết định này
-- [ ] STATUS: bỏ bảy dòng, thêm dòng KH8; việc còn sống (mốc 01/12 chuyển private, mốc 13/12 chấm `SKILL-LEVEL.md`) sang "Việc tiếp theo"
+- [x] Mỗi kế hoạch: tick việc có bằng chứng, việc còn lại ghi "đóng sớm", "Đã đổi" ghi quyết định này (2026-11-19, PR #152: bảy file đổi "Trạng thái: xong (đóng sớm ...)")
+- [x] STATUS: bỏ bảy dòng, thêm dòng KH8; việc còn sống (mốc 01/12 chuyển private, mốc 13/12 chấm `SKILL-LEVEL.md`) sang "Việc tiếp theo" (2026-11-19, PR #152)
 
 ## Câu hỏi (thien đã trả lời 2026-11-19 20:40 bằng nút trên trang: "ok, theo cả 10 đề xuất")
 Mỗi câu có đề xuất; bấm "ok" là theo đề xuất.
@@ -48,7 +48,7 @@ Mỗi câu có đề xuất; bấm "ok" là theo đề xuất.
    - Mỗi mốc một lượt review bằng một phiên Claude riêng, chỉ soi PR đụng lệnh xoá hay ghi file, git, token, đồng bộ sang repo khác; ghi vào mục "Review theo giai đoạn" của quyết định 003 (đề xuất)
    - Không review gì thêm tới khi thien nhờ
 4. Skill `viet-de-hieu` (10 quy tắc viết dễ hiểu, đang là skill riêng của tài khoản, không có trong repo): vào repo hay bỏ?
-   - Đưa vào repo ở `skills/viet-de-hieu/`, `VOICE.md` trỏ tới nó; nhóm SEP490 dùng lại được qua kế hoạch MCP sau này (đề xuất)
+   - Đưa vào repo ở thư mục viet-de-hieu trong skills (PR #153), `VOICE.md` trỏ tới nó; nhóm SEP490 dùng lại được qua kế hoạch MCP sau này (đề xuất)
    - Bỏ, chép 3–4 quy tắc chưa có vào `VOICE.md`
    - Để nguyên như bây giờ
 5. Luật ngôn ngữ đang nằm ba chỗ (`PROFILE.md` mục Ngôn ngữ, `VOICE.md` dòng đầu, mẫu AGENTS chung). Dọn về một chỗ?
