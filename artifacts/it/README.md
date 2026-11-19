@@ -40,11 +40,11 @@ Bài mẫu đã đăng (2026-11-14): [Frontend 6, màu cho app](https://claude.a
 | Chốt lựa chọn | `<button data-pick="d1" data-of="bank">`; nhắc lại vào `<p class="fb" data-echo="d1" [data-prefix]>` |
 | Danh sách đã thử | `<div class="tried" data-tried="bank.accent">` |
 | Kính | Núm `<div class="knob" data-knob="lens" data-lens>` với `data-val` là `none`, `blur`, `old`, `deut` (mù màu đỏ-lục), `prot`. Bước ngoài `@lens` thì núm ẩn và màn về bình thường |
-| Nhìn N giây | Trong `.phone` thêm `<div class="cover">chữ trên màn che</div>`; bước `data-stage="food@cover"`; `<button data-peek="food" data-sec="5" data-after="Đã xem">` (nút tự đếm ngược); `<button data-uncover="food">` bỏ che hẳn. Khi che, cột núm ẩn |
+| Nhìn N giây | Trong `.phone` thêm `<div class="cover">chữ trên màn che</div>`; bước `data-stage="food@cover"`; `<button data-peek="food" data-sec="5" data-after="Đã xem">` (nút tự đếm ngược); `<button data-uncover="food">` bỏ che hẳn. Khi che, cột núm ẩn. Tải lại giữa lúc đếm thì đếm tiếp số giây còn lại (giờ bắt đầu ghi trong máy); máy khác thì coi như đã xem |
 | Câu hỏi chờ sân khấu | `<div class="q" data-wait="peek-food">`: các lựa chọn khóa tới khi khóa đó xong |
 | Làm theo bản thiết kế | Bàn có `data-target='{"accent":"#0f766e","amount":"it"}'`; thêm `<div class="target"><span class="label">Bản thiết kế</span><div class="phone mini"><div class="screen"></div></div></div>` (tự chép màn chính) và `<div class="meter" role="status"><span></span></div>`; nhắc vào `[data-echo="match-<pane>"]` với `data-same` |
 | Bảng dán | `<div class="pane board" data-pane="who" data-answer='{"thẻ":"ô"}' [data-hear="4"]>` chứa `.bd-area` (gồm `.zones`, `.tray`, các thẻ) và `.say-bar` |
-| Ô | `.zones.grid2` (lưới 2×2, thêm `.axis.y`, `.axis.x` nếu cần tên trục: tên trục nằm trong lề riêng ngoài ô, chỉ chừa lề khi có trục) hay `.zones.flow` (các bước nối mũi tên); mỗi ô `<button class="zone" data-z="z1" data-reset>`, ô chính thêm `key` |
+| Ô | `.zones.grid2` (lưới 2×2, thêm `.axis.y`, `.axis.x` nếu cần tên trục: tên trục nằm trong lề riêng ngoài ô, chỉ chừa lề khi có trục) hay `.zones.flow` (các bước nối mũi tên); luồng thì dùng `.zones.flow.line` (tuyến ga: ô có `data-n="1"`.., ô có thẻ hiện tick; thien chọn ở vòng 4, 2026-11-19); thẻ theo mực hình thì thêm `inked` vào bảng và `data-kind="p"` (người làm, cam) hay `"a"` (app làm, xanh) vào thẻ, chú giải `.legend-ink`; mỗi ô `<button class="zone" data-z="z1" data-reset>`, ô chính thêm `key` |
 | Thẻ | `<button class="bd-card" data-c="ph" style="--c:#be185d" data-say="lời họ nói" data-why="giải thích khi xếp khác bản mẫu"><i>PH</i>Phụ huynh</button>` |
 | Thẻ lên tiếng, tua 3 tháng | Trên thẻ: `data-react="lời khi bị xếp sai"`, `data-later="Tháng 2\|chuyện xảy ra"`; theo ô bị đặt: `data-react-z2`, `data-later-z2`. Trong bảng: `<div class="ffwd"><span class="label">Mô phỏng · …</span><ol></ol></div>`; nút `<button data-ffwd="who" data-need="checked-who" data-label data-back data-good="khi không sai gì">` |
 | Thẻ ẩn, phỏng vấn | Thẻ thêm `data-hidden`. `<div class="ask" data-ask="pdt" data-of="who">` chứa `<button class="opt" data-reply="lời đáp" [data-reveal="ctsv"]>câu hỏi</button>` và `<p class="reply" role="status">` |
@@ -65,7 +65,6 @@ Bài mẫu đã đăng (2026-11-14): [Frontend 6, màu cho app](https://claude.a
 
 - Bố cục trang bảng dán cần trau chuốt hơn: thien thấy "ok nhưng chưa thỏa mãn" (sau BA 3, 2026-11-16). Lỗi tên trục đè thẻ ở cùng lần chê đã sửa 2026-11-17 (test `.github/scripts/grid2-axis.test.mjs`).
 
-- Khi nhìn N giây, phần tự lưu không giữ đồng hồ: tải lại trang giữa 5 giây thì coi như đã xem.
 - Nối hai thẻ bằng đường (sơ đồ ai nói với ai), làn bơi nhiều người cho luồng việc.
 - Ô gõ CSS thật (hướng C ở vòng chọn) cho phần cuối buổi khi thien đã quen.
 - Hai màn cạnh nhau để so trước và sau trên cùng bàn thử.

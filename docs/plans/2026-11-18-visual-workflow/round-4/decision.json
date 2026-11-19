@@ -1,0 +1,48 @@
+{
+  "id": "visual-workflow-board-r4",
+  "title": "Vòng 4 · bảng dán luồng cho BA 6",
+  "question": "Buổi BA 6 (vẽ luồng công việc) nên dùng bảng dán nào?",
+  "context": "Sau BA 3 bạn thấy bảng dán \"ok nhưng chưa thỏa mãn\". BA 6 sẽ xếp các bước thành luồng rồi tìm chỗ hay tắc, nên mình làm ba bản của cùng một bảng luồng (luồng báo vắng cho phụ huynh, app điểm danh ở BA 3) để bạn chọn trước buổi. Ảnh chụp lúc đã xếp 2 thẻ. Mở trang bấm thử để xếp thật cả ba bản trên điện thoại, rồi chọn một bản và viết một câu vì sao.",
+  "options": [
+    {
+      "key": "a",
+      "name": "A · Bảng đang dùng",
+      "short": "Đang dùng",
+      "image": "shots/a.png",
+      "scale": 2,
+      "summary": "Bảng hiện tại: 4 ô nét đứt nối bằng mũi tên chữ, thẻ mỗi người một màu tự chọn, khay \"Các bước\" bên dưới.",
+      "pros": ["Bạn đã quen từ BA 3 tới BA 5", "Không phải làm gì thêm"],
+      "cons": ["Ô nét đứt và mũi tên chữ trông như khung trống, chưa ra một luồng", "Màu thẻ không có nghĩa: hồng, xanh, xám chỉ để phân biệt"],
+      "links": [{ "text": "Trang bấm thử · đổi A, B, C ở đầu trang (nick tnt697)", "url": "https://claude.ai/artifact/4oPPXDxqm7jSgtAiYmn3yy", "note": "Xếp đủ 4 thẻ rồi bấm Kiểm tra để xem lúc bảng khoá." }]
+    },
+    {
+      "key": "b",
+      "name": "B · Tuyến ga",
+      "short": "Tuyến ga",
+      "image": "shots/b.png",
+      "scale": 2,
+      "summary": "Một nấc: các bước là ga trên một đường liền, ga có thẻ thì hiện dấu tick (như trang luồng bạn đã \"Thích\" hai lần). Thẻ theo mực hình: cam là việc người làm, xanh là việc app làm. Điện thoại: tuyến dọc.",
+      "pros": ["Nhìn là thấy một luồng có chiều đi, không phải bốn ô rời", "Dấu tick cho biết đã xếp tới đâu", "Màu thẻ có nghĩa, đúng hai mực của kit"],
+      "cons": ["Vẫn một hàng: chưa thấy ai làm bước nào, phải nhìn màu thẻ"],
+      "links": [{ "text": "Trang bấm thử · đổi A, B, C ở đầu trang (nick tnt697)", "url": "https://claude.ai/artifact/4oPPXDxqm7jSgtAiYmn3yy", "note": "Để ý ga đổi sang tick lúc bạn đặt thẻ." }]
+    },
+    {
+      "key": "c",
+      "name": "C · Làn bơi",
+      "short": "Làn bơi",
+      "image": "shots/c.png",
+      "scale": 2,
+      "summary": "Xa hơn một chút: bảng có hai làn, Người và App, mỗi làn 4 bước trên cùng tuyến ga. Xếp thẻ phải chọn cả bước lẫn làn. Đây là cách vẽ luồng công việc mà BA hay dùng (swimlane), và chỗ chuyển làn thường là chỗ tắc.",
+      "pros": ["Thấy ngay ai làm bước nào và chỗ việc chuyển tay", "Đúng kiểu sơ đồ BA dùng thật, sẽ gặp lại ở capstone", "Hợp ý \"tìm chỗ hay tắc\" của BA 6"],
+      "cons": ["Thêm một chiều phải nghĩ: BA 5 đã \"dài\" và \"khó\"", "Trên điện thoại hai cột hẹp, thẻ chữ dài phải xuống dòng"],
+      "links": [{ "text": "Trang bấm thử · đổi A, B, C ở đầu trang (nick tnt697)", "url": "https://claude.ai/artifact/4oPPXDxqm7jSgtAiYmn3yy", "note": "Thử xếp thẻ \"Gửi tin cho PH\": người hay app?" }]
+    }
+  ],
+  "criteria": [
+    { "name": "Thấy được luồng", "values": { "a": "vừa", "b": "tốt", "c": "tốt" } },
+    { "name": "Thấy ai làm bước nào", "values": { "a": "kém", "b": "vừa", "c": "tốt" } },
+    { "name": "Độ khó thêm cho BA 6", "values": { "a": { "text": "không", "tone": "good" }, "b": { "text": "không", "tone": "good" }, "c": { "text": "thêm một chiều", "tone": "bad" } } },
+    { "name": "Điện thoại", "values": { "a": "tốt", "b": "tốt", "c": "vừa" } }
+  ],
+  "recommend": { "key": "b", "why": "B làm bảng ra một luồng thật mà không thêm việc phải nghĩ, hợp với lời dặn BA 6 phải ngắn lại sau BA 5 \"dài\" và \"khó\". Làn bơi (C) đáng dùng, nhưng nên để một buổi sau khi bạn đã quen vẽ luồng một hàng." }
+}

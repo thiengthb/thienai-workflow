@@ -48,20 +48,21 @@
       <div class="ffwd" aria-live="polite"><span class="label">Mô phỏng · 3 tháng sau, theo cách bạn xếp</span><ol></ol></div>
     </div>
 
-    <!-- Bảng 2: xếp các bước thành luồng (zones.flow). -->
-    <div class="pane board" data-pane="flow" data-answer='{"a":"s1","b":"s2","c":"s3","d":"s4"}'>
+    <!-- Bảng 2: xếp các bước thành luồng, kiểu tuyến ga (zones.flow.line, data-n là số trên ga). Bảng inked: thẻ data-kind="p" là việc người làm (cam), "a" là việc app làm (xanh). -->
+    <div class="pane board inked" data-pane="flow" data-answer='{"a":"s1","b":"s2","c":"s3","d":"s4"}'>
+      <div class="legend-ink"><span><i class="p"></i>Người làm</span><span><i class="a"></i>App làm</span></div>
       <div class="bd-area">
-        <div class="zones flow">
-          <button class="zone" type="button" data-z="s1" data-reset><span>Bước 1</span></button>
-          <button class="zone" type="button" data-z="s2" data-reset><span>Bước 2</span></button>
-          <button class="zone" type="button" data-z="s3" data-reset><span>Bước 3</span></button>
-          <button class="zone" type="button" data-z="s4" data-reset><span>Bước 4</span></button>
+        <div class="zones flow line">
+          <button class="zone" type="button" data-z="s1" data-n="1" data-reset><span>Bước 1</span></button>
+          <button class="zone" type="button" data-z="s2" data-n="2" data-reset><span>Bước 2</span></button>
+          <button class="zone" type="button" data-z="s3" data-n="3" data-reset><span>Bước 3</span></button>
+          <button class="zone" type="button" data-z="s4" data-n="4" data-reset><span>Bước 4</span></button>
         </div>
         <div class="tray"><span class="label">Các bước</span></div>
-        <button class="bd-card" type="button" data-c="c" style="--c:#be185d" data-why="Phải hỏi sinh viên trước khi có gì để gửi."><i>?</i>SV đồng ý cho gửi?</button>
-        <button class="bd-card" type="button" data-c="a" style="--c:#2563eb"><i>GV</i>Điểm danh</button>
-        <button class="bd-card" type="button" data-c="d" style="--c:#be185d"><i>PH</i>Nhận tin</button>
-        <button class="bd-card" type="button" data-c="b" style="--c:#475569"><i>⚙</i>Đếm buổi vắng</button>
+        <button class="bd-card" type="button" data-c="c" data-kind="p" data-why="Phải hỏi sinh viên trước khi có gì để gửi."><i>?</i>SV đồng ý cho gửi?</button>
+        <button class="bd-card" type="button" data-c="a" data-kind="p"><i>GV</i>Điểm danh</button>
+        <button class="bd-card" type="button" data-c="d" data-kind="a"><i>✉</i>Gửi tin cho PH</button>
+        <button class="bd-card" type="button" data-c="b" data-kind="a"><i>⚙</i>Đếm buổi vắng</button>
       </div>
     </div>
   </div>
