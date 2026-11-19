@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 3: thien chọn B cả ba loại (phiếu hỏi trước, bảng tiến độ, thẻ kết quả). Tiếp theo chuyển ba bản B vào `artifacts/plan/` làm mặc định theo trạng thái, rồi dựng lại trang KH9. Ga 1 vẫn chờ thien xem trang mẫu thành phần.
+- Đang ở: checkpoint 3: thien chọn B cả ba loại (phiếu hỏi trước, bảng tiến độ, thẻ kết quả). PR #160 (vòng gu 5) và #161 (kit trắng đen) đã merge 20/11 (thien nhắn "merge hết"). Tiếp theo chuyển ba bản B vào `artifacts/plan/` làm mặc định theo trạng thái, theo bộ màu trắng đen, rồi dựng lại trang KH9. Ga 1 vẫn chờ thien xem trang mẫu thành phần.
 - Còn thiếu: việc 3 của ga 3; ga 4; đóng ga 1.
-- thien cần làm: merge PR #160. Xem thêm trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử").
+- thien cần làm: xem trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử").
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
