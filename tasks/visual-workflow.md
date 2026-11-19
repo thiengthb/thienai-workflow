@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 3, mẫu luồng chạy
 
 Repo: thiengthb/thienai-workflow · Nhánh: chưa có (bench-compare, kh6-sakubun-flow đã merge) · PR: #149, #150 đã merge; sakubun #339 chờ thien merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Cập nhật: 2026-11-19T13:02Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Cập nhật: 2026-11-19T13:27Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -55,11 +55,13 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kth
 - Luồng kiến trúc sakubun "Một câu luyện đi qua những đâu" (`docs/flows/practice-turn.json` ở sakubun, 9 bước, 11 khối): trang https://claude.ai/artifact/Xx8GxEfRauxKujP1er9H5v (nick tnt697, comments + db), PR sakubun #339 (risk:low, CI xanh, CodeRabbit một ý: hạn mức ngữ pháp mặc định là 3, đã sửa cả trang). Lệnh merge #339 bị chặn vì thien chỉ nhắn merge #149: chờ thien merge. PR #150 tick ga 3 đủ (19/24), tự merge theo DELEGATION.
 
 ## Bước tiếp theo
+00. 19/11 20:21 thien chọn "Làm nốt rồi đóng" cả KH1–KH7 (đang nhiều kế hoạch quá), rồi mới bàn kế hoạch MCP cho nhóm capstone SEP490. Đã soạn KH8 `docs/plans/2026-11-19-close-plans.md` (nhánh kh8-close-plans, PR nháp #152), trang 10 câu hỏi https://claude.ai/artifact/AZyzE1wW6dwEvC758uDgna (nick tnt697). thien trả lời xong thì đọc db `plans/<tên file>`, chép nguyên văn vào kế hoạch, làm PR luật (thien merge) rồi đóng bảy kế hoạch.
 0. KH6 không còn việc làm được trước mốc: checkpoint 4 còn nút Nghe và Nói (quyết ở 13/12) và điều kiện xong (sau BA 6 và Frontend 11; Frontend 11 có thể dùng `data-compare`); checkpoint 5 gom luật ở mốc 01/12.
 1. Repo đang public tạm (thien mở 19/11 10:46) để CI không bị trừ phút; 01/12 chuyển lại private, lịch nhắc trig_011nfKi6X5kZe3HTRTZkYmHh, dòng nhắc trong STATUS (PR #143 đã tự merge). Tới lúc đó không ghi thông tin riêng mới vào repo.
 2. thien kể lại luồng sakubun từ trang thì đọc comment và `flows/<id>` (ArtifactData), so với 9 bước, ghi vào kế hoạch.
 
 ## Đang chờ thien
+- Trả lời 10 câu hỏi KH8 trên trang https://claude.ai/artifact/AZyzE1wW6dwEvC758uDgna (mở ở nick tnt697).
 - Merge PR sakubun #339 (chỉ thêm một file luồng, CI xanh).
 
 ## Lưu ý
