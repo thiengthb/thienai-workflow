@@ -1,7 +1,7 @@
-# KH9 kit lắp ghép: ga 3 vòng gu 5 đã đăng, chờ thien chọn
+# KH9 kit lắp ghép: ga 3 thien chọn B cả ba loại, tiếp đưa vào make-plan
 
 Repo: thiengthb/thienai-workflow · Nhánh: plan-layouts · PR: #160 (ga 3 vòng gu 5, chờ thien merge); #158, #159 đã merge 19/11
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZUoAG29Ms2veKqNkH · Cập nhật: 2026-11-19T16:48Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZUoAG29Ms2veKqNkH · Cập nhật: 2026-11-19T16:54Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -69,13 +69,15 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBZUoAG29Ms2veKqNk
 
 - 19/11 23:17 (phiên mới, cùng link chat, "tiếp tục"): ga 3 việc 1 trên nhánh `plan-layouts`, PR #160. Vòng gu 5 ở `round-5/` (3 file mẫu: KH9 chờ duyệt, KH9 đang chạy, KH6 đã đóng; build.mjs, variants.css/js, shoot.mjs). Trang `decide/` có `parts` để hỏi nhiều câu trên một trang (test thêm). Đăng trang chọn https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG (comments, db, sample) và trang bấm thử https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP (nick tnt697). Đề xuất ẩn: C cả ba câu. Mọi test CI 0 lỗi trên máy. Kế hoạch 6/10.
 
+- 19/11 23:38 thien gửi từ trang chọn (comment, thread 635ef771…): chọn B cả ba câu (đề xuất C), chưa ghi vì sao; xin sửa ô hỏi Claude, kiểm lỗi UI khác, thêm phóng to và phím trái phải. Đã làm trên PR #160 (commit thứ hai): ô hỏi có lề và nhãn, icon rec đổi lớp `.ri` (lớp `.ic` của kit đè), 760–999px ảnh trên chữ dưới, hộp phóng to nấc 100–300% + kéo + ← → đổi bản + vuốt, ← → ở màn thường. Trang chọn đăng đè. Lựa chọn ghi vào kế hoạch (7/10) và taste-queue. Trả lời thread bằng công cụ báo not found: đã trả lời trong chat.
+
 ## Bước tiếp theo
-1. KH9 ga 3: khi thien gửi từ trang chọn https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG (đọc comment và db `decisions/modular-kit-plan-layout-r5`, khóa `picks.pending|running|closed`): chép nguyên văn vào kế hoạch và `learning/frontend/taste-queue.md`; viết lại bản chọn gọn trong `artifacts/plan/` (make-plan.mjs, template.html, plan.js) thành mặc định theo trạng thái trong `pickBlocks` (bản A thì giữ); dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 bằng `--url`. Nguồn thử ở `docs/plans/2026-11-18-visual-workflow/round-5/` (variants.js là bản phác, không chép nguyên).
+1. KH9 ga 3 việc 3: đưa ba bản B (pending: phiếu hỏi trước; running: bảng tiến độ; closed: thẻ kết quả) vào `artifacts/plan/` làm mặc định theo trạng thái (viết gọn lại từ `round-5/variants.js` và `variants.css`, không chép nguyên), cập nhật `artifacts/kit/sizes.json` nếu cỡ đổi, test make-plan; dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 bằng `--url`. Cũ (đã xong): khi thien gửi từ trang chọn https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG (đọc comment và db `decisions/modular-kit-plan-layout-r5`, khóa `picks.pending|running|closed`): chép nguyên văn vào kế hoạch và `learning/frontend/taste-queue.md`; viết lại bản chọn gọn trong `artifacts/plan/` (make-plan.mjs, template.html, plan.js) thành mặc định theo trạng thái trong `pickBlocks` (bản A thì giữ); dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 bằng `--url`. Nguồn thử ở `docs/plans/2026-11-18-visual-workflow/round-5/` (variants.js là bản phác, không chép nguyên).
 2. Kế hoạch MCP cho nhóm SEP490 sau KH9; mở mục "Chuyển sang kế hoạch sau" của KH8 trước.
 3. Repo public tạm tới 01/12; không ghi thông tin riêng mới.
 
 ## Đang chờ thien
-- Chọn bố cục cho ba loại kế hoạch ở https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG (bấm thử ở https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP), rồi merge PR #160.
+- Merge PR #160 (vòng gu 5 và sửa trang chọn).
 - Xem hai mục mới ở trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mở ở nick tnt697).
 
 ## Lưu ý
