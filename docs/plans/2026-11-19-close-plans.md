@@ -1,13 +1,13 @@
 # KH8 · Đóng KH1–KH7, làm sớm buổi xem lại 01/12
 
-Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 10 đề xuất") · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Trang: https://claude.ai/artifact/AZyzE1wW6dwEvC758uDgna (nick tnt697)
+Trạng thái: xong (2026-11-19) · Duyệt: 2026-11-19 (thien: "ok, theo cả 10 đề xuất") · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Trang: https://claude.ai/artifact/AZyzE1wW6dwEvC758uDgna (nick tnt697)
 
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 và 3 xong; checkpoint 2 chờ thien merge PR luật #153 và PR mã #154.
-- Còn thiếu: merge hai PR đó, rồi tick ga 2 và đóng KH8. Sau đó: KH9 (kit lắp ghép, theo ghi chú của thien) và kế hoạch MCP cho nhóm SEP490.
-- thien cần làm: merge #153 và #154 (và sakubun #339).
+- Đang ở: xong. Bảy kế hoạch đã đóng (#152), luật (#153) và mã (#154) đã merge 2026-11-19.
+- Còn thiếu: không; việc chuyển đi nằm ở mục "Chuyển sang kế hoạch sau" (KH9 và kế hoạch MCP).
+- thien cần làm: không có.
 
 ## Mục tiêu
 Đóng cả bảy kế hoạch đang chạy trong một đợt: việc còn làm được thì làm, phần cần số đo thật thì ghi "thien quyết đóng sớm" kèm việc còn lại. Sau đó mới bàn kế hoạch MCP cho nhóm capstone SEP490 (thien 2026-11-19: "cần bàn thêm sau khi đóng các kế hoạch trước").
@@ -27,7 +27,7 @@ Xong khi: mọi câu hỏi dưới có câu trả lời chép nguyên văn vào 
 
 ### 2. Một PR luật cho cả đợt
 Xong khi: thien đọc một PR gom mọi dòng luật đã chọn ở checkpoint 1 và merge.
-- [ ] PR sửa `profile/`, `README.md`, `artifacts/README.md` (và mã nhỏ nếu câu 6, 7 chọn sửa) theo câu trả lời: PR luật #153 (câu 1–5, ga 5 của KH6), PR mã #154 (câu 6, 7, 9, chi tiết thử thành tuỳ chọn); chờ thien merge
+- [x] PR sửa `profile/`, `README.md`, `artifacts/README.md` (và mã nhỏ nếu câu 6, 7 chọn sửa) theo câu trả lời: PR luật #153 (câu 1–5, ga 5 của KH6), PR mã #154 (câu 6, 7, 9, chi tiết thử thành tuỳ chọn); thien nhắn "bạn hãy merge hộ mình" (21:56), cả hai đã merge
 
 ### 3. Đóng bảy kế hoạch
 Xong khi: STATUS không còn bảng "Kế hoạch đang chạy" cho KH1–KH7; mỗi file kế hoạch có dòng "Trạng thái: đóng" và phần còn lại ghi rõ.
