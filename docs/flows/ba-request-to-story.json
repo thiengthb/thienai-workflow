@@ -1,0 +1,88 @@
+{
+  "title": "Từ một lời nhờ tới việc giao được",
+  "intro": "Năm buổi BA đầu ghép thành một luồng, đi theo chuyện của Hà (người dùng sakubun, mô phỏng) nhắn \"thêm chế độ tối đi\". Cuối luồng là một story kèm điều kiện hoàn thành, đủ rõ để giao cho dev hay cho AI. Buổi BA 6 sẽ học vẽ luồng công việc của chính người dùng.",
+  "updated": "2026-11-19",
+  "sources": [
+    "learning/ba/lessons/01-requests-vs-needs.md",
+    "learning/ba/lessons/02-user-interviews.md",
+    "learning/ba/lessons/03-stakeholders.md",
+    "learning/ba/lessons/04-user-stories.md",
+    "learning/ba/lessons/05-acceptance-criteria.md"
+  ],
+  "page": "https://claude.ai/artifact/QBi7zKgMnEWsAKj6ygBnHw",
+  "nodes": [
+    { "id": "ask", "label": "Hà nhờ một thứ" },
+    { "id": "why", "label": "Hỏi để làm gì", "kind": "k2" },
+    { "id": "talk", "label": "Hỏi về một lần cụ thể", "kind": "k2" },
+    { "id": "who", "label": "Ai liên quan", "kind": "k2" },
+    { "id": "story", "label": "Viết user story", "kind": "k1" },
+    { "id": "crit", "label": "Điều kiện hoàn thành", "kind": "k1" },
+    { "id": "test", "label": "Qua hai câu chưa", "kind": "k2" },
+    { "id": "pick", "label": "So cách, thử với Hà", "kind": "k2" },
+    { "id": "later", "label": "Ngăn \"để sau\"", "note": "Chỗ gom cách làm: nút chế độ tối, mã màu #121212, tên thư viện. Không viết vào ô \"Để\" của story, không dùng làm điều kiện; chỉ mở ra lúc so các cách." }
+  ],
+  "edges": [
+    ["ask", "why"],
+    ["why", "talk", "có vấn đề thật"],
+    ["talk", "who"],
+    ["who", "story"],
+    ["story", "crit"],
+    ["crit", "test"],
+    ["test", "crit", "mơ hồ: viết lại"],
+    ["test", "pick", "qua cả hai"],
+    ["pick", "talk", "Hà vẫn tắt máy"],
+    ["story", "later", "cách làm"],
+    ["test", "later", "là cách làm"],
+    ["later", "pick", "mở ra để so"]
+  ],
+  "steps": [
+    {
+      "id": "ask",
+      "note": "Hà nhắn \"thêm chế độ tối đi\". Đó là một giải pháp Hà tự nghĩ ra, chưa phải vấn đề thật.",
+      "more": "Nhận lời nhờ thì đừng làm ngay và cũng đừng gạt đi. Ghi lại nguyên văn, rồi đi tìm vấn đề đằng sau nó.",
+      "chips": ["BA 1"]
+    },
+    {
+      "id": "why",
+      "note": "Hỏi \"để làm gì\" 2–3 lần, cho tới khi gặp một việc người ta đang mất thời gian, tiền hay công sức.",
+      "more": "Ví dụ đã xem: nút xuất Excel hoá ra là 30 phút cộng tay mỗi sáng thứ hai. Có vấn đề thật thì nhóm mới so được nhiều giải pháp; không có thì chỉ còn đúng thứ được nhờ.",
+      "chips": ["learning/ba/lessons/01-requests-vs-needs.md"]
+    },
+    {
+      "id": "talk",
+      "note": "Hỏi về một lần gần đây: \"Lần gần nhất chị học, ở đâu, lúc mấy giờ?\" Hà kể học lúc 11 giờ đêm cạnh con, màn sáng làm con cựa mình nên phải tắt máy.",
+      "more": "Tránh 5 cái bẫy: hỏi về tương lai, hỏi \"thường\", gợi sẵn giải pháp, xin lời khen, hỏi thẳng \"tại sao\". Một người kể mới là giả thuyết, chưa chứng minh ai cũng vậy.",
+      "chips": ["learning/ba/lessons/02-user-interviews.md"]
+    },
+    {
+      "id": "who",
+      "note": "Liệt kê cả những người không dùng app mà vẫn bị ảnh hưởng hay chặn được việc. Ở chuyện của Hà, con của Hà bị ảnh hưởng dù không bao giờ mở app.",
+      "more": "Xếp họ theo quyền và mức quan tâm, rồi gặp sớm người chặn được việc, không phải người xuất hiện nhiều nhất. Vị trí trong lưới chỉ là đoán ban đầu, hỏi chuyện rồi xếp lại.",
+      "chips": ["learning/ba/lessons/03-stakeholders.md"]
+    },
+    {
+      "id": "story",
+      "note": "Viết thành ba phần: **Là** người đi làm, học lúc tối muộn trong phòng tối, **tôi muốn** học được khi phòng tắt đèn mà màn không chói, **để** xong bài 15 phút mà con không thức giấc.",
+      "more": "Chỗ dễ nhầm: ô \"Là\" cần người cụ thể kèm hoàn cảnh, không phải \"Người dùng\". Nút, màu, mã màu là cách làm, bỏ vào ngăn \"để sau\". Story là lời nhắc để nói chuyện tiếp, không phải bản đặc tả.",
+      "chips": ["learning/ba/lessons/04-user-stories.md"]
+    },
+    {
+      "id": "crit",
+      "note": "Viết vài dòng nói làm tới đâu thì coi là xong, theo mẫu **Khi** … **làm** … **thì** …. Ví dụ: mở app sau 22 giờ thì độ sáng tự hạ về mức thấp nhất, Hà không phải chỉnh.",
+      "more": "Hỏi Hà kể lại tối qua thì lộ thêm tiếng \"ting\" lúc trả lời đúng, nên có thêm điều kiện: sau 22 giờ app không phát tiếng, không rung.",
+      "chips": ["learning/ba/lessons/05-acceptance-criteria.md"]
+    },
+    {
+      "id": "test",
+      "note": "Mỗi điều kiện qua hai câu: kiểm được không (ai thử cũng ra cùng kết quả), và bám phần \"để\" không (đạt nó là tiến gần lý do thật).",
+      "more": "\"Màn không chói\" bám \"để\" nhưng mơ hồ, nên giữ ý và viết lại cho đo được. \"Nền #121212\" đo được nhưng là cách làm, nên vào ngăn \"để sau\". \"Hà dùng thử 3 tối, không tắt máy giữa chừng\" đã đo được, dùng thẳng.",
+      "chips": ["BA 5"]
+    },
+    {
+      "id": "pick",
+      "note": "Mở ngăn \"để sau\", so từng cách với điều kiện trước, xét công sau. Tự hạ sáng và tắt tiếng sau 22 giờ qua hai điều máy kiểm, rồi mới thử với Hà 3 tối.",
+      "more": "Chế độ tối không hạ độ sáng và vẫn kêu \"ting\", nên trượt dù là thứ Hà nhờ. Hà vẫn tắt máy giữa chừng thì quay lại hỏi về tối hôm đó: còn vấn đề chưa ai biết.",
+      "chips": ["BA 4", "BA 5"]
+    }
+  ]
+}
