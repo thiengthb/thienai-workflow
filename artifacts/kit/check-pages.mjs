@@ -4,7 +4,7 @@
 //   node artifacts/kit/check-pages.mjs [trang.html ...] [--changed <git-ref>] [--out <thư-mục-ảnh>]
 //
 // Không đưa trang nào: kiểm mọi trang bài trong learning/*/pages/ và một trang mẫu dựng từ mỗi mẫu trong artifacts/
-// (bài thường, bài chiến tranh, bài frontend, bài BA, trang chọn phương án, trang so sánh, trang ôn thẻ, trang kế hoạch, trang mẫu thành phần).
+// (bài thường, bài chiến tranh, bài frontend, bài BA, trang chọn phương án, trang so sánh, trang ôn thẻ, trang kế hoạch, trang luồng, trang mẫu thành phần).
 // --changed <ref> (CI dùng ở PR): chỉ kiểm trang bài đổi so với ref, cộng các trang mẫu. Bài đã học là bài đóng băng:
 // bản đăng là bản thật, không kiểm lại với kit mới (docs/plans/2026-11-15-lean-learning.md). Sửa kit thì trang mẫu bắt lỗi.
 // Trang bài trong repo là nguồn (thẻ kit rỗng): script dựng bản đầy đủ vào thư mục tạm rồi mới mở.
@@ -111,6 +111,10 @@ export async function buildFixtures(dir, browser) {
   const { build: plan } = await import('../plan/make-plan.mjs');
   plan(join(here, '../plan/fixture.md'), join(dir, 'plan'), { today: '2026-11-21' });
   out.push({ name: 'plan', file: join(dir, 'plan/preview.html') });
+  // Trang luồng chạy: luồng mẫu cố định (rẽ nhánh, vòng lặp, khối phụ).
+  const { build: flow } = await import('../flow/make-flow.mjs');
+  flow(join(here, '../flow/fixture.json'), join(dir, 'flow'));
+  out.push({ name: 'flow', file: join(dir, 'flow/preview.html') });
   // Trang mẫu thành phần: mọi mảnh dùng chung ở một trang (make-gallery.mjs).
   const { build: gallery } = await import('./make-gallery.mjs');
   out.push({ name: 'gallery', file: gallery(join(dir, 'gallery')) });
