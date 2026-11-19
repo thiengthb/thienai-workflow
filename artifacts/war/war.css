@@ -80,12 +80,14 @@ html[data-board="on"] #board { display: flex; }
 /* Link trong chữ (nguồn): đủ cao để bấm trên điện thoại. */
 .step a { display: inline-block; min-height: 24px; line-height: 24px; }
 /* Khung rộng: hai cột, sa bàn đứng yên bên trái, cao vừa khung xem. */
-@media (min-width: 900px) {
-  html[data-board="on"] .wrap { max-width: 1240px; display: grid; grid-template-columns: minmax(0, 1fr) 400px; column-gap: 16px; align-items: start; }
+/* Từ 760px (vòng gu 6, KH9 ga 4): cột tuyến bước thu còn chấm (lesson.css), sa bàn ở giữa, bước bên phải. */
+@media (min-width: 760px) {
+  html[data-board="on"] .wrap { max-width: 1240px; display: grid; grid-template-columns: 26px minmax(0, 1fr) 340px; justify-content: stretch; column-gap: 14px; align-items: start; }
   html[data-board="on"] .top { grid-column: 1 / -1; }
-  html[data-board="on"] #board { grid-column: 1; grid-row: 2 / span 40; position: sticky; top: 52px; height: calc(100vh - 68px); max-height: none; margin: 0; }
-  html[data-board="on"] .step { grid-column: 2; }
+  html[data-board="on"] #board { grid-column: 2; grid-row: 2 / span 40; position: sticky; top: 52px; height: calc(100vh - 68px); max-height: none; margin: 0; }
+  html[data-board="on"] .wrap > .step { grid-column: 3; }
 }
+@media (min-width: 900px) { html[data-board="on"] .wrap { grid-template-columns: 26px minmax(0, 1fr) 400px; column-gap: 16px; } }
 
 /* Chọn nước đi: không có đúng sai, chỉ "Bạn chọn" và "Chuyện thật". */
 .choose { display: grid; gap: 8px; }

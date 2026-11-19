@@ -1,0 +1,59 @@
+/* Vòng 6, trang học. Hai bản mới cùng đổi một chỗ: sân khấu (bàn thử, bảng dán) đứng cạnh chữ từ 760px thay vì 900px,
+   nên nửa màn hình cạnh chat (khoảng 860px) không còn xếp chồng sân khấu trên chữ. */
+@media (min-width: 760px) and (max-width: 899px) {
+  html[data-lay][data-stage="on"] .wrap { max-width: none; display: grid; grid-template-columns: minmax(0, 1fr) 330px; column-gap: 14px; align-items: start; padding-bottom: 12px; }
+  html[data-lay][data-stage="on"] .top { grid-column: 1 / -1; }
+  html[data-lay][data-stage="on"] #stage { grid-column: 1; grid-row: 2 / span 40; position: sticky; top: 52px; height: calc(100vh - 72px); margin: 0; }
+  html[data-lay][data-stage="on"] .step { grid-column: 2; }
+  html[data-lay][data-stage="on"] .pane.on { height: 100%; }
+  html[data-lay] .bench { align-content: center; }
+  html[data-lay] .bench .phone { --pw: 190px; height: 380px; }
+  html[data-lay] .bench .screen { zoom: .72; }
+}
+
+/* B · Tuyến bước */
+.rail { display: none; }
+@media (min-width: 760px) {
+  .wrap.lesson-b { max-width: 980px; display: grid; grid-template-columns: 190px minmax(0, 640px); justify-content: center; column-gap: 32px; align-items: start; }
+  .wrap.lesson-b > .top { grid-column: 1 / -1; }
+  .wrap.lesson-b > .top .bar { display: none; }
+  .wrap.lesson-b > .step { grid-column: 2; }
+  .rail { display: block; grid-column: 1; grid-row: 2 / span 40; position: sticky; top: 56px; padding-top: 12px; }
+  .rail ol { list-style: none; margin: 0; padding: 0; display: grid; }
+  .rail li { position: relative; display: flex; align-items: center; gap: 10px; min-height: 36px; font-size: 13.5px; color: var(--muted); }
+  .rail li:not(:last-child)::before { content: ""; position: absolute; left: 8px; top: 24px; bottom: -12px; width: 2px; background: var(--line-strong); }
+  .rail li.done:not(:last-child)::before { background: var(--ink-1); }
+  .rail .dot { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line-strong); background: var(--card); position: relative; z-index: 1; display: grid; place-items: center; }
+  .rail li.done .dot { border-color: var(--ink-1); }
+  .rail li.done .dot::after { content: ""; width: 10px; height: 10px; background: var(--ink-1); -webkit-mask: var(--ic-check) center / contain no-repeat; mask: var(--ic-check) center / contain no-repeat; }
+  .rail li.cur .dot { background: var(--ink-2); border-color: var(--ink-2); box-shadow: 0 0 0 4px var(--soft); }
+  .rail li.cur .nm { color: var(--ink); font-weight: 600; }
+  .rail .nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* Bước có sân khấu: tuyến thu còn chấm. */
+  html[data-lay="lesson-b"][data-stage="on"] .wrap.lesson-b { max-width: 1240px; grid-template-columns: 26px minmax(0, 1fr) 330px; justify-content: stretch; column-gap: 14px; }
+  html[data-lay="lesson-b"][data-stage="on"] .rail { grid-column: 1; }
+  html[data-lay="lesson-b"][data-stage="on"] .rail .nm { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  html[data-lay="lesson-b"][data-stage="on"] #stage { grid-column: 2; }
+  html[data-lay="lesson-b"][data-stage="on"] .wrap.lesson-b > .step { grid-column: 3; }
+}
+@media (min-width: 900px) {
+  html[data-lay="lesson-b"][data-stage="on"] .wrap.lesson-b { grid-template-columns: 26px minmax(0, 1fr) 380px; }
+}
+
+/* C · Theo nội dung */
+.lesson-c .step.k-split .col-l, .lesson-c .step.k-split .col-r { display: grid; gap: 12px; align-content: start; min-width: 0; }
+@media (min-width: 760px) {
+  .wrap.lesson-c { max-width: 980px; }
+  html[data-lay="lesson-c"][data-stage="on"] .wrap.lesson-c { max-width: 1240px; }
+  .lesson-c .step.k-read.on, .lesson-c .step.k-crit.on { max-width: 680px; margin: 0 auto; width: 100%; }
+  .lesson-c .step.k-grid.on { grid-template-columns: 1fr 1fr; column-gap: 14px; align-items: start; }
+  .lesson-c .step.k-grid > .span { grid-column: 1 / -1; }
+  .lesson-c .step.k-grid > .cell { height: 100%; align-content: start; }
+  .lesson-c .step.k-grid > .next { justify-self: end; width: auto; min-width: 280px; }
+  .lesson-c .step.k-split.on { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: 28px; align-items: start; }
+  .lesson-c .step.k-split .col-l { position: sticky; top: 64px; }
+  .lesson-c .step.k-split .col-r > textarea { min-height: 220px; }
+  .lesson-c .step.k-split .col-r { padding-top: 16px; }
+  .lesson-c .step.k-crit .card { grid-template-columns: 1fr 1fr; column-gap: 20px; }
+  .lesson-c .step.k-crit .crit + .crit { border-top: 0; padding-top: 0; }
+}

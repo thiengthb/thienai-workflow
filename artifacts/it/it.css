@@ -1,5 +1,5 @@
 /* Sân khấu cho bài IT (frontend, BA), trên lõi chung (kit.css) và khung buổi học (lesson.css). Xem artifacts/it/README.md.
-   Khung rộng (từ 900px): sân khấu bên trái đứng yên, các bước bên phải. Điện thoại: sân khấu trên, bước dưới.
+   Khung rộng (từ 760px): sân khấu bên trái đứng yên, các bước bên phải. Điện thoại: sân khấu trên, bước dưới.
    Bước không ghi data-stage thì ẩn sân khấu, trang về một cột hẹp như bài thường. Một bo góc 8px. */
 #stage { display: none; }
 html[data-stage="on"] #stage { display: block; }
@@ -7,14 +7,23 @@ html[data-stage="on"] #stage { display: block; }
 .pane { display: none; position: relative; background: var(--soft); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
 .pane.on { display: flex; }
 
-@media (min-width: 900px) {
-  html[data-stage="on"] .wrap { max-width: 1240px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; column-gap: 16px; align-items: start; }
+/* Từ 760px (vòng gu 6, KH9 ga 4: nửa màn hình cạnh chat khoảng 860px): cột tuyến bước thu còn chấm (lesson.css),
+   sân khấu ở giữa, bước bên phải (330px tới 899px, 380px từ 900px). */
+@media (min-width: 760px) {
+  html[data-stage="on"] .wrap { max-width: 1240px; display: grid; grid-template-columns: 26px minmax(0, 1fr) 330px; justify-content: stretch; column-gap: 14px; align-items: start; }
   html[data-stage="on"] .top { grid-column: 1 / -1; }
   /* Vừa khít màn hình: trang không cuộn khi bước ngắn, nên sân khấu dính không bị đẩy lên. */
   html[data-stage="on"] .wrap { padding-bottom: 12px; }
-  html[data-stage="on"] #stage { grid-column: 1; grid-row: 2 / span 40; position: sticky; top: 52px; height: calc(100vh - 72px); margin: 0; }
-  html[data-stage="on"] .step { grid-column: 2; }
+  html[data-stage="on"] #stage { grid-column: 2; grid-row: 2 / span 40; position: sticky; top: 52px; height: calc(100vh - 72px); margin: 0; }
+  html[data-stage="on"] .wrap > .step { grid-column: 3; }
   .pane.on { height: 100%; }
+}
+@media (min-width: 900px) { html[data-stage="on"] .wrap { grid-template-columns: 26px minmax(0, 1fr) 380px; column-gap: 16px; } }
+@media (min-width: 760px) and (max-width: 899px) {
+  /* Sân khấu cao cố định ở khổ này: núm không vừa thì bàn thử cuộn, căn từ đầu để phần trên không bị cắt. */
+  .bench { align-content: safe center; overflow-y: auto; }
+  .bench .phone { --pw: 190px; height: 380px; }
+  .bench .screen { zoom: .72; }
 }
 
 /* ---------- Bàn thử (frontend): màn app trong khung điện thoại, núm vặn, dòng CSS sáng lên ---------- */
@@ -173,8 +182,8 @@ html[data-stage="on"] #stage { display: block; }
 .tried span { font-size: 13px; padding: 3px 9px; border-radius: var(--r); background: var(--card); border: 1px solid var(--line); }
 .tried span.cur { border-color: var(--ink); }
 .stage-hint { font-size: 13px; color: var(--muted); }
-@media (min-width: 900px) { .stage-hint .ph { display: none; } }
-@media (max-width: 899px) { .stage-hint .pc { display: none; } }
+@media (min-width: 760px) { .stage-hint .ph { display: none; } }
+@media (max-width: 759px) { .stage-hint .pc { display: none; } }
 
 /* ---------- Kính: xem màn qua mắt người khác (núm data-lens) ---------- */
 .screen[data-lens="blur"] { filter: blur(3px); }

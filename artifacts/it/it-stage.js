@@ -470,7 +470,7 @@
   document.addEventListener('click', sync);
   sync();
   // Điện thoại: sân khấu nằm trên các bước, bấm thứ làm đổi sân khấu thì cuộn lên cho thấy.
-  function reveal() { if (window.innerWidth < 900) stage.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  function reveal() { if (window.innerWidth < 760) stage.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   // ---------- Claude làm mẫu (lesson.js, Lesson.demo) ----------
   // Bàn thử: Claude vặn núm (turn_knob). Bảng dán: Claude xếp từng thẻ vào ô (place_card), có bản mẫu để dựa vào.
   // Thao tác làm mẫu không tính là người học đã thử, không vào bản tự lưu; "Trả lại cách của mình" (hay lần bấm kế của người học) đưa về như trước.

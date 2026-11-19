@@ -1,0 +1,68 @@
+{
+  "id": "modular-kit-wide-r6",
+  "title": "Vòng 6 · ôn thẻ và trang học ở nửa màn hình",
+  "question": "Trang ôn thẻ và trang học nên dùng bề ngang thế nào?",
+  "context": "KH9 ga 4, vòng gu đầu tiên cho mẫu khác. Bạn hay mở trang ở nửa màn hình cạnh chat (khoảng 860px) hay 2/3 màn hình (khoảng 950px), mà hai trang này đang là một cột hẹp giữa khoảng trắng. Mỗi trang một câu, mỗi câu ba bản: A là trang hiện nay, B và C là bố cục mới (ảnh trái 860px, phải 950px). Điện thoại giữ như hiện nay ở cả ba bản. Link dưới mỗi bản mở trang bấm thử cả sáu bản, có nút đổi bề ngang 860 và 950.",
+  "parts": [
+    {
+      "key": "review",
+      "name": "Ôn thẻ",
+      "question": "Trang ôn thẻ (việc chính là nhớ lại, lật đáp án, tự chấm)",
+      "context": "Mẫu: 10 thẻ đến hạn ngày 20/11 trong learning/cards.md, ba môn. Ảnh chụp lúc đang giữa lượt: thẻ 1 nhớ, thẻ 2 quên, thẻ 3 vừa lật đáp án.",
+      "options": [
+        { "key": "a", "name": "A · Như hiện nay", "short": "Như hiện nay", "image": "shots/review-a.png", "scale": 2,
+          "summary": "Một thẻ rộng 720px ở giữa, đáp án hiện dưới câu của bạn, Nhớ/Quên ở cuối thẻ. Thanh mảnh trên cùng là tiến độ.",
+          "pros": ["Gọn, một đường đọc từ trên xuống", "Không thấy trước các câu sau"],
+          "cons": ["Nửa dưới màn trống", "Câu của bạn và đáp án nằm chồng nhau, so từng ý phải đưa mắt lên xuống", "Không biết thẻ nào đã nhớ, quên trong lượt"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/3bh7mbjckhWm2zqoUSBMk3", "note": "Chọn Ôn thẻ rồi A, đổi bề ngang 860 hay 950 ở đầu trang." }] },
+        { "key": "b", "name": "B · Thẻ và hàng chờ", "short": "Hàng chờ", "image": "shots/review-b.png", "scale": 2,
+          "summary": "Thẻ bên trái, cột bên phải có ba ô số (Nhớ, Quên, Còn) và danh sách cả lượt: thẻ nào đã nhớ, đã quên, đang hỏi. Điện thoại: danh sách gập thành một dòng dưới thẻ.",
+          "pros": ["Lúc nào cũng thấy mình đang ở đâu trong lượt và nhớ được bao nhiêu", "Dùng hết bề ngang mà thẻ vẫn rộng"],
+          "cons": ["Thấy trước câu hỏi của các thẻ sau: lúc tới lượt đã nghĩ sẵn, nhớ lại kém thật hơn", "Câu của bạn và đáp án vẫn chồng nhau như A"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/3bh7mbjckhWm2zqoUSBMk3", "note": "Bấm Nhớ, Quên vài thẻ để xem cột bên đổi." }] },
+        { "key": "c", "name": "C · Hai nửa thẻ", "short": "Hai nửa", "image": "shots/review-c.png", "scale": 2,
+          "summary": "Thẻ chia đôi: trái là câu hỏi và câu của bạn, phải là đáp án, che bằng khung đứt tới khi bấm Xem đáp án. Nhớ/Quên trải dưới cả hai nửa. Tiến độ là một hàng chấm: đen là nhớ, viền đỏ là quên.",
+          "pros": ["Lật xong là câu của bạn và đáp án nằm cạnh nhau, so từng ý ngay", "Hàng chấm cho biết nhớ, quên mà không lộ câu sau"],
+          "cons": ["Đáp án dài thì nửa phải cao hơn nửa trái, thẻ dài ra", "Không có số đếm Nhớ, Quên như B, phải đếm chấm"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/3bh7mbjckhWm2zqoUSBMk3", "note": "Gõ vài chữ rồi bấm Xem đáp án để thấy hai nửa." }] }
+      ],
+      "criteria": [
+        { "name": "Dùng bề ngang", "values": { "a": "kém", "b": "tốt", "c": "tốt" } },
+        { "name": "So câu mình với đáp án", "values": { "a": "vừa", "b": "vừa", "c": "tốt" } },
+        { "name": "Biết lượt đang tới đâu", "values": { "a": "kém", "b": "tốt", "c": "vừa" } },
+        { "name": "Không lộ câu sau", "values": { "a": "tốt", "b": "kém", "c": "tốt" } }
+      ],
+      "recommend": { "key": "c", "why": "Việc chính của trang ôn là tự chấm cho đúng, và tự chấm dễ nhất khi câu của mình đứng cạnh đáp án. B cho biết nhiều hơn về lượt, nhưng danh sách để lộ câu hỏi sau, làm phần nhớ lại yếu đi. Ba ô số của B có thể thêm vào đầu C mà không lộ gì." }
+    },
+    {
+      "key": "lesson",
+      "name": "Trang học",
+      "question": "Trang học (một buổi khoảng 15 phút, 9 bước, có bước có sân khấu)",
+      "context": "Mẫu: buổi frontend 10 (Chọn bản sửa). Trái: bước Ý chính có bàn thử ở 860px; phải: bước chữ Tự nói lại ở 950px. B và C cùng đổi một chỗ: sân khấu đứng cạnh chữ từ 760px thay vì 900px, nên nửa màn hình không còn xếp sân khấu chồng lên chữ. Bài đã học không dựng lại.",
+      "options": [
+        { "key": "a", "name": "A · Như hiện nay", "short": "Như hiện nay", "image": "shots/lesson-a.png", "scale": 2,
+          "summary": "Bước chữ là một cột 560px ở giữa. Ở 860px bước có sân khấu xếp sân khấu trên, chữ dưới; từ 900px mới thành hai cột.",
+          "pros": ["Cột hẹp dễ đọc", "Bạn đã quen"],
+          "cons": ["Nửa màn hình: bàn thử trên, chữ dưới, vặn núm xong phải cuộn xuống đọc", "Bước chữ để trống hai bên", "Chỉ có thanh mảnh, không biết bước sau là gì"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/3bh7mbjckhWm2zqoUSBMk3", "note": "Chọn Trang học rồi A, khung 860px." }] },
+        { "key": "b", "name": "B · Tuyến bước", "short": "Tuyến bước", "image": "shots/lesson-b.png", "scale": 2,
+          "summary": "Cột trái là 9 bước của buổi như tuyến ga: đã qua có dấu tick, đang làm chấm đen, chưa tới chấm rỗng. Chữ thành một cột 640px. Bước có sân khấu thì tuyến thu lại còn chấm.",
+          "pros": ["Luôn thấy đang ở bước mấy và còn gì", "Giữ kiểu tuyến tàu bạn đã Thích, giống màn kết", "Áp được cho mọi bài, không phải sửa chữ trong bài"],
+          "cons": ["Bước chữ vẫn là một cột, chỉ rộng hơn chút", "Tên bước dài bị cắt ở 860px"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/3bh7mbjckhWm2zqoUSBMk3", "note": "Bấm Bắt đầu và đi vài bước để xem tuyến chạy." }] },
+        { "key": "c", "name": "C · Theo nội dung", "short": "Theo nội dung", "image": "shots/lesson-c.png", "scale": 2,
+          "summary": "Mỗi bước chữ chọn khuôn theo thứ nó chứa: nhiều câu hỏi thành lưới hai cột, tin nhắn kèm ô viết thành tin trái ô viết phải, bước mở đầu là lời dẫn trái danh sách việc phải; còn lại một cột đọc.",
+          "pros": ["Dùng hết bề ngang, ô viết cao hơn", "Đúng ý kit lắp ghép: bước nào bố cục nấy"],
+          "cons": ["Chữ trong bài hay viết \"khung dưới\" mà ô viết lại nằm bên phải", "Mỗi bước một khuôn, mắt phải làm quen lại", "Lệnh dựng phải đoán loại bước, bài lạ có thể đoán sai"],
+          "links": [{ "text": "Trang bấm thử (nick tnt697)", "url": "https://claude.ai/artifact/3bh7mbjckhWm2zqoUSBMk3", "note": "Xem bước Ôn nhanh (lưới) và Tự nói lại (hai cột)." }] }
+      ],
+      "criteria": [
+        { "name": "Nửa màn hình có sân khấu", "values": { "a": "kém", "b": "tốt", "c": "tốt" } },
+        { "name": "Biết đang ở bước nào", "values": { "a": "kém", "b": "tốt", "c": "kém" } },
+        { "name": "Dùng bề ngang ở bước chữ", "values": { "a": "kém", "b": "vừa", "c": "tốt" } },
+        { "name": "Bài mới không phải viết khác", "values": { "a": "tốt", "b": "tốt", "c": "vừa" } }
+      ],
+      "recommend": { "key": "b", "why": "Một buổi học là một tuyến 15 phút, nên thấy mình ở bước mấy giúp nhiều hơn là trải chữ ra hai cột. B áp được cho mọi bài mà không đổi chữ trong bài; C hay hơn ở bước có nhiều câu hỏi, có thể lấy riêng lưới hai cột của C cho bước Ôn nhanh sau." }
+    }
+  ]
+}

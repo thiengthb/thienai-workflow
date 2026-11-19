@@ -1,13 +1,13 @@
 # KH9 · Kit lắp ghép, bố cục theo nội dung
 
-Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đề xuất") · Cập nhật: 2026-11-20 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Trang: https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (nick tnt697)
+Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đề xuất") · Cập nhật: 2026-11-20 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Trang: https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (nick tnt697)
 
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 3 xong (20/11): ba bản B thành mặc định của `artifacts/plan/` theo trạng thái (chờ duyệt có câu hỏi → phiếu hỏi, chờ duyệt không có câu hỏi → một cột, đang chạy → bảng tiến độ, đã đóng → thẻ kết quả), theo bộ màu trắng đen; trang KH9 dựng lại bằng bảng tiến độ và đăng đè (PR #163, thien nhắn merge 20/11 01:34). Ga 1 đóng: thien đã xem trang mẫu thành phần (20/11 01:34).
-- Còn thiếu: ga 4 (mốc, vòng gu hai tuần một lần; vòng đầu là trang ôn thẻ và trang học, chụp ở nửa màn hình và 2/3 màn hình).
-- thien cần làm: không có.
+- Đang ở: ga 4 việc 1 xong (20/11): thien chọn ôn thẻ C · Hai nửa thẻ và trang học B · Tuyến bước ở vòng gu 6 (giống đề xuất); cả hai đã vào `artifacts/review/` và `artifacts/lesson/`, sân khấu và sa bàn đứng cạnh chữ từ 760px (PR #164 đã merge 20/11).
+- Còn thiếu: luật vòng gu hai tuần một lần vào `artifacts/README.md` (việc 2 của ga 4); vòng gu sau khoảng 04/12 (luồng hay so sánh).
+- thien cần làm: chưa có.
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
@@ -53,7 +53,7 @@ Xong khi: thien chọn bố cục cho ba loại kế hoạch trên một trang c
 ### 4. Bố cục mới cho các mẫu khác, đều đặn
 Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang học, ôn thẻ, luồng, so sánh), thien chọn giữ hay bỏ; kit ghi rõ khối nào mới, khối nào bỏ.
 Ước: mốc
-- [ ] Vòng đầu: trang ôn thẻ và trang học ở màn rộng (đang bỏ trống nhiều)
+- [x] Vòng đầu: trang ôn thẻ và trang học ở màn rộng (đang bỏ trống nhiều) (vòng 6 ở `docs/plans/2026-11-18-visual-workflow/round-6/`, trang chọn https://claude.ai/artifact/6HmX4EYH3dsuLjUNpUzs9v, nick tnt697. Kết quả thien gửi 20/11 02:43, nguyên văn: "Ôn thẻ — Bạn chọn: C · Hai nửa thẻ. Giống đề xuất của Claude (C · Hai nửa thẻ). Trang học — Bạn chọn: B · Tuyến bước. Giống đề xuất của Claude (B · Tuyến bước)." Không ghi chú. Khối mới: hàng chấm và hai nửa thẻ ở mẫu ôn thẻ, tuyến bước ở khung buổi học; khối bỏ: thanh tiến độ của trang ôn, thanh mảnh của trang học từ 760px. PR #164)
 - [ ] Luật vòng thử gu hai tuần một lần (chuyển từ KH6) vào `artifacts/README.md` ở mốc sau
 
 ## Câu hỏi (thien đã trả lời 2026-11-19 21:15 bằng nút trên trang: "ok, theo cả 4 đề xuất")
@@ -75,6 +75,8 @@ Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang h�
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-20 | Sân khấu (bàn thử, bảng dán) và sa bàn đứng cạnh chữ từ 760px thay vì 900px, cho mọi bài mới | Hai bản mới của vòng 6 cùng đổi chỗ này để nửa màn hình (khoảng 860px) không xếp sân khấu chồng lên chữ; thien chọn B nên giữ |
+| 2026-11-20 | Vòng 6 chụp ở 860px và 950px thay vì 1180px và điện thoại; điện thoại giữ như hiện nay ở mọi bản | thien hay mở trang ở nửa màn hình cạnh chat hay 2/3 màn hình (00:59); điện thoại hai trang này đã ổn |
 | 2026-11-20 | Bảng tiến độ bản 2: ga đang chạy là thẻ lớn bên trái, "Chưa tới" và "Xong" là dòng gập mở ở cột bên, cột trống không vẽ; trang dùng bề ngang tới 1000px, chia hai cột từ 820px; bản đồ gọn nổi chỉ còn ở bố cục một cột | thien 00:59: "bố cục checkpoint vẫn chưa hợp ý", trang hay mở ở nửa màn hình cạnh chat (khoảng 860px) hay 2/3 màn hình (khoảng 950px) nên ba cột bằng nhau quá hẹp. Bỏ bản đồ gọn nổi là Claude tự quyết (đọc nhầm câu "menu đè lên nội dung", xem "Lỗi gặp"): ở bảng tiến độ nó nổi trên cột mà không giúp gì |
 | 2026-11-20 | Ba bản B viết lại gọn trong `artifacts/plan/`, khác bản phác ở bốn chỗ: mục tiêu gập có nút "Đọc hết mục tiêu" (bản phác bấm vào chữ, chữ có link thì bấm nhầm); ô "Bạn cần làm" giữ dòng đầy đủ ở Đang ở đâu (bản phác ẩn dòng đó, ô chỉ hiện 120 chữ); thẻ kết quả có việc con gập mở và ngày xong; ga "Ước: mốc" không tính vào số phiên còn lại. Ô số tròn đen chữ trắng ở nền sáng, ngược lại ở nền tối | Giữ đủ thông tin khi gập; trắng đen thì phân biệt bằng viền và độ đậm |
 | 2026-11-19 | Bộ màu của kit đổi sang trắng đen (PR #161): nền và thẻ trắng tinh, nhấn gần đen, mực hình thành ba mức xám, màu chỉ để báo xong, lỗi, cảnh báo. Mục "Không làm" ghi không đổi bộ màu gốc; lần này thien quyết thẳng, không qua vòng gu | thien 23:56: "màu chính là màu trắng, mình không muốn chạy đua với màu sắc nữa", chọn "Trắng đen, màu chỉ để báo". Ba bố cục B của ga 3 dựng theo bộ màu này |
