@@ -18,9 +18,18 @@
 5. **Thời gian dự kiến** tính bằng số phiên hoặc số tin nhắn của thien, và **chỗ dễ sa lầy**.
 6. **Câu hỏi** chỉ những câu mà câu trả lời làm đổi việc. Mỗi câu có sẵn đề xuất, để thien trả lời "ok" là chạy được.
 
+## Mã kế hoạch
+
+thien gọi kế hoạch bằng mã, không nhắc tên dài: nhiều kế hoạch chạy song song thì tên dài vừa khó nhớ vừa khó nói đúng (thien chọn mã số thay cho tên gọi 1–2 tiếng, 2026-11-19).
+- Mỗi kế hoạch có một mã `KH<số>`, ghi ở đầu tiêu đề file (`# KH6 · Quy trình nhìn được…`) và đầu dòng trong bảng "Kế hoạch đang chạy" của `docs/STATUS.md` (bảng xếp theo mã). Trang tiến độ lấy tiêu đề nên tự hiện mã.
+- Số kế tiếp = mã lớn nhất trong `docs/plans/` cộng 1. Không dùng lại số, kể cả khi kế hoạch đã xong hay bỏ. Kế hoạch xong trước ngày 2026-11-19 không có mã. Mã chỉ áp ở repo này; repo khác có kế hoạch riêng thì đánh số riêng.
+- Gửi kế hoạch mới cho thien duyệt thì ghi sẵn mã; thien duyệt kế hoạch là duyệt luôn mã.
+- thien nhắn "KH6 tới đâu", "làm tiếp kh 6", "kế hoạch 6", hay gọi gần đúng tên: AI tra bảng trong STATUS. Chỉ nhắn "kế hoạch": gửi lại bảng mã, tên ngắn, số tick. Không chắc thien nói kế hoạch nào thì hỏi bằng nút bấm, không đoán.
+- `templates/check-status.mjs` chặn kế hoạch chưa xong mà thiếu mã, và hai file trùng mã.
+
 ## Sau khi thien duyệt
 
-- Ngay trong phiên đó, ghi kế hoạch vào `docs/plans/<ngày>-<tên-tiếng-anh>.md` theo `templates/PLAN.template.md`, và thêm một dòng vào bảng "Kế hoạch đang chạy" của `docs/STATUS.md`. Project không có repo thì ghi vào memory của project.
+- Ngay trong phiên đó, ghi kế hoạch vào `docs/plans/<ngày>-<tên-tiếng-anh>.md` theo `templates/PLAN.template.md` (tiêu đề có mã), và thêm một dòng bắt đầu bằng mã vào bảng "Kế hoạch đang chạy" của `docs/STATUS.md`. Project không có repo thì ghi vào memory của project.
 - Ghi vào file kế hoạch trong cùng PR với việc đang làm, không mở PR riêng chỉ để tick.
 - **Tick** một việc khi đã có bằng chứng: PR đã merge, test chạy, thien đã thử. PR còn mở thì để trống và ghi "(chờ merge PR #…)".
 - **Đổi bước** so với bản đã duyệt: thêm một dòng vào bảng "Đã đổi" (đổi gì, vì sao), và nói thien một câu trong tin nhắn kế tiếp. Đổi cả mục tiêu thì phải hỏi trước.

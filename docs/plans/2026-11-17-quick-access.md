@@ -1,4 +1,4 @@
-# Trang mở nhanh: kế hoạch, hướng dẫn, trang hay xem
+# KH3 · Trang mở nhanh: kế hoạch, hướng dẫn, trang hay xem
 
 Trạng thái: đang chạy · Duyệt: 2026-11-17 (thien: "ok", theo cả 3 đề xuất và 4 cách mở nhanh) · Cập nhật: 2026-11-17 · nick tnt628 · Thread: [Lên kế hoạch các trang xem nhanh](https://claude.ai/code/project/chan_01SGACbRV5gySBUzjhLdLPvR?thread=cmsg_01SGACbRV5gySBUzjhLdLPvRXeMFLc4SCjNEs5y91GJ1LN) · Bản duyệt: https://claude.ai/artifact/T3wrDfnzvCy1nXyYc6NUHb
 

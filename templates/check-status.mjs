@@ -81,6 +81,27 @@ export function checkPlan(text) {
     if (!new RegExp(`^## ${name}`, 'm').test(text)) problems.push(`thiếu mục "## ${name}".`);
   }
   if (!/^### /m.test(text)) problems.push('mục Checkpoint chưa có checkpoint nào ("### 1. ...").');
+  if (!/^Trạng thái:\s*(xong|bỏ)(?=[\s.,;·]|$)/m.test(text) && planCode(text) == null) {
+    problems.push('tiêu đề chưa có mã kế hoạch: "# KH<số> · <tên>", số kế tiếp sau mã lớn nhất trong docs/plans/ (luật ở profile/PLANNING.md).');
+  }
+  return problems;
+}
+
+/** Plan code from the title line "# KH6 · ...": the number, or null. thien calls plans by this code (profile/PLANNING.md). */
+export function planCode(text) {
+  const m = /^# KH(\d+) · /m.exec(text);
+  return m ? Number(m[1]) : null;
+}
+
+/** Problems for codes shared by two plan files ([[name, text]]). Codes are never reused, even after a plan is done. */
+export function duplicateCodes(files) {
+  const seen = new Map(), problems = [];
+  for (const [name, text] of files) {
+    const c = planCode(text);
+    if (c == null) continue;
+    if (seen.has(c)) problems.push(`mã KH${c} trùng ở ${seen.get(c)} và ${name}: mỗi kế hoạch một mã riêng, không dùng lại.`);
+    else seen.set(c, name);
+  }
   return problems;
 }
 
@@ -118,9 +139,9 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   for (const n of notes) console.log(process.env.GITHUB_ACTIONS ? `::warning::${n}` : `nhắc: ${n}`);
   const plansDir = join(dirname(file), 'plans');
   if (existsSync(plansDir)) {
-    for (const f of readdirSync(plansDir).filter((n) => n.endsWith('.md'))) {
-      for (const p of checkPlan(lf(readFileSync(join(plansDir, f), 'utf8')))) problems.push(`${join(plansDir, f)}: ${p}`);
-    }
+    const planFiles = readdirSync(plansDir).filter((n) => n.endsWith('.md')).map((f) => [join(plansDir, f), lf(readFileSync(join(plansDir, f), 'utf8'))]);
+    for (const [f, t] of planFiles) for (const p of checkPlan(t)) problems.push(`${f}: ${p}`);
+    problems.push(...duplicateCodes(planFiles));
   }
   for (const p of problems) console.error(p);
   if (problems.length) process.exit(1);

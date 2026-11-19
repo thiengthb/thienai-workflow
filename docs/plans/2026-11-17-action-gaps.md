@@ -1,4 +1,4 @@
-# Các hành động giữa thien và AI còn thiếu luật
+# KH2 · Các hành động giữa thien và AI còn thiếu luật
 
 Trạng thái: đang chạy · Duyệt: 2026-11-17 · Cập nhật: 2026-11-18 · nick tnt697 · Báo cáo gốc: [Rà soát quy trình làm việc thien và Claude](https://claude.ai/artifact/PWo1UdCofcZ49baViSbe6Q) (mở ở nick tnt697)
 

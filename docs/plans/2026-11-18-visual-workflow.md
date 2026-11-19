@@ -1,4 +1,4 @@
-# Quy trình nhìn được, và gu lớn dần theo ngày
+# KH6 · Quy trình nhìn được, và gu lớn dần theo ngày
 
 Trạng thái: đang chạy · Duyệt: 2026-11-18 (thien: "ok, duyệt theo cả 4 đề xuất") · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBWDbXVGqmzESXaXn7P, https://claude.ai/code/session_01WXAvBX3kxdpafP9q92LUbo · Bản duyệt: https://claude.ai/artifact/7hVBYXwyHZbfVp7mL4GsV4 (nick tnt697) · Trang: https://claude.ai/artifact/WtTcEXfkxQkTckRan5J28v (nick tnt697)
 
