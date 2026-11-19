@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 · Trang: https://claude.ai/a
 Luật ghi file này ở `profile/PLANNING.md`. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 đã sửa xong trong PR #139 (luật mới ở `profile/CHATS.md`, chuẩn setup lên v6); checkpoint 2: lịch nhắc mới đã tạo, chạy lần đầu tối thứ Năm 19/11.
+- Đang ở: checkpoint 1 xong (PR #139 đã merge, thien đã dán chuẩn v6 ở mọi project); checkpoint 2: lịch nhắc mới đã tạo, chạy lần đầu tối thứ Năm 19/11.
 - Còn thiếu: số của lần nhắc đầu tiên; checkpoint 3 đo ở sakubun; xem lại ở mốc 01/12.
-- thien cần làm: merge PR #139, rồi dán lại project instructions bản v6 (khối "bản beta" trong `profile/SETUP.md`) ở từng project beta.
+- thien cần làm: không có.
 
 ## Mục tiêu
 Quy trình thienai-workflow ở project bản beta không đốt usage vào những chỗ không làm ra gì: đánh thức thread lớn đã nghỉ lâu, lịch nhắc chạy trong thread cũ, thread thức dậy vì PR chỉ còn chờ merge. Dùng đúng tính năng sẵn có của Claude Projects, không viết thêm công cụ.
@@ -37,7 +37,7 @@ Quy trình thienai-workflow ở project bản beta không đốt usage vào nh�
 Xong khi: bạn mở `profile/CHATS.md` trên GitHub, mục "Project bản beta" có ba luật ở mục "Ý kiến của mình" kèm số đo làm căn cứ; chat điều phối ở các project beta đã có luật số 2 (theo câu hỏi 1).
 Ước: 1 phiên
 - [x] `profile/CHATS.md` mục "Project bản beta": bỏ câu "nên không có ngưỡng", thêm ba luật và hai dòng số đo, giữ dưới khoảng 15 dòng
-- [ ] Đưa luật số 2 tới chat điều phối theo cách bạn chọn ở câu hỏi 1: dòng mới trong khối bản beta của `profile/SETUP.md`, chuẩn lên v6 (đã sửa trong PR #139); tick khi bạn đã dán lại ở các project beta
+- [x] Đưa luật số 2 tới chat điều phối theo cách bạn chọn ở câu hỏi 1: dòng mới trong khối bản beta của `profile/SETUP.md`, chuẩn lên v6 (đã sửa trong PR #139); PR #139 merge 2026-11-19, thien đã dán lại ở mọi project cùng ngày (cả project cũ, để mọi project cùng một số chuẩn)
 - [x] `docs/STATUS.md`: thêm dòng kế hoạch này vào "Kế hoạch đang chạy" (STATUS đang đủ 40 dòng, nên gộp hay bớt một dòng cũ cho vừa)
 
 ### 2. Lịch nhắc việc dở chạy ở phiên mới
