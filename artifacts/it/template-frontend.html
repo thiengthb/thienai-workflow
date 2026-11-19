@@ -144,7 +144,8 @@
       <pre class="code"><span data-line="accent"><span class="k">--accent</span>: <span data-v="accent"></span>;</span><span data-line="amount"><span class="c">/* tô màu: </span><span data-v="amount" class="c"></span><span class="c"> */</span></span></pre>
     </div>
 
-    <!-- Bàn thử 3: app đặt món, bước "Nhìn 5 giây" (data-stage="food@cover"). Màn bị che, nút data-peek mở 5 giây. -->
+    <!-- Bàn thử 3: app đặt món, bước "Nhìn 5 giây" (data-stage="food@cover"). Màn bị che, nút data-peek mở 5 giây.
+         Sau khi vặn, nút data-compare="food" đặt màn lúc đầu (nhiều cam) cạnh màn đang vặn. -->
     <div class="pane bench" data-pane="food">
       <div class="phone"><div class="screen" data-amount="nhieu">
         <div class="food">
@@ -263,9 +264,11 @@
       <p class="why">Dưới cùng. Màn có hơn 10 chỗ màu cam, nên trong 5 giây mắt không biết dừng ở đâu.</p>
     </div>
     <button class="btn" type="button" data-uncover="food" data-need="food" disabled>Bỏ che, cho mình vặn</button>
-    <p class="stage-hint">Giờ vặn Lượng màu cam về Ít, rồi nhìn lại.</p>
+    <p class="stage-hint">Giờ vặn Lượng màu cam về Ít, rồi đặt màn lúc đầu cạnh màn của bạn.</p>
     <div class="tried" data-tried="food.amount"></div>
-    <button class="btn primary next" type="button" data-go="6" data-need="tried-food.amount" disabled>Tiếp</button>
+    <button class="btn" type="button" data-compare="food" data-need="tried-food.amount" disabled>So với màn lúc đầu</button>
+    <p class="stage-hint">Hai màn cạnh nhau: bên nào mắt tìm ra nút đặt món trước?</p>
+    <button class="btn primary next" type="button" data-go="6" data-need="compare-food" disabled>Tiếp</button>
   </section>
 
   <!-- 6. Hiểu sau: nhắc lựa chọn, rồi cho tự thấy chỗ màu nhấn va với màu mang nghĩa. -->

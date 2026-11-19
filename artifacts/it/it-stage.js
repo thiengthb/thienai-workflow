@@ -7,7 +7,7 @@
   if (!stage) return;
   const R = window.R || (window.R = {});
   Object.assign(R, { knobs: R.knobs || {}, tried: R.tried || {}, picks: R.picks || {}, boards: R.boards || {}, heard: R.heard || [],
-    match: R.match || {}, peeked: R.peeked || [], asked: R.asked || [], ffwd: R.ffwd || {} });
+    match: R.match || {}, peeked: R.peeked || [], asked: R.asked || [], ffwd: R.ffwd || {}, compared: R.compared || [] });
   // Câu hỏi chờ một thao tác trên sân khấu: <div class="q" data-wait="peek-food">: các lựa chọn khóa cho tới khi khóa đó xong.
   const waitQs = $$('.q[data-wait]');
   const lockWait = (q, on) => $$('.opt', q).forEach((o) => { if (!o.classList.contains('right') && !o.classList.contains('wrong')) o.disabled = on; });
@@ -18,7 +18,7 @@
   };
   const panes = $$('.pane[data-pane]', stage);
   const pane = (n) => panes.find((p) => p.dataset.pane === n);
-  const mainScreen = (b) => $('.phone:not(.mini) .screen', b);
+  const mainScreen = (b) => $('.phone:not(.mini):not(.ghost) .screen', b);
   // Khối code cuộn ngang được: cho Tab tới để cuộn bằng phím (axe: scrollable-region-focusable).
   $$('pre.code', stage).forEach((c) => { if (!c.hasAttribute('tabindex')) c.tabIndex = 0; });
 
@@ -28,6 +28,7 @@
     Object.entries(r.picks || {}).forEach(([k, v]) => L.push(`Chốt (${k}): ${Object.values(v).join(', ')}`));
     Object.entries(r.match || {}).filter(([, v]) => v.moves).forEach(([k, v]) => L.push(`Vặn cho giống (${k}): ${v.best}% sau ${v.moves} lần vặn`));
     if ((r.peeked || []).length) L.push('Đã nhìn 5 giây: ' + r.peeked.join(', '));
+    if ((r.compared || []).length) L.push('Đã so hai màn trước và sau: ' + r.compared.join(', '));
     Object.entries(r.boards || {}).forEach(([k, b]) => { if (b.checked) L.push(`Bảng ${k}: khớp bản mẫu ${b.right}/${b.total}` + (b.diff.length ? ` (khác: ${b.diff.join(', ')})` : '')); });
     // Bảng đang xếp dở (chưa kiểm): để ô "Hỏi Claude" biết người học đang đặt ai ở đâu.
     $$('.board', stage).forEach((bd) => {
@@ -88,7 +89,7 @@
   }
   function soiCount(el) {
     const b = el.closest('.bench'); soiMark(b);
-    const n = $$('.phone:not(.mini) .screen .soi-on', b).length;
+    const n = $$('.phone:not(.mini):not(.ghost) .screen .soi-on', b).length;
     el.textContent = (el.dataset.text || '{n} chỗ').replace('{n}', n);
   }
 
@@ -129,7 +130,50 @@
     if (pct === 100 && moved) { done('match-' + name); $$(`[data-echo="match-${name}"]`).forEach((e) => { e.textContent = e.dataset.same || 'Giống hệt bản mục tiêu.'; e.classList.add('good'); }); }
   }
 
+  // ---------- So trước và sau ----------
+  // <button data-compare="food">: đặt màn "Trước" (bản chép, đứng yên) cạnh màn đang vặn ("Sau"), bấm lại để gập; mở khóa compare-<pane>.
+  // Trước = data-before của bàn (JSON như data-target), không có thì là giá trị các núm lúc mở trang (aria-pressed). Bước
+  // data-stage="food@compare" mở sẵn; sang bước khác thì gập. Chỉ bàn có dùng so mới được bọc thêm .pair và .shot, bàn khác giữ nguyên.
+  const cmpUsed = (n) => !!$(`[data-compare="${n}"]`) || $$('.step[data-stage]').some((s) => s.dataset.stage === n + '@compare');
+  function cmpSetup(b) {
+    const scr = mainScreen(b), phone = scr && scr.closest('.phone'); if (!phone) return;
+    const shot = (cls, text) => {
+      const s = document.createElement('div'), l = document.createElement('span');
+      s.className = 'shot ' + cls; l.className = 'label cap'; l.textContent = text; s.append(l); return s;
+    };
+    const pair = document.createElement('div'), before = shot('before', b.dataset.beforeLabel || 'Trước'), after = shot('after', b.dataset.afterLabel || 'Sau');
+    pair.className = 'pair';
+    phone.replaceWith(pair); after.append(phone);
+    const ghost = document.createElement('div'), copy = scr.cloneNode(true);
+    // Bản chép không bấm được, không đọc lên, không trùng id với màn thật.
+    ghost.className = 'phone ghost'; ghost.setAttribute('aria-hidden', 'true'); ghost.inert = true;
+    [copy, ...$$('[id]', copy)].forEach((e) => e.removeAttribute('id')); copy.removeAttribute('tabindex');
+    $$('[data-soi]', copy).forEach((e) => { e.removeAttribute('data-soi'); e.classList.remove('soi-on'); });
+    // Giá trị lúc mở trang của mọi núm, rồi data-before đè lên những núm nó ghi (núm nó không ghi giữ giá trị lúc mở).
+    const vals = { ...Object.fromEntries($$('[data-knob]:not([data-lens])', b)
+      .map((kn) => [kn.dataset.knob, ($$('button[data-val]', kn).find((x) => x.getAttribute('aria-pressed') === 'true') || {}).dataset?.val]).filter(([, v]) => v)),
+    ...(b.dataset.before ? JSON.parse(b.dataset.before) : {}) };
+    Object.entries(vals).forEach(([k, v]) => {
+      const knob = $(`[data-knob="${k}"]`, b);
+      if (knob && knob.dataset.var) copy.style.setProperty(knob.dataset.var, v); else copy.dataset[k] = v;
+    });
+    ghost.append(copy); before.append(ghost); pair.append(before, after);
+  }
+  function cmpShow(b, on) {
+    const name = b.dataset.pane;
+    b.classList.toggle('cmp', on);
+    $$(`[data-compare="${name}"]`).forEach((bt) => {
+      if (!bt.dataset.label) bt.dataset.label = bt.textContent.trim();
+      bt.setAttribute('aria-pressed', String(on));
+      bt.textContent = on ? (bt.dataset.back || 'Gập màn trước') : bt.dataset.label;
+    });
+    if (!on) return;
+    if (!R.compared.includes(name)) R.compared.push(name);
+    done('compare-' + name);
+  }
+
   $$('.bench', stage).forEach((b) => {
+    if (cmpUsed(b.dataset.pane)) cmpSetup(b);
     if (b.dataset.target) matchSetup(b);
     $$('[data-knob]', b).forEach((knob) => {
       const btns = $$('button[data-val]', knob);
@@ -201,6 +245,10 @@
       if (left > 0) return;
       clearInterval(tick); bt.textContent = bt.dataset.after || 'Đã xem'; end();
     }, 1000);
+  }));
+  $$('[data-compare]').forEach((bt) => bt.addEventListener('click', () => {
+    const b = pane(bt.dataset.compare); if (!b) return;
+    cmpShow(b, !b.classList.contains('cmp')); reveal();
   }));
   $$('[data-uncover]').forEach((bt) => bt.addEventListener('click', () => {
     const b = pane(bt.dataset.uncover); if (!b) return;
@@ -390,7 +438,8 @@
 
   // ---------- Bước nào hiện gì ----------
   // Mỗi bước: data-stage="<tên pane>[@chế độ]"; không ghi thì ẩn sân khấu. lesson.js chuyển bước bằng class "on".
-  // Chế độ: @listen (bảng chỉ cho nghe), @cover (bàn thử bị che, chờ nút data-peek), @lens (hiện núm kính data-lens).
+  // Chế độ: @listen (bảng chỉ cho nghe), @cover (bàn thử bị che, chờ nút data-peek), @lens (hiện núm kính data-lens),
+  // @compare (hai màn so trước và sau mở sẵn).
   const steps = $$('.step');
   let last = null;
   function sync() {
@@ -400,6 +449,10 @@
     // Sang bước khác thì gập màn tua 3 tháng, để bảng hiện lại.
     $$('[data-ffwd][aria-pressed="true"]').forEach((bt) => { bt.setAttribute('aria-pressed', 'false'); bt.textContent = bt.dataset.label; });
     $$('.ffwd.on').forEach((box) => box.classList.remove('on'));
+    // Hai màn so trước và sau: mở sẵn ở bước @compare, gập ở bước khác.
+    const [cn, cm = ''] = (cur.dataset.stage || '').split('@');
+    $$('.bench.cmp, .bench .pair').map((x) => x.closest('.bench')).filter((b, i, a) => a.indexOf(b) === i)
+      .forEach((b) => { const want = b.dataset.pane === cn && cm === 'compare'; if (want !== b.classList.contains('cmp')) cmpShow(b, want); });
     const [name, mode = ''] = (cur.dataset.stage || '').split('@');
     document.documentElement.dataset.stage = name ? 'on' : 'off';
     panes.forEach((p) => {
@@ -433,7 +486,7 @@
       const cur = (kn) => $$('button[data-val]', kn).find((x) => x.getAttribute('aria-pressed') === 'true');
       const report = () => {
         const L = knobs.map((kn) => `${knobLabel(kn)}: ${cur(kn) ? valName(cur(kn)) : 'chưa chọn'}`);
-        soiMark(b); const n = $$('.phone:not(.mini) .screen .soi-on', b).length;
+        soiMark(b); const n = $$('.phone:not(.mini):not(.ghost) .screen .soi-on', b).length;
         if ($('[data-soi]', b)) L.push(`màu nhấn đang nằm ở ${n} chỗ trên màn`);
         if (b.dataset.target) L.push(`giống bản mục tiêu ${(R.match[name] || {}).now ?? 0}%`);
         return L.join('; ');

@@ -239,3 +239,21 @@ html[data-stage="on"] #stage { display: block; }
 @media (max-width: 899px) { .phone.mini { --pw: 110px; height: 220px; } .phone.mini .screen { zoom: .42; } }
 /* Claude đang làm mẫu trên bảng: ẩn dấu ✓ ! của lần kiểm để không lẫn với cách Claude xếp. */
 .board.demo .bd-card::after { display: none; }
+
+/* ---------- So trước và sau: màn "Trước" (bản chép, đứng yên) cạnh màn đang vặn ---------- */
+/* Ngoài lúc so, .pair và .shot không tạo hộp nào: bàn y như cũ. Khi so, hai màn trong .pair nhỏ lại cho vừa cột sân khấu, núm vẫn bên cạnh;
+   bản thiết kế (.phone.mini) nếu có thì giữ cỡ riêng. */
+.pair, .shot { display: contents; }
+.shot > .cap, .phone.ghost { display: none; }
+.bench.cmp { flex-wrap: wrap; align-content: center; overflow-y: auto; }
+.bench.cmp .pair { display: flex; gap: 10px; flex: none; }
+.bench.cmp .shot { display: grid; gap: 6px; justify-items: center; align-content: start; }
+.bench.cmp .shot > .cap { display: block; font-size: 11px; }
+.bench.cmp .shot.after > .cap { color: var(--accent-ink); }
+.bench.cmp .phone.ghost { display: block; box-shadow: 0 0 0 1px var(--line); }
+.bench.cmp .pair .phone { --pw: 200px; height: min(510px, calc(100vh - 140px)); }
+.bench.cmp .pair .screen { zoom: .76; }
+@media (max-width: 899px) {
+  .bench.cmp .pair .phone { --pw: 146px; height: 300px; }
+  .bench.cmp .pair .screen { zoom: .535; }
+}
