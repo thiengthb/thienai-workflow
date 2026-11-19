@@ -14,7 +14,7 @@ Người đọc là người đang học, đọc bằng tiếng Việt. Mặc đ
 4. **Thuật ngữ mới đi kèm nghĩa ngay bên cạnh.** Lần đầu xuất hiện thì có nghĩa tiếng Việt trong ngoặc hoặc trong cùng câu. Một đoạn không giới thiệu quá hai thuật ngữ mới. Đã chọn tên nào thì giữ tên đó.
 5. **Mỗi câu một ý, câu ngắn** (phần lớn dưới khoảng 25 chữ). Chủ ngữ rõ; tránh "nó" mơ hồ.
 6. **Mỗi đoạn mở bằng câu chủ đề**, một đoạn một chủ đề, 2–4 câu.
-7. **Không dùng ký hiệu hay mã thay cho lời** (→, ↔, mã nội bộ, viết tắt). Nếu cần dẫn mã để tra, đặt trong ngoặc cuối câu sau khi câu đã đủ ý.
+7. **Không dùng ký hiệu hay mã thay cho lời** (→, ↔, mã nội bộ, viết tắt). Thuật ngữ quen dùng mà `profile/VOICE.md` cho giữ nguyên (PR, commit, migration, context...) không tính là viết tắt. Nếu cần dẫn mã để tra, đặt trong ngoặc cuối câu sau khi câu đã đủ ý.
 8. **Tiếng Việt đời thường.** "Dùng" thay "sử dụng/tiến hành". Tránh câu dịch thẳng từ tiếng Anh ("Điều đáng nhớ là…"). Tránh "rõ ràng là", "đơn giản là", "tất nhiên".
 9. **Danh sách có câu dẫn, các mục cùng dạng.** Số cho các bước có thứ tự, gạch đầu dòng cho mục rời. Lập luận và giải thích thì viết thành đoạn văn có câu nối, không băm thành gạch đầu dòng.
 10. **Tin nhắn sau khi làm xong việc có ba nhịp:** (1) vừa làm gì, một câu; (2) vì sao nó quan trọng, nối với điều người đọc đã biết; (3) nên làm gì tiếp, từng bước, mỗi bước nói rõ sẽ thấy gì.

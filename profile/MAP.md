@@ -16,7 +16,7 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 | Xong mục tiêu của chat, hay việc lớn mới trong chat đã xong mục tiêu | `profile/CHATS.md` | skill `explain-usage` chỉ khi có kế hoạch đang đo | một dòng `docs/usage-log.md` khi có đo |
 | "tiếp tục" | `profile/HANDOFF.md`, `profile/ACCOUNTS.md` khi việc do nick khác ghi | `templates/start-session.mjs --claim` (đọc sổ, nhận việc, so nhánh) | sổ bàn giao ở các mốc khó khôi phục |
 | "học" | gói buổi in bởi `artifacts/lesson/prepare-lesson.mjs` (buổi kế tiếp, khung một buổi, hồ sơ môn, 3 thẻ đến hạn, nhánh mở), `profile/TUTOR.md`, `artifacts/lesson/README.md` | `artifacts/lesson/prepare-lesson.mjs`, `artifacts/lesson/make-lesson.mjs`, `artifacts/review/make-review.mjs` | mục "Sau buổi" của `learning/README.md` (`after-lesson.mjs`), rồi PR |
-| Dạy hay giải thích để thien học | `profile/TUTOR.md` | | |
+| Dạy hay giải thích để thien học | `profile/TUTOR.md`, `skills/viet-de-hieu/SKILL.md` (10 quy tắc viết dễ hiểu) | | |
 | "mở lại bài …" (xem lại bài đăng ở nick khác) | `learning/reopen.md` | `artifacts/lesson/make-lesson.mjs --no-check` | không ghi gì |
 | Duyệt giao diện, chọn phương án có hình | `artifacts/README.md` rồi README của đúng mẫu: `artifacts/compare/README.md` hay `artifacts/decide/README.md` | `artifacts/compare/make-round.mjs`, `artifacts/decide/make-decision.mjs` | kết quả nguyên văn vào PR hay kế hoạch |
 | Quyết định khó sửa lại | mục "Ai quyết" trong `templates/AGENTS.template.md`, `templates/DECISION.template.md` | `artifacts/decide/make-decision.mjs` nếu có hình | `docs/decisions/` (repo project) |
