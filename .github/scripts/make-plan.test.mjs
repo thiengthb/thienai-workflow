@@ -94,7 +94,7 @@ for (const f of readdirSync(join(root, 'docs/plans')).filter((f) => f.endsWith('
   assert.ok(html.includes('window.Kit') && html.includes("'plans/' + P.id"));
   assert.ok(!html.includes('</script> mẫu'), 'title is escaped');
   assert.match(html, /id="ck-3"[^>]*>/);
-  assert.match(html, /<a class="jump" href="#ck-1">/, 'the jump card is a real link');
+  assert.match(html, /<a href="#q-2"><b>2<\/b>/, 'the question strip links to each question');
   assert.match(html, /id="readout" role="status"/);
   assert.ok(existsSync(join(out, 'preview.html')));
   const pub = JSON.parse(readFileSync(join(out, 'publish.json'), 'utf8'));
@@ -119,7 +119,7 @@ for (const f of readdirSync(join(root, 'docs/plans')).filter((f) => f.endsWith('
 {
   const dir = mkdtempSync(join(tmpdir(), 'plan-blocks-'));
   const full = build(fixture, join(dir, 'full'), { today: '2026-11-21' });
-  assert.deepEqual(full.blocks, ['dang-o', 'tuyen', 'ban-do', 'phuong-an', 'cau-hoi', 'them', 'nhat-ky']);
+  assert.deepEqual(full.blocks, ['cau-hoi', 'tuyen', 'ban-do', 'phuong-an', 'them', 'nhat-ky'], 'a plan waiting for approval puts its questions first');
   const md = readFileSync(fixture, 'utf8').replace('\nLuật ghi file', '\nKhối: cau-hoi, tuyen · Vì: chờ duyệt, câu hỏi lên trước\n\nLuật ghi file');
   writeFileSync(join(dir, 'some.md'), md);
   const some = build(join(dir, 'some.md'), join(dir, 'some'), { today: '2026-11-21' });
@@ -148,6 +148,46 @@ for (const f of readdirSync(join(root, 'docs/plans')).filter((f) => f.endsWith('
   const n = build(join(dir, 'no-opts.md'), join(dir, 'no-opts'), { today: '2026-11-21' });
   assert.deepEqual(n.blocks, ['tuyen']);
   assert.ok(n.issues.some((i) => i.level === 'ghi chú' && /phuong-an/.test(i.msg)));
+}
+
+// Layouts (KH9 ga 3, thien chose B for all three kinds): picked by state, a "Bố cục:" line overrides.
+{
+  const dir = mkdtempSync(join(tmpdir(), 'plan-lay-'));
+  const page = (name, opts) => { const r = build(join(root, 'artifacts/plan', name), join(dir, name), { today: '2026-11-21', ...opts }); return { ...r, html: readFileSync(join(dir, name, 'index.html'), 'utf8') }; };
+  const pend = page('fixture.md');
+  assert.equal(pend.layout, 'phieu-hoi');
+  assert.match(pend.html, /class="wrap lay-phieu-hoi"/);
+  assert.match(pend.html, /<section id="cau-hoi" aria-labelledby="h-q" class="phieu">/);
+  assert.doesNotMatch(pend.html, /class="prog"|class="tiles"|\.kanban\{/, 'no progress bar before approval, no board CSS');
+  assert.doesNotMatch(pend.html, /<details class="acc" open>/, 'context stops stay folded');
+  const run = page('fixture-running.md');
+  assert.equal(run.layout, 'bang-tien-do');
+  assert.match(run.html, /<div class="line kanban">/);
+  assert.match(run.html, /class="tile ask" href="#dang-o"/);
+  assert.match(run.html, /<b class="big">~1<small> phiên<\/small><\/b><span class="small muted">chưa tính ga mốc/, '"Ước: mốc" is not counted');
+  assert.match(run.html, /<a class="jump" href="#ck-3">/, 'the jump card is a real link');
+  const cols = run.html.slice(run.html.indexOf('<div class="line kanban">'));
+  assert.ok(cols.indexOf('id="ck-1"') < cols.indexOf('class="kcol now"') && cols.indexOf('id="ck-3"') > cols.indexOf('class="kcol now"'), 'done stops sit in the first column');
+  assert.doesNotMatch(run.html, /phieu-steps|res-grid\{/);
+  const done = page('fixture-closed.md');
+  assert.equal(done.layout, 'the-ket-qua');
+  assert.deepEqual(done.blocks, ['dang-o', 'tuyen', 'phuong-an', 'them', 'nhat-ky']);
+  assert.match(done.html, /<b>5<small>\/6<\/small><\/b><span>ga xong<\/span>/);
+  assert.match(done.html, /class="res card moved"/, 'unticked tasks gather in "Chuyển đi"');
+  assert.ok(done.dropped.includes('tuyen') && !/\.stop::before/.test(done.html), 'the stop line CSS is dropped, the task list CSS stays');
+  assert.match(done.html, /ul\.tasks\{/);
+  assert.doesNotMatch(done.html, /class="jump"|id="daymap"/);
+  // "Bố cục:" line: the old one-column page, with its reason; a wrong name is reported and the default stays.
+  const md = readFileSync(join(root, 'artifacts/plan/fixture-running.md'), 'utf8');
+  writeFileSync(join(dir, 'one.md'), md.replace(/^(Trạng thái:.*)$/m, '$1\nBố cục: mot-cot · Vì: muốn đọc từng ga theo tuyến'));
+  const one = build(join(dir, 'one.md'), join(dir, 'one'), { today: '2026-11-21' });
+  assert.equal(one.layout, 'mot-cot');
+  assert.equal(one.plan.layout.why, 'muốn đọc từng ga theo tuyến');
+  assert.match(readFileSync(join(dir, 'one/index.html'), 'utf8'), /<ol class="line">/);
+  const bad = parsePlanFile(md.replace(/^(Trạng thái:.*)$/m, '$1\nBố cục: lich'));
+  assert.ok(bad.issues.some((i) => /bố cục "lich" không có/.test(i.msg)) && bad.plan.layout === null);
+  const noWhy = parsePlanFile(md.replace(/^(Trạng thái:.*)$/m, '$1\nBố cục: mot-cot'));
+  assert.ok(noWhy.issues.some((i) => /thiếu " · Vì:/.test(i.msg)) && noWhy.plan.layout.name === 'mot-cot');
 }
 
 console.log('ok make-plan');

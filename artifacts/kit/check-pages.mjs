@@ -114,6 +114,11 @@ export async function buildFixtures(dir, browser) {
   const { build: plan } = await import('../plan/make-plan.mjs');
   plan(join(here, '../plan/fixture.md'), join(dir, 'plan'), { today: '2026-11-21' });
   out.push({ name: 'plan', file: join(dir, 'plan/preview.html') });
+  // Hai bố cục còn lại của trang kế hoạch (KH9 ga 3): đang chạy (bảng tiến độ), đã đóng (thẻ kết quả).
+  for (const k of ['running', 'closed']) {
+    plan(join(here, `../plan/fixture-${k}.md`), join(dir, 'plan-' + k), { today: '2026-11-21' });
+    out.push({ name: 'plan-' + k, file: join(dir, `plan-${k}/preview.html`) });
+  }
   // Trang luồng chạy: luồng mẫu cố định (rẽ nhánh, vòng lặp, khối phụ).
   const { build: flow } = await import('../flow/make-flow.mjs');
   flow(join(here, '../flow/fixture.json'), join(dir, 'flow'));

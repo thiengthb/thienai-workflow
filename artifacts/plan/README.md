@@ -1,6 +1,6 @@
 # Mẫu trang kế hoạch
 
-Trang dựng thẳng từ một file `docs/plans/*.md`, để thien nắm kế hoạch bằng mắt và trả lời câu hỏi bằng nút, không đọc hết file markdown. Bố cục là bản "Một nấc" thien chọn ở vòng gu 1 (2026-11-18): một cột đọc, toàn cảnh trước, tuyến checkpoint kiểu tuyến tàu. Kế hoạch đầy đủ ở `docs/plans/2026-11-18-visual-workflow.md`, checkpoint 2.
+Trang dựng thẳng từ một file `docs/plans/*.md`, để thien nắm kế hoạch bằng mắt và trả lời câu hỏi bằng nút, không đọc hết file markdown. Bố cục chọn theo trạng thái của kế hoạch (bảng ở mục "File kế hoạch viết thế nào"); bản gốc là "Một nấc" thien chọn ở vòng gu 1 (2026-11-18): một cột đọc, toàn cảnh trước, tuyến checkpoint kiểu tuyến tàu. Kế hoạch đầy đủ ở `docs/plans/2026-11-18-visual-workflow.md`, checkpoint 2.
 
 ## Trang làm được gì
 
@@ -38,7 +38,18 @@ Xong khi: ...
 Khối: cau-hoi, tuyen, nhat-ky · Vì: kế hoạch chờ duyệt, câu hỏi là việc chính
 ```
 
-Khối không có trên trang thì CSS và JS của nó cũng không (`kit/pack.mjs`), nên bỏ khối là trang nhẹ đi. Lệnh in danh sách khối đã dùng; tên sai hay thiếu "Vì:" thì báo "lệch". Bố cục riêng cho kế hoạch chờ duyệt, đang chạy, đã đóng là việc của KH9 ga 3.
+Khối không có trên trang thì CSS và JS của nó cũng không (`kit/pack.mjs`), nên bỏ khối là trang nhẹ đi. Lệnh in danh sách khối đã dùng; tên sai hay thiếu "Vì:" thì báo "lệch". 
+
+**Bố cục theo trạng thái (KH9 ga 3, thien chọn B cả ba loại ở vòng gu 5, 2026-11-19).** Lệnh dựng chọn theo dòng "Trạng thái:":
+
+| Trạng thái | Bố cục | Trang ra sao | Khối mặc định |
+|---|---|---|---|
+| chờ duyệt, còn câu hỏi | `phieu-hoi` | Câu hỏi là phiếu ngay dưới tên, dải số nhảy tới từng câu; tuyến ga ở dưới, gọi là bối cảnh, gập hết | cau-hoi, tuyen, ban-do, phuong-an, them, nhat-ky |
+| đang chạy, tạm dừng | `bang-tien-do` | Bốn ô số dưới tên (việc xong, ga, còn lại ước, bạn cần làm), ga xếp vào ba cột Xong · Đang chạy · Chưa tới | như mặc định ở trên |
+| xong, bỏ | `the-ket-qua` | Bốn con số kết quả, mỗi ga một thẻ "Đạt / Chưa đạt", việc chưa tick gom vào thẻ "Chuyển đi" | dang-o, tuyen, phuong-an, them, nhat-ky |
+| chờ duyệt mà không có câu hỏi | `mot-cot` | Bản "Một nấc" của vòng gu 1: một cột, tuyến ga dọc | như mặc định ở trên |
+
+Ở ba bố cục mới, mục tiêu dài gập còn ba dòng, có nút "Đọc hết mục tiêu". Trắng đen: cột, ô, thẻ phân biệt bằng viền và độ đậm; màu chỉ để báo (cảnh báo cho ga đóng khi chưa xong, mốc). Muốn khác thì thêm một dòng dưới dòng "Trạng thái:", có lý do: `Bố cục: mot-cot · Vì: muốn đọc từng ga theo tuyến`. Lệnh in bố cục đã dùng; tên sai hay thiếu "Vì:" thì báo "lệch".
 
 Trạng thái "chờ duyệt" dùng cho bản gửi thien duyệt (file nằm trên nhánh, chưa merge). Dòng "Ước:" và mục "Câu hỏi" chưa có trong mẫu PLAN; luật thêm vào mẫu gom ở mốc 01/12 (checkpoint 5 của kế hoạch).
 
@@ -59,4 +70,5 @@ Chỉ kiểm, không dựng: `node artifacts/plan/make-plan.mjs --check docs/pla
 | `make-plan.mjs` | Dựng thân trang, gộp kit, ghi `publish.json`; `--check` để chỉ kiểm |
 | `template.html` | Khung và CSS của trang (chỉ dùng tên màu trong kit) |
 | `plan.js` | Mục lục, bản đồ ngày, núm vặn, câu hỏi, lưu và gửi |
-| `fixture.md` | Kế hoạch mẫu cho test và `kit/check-pages.mjs` |
+| `fixture.md` | Kế hoạch mẫu cho test và `kit/check-pages.mjs` (chờ duyệt, bố cục phiếu hỏi) |
+| `fixture-running.md`, `fixture-closed.md` | KH9 lúc đang chạy và KH6 lúc đã đóng, chép từ vòng gu 5, để kiểm bảng tiến độ và thẻ kết quả |

@@ -134,17 +134,106 @@ ol.line { list-style: none; margin: 0; padding: 0; display: grid; }
 .done-when b { color: var(--ink-1); font-weight: 600; }
 .stop.now .done-when b { color: var(--ink-2); }
 .stop .acc summary { font-size: 14px; }
-ul.tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
-ul.tasks li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; align-items: start; }
-ul.tasks .tick { width: 18px; height: 18px; margin-top: 2px; border: 1.5px solid var(--line-strong); border-radius: 5px; display: grid; place-items: center; font-size: 12px; }
-ul.tasks li.done .tick { background: var(--ink-1); border-color: var(--ink-1); color: var(--on-fill); }
-ul.tasks li.done > span:last-child { color: var(--muted); }
 .legend { margin-top: -4px; }
 .legend .lg { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--line-strong); background: var(--card); }
 .legend .lg.done { background: var(--ink-1); border-color: var(--ink-1); }
 .legend .lg.now { border-color: var(--ink-2); }
 .legend .lg.gate { border-style: dashed; border-color: var(--warn); }
 /* @end tuyen */
+
+/* @block tasks */
+/* Việc con của một ga: trong tuyến ga, bảng tiến độ và thẻ kết quả */
+ul.tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
+ul.tasks li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; align-items: start; }
+ul.tasks .tick { width: 18px; height: 18px; margin-top: 2px; border: 1.5px solid var(--line-strong); border-radius: 5px; display: grid; place-items: center; font-size: 12px; }
+ul.tasks li.done .tick { background: var(--ink-1); border-color: var(--ink-1); color: var(--on-fill); }
+ul.tasks li.done > span:last-child { color: var(--muted); }
+/* @end tasks */
+
+/* @block lead-more */
+/* Bố cục mới (KH9 ga 3): mục tiêu dài gập còn ba dòng; nút chỉ hiện khi chữ bị cắt thật (plan.js). */
+.lead.clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.lead-more { justify-self: start; margin-top: -8px; min-height: 36px; padding: 0 12px; font-size: 13.5px; }
+.lead-more[hidden] { display: none; }
+/* @end lead-more */
+
+/* @block lay-phieu phieu-steps */
+/* Chờ duyệt · Phiếu hỏi trước (vòng gu 5, thien chọn B 2026-11-19): câu hỏi là phiếu ngay dưới tên, dải số nhảy tới câu;
+   tuyến ga nằm dưới, gọi là bối cảnh. Trắng đen: phiếu phân biệt bằng nền xám nhạt và viền trên đậm, không bằng màu. */
+#cau-hoi.phieu { background: var(--soft); border: 1px solid var(--line); border-top: 3px solid var(--ink-2); border-radius: var(--r-lg); padding: 20px 20px 22px; gap: 16px; }
+#cau-hoi.phieu > .label { color: var(--ink-2); }
+#cau-hoi.phieu #h-q { font-size: 24px; }
+.phieu-note { color: var(--muted); font-size: 14.5px; }
+.phieu-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.phieu-steps a { display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: center; padding: 8px 10px; min-height: 44px; height: 100%;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--r); color: var(--ink); text-decoration: none; font-size: 13px; line-height: 1.3; }
+.phieu-steps a:hover { border-color: var(--ink-2); }
+.phieu-steps b { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--ink-2); color: var(--bg); font: 600 13px var(--mono); }
+.phieu .qs { gap: 12px; }
+.phieu .q { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px 16px; scroll-margin-top: calc(var(--toc-h) + 16px); }
+.phieu .q legend { float: left; width: 100%; font-size: 16.5px; margin-bottom: 10px; }
+.phieu .q .opts2 { clear: both; }
+@media (max-width: 560px) { #cau-hoi.phieu { padding: 16px 12px 18px; } #cau-hoi.phieu #h-q { font-size: 21px; } .phieu .q { padding: 12px; } }
+#tuyen.ctx { padding-top: 18px; border-top: 1px dashed var(--line-strong); }
+/* @end lay-phieu */
+
+/* @block lay-bang kanban tiles */
+/* Đang chạy · Bảng tiến độ (vòng gu 5, thien chọn B): bốn ô số dưới tên, ga xếp vào ba cột Xong · Đang chạy · Chưa tới.
+   Cột đang chạy phân biệt bằng viền đậm và chữ đậm, không bằng màu. */
+@media (min-width: 1160px) { .wrap.lay-bang-tien-do { max-width: 940px; margin: 0 24px 0 max(212px, calc(50% - 470px)); } }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.tile { display: grid; gap: 6px; align-content: start; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; min-width: 0; }
+.tile .big { font: 700 30px/1 var(--font); letter-spacing: -.02em; }
+.tile .big small { font-size: 14px; font-weight: 500; color: var(--muted); margin-left: 3px; letter-spacing: 0; }
+.tile.ask { border-color: var(--ink-2); color: var(--ink); text-decoration: none; line-height: 1.4; }
+a.tile.ask:hover { background: var(--soft); }
+.tile.ask .label { color: var(--ink-2); }
+.tile.ask .small { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 720px) { .tiles { grid-template-columns: 1fr 1fr; } .tile .big { font-size: 26px; } }
+.kanban { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: start; }
+.kcol { display: grid; gap: 10px; background: var(--soft); border-radius: var(--r-lg); padding: 10px; min-height: 120px; align-content: start; }
+.kcol > h3 { display: flex; align-items: center; gap: 6px; padding: 2px 4px; }
+.kcol.now > h3 { color: var(--ink-2); }
+.kcol > ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.kcol > p { padding: 0 4px; }
+.kcol .stop { display: block; padding: 0; }
+.kcol .stop::before { display: none; }
+.kcol .stop .dot { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; font-size: 12px; }
+.kcol .stop .box { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; gap: 6px; }
+.kcol .stop.now .box { border: 1.5px solid var(--ink-2); box-shadow: var(--shadow-sm); }
+.kcol .stop .head { display: grid; gap: 6px; padding-right: 32px; }
+.kcol .stop h3 { font-size: 14.5px; }
+@media (max-width: 720px) { .kanban { grid-template-columns: minmax(0, 1fr); } }
+/* @end lay-bang */
+
+/* @block lay-ket-qua res-grid result-nums */
+/* Đã đóng · Thẻ kết quả (vòng gu 5, thien chọn B): bốn con số dưới tên, mỗi ga một thẻ "ra gì", việc chưa làm gom vào
+   thẻ "Chuyển đi". Ga xong: viền trên liền đậm; đóng khi chưa xong: viền đứt màu cảnh báo (màu chỉ để báo). */
+.result-nums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--r); background: var(--card); }
+.result-nums > div { display: grid; gap: 2px; padding: 12px 14px; }
+.result-nums > div + div { border-left: 1px solid var(--line); }
+.result-nums b { font: 700 28px/1.05 var(--font); }
+.result-nums small { font-size: 15px; color: var(--muted); font-weight: 500; }
+.result-nums span { font-size: 13px; color: var(--muted); }
+@media (max-width: 560px) { .result-nums { grid-template-columns: 1fr 1fr; } .result-nums > div:nth-child(3) { border-left: 0; }
+  .result-nums > div:nth-child(n+3) { border-top: 1px solid var(--line); } }
+.res-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 12px; }
+.res { padding: 14px 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.res .rh { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: center; }
+.res .rh h3 { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.res .n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font: 600 13px var(--mono); border: 2px dashed var(--warn); color: var(--warn); }
+.res.ok { border-top: 3px solid var(--ink-2); }
+.res.ok .n { background: var(--ink-2); border: 0; color: var(--bg); }
+.res.part { border-top: 3px dashed var(--warn); }
+.res.drop { border-top: 3px dotted var(--line-strong); }
+.res.drop .n { border: 2px dotted var(--line-strong); color: var(--muted); }
+.res.drop h3 { text-decoration: line-through; color: var(--muted); }
+.res.moved { grid-column: 1 / -1; border-top: 3px solid var(--ink-1); }
+.res.moved .n { background: var(--soft); border: 1px solid var(--line-strong); color: var(--ink); }
+.res .rf { display: flex; gap: 6px; flex-wrap: wrap; }
+.res p.small b { font-weight: 600; }
+.res .acc summary { font-size: 14px; }
+/* @end lay-ket-qua */
 
 /* @block phuong-an */
 /* Phương án */
