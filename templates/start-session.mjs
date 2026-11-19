@@ -18,6 +18,9 @@
 // --claim: thien said "tiếp tục". Sets "Ghi bởi" of the task to this value and saves it right away (profile/HANDOFF.md,
 //          step 3); the working copy is written next to the repo folder (../<việc>.md), outside git.
 // --task:  claim this task instead of the newest one.
+// --repos: the repos attached to the session (also read by setup-check). With --claim, a task in a repo that is not
+//          attached is not claimed (its book could not be pushed, 2026-11-19): the newest task among attached repos is
+//          taken instead, and the newer one is named so thien can attach its repo. Without --repos, every repo counts.
 // Options for tests: --remote-map "a/b=<git url>,..." (read only these repos, from these remotes), --task-dir <dir>,
 //          --no-fetch (do not fetch origin for unmerged branches), --no-agents (skip AGENTS.md), --no-git (passed on to setup-check).
 import { existsSync, readFileSync, readdirSync, writeFileSync, realpathSync } from 'node:fs';
@@ -144,6 +147,11 @@ function main(argv) {
   const noFetch = flag('--no-fetch');
   const noAgents = flag('--no-agents');
   const beta = argv.includes('--beta'); // stays in argv: setup-check reads it too
+  // --repos stays in argv for setup-check when --project is there; alone it is only read here.
+  const ri = argv.indexOf('--repos');
+  const attached = ri < 0 ? null : (argv[ri + 1] || '').split(',').map((x) => x.trim()).filter(Boolean);
+  if (ri >= 0 && !argv.includes('--project')) argv.splice(ri, 2);
+  const isAttached = (repo) => !attached || attached.includes(repo);
   const map = Object.fromEntries((mapArg || '').split(',').filter(Boolean).map((x) => { const i = x.indexOf('='); return [x.slice(0, i), x.slice(i + 1)]; }));
   const urlOf = (repo) => map[repo] || `https://github.com/${repo}`;
   let code = 0;
@@ -195,12 +203,20 @@ function main(argv) {
   }
   if (by) {
     console.log('\n## Nhận việc');
-    task = pick ? rows.find((r) => `${r.repo}:${r.slug}` === pick) : rows[0];
-    if (!task) console.log(pick ? `Không thấy việc ${pick} trong sổ.` : 'Không có việc nào để nhận.');
+    task = pick ? rows.find((r) => `${r.repo}:${r.slug}` === pick) : rows.find((r) => isAttached(r.repo));
+    const newest = rows[0];
+    if (!pick && newest && newest !== task) {
+      console.log(`nhắc: việc mới nhất trong sổ là "${newest.title}" ở ${newest.repo}, repo này chưa gắn vào phiên nên không nhận. Muốn làm việc đó: gắn repo rồi chạy lại với --task ${newest.repo}:${newest.slug}.`);
+    }
+    if (task && pick && !isAttached(task.repo)) {
+      code = 1;
+      console.log(`Chưa nhận: việc ${pick} ở repo ${task.repo}, repo này chưa gắn vào phiên nên không đẩy sổ được. Gắn repo đó rồi chạy lại. Sổ không bị đụng tới.`);
+      task = undefined;
+    } else if (!task) console.log(pick ? `Không thấy việc ${pick} trong sổ.` : (newest ? 'Không có việc nào ở các repo đang gắn.' : 'Không có việc nào để nhận.'));
     else {
       const note = otherNickNote(task, by, process.env.HANDOFF_NOW ? new Date(process.env.HANDOFF_NOW) : new Date()); // HANDOFF_NOW: fixed clock for tests
       if (note) console.log('nhắc: ' + note);
-      if (rows.length > 1 && !pick) console.log(`nhắc: sổ có ${rows.length} việc; nhận việc mới nhất. Kể các việc kia cho thien (mục trên).`);
+      if (rows.length > 1 && !pick) console.log(`nhắc: sổ có ${rows.length} việc; nhận việc mới nhất${attached ? ' ở các repo đang gắn' : ''}. Kể các việc kia cho thien (mục trên).`);
       const file = join(taskDir, task.slug + '.md');
       // Based on the version just read, so save refuses if another nick changed the task in between.
       writeFileSync(file, stripBase(claimText(task.text, by)) + `<!-- handoff-base: ${hashOf(task.text)} -->\n`);
@@ -211,7 +227,9 @@ function main(argv) {
         // A format problem is not another nick: only a changed book (save refused) means that.
         console.log(`Chưa nhận được: ${why}\n=> ` + (/chưa đúng mẫu/.test(why)
           ? 'Việc này trong sổ chưa đúng mẫu (xem trên), chưa ghi gì: sửa file đó theo mẫu rồi save, hay hỏi thien nếu không rõ.'
-          : 'Một nick khác có thể vừa nhận việc này: dừng lại hỏi thien.'));
+          : /nick khác vừa sửa/.test(why)
+            ? 'Một nick khác vừa sửa việc này trong sổ: dừng lại hỏi thien.'
+            : `Đẩy sổ của ${task.repo} không được, không phải vì nick khác: xem repo đó đã gắn vào phiên với quyền ghi chưa, rồi chạy lại.`));
       } else {
         console.log(`${s.stdout.trim()} (bản làm việc: ${file})\n`);
         console.log(normalize(readFileSync(file, 'utf8')).replace(/\n?<!-- handoff-base: [0-9a-f]+ -->\n?$/, '').trim());

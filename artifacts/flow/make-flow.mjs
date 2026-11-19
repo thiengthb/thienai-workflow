@@ -146,11 +146,11 @@ ${steps}
 ${asideHtml}
 <section id="ke-lai" class="retell" aria-labelledby="h-retell">
   <span class="label">Tự kể lại</span>
-  <h2 id="h-retell">Kể lại luồng này bằng lời của bạn</h2>
-  <p class="muted">Đừng cuộn lên, đừng mở file nào. Vài câu là đủ: bắt đầu từ đâu, đi qua những bước nào, chỗ nào rẽ hay quay lại. Claude đọc và chỉ chỗ thiếu.</p>
+  <h2 id="h-retell">Luồng rẽ ở đâu? Quay lại ở đâu?</h2>
+  <p class="muted">Kể bằng lời của bạn, đừng chép tên khối. Đừng cuộn lên, đừng mở file nào. Vài câu là đủ: bắt đầu từ đâu, chỗ nào chia hai đường, chỗ nào vòng lại và vì sao. Claude đọc và chỉ chỗ thiếu.</p>
   <div class="reply card pad">
     <label class="label" for="tell">Luồng "${esc(flow.title)}" theo bạn</label>
-    <textarea id="tell" maxlength="3000" disabled placeholder="Ví dụ: mình nhắn học, Claude chạy lệnh in gói buổi..."></textarea>
+    <textarea id="tell" maxlength="3000" disabled placeholder="Ví dụ: mình nhắn học thì Claude soạn trang; nếu kiểm còn thiếu thì quay lại ghi tiếp, đủ rồi mới mở PR..."></textarea>
     ${trial ? `<div class="trial" id="trial"><h3>${icon('sparkles')}Chi tiết thử của trang này</h3><p class="small">${esc(trial)}</p>
       <div class="row" role="group" aria-label="Chi tiết thử"><button class="choice" type="button" aria-pressed="false" data-trial="Thích" disabled><i></i>Thích</button><button class="choice" type="button" aria-pressed="false" data-trial="Không" disabled><i></i>Không</button></div></div>` : ''}
     <div class="acts"><button class="btn" id="copy" type="button" disabled>${icon('copy')}Chép</button><button class="btn accent" id="send" type="button" disabled>Gửi cho Claude</button></div>
@@ -170,7 +170,7 @@ export function build(jsonPath, out, { repo = '', url = '', trial = '' } = {}) {
   const rel = repoPath(jsonPath);
   const id = basename(jsonPath).replace(/\.json$/i, '').toLowerCase().replace(/[^a-z0-9-]+/g, '-');
   const { body, data } = render(flow, { id, repo, source: repo && rel ? `https://github.com/${repo}/blob/main/${rel}` : '',
-    trial: trial || 'Khối đã đọc qua đổi viền sang xanh mực và có dấu tick nhỏ, để thấy mình đã đi tới đâu trong luồng.' });
+    trial });   // chi tiết thử chỉ khi truyền --trial (KH8, 2026-11-19)
   const html = packHtml(lf(readFileSync(join(here, 'template.html'), 'utf8'))
     .replace('__TITLE__', () => esc(flow.title))
     .replace('/*KIT_CSS*/', () => lf(readFileSync(join(here, '../kit/kit.css'), 'utf8')))

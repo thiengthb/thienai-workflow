@@ -65,7 +65,7 @@ const TODAY = ['--today', '2026-11-17'];
   assert.equal(pub.file_path, join(d, 'out/lesson-02.html'), 'đăng bản dựng, không đăng nguồn');
   assert.deepEqual(filledIn(rd(pagePath, 'utf8')), [], 'nguồn trong repo vẫn gọn');
   assert.match(rd(pub.file_path, 'utf8'), /window\.Kit = /, 'bản dựng có kit');
-  assert.deepEqual(pub.capabilities, { db: {}, comments: {}, sample: {}, dictation: {}, tts: {} });
+  assert.deepEqual(pub.capabilities, { db: {}, comments: {}, sample: {}, tts: {} });   // dictation bỏ cùng mic (KH8 câu 7)
   assert.equal(pub.description, 'Buổi thử');
   assert.match(rd(pub.file_path, 'utf8'), /<meta name="lesson-id" content="demo-02">/, 'id guessed from the path');
   // Nguồn cũ còn kit đã điền (bài trước 2026-11-15): chạy lại thì nguồn tự gọn.
