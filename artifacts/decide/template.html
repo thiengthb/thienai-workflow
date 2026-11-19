@@ -76,6 +76,22 @@ main { max-width: 1180px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
 @media (max-width: 759px) { .view-table { display: none; } .view-cards { display: grid; } }
 
 /* Đề xuất của Claude, ẩn tới khi chọn */
+/* Nhiều câu trên một trang: thanh câu (nút đánh số, chữ bản đã chọn), rồi tên câu đang xem. */
+.parts { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 8px; }
+.parts[hidden], .pq[hidden] { display: none; }
+.part { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: center; text-align: left; font: inherit; color: var(--ink);
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 8px 12px; min-height: 52px; cursor: pointer; }
+.part:hover { border-color: var(--line-strong); }
+.part .pn { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--line-strong); font: 600 13px var(--mono); color: var(--muted); }
+.part.done .pn { background: var(--ink-1); border-color: var(--ink-1); color: var(--on-fill); }
+.part[aria-current] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.part .pt { display: grid; font-size: 13px; line-height: 1.35; }
+.part .pt b { font-size: 14px; font-weight: 600; }
+.pq { display: grid; gap: 2px; }
+.pq h2 { font-size: 18px; }
+.pq .why { color: var(--muted); max-width: 80ch; }
+.rec .next { margin-left: 8px; margin-top: 6px; }
+@media (max-width: 480px) { .part { grid-template-columns: 1fr; justify-items: start; gap: 4px; padding: 8px 10px; } .part .pt b { font-size: 13.5px; } }
 .rec { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border: 1px dashed var(--line); border-radius: var(--r); color: var(--muted); font-size: 13.5px; }
 .rec .ic { flex: none; width: 16px; height: 16px; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .rec.open { border-style: solid; background: var(--card); color: var(--ink); }
@@ -101,6 +117,8 @@ dialog#zoom img { display: block; width: 100%; height: auto; }
     <h1 id="q"></h1>
     <p class="why" id="why"></p>
   </header>
+  <nav class="parts" id="parts" aria-label="Các câu cần chọn" hidden></nav>
+  <div class="pq" id="pq" hidden><h2 id="pq-t"></h2><p class="why" id="pq-why"></p></div>
   <section class="view-table card stage" id="stage" data-area="stage" aria-label="Xem từng phương án"></section>
   <section class="view-table card tbl" id="table" data-area="table" aria-label="Bảng so sánh"></section>
   <section class="view-cards cards" id="cards" data-area="cards" aria-label="Các phương án"></section>

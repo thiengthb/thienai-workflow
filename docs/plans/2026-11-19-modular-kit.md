@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 2 xong: PR #158 đã merge (thien nhắn "merge đi" 23:00). Tiếp theo checkpoint 3 (vòng gu bố cục trang kế hoạch). Ga 1 vẫn chờ thien xem trang mẫu thành phần.
-- Còn thiếu: ga 3, ga 4; đóng ga 1 khi thien xem xong trang mẫu thành phần.
-- thien cần làm: mở trang mẫu thành phần (https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst, nick tnt697) xem mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử".
+- Đang ở: checkpoint 3: vòng gu 5 đã đăng (3 câu x 3 bản), chờ thien chọn. Ga 1 vẫn chờ thien xem trang mẫu thành phần.
+- Còn thiếu: thien chọn bố cục; chuyển bản chọn vào `artifacts/plan/` và dựng lại trang KH9; ga 4; đóng ga 1.
+- thien cần làm: mở trang chọn https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG (nick tnt697), chọn một bản cho mỗi loại, viết một câu vì sao rồi bấm "Gửi cho Claude". Bấm thật cả chín bản ở https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP. Xem thêm trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử").
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
@@ -46,7 +46,7 @@ Xong khi: một trang kế hoạch và một trang luồng dựng từ danh sác
 ### 3. Vòng gu bố cục cho trang kế hoạch
 Xong khi: thien chọn bố cục cho ba loại kế hoạch trên một trang chọn có hình; trang của chính KH9 được dựng lại và đăng đè theo bố cục đã chọn (câu 3), và trang kế hoạch kế tiếp dựng theo bố cục đó.
 Ước: 1 phiên
-- [ ] Ba loại nội dung, mỗi loại 2–3 bố cục: chờ duyệt (nhiều câu hỏi: dạng phiếu hỏi), đang chạy (theo dõi: dạng bảng tiến độ, tuyến ga), đã đóng (tổng kết: dạng thẻ kết quả, việc chuyển đi)
+- [x] Ba loại nội dung, mỗi loại 2–3 bố cục: chờ duyệt (nhiều câu hỏi: dạng phiếu hỏi), đang chạy (theo dõi: dạng bảng tiến độ, tuyến ga), đã đóng (tổng kết: dạng thẻ kết quả, việc chuyển đi) (vòng 5 ở `docs/plans/2026-11-18-visual-workflow/round-5/`: mỗi loại A hiện nay, chờ duyệt B phiếu hỏi trước, C hỏi bên cạnh; đang chạy B bảng tiến độ, C tuyến ngang; đã đóng B thẻ kết quả, C ba cột tổng kết. Trang chọn ba câu https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG, trang bấm thử https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP, nick tnt697, 2026-11-19)
 - [ ] thien chọn trên trang `decide/`, câu vì sao vào hàng chờ gu
 - [ ] Dựng lại trang KH9 bằng bố cục đã chọn, đăng đè link trong dòng "Trang:" (câu 3)
 
@@ -75,6 +75,7 @@ Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang h�
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-19 | Ga 3: trang `decide/` hỏi được nhiều câu trên một trang (`parts`), thay vì ba trang chọn | Kế hoạch ghi "một trang chọn có hình" cho ba loại; mỗi loại cần đề xuất ẩn và ảnh riêng, nên mẫu chọn phương án cần chọn nhiều câu |
 | 2026-11-19 | Ga 2: mặc định "theo nội dung" chỉ quyết khối nào có (khối có nội dung thì có), giữ thứ tự như trước | Đổi thứ tự hay bố cục theo loại kế hoạch là vòng gu của ga 3, thien chọn; ga 2 chỉ làm phần máy, nên trang mặc định không đổi so với main |
 | 2026-11-19 | Checkpoint 1 rút khối gửi, `.choice`, `.trial` thay vì câu hỏi, núm, khung ảnh | Đọc từng chỗ thì `.q`, `.opt` là trùng tên chứ không trùng khối (thẻ phương án, dòng lựa chọn, câu trắc nghiệm là ba thứ khác nhau); núm và khung ảnh cũng khác theo mẫu. Khối trùng thật là chép và gửi (bốn bản) và chi tiết thử (hai bản) |
 
