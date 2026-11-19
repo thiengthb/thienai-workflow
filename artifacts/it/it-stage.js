@@ -149,8 +149,10 @@
     ghost.className = 'phone ghost'; ghost.setAttribute('aria-hidden', 'true'); ghost.inert = true;
     [copy, ...$$('[id]', copy)].forEach((e) => e.removeAttribute('id')); copy.removeAttribute('tabindex');
     $$('[data-soi]', copy).forEach((e) => { e.removeAttribute('data-soi'); e.classList.remove('soi-on'); });
-    const vals = b.dataset.before ? JSON.parse(b.dataset.before) : Object.fromEntries($$('[data-knob]:not([data-lens])', b)
-      .map((kn) => [kn.dataset.knob, ($$('button[data-val]', kn).find((x) => x.getAttribute('aria-pressed') === 'true') || {}).dataset?.val]).filter(([, v]) => v));
+    // Giá trị lúc mở trang của mọi núm, rồi data-before đè lên những núm nó ghi (núm nó không ghi giữ giá trị lúc mở).
+    const vals = { ...Object.fromEntries($$('[data-knob]:not([data-lens])', b)
+      .map((kn) => [kn.dataset.knob, ($$('button[data-val]', kn).find((x) => x.getAttribute('aria-pressed') === 'true') || {}).dataset?.val]).filter(([, v]) => v)),
+    ...(b.dataset.before ? JSON.parse(b.dataset.before) : {}) };
     Object.entries(vals).forEach(([k, v]) => {
       const knob = $(`[data-knob="${k}"]`, b);
       if (knob && knob.dataset.var) copy.style.setProperty(knob.dataset.var, v); else copy.dataset[k] = v;

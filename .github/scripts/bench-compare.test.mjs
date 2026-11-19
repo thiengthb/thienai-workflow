@@ -13,10 +13,11 @@ const { chromium } = createRequire(import.meta.url)('playwright');
 const browser = await chromium.launch();
 const dir = mkdtempSync(join(tmpdir(), 'bench-compare-'));
 const fx = Object.fromEntries((await buildFixtures(dir, browser)).map((f) => [f.name, f.file]));
-// Bản thứ hai: bàn "bank" có data-before và bước 6 mở sẵn hai màn (@compare).
+// Bản thứ hai: bàn "bank" có data-before chỉ ghi một núm, bước 6 mở sẵn hai màn (@compare); bàn "match" (có bản thiết kế) cũng dùng so.
 const modeFile = join(dir, 'mode.html');
 writeFileSync(modeFile, readFileSync(fx.frontend, 'utf8')
-  .replace('data-pane="bank">', `data-pane="bank" data-before='{"accent":"#dc2626","amount":"nhieu"}' data-before-label="Bản cũ">`)
+  .replace('data-pane="bank">', `data-pane="bank" data-before='{"amount":"it"}' data-before-label="Bản cũ">`)
+  .replace('data-s="8" data-stage="match"', 'data-s="8" data-stage="match@compare"')
   .replace('data-s="6" data-stage="bank"', 'data-s="6" data-stage="bank@compare"'));
 
 const go = (p, s) => p.evaluate((s) => document.querySelectorAll('.step').forEach((x) => x.classList.toggle('on', x.dataset.s === String(s))), s);
@@ -73,12 +74,19 @@ const m = await p.evaluate(() => {
     soiGhost: g.querySelectorAll('.soi-on, [data-soi]').length, soiMain: b.querySelectorAll('.shot.after .soi-on').length };
 });
 assert.ok(m.cmp, 'bước @compare mở sẵn hai màn');
-assert.equal(m.accent, '#dc2626'); assert.equal(m.amount, 'nhieu');
+assert.equal(m.accent, '#2563eb', 'núm data-before không ghi thì giữ giá trị lúc mở');
+assert.equal(m.amount, 'it', 'data-before đè giá trị lúc mở');
 assert.equal(m.cap, 'Bản cũ');
 assert.ok(m.soiGhost === 0 && m.soiMain > 0, 'Soi chỉ trên màn thật');
 await go(p, 7);
 await p.waitForTimeout(100);
 assert.equal(await p.evaluate(() => document.querySelector('[data-pane="bank"]').classList.contains('cmp')), false);
+// Bàn có bản thiết kế: khi so, bản thiết kế giữ cỡ riêng, chỉ hai màn trong .pair nhỏ lại.
+await go(p, 8);
+await p.waitForTimeout(200);
+const mini = await p.evaluate(() => { const b = document.querySelector('[data-pane="match"]'), r = (e) => Math.round(e.getBoundingClientRect().width);
+  return { cmp: b.classList.contains('cmp'), mini: r(b.querySelector('.phone.mini')), pair: r(b.querySelector('.shot.after .phone')) }; });
+assert.ok(mini.cmp && mini.mini === 132 && mini.pair === 200, `bản thiết kế giữ 132px, màn so 200px (${JSON.stringify(mini)})`);
 assert.deepEqual(errors, []);
 await browser.close();
 console.log('ok bench-compare');
