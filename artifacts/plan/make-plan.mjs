@@ -253,7 +253,7 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   };
   const TOC = { 'dang-o': 'Đang ở đâu', tuyen: { 'phieu-hoi': 'Bối cảnh', 'the-ket-qua': 'Kết quả' }[L] || 'Checkpoint', 'phuong-an': 'Phương án', 'cau-hoi': open ? 'Câu hỏi' : 'Góp ý', them: 'Thêm', 'nhat-ky': 'Nhật ký' };
   const toc = blocks.filter((n) => TOC[n]).map((n) => [n, TOC[n]]);
-  const body = `<nav class="toc" id="toc" aria-label="Mục lục"><div class="in">${toc.map(([h, t]) => `<a href="#${h}">${t}</a>`).join('')}</div>${sideProg}</nav>
+  const body = `<nav class="toc${L === 'bang-tien-do' ? ' wide' : ''}" id="toc" aria-label="Mục lục"><div class="in">${toc.map(([h, t]) => `<a href="#${h}">${t}</a>`).join('')}</div>${sideProg}</nav>
 ${mini}
 <main class="wrap lay-${L}">
 <header class="ph">

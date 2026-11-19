@@ -40,7 +40,9 @@ nav.toc.away { transform: translateY(-100%); }
 .side-prog { display: none; }
 @media (min-width: 1160px) {
   nav.toc, nav.toc.away { transform: none; }
-  nav.toc { position: fixed; top: 0; bottom: 0; left: max(8px, calc(50% - 380px - 196px)); width: 180px; padding: 32px 0;
+  /* Cột mục lục đứng ngay bên trái cột đọc, cách 16px: tính từ bề ngang cột đọc (--main-w), để bố cục rộng hơn 760px
+     không bị cột này đè lên (lỗi thien thấy 20/11 ở bảng tiến độ, màn từ khoảng 1366px). */
+  nav.toc { position: fixed; top: 0; bottom: 0; left: max(8px, calc(50% - var(--main-w, 760px) / 2 - 196px)); width: 180px; padding: 32px 0;
     background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border: 0; display: flex; flex-direction: column; gap: 24px; }
   nav.toc .in { flex-direction: column; margin: 0; padding: 0; gap: 0; overflow: visible; }
   nav.toc a { padding: 9px 12px; border-left: 2px solid var(--line); border-radius: 0 var(--r) var(--r) 0; white-space: normal; line-height: 1.3; }
@@ -184,6 +186,8 @@ ul.tasks li.done > span:last-child { color: var(--muted); }
    chạy phân biệt bằng viền đậm, không bằng màu. */
 .wrap.lay-bang-tien-do { max-width: 1000px; }
 @media (min-width: 1160px) { .wrap.lay-bang-tien-do { max-width: 960px; margin: 0 24px 0 max(212px, calc(50% - 480px)); } }
+/* Cột mục lục đọc --main-w để đứng cạnh cột đọc 960px (lệnh dựng đặt lớp wide cho nav ở bố cục này). */
+nav.toc.wide { --main-w: 960px; }
 .tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .tile { display: grid; gap: 6px; align-content: start; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; min-width: 0; }
 .tile .big { font: 700 30px/1 var(--font); letter-spacing: -.02em; }
