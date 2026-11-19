@@ -1,6 +1,6 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-19 · Claude nick tnt697 (project Claude, KH9: #160, #161 đã merge) · Trang tiến độ: https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n (trang tổng quan, tab thienai-workflow)
+Cập nhật lần cuối: 2026-11-20 · Claude nick tnt697 (project Claude, KH9 ga 1 và ga 3 xong, PR #163 đã merge) · Trang tiến độ: https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n (trang tổng quan, tab thienai-workflow)
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu. Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
 
@@ -12,7 +12,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
-| KH9 · [Kit lắp ghép, bố cục theo nội dung](plans/2026-11-19-modular-kit.md) | Duyệt 19/11, làm trước kế hoạch MCP; 1: khối dùng chung đã vào kit (PR #156 đã merge), chờ thien xem trang mẫu thành phần; 2: trang dựng từ danh sách khối, kit bỏ khối không dùng, check-pages báo vượt cỡ gốc 20% (PR #158 đã merge); 3: thien chọn B cả ba loại (phiếu hỏi trước, bảng tiến độ, thẻ kết quả) ở vòng gu 5 (PR #160 đã merge); kit đổi sang trắng đen (PR #161 đã merge); tiếp theo đưa ba bản B vào `artifacts/plan/` và dựng lại trang KH9 | 7/10 |
+| KH9 · [Kit lắp ghép, bố cục theo nội dung](plans/2026-11-19-modular-kit.md) | Duyệt 19/11, làm trước kế hoạch MCP; 1: khối dùng chung đã vào kit (PR #156 đã merge), thien đã xem trang mẫu thành phần (20/11), ga đóng; 2: trang dựng từ danh sách khối, kit bỏ khối không dùng, check-pages báo vượt cỡ gốc 20% (PR #158 đã merge); 3: thien chọn B cả ba loại (phiếu hỏi trước, bảng tiến độ, thẻ kết quả) ở vòng gu 5 (PR #160 đã merge); kit đổi sang trắng đen (PR #161 đã merge); ba bản B thành mặc định của `artifacts/plan/` theo trạng thái, trang KH9 dựng lại bằng bảng tiến độ (PR #163 đã merge); 4: vòng gu hai tuần một lần (mốc) | 8/10 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |

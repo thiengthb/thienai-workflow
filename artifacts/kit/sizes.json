@@ -1,5 +1,5 @@
 {
-  "note": "Cỡ gốc (byte) của trang mẫu mỗi mẫu, bản sẽ đăng (đã qua kit/pack.mjs). kit/check-pages.mjs báo LỖI khi một trang mẫu nặng hơn cỡ gốc quá 20% (KH9 ga 2). Đo từ main ở f45b0be ngày 2026-11-19, lúc bắt đầu checkpoint 2. Chỉ đổi khi thien duyệt một bố cục mới: node artifacts/kit/check-pages.mjs --write-sizes.",
+  "note": "Cỡ gốc (byte) của trang mẫu mỗi mẫu, bản sẽ đăng (đã qua kit/pack.mjs). kit/check-pages.mjs báo LỖI khi một trang mẫu nặng hơn cỡ gốc quá 20% (KH9 ga 2). Đo từ main ở f45b0be ngày 2026-11-19, lúc bắt đầu checkpoint 2. Chỉ đổi khi thien duyệt một bố cục mới: node artifacts/kit/check-pages.mjs --write-sizes. plan-running, plan-closed thêm 2026-11-20 (KH9 ga 3, thien chọn bố cục bảng tiến độ và thẻ kết quả), đo từ nhánh plan-layouts-default.",
   "measured": "2026-11-19 · main f45b0be",
   "limit": 1.2,
   "pages": {
@@ -11,6 +11,8 @@
     "compare": 94147,
     "review": 52822,
     "plan": 73907,
+    "plan-running": 77312,
+    "plan-closed": 82022,
     "flow": 119708,
     "gallery": 172668
   }

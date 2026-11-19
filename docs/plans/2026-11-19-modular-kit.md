@@ -1,13 +1,13 @@
 # KH9 · Kit lắp ghép, bố cục theo nội dung
 
-Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đề xuất") · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Trang: https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (nick tnt697)
+Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đề xuất") · Cập nhật: 2026-11-20 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Trang: https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (nick tnt697)
 
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 3: thien chọn B cả ba loại (phiếu hỏi trước, bảng tiến độ, thẻ kết quả). PR #160 (vòng gu 5) và #161 (kit trắng đen) đã merge 20/11 (thien nhắn "merge hết"). Tiếp theo chuyển ba bản B vào `artifacts/plan/` làm mặc định theo trạng thái, theo bộ màu trắng đen, rồi dựng lại trang KH9. Ga 1 vẫn chờ thien xem trang mẫu thành phần.
-- Còn thiếu: việc 3 của ga 3; ga 4; đóng ga 1.
-- thien cần làm: xem trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử").
+- Đang ở: checkpoint 3 xong (20/11): ba bản B thành mặc định của `artifacts/plan/` theo trạng thái (chờ duyệt có câu hỏi → phiếu hỏi, chờ duyệt không có câu hỏi → một cột, đang chạy → bảng tiến độ, đã đóng → thẻ kết quả), theo bộ màu trắng đen; trang KH9 dựng lại bằng bảng tiến độ và đăng đè (PR #163, thien nhắn merge 20/11 01:34). Ga 1 đóng: thien đã xem trang mẫu thành phần (20/11 01:34).
+- Còn thiếu: ga 4 (mốc, vòng gu hai tuần một lần; vòng đầu là trang ôn thẻ và trang học, chụp ở nửa màn hình và 2/3 màn hình).
+- thien cần làm: không có.
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
@@ -30,7 +30,7 @@ Lời thien (2026-11-19 20:40, ghi chú kèm câu trả lời KH8): "bạn phả
 
 ## Checkpoint
 
-### 1. Rút khối dùng chung vào kit
+### 1. Rút khối dùng chung vào kit (xong 2026-11-20: thien đã xem trang mẫu thành phần)
 Xong khi: trang mẫu thành phần có đủ các khối trùng thật (khối gửi, nút chọn một, chi tiết thử); mọi mẫu từng tự viết các khối đó (kế hoạch, luồng, chọn phương án, ôn thẻ) dùng khối của kit, `check-pages` 0 lỗi, và thien mở trang mẫu thành phần thấy từng khối một lần.
 Ước: 1–2 phiên
 - [x] Khối câu hỏi có nút, ô trả lời gửi Claude, núm, khung ảnh vào `kit/` (CSS và JS), có tên trong trang mẫu thành phần (đổi sau khi kiểm kỹ, xem "Đã đổi": khối gửi `Kit.sendBox` + `.kit-send`, nút chọn một `.choice`, chi tiết thử `.trial`, HTML ở `kit/blocks.mjs`; trang mẫu thành phần có hai mục mới; PR #156, đã merge 2026-11-19; trang mẫu thành phần đăng lại https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst, nick tnt697)
@@ -48,7 +48,7 @@ Xong khi: thien chọn bố cục cho ba loại kế hoạch trên một trang c
 Ước: 1 phiên
 - [x] Ba loại nội dung, mỗi loại 2–3 bố cục: chờ duyệt (nhiều câu hỏi: dạng phiếu hỏi), đang chạy (theo dõi: dạng bảng tiến độ, tuyến ga), đã đóng (tổng kết: dạng thẻ kết quả, việc chuyển đi) (vòng 5 ở `docs/plans/2026-11-18-visual-workflow/round-5/`: mỗi loại A hiện nay, chờ duyệt B phiếu hỏi trước, C hỏi bên cạnh; đang chạy B bảng tiến độ, C tuyến ngang; đã đóng B thẻ kết quả, C ba cột tổng kết. Trang chọn ba câu https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG, trang bấm thử https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP, nick tnt697, 2026-11-19)
 - [x] thien chọn trên trang `decide/`, câu vì sao vào hàng chờ gu (2026-11-19 23:38, comment trên trang chọn: B cả ba câu, đề xuất là C cả ba; chưa ghi vì sao, ghi chú xin sửa ô hỏi Claude và thêm trợ năng phóng to, phím trái phải; đã ghi vào `learning/frontend/taste-queue.md`)
-- [ ] Dựng lại trang KH9 bằng bố cục đã chọn, đăng đè link trong dòng "Trang:" (câu 3)
+- [x] Dựng lại trang KH9 bằng bố cục đã chọn, đăng đè link trong dòng "Trang:" (câu 3) (2026-11-20: `make-plan.mjs` chọn bố cục theo trạng thái, `pickLayout`; dòng `Bố cục: <tên> · Vì: …` đổi được; trang mẫu đang chạy và đã đóng vào `check-pages`; trang KH9 đăng đè ở link trên, bố cục bảng tiến độ; PR #163)
 
 ### 4. Bố cục mới cho các mẫu khác, đều đặn
 Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang học, ôn thẻ, luồng, so sánh), thien chọn giữ hay bỏ; kit ghi rõ khối nào mới, khối nào bỏ.
@@ -75,6 +75,8 @@ Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang h�
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-20 | Bảng tiến độ bản 2: ga đang chạy là thẻ lớn bên trái, "Chưa tới" và "Xong" là dòng gập mở ở cột bên, cột trống không vẽ; trang dùng bề ngang tới 1000px, chia hai cột từ 820px; bản đồ gọn nổi chỉ còn ở bố cục một cột | thien 00:59: "bố cục checkpoint vẫn chưa hợp ý", trang hay mở ở nửa màn hình cạnh chat (khoảng 860px) hay 2/3 màn hình (khoảng 950px) nên ba cột bằng nhau quá hẹp. Bỏ bản đồ gọn nổi là Claude tự quyết (đọc nhầm câu "menu đè lên nội dung", xem "Lỗi gặp"): ở bảng tiến độ nó nổi trên cột mà không giúp gì |
+| 2026-11-20 | Ba bản B viết lại gọn trong `artifacts/plan/`, khác bản phác ở bốn chỗ: mục tiêu gập có nút "Đọc hết mục tiêu" (bản phác bấm vào chữ, chữ có link thì bấm nhầm); ô "Bạn cần làm" giữ dòng đầy đủ ở Đang ở đâu (bản phác ẩn dòng đó, ô chỉ hiện 120 chữ); thẻ kết quả có việc con gập mở và ngày xong; ga "Ước: mốc" không tính vào số phiên còn lại. Ô số tròn đen chữ trắng ở nền sáng, ngược lại ở nền tối | Giữ đủ thông tin khi gập; trắng đen thì phân biệt bằng viền và độ đậm |
 | 2026-11-19 | Bộ màu của kit đổi sang trắng đen (PR #161): nền và thẻ trắng tinh, nhấn gần đen, mực hình thành ba mức xám, màu chỉ để báo xong, lỗi, cảnh báo. Mục "Không làm" ghi không đổi bộ màu gốc; lần này thien quyết thẳng, không qua vòng gu | thien 23:56: "màu chính là màu trắng, mình không muốn chạy đua với màu sắc nữa", chọn "Trắng đen, màu chỉ để báo". Ba bố cục B của ga 3 dựng theo bộ màu này |
 | 2026-11-19 | Ga 3: trang `decide/` hỏi được nhiều câu trên một trang (`parts`), thay vì ba trang chọn | Kế hoạch ghi "một trang chọn có hình" cho ba loại; mỗi loại cần đề xuất ẩn và ảnh riêng, nên mẫu chọn phương án cần chọn nhiều câu |
 | 2026-11-19 | Ga 2: mặc định "theo nội dung" chỉ quyết khối nào có (khối có nội dung thì có), giữ thứ tự như trước | Đổi thứ tự hay bố cục theo loại kế hoạch là vòng gu của ga 3, thien chọn; ga 2 chỉ làm phần máy, nên trang mặc định không đổi so với main |
@@ -83,4 +85,5 @@ Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang h�
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
 |---|---|---|
+| 2026-11-20 | Bảng tiến độ rộng 960px nhưng cột mục lục bên trái vẫn đặt cho cột đọc 760px: từ khoảng 1366px, chữ "Tiến độ" và thanh tiến độ đè lên ô số (thien gửi ảnh 01:16). Lần đầu Claude đọc nhầm thành bản đồ gọn | Cột mục lục tính vị trí từ bề ngang cột đọc (`--main-w`, lớp `wide` ở bố cục bảng tiến độ); test `plan-layout.test.mjs` đo mục lục và cột đọc ở 1160–1920px cho cả ba bố cục, chạy trong job pages |
 | 2026-11-19 | Trang chọn phương án: ô hỏi Claude dính sát viền thẻ (không có lề), icon khoá và bóng đèn hiện thành ô vuông đặc (lớp `.ic` của kit là icon mặt nạ từ PR #127, đè lên svg); ảnh bé ở khung 760–999px; phóng to chỉ vừa khung, không đổi bản được (thien báo 23:38) | PR #160: ô hỏi có lề và nhãn; icon đổi lớp `.ri`; khung vừa xếp ảnh trên chữ dưới; hộp phóng to có nấc 100–300%, kéo, bấm đúp, Ctrl + lăn, ← → đổi bản, vuốt trên điện thoại; ← → ở màn chọn thường |

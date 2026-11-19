@@ -1,6 +1,6 @@
 # Mẫu trang kế hoạch
 
-Trang dựng thẳng từ một file `docs/plans/*.md`, để thien nắm kế hoạch bằng mắt và trả lời câu hỏi bằng nút, không đọc hết file markdown. Bố cục là bản "Một nấc" thien chọn ở vòng gu 1 (2026-11-18): một cột đọc, toàn cảnh trước, tuyến checkpoint kiểu tuyến tàu. Kế hoạch đầy đủ ở `docs/plans/2026-11-18-visual-workflow.md`, checkpoint 2.
+Trang dựng thẳng từ một file `docs/plans/*.md`, để thien nắm kế hoạch bằng mắt và trả lời câu hỏi bằng nút, không đọc hết file markdown. Bố cục chọn theo trạng thái của kế hoạch (bảng ở mục "File kế hoạch viết thế nào"); bản gốc là "Một nấc" thien chọn ở vòng gu 1 (2026-11-18): một cột đọc, toàn cảnh trước, tuyến checkpoint kiểu tuyến tàu. Kế hoạch đầy đủ ở `docs/plans/2026-11-18-visual-workflow.md`, checkpoint 2.
 
 ## Trang làm được gì
 
@@ -8,7 +8,7 @@ Trang dựng thẳng từ một file `docs/plans/*.md`, để thien nắm kế h
 - Đang ở đâu: ba dòng có nhãn; "thien cần làm" tô cam. Dòng không nhãn gập vào "Ghi chú thêm". Thẻ "Ga đang chạy" là link `#ck-N`, Tab tới được.
 - Tuyến checkpoint: ga xong tô xanh (mực `--ink-1`), ga đang chạy viền cam (`--ink-2`), ga mốc (tên có "mốc 01/12") viền nét đứt vàng, ga bỏ gạch ngang. Mỗi ga có "Xong khi", số việc, số phiên ước, việc con gập mở (ga đang chạy mở sẵn).
 - Mục lục: thanh dính trên cùng ở điện thoại và máy tính bảng, tự ẩn khi cuộn xuống đọc, hiện lại khi cuộn lên hay khi Tab vào (thien chọn 19/11); từ 1160px là cột bên trái kèm tiến độ gọn (thien góp ý 19/11).
-- Bản đồ ga theo ngày (chi tiết thử, lấy từ bản Thật xa của vòng gu 1, nền sáng; thien bấm Thích 19/11): ga xong ở ngày xong, mốc đứng yên đúng ngày, ga còn lại nối nhau từ hôm nay. Núm "mấy phiên mỗi tuần" chỉ hiện khi mọi ga còn lại có dòng `Ước:`. Cuộn qua bản đồ đầy đủ thì bản gọn hiện dính dưới mục lục (cách 8px): chỉ chấm và tên ga đang đọc, sáng theo ga cả khi cuộn ngược; bấm một ga thì nhảy tới ga đó.
+- Bản đồ ga theo ngày (chi tiết thử, lấy từ bản Thật xa của vòng gu 1, nền sáng; thien bấm Thích 19/11): ga xong ở ngày xong, mốc đứng yên đúng ngày, ga còn lại nối nhau từ hôm nay. Núm "mấy phiên mỗi tuần" chỉ hiện khi mọi ga còn lại có dòng `Ước:`. Cuộn qua bản đồ đầy đủ thì bản gọn hiện dính dưới mục lục (cách 8px; chỉ ở bố cục một cột): chỉ chấm và tên ga đang đọc, sáng theo ga cả khi cuộn ngược; bấm một ga thì nhảy tới ga đó.
 - Phương án: bảng "Các phương án đã xét" thành thẻ; hàng in đậm là phương án đã chọn, cột cuối của nó đổi tên thành "Chỗ yếu".
 - Câu hỏi: mỗi câu là một nhóm nút, đề xuất chọn sẵn ("để nguyên là ok"). Ô ghi chú của thien không bao giờ bị ghi đè; câu trả lời sẽ gửi hiện ở ô xem trước riêng. "Gửi cho Claude" gửi comment; không gửi được thì tự chép. Đổi bất cứ gì thì dòng "Đã chép" hay "Đã gửi" cũ tự xoá.
 - Kế hoạch đã trả lời (`## Câu hỏi đã chốt`, hay tiêu đề có "đã trả lời") thì câu hỏi chỉ để đọc, phần cuối thành "Góp ý": chi tiết thử (Thích, Không) và ô ghi chú.
@@ -38,7 +38,18 @@ Xong khi: ...
 Khối: cau-hoi, tuyen, nhat-ky · Vì: kế hoạch chờ duyệt, câu hỏi là việc chính
 ```
 
-Khối không có trên trang thì CSS và JS của nó cũng không (`kit/pack.mjs`), nên bỏ khối là trang nhẹ đi. Lệnh in danh sách khối đã dùng; tên sai hay thiếu "Vì:" thì báo "lệch". Bố cục riêng cho kế hoạch chờ duyệt, đang chạy, đã đóng là việc của KH9 ga 3.
+Khối không có trên trang thì CSS và JS của nó cũng không (`kit/pack.mjs`), nên bỏ khối là trang nhẹ đi. Lệnh in danh sách khối đã dùng; tên sai hay thiếu "Vì:" thì báo "lệch". 
+
+**Bố cục theo trạng thái (KH9 ga 3, thien chọn B cả ba loại ở vòng gu 5, 2026-11-19).** Lệnh dựng chọn theo dòng "Trạng thái:":
+
+| Trạng thái | Bố cục | Trang ra sao | Khối mặc định |
+|---|---|---|---|
+| chờ duyệt, còn câu hỏi | `phieu-hoi` | Câu hỏi là phiếu ngay dưới tên, dải số nhảy tới từng câu; tuyến ga ở dưới, gọi là bối cảnh, gập hết | cau-hoi, tuyen, ban-do, phuong-an, them, nhat-ky |
+| đang chạy, tạm dừng | `bang-tien-do` | Bốn ô số dưới tên (việc xong, ga, còn lại ước, bạn cần làm); ga đang chạy là thẻ lớn, ga chưa tới và ga xong là dòng gập mở ở cột bên (bản 2, thien 20/11: ba cột bằng nhau quá hẹp ở nửa màn hình). Trang rộng tới 1000px, hai cột từ 820px | như mặc định ở trên |
+| xong, bỏ | `the-ket-qua` | Bốn con số kết quả, mỗi ga một thẻ "Đạt / Chưa đạt", việc chưa tick gom vào thẻ "Chuyển đi" | dang-o, tuyen, phuong-an, them, nhat-ky |
+| chờ duyệt mà không có câu hỏi | `mot-cot` | Bản "Một nấc" của vòng gu 1: một cột, tuyến ga dọc | như mặc định ở trên |
+
+Ở ba bố cục mới, bản đồ gọn nổi dưới mục lục không còn (nó đè lên nội dung, thien 20/11; chỉ bố cục một cột giữ), mục tiêu dài gập còn ba dòng, có nút "Đọc hết mục tiêu". Trắng đen: cột, ô, thẻ phân biệt bằng viền và độ đậm; màu chỉ để báo (cảnh báo cho ga đóng khi chưa xong, mốc). Muốn khác thì thêm một dòng dưới dòng "Trạng thái:", có lý do: `Bố cục: mot-cot · Vì: muốn đọc từng ga theo tuyến`. Lệnh in bố cục đã dùng; tên sai hay thiếu "Vì:" thì báo "lệch".
 
 Trạng thái "chờ duyệt" dùng cho bản gửi thien duyệt (file nằm trên nhánh, chưa merge). Dòng "Ước:" và mục "Câu hỏi" chưa có trong mẫu PLAN; luật thêm vào mẫu gom ở mốc 01/12 (checkpoint 5 của kế hoạch).
 
@@ -59,4 +70,5 @@ Chỉ kiểm, không dựng: `node artifacts/plan/make-plan.mjs --check docs/pla
 | `make-plan.mjs` | Dựng thân trang, gộp kit, ghi `publish.json`; `--check` để chỉ kiểm |
 | `template.html` | Khung và CSS của trang (chỉ dùng tên màu trong kit) |
 | `plan.js` | Mục lục, bản đồ ngày, núm vặn, câu hỏi, lưu và gửi |
-| `fixture.md` | Kế hoạch mẫu cho test và `kit/check-pages.mjs` |
+| `fixture.md` | Kế hoạch mẫu cho test và `kit/check-pages.mjs` (chờ duyệt, bố cục phiếu hỏi) |
+| `fixture-running.md`, `fixture-closed.md` | KH9 lúc đang chạy và KH6 lúc đã đóng, chép từ vòng gu 5, để kiểm bảng tiến độ và thẻ kết quả |

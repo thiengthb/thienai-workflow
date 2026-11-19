@@ -51,7 +51,9 @@
     const now = new Date();
     const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
     const cks = P.checkpoints.filter((c) => c.state !== 'dropped');
-    const rest = cks.filter((c) => c.state !== 'done' && !c.gate);
+    // "Ước: mốc" (est 0) là ga mốc chưa có ngày: không xếp theo núm, không đặt lên trục.
+    const rest = cks.filter((c) => c.state !== 'done' && !c.gate && c.est !== 0);
+    const undated = cks.filter((c) => c.state !== 'done' && !c.gate && c.est === 0).length;
     const canPace = rest.length > 0 && rest.every((c) => typeof c.est === 'number' && c.est > 0);
     let pace = 3, sel = (P.checkpoints.find((c) => c.state === 'now') || {}).id || '';
 
@@ -124,7 +126,8 @@
         out.innerHTML = left.length
           ? `Với <b>${pace} phiên</b> mỗi tuần, ga cuối xong khoảng <b>${ddmm(Math.max(...left.map((p) => p.t)))}</b>.` +
             (pts.some((p) => p.fixed && p.c.state !== 'done') ? ' Mốc đứng yên, không trượt theo núm.' : '')
-          : (cks.every((c) => c.state === 'done') ? 'Mọi ga đã xong.' : 'Ga còn lại chưa ước số phiên.') + missing;
+          : (cks.every((c) => c.state === 'done') ? 'Mọi ga đã xong.' : rest.length ? 'Ga còn lại chưa ước số phiên.' : '') + missing;
+        if (undated) out.innerHTML += `${out.innerHTML ? ' ' : ''}${undated} ga mốc chưa có ngày nên chưa đặt lên trục.`;
       }
     }
     function select(id) {
@@ -140,7 +143,7 @@
     /** Bản gọn hiện khi bản đầy đủ đã cuộn khuất mà còn đang đọc các ga; ra khỏi tuyến (hay cuộn ngược lên) thì ẩn. */
     function miniShow() {
       if (!mini) return;
-      const top = tocH() + 8, full = $('daymap').getBoundingClientRect(), line = $('tuyen').querySelector('ol.line').getBoundingClientRect();
+      const top = tocH() + 8, full = $('daymap').getBoundingClientRect(), line = $('tuyen').querySelector('.line').getBoundingClientRect();
       const on = full.bottom < top && line.bottom > top + mini.offsetHeight + 40;
       if (on !== mini.classList.contains('on')) { mini.classList.toggle('on', on); if (on) draw(); }
     }
@@ -169,7 +172,7 @@
     P.questions.forEach((q) => { const k = q.options.findIndex((o) => o.rec); S.answers[q.id] = k < 0 ? 0 : k; });
     const qs = $('qs');
     P.questions.forEach((q, i) => {
-      const f = document.createElement('fieldset'); f.className = 'q';
+      const f = document.createElement('fieldset'); f.className = 'q'; f.id = 'q-' + (i + 1);   // dải số của phiếu hỏi nhảy tới đây
       f.innerHTML = `<legend>${i + 1}. ${q.q}</legend><div class="opts2"></div>`;
       q.options.forEach((o, k) => {
         const b = document.createElement('button');
@@ -225,6 +228,23 @@
     });
   })();
   /* @end cau-hoi */
+
+  /* @block lead-more */
+  // ---------- Mục tiêu gập còn ba dòng (bố cục mới): nút "Đọc hết" chỉ hiện khi chữ bị cắt thật ----------
+  (() => {
+    const lead = $('lead'), more = document.querySelector('.lead-more');
+    if (!lead || !more) return;
+    const fit = () => { if (lead.classList.contains('clamp')) more.hidden = lead.scrollHeight <= lead.clientHeight + 2; };
+    more.addEventListener('click', () => {
+      const open = lead.classList.toggle('clamp') === false;
+      more.setAttribute('aria-expanded', String(open));
+      more.textContent = open ? 'Thu gọn' : 'Đọc hết mục tiêu';
+    });
+    fit();
+    addEventListener('resize', fit);
+    if (document.fonts) document.fonts.ready.then(fit);
+  })();
+  /* @end lead-more */
 
   // ---------- Khởi động ----------
   let raf = 0;

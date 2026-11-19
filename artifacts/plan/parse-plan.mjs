@@ -5,6 +5,7 @@
 //   issues: [{ level: 'lỗi' | 'lệch' | 'ghi chú', line, msg }]; có 'lỗi' thì không dựng được trang.
 //   plan.blocks: null (lệnh dựng chọn khối theo nội dung) hay { names, why, line } từ dòng
 //   "Khối: dang-o, tuyen, cau-hoi · Vì: <lý do>" dưới dòng Trạng thái (KH9 ga 2; tên khối ở PLAN_BLOCKS).
+//   plan.layout: null (bố cục theo trạng thái) hay { name, why, line } từ dòng "Bố cục: mot-cot · Vì: <lý do>" (KH9 ga 3).
 import { inline as mdInline, blocks as mdBlocks, tableRows } from '../../templates/progress-page.mjs';
 
 /** Link trần (https://...) thành link markdown có chữ ngắn, để không tràn dòng trên điện thoại. */
@@ -24,6 +25,9 @@ export const REQUIRED = ['Đang ở đâu', 'Mục tiêu', 'Không làm', 'Check
 /** Mục có chỗ riêng trên trang; mục khác hiện ở phần "Thêm" theo đúng thứ tự trong file. */
 /** Khối của trang kế hoạch, theo thứ tự mặc định. ban-do (bản đồ ga theo ngày) nằm trong tuyen, không có chỗ riêng. */
 export const PLAN_BLOCKS = ['dang-o', 'tuyen', 'ban-do', 'phuong-an', 'cau-hoi', 'them', 'nhat-ky'];
+/** Bố cục của trang kế hoạch (KH9 ga 3, thien chọn B cả ba loại ở vòng gu 5): lệnh dựng chọn theo trạng thái, dòng
+ *  "Bố cục: <tên> · Vì: <lý do>" đổi được. mot-cot là bản "Một nấc" của vòng gu 1. */
+export const PLAN_LAYOUTS = ['phieu-hoi', 'bang-tien-do', 'the-ket-qua', 'mot-cot'];
 const KNOWN = [...REQUIRED, 'Các phương án đã xét', 'Câu hỏi'];
 
 /** Markdown thành { title, titleLine, intro: [{ text, line }], sections: [{ title, level, line, lines: [{ text, line }] }] }. */
@@ -137,6 +141,19 @@ export function parsePlanFile(md, opts = {}) {
     if (!f['Vì']) issue('lệch', blockRow.line, 'dòng "Khối:" thiếu " · Vì: <lý do>": đổi khối so với mặc định thì ghi một dòng lý do.');
     blockList = { names: [...new Set(names.filter((n) => PLAN_BLOCKS.includes(n)))], why: f['Vì'] || '', line: blockRow.line };
     if (!blockList.names.length) { issue('lệch', blockRow.line, 'dòng "Khối:" không có khối nào đúng tên: dùng khối mặc định.'); blockList = null; }
+  }
+
+  // Dòng Bố cục: như dòng Khối, đổi bố cục so với mặc định theo trạng thái thì ghi lý do.
+  const layRow = doc.intro.find((l) => /^Bố cục:/.test(l.text));
+  let layout = null;
+  if (layRow) {
+    const f = metaLine(layRow.text).fields;
+    const name = (f['Bố cục'] || '').trim().toLowerCase();
+    if (!PLAN_LAYOUTS.includes(name)) issue('lệch', layRow.line, `bố cục "${name}" không có; bố cục của trang kế hoạch: ${PLAN_LAYOUTS.join(', ')}. Dùng bố cục mặc định.`);
+    else {
+      if (!f['Vì']) issue('lệch', layRow.line, 'dòng "Bố cục:" thiếu " · Vì: <lý do>": đổi bố cục so với mặc định thì ghi một dòng lý do.');
+      layout = { name, why: f['Vì'] || '', line: layRow.line };
+    }
   }
 
   const top = doc.sections.filter((s) => s.level === 2);
@@ -257,7 +274,7 @@ export function parsePlanFile(md, opts = {}) {
     changes: tableRows(find('Đã đổi')?.lines.map((l) => l.text) ?? []).map((r) => r.map((c) => ln(c))),
     errors: tableRows(find('Lỗi gặp')?.lines.map((l) => l.text) ?? []).map((r) => r.map((c) => ln(c))),
     extras: extras.map((e) => ({ title: e.title, html: e.html.join('\n') })),
-    blocks: blockList,
+    blocks: blockList, layout,
   };
   return { plan, issues };
 }
