@@ -220,10 +220,9 @@
       if (a) { R.ai.push({ kind: 'why', q: q.dataset.q, a }); b.remove(); } else b.disabled = false;
     });
   }
-  // 1. Ô tự nói lại. Nói thay gõ (Kit.micRow, khả năng dictation): nút mic cạnh ô, ẩn nơi không có mic.
-  // R.spoke đếm số lần nói, để biết tính năng có thật sự được dùng (learning/usage.md).
+  // 1. Ô tự nói lại. Nút mic "Nói thay gõ" đã bỏ khỏi bài học (KH8 câu 7, 2026-11-19: 12 buổi dùng 0 lần); Kit.micRow vẫn có trong kit.
   const teach = $('textarea[data-key="teach"]');
-  const teachEnd = teach && window.Kit && Kit.micRow ? Kit.micRow(teach, () => { R.spoke = (R.spoke || 0) + 1; }) : teach;
+  const teachEnd = teach;
   if (teach && canAsk()) {
     const b = aiBtn('Claude nhận xét bài của mình', 'ai-open'), out = el('p', { className: 'ai-out kit-ask' });
     out.setAttribute('role', 'status');
@@ -288,21 +287,8 @@
     });
   });
 
-  // ---------- Nghe phần giải thích (khả năng tts, đề xuất N2) ----------
-  // Bước giải thích (không có câu hỏi, ô viết hay nút xong, đủ dài) có nút loa ngay dưới tiêu đề. data-listen="off" trên bước để tắt,
-  // data-listen trên bước khác để bật. Chỉ hiện ở Chrome và app Claude máy tính. R.listened đếm số lần nghe (learning/usage.md).
-  const heard = () => { R.listened = (R.listened || 0) + 1; };
-  if (window.Kit && Kit.listen) steps.forEach((step) => {
-    const v = step.dataset.listen;
-    if (v === 'off' || /(^|\s)review(\s|$)/.test(step.dataset.part || '')) return;
-    // Bước giải thích: không có việc phải làm (câu hỏi, ô viết, nút Tiếp chờ điều kiện).
-    const plain = !step.querySelector('.q, textarea, #finish, .choose, .ask, .next[data-need]');
-    if (v == null && !(plain && visibleText(step, 4000).length >= 60)) return;
-    const h = step.querySelector('h1, h2'), b = el('button', { type: 'button', className: 'listen', textContent: 'Nghe' });
-    (h || step.firstElementChild).after(b);
-    // Đọc chữ của bài, bỏ chữ trên các nút (Tiếp, Hỏi Claude…).
-    Kit.listen(b, () => { const c = step.cloneNode(true); c.querySelectorAll('button').forEach((x) => x.remove()); return visibleText(c, 2000); }, heard);
-  });
+  // ---------- Nghe phần giải thích: đã bỏ (KH8 câu 7, 2026-11-19: 12 buổi 14–17/11 dùng 0 lần) ----------
+  // Kit.listen vẫn có trong kit; bài chiến tranh còn "Nghe mốc đang xem" trên sa bàn (war-lesson.js).
 
   // ---------- Claude làm mẫu trên sân khấu (khả năng sample có tools, đề xuất T1) ----------
   // Sân khấu (bàn thử, bảng dán, sa bàn) đăng ký bằng Lesson.demo({ match(step) }): match trả về null nếu bước không có gì để làm mẫu,

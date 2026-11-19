@@ -9,8 +9,8 @@ Trang kể một luồng (quy trình, kiến trúc, nghiệp vụ) bằng một 
 - Cuộn tới bước nào thì khối đó sáng lên, dòng dưới sơ đồ ghi "Bước 3/7 · tên khối". Chạm một khối thì nhảy tới bước đó.
 - Mỗi bước: chữ chính (`note`), chữ phụ (`more`), tên file hay lệnh (`chips`), và mũi tên của sơ đồ viết lại bằng chữ: "Tiếp: …", "thiếu: quay lại …", "Nhận từ … (3 thẻ đến hạn)". Hình luôn đi kèm chữ.
 - Khối không phải bước (file, kho dữ liệu) nằm ở "Ngoài luồng chính", kèm `note` của nó.
-- Tự kể lại: ô chữ lưu vào máy và db của trang ở `flows/<id>`; "Gửi cho Claude" gửi comment, không gửi được thì tự chép. Có chi tiết thử (Thích, Không).
-- Chi tiết thử mặc định: khối đã đọc qua viền xanh mực, số có tick nhỏ.
+- Tự kể lại: ô hỏi thẳng "Luồng rẽ ở đâu? Quay lại ở đâu?" và dặn kể bằng lời mình, không chép tên khối (thien kể ba lần đều chép tên khối, KH8 câu 9, 2026-11-19); ô chữ lưu vào máy và db của trang ở `flows/<id>`; "Gửi cho Claude" gửi comment, không gửi được thì tự chép.
+- Khối đã đọc qua viền xanh mực, số có tick nhỏ (nay là mặc định). Chi tiết thử (Thích, Không) chỉ có khi truyền `--trial "..."`: thien thấy trang nào cũng một chi tiết thử là khung lặp (2026-11-19).
 
 ## File luồng viết thế nào
 
@@ -33,7 +33,7 @@ Mỗi luồng một file JSON, đúng định dạng `Diagram.mount` của kit (
 
 ## Cách AI dựng một trang
 
-1. Viết hay sửa file luồng, rồi `node artifacts/flow/make-flow.mjs docs/flows/<luồng>.json /tmp/flow` (thêm `--repo owner/repo` cho repo khác, `--url <link>` để đăng đè, `--trial "..."` để đổi chi tiết thử). Lệnh in chỗ sai: "lỗi" chặn dựng (id trùng, mũi tên trỏ tới khối không có, không có bước), "lệch" chỉ báo (bước chưa có chữ, khối không nối).
+1. Viết hay sửa file luồng, rồi `node artifacts/flow/make-flow.mjs docs/flows/<luồng>.json /tmp/flow` (thêm `--repo owner/repo` cho repo khác, `--url <link>` để đăng đè, `--trial "..."` khi có thứ mới cần thien thử; mặc định không có). Lệnh in chỗ sai: "lỗi" chặn dựng (id trùng, mũi tên trỏ tới khối không có, không có bước), "lệch" chỉ báo (bước chưa có chữ, khối không nối).
 2. Gọi Artifact với đúng tham số trong `/tmp/flow/publish.json`. Mở thử: `/tmp/flow/preview.html`. Trang mới thì điền `"page"` vào file luồng.
 3. Khi thien gửi bản kể lại: đọc comment và `flows/<id>` (ArtifactData), so với các bước, chỉ chỗ thiếu hay sai thứ tự. Kết quả vào kế hoạch hay PR của việc đang làm.
 

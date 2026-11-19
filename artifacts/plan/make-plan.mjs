@@ -163,9 +163,10 @@ export function build(mdPath, out, { repo = '', url = '', trial = '', today = ''
   const fatal = issues.filter((i) => i.level === 'lỗi');
   if (fatal.length) { const e = new Error(fatal.map((i) => `${mdPath}:${i.line}: ${i.msg}`).join('\n')); e.issues = issues; throw e; }
   const id = basename(mdPath).replace(/\.md$/i, '').toLowerCase().replace(/[^a-z0-9-]+/g, '-');
-  const hasMap = plan.checkpoints.some((c) => c.estimate != null);
   const { body, data } = render(plan, { id, repo, source: repo && rel ? `https://github.com/${repo}/blob/main/${rel}` : '',
-    trial: trial || (hasMap ? 'Bản đồ ga theo ngày và núm "mỗi tuần làm được mấy phiên", lấy từ bản Thật xa của vòng gu 1, giữ nền sáng và chữ cỡ thường.' : 'Tuyến checkpoint vẽ như tuyến tàu; ga xong tô xanh, ga đang chạy viền cam.') });
+    // Chi tiết thử chỉ có khi truyền --trial: mặc định không có (thien 2026-11-19, KH8: trang nào cũng một chi tiết thử
+    // thì thành khung lặp, mấy kế hoạch gần đây không bấm tới).
+    trial });
   const html = packHtml(readFileSync(join(here, 'template.html'), 'utf8')
     .replace('__TITLE__', () => esc(plain(plan.titleHtml)))
     .replace('/*KIT_CSS*/', () => readFileSync(join(here, '../kit/kit.css'), 'utf8'))

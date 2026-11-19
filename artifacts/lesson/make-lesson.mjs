@@ -22,7 +22,7 @@ const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 const here = dirname(fileURLToPath(import.meta.url));
 // sample: trang tự hỏi Claude (nhận xét bài tự nói lại, giải thích chỗ chọn sai, hỏi về một bước, làm mẫu, tình huống thêm), xem lesson.js.
 // dictation: nói thay gõ ở bước tự nói lại. tts: nút Nghe đọc to phần giải thích và mốc trên sa bàn.
-export const CAPABILITIES = { db: {}, comments: {}, sample: {}, dictation: {}, tts: {} };
+export const CAPABILITIES = { db: {}, comments: {}, sample: {}, tts: {} };   // tts: "Nghe mốc đang xem" của bài chiến tranh
 const read = (p) => lf(readFileSync(join(here, p), 'utf8'));
 const PARTS = {
   'kit-css': ['style', '../kit/kit.css'],
