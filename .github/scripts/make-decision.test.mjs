@@ -1,7 +1,7 @@
 // Builds a tiny decision page and checks the data, the validation and that the page carries the kit.
 import { mkdtempSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, basename, relative } from 'node:path';
 import { deflateSync } from 'node:zlib';
 import assert from 'node:assert/strict';
 import { build, rating, shootOptions } from '../../artifacts/decide/make-decision.mjs';
@@ -65,7 +65,12 @@ const multi = build({ id: 'm', question: 'Bố cục nào?', parts: [
   { key: 'P1', name: 'Chờ duyệt', question: 'Kế hoạch chờ duyệt?', options: [{ key: 'a', name: 'A', image: 'a.png' }, { key: 'b', name: 'B' }], recommend: { key: 'a', why: 'x' } },
   { key: 'p2', question: 'Đang chạy?', options: [{ key: 'a', name: 'A', image: 'a.png' }, { key: 'c', name: 'C' }], criteria: [{ name: 't', values: { c: 'tốt' } }] }] }, dir, join(dir, 'om'));
 assert.deepEqual(multi.decision.parts.map((p) => [p.key, p.name, p.options.map((o) => o.key)]), [['p1', 'Chờ duyệt', ['a', 'b']], ['p2', 'Đang chạy?', ['a', 'c']]]);
-assert.deepEqual(Object.keys(multi.files), ['img/p1-a.png', 'img/p2-a.png'], 'same option key in two parts does not collide');
+assert.deepEqual(Object.keys(multi.files), ['img/p1/a.png', 'img/p2/a.png'], 'same option key in two parts does not collide');
+// part "a-b" with option "c" and part "a" with option "b-c" must not share a file (one folder per part)
+const clash = build({ id: 'c', question: 'q', parts: [
+  { key: 'a-b', question: 'q', options: [{ key: 'c', image: 'a.png' }, { key: 'd' }] },
+  { key: 'a', question: 'q', options: [{ key: 'b-c', image: 'a.png' }, { key: 'd' }] }] }, dir, join(dir, 'oc'));
+assert.deepEqual(Object.keys(clash.files), ['img/a-b/c.png', 'img/a/b-c.png']);
 assert.equal(multi.decision.options, undefined, 'a multi page keeps options inside parts');
 assert.deepEqual(multi.decision.parts[1].recommend, null);
 const mbad = (parts, re) => assert.throws(() => build({ id: 'm', question: 'q', parts }, dir, join(dir, 'om2')), re);
@@ -76,6 +81,6 @@ mbad([two[0], { key: 'y', question: 'q', options: [{ key: 'a' }] }], /Câu 2 \(y
 mbad([two[0], { key: 'y', question: 'q', options: two[0].options, recommend: { key: 'z' } }], /Câu 2.*Đề xuất/);
 const mshot = { id: 'ms', question: 'q', parts: [{ key: 'p', question: 'q', options: [{ key: 'a', shot: 'b.html' }, { key: 'b', image: 'a.png' }] }, { key: 'r', question: 'q', options: [{ key: 'a', shot: 'b.html' }, { key: 'b', image: 'a.png' }] }] };
 let mpaths;
-await shootOptions(mshot, dir, join(dir, 'oms'), async (sizes, shotsFor) => { mpaths = shotsFor().map((s) => s.path.split('/').pop()); for (const s of shotsFor()) writeFileSync(s.path, png(100, 100)); });
-assert.deepEqual(mpaths, ['p-a@2x.png', 'r-a@2x.png']);
+await shootOptions(mshot, dir, join(dir, 'oms'), async (sizes, shotsFor) => { mpaths = shotsFor().map((s) => relative(join(dir, 'oms', 'src'), s.path).split('\\').join('/')); for (const s of shotsFor()) writeFileSync(s.path, png(100, 100)); });
+assert.deepEqual(mpaths, ['p/a@2x.png', 'r/a@2x.png']);
 console.log('make-decision: ok');

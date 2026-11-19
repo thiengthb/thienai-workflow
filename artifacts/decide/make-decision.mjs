@@ -46,6 +46,7 @@ function makePart(spec, specDir, out, files, where = '', prefix = '') {
         const { w, h } = imageSize(readFileSync(src));
         const k = o.scale || 1;
         const name = `img/${prefix}${key}${extname(src).toLowerCase()}`;
+        mkdirSync(dirname(join(out, name)), { recursive: true });
         copyFileSync(src, join(out, name));
         files[name] = join(out, name);
         image = { src: name, w: Math.round(w / k), h: Math.round(h / k) };
@@ -90,7 +91,7 @@ export function build(spec, specDir, out) {
       if (!p.question) fail(`Câu ${key} thiếu question`);
       keys.add(key);
       return { key, name: String(p.name || p.question), question: String(p.question), context: String(p.context || ''),
-        ...makePart(p, specDir, out, files, `Câu ${i + 1} (${key}): `, key + '-') };
+        ...makePart(p, specDir, out, files, `Câu ${i + 1} (${key}): `, key + '/') };   // một thư mục mỗi câu: khóa nối bằng "-" có thể trùng
     });
   } else Object.assign(decision, makePart(spec, specDir, out, files));
   const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
@@ -107,7 +108,7 @@ export function build(spec, specDir, out) {
 
 /** Options with "shot" (a link or html file) and no image get screenshotted @2x into <out>/src; image and scale are set in place. */
 export async function shootOptions(spec, specDir, out, shootFn = shoot) {
-  const groups = spec.parts ? spec.parts.map((p) => [safe(p.key) + '-', p.options || []]) : [['', spec.options || []]];
+  const groups = spec.parts ? spec.parts.map((p) => [safe(p.key) + '/', p.options || []]) : [['', spec.options || []]];
   const todo = groups.flatMap(([pre, os]) => os.filter((o) => o.shot && !o.image).map((o) => Object.assign(o, { _pre: pre })));
   if (!todo.length) return;
   const [size] = parseSizes(spec.shotSize || '1180x760');
@@ -116,6 +117,7 @@ export async function shootOptions(spec, specDir, out, shootFn = shoot) {
   const shots = todo.map((o) => {
     const target = /^[a-z][a-z0-9+.-]+:/i.test(o.shot) ? o.shot : resolve(specDir, o.shot);
     const path = join(out, 'src', `${o._pre}${safe(o.key)}@2x.png`);
+    mkdirSync(dirname(path), { recursive: true });
     delete o._pre;
     return { o, url: toUrl(target), path };
   });

@@ -15,9 +15,10 @@
   const DB_PATH = 'decisions/' + String(D.id).replace(/[^a-z0-9-]/gi, '-');
   const store = Kit.store('decide:' + D.id, DB_PATH);
   const S = { pick: '', picks: {}, note: '', at: '' };
-  const pickOf = (part) => (multi ? S.picks[part.key] : S.pick) || '';
+  // Chỉ thuộc tính riêng của picks: câu có khóa "constructor" không được đọc nhầm hàm của Object là đã chọn.
+  const pickOf = (part) => (multi ? (Object.hasOwn(S.picks, part.key) ? S.picks[part.key] : '') : S.pick) || '';
   const cur = () => pickOf(P);
-  const uid = (o) => (multi ? P.key + '-' : '') + o.key;   // id cho comment ghim: không trùng giữa các câu
+  const uid = (o) => (multi ? P.key + '__' + o.key : o.key);   // id cho comment ghim: "__" không có trong khóa đã chuẩn hóa, nên không trùng giữa các câu
   let loaded = false;
   let view = (opts[0] || {}).key;   // bản đang xem ở khung rộng; không lưu
   const views = {};
@@ -136,6 +137,7 @@
       const b = el('button', { type: 'button', className: 'part' + (k ? ' done' : '') }, el('span', { className: 'pn', textContent: String(j + 1) }),
         el('span', { className: 'pt' }, el('b', { textContent: p.name || p.question }), el('span', { className: 'muted', textContent: o ? 'Đã chọn ' + o.short : 'Chưa chọn' })));
       if (p === P) b.setAttribute('aria-current', 'step');
+      b.dataset.part = p.key;
       b.addEventListener('click', () => setPart(p));
       return b;
     }));
@@ -147,6 +149,9 @@
     P = p; opts = P.options || [];
     view = views[P.key] || (opts[0] || {}).key;
     render();
+    // render() vẽ lại thanh câu, nút vừa bấm mất: đưa focus về nút của câu mới để người dùng bàn phím không lạc chỗ.
+    const nb = [...$('parts').children].find((b) => b.dataset.part === P.key);
+    if (nb) nb.focus({ preventScroll: !!scroll });
     if (scroll) $('parts').scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
 
@@ -324,7 +329,7 @@
     if (saved) {
       if (typeof saved.pick === 'string' && (saved.pick === '' || byKey(saved.pick))) S.pick = saved.pick;
       if (multi && saved.picks && typeof saved.picks === 'object') for (const p of parts) {
-        const k = saved.picks[p.key];
+        const k = Object.hasOwn(saved.picks, p.key) ? saved.picks[p.key] : undefined;
         if (typeof k === 'string' && (k === '' || byKey(k, p))) S.picks[p.key] = k;
       }
       if (typeof saved.note === 'string') S.note = saved.note;
