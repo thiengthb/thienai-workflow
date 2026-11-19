@@ -5,7 +5,7 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 2 dựng xong trên nhánh `kit-block-list` (PR mở 19/11 22:xx): trang kế hoạch và trang luồng dựng từ danh sách khối, `pack.mjs` bỏ CSS và JS của khối không dùng, `check-pages` báo trang vượt cỡ gốc 20%. Ga 1 vẫn chờ thien xem trang mẫu thành phần.
+- Đang ở: checkpoint 2 dựng xong trên nhánh `kit-block-list` (PR #158): trang kế hoạch và trang luồng dựng từ danh sách khối, `pack.mjs` bỏ CSS và JS của khối không dùng, `check-pages` báo trang vượt cỡ gốc 20%. Ga 1 vẫn chờ thien xem trang mẫu thành phần.
 - Còn thiếu: ga 3 (vòng gu bố cục trang kế hoạch), ga 4; thien merge PR ga 2.
 - thien cần làm: xem PR ga 2 rồi nhắn merge; mở trang mẫu thành phần (https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst, nick tnt697) xem mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử".
 
