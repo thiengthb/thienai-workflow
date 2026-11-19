@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 3, mẫu luồng chạy
 
-Repo: thiengthb/thienai-workflow · Nhánh: lesson-polish · PR: #144 (chờ thien merge); #142, #143 đã merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX67M6JBCiq3SbaoEV · Cập nhật: 2026-11-19T04:20Z
+Repo: thiengthb/thienai-workflow · Nhánh: chưa có (lesson-polish, peek-per-tab đã merge; proxy chặn xoá nhánh) · PR: #144, #145 đã merge (19/11 11:21–11:35, thien nhắn "merge giúp mình luôn", bấm "Merge luôn")
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX67M6JBCiq3SbaoEV · Cập nhật: 2026-11-19T04:37Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -47,6 +47,8 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX67M6JBCiq3SbaoE
 
 - 19/11 10:53 thien chọn làm checkpoint 4 trước buổi học. Nhánh lesson-polish, PR #144: đồng hồ nhìn N giây giữ khi tải lại (it-stage.js, test trong autosave.test.mjs), màn kết có hình (lesson.js endCard, end-card.test.mjs), vòng 4 bảng dán (round-4/: build.mjs, variants.css, shoot.mjs, decision.json). Trang chọn https://claude.ai/artifact/VaxABzqfhzqqF98sgFye2L, trang bấm thử https://claude.ai/artifact/4oPPXDxqm7jSgtAiYmn3yy (nick tnt697). Đề xuất ẩn: B · Tuyến ga. 11:08 thien chọn B (ghi chú trống); đã chuyển vào kit (.zones.flow.line, .filled, bảng inked, template-ba.html) trên cùng PR #144. Kế hoạch 15/24.
 
+- #144 merge (038431b) sau khi CI xanh; job Windows phải bỏ qua end-card.test.mjs (cần trình duyệt). CodeRabbit góp ý đồng hồ ghi giờ ở localStorage bị tab khác ghi đè: PR #145 đổi sang sessionStorage, đã trả lời và resolve thread, #145 merge.
+
 ## Bước tiếp theo
 0. Còn lại của checkpoint 4: hai màn cạnh nhau để so trước và sau trên bàn thử; nút Nghe và Nói ở mục "Thêm" (quyết ở 13/12). BA 6 soạn trên bảng `.zones.flow.line` mới.
 1. Repo đang public tạm (thien mở 19/11 10:46) để CI không bị trừ phút; 01/12 chuyển lại private, lịch nhắc trig_011nfKi6X5kZe3HTRTZkYmHh, dòng nhắc trong STATUS (PR #143 đã tự merge). Tới lúc đó không ghi thông tin riêng mới vào repo.
@@ -54,7 +56,7 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX67M6JBCiq3SbaoE
 3. Khi một nick giữ trang tổng quan (SZGp85…) mở phiên: `node templates/publish-progress.mjs overview` rồi đăng đè, tick việc 4 của checkpoint 2
 
 ## Đang chờ thien
-Merge PR #144.
+Không.
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
