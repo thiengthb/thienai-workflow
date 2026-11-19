@@ -1,13 +1,13 @@
 # KH9 · Kit lắp ghép, bố cục theo nội dung
 
-Trạng thái: chờ duyệt · Duyệt: chưa · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Trang: https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (nick tnt697)
+Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đề xuất") · Cập nhật: 2026-11-19 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Trang: https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (nick tnt697)
 
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: chờ thien trả lời câu hỏi dưới. Đã kiểm sơ bộ 8 mẫu (mục "Kiểm sơ bộ").
+- Đang ở: checkpoint 1 (rút khối dùng chung vào kit). thien trả lời 21:15: ok cả 4 đề xuất; KH9 làm trước kế hoạch MCP.
 - Còn thiếu: cả bốn checkpoint.
-- thien cần làm: trả lời câu hỏi trên trang.
+- thien cần làm: không có, tới khi có PR kit để merge.
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
@@ -54,7 +54,7 @@ Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang h�
 - [ ] Vòng đầu: trang ôn thẻ và trang học ở màn rộng (đang bỏ trống nhiều)
 - [ ] Luật vòng thử gu hai tuần một lần (chuyển từ KH6) vào `artifacts/README.md` ở mốc sau
 
-## Câu hỏi
+## Câu hỏi (thien đã trả lời 2026-11-19 21:15 bằng nút trên trang: "ok, theo cả 4 đề xuất")
 1. Làm KH9 trước hay kế hoạch MCP cho nhóm SEP490 trước?
    - KH9 trước: kit lắp ghép là thứ nhóm sẽ dùng qua MCP, nên làm gọn trước rồi mới chia sẻ (đề xuất)
    - MCP trước, KH9 sau
