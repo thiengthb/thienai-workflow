@@ -1,7 +1,7 @@
 # KH9 kit lắp ghép: ga 4 (vòng gu 6: ôn thẻ và trang học ở khổ nửa màn hình)
 
-Repo: thiengthb/thienai-workflow · Nhánh: wide-layouts · PR: #164 (nháp)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-19T19:07Z
+Repo: thiengthb/thienai-workflow · Nhánh: wide-layouts · PR: #164 (sẵn sàng, chờ thien merge)
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-19T19:52Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -82,14 +82,15 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6
 - 20/11 01:34 thien: "ok bạn merge giúp mình, và phần xem trang mẫu mình đã xem rồi". CodeRabbit 5 ý trên #163: sửa 4 (ghi chú ga trong thẻ kết quả, đếm ngày chỉ ga xong, ô "Bạn cần làm" chỉ gập khi là link, câu chờ duyệt có/không câu hỏi), ý mục lục đè đã sửa ở 35c6436; trả lời và resolve cả 5. Job Windows đỏ vì plan-layout.test.mjs cần Playwright: thêm vào danh sách bỏ qua ở windows.yml. CI xanh, #163 merge (squash e99afaa). Ga 1 KH9 đóng (thien đã xem trang mẫu thành phần), KH9 8/10, STATUS sửa trong cùng PR. Trang KH9 đăng đè.
 
 - 20/11 01:42 (phiên mới, thien nhắn "làm ga 4"): vòng 6 trên nhánh `wide-layouts`, commit ce3bd14, PR #164 (nháp). `round-6/`: build.mjs, review-variants.css/js, lesson-variants.css/js, shoot.mjs (860 và 950px), decision.json (hai câu: ôn thẻ, trang học). Trang chọn https://claude.ai/artifact/6HmX4EYH3dsuLjUNpUzs9v (comments, db, sample), trang bấm thử https://claude.ai/artifact/3bh7mbjckhWm2zqoUSBMk3 (nick tnt697). Đề xuất ẩn: ôn thẻ C, trang học B. Kế hoạch và STATUS ghi chờ thien.
+- 20/11 02:43 thien chọn trên trang (comment): ôn thẻ C · Hai nửa thẻ, trang học B · Tuyến bước (giống đề xuất, không ghi chú). Thread comment báo not found, đã trả lời trong chat. Commit 9972d7c trên #164: `artifacts/review/` hai nửa thẻ và hàng chấm; `lesson.js`/`lesson.css` tuyến bước từ 760px; `it.css`, `war.css` sân khấu và sa bàn cạnh chữ từ 760px. Mọi test node của CI 0 lỗi, check-pages 0 lỗi, cỡ trang dưới gốc. KH9 9/10, taste-queue, STATUS. PR chuyển sẵn sàng.
 
 ## Bước tiếp theo
-1. Khi thien chọn: chép nguyên văn vào KH9 (việc 1 của ga 4) và `learning/frontend/taste-queue.md`; viết gọn bản chọn vào `artifacts/review/` (template, review.js) và `artifacts/lesson/` (lesson.css, lesson.js, và it.css nếu giữ sân khấu từ 760px), check-pages, `--write-sizes` nếu trang nặng hơn; commit lên #164.
-2. Luật vòng gu hai tuần một lần vào `artifacts/README.md` (việc 2 ga 4); vòng sau khoảng 04/12 (luồng hay so sánh).
-3. Kế hoạch MCP cho nhóm SEP490 sau KH9.
+1. Chờ CodeRabbit và thien merge #164; sửa ý review nếu có.
+2. Trang ôn thẻ link cố định (L612hHx2…) đổi bố cục ở lần dựng lại sau (`make-review.mjs --url`), nick nào có trang đó thì đăng đè.
+3. Luật vòng gu hai tuần một lần vào `artifacts/README.md` (việc 2 ga 4); vòng sau khoảng 04/12. Rồi kế hoạch MCP cho nhóm SEP490.
 
 ## Đang chờ thien
-- Chọn hai câu trên https://claude.ai/artifact/6HmX4EYH3dsuLjUNpUzs9v (nick tnt697). Dựng lại trang ở nick khác: `node docs/plans/2026-11-18-visual-workflow/round-6/build.mjs && FONTSOURCE=<node_modules/@fontsource> node docs/plans/2026-11-18-visual-workflow/round-6/shoot.mjs && node artifacts/decide/make-decision.mjs docs/plans/2026-11-18-visual-workflow/round-6/decision.json <out>`; trang bấm thử là `round-6/shots/pages/` (đăng index.html cùng 6 trang). Link trang bấm thử trong decision.json phải đổi theo.
+- Merge PR #164.
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
