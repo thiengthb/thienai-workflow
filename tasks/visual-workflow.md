@@ -1,7 +1,7 @@
 # Quy trình nhìn được: checkpoint 3, mẫu luồng chạy
 
-Repo: thiengthb/thienai-workflow · Nhánh: chưa có (lesson-polish, peek-per-tab đã merge; proxy chặn xoá nhánh) · PR: #144, #145 đã merge (19/11 11:21–11:35, thien nhắn "merge giúp mình luôn", bấm "Merge luôn")
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Cập nhật: 2026-11-19T12:14Z
+Repo: thiengthb/thienai-workflow · Nhánh: bench-compare (commit d038d48) · PR: #149 (chờ thien merge)
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Cập nhật: 2026-11-19T12:24Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -49,14 +49,15 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kth
 
 - #144 merge (038431b) sau khi CI xanh; job Windows phải bỏ qua end-card.test.mjs (cần trình duyệt). CodeRabbit góp ý đồng hồ ghi giờ ở localStorage bị tab khác ghi đè: PR #145 đổi sang sessionStorage, đã trả lời và resolve thread, #145 merge.
 
+- 19/11 19:13 (giờ VN, phiên mới, thien nhắn "làm tiếp KH6"): hai màn so trước và sau trên bàn thử. Nhánh `bench-compare`, commit d038d48, PR #149: nút `data-compare` và bước `@compare` trong `it-stage.js`/`it.css`, mẫu frontend dùng ở bước "Nhìn 5 giây", test `bench-compare.test.mjs` (job pages, Windows bỏ qua). Mọi test CI chạy trên máy 0 lỗi, check-pages 0 lỗi. Trang thử mở thẳng bước đó: https://claude.ai/artifact/1TjXknw69z6hMDhKaNXeeo (nick tnt697). Kế hoạch 17/24.
+
 ## Bước tiếp theo
-0. Còn lại của checkpoint 4: hai màn cạnh nhau để so trước và sau trên bàn thử; nút Nghe và Nói ở mục "Thêm" (quyết ở 13/12). BA 6 soạn trên bảng `.zones.flow.line` mới.
+0. Chờ thien bấm thử trang so trước và sau rồi merge PR #149; góp ý bố cục thì sửa trên cùng nhánh. Còn lại của checkpoint 4 chỉ là nút Nghe và Nói ở mục "Thêm" (quyết ở 13/12) và điều kiện xong (sau BA 6, Frontend 11). BA 6 soạn trên bảng `.zones.flow.line`; Frontend 11 có thể dùng `data-compare`.
 1. Repo đang public tạm (thien mở 19/11 10:46) để CI không bị trừ phút; 01/12 chuyển lại private, lịch nhắc trig_011nfKi6X5kZe3HTRTZkYmHh, dòng nhắc trong STATUS (PR #143 đã tự merge). Tới lúc đó không ghi thông tin riêng mới vào repo.
 2. Luồng kiến trúc sakubun (để ở `docs/flows/` của repo sakubun, dựng bằng `--repo thiengthb/sakubun`) để tick việc 2 của ga 3; việc 3 (8/8 mẫu) tick cùng lúc. Nên làm ở phiên có gắn repo sakubun.
-3. Khi một nick giữ trang tổng quan (SZGp85…) mở phiên: `node templates/publish-progress.mjs overview` rồi đăng đè, tick việc 4 của checkpoint 2
 
 ## Đang chờ thien
-Không.
+- Bấm thử https://claude.ai/artifact/1TjXknw69z6hMDhKaNXeeo (mở ở nick tnt697) rồi merge PR #149.
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
