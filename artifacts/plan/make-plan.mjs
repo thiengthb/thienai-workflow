@@ -85,11 +85,11 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   const jump = now && on('tuyen') && L !== 'the-ket-qua' ? `<a class="jump" href="#${now.id}"><span>Ga đang chạy · <b>${now.num}. ${esc(now.name)}</b></span>${icon('arrow-right')}</a>` : '';
 
   const taskList = (c) => c.tasks.length ? `<ul class="tasks">${c.tasks.map((t) => `<li class="${t.done ? 'done' : ''}"><span class="tick" role="img" aria-label="${t.done ? 'đã xong' : 'chưa xong'}">${t.done ? icon('check') : ''}</span><span>${t.html}</span></li>`).join('')}</ul>` : '';
-  /** Một ga. kanban: ga nằm trong cột của bảng tiến độ, nên bỏ chip trạng thái (cột đã nói) và "Xong khi" của ga không chạy. */
-  const stopHtml = (c, kanban) => {
+  /** Một ga. focus: thẻ lớn của ga đang chạy trong bảng tiến độ, bỏ chip trạng thái (nhãn cột đã nói). */
+  const stopHtml = (c, focus) => {
     const chips = [
       c.gate && c.state !== 'done' ? `<span class="chip warn">${icon('calendar')}mốc ${ddmm(c.gate)}</span>` : '',
-      kanban ? '' : `<span class="chip${c.state === 'now' ? ' accent' : c.state === 'done' ? ' good' : ''}">${STOP_LABEL[c.state]}</span>`,
+      focus ? '' : `<span class="chip${c.state === 'now' ? ' accent' : c.state === 'done' ? ' good' : ''}">${STOP_LABEL[c.state]}</span>`,
       c.total ? `<span class="chip">${c.done}/${c.total} việc</span>` : '',
       c.estimate && c.state !== 'done' ? `<span class="chip">${icon('clock')}~${nf(c.estimate)} phiên</span>` : '',
     ].join('');
@@ -103,7 +103,7 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   <div class="box">
     <div class="head"><h3><span class="vh">Ga ${esc(c.num)}: </span>${c.nameHtml}</h3><span class="chips">${chips}</span></div>
     ${c.note ? `<p class="small muted">${c.note}</p>` : ''}
-    ${c.doneWhen && (!kanban || c.state === 'now') ? `<p class="done-when"><b>Xong khi:</b> ${c.doneWhen}</p>` : ''}
+    ${c.doneWhen ? `<p class="done-when"><b>Xong khi:</b> ${c.doneWhen}</p>` : ''}
     ${tasks}
   </div>
 </li>`;
@@ -121,10 +121,17 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   // Thân khối tuyến ga theo bố cục.
   let line;
   if (L === 'bang-tien-do') {
-    // Bảng tiến độ: ba cột Xong · Đang chạy · Chưa tới thay cho tuyến dọc; ga bỏ nằm ở cột Chưa tới, gạch ngang.
-    const col = (k, t, list) => `<div class="kcol ${k}"><h3 class="label">${t} <span class="chip">${list.length}</span></h3>${list.length
-      ? `<ol>${list.map((c) => stopHtml(c, true)).join('\n')}</ol>` : '<p class="small muted">Chưa có ga nào.</p>'}</div>`;
-    line = `<div class="line kanban">${col('done', 'Xong', cks.filter((c) => c.state === 'done'))}${col('now', 'Đang chạy', cks.filter((c) => c.state === 'now'))}${col('todo', 'Chưa tới', cks.filter((c) => c.state === 'todo' || c.state === 'dropped'))}</div>`;
+    // Bảng tiến độ, bản 2 (thien 20/11: ba cột bằng nhau quá hẹp khi trang mở nửa màn hình, cạnh chat): ga đang chạy là
+    // thẻ lớn bên trái; bên phải "Chưa tới" rồi "Xong", mỗi ga một dòng gập mở. Cột trống thì không vẽ.
+    const mini = (c) => `<li class="stop kmini ${c.state}${c.gate ? ' gate' : ''}" id="${c.id}" data-ck="${esc(c.num)}"><details class="acc"><summary>
+    <span class="dot" aria-hidden="true">${c.state === 'done' ? icon('check') : esc(c.num)}</span><span class="nm"><span class="vh">Ga ${esc(c.num)}: </span>${c.nameHtml}</span>${c.total ? `<span class="chip">${c.done}/${c.total}</span>` : c.gate || c.estimate === 0 ? '<span class="chip">mốc</span>' : ''}</summary>
+    <div class="box">${c.note ? `<p class="small muted">${c.note}</p>` : ''}${c.doneWhen ? `<p class="done-when"><b>Xong khi:</b> ${c.doneWhen}</p>` : ''}${taskList(c)}</div></details></li>`;
+    const group = (k, t, list) => list.length ? `<div class="bcol ${k}"><h3 class="label">${t} <span class="chip">${list.length}</span></h3><ol>${list.map(mini).join('\n')}</ol></div>` : '';
+    const nowList = cks.filter((c) => c.state === 'now');
+    line = `<div class="line board">
+  <div class="bcol now"><h3 class="label">Đang chạy</h3>${nowList.length ? `<ol>${nowList.map((c) => stopHtml(c, true)).join('\n')}</ol>` : '<p class="small muted">Không có ga đang chạy.</p>'}</div>
+  <div class="bside">${group('todo', 'Chưa tới', cks.filter((c) => c.state === 'todo' || c.state === 'dropped'))}${group('done', 'Xong', cks.filter((c) => c.state === 'done'))}</div>
+</div>`;
   } else if (L === 'the-ket-qua') {
     // Thẻ kết quả: mỗi ga một thẻ "ra gì" (Đạt hay Chưa đạt thay cho Xong khi), việc chưa tick gom vào thẻ "Chuyển đi".
     const moved = cks.flatMap((c) => c.tasks.filter((t) => !t.done).map((t) => ({ ga: c.num, html: t.html })));
@@ -141,7 +148,7 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   } else line = `<ol class="line">${cks.map((c) => stopHtml(c, false)).join('\n')}</ol>\n  ${legend}`;
   const lineHead = {
     'phieu-hoi': ['Bối cảnh để trả lời', 'Kế hoạch sẽ chạy thế nào nếu bạn đồng ý'],
-    'bang-tien-do': ['Checkpoint', 'Mỗi ga đang nằm ở cột nào'],
+    'bang-tien-do': ['Checkpoint', 'Đang làm ga nào, còn ga nào'],
     'the-ket-qua': ['Kết quả', 'Mỗi ga ra được gì'],
   }[L] || ['Checkpoint', `${cks.length} ga, mỗi ga xong khi bạn tự kiểm được`];
 
@@ -232,7 +239,8 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   const sideProg = `<div class="side-prog"><span class="label">Tiến độ</span><div class="bar"><span style="width:${pct}%"></span></div>
     <span class="small">${plan.ticks.done}/${plan.ticks.total} việc${now ? ` · đang ở ga ${esc(now.num)}` : ''}</span></div>`;
   // Bản đồ gọn: hiện dính dưới mục lục khi đã cuộn qua bản đồ đầy đủ mà còn ở trong tuyến; chỉ để xem đang tới đâu.
-  const mini = daymap ? `<div class="mapmini card" id="mapmini" aria-hidden="true"><svg id="map-mini"></svg><p class="mini-cap" id="mini-cap"></p></div>` : '';
+  // Chỉ ở bố cục một cột (đọc từng ga theo tuyến dọc); bố cục khác thì nó nổi đè lên nội dung mà không giúp gì (thien 20/11).
+  const mini = daymap && L === 'mot-cot' ? `<div class="mapmini card" id="mapmini" aria-hidden="true"><svg id="map-mini"></svg><p class="mini-cap" id="mini-cap"></p></div>` : '';
   const sections = {
     'dang-o': `<section id="dang-o" aria-labelledby="h-where"><span class="label">Đang ở đâu</span><h2 id="h-where" class="vh">Đang ở đâu</h2>${where}${jump}</section>`,
     tuyen: `<section id="tuyen" aria-labelledby="h-line"${L === 'phieu-hoi' ? ' class="ctx"' : ''}>

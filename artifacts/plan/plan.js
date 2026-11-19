@@ -51,7 +51,9 @@
     const now = new Date();
     const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
     const cks = P.checkpoints.filter((c) => c.state !== 'dropped');
-    const rest = cks.filter((c) => c.state !== 'done' && !c.gate);
+    // "Ước: mốc" (est 0) là ga mốc chưa có ngày: không xếp theo núm, không đặt lên trục.
+    const rest = cks.filter((c) => c.state !== 'done' && !c.gate && c.est !== 0);
+    const undated = cks.filter((c) => c.state !== 'done' && !c.gate && c.est === 0).length;
     const canPace = rest.length > 0 && rest.every((c) => typeof c.est === 'number' && c.est > 0);
     let pace = 3, sel = (P.checkpoints.find((c) => c.state === 'now') || {}).id || '';
 
@@ -124,7 +126,8 @@
         out.innerHTML = left.length
           ? `Với <b>${pace} phiên</b> mỗi tuần, ga cuối xong khoảng <b>${ddmm(Math.max(...left.map((p) => p.t)))}</b>.` +
             (pts.some((p) => p.fixed && p.c.state !== 'done') ? ' Mốc đứng yên, không trượt theo núm.' : '')
-          : (cks.every((c) => c.state === 'done') ? 'Mọi ga đã xong.' : 'Ga còn lại chưa ước số phiên.') + missing;
+          : (cks.every((c) => c.state === 'done') ? 'Mọi ga đã xong.' : rest.length ? 'Ga còn lại chưa ước số phiên.' : '') + missing;
+        if (undated) out.innerHTML += `${out.innerHTML ? ' ' : ''}${undated} ga mốc chưa có ngày nên chưa đặt lên trục.`;
       }
     }
     function select(id) {

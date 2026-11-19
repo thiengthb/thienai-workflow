@@ -158,16 +158,20 @@ for (const f of readdirSync(join(root, 'docs/plans')).filter((f) => f.endsWith('
   assert.equal(pend.layout, 'phieu-hoi');
   assert.match(pend.html, /class="wrap lay-phieu-hoi"/);
   assert.match(pend.html, /<section id="cau-hoi" aria-labelledby="h-q" class="phieu">/);
-  assert.doesNotMatch(pend.html, /class="prog"|class="tiles"|\.kanban\{/, 'no progress bar before approval, no board CSS');
+  assert.doesNotMatch(pend.html, /class="prog"|class="tiles"|\.board\{|id="mapmini"/, 'no progress bar before approval, no board CSS, no floating mini map');
   assert.doesNotMatch(pend.html, /<details class="acc" open>/, 'context stops stay folded');
   const run = page('fixture-running.md');
   assert.equal(run.layout, 'bang-tien-do');
-  assert.match(run.html, /<div class="line kanban">/);
+  assert.match(run.html, /<div class="line board">/);
+  assert.doesNotMatch(run.html, /id="mapmini"/, 'the floating mini map sat on top of the board (thien 20/11)');
   assert.match(run.html, /class="tile ask" href="#dang-o"/);
   assert.match(run.html, /<b class="big">~1<small> phiên<\/small><\/b><span class="small muted">chưa tính ga mốc/, '"Ước: mốc" is not counted');
   assert.match(run.html, /<a class="jump" href="#ck-3">/, 'the jump card is a real link');
-  const cols = run.html.slice(run.html.indexOf('<div class="line kanban">'));
-  assert.ok(cols.indexOf('id="ck-1"') < cols.indexOf('class="kcol now"') && cols.indexOf('id="ck-3"') > cols.indexOf('class="kcol now"'), 'done stops sit in the first column');
+  const cols = run.html.slice(run.html.indexOf('<div class="line board">'));
+  const at = (re) => cols.search(re);
+  assert.ok(at(/class="bcol now"/) < at(/id="ck-3"/) && at(/id="ck-3"/) < at(/class="bcol todo"/) && at(/class="bcol todo"/) < at(/class="bcol done"/) && at(/id="ck-1"/) > at(/class="bcol done"/),
+    'the running stop is the big card, then what comes next, then what is done');
+  assert.match(cols, /<li class="stop kmini done" id="ck-1"[^>]*><details class="acc">/, 'other stops fold into one line each');
   assert.doesNotMatch(run.html, /phieu-steps|res-grid\{/);
   const done = page('fixture-closed.md');
   assert.equal(done.layout, 'the-ket-qua');
