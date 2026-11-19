@@ -1,7 +1,7 @@
 # KH9 kit lắp ghép: ga 4 (vòng gu 6: ôn thẻ và trang học ở khổ nửa màn hình)
 
 Repo: thiengthb/thienai-workflow · Nhánh: wide-layouts · PR: #164 (sẵn sàng, chờ thien merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-19T19:52Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-19T23:33Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -83,9 +83,10 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6
 
 - 20/11 01:42 (phiên mới, thien nhắn "làm ga 4"): vòng 6 trên nhánh `wide-layouts`, commit ce3bd14, PR #164 (nháp). `round-6/`: build.mjs, review-variants.css/js, lesson-variants.css/js, shoot.mjs (860 và 950px), decision.json (hai câu: ôn thẻ, trang học). Trang chọn https://claude.ai/artifact/6HmX4EYH3dsuLjUNpUzs9v (comments, db, sample), trang bấm thử https://claude.ai/artifact/3bh7mbjckhWm2zqoUSBMk3 (nick tnt697). Đề xuất ẩn: ôn thẻ C, trang học B. Kế hoạch và STATUS ghi chờ thien.
 - 20/11 02:43 thien chọn trên trang (comment): ôn thẻ C · Hai nửa thẻ, trang học B · Tuyến bước (giống đề xuất, không ghi chú). Thread comment báo not found, đã trả lời trong chat. Commit 9972d7c trên #164: `artifacts/review/` hai nửa thẻ và hàng chấm; `lesson.js`/`lesson.css` tuyến bước từ 760px; `it.css`, `war.css` sân khấu và sa bàn cạnh chữ từ 760px. Mọi test node của CI 0 lỗi, check-pages 0 lỗi, cỡ trang dưới gốc. KH9 9/10, taste-queue, STATUS. PR chuyển sẵn sàng.
+- 20/11 06:30 thien nhắn "ok bạn hãy thực hiện": sửa 6 ý CodeRabbit ở ebb06d5 (it.css bàn thử cuộn được ở 760–899px; round-6 dựng từ e99afaa bằng git archive, bản A giống hệt trang đã đăng; ba lỗi nhỏ ở biến thể), trả lời từng ý trên PR.
 
 ## Bước tiếp theo
-1. Chờ CodeRabbit và thien merge #164; sửa ý review nếu có.
+1. Chờ thien merge #164 (6 ý CodeRabbit đã sửa và trả lời).
 2. Trang ôn thẻ link cố định (L612hHx2…) đổi bố cục ở lần dựng lại sau (`make-review.mjs --url`), nick nào có trang đó thì đăng đè.
 3. Luật vòng gu hai tuần một lần vào `artifacts/README.md` (việc 2 ga 4); vòng sau khoảng 04/12. Rồi kế hoạch MCP cho nhóm SEP490.
 
