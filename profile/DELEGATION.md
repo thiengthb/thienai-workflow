@@ -13,4 +13,8 @@ Chỉ áp cho repo thienai-workflow. Repo khác theo luật của chính nó (sa
 | Quyết định làm rồi rất khó sửa lại, đổi mục tiêu kế hoạch | Hỏi trước, thien chọn trước (luật ở `PROFILE.md`) |
 | Production, dữ liệu thật, secret, force push nhánh chung | Không làm |
 
+Hai điều khi tự merge (thien chọn 2026-11-19, KH8 câu 1, sau 6 chat kiểm thì 2 lần trượt):
+- CI không tự chặn merge (repo gói Free không có bảo vệ nhánh): AI tự xem CI xanh trước khi merge.
+- Lệnh merge bị công cụ chặn thì báo thien một dòng kèm link PR, không thử cách khác.
+
 Cách kiểm: PR AI tự merge có dòng `Tự merge theo profile/DELEGATION.md` trong mô tả, và danh sách file của PR (trang Files changed) cho thấy mọi file đều nằm trong dòng đầu của bảng. Xem lại bảng này ở mốc 2026-12-01.

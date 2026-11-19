@@ -6,6 +6,9 @@ File này do thien sở hữu. AI đọc ở mọi project, trước khi viết 
 
 Vì sao có phần này: thien đọc để theo dõi và để học. Câu lạ hay dịch sát từ tiếng Anh làm thien phải dừng lại đoán nghĩa, và đó là lúc thien mất dấu.
 
+- Thứ thien đọc để theo dõi (tóm tắt, kế hoạch, quyết định, mô tả PR, file tiến độ, AGENTS.md) viết tiếng Việt; code, comment trong code, commit, tên file, thư mục, nhánh viết tiếng Anh. Nội dung file viết cho thien đọc thì vẫn bằng tiếng Việt. (Gom từ `PROFILE.md` ngày 2026-11-19, KH8 câu 5.)
+- Giải thích cho người mới học (kiến thức chuyên ngành, việc nhiều bước): theo 10 quy tắc của skill [`viet-de-hieu`](../skills/viet-de-hieu/SKILL.md).
+- Giải thích một luồng hay báo một việc nhiều bước ngay trong chat thì vẽ sơ đồ nhỏ ngay trong chat, chữ vẫn đi kèm (KH6, mốc 01/12 làm sớm).
 - Luôn trả lời thien bằng tiếng Việt. Ngày 14/11/2026, sau khi phiên dài được tóm tắt lại, ba tin liền viết tiếng Anh và thien tưởng AI bị lỗi. Ngữ cảnh toàn tiếng Anh (tóm tắt, bot, log) không phải lý do để đổi ngôn ngữ.
 - Viết như đang giải thích cho bạn bè: câu đủ chủ ngữ vị ngữ, từ thường ngày. Không tự cắt gọn, không tự đặt từ mới.
 - "Ngắn" nghĩa là ít ý, không phải ít chữ cho mỗi ý. Không viết kiểu ghi chú, mũi tên nối ý, gạch ngang dài.

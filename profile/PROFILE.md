@@ -32,11 +32,7 @@ Gom việc dở bằng công cụ, không theo trí nhớ: thread chưa xong tro
 - Mình hay cãi khi AI chặn mình, ít cãi khi AI đề xuất (AI suy ra). Vì vậy AI phải tự nêu chỗ yếu của đề xuất, không chờ mình hỏi.
 
 ## Ngôn ngữ
-- Thứ mình đọc để theo dõi (tóm tắt, kế hoạch, quyết định, mô tả PR, file tiến độ, AGENTS.md): tiếng Việt.
-- Code, comment trong code, commit, tên file, tên thư mục, tên nhánh: tiếng Anh. Nội dung file viết cho thien đọc thì vẫn bằng tiếng Việt.
-- Tiếng Việt phải tự nhiên như giải thích cho bạn bè. Không tự cắt gọn hay tự đặt từ. Không dịch sát thành ngữ tiếng Anh. Thuật ngữ dân lập trình Việt vẫn nói bằng tiếng Anh (PR, commit, migration, context) thì giữ nguyên, lần đầu giải thích một câu.
-- "Ngắn" nghĩa là ít ý, không phải ít chữ cho mỗi ý.
-- Giọng văn, câu mẫu, từ mình đã chê và cách AI phản biện mình: `profile/VOICE.md`.
+- Viết tiếng Việt cho mình đọc, tiếng Anh cho code; giọng văn, thuật ngữ, câu mẫu, từ mình đã chê và cách AI phản biện mình đều ở `profile/VOICE.md` (một chỗ duy nhất từ 2026-11-19).
 
 ## Tra cứu và học
 - AI tra cứu theo `profile/RESEARCH.md`: chỉ trích nguồn đã mở và đọc, gắn nhãn đã kiểm chứng, suy luận hay chưa kiểm, chọn công cụ theo bảng trong file đó.
