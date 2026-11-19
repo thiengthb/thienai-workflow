@@ -198,6 +198,28 @@ html:not(.kit-ask-on) .kit-ask { display: none !important; }
 .extra-q { display: grid; gap: 8px; }
 .extra-q:empty { display: none; }
 
+/* Khối dùng chung (KH9, 2026-11-19; trước đó trang kế hoạch và trang luồng mỗi trang tự viết một bản):
+   .kit-send bọc ô chữ, hai nút (Chép, Gửi cho Claude) trong .acts và dòng báo .status, hành vi ở Kit.sendBox.
+   .choice là nút chọn một có chấm tròn (câu hỏi có lựa chọn, chi tiết thử), .rec cho nhãn "đề xuất", .why cho dòng lý do.
+   .trial là khung viền đứt của chi tiết thử (chỉ có khi trang thật sự thử thứ mới). */
+.kit-send textarea { width: 100%; min-height: 72px; resize: vertical; }
+.kit-send .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+@media (max-width: 480px) { .kit-send .acts .btn { flex: 1; } }
+.kit-send .status { font-size: 13px; color: var(--muted); min-height: 1.4em; }
+.choice { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; text-align: left; font: inherit; font-size: 14.5px; color: var(--ink);
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; cursor: pointer; min-height: 44px; }
+.choice:disabled { cursor: default; opacity: .6; }
+.choice i { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line-strong); margin-top: 2px; }
+.choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.choice[aria-pressed="true"] i { border-color: var(--accent); background: radial-gradient(var(--accent) 45%, transparent 50%); }
+.choice .rec { color: var(--accent-ink); font-weight: 600; font-size: 12.5px; margin-left: 6px; white-space: nowrap; }
+.choice .why { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+.trial { display: grid; gap: 8px; border: 1px dashed var(--line-strong); border-radius: var(--r); padding: 12px 14px; }
+.trial h3 { display: flex; align-items: center; gap: 6px; font-size: 15px; }
+.trial h3 .ic { color: var(--ink-2); }
+.trial .row { display: flex; gap: 8px; flex-wrap: wrap; }
+.trial .choice { grid-template-columns: 20px auto; }
+
 /* Sơ đồ (kit/diagram.js): khối trơn kiểu draw.io, viền mảnh, mũi tên, không tô màu, không bóng (gu 2026-11-17).
    Khối đang tới bước thì viền nhấn và mở chú thích ngay dưới tên; khung xếp lại nên không khối nào đè lên chú thích. */
 .dg { display: grid; gap: 12px; min-width: 0; }

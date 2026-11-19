@@ -150,14 +150,10 @@
   }
 
   $('note').addEventListener('input', () => { S.note = $('note').value; render(); store.save({ ...S }); });
-  $('copy').addEventListener('click', () => { const st = { ...S }; store.save(st, true); Kit.copy(results(st)); });
-  $('send').addEventListener('click', async () => {
-    const st = { ...S };   // one snapshot: what is saved is what is sent
-    store.save(st, true);
-    const text = results(st);
-    if (await Kit.sendToClaude(text, document.querySelector('.head'))) Kit.toast('Đã gửi cho Claude. Claude trả lời trong comment.', 5000);
-    else Kit.toast(await Kit.copy(text) ? 'Chưa gửi thẳng được. Kết quả đã chép: dán vào chat cho Claude.' : 'Chưa gửi thẳng được. Chép kết quả trong ô bên dưới rồi dán vào chat cho Claude.', 8000);
-  });
+  // Chép và gửi: khối dùng chung của kit (Kit.sendBox, KH9); báo bằng toast vì dòng #status ở đây nói lựa chọn đang có.
+  // Một bản chụp S: thứ được lưu đúng là thứ được gửi.
+  Kit.sendBox({ copy: $('copy'), send: $('send'), anchor: document.querySelector('.head'), text: results,
+    snapshot: () => ({ ...S }), save: (st) => store.save(st, true) });
 
   // Hỏi Claude về các phương án. Trước khi thien chọn, Claude chỉ giải thích và so sánh, không nói nên chọn cái nào
   // (giống đề xuất đang ẩn); sau khi chọn thì Claude biết lựa chọn và đề xuất lúc soạn trang.

@@ -11,6 +11,7 @@ import { dirname, join, resolve, basename, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { packHtml } from '../kit/pack.mjs';
+import { trialHtml, sendActsHtml } from '../kit/blocks.mjs';
 import { writePublish } from '../kit/publish.mjs';
 import { parsePlanFile } from './parse-plan.mjs';
 
@@ -91,15 +92,13 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   ${open && plan.questionsIntro ? `<p class="muted">${plan.questionsIntro}</p>` : ''}
   ${answeredList}
   <div class="qs" id="qs"></div>
-  ${trial ? `<div class="trial" id="trial"><h3>${icon('sparkles')}Chi tiết thử của trang này</h3><p class="small">${esc(trial)}</p>
-    <div class="row" role="group" aria-label="Chi tiết thử"><button class="choice" type="button" aria-pressed="false" data-trial="Thích" disabled><i></i>Thích</button><button class="choice" type="button" aria-pressed="false" data-trial="Không" disabled><i></i>Không</button></div></div>` : ''}
-  <div class="reply card pad">
+  ${trialHtml(trial)}
+  <div class="reply card pad kit-send">
     <label class="label" for="note">Ghi chú của bạn (không bắt buộc)</label>
     <textarea id="note" maxlength="3000" disabled placeholder="Ví dụ: ga 3 làm trước ga 4 được không?"></textarea>
     <p class="label">Câu trả lời sẽ gửi</p>
     <div class="preview" id="preview"></div>
-    <div class="acts"><button class="btn" id="copy" type="button" disabled>${icon('copy')}Chép</button><button class="btn accent" id="send" type="button" disabled>Gửi cho Claude</button></div>
-    <p class="status" id="status" aria-live="polite"></p>
+    ${sendActsHtml()}
   </div>
 </section>`;
 

@@ -86,20 +86,8 @@ ul.nodes { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 ul.nodes li { scroll-margin-top: calc(var(--band-h) + 12px); }
 
 /* Tự kể lại */
-.reply textarea { width: 100%; min-height: 120px; resize: vertical; }
-.trial { display: grid; gap: 8px; border: 1px dashed var(--line-strong); border-radius: var(--r); padding: 12px 14px; }
-.trial h3 { display: flex; align-items: center; gap: 6px; font-size: 15px; }
-.trial h3 .ic { color: var(--ink-2); }
-.trial .row { display: flex; gap: 8px; flex-wrap: wrap; }
-.choice { display: grid; grid-template-columns: 20px auto; gap: 10px; align-items: start; text-align: left; font: inherit; font-size: 14.5px; color: var(--ink);
-  background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; cursor: pointer; min-height: 44px; }
-.choice:disabled { cursor: default; opacity: .6; }
-.choice i { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line-strong); margin-top: 2px; }
-.choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
-.choice[aria-pressed="true"] i { border-color: var(--accent); background: radial-gradient(var(--accent) 45%, transparent 50%); }
-.acts { display: flex; gap: 8px; flex-wrap: wrap; }
-@media (max-width: 480px) { .acts .btn { flex: 1; } }
-.status { font-size: 13px; color: var(--muted); min-height: 1.4em; }
+/* Ô kể lại cao hơn ô ghi chú mặc định; .choice, .trial, nút và dòng báo của khối gửi: trong kit.css (KH9). */
+.retell .kit-send textarea { min-height: 120px; }
 footer { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
 </style>
 

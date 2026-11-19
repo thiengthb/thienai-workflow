@@ -158,24 +158,8 @@ ul.tasks li.done > span:last-child { color: var(--muted); }
 .q { display: grid; gap: 8px; border: 0; margin: 0; padding: 0; min-width: 0; }
 .q legend { font-weight: 600; font-size: 15.5px; padding: 0; margin-bottom: 8px; }
 .q .opts2 { display: grid; gap: 6px; }
-.choice { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; text-align: left; font: inherit; font-size: 14.5px; color: var(--ink);
-  background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; cursor: pointer; min-height: 44px; }
-.choice:disabled { cursor: default; opacity: .6; }
-.choice i { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line-strong); margin-top: 2px; }
-.choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
-.choice[aria-pressed="true"] i { border-color: var(--accent); background: radial-gradient(var(--accent) 45%, transparent 50%); }
-.choice .rec { color: var(--accent-ink); font-weight: 600; font-size: 12.5px; margin-left: 6px; white-space: nowrap; }
-.choice .why { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
-.trial { display: grid; gap: 8px; border: 1px dashed var(--line-strong); border-radius: var(--r); padding: 12px 14px; }
-.trial h3 { display: flex; align-items: center; gap: 6px; font-size: 15px; }
-.trial h3 .ic { color: var(--ink-2); }
-.trial .row { display: flex; gap: 8px; flex-wrap: wrap; }
-.trial .choice { grid-template-columns: 20px auto; }
-.reply textarea { width: 100%; min-height: 72px; resize: vertical; }
+/* .choice, .trial, ô chữ, nút và dòng báo của khối gửi: trong kit.css (KH9). */
 .preview { white-space: pre-wrap; font-size: 13.5px; color: var(--muted); background: var(--soft); border-radius: var(--r); padding: 10px 12px; }
-.acts { display: flex; gap: 8px; flex-wrap: wrap; }
-@media (max-width: 480px) { .acts .btn { flex: 1; } }
-.status { font-size: 13px; color: var(--muted); min-height: 1.4em; }
 
 /* Thêm, nhật ký */
 .accs { display: grid; }

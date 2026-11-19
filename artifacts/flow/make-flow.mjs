@@ -11,6 +11,7 @@ import { dirname, join, resolve, basename, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { packHtml } from '../kit/pack.mjs';
+import { trialHtml, sendActsHtml } from '../kit/blocks.mjs';
 import { writePublish } from '../kit/publish.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -148,13 +149,11 @@ ${asideHtml}
   <span class="label">Tự kể lại</span>
   <h2 id="h-retell">Luồng rẽ ở đâu? Quay lại ở đâu?</h2>
   <p class="muted">Kể bằng lời của bạn, đừng chép tên khối. Đừng cuộn lên, đừng mở file nào. Vài câu là đủ: bắt đầu từ đâu, chỗ nào chia hai đường, chỗ nào vòng lại và vì sao. Claude đọc và chỉ chỗ thiếu.</p>
-  <div class="reply card pad">
+  <div class="reply card pad kit-send">
     <label class="label" for="tell">Luồng "${esc(flow.title)}" theo bạn</label>
     <textarea id="tell" maxlength="3000" disabled placeholder="Ví dụ: mình nhắn học thì Claude soạn trang; nếu kiểm còn thiếu thì quay lại ghi tiếp, đủ rồi mới mở PR..."></textarea>
-    ${trial ? `<div class="trial" id="trial"><h3>${icon('sparkles')}Chi tiết thử của trang này</h3><p class="small">${esc(trial)}</p>
-      <div class="row" role="group" aria-label="Chi tiết thử"><button class="choice" type="button" aria-pressed="false" data-trial="Thích" disabled><i></i>Thích</button><button class="choice" type="button" aria-pressed="false" data-trial="Không" disabled><i></i>Không</button></div></div>` : ''}
-    <div class="acts"><button class="btn" id="copy" type="button" disabled>${icon('copy')}Chép</button><button class="btn accent" id="send" type="button" disabled>Gửi cho Claude</button></div>
-    <p class="status" id="status" aria-live="polite"></p>
+    ${trialHtml(trial)}
+    ${sendActsHtml()}
   </div>
 </section>
 <footer>${source ? `Sinh từ <a href="${esc(source)}">${esc(source.replace(/^https:\/\/github\.com\//, ''))}</a>` : ''}${srcLinks ? `${source ? ' · ' : ''}Theo ${srcLinks}` : ''}</footer>
