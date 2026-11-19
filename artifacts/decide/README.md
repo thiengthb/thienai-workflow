@@ -4,10 +4,11 @@ Trang dùng mỗi khi AI cần thien chọn 1 trong 2–4 cách có hình: bố 
 
 ## Trang làm được gì
 
-- Khung rộng (từ 760px), phần trên: xem từng bản một. Tab tên các bản ở đầu, ảnh lớn đủ tỉ lệ bên trái (cao tới khoảng 2/3 khung), bên phải là tóm tắt, ưu nhược, nút chọn và Trước/Sau. Phím ← → trên tab để chuyển bản; tab của bản đã chọn có chữ "đã chọn".
+- Khung rộng (từ 760px; 760–999px thì ảnh trên, chữ dưới), phần trên: xem từng bản một. Tab tên các bản ở đầu, ảnh lớn đủ tỉ lệ bên trái (cao tới khoảng 2/3 khung), bên phải là tóm tắt, ưu nhược, nút chọn và Trước/Sau. Phím ← → trên tab để chuyển bản; tab của bản đã chọn có chữ "đã chọn".
 - Khung rộng, phần dưới: bảng so sánh gọn, mỗi phương án một cột, các hàng là tiêu chí chấm sẵn (tốt, vừa, kém), hàng "Điểm chính" là ưu nhược, hàng cuối là nút chọn. Không bản nào có ảnh thì chỉ còn bảng.
 - Điện thoại: mỗi phương án một thẻ có ảnh đủ tỉ lệ (cao tới 72% màn), tiêu chí, ưu nhược và nút "Chọn bản này".
-- Bấm ảnh để phóng to. Bấm lại bản đang chọn là bỏ chọn.
+- Bấm ảnh để phóng to: hộp gần kín màn, nấc vừa khung, 100–300% (nút + −, phím + − 0, bấm đúp hay Ctrl + lăn chuột phóng đúng chỗ đó), kéo chuột để xem chỗ khác; ← → đổi sang bản trước, bản sau (giữ nấc phóng), điện thoại vuốt ngang. Đóng thì về nút ảnh của bản đang xem (thien xin 2026-11-19). Bấm lại bản đang chọn là bỏ chọn.
+- Phím ← → ở bất cứ đâu trên trang (trừ lúc gõ chữ) đổi bản: khung rộng đổi tab, điện thoại cuộn tới thẻ.
 - **Đề xuất của AI ẩn tới khi thien chọn**, để thien chọn theo mắt mình trước. Chọn xong, trang hiện đề xuất kèm lý do và nói lựa chọn giống hay khác đề xuất. Đề xuất vẫn nằm trong mã trang: "ẩn" là ẩn trên màn, không phải bí mật.
 - Ô "Hỏi Claude" về các phương án (khả năng `sample`): trước khi chọn Claude chỉ giải thích, không gợi ý chọn cái nào; không hỏi được thì ô tự ẩn.
 - Ô ghi chú, nút "Chép kết quả" và "Gửi cho Claude". Gửi không được thì tự chép.

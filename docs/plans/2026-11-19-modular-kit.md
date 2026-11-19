@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 3: vòng gu 5 đã đăng (3 câu x 3 bản), chờ thien chọn. Ga 1 vẫn chờ thien xem trang mẫu thành phần.
-- Còn thiếu: thien chọn bố cục; chuyển bản chọn vào `artifacts/plan/` và dựng lại trang KH9; ga 4; đóng ga 1.
-- thien cần làm: mở trang chọn https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG (nick tnt697), chọn một bản cho mỗi loại, viết một câu vì sao rồi bấm "Gửi cho Claude". Bấm thật cả chín bản ở https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP. Xem thêm trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử").
+- Đang ở: checkpoint 3: thien chọn B cả ba loại (phiếu hỏi trước, bảng tiến độ, thẻ kết quả). Tiếp theo chuyển ba bản B vào `artifacts/plan/` làm mặc định theo trạng thái, rồi dựng lại trang KH9. Ga 1 vẫn chờ thien xem trang mẫu thành phần.
+- Còn thiếu: việc 3 của ga 3; ga 4; đóng ga 1.
+- thien cần làm: merge PR #160. Xem thêm trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử").
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
@@ -47,7 +47,7 @@ Xong khi: một trang kế hoạch và một trang luồng dựng từ danh sác
 Xong khi: thien chọn bố cục cho ba loại kế hoạch trên một trang chọn có hình; trang của chính KH9 được dựng lại và đăng đè theo bố cục đã chọn (câu 3), và trang kế hoạch kế tiếp dựng theo bố cục đó.
 Ước: 1 phiên
 - [x] Ba loại nội dung, mỗi loại 2–3 bố cục: chờ duyệt (nhiều câu hỏi: dạng phiếu hỏi), đang chạy (theo dõi: dạng bảng tiến độ, tuyến ga), đã đóng (tổng kết: dạng thẻ kết quả, việc chuyển đi) (vòng 5 ở `docs/plans/2026-11-18-visual-workflow/round-5/`: mỗi loại A hiện nay, chờ duyệt B phiếu hỏi trước, C hỏi bên cạnh; đang chạy B bảng tiến độ, C tuyến ngang; đã đóng B thẻ kết quả, C ba cột tổng kết. Trang chọn ba câu https://claude.ai/artifact/EzRQAqCHdyNTsEnrgJaRwG, trang bấm thử https://claude.ai/artifact/UrAYhZsa14BVWWkfLtCvPP, nick tnt697, 2026-11-19)
-- [ ] thien chọn trên trang `decide/`, câu vì sao vào hàng chờ gu
+- [x] thien chọn trên trang `decide/`, câu vì sao vào hàng chờ gu (2026-11-19 23:38, comment trên trang chọn: B cả ba câu, đề xuất là C cả ba; chưa ghi vì sao, ghi chú xin sửa ô hỏi Claude và thêm trợ năng phóng to, phím trái phải; đã ghi vào `learning/frontend/taste-queue.md`)
 - [ ] Dựng lại trang KH9 bằng bố cục đã chọn, đăng đè link trong dòng "Trang:" (câu 3)
 
 ### 4. Bố cục mới cho các mẫu khác, đều đặn
@@ -82,3 +82,4 @@ Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang h�
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
 |---|---|---|
+| 2026-11-19 | Trang chọn phương án: ô hỏi Claude dính sát viền thẻ (không có lề), icon khoá và bóng đèn hiện thành ô vuông đặc (lớp `.ic` của kit là icon mặt nạ từ PR #127, đè lên svg); ảnh bé ở khung 760–999px; phóng to chỉ vừa khung, không đổi bản được (thien báo 23:38) | PR #160: ô hỏi có lề và nhãn; icon đổi lớp `.ri`; khung vừa xếp ảnh trên chữ dưới; hộp phóng to có nấc 100–300%, kéo, bấm đúp, Ctrl + lăn, ← → đổi bản, vuốt trên điện thoại; ← → ở màn chọn thường |

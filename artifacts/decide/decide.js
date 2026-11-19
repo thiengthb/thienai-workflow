@@ -22,8 +22,8 @@
   let view = (opts[0] || {}).key;   // bản đang xem ở khung rộng; không lưu
   const views = {};
   const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids.filter((k) => k != null)); return e; };
-  const lock = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
-  const bulb = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>';
+  const lock = '<svg class="ri" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+  const bulb = '<svg class="ri" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>';
 
   const pros = (o) => el('ul', { className: 'pc' }, ...(o.pros || []).map((t) => el('li', { className: 'p', textContent: t })), ...(o.cons || []).map((t) => el('li', { className: 'c', textContent: t })));
   // Ví dụ thật kèm một câu "để ý chỗ này" (vòng thử gu), mở ở tab mới.
@@ -33,7 +33,7 @@
     if (!o.image) return null;
     const img = el('img', { src: o.image.src, alt: 'Ảnh ' + o.name, loading: 'lazy' });
     if (o.image.w && o.image.h) img.style.aspectRatio = o.image.w + ' / ' + o.image.h;   // giữ chỗ đúng tỉ lệ khi ảnh chưa tải
-    const b = el('button', { type: 'button', className: 'shot', title: 'Phóng to' }, img, el('span', { className: 'zoom-hint', textContent: 'Phóng to' }));
+    const b = el('button', { type: 'button', className: 'shot', title: 'Phóng to', ariaLabel: 'Phóng to ảnh ' + o.name }, img, el('span', { className: 'zoom-hint', textContent: 'Phóng to' }));
     b.addEventListener('click', () => zoom(o));
     return b;
   };
@@ -65,7 +65,8 @@
     const panes = opts.map((o, j) => {
       const nav = el('div', { className: 'nav' },
         el('button', { type: 'button', className: 'btn', textContent: 'Trước', disabled: j === 0, onclick: () => show(opts[j - 1].key) }),
-        el('button', { type: 'button', className: 'btn', textContent: 'Sau', disabled: j === opts.length - 1, onclick: () => show(opts[j + 1].key) }));
+        el('button', { type: 'button', className: 'btn', textContent: 'Sau', disabled: j === opts.length - 1, onclick: () => show(opts[j + 1].key) }),
+        el('span', { className: 'keys', innerHTML: '<kbd>←</kbd> <kbd>→</kbd> đổi bản' }));
       const p = el('div', { className: 'pane', role: 'tabpanel', id: 'view-' + uid(o), hidden: j !== i },
         el('div', { className: 'im' }, shot(o) || el('span', { className: 'none', textContent: 'Bản này không có ảnh.' })),
         el('div', { className: 'side' }, el('span', { className: 'label', textContent: `Bản ${j + 1} / ${opts.length}` }), el('h2', { textContent: o.name }),
@@ -171,13 +172,105 @@
     if (b) b.focus();
   }
 
+  // Phóng to: ảnh lớn trong một hộp thoại gần kín màn. ← → đổi sang bản trước, bản sau của câu đang xem;
+  // + − 0 (hay nút, Ctrl + lăn chuột, bấm đúp) phóng theo nấc; kéo chuột hay vuốt để xem chỗ khác khi đã phóng.
+  // Ảnh chụp @2x nên phóng tới 200% vẫn nét. Đóng thì trả focus về chỗ đã mở.
+  const LEVELS = [0, 1, 1.5, 2, 3];   // 0 là vừa khung
+  const Z = { o: null, lv: 0, back: null };
+  const withImg = () => opts.filter((x) => x.image);
   function zoom(o) {
     const d = $('zoom');
-    $('zoom-t').textContent = o.name; $('zoom-img').src = o.image.src; $('zoom-img').alt = 'Ảnh ' + o.name;
+    Z.back = document.activeElement; Z.lv = 0;
+    zoomTo(o);
     if (d.showModal) d.showModal(); else d.setAttribute('open', '');
+    $('zoom-body').focus({ preventScroll: true });
   }
-  $('zoom-x').addEventListener('click', () => { const d = $('zoom'); if (d.close) d.close(); else d.removeAttribute('open'); });
-  $('zoom').addEventListener('click', (e) => { if (e.target === e.currentTarget && e.currentTarget.close) e.currentTarget.close(); });
+  function zoomTo(o, keep) {
+    Z.o = o;
+    const list = withImg(), i = list.indexOf(o);
+    $('zoom-t').textContent = o.name;
+    $('zoom-n').textContent = multi ? `Câu ${parts.indexOf(P) + 1} · bản ${i + 1}/${list.length}` : `Bản ${i + 1}/${list.length}`;
+    const img = $('zoom-img');
+    img.src = o.image.src; img.alt = 'Ảnh ' + o.name;
+    img.dataset.w = o.image.w || ''; img.dataset.h = o.image.h || '';
+    $('zoom-prev').disabled = list.length < 2; $('zoom-next').disabled = list.length < 2;
+    $('zoom-live').textContent = `${o.name}, bản ${i + 1} trên ${list.length}.`;
+    setLevel(keep ? Z.lv : 0);
+    if (view !== o.key && $('stage') && !$('stage').hidden) show(o.key);   // trang phía sau đi theo bản đang phóng
+  }
+  function step(dir) {
+    const list = withImg(); if (list.length < 2) return;
+    const i = list.indexOf(Z.o);
+    zoomTo(list[(i + dir + list.length) % list.length], true);
+  }
+  function setLevel(lv, at) {
+    const body = $('zoom-body'), img = $('zoom-img');
+    const prev = body.getBoundingClientRect();
+    // giữ điểm đang nhìn (giữa khung, hay chỗ bấm) đứng yên khi đổi nấc
+    const fx = at ? at.x - prev.left : prev.width / 2, fy = at ? at.y - prev.top : prev.height / 2;
+    const rx = (body.scrollLeft + fx) / Math.max(1, body.scrollWidth), ry = (body.scrollTop + fy) / Math.max(1, body.scrollHeight);
+    Z.lv = Math.max(0, Math.min(LEVELS.length - 1, lv));
+    const k = LEVELS[Z.lv], w = +img.dataset.w || img.naturalWidth / 2 || 1180;
+    body.classList.toggle('fit', k === 0);
+    img.style.width = k ? Math.round(w * k) + 'px' : '';
+    $('zoom-lv').textContent = k ? Math.round(k * 100) + '%' : 'Vừa khung';
+    $('zoom-in').disabled = Z.lv === LEVELS.length - 1; $('zoom-out').disabled = Z.lv === 0;
+    if (k) { body.scrollLeft = rx * body.scrollWidth - fx; body.scrollTop = ry * body.scrollHeight - fy; }
+  }
+  const closeZoom = () => { const d = $('zoom'); if (d.close) d.close(); else d.removeAttribute('open'); };
+  // Trang phía sau vẽ lại khi đổi bản trong lúc phóng, nên nút đã mở có thể không còn: lúc đó về nút ảnh của bản đang xem.
+  $('zoom').addEventListener('close', () => {
+    const t = Z.back && Z.back.isConnected && Z.back.offsetParent ? Z.back
+      : [...document.querySelectorAll(`#view-${CSS.escape(uid(Z.o))} .shot, #opt-${CSS.escape(uid(Z.o))} .shot`)].find((x) => x.offsetParent);
+    if (t) t.focus({ preventScroll: true });
+  });
+  $('zoom-x').addEventListener('click', closeZoom);
+  $('zoom-prev').addEventListener('click', () => step(-1));
+  $('zoom-next').addEventListener('click', () => step(1));
+  $('zoom-in').addEventListener('click', () => setLevel(Z.lv + 1));
+  $('zoom-out').addEventListener('click', () => setLevel(Z.lv - 1));
+  $('zoom-lv').addEventListener('click', () => setLevel(Z.lv ? 0 : 3));
+  $('zoom').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeZoom(); });
+  $('zoom').addEventListener('keydown', (e) => {
+    if (e.altKey || e.metaKey || (e.ctrlKey && !['+', '=', '-', '0'].includes(e.key))) return;
+    const act = { ArrowLeft: () => step(-1), ArrowRight: () => step(1), '+': () => setLevel(Z.lv + 1), '=': () => setLevel(Z.lv + 1),
+      '-': () => setLevel(Z.lv - 1), '0': () => setLevel(0) }[e.key];
+    if (act) { e.preventDefault(); act(); }
+  });
+  const zb = $('zoom-body');
+  zb.addEventListener('dblclick', (e) => setLevel(Z.lv ? 0 : 3, e));
+  zb.addEventListener('wheel', (e) => { if (!e.ctrlKey) return; e.preventDefault(); setLevel(Z.lv + (e.deltaY < 0 ? 1 : -1), e); }, { passive: false });
+  // Kéo bằng chuột khi đã phóng; vuốt ngang (cảm ứng, lúc vừa khung) để sang bản khác. Cảm ứng lúc đã phóng thì cuộn như thường.
+  let drag = null;
+  zb.addEventListener('pointerdown', (e) => {
+    drag = { x: e.clientX, y: e.clientY, sl: zb.scrollLeft, st: zb.scrollTop, mouse: e.pointerType === 'mouse', moved: false };
+    if (drag.mouse && Z.lv) { zb.setPointerCapture(e.pointerId); zb.classList.add('drag'); }
+  });
+  zb.addEventListener('pointermove', (e) => {
+    if (!drag || !drag.mouse || !Z.lv) return;
+    zb.scrollLeft = drag.sl - (e.clientX - drag.x); zb.scrollTop = drag.st - (e.clientY - drag.y);
+  });
+  const end = (e) => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (!drag.mouse && !Z.lv && Math.abs(dx) > 50 && Math.abs(dx) > 1.5 * Math.abs(dy)) step(dx < 0 ? 1 : -1);
+    zb.classList.remove('drag'); drag = null;
+  };
+  zb.addEventListener('pointerup', end); zb.addEventListener('pointercancel', () => { zb.classList.remove('drag'); drag = null; });
+
+  // Màn chọn thường: ← → đổi bản ở bất cứ đâu trên trang (trừ lúc đang gõ chữ). Khung rộng đổi tab; điện thoại cuộn tới thẻ.
+  document.addEventListener('keydown', (e) => {
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+    if ($('zoom').open || e.target.closest('input, textarea, select, [contenteditable], [role="tablist"], dialog')) return;
+    if (opts.length < 2) return;
+    const dir = e.key === 'ArrowRight' ? 1 : -1;
+    const i = Math.max(0, opts.findIndex((o) => o.key === view)), n = opts[(i + dir + opts.length) % opts.length];
+    e.preventDefault();
+    if (!$('stage').hidden && $('stage').offsetParent) { show(n.key); return; }
+    view = n.key; views[P.key] = n.key;
+    const card = $('opt-' + uid(n));
+    if (card) { card.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); card.querySelector('.pick')?.focus({ preventScroll: true }); }
+  });
 
   function results(st) {
     const L = [`# Quyết định: ${D.question}`, '', `Vòng: ${D.id}`];
