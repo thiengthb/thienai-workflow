@@ -52,7 +52,7 @@
   sync();
 
   // Điện thoại: sa bàn nằm trên các bước, bấm xem thì cuộn lên cho thấy.
-  const reveal = () => { if (window.innerWidth < 900) board.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+  const reveal = () => { if (window.innerWidth < 760) board.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
   $$('[data-track]').forEach((bt) => bt.addEventListener('click', () => { st.show(bt.dataset.track, { at: 0 }); reveal(); }));
 
   // Nghe mốc đang xem (khả năng tts, đề xuất N2): nút loa ở mỗi bước có sa bàn, đọc chữ của mốc đang hiện (kể cả nguồn).

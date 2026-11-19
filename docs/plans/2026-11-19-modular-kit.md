@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: ga 4, vòng gu 6 (20/11): trang ôn thẻ và trang học, mỗi trang A hiện nay, B và C mới, chụp ở 860px và 950px. Trang chọn hai câu https://claude.ai/artifact/6HmX4EYH3dsuLjUNpUzs9v, trang bấm thử https://claude.ai/artifact/3bh7mbjckhWm2zqoUSBMk3 (nick tnt697). Nguồn ở `docs/plans/2026-11-18-visual-workflow/round-6/`.
-- Còn thiếu: thien chọn; bản chọn vào `artifacts/review/` và `artifacts/lesson/`; luật vòng gu hai tuần một lần vào `artifacts/README.md`.
-- thien cần làm: chọn hai câu trên trang chọn.
+- Đang ở: ga 4 việc 1 xong (20/11): thien chọn ôn thẻ C · Hai nửa thẻ và trang học B · Tuyến bước ở vòng gu 6 (giống đề xuất); cả hai đã vào `artifacts/review/` và `artifacts/lesson/`, sân khấu và sa bàn đứng cạnh chữ từ 760px (PR #164).
+- Còn thiếu: luật vòng gu hai tuần một lần vào `artifacts/README.md` (việc 2 của ga 4); vòng gu sau khoảng 04/12 (luồng hay so sánh).
+- thien cần làm: merge PR #164.
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
@@ -53,7 +53,7 @@ Xong khi: thien chọn bố cục cho ba loại kế hoạch trên một trang c
 ### 4. Bố cục mới cho các mẫu khác, đều đặn
 Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang học, ôn thẻ, luồng, so sánh), thien chọn giữ hay bỏ; kit ghi rõ khối nào mới, khối nào bỏ.
 Ước: mốc
-- [ ] Vòng đầu: trang ôn thẻ và trang học ở màn rộng (đang bỏ trống nhiều) (vòng 6 ở `docs/plans/2026-11-18-visual-workflow/round-6/`, 20/11: ôn thẻ B thẻ và hàng chờ, C hai nửa thẻ; trang học B tuyến bước, C theo nội dung; B và C của trang học cùng đưa sân khấu lên cạnh chữ từ 760px. Trang chọn https://claude.ai/artifact/6HmX4EYH3dsuLjUNpUzs9v, trang bấm thử https://claude.ai/artifact/3bh7mbjckhWm2zqoUSBMk3, nick tnt697. Chờ thien chọn)
+- [x] Vòng đầu: trang ôn thẻ và trang học ở màn rộng (đang bỏ trống nhiều) (vòng 6 ở `docs/plans/2026-11-18-visual-workflow/round-6/`, trang chọn https://claude.ai/artifact/6HmX4EYH3dsuLjUNpUzs9v, nick tnt697. Kết quả thien gửi 20/11 02:43, nguyên văn: "Ôn thẻ — Bạn chọn: C · Hai nửa thẻ. Giống đề xuất của Claude (C · Hai nửa thẻ). Trang học — Bạn chọn: B · Tuyến bước. Giống đề xuất của Claude (B · Tuyến bước)." Không ghi chú. Khối mới: hàng chấm và hai nửa thẻ ở mẫu ôn thẻ, tuyến bước ở khung buổi học; khối bỏ: thanh tiến độ của trang ôn, thanh mảnh của trang học từ 760px. PR #164)
 - [ ] Luật vòng thử gu hai tuần một lần (chuyển từ KH6) vào `artifacts/README.md` ở mốc sau
 
 ## Câu hỏi (thien đã trả lời 2026-11-19 21:15 bằng nút trên trang: "ok, theo cả 4 đề xuất")
@@ -75,6 +75,7 @@ Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang h�
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-20 | Sân khấu (bàn thử, bảng dán) và sa bàn đứng cạnh chữ từ 760px thay vì 900px, cho mọi bài mới | Hai bản mới của vòng 6 cùng đổi chỗ này để nửa màn hình (khoảng 860px) không xếp sân khấu chồng lên chữ; thien chọn B nên giữ |
 | 2026-11-20 | Vòng 6 chụp ở 860px và 950px thay vì 1180px và điện thoại; điện thoại giữ như hiện nay ở mọi bản | thien hay mở trang ở nửa màn hình cạnh chat hay 2/3 màn hình (00:59); điện thoại hai trang này đã ổn |
 | 2026-11-20 | Bảng tiến độ bản 2: ga đang chạy là thẻ lớn bên trái, "Chưa tới" và "Xong" là dòng gập mở ở cột bên, cột trống không vẽ; trang dùng bề ngang tới 1000px, chia hai cột từ 820px; bản đồ gọn nổi chỉ còn ở bố cục một cột | thien 00:59: "bố cục checkpoint vẫn chưa hợp ý", trang hay mở ở nửa màn hình cạnh chat (khoảng 860px) hay 2/3 màn hình (khoảng 950px) nên ba cột bằng nhau quá hẹp. Bỏ bản đồ gọn nổi là Claude tự quyết (đọc nhầm câu "menu đè lên nội dung", xem "Lỗi gặp"): ở bảng tiến độ nó nổi trên cột mà không giúp gì |
 | 2026-11-20 | Ba bản B viết lại gọn trong `artifacts/plan/`, khác bản phác ở bốn chỗ: mục tiêu gập có nút "Đọc hết mục tiêu" (bản phác bấm vào chữ, chữ có link thì bấm nhầm); ô "Bạn cần làm" giữ dòng đầy đủ ở Đang ở đâu (bản phác ẩn dòng đó, ô chỉ hiện 120 chữ); thẻ kết quả có việc con gập mở và ngày xong; ga "Ước: mốc" không tính vào số phiên còn lại. Ô số tròn đen chữ trắng ở nền sáng, ngược lại ở nền tối | Giữ đủ thông tin khi gập; trắng đen thì phân biệt bằng viền và độ đậm |

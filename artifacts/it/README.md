@@ -4,7 +4,7 @@ Phần thêm cho mẫu buổi học (`../lesson/`), dành cho bài frontend và 
 
 ## Trang làm được gì
 
-- Khung rộng (từ 900px): sân khấu bên trái đứng yên, các bước bên phải. Điện thoại: sân khấu ở trên, bước ở dưới. Bước không cần sân khấu (ôn, câu hỏi, góp ý) thì sân khấu ẩn, trang về một cột như bài thường.
+- Khung rộng (từ 760px, trước 20/11 là 900px): sân khấu bên trái đứng yên, các bước bên phải. Điện thoại: sân khấu ở trên, bước ở dưới. Bước không cần sân khấu (ôn, câu hỏi, góp ý) thì sân khấu ẩn, trang về một cột như bài thường.
 - **Bàn thử (frontend):** một màn app thật trong khung điện thoại, cạnh đó là núm vặn (ô màu, nhóm nút). Vặn núm là màn đổi ngay, và dòng CSS tương ứng sáng lên: đi từ màn thật, tới núm, tới code. Nút **Soi** viền đứt và đánh số mọi chỗ đang dùng thứ đang học (ví dụ màu nhấn), kèm số chỗ. Một trang có thể có nhiều bàn (nhiều app), mỗi bước chọn bàn nào hiện.
 - **Bảng dán (BA):** một bảng có ô (lưới 2×2, làn, các bước của luồng) và thẻ người hay thẻ việc. Bấm thẻ để nghe người đó nói (một dải lời nói dưới bảng), bấm thẻ rồi bấm ô để đặt. Kiểm tra thì mỗi thẻ có ký hiệu ✓ (khớp bản mẫu) hay ! (khác), lời giải thích của các thẻ khác hiện bên cột bước. Nút "Xem bản mẫu" dời thẻ về chỗ của bản mẫu ngay trên bảng, bấm lại để về cách mình xếp.
 - **Tám cách tương tác thêm** (bảy cái đầu thien bảo "thử hết", 2026-11-14). Bài thật chọn 2–3 cái hợp chủ đề, đừng nhồi cả tám:

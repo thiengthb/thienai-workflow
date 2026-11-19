@@ -23,9 +23,30 @@
     $('#cnt').textContent = (at + 1) + '/' + shown.length;
     const bk = $('.top .back'); if (bk) bk.hidden = at === 0;
     $('#bar').style.width = (shown.length > 1 ? at / (shown.length - 1) * 100 : 100) + '%';
+    railTo(i);
     window.scrollTo(0, 0);
     const h = steps[i].querySelector('h1, h2');
     if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+  }
+  // Tuyến bước (thien chọn ở vòng gu 6, KH9 ga 4): từ 760px cột trái là các bước của buổi như tuyến ga, đã qua có tick,
+  // đang làm chấm đen, chưa tới chấm rỗng; bước có sân khấu thì tuyến thu còn chấm (lesson.css). Chỉ để xem, không bấm.
+  const rail = document.createElement('nav');
+  rail.className = 'rail'; rail.setAttribute('aria-label', 'Các bước của buổi');
+  const railOl = document.createElement('ol');
+  steps.forEach((s, i) => {
+    const li = document.createElement('li'), dot = document.createElement('span'), nm = document.createElement('span');
+    dot.className = 'dot'; nm.className = 'nm';
+    nm.textContent = i === 0 ? 'Bắt đầu' : ((s.querySelector('h1, h2') || {}).textContent || 'Bước ' + i).replace(/:.*$/, '').trim();
+    nm.title = nm.textContent; li.append(dot, nm); railOl.append(li);
+  });
+  rail.append(railOl);
+  if (steps.length) steps[0].before(rail);
+  function railTo(at) {
+    [...railOl.children].forEach((li, j) => {
+      li.hidden = skip(steps[j]);
+      li.className = j < at ? 'done' : j === at ? 'cur' : '';
+      if (j === at) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+    });
   }
   /** Enables every [data-need] button whose keys are all done. Review gates stay open once the lesson was finished before. */
   function gate() {
@@ -424,6 +445,6 @@
   if (start) go(start.dataset.s);
   gate();
   // Phần tự lưu bật chế độ học lại sau khi trang đã chạy: mở lại các nút khóa bởi phần ôn và bỏ qua bước ôn.
-  new MutationObserver(() => { gate(); const cur = steps.find((s) => s.classList.contains('on')); if (cur && skip(cur)) go(cur.dataset.s); })
+  new MutationObserver(() => { gate(); const cur = steps.find((s) => s.classList.contains('on')); if (cur && skip(cur)) go(cur.dataset.s); else if (cur) railTo(steps.indexOf(cur)); })
     .observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 })();

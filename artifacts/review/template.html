@@ -6,10 +6,12 @@
 <style>/*KIT_CSS*/</style>
 <style>
 /* Trang ôn thẻ (artifacts/review/README.md). Một vùng chính: thẻ đang hỏi. Thử nhớ trước, rồi mới xem đáp án,
-   rồi tự chấm Nhớ hay Quên. Claude chấm thêm nếu muốn (khả năng sample), nói được thay gõ (khả năng dictation). */
+   rồi tự chấm Nhớ hay Quên. Claude chấm thêm nếu muốn (khả năng sample), nói được thay gõ (khả năng dictation).
+   Bố cục "hai nửa thẻ" (thien chọn ở vòng gu 6, KH9 ga 4): từ 760px thẻ chia đôi, trái là câu hỏi và câu của mình,
+   phải là đáp án (che bằng khung đứt tới khi lật), để so từng ý cạnh nhau. Tiến độ là hàng chấm: đen nhớ, viền đỏ quên. */
 body { font-size: 15px; }
 [hidden] { display: none !important; }
-main { max-width: 720px; margin: 0 auto; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 14px; }
+main { max-width: 1000px; margin: 0 auto; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 14px; }
 .top { display: grid; gap: 8px; }
 .top .meta { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 12px; }
@@ -17,7 +19,7 @@ main { max-width: 720px; margin: 0 auto; padding: 20px max(16px, env(safe-area-i
 .q { font-size: 19px; font-weight: 600; line-height: 1.4; text-wrap: pretty; }
 textarea { min-height: 84px; resize: vertical; }
 .acts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.reveal { background: var(--soft); border-radius: var(--r); padding: 12px; display: grid; gap: 6px; }
+.reveal { background: var(--card); border: 1px solid var(--ink); border-radius: var(--r); padding: 12px; display: grid; gap: 6px; align-content: start; }
 .reveal .src { font-size: 13px; color: var(--muted); }
 .judge { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .judge .btn { min-height: 44px; }
@@ -28,31 +30,60 @@ textarea { min-height: 84px; resize: vertical; }
 .list .id { font: 600 12px/1 var(--mono); color: var(--muted); }
 .status { font-size: 13.5px; color: var(--muted); }
 .empty { color: var(--muted); }
+.dots { list-style: none; margin: 2px 0 0; padding: 0; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; min-height: 14px; }
+.dots li { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--line-strong); background: var(--card); }
+.dots li.nho { background: var(--ink); border-color: var(--ink); }
+.dots li.quen { border-color: var(--bad); background: var(--bad-soft); }
+.dots li.cur { width: 14px; height: 14px; border: 2px solid var(--ink); }
+.half { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.cover { border: 1.5px dashed var(--line-strong); border-radius: var(--r); padding: 14px; display: grid; gap: 10px; justify-items: start; }
+.cover p { color: var(--muted); font-size: 14px; margin: 0; }
+@media (min-width: 760px) {
+  .card.split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 0; padding: 0; }
+  .card.split > .half { padding: 18px; }
+  .card.split > .mine { border-right: 1px solid var(--line); }
+  .card.split > .ans { grid-auto-rows: 1fr; }
+  .card.split > .judge { grid-column: 1 / -1; padding: 0 18px 18px; }
+  .cover { align-content: center; justify-items: center; text-align: center; padding: 24px; }
+  .cover p { max-width: 30ch; }
+  .ans .reveal { border: 0; padding: 0; background: none; }
+  .q { font-size: 21px; }
+  textarea { min-height: 140px; }
+  .done .list { grid-template-columns: 1fr 1fr; column-gap: 20px; }
+}
 /* Hỏi Claude: kiểu chung ở kit.css (.ai-open, .ai-out); chỉ hiện khi trang hỏi được (.kit-ask). */
 </style>
 <main>
   <header class="top">
     <div class="meta"><span class="label" id="title">Ôn thẻ</span><span class="label" id="cnt"></span></div>
-    <div class="bar"><span id="bar" style="width:0"></span></div>
+    <ol class="dots" id="dots" aria-hidden="true"></ol>
   </header>
 
-  <section class="card" id="card" aria-live="polite">
-    <div class="tags"><span class="chip" id="subj"></span><span class="chip" id="box"></span></div>
-    <p class="q" id="q"></p>
-    <div class="mic-row">
-      <textarea id="mine" maxlength="1500" placeholder="Bạn nhớ gì? Gõ vài chữ, chưa cần đúng." aria-label="Câu trả lời của bạn"></textarea>
-      <button class="btn mic" id="mic" type="button" hidden aria-pressed="false" aria-label="Nói thay gõ" title="Nói thay gõ">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v5"/></svg>
-      </button>
+  <section class="card split" id="card" aria-live="polite">
+    <div class="half mine">
+      <div class="tags"><span class="chip" id="subj"></span><span class="chip" id="box"></span></div>
+      <p class="q" id="q"></p>
+      <div class="mic-row">
+        <textarea id="mine" maxlength="1500" placeholder="Bạn nhớ gì? Gõ vài chữ, chưa cần đúng." aria-label="Câu trả lời của bạn"></textarea>
+        <button class="btn mic" id="mic" type="button" hidden aria-pressed="false" aria-label="Nói thay gõ" title="Nói thay gõ">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v5"/></svg>
+        </button>
+      </div>
+      <p class="mic-partial" id="partial" aria-live="polite"></p>
     </div>
-    <p class="mic-partial" id="partial" aria-live="polite"></p>
-    <div class="acts"><button class="btn primary" id="show" type="button">Xem đáp án</button></div>
-    <div class="reveal" id="reveal" hidden>
-      <span class="label">Đáp án</span>
-      <p id="ans"></p>
-      <p class="src" id="src"></p>
-      <button class="ai-open kit-ask" id="grade" type="button">Claude chấm câu của mình</button>
-      <p class="ai-out kit-ask" id="ai" role="status"></p>
+    <div class="half ans">
+      <div class="cover" id="cover">
+        <span class="label">Đáp án</span>
+        <p>Gõ điều bạn nhớ trước, chưa cần đúng. Rồi lật đáp án ra so từng ý.</p>
+        <button class="btn primary" id="show" type="button">Xem đáp án</button>
+      </div>
+      <div class="reveal" id="reveal" hidden>
+        <span class="label">Đáp án</span>
+        <p id="ans"></p>
+        <p class="src" id="src"></p>
+        <button class="ai-open kit-ask" id="grade" type="button">Claude chấm câu của mình</button>
+        <p class="ai-out kit-ask" id="ai" role="status"></p>
+      </div>
     </div>
     <div class="judge" id="judge" hidden>
       <button class="btn good" id="yes" type="button">Nhớ</button>

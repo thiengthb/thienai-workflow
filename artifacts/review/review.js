@@ -19,7 +19,7 @@
   function show() {
     const q = queue();
     const all = items.length, marked = items.filter((x) => (S.items[x.id] || {}).verdict).length;
-    $('bar').style.width = (all ? Math.round((marked / all) * 100) : 100) + '%';
+    dots(S.finished || S.i >= q.length ? '' : (q[S.i] || {}).id);
     if (!all) {
       $('card').hidden = false; $('done').hidden = true;
       $('card').replaceChildren(Object.assign(document.createElement('p'), { className: 'empty', textContent: 'Hôm nay không có thẻ nào đến hạn. Hẹn lần sau.' }));
@@ -37,7 +37,7 @@
     $('mine').disabled = false;
     $('show').hidden = s.shown && !S.again;
     const open = s.shown && !S.again;
-    $('reveal').hidden = !open; $('judge').hidden = !open;
+    $('reveal').hidden = !open; $('judge').hidden = !open; $('cover').hidden = open;
     $('ans').textContent = it.answer || 'Thẻ này chưa có đáp án viết sẵn. Ý chính của bài: ' + it.ref.slice(0, 420) + (it.ref.length > 420 ? '…' : '');
     $('src').textContent = it.source ? 'Từ ' + it.source : '';
     $('ai').textContent = open ? s.ai : '';
@@ -50,6 +50,11 @@
   }
 
   function current() { return queue()[S.i]; }
+  /** Hàng chấm đầu trang: mỗi thẻ một chấm, đen là nhớ, viền đỏ là quên, chấm to là thẻ đang hỏi. Không lộ câu sau. */
+  function dots(cur) {
+    $('dots').replaceChildren(...items.map((x) => { const li = document.createElement('li'), v = (S.items[x.id] || {}).verdict;
+      li.className = (v || '') + (x.id === cur ? ' cur' : ''); return li; }));
+  }
 
   $('mine').addEventListener('input', () => {
     const it = current(); if (!it) return;
@@ -59,7 +64,7 @@
   $('show').addEventListener('click', () => {
     const it = current(); if (!it) return;
     if (!S.again) { st(it.id).shown = true; save(); }
-    $('show').hidden = true; $('reveal').hidden = false; $('judge').hidden = false;
+    $('show').hidden = true; $('cover').hidden = true; $('reveal').hidden = false; $('judge').hidden = false;
     $('grade').hidden = false; $('ai').textContent = '';
     $('grade').disabled = !$('mine').value.trim();
   });
@@ -92,7 +97,7 @@
   function finish() {
     S.finished = true;
     $('card').hidden = true; $('done').hidden = false;
-    $('cnt').textContent = 'Xong';
+    $('cnt').textContent = 'Xong'; dots('');
     const forgot = items.filter((x) => (S.items[x.id] || {}).verdict === 'quen').map((x) => x.id);
     const ok = items.length - forgot.length;
     $('done-title').textContent = `Xong buổi ôn: nhớ ${ok}/${items.length} thẻ`;

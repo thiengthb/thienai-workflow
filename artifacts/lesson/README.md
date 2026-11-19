@@ -5,6 +5,7 @@ Khung cho mọi trang học (frontend, BA, chiến tranh, môn mới), dựng tr
 ## Trang làm được gì
 
 - Mỗi màn một bước, đầu trang có tên buổi, số bước ("3/8") và thanh tiến độ. Nút "Tiếp" mờ tới khi làm xong bước đó.
+- Từ 760px (nửa màn hình cạnh chat trở lên): thanh tiến độ thành **tuyến bước** ở cột trái, các bước như tuyến ga (đã qua có tick, đang làm chấm đen, chưa tới chấm rỗng), chữ một cột 640px. Bước có sân khấu thì tuyến thu còn chấm. thien chọn ở vòng gu 6 (KH9 ga 4, 2026-11-20).
 - Câu hỏi một lựa chọn chấm ngay: chữ "Bạn chọn", "Đúng" và lời giải thích hiện cùng lúc, không chỉ đổi màu.
 - Ô tự nói lại theo tình huống: một người cụ thể nhắn hỏi về chính màn hay tình huống vừa làm (hộp `.ask-from`), người học trả lời người đó. Bản của Claude ẩn tới khi bấm xem (ghi lại là xem trước hay sau khi tự viết). Đổi từ câu hỏi chung chung theo lựa chọn của thien 2026-11-17 (phương án C, `learning/frontend.md`): câu chung chung làm bí, tình huống cụ thể giúp tự tổng hợp.
 - Góp ý độ dài, độ khó, cách học so với các buổi trước bằng nhóm nút (nút đã chọn tô đen), ô ghi thêm.

@@ -7,6 +7,7 @@ Trang để thien ôn các thẻ đến hạn trong [`learning/cards.md`](../../
 ## Trang làm được gì
 
 - Mỗi lần một thẻ: thien gõ (hoặc nói) điều mình nhớ trước, rồi mới bấm "Xem đáp án", rồi tự chấm **Nhớ** hay **Quên**. Đúng nhịp "thử trước, giải thích sau" của `profile/TUTOR.md`.
+- Bố cục **hai nửa thẻ** (thien chọn ở vòng gu 6, KH9 ga 4, 2026-11-20): từ 760px trái là câu hỏi và câu của mình, phải là đáp án, che bằng khung đứt tới khi lật, để so từng ý cạnh nhau; điện thoại xếp dọc. Tiến độ là hàng chấm, mỗi thẻ một chấm (đen nhớ, viền đỏ quên), không lộ câu sau.
 - Đáp án lấy từ mục "Tự kiểm" trong file bài mà cột "Đáp án ở" trỏ tới (ghép theo chữ trùng). Không ghép được thì trang cho xem đoạn ý chính của bài.
 - **Claude chấm câu của mình** (khả năng `sample`): Claude so câu trả lời với đáp án và đoạn bài, nói khớp gì, thiếu gì, rồi gợi ý nên chấm Nhớ hay Quên. Lời dặn cấm thêm chi tiết ngoài bài (luật nguồn số 10 của TUTOR, quan trọng với môn chiến tranh). Không hỏi được thì nút tự ẩn.
 - **Nói thay gõ** (khả năng `dictation`): nút mic cạnh ô trả lời (`Kit.dictate` trong lõi chung), chỉ có ở Chrome và app Claude trên máy tính; nơi khác nút tự ẩn.
