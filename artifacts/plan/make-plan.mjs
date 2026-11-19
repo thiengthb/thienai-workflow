@@ -141,7 +141,7 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   <div class="rh"><span class="n" aria-hidden="true">${ok ? icon('check') : esc(c.num)}</span><h3><span class="vh">Ga ${esc(c.num)}: </span>${c.nameHtml}</h3></div>
   ${c.doneWhen ? `<p class="small"><b>${ok ? 'Đạt' : 'Chưa đạt'}:</b> ${c.doneWhen}</p>` : ''}
   <div class="rf">${c.total ? `<span class="chip ${c.done === c.total ? 'good' : 'warn'}">${c.done}/${c.total} việc</span>` : ''}${ok ? '' : `<span class="chip">${c.state === 'dropped' ? 'bỏ' : 'đóng khi chưa xong'}</span>`}${c.doneDate ? `<span class="chip">${icon('calendar')}${ddmm(c.doneDate)}</span>` : ''}</div>
-  ${c.tasks.length ? `<details class="acc"><summary>Việc con · ${c.done}/${c.total}</summary><div>${taskList(c)}</div></details>` : ''}
+  ${c.tasks.length || c.notes.length ? `<details class="acc"><summary>${c.tasks.length ? `Việc con · ${c.done}/${c.total}` : 'Ghi chú'}</summary><div>${taskList(c)}${c.notes.map((n) => `<p class="small muted">${n}</p>`).join('')}</div></details>` : ''}
 </article>`;
     }).join('\n')}${moved.length ? `<article class="res card moved"><div class="rh"><span class="n" aria-hidden="true">${icon('arrow-right')}</span><h3>Chuyển đi <span class="chip">${moved.length}</span></h3></div>
   <ul class="list">${moved.map((m) => `<li><span class="muted">Ga ${esc(m.ga)}:</span> ${m.html}</li>`).join('')}</ul></article>` : ''}</div>`;
@@ -223,7 +223,7 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
     <${askTag} class="tile ask"${askTag === 'a' ? ' href="#dang-o"' : ''}><span class="label">Bạn cần làm</span><span class="small">${askRow ? askRow.html.replace(/<a\b[^>]*>|<\/a>/g, '') : 'Không có'}</span></${askTag}>
   </div>`;
   } else if (L === 'the-ket-qua') {
-    const days = new Set(cks.map((c) => c.doneDate).filter(Boolean)).size;
+    const days = new Set(cks.filter((c) => c.state === 'done').map((c) => c.doneDate).filter(Boolean)).size;   // chỉ ga đã xong (PR #163 review)
     summary = `<div class="result-nums">
     <div><b>${doneCks}<small>/${cks.length}</small></b><span>ga xong</span></div>
     <div><b>${plan.ticks.done}<small>/${plan.ticks.total}</small></b><span>việc đã tick</span></div>

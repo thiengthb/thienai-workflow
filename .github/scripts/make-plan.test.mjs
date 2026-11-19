@@ -180,6 +180,7 @@ for (const f of readdirSync(join(root, 'docs/plans')).filter((f) => f.endsWith('
   assert.match(done.html, /class="res card moved"/, 'unticked tasks gather in "Chuyển đi"');
   assert.ok(done.dropped.includes('tuyen') && !/\.stop::before/.test(done.html), 'the stop line CSS is dropped, the task list CSS stays');
   assert.match(done.html, /ul\.tasks\{/);
+  assert.match(done.html, /<b>2<\/b><span>ngày có ga xong<\/span>/, 'days count only finished stops');
   assert.doesNotMatch(done.html, /class="jump"|id="daymap"/);
   // "Bố cục:" line: the old one-column page, with its reason; a wrong name is reported and the default stays.
   const md = readFileSync(join(root, 'artifacts/plan/fixture-running.md'), 'utf8');

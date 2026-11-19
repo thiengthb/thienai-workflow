@@ -195,7 +195,8 @@ nav.toc.wide { --main-w: 960px; }
 .tile.ask { border-color: var(--ink-2); color: var(--ink); text-decoration: none; line-height: 1.4; }
 a.tile.ask:hover { background: var(--soft); }
 .tile.ask .label { color: var(--ink-2); }
-.tile.ask .small { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+/* Gập còn bốn dòng chỉ khi ô là link tới dòng đầy đủ ở Đang ở đâu; không có khối đó thì hiện hết (PR #163 review). */
+a.tile.ask .small { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 @media (max-width: 720px) { .tiles { grid-template-columns: 1fr 1fr; } .tile .big { font-size: 26px; } }
 .board { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
 @media (min-width: 820px) { .board { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; align-items: start; } }

@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 3 xong (20/11): ba bản B thành mặc định của `artifacts/plan/` theo trạng thái (chờ duyệt → phiếu hỏi, đang chạy → bảng tiến độ, đã đóng → thẻ kết quả), theo bộ màu trắng đen; trang KH9 dựng lại bằng bảng tiến độ và đăng đè. PR #163 chờ thien merge. Ga 1 vẫn chờ thien xem trang mẫu thành phần.
-- Còn thiếu: ga 4 (mốc, vòng gu hai tuần một lần); đóng ga 1.
-- thien cần làm: merge PR #163; xem trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử").
+- Đang ở: checkpoint 3 xong (20/11): ba bản B thành mặc định của `artifacts/plan/` theo trạng thái (chờ duyệt có câu hỏi → phiếu hỏi, chờ duyệt không có câu hỏi → một cột, đang chạy → bảng tiến độ, đã đóng → thẻ kết quả), theo bộ màu trắng đen; trang KH9 dựng lại bằng bảng tiến độ và đăng đè (PR #163, thien nhắn merge 20/11 01:34). Ga 1 đóng: thien đã xem trang mẫu thành phần (20/11 01:34).
+- Còn thiếu: ga 4 (mốc, vòng gu hai tuần một lần; vòng đầu là trang ôn thẻ và trang học, chụp ở nửa màn hình và 2/3 màn hình).
+- thien cần làm: không có.
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
@@ -30,7 +30,7 @@ Lời thien (2026-11-19 20:40, ghi chú kèm câu trả lời KH8): "bạn phả
 
 ## Checkpoint
 
-### 1. Rút khối dùng chung vào kit
+### 1. Rút khối dùng chung vào kit (xong 2026-11-20: thien đã xem trang mẫu thành phần)
 Xong khi: trang mẫu thành phần có đủ các khối trùng thật (khối gửi, nút chọn một, chi tiết thử); mọi mẫu từng tự viết các khối đó (kế hoạch, luồng, chọn phương án, ôn thẻ) dùng khối của kit, `check-pages` 0 lỗi, và thien mở trang mẫu thành phần thấy từng khối một lần.
 Ước: 1–2 phiên
 - [x] Khối câu hỏi có nút, ô trả lời gửi Claude, núm, khung ảnh vào `kit/` (CSS và JS), có tên trong trang mẫu thành phần (đổi sau khi kiểm kỹ, xem "Đã đổi": khối gửi `Kit.sendBox` + `.kit-send`, nút chọn một `.choice`, chi tiết thử `.trial`, HTML ở `kit/blocks.mjs`; trang mẫu thành phần có hai mục mới; PR #156, đã merge 2026-11-19; trang mẫu thành phần đăng lại https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst, nick tnt697)
