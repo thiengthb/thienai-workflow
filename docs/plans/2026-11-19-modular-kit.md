@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1 (rút khối dùng chung vào kit). thien trả lời 21:15: ok cả 4 đề xuất; KH9 làm trước kế hoạch MCP.
+- Đang ở: checkpoint 1 dựng xong, PR #156 chờ thien merge (merge sau #154). thien trả lời 21:15: ok cả 4 đề xuất; KH9 làm trước kế hoạch MCP.
 - Còn thiếu: cả bốn checkpoint.
-- thien cần làm: không có, tới khi có PR kit để merge.
+- thien cần làm: merge #154 rồi #156; mở trang mẫu thành phần xem hai mục mới.
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
@@ -33,8 +33,8 @@ Lời thien (2026-11-19 20:40, ghi chú kèm câu trả lời KH8): "bạn phả
 ### 1. Rút khối dùng chung vào kit
 Xong khi: trang mẫu thành phần có đủ khối câu hỏi có nút, ô trả lời gửi Claude, núm, khung ảnh; các mẫu cũ dùng khối đó, `check-pages` 0 lỗi, và thien mở trang mẫu thành phần thấy từng khối một lần.
 Ước: 1–2 phiên
-- [ ] Khối câu hỏi có nút, ô trả lời gửi Claude, núm, khung ảnh vào `kit/` (CSS và JS), có tên trong trang mẫu thành phần
-- [ ] Bốn mẫu đang tự viết các khối đó chuyển sang dùng khối của kit; bài đã học không đổi
+- [ ] Khối câu hỏi có nút, ô trả lời gửi Claude, núm, khung ảnh vào `kit/` (CSS và JS), có tên trong trang mẫu thành phần (đổi sau khi kiểm kỹ, xem "Đã đổi": khối gửi `Kit.sendBox` + `.kit-send`, nút chọn một `.choice`, chi tiết thử `.trial`, HTML ở `kit/blocks.mjs`; trang mẫu thành phần có hai mục mới; PR #156)
+- [ ] Bốn mẫu đang tự viết các khối đó chuyển sang dùng khối của kit; bài đã học không đổi (trang kế hoạch, luồng, chọn phương án, ôn thẻ dùng `Kit.sendBox`; ảnh chụp trước và sau trùng từng điểm ảnh; PR #156)
 
 ### 2. Trang dựng từ danh sách khối
 Xong khi: một trang kế hoạch và một trang luồng dựng từ danh sách khối khai báo trong file nguồn (không còn khung HTML cố định); bỏ một khối khỏi danh sách thì trang không còn khối đó và không nặng thêm.
@@ -73,6 +73,7 @@ Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang h�
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-19 | Checkpoint 1 rút khối gửi, `.choice`, `.trial` thay vì câu hỏi, núm, khung ảnh | Đọc từng chỗ thì `.q`, `.opt` là trùng tên chứ không trùng khối (thẻ phương án, dòng lựa chọn, câu trắc nghiệm là ba thứ khác nhau); núm và khung ảnh cũng khác theo mẫu. Khối trùng thật là chép và gửi (bốn bản) và chi tiết thử (hai bản) |
 
 ## Lỗi gặp
 | Ngày | Lỗi | Đã xử lý |
