@@ -1,7 +1,7 @@
 // Kiểm ba tính năng của đợt 5 trong trang học, bằng một Claude giả (khả năng sample có tools, sample.json, tts):
 //   T1 "Xem Claude làm": chỉ mở khi tự làm xong bước; Claude vặn núm, xếp thẻ, dời sa bàn qua tools; "Trả lại cách của mình".
 //   T3 "Thêm một tình huống": Claude soạn câu hỏi mới ở bước cuối (không có ở bài chiến tranh), kết quả vào R.extra.
-//   N2 "Nghe": nút loa ở bước giải thích và ở sa bàn, đọc đúng chữ đang thấy, R.listened đếm số lần.
+//   N2 "Nghe": chỉ còn ở sa bàn bài chiến tranh, đọc đúng chữ đang thấy; bài thường không còn nút Nghe, mic (KH8) số lần.
 // Cần trình duyệt: CI chạy file này trong job "pages".
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
@@ -152,20 +152,10 @@ const finish = (p, keys) => p.evaluate((ks) => ks.forEach((k) => Lesson.done(k))
   await ctx.close();
 }
 
-{ // Bài thường: nút Nghe ở bước "Ý chính" (không ở bước có câu hỏi); tình huống thêm ở bước cuối.
+{ // Bài thường: không còn nút Nghe hay mic (KH8 câu 7, 2026-11-19); tình huống thêm ở bước cuối.
   const { p, ctx } = await openPage(fx.lesson);
-  await go(p, 4);
-  const idea = p.locator('.step[data-s="4"]'), listen = idea.locator('.listen');
-  assert.equal(await listen.textContent(), 'Nghe');
-  assert.ok(await listen.isVisible());
-  assert.equal(await p.locator('.step[data-s="5"] .listen').count(), 0, 'bước có câu hỏi không có nút Nghe');
-  await listen.click();
-  assert.equal(await listen.getAttribute('aria-pressed'), 'true');
-  assert.match(await listen.textContent(), /Dừng/);
-  assert.match(await p.evaluate(() => window.__spoken.at(-1)), /Mỗi màn chỉ một chỗ màu đặc/);
-  assert.doesNotMatch(await p.evaluate(() => window.__spoken.at(-1)), /Hỏi Claude|Nghe|Tiếp/, 'không đọc chữ của nút');
-  await p.waitForFunction(() => document.querySelector('.step[data-s="4"] .listen').getAttribute('aria-pressed') === 'false');
-  assert.equal(await p.evaluate(() => window.R.listened), 1);
+  assert.equal(await p.locator('.step .listen').count(), 0, 'bài học thường không có nút Nghe');
+  assert.equal(await p.locator('.mic-row, button[aria-label="Nói thay gõ"]').count(), 0, 'ô tự nói lại không có mic');
 
   const fin = p.locator('.step', { has: p.locator('#finish') });
   await go(p, await fin.getAttribute('data-s'));
@@ -177,7 +167,9 @@ const finish = (p, keys) => p.evaluate((ks) => ks.forEach((k) => Lesson.done(k))
   const R = await p.evaluate(() => window.R);
   assert.deepEqual(R.extra.map((x) => [x.pick, x.answer, x.ok]), [[0, 2, false]]);
   assert.match(await p.evaluate(() => window.__prompts.at(-1)), /Trả về JSON đúng dạng/);
-  assert.match(await p.evaluate(() => Lesson.summary('')), /Tình huống thêm: đúng 0\/1[\s\S]*Nghe đọc to: 1 lần/);
+  const sum = await p.evaluate(() => Lesson.summary(""));
+  assert.match(sum, /Tình huống thêm: đúng 0\/1/);
+  assert.doesNotMatch(sum, /Nghe đọc to/, "bài thường không còn đếm lần nghe");
   // JSON sai dạng thì nói rõ, không vỡ trang.
   await p.evaluate(() => { window.__json = { situation: 'x' }; });
   await fin.getByRole('button', { name: 'Tình huống khác' }).click();

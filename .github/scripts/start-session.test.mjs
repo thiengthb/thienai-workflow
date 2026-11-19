@@ -96,6 +96,21 @@ assert.match(r.stdout, /tasks\/old\.md/);
 r = start('--claim', 'Claude tnt697, https://new', '--task', 'a/b:missing');
 assert.match(r.stdout, /Không thấy việc a\/b:missing/);
 
+// --repos names the repos attached to the session: a task in another repo is not claimed (2026-11-19: the newest task
+// was in a repo the session could not push to, and the failed push was reported as "another nick").
+r = start('--claim', 'Claude tnt697, https://new', '--repos', 'c/d');
+assert.equal(r.status, 0, r.stdout + r.stderr);
+assert.match(r.stdout, /ở a\/b, repo này chưa gắn vào phiên nên không nhận/);
+assert.match(r.stdout, /--task a\/b:new/, 'says how to take it once the repo is attached');
+assert.match(r.stdout, /Không có việc nào ở các repo đang gắn/);
+assert.doesNotMatch(r.stdout, /đã đẩy|Một nick khác/);
+r = start('--claim', 'Claude tnt697, https://new', '--repos', 'c/d', '--task', 'a/b:old');
+assert.equal(r.status, 1);
+assert.match(r.stdout, /Chưa nhận: việc a\/b:old ở repo a\/b, repo này chưa gắn/);
+r = start('--claim', 'Claude tnt697, https://new', '--repos', 'a/b,c/d');
+assert.equal(r.status, 0, r.stdout + r.stderr);
+assert.match(r.stdout, /a\/b, nhánh handoff, tasks\/new\.md \(bản làm việc/, 'attached repo: claimed as before');
+
 // Setup check runs first and its fixes make the exit code 1, but the rest is still printed.
 r = start('--project', 'Claude', '--instructions', 'none', '--repos', 'thiengthb/thienai-workflow', '--no-git');
 assert.equal(r.status, 1);
