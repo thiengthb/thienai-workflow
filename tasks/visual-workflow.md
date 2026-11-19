@@ -1,7 +1,7 @@
-# KH8 đóng KH1–KH7, rồi KH9 kit lắp ghép
+# KH9 kit lắp ghép: ga 1 ở PR #156
 
-Repo: thiengthb/thienai-workflow · Nhánh: kh9-modular-kit · PR: #155 (nháp KH9); #153 luật, #154 mã chờ thien merge; #152 đã merge; sakubun #339 chờ thien merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Cập nhật: 2026-11-19T14:06Z
+Repo: thiengthb/thienai-workflow · Nhánh: kh9-kit-blocks (commit 66abcd1, đã gộp nhánh kh8-code của #154) · PR: #156 chờ thien merge sau #154; #153, #154 chờ thien merge; #152, #155 đã merge; sakubun #339 chờ thien merge
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Cập nhật: 2026-11-19T14:50Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -57,15 +57,18 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kth
 - 19/11 20:40 thien trả lời KH8: ok cả 10 đề xuất, kèm ghi chú (chi tiết thử lặp ở mọi trang; mẫu phải là bộ lắp ghép; bố cục theo nội dung, kiểm kỹ artifact). Đã làm: PR #153 luật (DELEGATION, README 3 luật/mốc, quyết định 003 review theo giai đoạn, skill viet-de-hieu vào repo, ngôn ngữ về VOICE, plan/flow vào danh sách mẫu 8/8, MAP), PR #154 mã (start-session không nhận việc ở repo chưa gắn, bỏ Nghe và mic khỏi mẫu học, chi tiết thử thành --trial, ô kể lại hỏi rẽ ở đâu quay lại ở đâu), PR #152 đóng KH1–KH7 và STATUS (tự merge). Mọi góp ý CodeRabbit đã sửa và resolve; CI xanh cả ba.
 - KH9 nháp `docs/plans/2026-11-19-modular-kit.md` (PR #155), trang 4 câu hỏi https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (nick tnt697). Trang lộ trình học (Vubbj6...) ở nick khác: nick đó chạy `publish-progress.mjs roadmap` rồi đăng đè (learning/roadmap.md đổi ở #152).
 
+- 19/11 21:15 thien trả lời KH9: ok cả 4 đề xuất (KH9 trước MCP; lệnh dựng chọn bố cục theo nội dung, AI đổi thì ghi lý do; trang KH9 dựng lại ở ga 3; kit không giới hạn, trang chỉ mang khối dùng, check-pages báo vượt cỡ gốc +20%). PR #155 (kế hoạch + STATUS) tự merge.
+- Ga 1 (PR #156): kiểm kỹ thì `.q`, `.opt`, núm, khung ảnh chỉ trùng tên; khối trùng thật là chép và gửi (4 mẫu) và chi tiết thử (2 mẫu). Đã có `Kit.sendBox`, `.kit-send`, `.choice`, `.trial` trong kit, `kit/blocks.mjs`, hai mục mới ở trang mẫu thành phần, test `kit-blocks.test.mjs`. Ảnh chụp trang kế hoạch, luồng, chọn phương án, ôn thẻ trùng từng điểm ảnh với trước. Ba ý CodeRabbit đã sửa (chép không chờ db, clear() bỏ câu báo cũ, snapshot chép answers).
+
 ## Bước tiếp theo
-0. thien trả lời KH9 (đọc db `plans/2026-11-19-modular-kit` hay file gửi kèm), chép nguyên văn vào kế hoạch, rồi làm checkpoint 1 (rút khối dùng chung vào kit).
-1. Sau khi thien merge #153 và #154: tick ga 2 của KH8 và đóng KH8 (dòng STATUS).
-2. Kế hoạch MCP cho nhóm SEP490: mở mục "Chuyển sang kế hoạch sau" của KH8 trước (đối chiếu tính năng Claude, ba luật thread). Thứ tự với KH9 theo câu 1 của KH9.
-3. Repo đang public tạm tới 01/12 (lịch nhắc trig_011nfKi6X5kZe3HTRTZkYmHh); không ghi thông tin riêng mới.
+0. Sau khi thien merge #154 rồi #156: tick ga 1 KH9 (2 việc) và ga 2 KH8, đóng KH8; STATUS sửa số.
+1. KH9 ga 2: lệnh dựng đọc danh sách khối từ file nguồn, `pack.mjs` bỏ khối không dùng, `check-pages` báo vượt cỡ gốc +20% (cỡ gốc ghi trong `artifacts/kit/`). Nhánh mới từ main sau khi #156 vào.
+2. KH9 ga 3: vòng gu bố cục trang kế hoạch (3 loại nội dung x 2–3 bố cục) trên trang `decide/`; dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 theo bố cục chọn.
+3. Kế hoạch MCP cho nhóm SEP490 sau KH9; mở mục "Chuyển sang kế hoạch sau" của KH8 trước.
+4. Repo public tạm tới 01/12; không ghi thông tin riêng mới.
 
 ## Đang chờ thien
-- Merge PR #153 (luật) và #154 (mã); merge sakubun #339.
-- Trả lời 4 câu hỏi KH9: https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (mở ở nick tnt697).
+- Merge #153 (luật), #154 (mã), rồi #156 (khối kit); merge sakubun #339.
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
