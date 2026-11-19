@@ -1,34 +1,36 @@
 /* Lõi chung cho mọi trang artifact của thien (xem artifacts/README.md).
    Sửa ở đây; make-round.mjs và các script dựng trang chép file này vào trang lúc dựng.
-   Gu: Onest, nền giấy trắng (xám rất nhẹ, thẻ trắng), chữ gần đen, một màu nhấn xanh petrol cho thứ quan trọng.
-   Bảng màu thien chọn ở vòng gu 2 (2026-11-18): nền của A · Giấy trắng với màu nhấn của C · xanh petrol (docs/plans/2026-11-18-visual-workflow/round-2/). Màu đúng/sai tách khỏi màu nhấn. */
+   Gu: Onest, trắng đen. Nền và thẻ trắng tinh, tách nhau bằng viền xám mảnh; chữ, nút, tab đang chọn màu gần đen.
+   Màu chỉ để báo: xanh lá là xong, đỏ là lỗi, vàng là cảnh báo. Hình và sơ đồ dùng ba mức xám thay cho mực màu.
+   thien chọn 2026-11-19 23:56: "màu chính là màu trắng, mình không muốn chạy đua với màu sắc nữa" (thay xanh petrol của vòng gu 2
+   và mực xanh, cam của vòng gu 3; các vòng cũ ở docs/plans/2026-11-18-visual-workflow/round-2/, round-3/). */
 :root {
-  --bg: #f7f7f5; --card: #ffffff; --soft: #f0f0ed; --line: #e5e5e1; --line-strong: #d4d4cf; --ink: #1c1c1b; --muted: #666662;
-  --accent: #0e7490; --accent-soft: #e3f3f8; --accent-ink: #0b5a70;
+  --bg: #ffffff; --card: #ffffff; --soft: #f4f4f3; --line: #e4e4e1; --line-strong: #cfcfcb; --ink: #1c1c1b; --muted: #62625e;
+  --accent: #1c1c1b; --accent-soft: #f0f0ee; --accent-ink: #1c1c1b;
   --good: #277a4c; --good-soft: #e6f3eb; --bad: #c2410c; --bad-soft: #fdeee6; --warn: #8a5a12; --warn-soft: #f6ecd6;
-  --accent-fill: #0e7490; --on-accent: #fff; --primary-fill: var(--ink);   /* nền đặc màu nhấn (nút Gửi, nút đang chọn) và chữ trên nền đặc nhấn, đúng, sai */
-  /* Mực hình (vòng gu 3, thien chọn A · Thêm mực cam, 19/11): hai mực có nghĩa cố định cho chữ khoá, sơ đồ, biểu đồ.
-     --ink-1 xanh = khái niệm, công cụ, dữ liệu; --ink-2 cam = người học, điểm cần làm; --ink-3 tím = loạt thứ ba của biểu đồ.
-     Đã qua bộ kiểm màu biểu đồ (sáu mục, cả sáng và tối; cặp gần nhất khi mù màu ΔE 19,4). Không dùng làm màu nút. */
-  --ink-1: #0b6fa0; --ink-2: #c2480f; --ink-3: #7a5bc7;
+  --accent-fill: #1c1c1b; --on-accent: #fff; --primary-fill: var(--ink);   /* nền đặc màu nhấn (nút Gửi, nút đang chọn) và chữ trên nền đặc nhấn, đúng, sai */
+  /* Mực hình: giữ ba tên cũ để mọi mẫu không phải sửa, nay là ba mức xám (thien 19/11, trắng đen).
+     --ink-1 xám vừa = khái niệm, công cụ, dữ liệu, ga đã xong; --ink-2 gần đen = người học, điểm cần làm, ga đang chạy (đậm nhất);
+     --ink-3 xám nhạt = loạt thứ ba của biểu đồ. Phân biệt bằng độ đậm, nét liền hay đứt, chữ, không bằng màu. Không dùng làm màu nút. */
+  --ink-1: #6a6a65; --ink-2: #1c1c1b; --ink-3: #a3a39e;
   --shadow: 0 1px 2px rgba(28, 28, 27, .06), 0 6px 18px rgba(28, 28, 27, .06);
   --font: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --r: 8px; --r-lg: 8px;   /* one radius for buttons, inputs, chips and cards (thienui docs/taste.md); round only for dots and knobs */
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #171716; --card: #1f1f1e; --soft: #272726; --line: #333331; --line-strong: #444441; --ink: #ededeb; --muted: #a3a39e;
-  --accent: #38b2cf; --accent-soft: #11303a; --accent-ink: #8fd8ea;
+  --bg: #161616; --card: #1c1c1c; --soft: #262626; --line: #333331; --line-strong: #444441; --ink: #ededeb; --muted: #a3a39e;
+  --accent: #ededeb; --accent-soft: #2a2a29; --accent-ink: #ededeb;
   --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
-  --accent-fill: #1b7a91; --on-accent: #fff; --primary-fill: #c4c4c0;
-  --ink-1: #3a9fd0; --ink-2: #e0703a; --ink-3: #8a74e0;
+  --accent-fill: #ededeb; --on-accent: #161616; --primary-fill: #ededeb;
+  --ink-1: #8f8f8a; --ink-2: #ededeb; --ink-3: #5c5c58;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; } }
 :root[data-theme="dark"] {
-  --bg: #171716; --card: #1f1f1e; --soft: #272726; --line: #333331; --line-strong: #444441; --ink: #ededeb; --muted: #a3a39e;
-  --accent: #38b2cf; --accent-soft: #11303a; --accent-ink: #8fd8ea;
+  --bg: #161616; --card: #1c1c1c; --soft: #262626; --line: #333331; --line-strong: #444441; --ink: #ededeb; --muted: #a3a39e;
+  --accent: #ededeb; --accent-soft: #2a2a29; --accent-ink: #ededeb;
   --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
-  --accent-fill: #1b7a91; --on-accent: #fff; --primary-fill: #c4c4c0;
-  --ink-1: #3a9fd0; --ink-2: #e0703a; --ink-3: #8a74e0;
+  --accent-fill: #ededeb; --on-accent: #161616; --primary-fill: #ededeb;
+  --ink-1: #8f8f8a; --ink-2: #ededeb; --ink-3: #5c5c58;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; }
 /* Bộ token thứ hai, như nhau ở sáng và tối. Mọi màu của các mẫu (lesson, it, war, review, decide, compare) lấy từ đây hay từ trên;
    check-tokens.mjs báo khi có mã màu viết thẳng ngoài file này. Riêng màu của màn mô phỏng và địa hình trong từng bài là nội dung bài. */
@@ -41,7 +43,7 @@
   /* Chuyển động: lò xo nhẹ, không nảy rõ (thienui docs/taste.md). Vào chậm hơn ra. */
   --ease-spring: linear(0, .32 8%, .72 18%, .95 30%, 1.03 42%, 1.01 58%, 1); --ease-out: cubic-bezier(.2, .8, .2, 1);
   --t-fast: .12s; --t-base: .2s; --t-slow: .32s;
-  --shadow-device: 0 10px 30px rgb(0 0 0 / .12); --scrim: rgb(0 0 0 / .55); --lit: rgb(56 178 207 / .2); --lit-strong: rgb(56 178 207 / .65);
+  --shadow-device: 0 10px 30px rgb(0 0 0 / .12); --scrim: rgb(0 0 0 / .55); --lit: rgb(120 120 115 / .18); --lit-strong: rgb(120 120 115 / .5);
   /* Màu nội dung: khung điện thoại và giấy của màn mô phỏng, khối code, bút soi, nhãn trên sa bàn. Luôn giữ như nhau vì là một phần của bài. */
   --paper: #fff; --device: #1b1b1a; --code-bg: #1f1f1d; --code-ink: #d6d3cc; --code-muted: #8a877f; --code-key: #8fd9c9; --code-val: #fff;
   --mark: #e11d48; --mark-ink: #be123c;
@@ -69,7 +71,7 @@ code, .mono { font-family: var(--mono); font-size: .88em; }
 
 /* Nút: viền 1px, bo 8px, nổi nhẹ. Nút đặc (primary, accent) không viền, có gờ tối 2px ở đáy; bấm thì lún 1px theo lò xo, mất gờ.
    Không quầng sáng quanh nút: nút nào cũng nổi cùng một mức (thien 2026-11-19: nút sáng hẳn ra khỏi các nút khác nhìn khó chịu;
-   quầng sáng chỉ hợp với thứ mang nghĩa đèn, đang bật). Tối: nền đặc nhấn là xanh petrol đậm chữ trắng, nút Chính xám sáng vừa (--primary-fill), không trắng loá. */
+   quầng sáng chỉ hợp với thứ mang nghĩa đèn, đang bật). Tối: nền đặc nhấn và nút Chính là trắng ngà chữ đen (trắng đen, 19/11). */
 .btn { font: 600 14px/1 var(--font); color: var(--ink); background: var(--card); border: 1px solid var(--line-strong);
   border-radius: var(--r); min-height: 36px; padding: 0 14px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   cursor: pointer; white-space: nowrap; box-shadow: var(--shadow-btn), var(--lip-soft); -webkit-tap-highlight-color: transparent;
@@ -80,7 +82,7 @@ code, .mono { font-family: var(--mono); font-size: .88em; }
 .btn.primary { background: var(--primary-fill); border-color: transparent; color: var(--bg); box-shadow: var(--shadow-btn), var(--lip); }
 .btn.primary:hover { background: color-mix(in srgb, var(--primary-fill) 88%, var(--bg)); }
 .btn.accent { background: var(--accent-fill); border-color: transparent; color: var(--on-accent); box-shadow: var(--shadow-btn), var(--lip); }
-.btn.accent:hover { background: color-mix(in srgb, var(--accent-fill) 88%, black); }   /* luôn tối đi khi rê chuột, để chữ trắng giữ trên 4,5:1 ở cả sáng và tối */
+.btn.accent:hover { background: color-mix(in srgb, var(--accent-fill) 86%, var(--bg)); }   /* rê chuột thì nhạt về phía nền một nấc; chữ trên nền đặc vẫn trên 4,5:1 ở cả sáng và tối */
 .btn.primary:active, .btn.accent:active { box-shadow: none; }
 .btn.ghost { background: transparent; border-color: transparent; box-shadow: none; }
 .btn.ghost:hover { background: var(--soft); }
