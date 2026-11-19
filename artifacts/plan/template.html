@@ -8,7 +8,8 @@
 /* Trang kế hoạch: bố cục bản "Một nấc" thien chọn ở vòng gu 1 (2026-11-18): một cột đọc, toàn cảnh trước,
    tuyến checkpoint kiểu tuyến tàu, phương án, câu hỏi trả lời bằng nút. Màu, chữ, bo góc là của kit;
    mực hình theo nghĩa: xanh (--ink-1) cho ga đã xong, cam (--ink-2) cho ga đang chạy và việc thien cần làm.
-   Chi tiết thử: bản đồ ga theo ngày kèm núm vặn, lấy từ bản Thật xa nhưng nền sáng, chữ cỡ thường. */
+   Chi tiết thử: bản đồ ga theo ngày kèm núm vặn, lấy từ bản Thật xa nhưng nền sáng, chữ cỡ thường.
+   Mỗi khối của trang nằm trong một vùng @block (KH9 ga 2): trang không có khối thì kit/pack.mjs bỏ CSS của nó. */
 :root { --toc-h: 48px; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -21,9 +22,9 @@ h3 { font-size: 16px; line-height: 1.35; }
 .small { font-size: 14px; }
 .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
 section, header.ph { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; scroll-margin-top: calc(var(--toc-h) + 12px); }
-.stop { scroll-margin-top: calc(var(--toc-h) + var(--map-h, 0px) + 16px); }
 .pad { padding: 14px 16px; display: grid; gap: 8px; }
 .chip { display: inline-flex; align-items: center; gap: 4px; }
+.list { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14.5px; }
 
 /* Mục lục: thanh dính trên cùng ở điện thoại và máy tính bảng; JS đo chiều cao thật vào --toc-h để nhảy tới mục không bị che.
    Màn rộng (từ 1160px): thành cột bên trái, tận dụng khoảng trống hai bên cột đọc; --toc-h về 0 (lời thien 19/11). */
@@ -35,7 +36,6 @@ nav.toc a:hover { color: var(--ink); }
 nav.toc a.on { background: var(--card); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
 nav.toc { transition: transform var(--t-base) var(--ease-out); }
 nav.toc.away { transform: translateY(-100%); }
-html.toc-away .mapmini { top: 8px; }
 @media (prefers-reduced-motion: reduce) { nav.toc { transition: none; } }
 .side-prog { display: none; }
 @media (min-width: 1160px) {
@@ -54,6 +54,7 @@ html.toc-away .mapmini { top: 8px; }
 .prog { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
 .prog .mono { font-size: 12.5px; color: var(--muted); }
 
+/* @block dang-o */
 /* Đang ở đâu */
 .where { display: grid; }
 .w-row { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 12px; padding: 12px 16px; }
@@ -69,7 +70,9 @@ html.toc-away .mapmini { top: 8px; }
 .jump:hover { border-color: var(--ink-2); }
 .jump b { font-weight: 600; }
 .jump .ic { color: var(--ink-2); flex: none; }
+/* @end dang-o */
 
+/* @block ban-do daymap */
 /* Bản đồ ga theo ngày (chi tiết thử): bản đầy đủ nằm yên đầu tuyến, có núm vặn; cuộn qua thì bản gọn hiện dính dưới mục lục,
    cách mục lục 8px, chỉ còn chấm và tên ga đang đọc, để chỗ cho nội dung từng ga (lời thien 19/11). */
 .daymap { padding: 10px 12px 8px; display: grid; gap: 6px; }
@@ -77,6 +80,7 @@ html.toc-away .mapmini { top: 8px; }
 .mapmini { position: fixed; z-index: 5; top: calc(var(--toc-h) + 8px); left: 50%; width: min(728px, calc(100vw - 24px)); padding: 6px 12px 6px;
   box-shadow: var(--shadow-pop); opacity: 0; visibility: hidden; transform: translate(-50%, -6px);
   transition: opacity var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out), top var(--t-base) var(--ease-out), visibility 0s linear var(--t-base); }
+html.toc-away .mapmini { top: 8px; }
 .mapmini.on { opacity: 1; visibility: visible; transform: translate(-50%, 0); transition-delay: 0s; }
 .mapmini svg { width: 100%; height: 34px; display: block; overflow: visible; }
 .mini-cap { min-height: 1.5em; font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -104,8 +108,11 @@ html.toc-away .mapmini { top: 8px; }
 .readout { font-size: 13.5px; color: var(--muted); min-height: 1.5em; }
 .readout b { color: var(--ink); font-weight: 600; }
 @media (max-width: 560px) { .daymap { padding: 8px 10px 6px; gap: 2px; } .knob { font-size: 13.5px; gap: 10px; } .readout { font-size: 13px; } }
+/* @end ban-do */
 
+/* @block tuyen */
 /* Tuyến checkpoint kiểu tuyến tàu */
+.stop { scroll-margin-top: calc(var(--toc-h) + var(--map-h, 0px) + 16px); }
 ol.line { list-style: none; margin: 0; padding: 0; display: grid; }
 .stop { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; position: relative; padding-bottom: 18px; }
 .stop::before { content: ""; position: absolute; left: 19px; top: 40px; bottom: 0; width: 2px; background: var(--line); }
@@ -137,7 +144,9 @@ ul.tasks li.done > span:last-child { color: var(--muted); }
 .legend .lg.done { background: var(--ink-1); border-color: var(--ink-1); }
 .legend .lg.now { border-color: var(--ink-2); }
 .legend .lg.gate { border-style: dashed; border-color: var(--warn); }
+/* @end tuyen */
 
+/* @block phuong-an */
 /* Phương án */
 .opts { display: grid; gap: 8px; }
 .opt { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 14px; }
@@ -150,8 +159,9 @@ ul.tasks li.done > span:last-child { color: var(--muted); }
 .opt dt { color: var(--muted); }
 .opt dd { margin: 0; }
 @media (max-width: 480px) { .opt dl { grid-template-columns: 1fr; } .opt dt { margin-top: 4px; } }
-.list { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14.5px; }
+/* @end phuong-an */
 
+/* @block cau-hoi */
 /* Câu hỏi và góp ý */
 .qs { display: grid; gap: 16px; }
 .qs:empty { display: none; }
@@ -160,7 +170,9 @@ ul.tasks li.done > span:last-child { color: var(--muted); }
 .q .opts2 { display: grid; gap: 6px; }
 /* .choice, .trial, ô chữ, nút và dòng báo của khối gửi: trong kit.css (KH9). */
 .preview { white-space: pre-wrap; font-size: 13.5px; color: var(--muted); background: var(--soft); border-radius: var(--r); padding: 10px 12px; }
+/* @end cau-hoi */
 
+/* @block them-nhat-ky accs */
 /* Thêm, nhật ký */
 .accs { display: grid; }
 .md { display: grid; gap: 10px; font-size: 14.5px; }
@@ -170,6 +182,8 @@ ul.tasks li.done > span:last-child { color: var(--muted); }
 .table table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 480px; }
 .table th, .table td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
 .table th { color: var(--muted); font-weight: 600; }
+/* @end them-nhat-ky */
+
 footer { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
 </style>
 

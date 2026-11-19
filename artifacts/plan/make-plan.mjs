@@ -5,15 +5,18 @@
 //   node artifacts/plan/make-plan.mjs --check <plan.md|thư-mục> ...   chỉ in chỗ lệch mẫu, không dựng; thoát 1 khi có lỗi
 //
 // Ra: <out-dir>/index.html (đã gộp kit), <out-dir>/preview.html để mở thử, <out-dir>/publish.json để đăng.
+// Khối của trang (KH9 ga 2): mặc định khối nào có nội dung thì có; dòng "Khối: a, b · Vì: <lý do>" dưới dòng Trạng thái
+// chọn khối và thứ tự (tên ở PLAN_BLOCKS của parse-plan.mjs). Khối không có trên trang thì CSS, JS của nó cũng không
+// (vùng @block trong template.html, plan.js, kit.css; kit/pack.mjs bỏ).
 // File lệch mẫu thì lệnh in từng chỗ kèm số dòng. Chỉ "lỗi" (thiếu tiêu đề, thiếu checkpoint) mới chặn dựng trang.
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, statSync, realpathSync } from 'node:fs';
 import { dirname, join, resolve, basename, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
-import { packHtml } from '../kit/pack.mjs';
+import { packHtml, trimBlocks } from '../kit/pack.mjs';
 import { trialHtml, sendActsHtml } from '../kit/blocks.mjs';
 import { writePublish } from '../kit/publish.mjs';
-import { parsePlanFile } from './parse-plan.mjs';
+import { parsePlanFile, PLAN_BLOCKS } from './parse-plan.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -21,22 +24,42 @@ const plain = (html) => String(html).replace(/<[^>]+>/g, '').replace(/&lt;/g, '<
 const ddmm = (iso) => { const m = /^\d{4}-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? `${m[2]}/${m[1]}` : ''; };
 const icon = (n) => `<i class="ic ic-${n}" aria-hidden="true"></i>`;
 
+/** Khối trang sẽ có, theo thứ tự: dòng "Khối:" của file nếu có, không thì mặc định theo nội dung (khối nào có nội dung
+ *  thì có, theo thứ tự PLAN_BLOCKS). Khối được liệt kê mà không có nội dung thì bỏ, kèm một ghi chú. */
+export function pickBlocks(plan, has) {
+  const auto = PLAN_BLOCKS.filter((n) => has[n]);
+  if (!plan.blocks) return { list: auto, notes: [] };
+  const notes = [];
+  const list = plan.blocks.names.filter((n) => {
+    if (has[n]) return true;
+    notes.push({ level: 'ghi chú', line: plan.blocks.line, msg: `khối "${n}" không có nội dung trong file này, trang bỏ qua.` });
+    return false;
+  });
+  if (list.includes('ban-do') && !list.includes('tuyen')) notes.push({ level: 'lệch', line: plan.blocks.line, msg: 'khối "ban-do" nằm trong "tuyen": thiếu "tuyen" thì không có bản đồ.' });
+  return { list: list.filter((n) => n !== 'ban-do' || list.includes('tuyen')), notes };
+}
+
 const STATE_CHIP = { 'đang chạy': 'accent', 'chờ duyệt': 'warn', 'tạm dừng': '', 'xong': 'good', 'bỏ': '' };
 const STOP_LABEL = { done: 'xong', now: 'đang chạy', todo: 'chưa tới', dropped: 'bỏ' };
 
 /** Thân trang (HTML) và dữ liệu cho plan.js. */
 export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
+  const mapNeeded = plan.checkpoints.filter((c) => c.state !== 'dropped' && (c.doneDate || c.gate || c.estimate != null)).length >= 2;
+  const has = { 'dang-o': plan.where.length > 0, tuyen: true, 'ban-do': mapNeeded, 'phuong-an': !!plan.options?.length,
+    'cau-hoi': true, them: !!(plan.extras.length || plan.notDo.length), 'nhat-ky': true };
+  const { list: blocks, notes } = pickBlocks(plan, has);
+  const on = (n) => blocks.includes(n);
   const stateChip = `<span class="chip ${STATE_CHIP[plan.state.split(' ')[0] === 'chờ' ? 'chờ duyệt' : plan.state] ?? ''}">${esc(plan.stateFull || plan.state)}</span>`;
   const pct = plan.ticks.total ? Math.round(100 * plan.ticks.done / plan.ticks.total) : 0;
   const now = plan.checkpoints[plan.current];
-  const toc = [['dang-o', 'Đang ở đâu'], ['tuyen', 'Checkpoint']];
 
   // Dòng có nhãn ("Đang ở:", "Còn thiếu:", "thien cần làm:") hiện thẳng; dòng không nhãn gập vào "Ghi chú thêm".
   const keyed = plan.where.filter((w) => w.key), loose = plan.where.filter((w) => !w.key);
   const where = plan.where.length ? `<div class="where card">${keyed.map((w) =>
     `<div class="w-row${w.ask ? ' ask' : ''}"><span class="label ${w.ask ? 'k2' : 'k1'}">${esc(w.key)}</span><p>${w.html}</p></div>`).join('')}${loose.length
     ? `<details class="acc w-more"><summary>Ghi chú thêm <span class="chip">${loose.length}</span></summary><ul class="list">${loose.map((w) => `<li>${w.html}</li>`).join('')}</ul></details>` : ''}</div>` : '';
-  const jump = now ? `<a class="jump" href="#${now.id}"><span>Ga đang chạy · <b>${now.num}. ${esc(now.name)}</b></span>${icon('arrow-right')}</a>` : '';
+  // Link tới ga đang chạy chỉ khi trang có tuyến ga.
+  const jump = now && on('tuyen') ? `<a class="jump" href="#${now.id}"><span>Ga đang chạy · <b>${now.num}. ${esc(now.name)}</b></span>${icon('arrow-right')}</a>` : '';
 
   const stops = plan.checkpoints.map((c) => {
     const chips = [
@@ -59,8 +82,7 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
 </li>`;
   }).join('\n');
   const legend = `<p class="legend"><span><i class="lg done"></i>xong</span><span><i class="lg now"></i>đang chạy</span><span><i class="lg todo"></i>chưa tới</span>${plan.checkpoints.some((c) => c.gate) ? '<span><i class="lg gate"></i>mốc cố định</span>' : ''}</p>`;
-  const mapNeeded = plan.checkpoints.filter((c) => c.state !== 'dropped' && (c.doneDate || c.gate || c.estimate != null)).length >= 2;
-  const daymap = mapNeeded ? `<div class="daymap card" id="daymap">
+  const daymap = mapNeeded && on('ban-do') ? `<div class="daymap card" id="daymap">
     <svg id="map" aria-hidden="true"></svg>
     <div class="knob" id="knob" hidden>
       <label for="pace"><b id="pace-v">3</b> phiên mỗi tuần</label>
@@ -71,7 +93,6 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
 
   let options = '';
   if (plan.options?.length) {
-    toc.push(['phuong-an', 'Phương án']);
     const chosen = plan.options.find((o) => o.chosen);
     options = `<section id="phuong-an" aria-labelledby="h-pa">
   <span class="label">Các phương án đã xét</span>
@@ -84,7 +105,6 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   const notDo = plan.notDo.length ? `<div class="card pad"><h3>Không làm lần này</h3><ul class="list">${plan.notDo.map((x) => `<li>${x}</li>`).join('')}</ul></div>` : '';
 
   const open = plan.questions.length && !plan.answered;
-  toc.push(['cau-hoi', open ? 'Câu hỏi' : 'Góp ý']);
   const answeredList = plan.questions.length && plan.answered ? `<div class="card pad"><h3>${plan.questionsTitle}</h3><ol class="list">${plan.questions.map((q) => `<li>${q.q}${q.options.find((o) => o.rec && !o.other) ? ` <span class="muted">${q.options.find((o) => o.rec).html}</span>` : ''}</li>`).join('')}</ol></div>` : '';
   const ask = `<section id="cau-hoi" aria-labelledby="h-q">
   <span class="label">${open ? 'Câu hỏi' : 'Góp ý'}</span>
@@ -106,10 +126,8 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   const table = (head, rows) => rows.length ? `<div class="table"><table><thead><tr>${head.map((h) => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '<p class="muted small">Chưa có.</p>';
   let more = '';
   if (plan.extras.length || notDo) {
-    toc.push(['them', 'Thêm']);
     more = `<section id="them" aria-labelledby="h-them"><span class="label">Thêm</span><h2 id="h-them">Phạm vi, thời gian, nghiên cứu</h2>${notDo}<div class="accs">${plan.extras.map((e) => acc(e.title, e.html)).join('')}</div></section>`;
   }
-  toc.push(['nhat-ky', 'Nhật ký']);
   const log = `<section id="nhat-ky" aria-labelledby="h-log"><span class="label">Nhật ký</span><h2 id="h-log">Đã đổi gì, gặp lỗi gì</h2><div class="accs">
   ${acc('Đã đổi so với bản duyệt', table(['Ngày', 'Đổi gì', 'Vì sao'], plan.changes), plan.changes.length)}
   ${acc('Lỗi gặp', table(['Ngày', 'Lỗi', 'Đã xử lý'], plan.errors), plan.errors.length)}</div></section>`;
@@ -122,7 +140,20 @@ export function render(plan, { id, repo = '', source = '', trial = '' } = {}) {
   const sideProg = `<div class="side-prog"><span class="label">Tiến độ</span><div class="bar"><span style="width:${pct}%"></span></div>
     <span class="small">${plan.ticks.done}/${plan.ticks.total} việc${now ? ` · đang ở ga ${esc(now.num)}` : ''}</span></div>`;
   // Bản đồ gọn: hiện dính dưới mục lục khi đã cuộn qua bản đồ đầy đủ mà còn ở trong tuyến; chỉ để xem đang tới đâu.
-  const mini = mapNeeded ? `<div class="mapmini card" id="mapmini" aria-hidden="true"><svg id="map-mini"></svg><p class="mini-cap" id="mini-cap"></p></div>` : '';
+  const mini = daymap ? `<div class="mapmini card" id="mapmini" aria-hidden="true"><svg id="map-mini"></svg><p class="mini-cap" id="mini-cap"></p></div>` : '';
+  const sections = {
+    'dang-o': `<section id="dang-o" aria-labelledby="h-where"><span class="label">Đang ở đâu</span><h2 id="h-where" class="vh">Đang ở đâu</h2>${where}${jump}</section>`,
+    tuyen: `<section id="tuyen" aria-labelledby="h-line">
+  <span class="label">Checkpoint</span>
+  <h2 id="h-line">${plan.checkpoints.length} ga, mỗi ga xong khi bạn tự kiểm được</h2>
+  ${daymap}
+  <ol class="line">${stops}</ol>
+  ${legend}
+</section>`,
+    'phuong-an': options, 'cau-hoi': ask, them: more, 'nhat-ky': log,
+  };
+  const TOC = { 'dang-o': 'Đang ở đâu', tuyen: 'Checkpoint', 'phuong-an': 'Phương án', 'cau-hoi': open ? 'Câu hỏi' : 'Góp ý', them: 'Thêm', 'nhat-ky': 'Nhật ký' };
+  const toc = blocks.filter((n) => TOC[n]).map((n) => [n, TOC[n]]);
   const body = `<nav class="toc" id="toc" aria-label="Mục lục"><div class="in">${toc.map(([h, t]) => `<a href="#${h}">${t}</a>`).join('')}</div>${sideProg}</nav>
 ${mini}
 <main class="wrap">
@@ -133,26 +164,19 @@ ${mini}
   <div class="meta">${metaChips}</div>
   <div class="prog"><div class="bar" role="img" aria-label="${plan.ticks.done} trên ${plan.ticks.total} việc đã xong"><span style="width:${pct}%"></span></div><span class="mono">${plan.ticks.done}/${plan.ticks.total} việc</span></div>
 </header>
-<section id="dang-o" aria-labelledby="h-where"><span class="label">Đang ở đâu</span><h2 id="h-where" class="vh">Đang ở đâu</h2>${where}${jump}</section>
-<section id="tuyen" aria-labelledby="h-line">
-  <span class="label">Checkpoint</span>
-  <h2 id="h-line">${plan.checkpoints.length} ga, mỗi ga xong khi bạn tự kiểm được</h2>
-  ${daymap}
-  <ol class="line">${stops}</ol>
-  ${legend}
-</section>
-${options}
-${ask}
-${more}
-${log}
+${blocks.filter((n) => sections[n]).map((n) => sections[n]).join('\n')}
 <footer>${source ? `Sinh từ <a href="${esc(source)}">${esc(source.replace(/^https:\/\/github\.com\//, ''))}</a>` : ''}${plan.links.length ? ' · ' + plan.links.map((l) => (l.key ? esc(l.key) + ': ' : '') + l.html).join(' · ') : ''}</footer>
 </main>`;
   const data = {
     id, title: plain(plan.titleHtml), state: plan.state, open: !!open, trial,
-    questions: open ? plan.questions.map((q) => ({ id: q.id, q: q.q, qText: q.qText, options: q.options.map((o) => ({ html: o.html, text: o.text.replace(/\*\*|`/g, ''), rec: !!o.rec, other: !!o.other, why: o.why })) })) : [],
+    questions: open && on('cau-hoi') ? plan.questions.map((q) => ({ id: q.id, q: q.q, qText: q.qText, options: q.options.map((o) => ({ html: o.html, text: o.text.replace(/\*\*|`/g, ''), rec: !!o.rec, other: !!o.other, why: o.why })) })) : [],
     checkpoints: plan.checkpoints.map((c) => ({ id: c.id, num: c.num, name: c.name.replace(/\*\*|`/g, ''), state: c.state, est: c.estimate, gate: c.gate, doneDate: c.doneDate })),
   };
-  return { body, data };
+  // Khối đã bỏ: báo cho pack.mjs, để chữ trong trang có tên khối (tiêu đề nhắc "cau-hoi") không giữ lại CSS, JS của nó.
+  // Tên vùng ở template.html, plan.js; them và nhat-ky chung một vùng CSS.
+  const drop = ['dang-o', 'tuyen', 'ban-do', 'phuong-an', 'cau-hoi'].filter((n) => !on(n));
+  if (!on('them') && !on('nhat-ky')) drop.push('them-nhat-ky');
+  return { body, data, blocks, notes, drop };
 }
 
 export function build(mdPath, out, { repo = '', url = '', trial = '', today = '' } = {}) {
@@ -163,22 +187,23 @@ export function build(mdPath, out, { repo = '', url = '', trial = '', today = ''
   const fatal = issues.filter((i) => i.level === 'lỗi');
   if (fatal.length) { const e = new Error(fatal.map((i) => `${mdPath}:${i.line}: ${i.msg}`).join('\n')); e.issues = issues; throw e; }
   const id = basename(mdPath).replace(/\.md$/i, '').toLowerCase().replace(/[^a-z0-9-]+/g, '-');
-  const { body, data } = render(plan, { id, repo, source: repo && rel ? `https://github.com/${repo}/blob/main/${rel}` : '',
+  const { body, data, blocks, notes, drop } = render(plan, { id, repo, source: repo && rel ? `https://github.com/${repo}/blob/main/${rel}` : '',
     // Chi tiết thử chỉ có khi truyền --trial: mặc định không có (thien 2026-11-19, KH8: trang nào cũng một chi tiết thử
     // thì thành khung lặp, mấy kế hoạch gần đây không bấm tới).
     trial });
+  issues.push(...notes);
   const html = packHtml(readFileSync(join(here, 'template.html'), 'utf8')
     .replace('__TITLE__', () => esc(plain(plan.titleHtml)))
     .replace('/*KIT_CSS*/', () => readFileSync(join(here, '../kit/kit.css'), 'utf8'))
     .replace('/*KIT_JS*/', () => readFileSync(join(here, '../kit/kit.js'), 'utf8'))
     .replace('/*PLAN_JS*/', () => readFileSync(join(here, 'plan.js'), 'utf8'))
     .replace('<!--BODY-->', () => body)
-    .replace('__PLAN__', () => JSON.stringify(data).replace(/</g, '\\u003c')));
+    .replace('__PLAN__', () => JSON.stringify(data).replace(/</g, '\\u003c')), { drop });
   mkdirSync(out, { recursive: true });
   writeFileSync(join(out, 'index.html'), html);
   writeFileSync(join(out, 'preview.html'), `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>\n${html}\n</body></html>\n`);
   const lines = writePublish(out, { url, capabilities: { comments: {}, db: {} }, icon: 'plan', description: 'Kế hoạch: ' + plain(plan.titleHtml) });
-  return { plan, issues, lines, id };
+  return { plan, issues, lines, id, blocks, dropped: trimBlocks.last };
 }
 
 /** Đường dẫn của file trong repo git chứa nó (để link về GitHub), hay '' khi không trong repo. */
@@ -216,9 +241,12 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const [mdPath, out] = args;
   if (!mdPath || !out) { console.error('Cách dùng: node make-plan.mjs <plan.md> <out-dir> [--repo owner/repo] [--url <link trang cũ>] [--trial "<chi tiết thử>"]'); process.exit(2); }
   try {
-    const { plan, issues, lines } = build(mdPath, resolve(out), { repo, url, trial });
+    const built = build(mdPath, resolve(out), { repo, url, trial });
+    const { plan, issues, lines } = built;
     report(mdPath, issues);
+    const { blocks } = built;
     console.log(`Đã dựng "${plain(plan.titleHtml)}" (${plan.checkpoints.length} ga, ${plan.questions.length} câu hỏi${plan.answered ? ' đã trả lời' : ''}) vào ${resolve(out)}/index.html`);
+    console.log(`Khối: ${blocks.join(', ')}${plan.blocks ? ` (theo dòng "Khối:", vì: ${plan.blocks.why || 'chưa ghi'})` : ' (mặc định theo nội dung)'}`);
     for (const l of lines) console.log(l);
     if (!plan.page) console.log(`Đăng xong: thêm " · Trang: <link> (nick <nick>)" vào dòng "Trạng thái:" của ${mdPath}, để trang tổng quan dẫn sang trang này và lần sau đăng đè bằng --url.`);
     else if (!url) console.log(`File đã có trang ${plan.page}: muốn đăng đè thì chạy lại với --url ${plan.page}.`);

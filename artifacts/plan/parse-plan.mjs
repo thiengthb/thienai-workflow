@@ -3,6 +3,8 @@
 //
 //   parsePlanFile(md, { linkBase: 'owner/repo:docs/plans/x.md' }) → { plan, issues }
 //   issues: [{ level: 'lỗi' | 'lệch' | 'ghi chú', line, msg }]; có 'lỗi' thì không dựng được trang.
+//   plan.blocks: null (lệnh dựng chọn khối theo nội dung) hay { names, why, line } từ dòng
+//   "Khối: dang-o, tuyen, cau-hoi · Vì: <lý do>" dưới dòng Trạng thái (KH9 ga 2; tên khối ở PLAN_BLOCKS).
 import { inline as mdInline, blocks as mdBlocks, tableRows } from '../../templates/progress-page.mjs';
 
 /** Link trần (https://...) thành link markdown có chữ ngắn, để không tràn dòng trên điện thoại. */
@@ -20,6 +22,8 @@ const lf = (s) => s.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 export const STATES = ['đang chạy', 'chờ duyệt', 'tạm dừng', 'xong', 'bỏ'];
 export const REQUIRED = ['Đang ở đâu', 'Mục tiêu', 'Không làm', 'Checkpoint', 'Đã đổi', 'Lỗi gặp'];
 /** Mục có chỗ riêng trên trang; mục khác hiện ở phần "Thêm" theo đúng thứ tự trong file. */
+/** Khối của trang kế hoạch, theo thứ tự mặc định. ban-do (bản đồ ga theo ngày) nằm trong tuyen, không có chỗ riêng. */
+export const PLAN_BLOCKS = ['dang-o', 'tuyen', 'ban-do', 'phuong-an', 'cau-hoi', 'them', 'nhat-ky'];
 const KNOWN = [...REQUIRED, 'Các phương án đã xét', 'Câu hỏi'];
 
 /** Markdown thành { title, titleLine, intro: [{ text, line }], sections: [{ title, level, line, lines: [{ text, line }] }] }. */
@@ -122,6 +126,18 @@ export function parsePlanFile(md, opts = {}) {
   const state = (meta.fields['Trạng thái'] || '').replace(/\s*\(.*$/, '').trim();
   if (!metaRow) issue('lệch', doc.titleLine + 1, 'thiếu dòng "Trạng thái: đang chạy · Duyệt: <ngày> · Cập nhật: <ngày>" dưới tiêu đề.');
   else if (!STATES.some((s) => state.startsWith(s))) issue('lệch', metaRow.line, `trạng thái "${state}" không nằm trong: ${STATES.join(', ')}.`);
+
+  // Dòng Khối: AI đổi khối so với mặc định thì ghi một dòng lý do ("Vì:"), để lần sau biết vì sao trang khác mẫu.
+  const blockRow = doc.intro.find((l) => /^Khối:/.test(l.text));
+  let blockList = null;
+  if (blockRow) {
+    const f = metaLine(blockRow.text).fields;
+    const names = (f['Khối'] || '').split(/[,\s]+/).map((n) => n.trim().toLowerCase()).filter(Boolean);
+    for (const n of names) if (!PLAN_BLOCKS.includes(n)) issue('lệch', blockRow.line, `khối "${n}" không có; khối của trang kế hoạch: ${PLAN_BLOCKS.join(', ')}.`);
+    if (!f['Vì']) issue('lệch', blockRow.line, 'dòng "Khối:" thiếu " · Vì: <lý do>": đổi khối so với mặc định thì ghi một dòng lý do.');
+    blockList = { names: [...new Set(names.filter((n) => PLAN_BLOCKS.includes(n)))], why: f['Vì'] || '', line: blockRow.line };
+    if (!blockList.names.length) { issue('lệch', blockRow.line, 'dòng "Khối:" không có khối nào đúng tên: dùng khối mặc định.'); blockList = null; }
+  }
 
   const top = doc.sections.filter((s) => s.level === 2);
   const find = (name) => top.find((s) => s.title.startsWith(name));
@@ -241,6 +257,7 @@ export function parsePlanFile(md, opts = {}) {
     changes: tableRows(find('Đã đổi')?.lines.map((l) => l.text) ?? []).map((r) => r.map((c) => ln(c))),
     errors: tableRows(find('Lỗi gặp')?.lines.map((l) => l.text) ?? []).map((r) => r.map((c) => ln(c))),
     extras: extras.map((e) => ({ title: e.title, html: e.html.join('\n') })),
+    blocks: blockList,
   };
   return { plan, issues };
 }

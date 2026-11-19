@@ -5,9 +5,9 @@ Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đ�
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: checkpoint 1: PR #156 đã merge (thien nhắn "bạn hãy merge hộ mình" 21:56), trang mẫu thành phần đã đăng lại; chờ thien xem hai mục mới để đóng ga 1. Tiếp theo checkpoint 2. thien trả lời 21:15: ok cả 4 đề xuất; KH9 làm trước kế hoạch MCP.
-- Còn thiếu: cả bốn checkpoint.
-- thien cần làm: mở trang mẫu thành phần (https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst, nick tnt697) xem mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử".
+- Đang ở: checkpoint 2 dựng xong trên nhánh `kit-block-list` (PR #158): trang kế hoạch và trang luồng dựng từ danh sách khối, `pack.mjs` bỏ CSS và JS của khối không dùng, `check-pages` báo trang vượt cỡ gốc 20%. Ga 1 vẫn chờ thien xem trang mẫu thành phần.
+- Còn thiếu: ga 3 (vòng gu bố cục trang kế hoạch), ga 4; thien merge PR ga 2.
+- thien cần làm: xem PR ga 2 rồi nhắn merge; mở trang mẫu thành phần (https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst, nick tnt697) xem mục "Gửi cho Claude" và "Chọn một có lý do, chi tiết thử".
 
 ## Mục tiêu
 Các mẫu artifact thành một bộ lắp ghép: mỗi trang chọn khối hợp với nội dung của nó, thay vì mỗi mẫu là một khung cố định áp mãi. Kit lớn dần mỗi ngày, có thứ mới để làm mới mắt, nhưng mỗi trang chỉ mang khối nó dùng.
@@ -39,9 +39,9 @@ Xong khi: trang mẫu thành phần có đủ các khối trùng thật (khối 
 ### 2. Trang dựng từ danh sách khối
 Xong khi: một trang kế hoạch và một trang luồng dựng từ danh sách khối khai báo trong file nguồn (không còn khung HTML cố định); bỏ một khối khỏi danh sách thì trang không còn khối đó và không nặng thêm; `check-pages` báo khi một trang nặng hơn cỡ gốc của nó quá 20%.
 Ước: 2 phiên
-- [ ] Lệnh dựng đọc danh sách khối (thứ tự, khối nào) từ file kế hoạch hay luồng; mặc định chọn theo nội dung
-- [ ] `kit/pack.mjs` bỏ CSS, JS của khối trang không dùng, như đang bỏ icon thừa
-- [ ] `check-pages` báo khi một trang vượt cỡ gốc cộng 20% (câu 4); cỡ gốc là cỡ của trang mẫu đó dựng từ main lúc bắt đầu checkpoint này, ghi vào một file trong `artifacts/kit/`, đổi khi thien duyệt một bố cục mới
+- [x] Lệnh dựng đọc danh sách khối (thứ tự, khối nào) từ file kế hoạch hay luồng; mặc định chọn theo nội dung (kế hoạch: dòng `Khối: … · Vì: …`, luồng: `"blocks"` và `"blocksWhy"`; thiếu lý do thì báo lệch; nhánh `kit-block-list`)
+- [x] `kit/pack.mjs` bỏ CSS, JS của khối trang không dùng, như đang bỏ icon thừa (vùng `/* @block … */` trong `kit.css`, template và JS của trang kế hoạch, trang luồng; trang mẫu kế hoạch bỏ 4 khối nhẹ đi 21%, trang luồng bỏ sơ đồ nhẹ đi 63%; ảnh chụp 10 trang mẫu mặc định trùng với main)
+- [x] `check-pages` báo khi một trang vượt cỡ gốc cộng 20% (câu 4); cỡ gốc là cỡ của trang mẫu đó dựng từ main lúc bắt đầu checkpoint này, ghi vào một file trong `artifacts/kit/`, đổi khi thien duyệt một bố cục mới (`artifacts/kit/sizes.json`, đo từ main f45b0be; mục 8 của check-pages; `--write-sizes` ghi lại; mọi trang mẫu nay nhẹ hơn gốc 3–22%)
 
 ### 3. Vòng gu bố cục cho trang kế hoạch
 Xong khi: thien chọn bố cục cho ba loại kế hoạch trên một trang chọn có hình; trang của chính KH9 được dựng lại và đăng đè theo bố cục đã chọn (câu 3), và trang kế hoạch kế tiếp dựng theo bố cục đó.
@@ -75,6 +75,7 @@ Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang h�
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-19 | Ga 2: mặc định "theo nội dung" chỉ quyết khối nào có (khối có nội dung thì có), giữ thứ tự như trước | Đổi thứ tự hay bố cục theo loại kế hoạch là vòng gu của ga 3, thien chọn; ga 2 chỉ làm phần máy, nên trang mặc định không đổi so với main |
 | 2026-11-19 | Checkpoint 1 rút khối gửi, `.choice`, `.trial` thay vì câu hỏi, núm, khung ảnh | Đọc từng chỗ thì `.q`, `.opt` là trùng tên chứ không trùng khối (thẻ phương án, dòng lựa chọn, câu trắc nghiệm là ba thứ khác nhau); núm và khung ảnh cũng khác theo mẫu. Khối trùng thật là chép và gửi (bốn bản) và chi tiết thử (hai bản) |
 
 ## Lỗi gặp

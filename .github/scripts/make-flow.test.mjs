@@ -1,5 +1,5 @@
 // Reads flow files (a Diagram.mount spec plus page fields), reports what is wrong, and builds a page.
-import { mkdtempSync, readFileSync, readdirSync } from 'node:fs';
+import { mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -70,6 +70,31 @@ assert.equal(inline('`**not bold**`'), '<code>**not bold**</code>');
   const r = spawnSync(process.execPath, [cli, '--check', dir], { encoding: 'utf8' });
   assert.equal(r.status, 0, r.stdout + r.stderr);
   for (const f of files) assert.match(r.stdout, new RegExp(`${f}: đúng mẫu`));
+}
+
+// Blocks (KH9 ga 2): default is every block with content; "blocks" picks them, and dropping the diagram drops dagre
+// and diagram.js too. Steps stay. A side node without "ngoai-luong" is named, not linked to a missing card.
+{
+  const dir = mkdtempSync(join(tmpdir(), 'flow-blocks-'));
+  const full = build(fixture, join(dir, 'full'));
+  assert.deepEqual(full.blocks, ['so-do', 'ngoai-luong', 'ke-lai']);
+  const j = JSON.parse(readFileSync(fixture, 'utf8'));
+  writeFileSync(join(dir, 'some.json'), JSON.stringify({ ...j, blocks: ['ke-lai'], blocksWhy: 'chỉ ôn lại bằng chữ' }));
+  const some = build(join(dir, 'some.json'), join(dir, 'some'));
+  assert.deepEqual(some.blocks, ['ke-lai']);
+  for (const b of ['so-do', 'ngoai-luong', 'diagram']) assert.ok(some.dropped.includes(b), `${b} dropped`);
+  const a = readFileSync(join(dir, 'full/index.html'), 'utf8'), b = readFileSync(join(dir, 'some/index.html'), 'utf8');
+  assert.ok(b.length < a.length / 2, `much lighter without the diagram (${a.length} -> ${b.length})`);
+  assert.doesNotMatch(b, /id="flow-dg"|Diagram\.mount|dagre|href="#n-/);
+  assert.match(b, /class="beat"/);
+  assert.match(b, /Nhận từ <b>DELEGATION\.md<\/b>/);
+  // Page text naming a dropped block's mark does not keep it (PR #158 review).
+  writeFileSync(join(dir, 'named.json'), JSON.stringify({ ...j, title: 'Luồng flow-dg và Diagram', blocks: ['ke-lai'], blocksWhy: 'thử' }));
+  build(join(dir, 'named.json'), join(dir, 'named'));
+  assert.doesNotMatch(readFileSync(join(dir, 'named/index.html'), 'utf8'), /dagre|Diagram\.mount/);
+  const bad = readFlow({ ...j, blocks: ['so-do', 'bang-x'] });
+  assert.ok(bad.issues.some((i) => /khối "bang-x" không có/.test(i.msg)));
+  assert.ok(bad.issues.some((i) => i.at === 'blocksWhy'));
 }
 
 console.log('ok make-flow');

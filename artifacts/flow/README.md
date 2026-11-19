@@ -29,6 +29,8 @@ Mỗi luồng một file JSON, đúng định dạng `Diagram.mount` của kit (
 }
 ```
 
+**Khối của trang (KH9, từ 2026-11-19).** Các bước luôn có; ngoài ra có `so-do` (dải sơ đồ đi cùng các bước), `ngoai-luong` (khối phụ), `ke-lai` (ô tự kể lại). Mặc định khối nào có nội dung thì có. Muốn khác thì thêm `"blocks": ["ke-lai"]` cùng `"blocksWhy": "<lý do>"`. Bỏ `so-do` thì trang không mang dagre và `diagram.js` (nhẹ đi khoảng hai phần ba); bỏ `ngoai-luong` thì tên khối phụ trong các bước thành chữ đậm, không còn link.
+
 `kind`: `k1` viền xanh cho công cụ, file, dữ liệu; `k2` viền cam cho việc của thien (mực hình của kit). `id` chỉ dùng chữ không dấu, số, `_`, `-`.
 
 ## Cách AI dựng một trang
