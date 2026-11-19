@@ -1,7 +1,7 @@
 # KH9 kit lắp ghép: ga 1 ở PR #156
 
-Repo: thiengthb/thienai-workflow · Nhánh: kh9-kit-blocks (commit 66abcd1, đã gộp nhánh kh8-code của #154) · PR: #156 chờ thien merge sau #154; #153, #154 chờ thien merge; #152, #155 đã merge; sakubun #339 chờ thien merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Cập nhật: 2026-11-19T14:50Z
+Repo: thiengthb/thienai-workflow · Nhánh: chưa có (ga 2 KH9 tạo nhánh mới từ main) · PR: #153, #154, #156, #157 và sakubun #339 đã merge 19/11
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kthH · Cập nhật: 2026-11-19T15:06Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -60,15 +60,16 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBXnyzCdSkEXzr2kth
 - 19/11 21:15 thien trả lời KH9: ok cả 4 đề xuất (KH9 trước MCP; lệnh dựng chọn bố cục theo nội dung, AI đổi thì ghi lý do; trang KH9 dựng lại ở ga 3; kit không giới hạn, trang chỉ mang khối dùng, check-pages báo vượt cỡ gốc +20%). PR #155 (kế hoạch + STATUS) tự merge.
 - Ga 1 (PR #156): kiểm kỹ thì `.q`, `.opt`, núm, khung ảnh chỉ trùng tên; khối trùng thật là chép và gửi (4 mẫu) và chi tiết thử (2 mẫu). Đã có `Kit.sendBox`, `.kit-send`, `.choice`, `.trial` trong kit, `kit/blocks.mjs`, hai mục mới ở trang mẫu thành phần, test `kit-blocks.test.mjs`. Ảnh chụp trang kế hoạch, luồng, chọn phương án, ôn thẻ trùng từng điểm ảnh với trước. Ba ý CodeRabbit đã sửa (chép không chờ db, clear() bỏ câu báo cũ, snapshot chép answers).
 
+- 19/11 21:56 thien nhắn "bạn hãy merge hộ mình": #153, #154 merge; #156 gộp main (một xung đột ở ô kể lại, giữ bản của nhánh), CI xanh, merge; sakubun #339 merge. Trang mẫu thành phần đăng lại (Uecy4C…, nick tnt697). PR #157 đóng KH8, tick ga 1 KH9 (2/10), tự merge.
+
 ## Bước tiếp theo
-0. Sau khi thien merge #154 rồi #156: tick ga 1 KH9 (2 việc) và ga 2 KH8, đóng KH8; STATUS sửa số.
-1. KH9 ga 2: lệnh dựng đọc danh sách khối từ file nguồn, `pack.mjs` bỏ khối không dùng, `check-pages` báo vượt cỡ gốc +20% (cỡ gốc ghi trong `artifacts/kit/`). Nhánh mới từ main sau khi #156 vào.
-2. KH9 ga 3: vòng gu bố cục trang kế hoạch (3 loại nội dung x 2–3 bố cục) trên trang `decide/`; dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 theo bố cục chọn.
-3. Kế hoạch MCP cho nhóm SEP490 sau KH9; mở mục "Chuyển sang kế hoạch sau" của KH8 trước.
-4. Repo public tạm tới 01/12; không ghi thông tin riêng mới.
+0. KH9 ga 1 chờ thien xem trang mẫu thành phần; ga 2: lệnh dựng đọc danh sách khối từ file nguồn, `pack.mjs` bỏ khối không dùng, `check-pages` báo vượt cỡ gốc +20% (cỡ gốc ghi trong `artifacts/kit/`). Nhánh mới từ main.
+1. KH9 ga 3: vòng gu bố cục trang kế hoạch (3 loại nội dung x 2–3 bố cục) trên trang `decide/`; dựng lại trang KH9 https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 theo bố cục chọn.
+2. Kế hoạch MCP cho nhóm SEP490 sau KH9; mở mục "Chuyển sang kế hoạch sau" của KH8 trước.
+3. Repo public tạm tới 01/12; không ghi thông tin riêng mới.
 
 ## Đang chờ thien
-- Merge #153 (luật), #154 (mã), rồi #156 (khối kit); merge sakubun #339.
+- Xem hai mục mới ở trang mẫu thành phần https://claude.ai/artifact/Uecy4Cdp3CsVFrY8omJGst (mở ở nick tnt697).
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
