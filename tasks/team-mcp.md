@@ -1,7 +1,7 @@
 # KH10 MCP cho nhóm SEP490: ga 2, viết máy chủ MCP trong thienai-core/mcp/
 
 Repo: thiengthb/thienai-workflow · Nhánh: mcp-server (thienai-core) · PR: thienai-core#1 (thien merge); nuc-infra#155 (risk:high, thien merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX4Ame5mi3wE9qmgsT · Cập nhật: 2026-11-20T12:17Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX4Ame5mi3wE9qmgsT · Cập nhật: 2026-11-20T12:39Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -51,8 +51,10 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 
 - 20/11 19:13 thien làm tới bước 4d, repo `thiengthb/SEP490`. Repo trống (quên README): Claude đẩy commit đầu chỉ README lên main (65f082d, như thienai-core). SEP490 PR #1 (nhánh chore/project-skeleton): AGENTS.md từ rules agents-md + phần riêng (thư mục, link connector, nhánh handoff), CLAUDE.md, docs/STATUS.md (check-status ổn), docs/plans/README.md, docs/decisions/README.md, docs/ai-log.md. 19:16 thien: "ok bạn merge giúp mình"; sửa một ý CodeRabbit (STATUS ghi việc dở bật quyền ghi), merge 9f9198d.
 
+- 20/11 19:29 thien gửi kết quả trang hướng dẫn: 8/8 bước, đoạn chat bước 7 (repos chỉ SEP490; save_status nhánh thu-team-kit 21fecfd; handoff f831ce9, list, done 3fc7bb1; write_log 3 dòng). GitHub API: ba commit gắn tài khoản thiengthb; nhánh thử đã xoá. thienai-workflow#181 tick 3 việc ga 3, thêm việc thứ tư (một bạn trong nhóm tự ghi) theo góp ý CodeRabbit, tự merge; KH10 13/17. thienai-core PR 7 thêm: forTeam bỏ câu "check-status kiểm trong CI" khỏi mẫu STATUS cho nhóm (Claude của nhóm tưởng CI báo lỗi), bước 7 trang hướng dẫn ghi sẵn thiengthb/SEP490 (trang đăng đè). SEP490 PR #2: bỏ dòng việc dở bật quyền ghi, dòng ai-log; chờ thien merge.
+
 ## Bước tiếp theo
-0. thien làm theo trang https://claude.ai/artifact/LQLe4RyukbPmgWBnm3XfyP (8 bước) = build image (thienai-core main dbd8f80), làm theo `mcp/docs/github-app.md` (tạo GitHub App, cài vào repo đồ án, TOKEN_KEY, ADMIN_LOGINS, gắn lại connector, thử bước 7). Thử xong có bằng chứng thì tick ga 3. Sau đó PR nhỏ ở nuc-infra: `apps/team-kit/` ghi thêm TOKEN_KEY, ADMIN_LOGINS.
+0. Ga 3 xong phần thien (13/17). Còn: một bạn trong nhóm tự ghi STATUS và sổ bàn giao (làm cùng ga 4). PR nhỏ ở nuc-infra: `apps/team-kit/env.example` ghi thêm TOKEN_KEY, ADMIN_LOGINS và README đổi OAuth App thành GitHub App (luật nuc-infra: issue trước, nhánh agent/<tên>/<số>-...).
 0b. Repo đồ án: thiengthb/SEP490 (private). Ghi tên repo vào kế hoạch KH10 khi tick ga 3.
 1. Thêm tài khoản GitHub của nhóm vào `/data/allowlist.txt` (lệnh ở `apps/team-kit/README.md` của nuc-infra) khi thien gửi tên.
 2. thien xem trang "Gắn connector", sửa theo góp ý; rồi ga 3 (ghi vào repo đồ án).
@@ -60,7 +62,7 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 4. Workers dự phòng: làm sau cùng, bỏ được nếu máy chạy ổn hai tuần.
 
 ## Đang chờ thien
-- Làm tiếp bước 5–8 của trang hướng dẫn (SEP490 PR #1 đã merge). Thử xong: xoá dòng "Bật quyền ghi" trong Việc dở của docs/STATUS.md ở SEP490.
+- Merge thienai-core PR 7 (tài liệu, mẫu STATUS cho nhóm) và SEP490 PR #2 (STATUS sau khi thử).
 - Build image và làm theo `mcp/docs/github-app.md` (thienai-core#6 đã merge).
 - Thêm tài khoản GitHub của nhóm vào danh sách: thien nói 20/11 15:20 sẽ tự làm sau.
 - Xem trang "Gắn connector" (chữ đã nhỏ lại), góp ý nếu cần.
