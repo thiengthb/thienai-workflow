@@ -1,7 +1,7 @@
 # KH10 MCP cho nhóm SEP490: ga 2, viết máy chủ MCP trong thienai-core/mcp/
 
 Repo: thiengthb/thienai-workflow · Nhánh: mcp-server (thienai-core) · PR: thienai-core#1 (thien merge); nuc-infra#155 (risk:high, thien merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaWbaWTa8usSfceZqS · Cập nhật: 2026-11-20T06:56Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaWbaWTa8usSfceZqS · Cập nhật: 2026-11-20T07:28Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -28,15 +28,16 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 
 - 20/11 13:44 thien: "ok bạn merge giúp mình mình đã tạo oauth app như trên". Sửa góp ý CodeRabbit (bỏ đường dẫn life/ trong hướng dẫn), merge thienai-core#2 (e987339), thienai-workflow#171 (a360580). M5: thien bấm "Nhờ Claude merge" → nuc-infra#155 merge c780647. Mở: nuc-infra#158 (mảng team-kit, sửa M5 bỏ .snapshot; risk:high), nuc-infra#159 (apps/team-kit compose, env, README; risk:medium, cần phiên khác review), thienai-core#3 (tag sha-, ghim action), thienai-workflow#172 (tick M5).
 
+- 20/11 14:19 thien build image trên máy và đẩy lên ghcr (lần đầu lỗi unauthenticated vì bỏ qua docker login; làm lại ổn). Mình viết `scripts/apps/team-kit-setup.sh` (bước 4 M5, chạy bằng thi3n) và component `[team-kit]` interactive. thien bấm "Nhờ Claude merge cả 4": nuc-infra#158 (8a128c0), #159 (7a04b4c), thienai-core#3 (e05aae1), thienai-workflow#172 (08ef91c). CI nuc-infra và thienai-core không chạy (billing); `scripts/verify` PASS trên máy làm việc.
+
 ## Bước tiếp theo
-1. Image: thien chọn build trên máy (20/11); hướng dẫn `mcp/docs/build-image-local.md` ở thienai-core#3. Thien báo đã push thì kiểm package, rồi làm hướng dẫn bước 4 của M5.
-2. nuc-infra#159 cần một phiên khác review (`Review: OK`), merge sau #158.
-3. Có image và #159 merge: viết hướng dẫn bước 4 của M5 cho thien (mkdir /opt/apps/team-kit, .env, allowlist, compose up --wait, .autodeploy, component interactive), rồi PR route bước 5 (risk:high).
-4. Sau khi chạy: thien thêm connector bằng nick khác để kiểm "Xong khi" ga 2; trang "Gắn connector"; Workers dự phòng sau cùng.
+1. thien chạy script cài lần đầu trên NUC (cách gọi ở đầu `scripts/apps/team-kit-setup.sh`). Thien gửi log thì kiểm: healthy, /mcp 401, .autodeploy.
+2. Bước 5 M5: PR route `team-kit` trong `infra/traefik/dynamic.yml` (risk:high), thien merge, `nuc-approve traefik-routes`, rồi `nuc-apply run traefik-routes` (agent trên NUC) hay thien chạy. Kiểm `curl -sI https://team-kit.thientnse.site/health`.
+3. thien thêm connector `https://team-kit.thientnse.site/mcp` bằng nick khác để kiểm "Xong khi" ga 2; tick việc ga 2 có bằng chứng.
+4. Sau: trang "Gắn connector", bước 6, 7 của M5, Workers dự phòng.
 
 ## Đang chờ thien
-- Build image trên máy theo `mcp/docs/build-image-local.md` (thienai-core, PR #3), thien chọn 20/11.
-- Merge nuc-infra#158, thienai-core#3, thienai-workflow#172.
+- Chạy script cài Team Kit trên NUC rồi gửi log.
 
 ## Lưu ý
 - Câu 4 đã chốt ("Tách repo mới") hiểu là repo **private**; đừng tạo repo public.
