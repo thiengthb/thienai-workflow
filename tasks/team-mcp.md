@@ -1,7 +1,7 @@
-# KH10 MCP cho nhóm SEP490: ga 2, chờ thien duyệt milestone M5 bên nuc-infra
+# KH10 MCP cho nhóm SEP490: ga 2, viết máy chủ MCP trong thienai-core/mcp/
 
 Repo: thiengthb/thienai-workflow · Nhánh: agent/claude/154-sep490-kit-milestone (nuc-infra) · PR: nuc-infra#155 (risk:high, thien merge); thienai-workflow #169 đã merge (de21044)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-20T05:50Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-20T05:57Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -20,10 +20,11 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 - 20/11 12:23 thien dán lại secret; chạy lại run 44680379911 → xanh, thienai-core có `2d02db7` "sync: thienai-workflow@c39d293". PR #169 tick ga 1; CodeRabbit nhắc ga chỉ đóng khi thien kiểm repo → sửa "Đang ở đâu" và STATUS. Job pages đỏ một lần do test trình duyệt chập chờn (bảng dán 390px), chạy lại xanh.
 - 20/11 12:42 thien: "ok bạn giúp tôi và tôi đã đọc lướt qua repo rồi" → ghi vào kế hoạch, ga 1 xong, merge #169 (de21044), đăng lại trang kế hoạch.
 - Ga 2 việc 1: issue nuc-infra#154 và PR nuc-infra#155 (`plans/M5-sep490-kit.md` + dòng M5 trong `docs/roadmap.md`), nhãn risk:high, area:process, agent:claude. `scripts/verify` trên máy làm việc PASS. CI của nuc-infra không chạy: "recent account payments have failed or your spending limit needs to be increased" (repo private hết phút Actions).
+- 20/11 12:57 thien đồng ý bắt đầu viết `mcp/` trong lúc chờ duyệt M5, làm ở chat mới.
 
 ## Bước tiếp theo
-1. thien duyệt M5 (merge nuc-infra#155; CI không chạy được vì billing, verify đã chạy tay). Sau đó tick việc "Đề xuất milestone" ở KH10 (PR docs nhỏ) và làm bước 2 của M5: mảng `sep490-kit` trong `docs/ownership.md` (risk high).
-2. Song song, không phụ thuộc NUC: viết `mcp/` trong thienai-core (Node, MCP streamable HTTP, OAuth GitHub, tool đọc luật theo chủ đề và dựng trang, MCP Apps), Dockerfile, Actions build lên `ghcr.io/thiengthb/thienai-core-mcp`.
+1. (Chat mới) Gắn repo `thiengthb/thienai-core` (ghi) và `thiengthb/thienai-workflow`. Viết `thienai-core/mcp/` theo ga 2 của `docs/plans/2026-11-20-team-mcp.md`: Node, MCP streamable HTTP; đăng nhập GitHub OAuth cho mọi lần gọi, danh sách tài khoản do thien giữ; tool đọc luật theo chủ đề (trả từng đoạn, mô tả tool ngắn) và dựng trang kế hoạch, luồng, chọn phương án từ `upstream/`; trang hiện bằng MCP Apps (câu 5); Dockerfile non-root, healthcheck `/health`, GitHub Actions build lên `ghcr.io/thiengthb/thienai-core-mcp`. Mọi thay đổi qua nhánh và PR trong thienai-core (luật ở `AGENTS.md` bên đó). Không đụng NUC tới khi M5 được duyệt.
+2. Khi thien merge nuc-infra#155: tick việc "Đề xuất milestone" ở KH10 và làm bước 2 của M5 (mảng `sep490-kit` trong `docs/ownership.md`).
 
 ## Đang chờ thien
 - Duyệt milestone M5: https://github.com/thiengthb/nuc-infra/pull/155
