@@ -13,7 +13,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
 | KH9 · [Kit lắp ghép, bố cục theo nội dung](plans/2026-11-19-modular-kit.md) | Duyệt 19/11, làm trước kế hoạch MCP; 1: khối dùng chung đã vào kit (PR #156 đã merge), thien đã xem trang mẫu thành phần (20/11), ga đóng; 2: trang dựng từ danh sách khối, kit bỏ khối không dùng, check-pages báo vượt cỡ gốc 20% (PR #158 đã merge); 3: thien chọn B cả ba loại (phiếu hỏi trước, bảng tiến độ, thẻ kết quả) ở vòng gu 5 (PR #160 đã merge); kit đổi sang trắng đen (PR #161 đã merge); ba bản B thành mặc định của `artifacts/plan/` theo trạng thái, trang KH9 dựng lại bằng bảng tiến độ (PR #163 đã merge); 4: vòng gu hai tuần một lần (mốc); vòng 6: thien chọn ôn thẻ hai nửa thẻ, trang học tuyến bước, đã vào mẫu (PR #164 đã merge) | 9/10 |
-| KH10 · [MCP cho nhóm SEP490](plans/2026-11-20-team-mcp.md) | Duyệt 20/11 (cả 5 đề xuất); thien trả lời 4 câu đầu 20/11 (Claude web/desktop, quy trình chung và lệnh dựng trang, ghi repo đồ án, tách repo mới); 10:46 duyệt hướng hai lớp: repo lõi private, chỉ MCP mở ra ngoài, trang bằng MCP Apps; còn câu chỗ host (miniserver qua Cloudflare Tunnel hay Workers) | 0/14 |
+| KH10 · [MCP cho nhóm SEP490](plans/2026-11-20-team-mcp.md) | Duyệt 20/11 (cả 5 đề xuất); thien trả lời 4 câu đầu 20/11 (Claude web/desktop, quy trình chung và lệnh dựng trang, ghi repo đồ án, tách repo mới); 10:46 duyệt hướng hai lớp: repo lõi private, chỉ MCP mở ra ngoài, trang bằng MCP Apps; còn câu chỗ host (miniserver qua Cloudflare Tunnel hay Workers) | 0/15 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
