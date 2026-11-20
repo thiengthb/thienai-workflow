@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>/*KIT_CSS*/</style>
 <style>/*LESSON_CSS*/</style>
 <style>/*IT_CSS*/</style>
@@ -10,21 +10,21 @@
 <style>
 /* Trang mẫu thành phần (đề xuất U1): mọi mảnh dùng chung của trang học, trang ôn, trang chọn phương án, ở một chỗ.
    Dựng bằng node artifacts/kit/make-gallery.mjs. Chỉ bố cục ở đây; màu lấy từ kit.css như mọi trang khác. */
-body { font-size: 15px; }
+body { font-size: 1rem; }
 main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 16px; }
 .g-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
-.g-head h1 { font-size: 22px; letter-spacing: -.01em; }
+.g-head h1 { font-size: 1.4667rem; letter-spacing: -.01em; }
 .g-head p { color: var(--muted); max-width: 60ch; margin-top: 4px; }
 .g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 16px; align-items: start; }
 .g-sec { padding: 14px; display: grid; gap: 12px; align-content: start; }
 .g-sec.wide { grid-column: 1 / -1; }
-.g-sec h2 { font-size: 16px; }
-.g-sec > p { font-size: 13.5px; color: var(--muted); }
+.g-sec h2 { font-size: 1.0667rem; }
+.g-sec > p { font-size: 0.9rem; color: var(--muted); }
 .g-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .g-sw { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
-.g-sw div { display: grid; gap: 4px; font-size: 12px; }
+.g-sw div { display: grid; gap: 4px; font-size: 0.8rem; }
 .g-sw i { display: block; height: 32px; border-radius: var(--r); border: 1px solid var(--line); }
-.g-sw code { font-size: 12px; color: var(--muted); }
+.g-sw code { font-size: 0.8rem; color: var(--muted); }
 /* Thông báo nổi và thanh tự lưu thường dính đáy màn; ở đây đặt vào dòng để xem. */
 .g-float #kit-toast, .g-float #kit-bar { position: static; transform: none; opacity: 1; width: auto; max-width: none; }
 .g-float { display: grid; gap: 8px; }
@@ -34,15 +34,15 @@ main { max-width: 1080px; margin: 0 auto; padding: 20px max(16px, env(safe-area-
 .g-board .bd-card { position: relative; }
 .g-knobs { width: 100%; }
 .g-ink { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; align-items: start; }
-.g-ink-h { font: 800 22px/1.2 var(--font); letter-spacing: -.01em; margin-bottom: 10px; }
+.g-ink-h { font: 800 1.4667rem/1.2 var(--font); letter-spacing: -.01em; margin-bottom: 10px; }
 .g-bars { width: 100%; max-width: 420px; height: auto; display: block; margin-top: 6px; }
-.g-bars text { font: 600 12px var(--font); fill: var(--ink); } .g-bars text.m { font-weight: 400; fill: var(--muted); }
+.g-bars text { font: 600 0.8rem var(--font); fill: var(--ink); } .g-bars text.m { font-weight: 400; fill: var(--muted); }
 .g-switch { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; max-width: 100%; }
 #g-palette { flex-wrap: wrap; max-width: 100%; }
 .g-icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
-.g-icons div { display: grid; justify-items: center; gap: 6px; padding: 10px 4px; border-radius: var(--r); font-size: 11.5px; color: var(--muted); }
+.g-icons div { display: grid; justify-items: center; gap: 6px; padding: 10px 4px; border-radius: var(--r); font-size: 0.7667rem; color: var(--muted); }
 .g-icons div:hover { background: var(--soft); color: var(--ink); }
-.g-icons .ic { font-size: 20px; color: var(--ink); }
+.g-icons .ic { font-size: 1.3333rem; color: var(--ink); }
 </style>
 <main>
   <header class="g-head">
