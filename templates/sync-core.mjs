@@ -10,7 +10,7 @@
 //   - tên nick thật (tnt + ba chữ số; "tntXXX" trong luật thì được), link phiên chat và link trang artifact thật,
 //     địa chỉ email.
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync, rmSync, copyFileSync } from 'node:fs';
-import { dirname, join, relative, sep } from 'node:path';
+import { dirname, join, relative, sep, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
@@ -31,6 +31,8 @@ export function listFiles(manifestText, base = root) {
     const line = raw.trim();
     if (!line || line.startsWith('#')) continue;
     const abs = join(base, line);
+    const rel = relative(base, abs);
+    if (!rel || rel.startsWith('..') || isAbsolute(rel)) throw new Error(`core-files.txt: ${line} nằm ngoài repo`);
     if (!existsSync(abs)) throw new Error(`core-files.txt: không có ${line}`);
     if (statSync(abs).isDirectory()) {
       const walk = (d) => readdirSync(d).sort().forEach((n) => {
@@ -38,7 +40,7 @@ export function listFiles(manifestText, base = root) {
         if (statSync(p).isDirectory()) walk(p); else out.push(relative(base, p).split(sep).join('/'));
       });
       walk(abs);
-    } else out.push(line);
+    } else out.push(rel.split(sep).join('/'));
   }
   return [...new Set(out)];
 }

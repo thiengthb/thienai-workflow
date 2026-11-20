@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -41,7 +43,8 @@ jobs:
           set -euo pipefail
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "$KEY" > ~/.ssh/core && chmod 600 ~/.ssh/core
-          ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+          # Khoá host của GitHub ghi cứng (docs.github.com, "GitHub's SSH key fingerprints"), không tin ssh-keyscan lúc chạy.
+          echo 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' >> ~/.ssh/known_hosts
           export GIT_SSH_COMMAND="ssh -i ~/.ssh/core -o IdentitiesOnly=yes"
           git clone --depth 1 git@github.com:thiengthb/thienai-core.git core
           node templates/sync-core.mjs core
@@ -50,4 +53,8 @@ jobs:
           if git diff --cached --quiet; then echo "Không có gì mới."; exit 0; fi
           git -c user.name="sync-core" -c user.email="sync-core@users.noreply.github.com" \
             commit -q -m "sync: thienai-workflow@${GITHUB_SHA::7}"
-          git push origin HEAD:main
+          # main bên kia đổi giữa lúc clone và lúc đẩy (PR team/ hay mcp/ vừa merge): kéo về rồi thử lại một lần.
+          if ! git push origin HEAD:main; then
+            git pull -q --rebase origin main
+            git push origin HEAD:main
+          fi

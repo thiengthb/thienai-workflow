@@ -32,6 +32,10 @@ assert.deepEqual(hits.map((h) => `${h.file}:${h.line}:${h.why}`), [
   'templates/b.md:3:địa chỉ email',
 ], 'private paths, real nicks, chat and artifact links, emails are blocked; tntXXX and image@2x are not');
 
+// 2b. Dòng trỏ ra ngoài repo bị từ chối, không chép ra ngoài upstream/.
+assert.throws(() => listFiles('../x\n', fake), /nằm ngoài repo/);
+assert.throws(() => listFiles('templates/../../x\n', fake), /nằm ngoài repo/);
+
 // 3. Lệnh chạy thật: có đồ riêng thì thoát 1, không ghi gì.
 const dest = join(tmp, 'core');
 mkdirSync(dest);
