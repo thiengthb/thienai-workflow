@@ -1,7 +1,7 @@
 # KH10 MCP cho nhóm SEP490: ga 2, viết máy chủ MCP trong thienai-core/mcp/
 
 Repo: thiengthb/thienai-workflow · Nhánh: mcp-server (thienai-core) · PR: thienai-core#1 (thien merge); nuc-infra#155 (risk:high, thien merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBW4iUN35kotvH1QUzY · Cập nhật: 2026-11-20T08:49Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBW4iUN35kotvH1QUzY · Cập nhật: 2026-11-20T08:54Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -40,7 +40,7 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 
 - 20/11 15:30 (tnt697, chat này): trang "Gắn connector" cho nhóm dựng bằng Design: https://claude.ai/artifact/LYLjgeEFMyitpmWiE7HL3L (mở ở nick tnt697). Tick trong kế hoạch, STATUS 10/16, PR #174 (thien merge). Tên nút theo tài liệu Anthropic, hình là hình vẽ.
 
-- 20/11 15:45: thien bảo merge #174 (eaad9d1). thien chê chữ artifact to và lệch font với app Claude: trang Gắn connector hạ chữ và dùng font hệ thống như claude.ai; kit chung đổi theo ở PR #175 (cỡ chữ cả bộ theo `html { font-size: 14px }` của kit.css, bỏ Onest), chờ thien merge.
+- 20/11 15:45: thien bảo merge #174 (eaad9d1). thien chê chữ artifact to và lệch font với app Claude: trang Gắn connector hạ chữ và dùng font hệ thống như claude.ai; kit chung đổi theo ở PR #175 (cỡ chữ cả bộ theo `html { font-size: 14px }` của kit.css, bỏ Onest); thien bảo merge 15:50, merge 3184863.
 
 ## Bước tiếp theo
 1. Thêm tài khoản GitHub của nhóm vào `/data/allowlist.txt` (lệnh ở `apps/team-kit/README.md` của nuc-infra) khi thien gửi tên.
@@ -50,7 +50,7 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 
 ## Đang chờ thien
 - Thêm tài khoản GitHub của nhóm vào danh sách: thien nói 20/11 15:20 sẽ tự làm sau.
-- Xem trang "Gắn connector" (chữ đã nhỏ lại) và merge PR #175 (font và cỡ chữ của kit).
+- Xem trang "Gắn connector" (chữ đã nhỏ lại), góp ý nếu cần.
 
 ## Lưu ý
 - Câu 4 đã chốt ("Tách repo mới") hiểu là repo **private**; đừng tạo repo public.
