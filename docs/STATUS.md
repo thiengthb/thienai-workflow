@@ -12,7 +12,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
-| KH10 · [MCP cho nhóm SEP490](plans/2026-11-20-team-mcp.md) | Duyệt 20/11 (cả 5 đề xuất); thien trả lời 4 câu đầu 20/11 (Claude web/desktop, quy trình chung và lệnh dựng trang, ghi repo đồ án, tách repo mới); 10:46 duyệt hướng hai lớp: repo lõi private, chỉ MCP mở ra ngoài, trang bằng MCP Apps; host trên miniserver qua Cloudflare Tunnel, Workers dự phòng (chốt 11:15); NUC đã có tunnel, Traefik và tên miền (đọc nuc-infra); ga 2: mã máy chủ MCP đã vào thienai-core, connector đổi tên "Team Kit", Team Kit chạy trên NUC, thien thử trọn luồng trên claude.ai 20/11; trang "Gắn connector" cho nhóm đã dựng (chờ thien xem); còn Workers dự phòng; ga 3: thien chọn GitHub App (16:15), mã ghi STATUS, sổ bàn giao, trang ở thienai-core PR 6 (đã merge 20/11, chưa thử GitHub thật) | 10/16 |
+| KH10 · [MCP cho nhóm SEP490](plans/2026-11-20-team-mcp.md) | Duyệt 20/11 (cả 5 đề xuất); thien trả lời 4 câu đầu 20/11 (Claude web/desktop, quy trình chung và lệnh dựng trang, ghi repo đồ án, tách repo mới); 10:46 duyệt hướng hai lớp: repo lõi private, chỉ MCP mở ra ngoài, trang bằng MCP Apps; host trên miniserver qua Cloudflare Tunnel, Workers dự phòng (chốt 11:15); NUC đã có tunnel, Traefik và tên miền (đọc nuc-infra); ga 2: mã máy chủ MCP đã vào thienai-core, connector đổi tên "Team Kit", Team Kit chạy trên NUC, thien thử trọn luồng trên claude.ai 20/11; trang "Gắn connector" cho nhóm đã dựng (chờ thien xem); còn Workers dự phòng; ga 3: GitHub App chạy, thien thử ghi STATUS và sổ bàn giao vào repo đồ án SEP490 (20/11 19:25); còn chờ một bạn trong nhóm tự ghi thử, làm cùng ga 4 (nhóm dùng thử) | 13/17 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
@@ -31,7 +31,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 6. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- KH10: build lại image, làm theo `mcp/docs/github-app.md` của thienai-core (GitHub App, `TOKEN_KEY`); gửi tên GitHub của nhóm để thêm vào danh sách Team Kit; xem trang "Gắn connector" https://claude.ai/artifact/LYLjgeEFMyitpmWiE7HL3L (mở ở nick tnt697) trước khi gửi nhóm.
+- KH10: gửi tên GitHub của nhóm để thêm vào danh sách Team Kit và mời làm collaborator của repo SEP490; xem trang "Gắn connector" https://claude.ai/artifact/LYLjgeEFMyitpmWiE7HL3L (mở ở nick tnt697) trước khi gửi nhóm.
 - Ngày 01/12 chuyển repo này lại private. Từ 19/11 repo public tạm vì bản private hết phút CI miễn phí; đã đặt lịch nhắc. Tới lúc đó không ghi thông tin riêng mới vào repo.
 
 ## Đang vướng
