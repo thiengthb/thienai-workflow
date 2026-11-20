@@ -1,0 +1,53 @@
+# Chép phần lõi sang repo private thiengthb/thienai-core mỗi khi main đổi (KH10 ga 1, templates/sync-core.mjs).
+# Cần secret CORE_DEPLOY_KEY: khoá riêng của một deploy key có quyền ghi trên thienai-core (cách tạo ở
+# docs/plans/2026-11-20-team-mcp.md, ga 1). Chưa có secret thì job báo và dừng, không đỏ.
+name: sync-core
+on:
+  push:
+    branches: [main]
+    paths: ['templates/**', 'artifacts/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: sync-core
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Quét đồ riêng
+        run: node templates/sync-core.mjs --check
+      - name: Có deploy key chưa
+        id: key
+        env:
+          KEY: ${{ secrets.CORE_DEPLOY_KEY }}
+        run: |
+          if [ -z "$KEY" ]; then
+            echo "::notice::Chưa có secret CORE_DEPLOY_KEY nên chưa chép sang thienai-core."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Chép và đẩy
+        if: steps.key.outputs.ok == 'true'
+        env:
+          KEY: ${{ secrets.CORE_DEPLOY_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/core && chmod 600 ~/.ssh/core
+          ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/core -o IdentitiesOnly=yes"
+          git clone --depth 1 git@github.com:thiengthb/thienai-core.git core
+          node templates/sync-core.mjs core
+          cd core
+          git add -A upstream
+          if git diff --cached --quiet; then echo "Không có gì mới."; exit 0; fi
+          git -c user.name="sync-core" -c user.email="sync-core@users.noreply.github.com" \
+            commit -q -m "sync: thienai-workflow@${GITHUB_SHA::7}"
+          git push origin HEAD:main

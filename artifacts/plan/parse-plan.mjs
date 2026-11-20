@@ -58,7 +58,7 @@ export function sessions(s) {
   return nums.map(Number).reduce((a, b) => a + b, 0) / nums.length;
 }
 
-/** "Trạng thái: x · Duyệt: y · nick tnt697 · Chat: <link>" → { fields: {Trạng thái: 'x', ...}, free: ['nick tnt697'] }. */
+/** "Trạng thái: x · Duyệt: y · nick tntXXX · Chat: <link>" → { fields: {Trạng thái: 'x', ...}, free: ['nick tntXXX'] }. */
 export function metaLine(text) {
   const fields = {}, free = [];
   for (const seg of text.split(/\s+·\s+/)) {
