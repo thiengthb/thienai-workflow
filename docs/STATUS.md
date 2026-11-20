@@ -32,7 +32,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 6. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- KH10: build lại image Team Kit (thienai-core main mới nhất, có màu nhấn của vòng gu 7); merge thienai-core PR 9 (màu trang hướng dẫn GitHub App); khi nhóm rảnh, gửi tên GitHub của 2 bạn thử trước.
+- KH10: cài tác vụ tự build image Team Kit một lần (`mcp/docs/auto-build.md` của thienai-core, PR 11 đã merge), rồi thoát hẳn app desktop và mở lại; khi nhóm rảnh, gửi tên GitHub của 2 bạn thử trước.
 - Ngày 01/12 chuyển repo này lại private. Từ 19/11 repo public tạm vì bản private hết phút CI miễn phí; đã đặt lịch nhắc. Tới lúc đó không ghi thông tin riêng mới vào repo.
 
 ## Đang vướng
