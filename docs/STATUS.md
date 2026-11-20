@@ -30,7 +30,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 4. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- KH10: image Team Kit chưa build được (Actions của repo private hết phút): chọn sửa billing hay build trên máy; merge nuc-infra#158.
+- KH10: build image Team Kit trên máy theo `mcp/docs/build-image-local.md` (thienai-core), merge nuc-infra#158.
 - Ngày 01/12 chuyển repo này lại private. Từ 19/11 repo public tạm vì bản private hết phút CI miễn phí; đã đặt lịch nhắc. Tới lúc đó không ghi thông tin riêng mới vào repo.
 
 ## Đang vướng
