@@ -1,7 +1,7 @@
 # KH10 MCP cho nhóm SEP490: ga 2, viết máy chủ MCP trong thienai-core/mcp/
 
 Repo: thiengthb/thienai-workflow · Nhánh: mcp-server (thienai-core) · PR: thienai-core#1 (thien merge); nuc-infra#155 (risk:high, thien merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaWbaWTa8usSfceZqS · Cập nhật: 2026-11-20T07:41Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaWbaWTa8usSfceZqS · Cập nhật: 2026-11-20T07:58Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -33,6 +33,8 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 - 20/11 14:30 script chạy lần đầu dừng ở `docker pull` (thi3n không có login ghcr; token chỉ đọc ở `/etc/miniserver/docker`). Sửa ở nuc-infra#161 (issue #160), thien duyệt thay review, merge 68c3ba5. Lần đầu: `sudo DOCKER_CONFIG=/etc/miniserver/docker docker pull ...` rồi chạy lại script.
 
 - 20/11 14:39 thien chạy script: team-kit healthy trên NUC, /mcp 401, allowlist 1 tài khoản (thiengthb), .autodeploy bật. Route: nuc-infra#163 (issue #162, kèm dòng architecture.md), thien bấm "Nhờ Claude merge", merge f9373d3.
+
+- 20/11 14:53 thien thử connector trên claude.ai (chat ngoài project, nick khác): rules chạy đúng (15 chủ đề, cuoi-phien một đoạn), plan_page hiện trang trong chat. Lỗi: bấm link "#..." (Câu hỏi/Bối cảnh/Nhật ký) thì trang trắng (srcdoc lấy địa chỉ trang ngoài). Sửa thienai-core#4, merge theo lời thien; cần thien build lại image trên máy rồi thử lại bước 5 (Gửi cho Claude).
 
 ## Bước tiếp theo
 1. thien chạy `sudo nuc-approve traefik-routes` rồi `sudo nuc-apply run traefik-routes --agent claude` trên NUC; kiểm `https://team-kit.thientnse.site/health`.
