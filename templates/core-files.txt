@@ -1,0 +1,44 @@
+# Phần lõi chép sang repo private thiengthb/thienai-core (KH10 ga 1, docs/plans/2026-11-20-team-mcp.md).
+# Mỗi dòng một file hay một thư mục (kết thúc bằng /) tính từ gốc repo này. sync-core.mjs chép đúng các đường dẫn này
+# vào upstream/ của thienai-core, giữ nguyên chỗ để import tương đối vẫn chạy, xoá file không còn trong danh sách.
+# Không thêm gì dưới profile/, learning/, life/, docs/: sync-core.mjs chặn. Fixture của mẫu là bản chép kế hoạch thật,
+# nên không chép.
+
+# Quy trình chung (câu 1 đã chốt: AGENTS mẫu, PR và review, STATUS, sổ bàn giao, mẫu kế hoạch)
+templates/AGENTS.template.md
+templates/PLAN.template.md
+templates/STATUS.template.md
+templates/check-status.mjs
+templates/check-open-work.mjs
+templates/handoff.mjs
+# parse-plan.mjs lấy hàm đọc markdown ở progress-page.mjs
+templates/progress-page.mjs
+
+# Kit trắng đen
+artifacts/kit/kit.css
+artifacts/kit/kit.js
+artifacts/kit/autosave.js
+artifacts/kit/diagram.js
+artifacts/kit/blocks.mjs
+artifacts/kit/pack.mjs
+artifacts/kit/publish.mjs
+artifacts/kit/shoot.mjs
+artifacts/kit/vendor/
+
+# Ba lệnh dựng trang: kế hoạch, luồng, chọn phương án (chọn phương án cần imageSize của mẫu so sánh)
+artifacts/plan/README.md
+artifacts/plan/make-plan.mjs
+artifacts/plan/parse-plan.mjs
+artifacts/plan/plan.js
+artifacts/plan/template.html
+artifacts/flow/README.md
+artifacts/flow/make-flow.mjs
+artifacts/flow/flow.js
+artifacts/flow/template.html
+artifacts/decide/README.md
+artifacts/decide/make-decision.mjs
+artifacts/decide/decide.js
+artifacts/decide/template.html
+artifacts/compare/make-round.mjs
+artifacts/compare/compare.js
+artifacts/compare/template.html
