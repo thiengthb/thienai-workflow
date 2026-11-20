@@ -1,7 +1,7 @@
 # KH10 MCP cho nhóm SEP490: ga 2, viết máy chủ MCP trong thienai-core/mcp/
 
 Repo: thiengthb/thienai-workflow · Nhánh: mcp-server (thienai-core) · PR: thienai-core#1 (thien merge); nuc-infra#155 (risk:high, thien merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX4Ame5mi3wE9qmgsT · Cập nhật: 2026-11-20T11:46Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX4Ame5mi3wE9qmgsT · Cập nhật: 2026-11-20T12:11Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -46,10 +46,12 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 - 20/11 16:08 thien: "ok bạn hãy merge giúp tôi". #176 merge c12a6bd; sync-core chép sang thienai-core (cfbee16); core#5 gộp main, `npm test` 14/14 và `shell.browser.mjs` 0 lỗi với kit đã đồng bộ, merge e8ecba7 (CI thienai-core không chạy vì billing).
 
 - 20/11 16:11 thien: "ok làm xong kh10 rồi sang hoàn thiện nốt kh9". 16:15 thien chọn bằng nút: GitHub App; repo đồ án thien là chủ (chưa ghi tên). Ga 3 mã ở thienai-core#6 (nhánh team-writes, commit 63cc610): github.mjs (TokenVault mã hoá, GitHub REST, WriteLog), tool repos/save_status/save_page/handoff/write_log, chủ đề ghi-repo, `mcp/docs/github-app.md`; `npm test` 20/20. thienai-workflow#177 ghi kế hoạch và STATUS, tự merge 9c2611d. CodeRabbit 5 ý trên core#6 (file kế thừa từ main khi tạo nhánh, done cần sha, làm mới token chạy song song, thu quyền giữa lúc làm mới, khôi phục khi lộ TOKEN_KEY): sửa cả 5 ở aa4bcb5, test 21/21, trả lời và resolve hết. 18:31 thien: "merge #6 và #178": core#6 merge dbd8f80, #178 merge 25a9a0e (KH9 đóng, sổ visual-workflow done). #179 sửa "chờ merge" trong kế hoạch và STATUS, tự merge.
-- 20/11 18:41 thien: "bạn hưỡng dẫn kĩ hơn được không". Đọc nuc-infra (`apps/team-kit/`: .env ở /opt/apps/team-kit/.env, user thi3n). Trang 8 bước có tick và nút chép: https://claude.ai/artifact/LQLe4RyukbPmgWBnm3XfyP (nick tnt697). Nguồn `mcp/docs/github-app-guide.html` ở thienai-core PR 7 (nhánh app-guide-page), kèm bước 6 của github-app.md có lệnh NUC thật. Dựng lại ở nick khác: publish_files với file đó làm index.html. Link vào kế hoạch: thienai-workflow PR kh10-guide-link (tự merge khi CI xanh).
+- 20/11 18:41 thien: "bạn hưỡng dẫn kĩ hơn được không". Đọc nuc-infra (`apps/team-kit/`: .env ở /opt/apps/team-kit/.env, user thi3n). Trang 8 bước có tick và nút chép: https://claude.ai/artifact/LQLe4RyukbPmgWBnm3XfyP (nick tnt697). Nguồn `mcp/docs/github-app-guide.html` ở thienai-core PR 7 (nhánh app-guide-page), kèm bước 6 của github-app.md có lệnh NUC thật. Dựng lại ở nick khác: publish_files với file đó làm index.html.
+- 20/11 19:09 thien muốn dựng trên repo đồ án mới; chọn bằng nút: repo dưới tài khoản thiengthb (App giữ "Only on this account"). Bước 4 của trang và github-app.md viết lại: tạo repo private có README, cài app, Configure để thêm repo sau, collaborator, 4d nhờ Claude dựng khung (AGENTS.md của nhóm từ rules topic agents-md, docs/STATUS.md, docs/plans/, docs/ai-log.md). Commit trên PR 7 của thienai-core, trang đăng đè. Link vào kế hoạch: thienai-workflow PR kh10-guide-link (tự merge khi CI xanh).
 
 ## Bước tiếp theo
 0. thien làm theo trang https://claude.ai/artifact/LQLe4RyukbPmgWBnm3XfyP (8 bước) = build image (thienai-core main dbd8f80), làm theo `mcp/docs/github-app.md` (tạo GitHub App, cài vào repo đồ án, TOKEN_KEY, ADMIN_LOGINS, gắn lại connector, thử bước 7). Thử xong có bằng chứng thì tick ga 3. Sau đó PR nhỏ ở nuc-infra: `apps/team-kit/` ghi thêm TOKEN_KEY, ADMIN_LOGINS.
+0b. Khi thien gửi tên repo đồ án mới: gắn repo, mở PR dựng khung (AGENTS.md = team/AGENTS.md của thienai-core, STATUS theo mẫu, docs/plans/.gitkeep, docs/ai-log.md), ghi tên repo vào kế hoạch KH10.
 1. Thêm tài khoản GitHub của nhóm vào `/data/allowlist.txt` (lệnh ở `apps/team-kit/README.md` của nuc-infra) khi thien gửi tên.
 2. thien xem trang "Gắn connector", sửa theo góp ý; rồi ga 3 (ghi vào repo đồ án).
 3. Việc nhỏ: thien build lại image (sha-e8ecba7) rồi thử trên claude.ai (khung có cao vừa không, có nút Mở to không, câu báo "trong chat"); chạy lại `shell.browser.mjs` khi upstream đã có kit mới. Còn: M5 bước 6 (backup volume team-kit_data, restore drill), `docs/state/` sau khi cài.
