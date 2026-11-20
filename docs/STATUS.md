@@ -1,6 +1,6 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-20 · Claude nick tnt697 (project Claude, KH10 MCP cho nhóm: ga 1 xong, Action sync-core chạy) · Trang tiến độ: https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n (trang tổng quan, tab thienai-workflow)
+Cập nhật lần cuối: 2026-11-20 · Claude nick tnt697 (project Claude, KH10 MCP cho nhóm: ga 1 đủ việc, chờ thien kiểm repo lõi) · Trang tiến độ: https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n (trang tổng quan, tab thienai-workflow)
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu. Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
 
@@ -30,6 +30,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 4. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
+- KH10 ga 1: mở https://github.com/thiengthb/thienai-core, xác nhận không thấy gì riêng.
 - Ngày 01/12 chuyển repo này lại private. Từ 19/11 repo public tạm vì bản private hết phút CI miễn phí; đã đặt lịch nhắc. Tới lúc đó không ghi thông tin riêng mới vào repo.
 
 ## Đang vướng
