@@ -1,7 +1,7 @@
-# KH10 MCP cho nhóm SEP490: ga 1 đủ việc, chờ thien kiểm repo lõi
+# KH10 MCP cho nhóm SEP490: ga 2, chờ thien duyệt milestone M5 bên nuc-infra
 
-Repo: thiengthb/thienai-workflow · Nhánh: kh10-ga1-done · PR: #169 (CI xanh, chờ thien merge; tự merge bị công cụ chặn)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-20T05:37Z
+Repo: thiengthb/thienai-workflow · Nhánh: agent/claude/154-sep490-kit-milestone (nuc-infra) · PR: nuc-infra#155 (risk:high, thien merge); thienai-workflow #169 đã merge (de21044)
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-20T05:50Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -18,14 +18,16 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 - 20/11 12:06 thien tạo xong deploy key và secret, bảo merge: #167 merge 950ce56. Action chạy lần đầu đỏ (run 44678809847): "Load key: error in libcrypto", nghi khoá dán từ Windows có \r. PR #168: bỏ \r, kiểm đầu cuối và ssh-keygen -y, thêm file Action vào paths để merge là chạy lại. CI xanh.
 - 20/11 12:20 #168 merge c39d293. Run 44680379911 đỏ với lỗi mới: CORE_DEPLOY_KEY không có dòng BEGIN/END của khoá riêng (dán nhầm file .pub hay thiếu dòng). Đã nhờ thien dán lại bằng `Get-Content sync-core -Raw | Set-Clipboard`.
 - 20/11 12:23 thien dán lại secret; chạy lại run 44680379911 → xanh, thienai-core có `2d02db7` "sync: thienai-workflow@c39d293". PR #169 tick ga 1; CodeRabbit nhắc ga chỉ đóng khi thien kiểm repo → sửa "Đang ở đâu" và STATUS. Job pages đỏ một lần do test trình duyệt chập chờn (bảng dán 390px), chạy lại xanh.
+- 20/11 12:42 thien: "ok bạn giúp tôi và tôi đã đọc lướt qua repo rồi" → ghi vào kế hoạch, ga 1 xong, merge #169 (de21044), đăng lại trang kế hoạch.
+- Ga 2 việc 1: issue nuc-infra#154 và PR nuc-infra#155 (`plans/M5-sep490-kit.md` + dòng M5 trong `docs/roadmap.md`), nhãn risk:high, area:process, agent:claude. `scripts/verify` trên máy làm việc PASS. CI của nuc-infra không chạy: "recent account payments have failed or your spending limit needs to be increased" (repo private hết phút Actions).
 
 ## Bước tiếp theo
-1. thien merge #169 và mở thienai-core xác nhận không thấy gì riêng → ghi vào kế hoạch, đóng ga 1.
-2. Ga 2: đề xuất milestone "SEP490 Kit" trong `nuc-infra/plans/` (đọc AGENTS.md bên đó: nhánh `agent/<tên>/...`, nhãn risk, không ghi tên model).
+1. thien duyệt M5 (merge nuc-infra#155; CI không chạy được vì billing, verify đã chạy tay). Sau đó tick việc "Đề xuất milestone" ở KH10 (PR docs nhỏ) và làm bước 2 của M5: mảng `sep490-kit` trong `docs/ownership.md` (risk high).
+2. Song song, không phụ thuộc NUC: viết `mcp/` trong thienai-core (Node, MCP streamable HTTP, OAuth GitHub, tool đọc luật theo chủ đề và dựng trang, MCP Apps), Dockerfile, Actions build lên `ghcr.io/thiengthb/thienai-core-mcp`.
 
 ## Đang chờ thien
-- Merge PR #169: https://github.com/thiengthb/thienai-workflow/pull/169
-- Mở https://github.com/thiengthb/thienai-core, xác nhận không thấy gì riêng.
+- Duyệt milestone M5: https://github.com/thiengthb/nuc-infra/pull/155
+- CI của nuc-infra không chạy vì billing GitHub Actions (repo private).
 
 ## Lưu ý
 - Câu 4 đã chốt ("Tách repo mới") hiểu là repo **private**; đừng tạo repo public.
