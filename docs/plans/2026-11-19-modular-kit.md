@@ -1,12 +1,12 @@
 # KH9 · Kit lắp ghép, bố cục theo nội dung
 
-Trạng thái: đang chạy · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đề xuất") · Cập nhật: 2026-11-20 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Trang: https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (nick tnt697)
+Trạng thái: xong (2026-11-20) · Duyệt: 2026-11-19 (thien: "ok, theo cả 4 đề xuất") · Cập nhật: 2026-11-20 · nick tnt697 · Chat: https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T, https://claude.ai/code/session_01WXAvBX4Ame5mi3wE9qmgsT · Trang: https://claude.ai/artifact/9f8VSi8ttTr7u4STJSLTz5 (nick tnt697)
 
 Luật ghi file này ở `profile/PLANNING.md` của repo thienai-workflow. Tick khi có bằng chứng; đổi bước thì ghi vào "Đã đổi"; lỗi thì ghi vào "Lỗi gặp".
 
 ## Đang ở đâu
-- Đang ở: ga 4 việc 1 xong (20/11): thien chọn ôn thẻ C · Hai nửa thẻ và trang học B · Tuyến bước ở vòng gu 6 (giống đề xuất); cả hai đã vào `artifacts/review/` và `artifacts/lesson/`, sân khấu và sa bàn đứng cạnh chữ từ 760px (PR #164 đã merge 20/11).
-- Còn thiếu: luật vòng gu hai tuần một lần vào `artifacts/README.md` (việc 2 của ga 4); vòng gu sau khoảng 04/12 (luồng hay so sánh).
+- Đang ở: xong (20/11). Ga 4 đóng: vòng gu 6 đã vào mẫu (PR #164), luật vòng thử gu hai tuần một lần đã vào `artifacts/README.md` mục "Vòng thử gu".
+- Chuyển đi: vòng gu 7 khoảng 04/12 và đăng lại trang ôn thẻ link cố định theo bố cục hai nửa thẻ (trang nằm ở nick khác tnt697, tnt628) sang "Việc tiếp theo" của `docs/STATUS.md`.
 - thien cần làm: chưa có.
 
 ## Mục tiêu
@@ -54,7 +54,7 @@ Xong khi: thien chọn bố cục cho ba loại kế hoạch trên một trang c
 Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang học, ôn thẻ, luồng, so sánh), thien chọn giữ hay bỏ; kit ghi rõ khối nào mới, khối nào bỏ.
 Ước: mốc
 - [x] Vòng đầu: trang ôn thẻ và trang học ở màn rộng (đang bỏ trống nhiều) (vòng 6 ở `docs/plans/2026-11-18-visual-workflow/round-6/`, trang chọn https://claude.ai/artifact/6HmX4EYH3dsuLjUNpUzs9v, nick tnt697. Kết quả thien gửi 20/11 02:43, nguyên văn: "Ôn thẻ — Bạn chọn: C · Hai nửa thẻ. Giống đề xuất của Claude (C · Hai nửa thẻ). Trang học — Bạn chọn: B · Tuyến bước. Giống đề xuất của Claude (B · Tuyến bước)." Không ghi chú. Khối mới: hàng chấm và hai nửa thẻ ở mẫu ôn thẻ, tuyến bước ở khung buổi học; khối bỏ: thanh tiến độ của trang ôn, thanh mảnh của trang học từ 760px. PR #164)
-- [ ] Luật vòng thử gu hai tuần một lần (chuyển từ KH6) vào `artifacts/README.md` ở mốc sau
+- [x] Luật vòng thử gu hai tuần một lần (chuyển từ KH6) vào `artifacts/README.md` ở mốc sau (thien chọn bằng nút 20/11 16:25: "Ghi ngay, tính vào mốc 01/12"; mục "Vòng thử gu" của `artifacts/README.md`, luật 1/3 của mốc 01/12)
 
 ## Câu hỏi (thien đã trả lời 2026-11-19 21:15 bằng nút trên trang: "ok, theo cả 4 đề xuất")
 1. Làm KH9 trước hay kế hoạch MCP cho nhóm SEP490 trước?
@@ -75,6 +75,7 @@ Xong khi: mỗi hai tuần có một bố cục mới cho một mẫu (trang h�
 ## Đã đổi
 | Ngày | Đổi gì | Vì sao |
 |---|---|---|
+| 2026-11-20 | Luật vòng thử gu ghi ngay thay vì chờ mốc 01/12, tính là 1 trong 3 luật của mốc đó | thien nhắn "hoàn thiện nốt kh9" (16:11), chọn bằng nút "Ghi ngay, tính vào mốc 01/12" (16:25) |
 | 2026-11-20 | Sân khấu (bàn thử, bảng dán) và sa bàn đứng cạnh chữ từ 760px thay vì 900px, cho mọi bài mới | Hai bản mới của vòng 6 cùng đổi chỗ này để nửa màn hình (khoảng 860px) không xếp sân khấu chồng lên chữ; thien chọn B nên giữ |
 | 2026-11-20 | Vòng 6 chụp ở 860px và 950px thay vì 1180px và điện thoại; điện thoại giữ như hiện nay ở mọi bản | thien hay mở trang ở nửa màn hình cạnh chat hay 2/3 màn hình (00:59); điện thoại hai trang này đã ổn |
 | 2026-11-20 | Bảng tiến độ bản 2: ga đang chạy là thẻ lớn bên trái, "Chưa tới" và "Xong" là dòng gập mở ở cột bên, cột trống không vẽ; trang dùng bề ngang tới 1000px, chia hai cột từ 820px; bản đồ gọn nổi chỉ còn ở bố cục một cột | thien 00:59: "bố cục checkpoint vẫn chưa hợp ý", trang hay mở ở nửa màn hình cạnh chat (khoảng 860px) hay 2/3 màn hình (khoảng 950px) nên ba cột bằng nhau quá hẹp. Bỏ bản đồ gọn nổi là Claude tự quyết (đọc nhầm câu "menu đè lên nội dung", xem "Lỗi gặp"): ở bảng tiến độ nó nổi trên cột mà không giúp gì |

@@ -75,6 +75,14 @@ thien muốn các trang "thông minh" hơn. Trang khai báo khả năng `sample`
 - Chữ cùng họ với app Claude (dãy font hệ thống claude.ai dùng, ra Segoe UI trên Windows), cỡ chữ cả bộ theo một dòng `html { font-size }` trong `kit/kit.css` (14px từ 20/11/2026: thien chê chữ to hơn app). Nền trắng, chữ gần đen, màu chỉ để báo xong, lỗi, cảnh báo. Theo gu ở repo [thienui](https://github.com/thiengthb/thienui), file `docs/taste.md`, và [`learning/frontend/taste-queue.md`](../learning/frontend/taste-queue.md).
 - Tiếng Việt tự nhiên, giọng người kèm học thân thiện, thuật ngữ tiếng Anh giữ nguyên và giải thích một lần.
 
+## Vòng thử gu
+
+Gu của thien đổi dần theo ngày, nên mẫu cũng phải đổi theo (thien chọn 2026-11-18, KH6 câu 3; ghi thành luật ở KH9 ngày 2026-11-20, tính vào mốc 01/12).
+
+- Khoảng hai tuần một lần, AI dựng một vòng cho mẫu lâu chưa thử nhất (trang học, ôn thẻ, luồng, so sánh, kế hoạch): 2–3 bản trên cùng nội dung thật, một bản quen và ít nhất một bản đi xa hơn, đăng bằng trang chọn `decide/` có đề xuất ẩn. Nguồn để ở `docs/plans/2026-11-18-visual-workflow/round-<số>/`. Vòng gần nhất: vòng 6, 20/11/2026; vòng sau khoảng 04/12.
+- Bản thien chọn vào mẫu và kit trong cùng PR, ghi khối nào mới và khối nào bỏ; lời thien chép nguyên văn vào [`learning/frontend/taste-queue.md`](../learning/frontend/taste-queue.md), rồi sang thienui mục "Đang thử" kèm ngày xem lại sau 4 tuần.
+- Mỗi lần chỉ một vòng. thien bận thì dời, không dồn hai vòng một lúc. Xong vòng thì sửa ngày ở dòng trên.
+
 ## Thêm hoặc bỏ mẫu
 
 - Khi thien nói thích một artifact, AI đề xuất lưu nó thành mẫu ở đây qua PR, kèm một dòng "thien khen gì".
