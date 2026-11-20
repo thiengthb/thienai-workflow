@@ -4,7 +4,7 @@ Bản đồ để AI chỉ đọc file cần cho việc đang làm, không mở 
 
 ## Tầng 1: mọi phiên
 - Project instructions (đã có sẵn trong phiên), `AGENTS.md` và `docs/STATUS.md` (repo project).
-- Phiên đầu của thread: chạy `templates/start-session.mjs` (cách gọi ở project instructions và mục "AI kiểm gì, lúc nào" của SETUP.md). Lệnh in kết quả kiểm setup, `AGENTS.md`, sổ bàn giao, phần cần của STATUS và nhánh chưa merge, nên không phải mở từng file. Setup báo thiếu thì lệnh in sẵn đoạn cần dán.
+- Phiên đầu của thread: chạy `templates/start-session.mjs` (cách gọi ở project instructions và mục "AI kiểm gì, lúc nào" của SETUP.md). Lệnh in kết quả kiểm setup, `AGENTS.md`, sổ bàn giao, phần cần của STATUS, nhánh chưa merge và luật đổi chat (lệnh tự trích từ CHATS.md, khoảng 2 KB), nên không phải mở từng file. Setup báo thiếu thì lệnh in sẵn đoạn cần dán.
 - Câu hỏi trả lời xong trong một lượt (giải thích, tra một chỗ): dừng ở đây, cộng mục "Ngôn ngữ" của `profile/PROFILE.md` và `profile/VOICE.md` khi viết cho thien.
 
 ## Tầng 2: theo việc

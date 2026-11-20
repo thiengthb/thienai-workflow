@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { statusParts, claimText, claimBy, otherNickNote, branchOf, stalePrNotes, planNow, planNotes, PLAN_WAIT } from '../../templates/start-session.mjs';
+import { statusParts, claimText, claimBy, otherNickNote, branchOf, stalePrNotes, planNow, planNotes, PLAN_WAIT, chatRules } from '../../templates/start-session.mjs';
 import { skeleton } from '../../templates/handoff.mjs';
 
 // STATUS: only the parts a new session needs, history left out.
@@ -42,6 +42,25 @@ assert.equal(branchOf('Repo: a/b · Nhánh: feat/x · PR: #3'), 'feat/x');
 assert.equal(branchOf('Repo: a/b · Nhánh: chưa có (tạo từ main) · PR: #82'), '');
 assert.equal(branchOf('Repo: a/b · Nhánh: <nhánh làm việc> · PR: chưa có'), '');
 
+// Chat switching is read from the real profile/CHATS.md: renaming one of its headings fails here, not silently in a session
+// (20/11: a chat ran 344 turns because nothing printed these rules).
+{
+  const chats = readFileSync(fileURLToPath(new URL('../../profile/CHATS.md', import.meta.url)), 'utf8');
+  const old = chatRules(chats);
+  assert.match(old, /^- Câu trả lời đầu tiên có một dòng mục tiêu/, 'goal line at the start of a chat');
+  assert.match(old, /\| Việc kế tiếp \| Số lượt đã đo \| Ở lại hay đổi \|/, 'the stay-or-switch table');
+  assert.match(old, /quá 30 lượt/);
+  assert.match(old, /Việc này nên làm ở chat mới cho đỡ tốn \(chat đã <số> lượt\)/, 'the sentence to say');
+  assert.match(old, /Xong mục tiêu chat này/, 'the closing line');
+  assert.doesNotMatch(old, /Căn cứ|Project bản beta|Một thread cho một checkpoint/, 'history and beta rules left out');
+  assert.ok(Buffer.byteLength(old) < 3000, 'block stays short: ' + Buffer.byteLength(old));
+  const beta = chatRules(chats, { beta: true });
+  assert.match(beta, /Một thread cho một checkpoint/);
+  assert.doesNotMatch(beta, /quá 30 lượt/);
+  assert.equal(chatRules(chats.replace('## Việc kế tiếp: ở lại hay mở chat mới', '## Khác')), '', 'missing section: empty, so the caller warns');
+  assert.match(chatRules(chats.replace(/\n/g, '\r\n')), /quá 30 lượt/, 'CRLF works');
+}
+
 // End to end: a book with two tasks in a local bare repo; --claim takes the newest and pushes the claim.
 const root = mkdtempSync(join(tmpdir(), 'start-session-'));
 const bare = join(root, 'b.git');
@@ -67,6 +86,9 @@ assert.ok(r.stdout.indexOf('Việc X') < r.stdout.indexOf('Việc cũ'), 'newest
 assert.doesNotMatch(r.stdout, /## Nhận việc/, 'no claim without --claim');
 assert.match(r.stdout, /## STATUS/);
 assert.match(r.stdout, /## AGENTS\.md/, 'AGENTS.md is printed, no extra turn to load it');
+assert.match(r.stdout, /## Đổi chat[\s\S]*quá 30 lượt/, 'chat switching rules are printed');
+assert.ok(r.stdout.lastIndexOf('## Đổi chat') > r.stdout.indexOf('## Nhánh chưa merge'), 'last block, read right before work');
+assert.match(start('--beta').stdout, /## Đổi chat[\s\S]*Một thread cho một checkpoint/, 'beta: thread rules');
 assert.doesNotMatch(start('--no-agents').stdout, /## AGENTS\.md/);
 assert.doesNotMatch(start('--beta').stdout, /## AGENTS\.md/, 'beta threads already loaded AGENTS.md through CLAUDE.md');
 
