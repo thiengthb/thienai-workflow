@@ -520,7 +520,7 @@
       const text = long ? full.slice(0, 3600) + '\n\n(Kết quả dài, bản đầy đủ nằm trong db của trang: ' + sentPath + ', trường report)' : full;
       const ok = await Kit.sendToClaude(text, $('top'));
       if (ok && long) { const copied = await Kit.copy(full); Kit.toast(copied ? 'Đã gửi bản rút gọn cho Claude; bản đầy đủ đã lưu và đã chép.' : 'Đã gửi bản rút gọn cho Claude; bản đầy đủ đã lưu trong trang.', 6000); }
-      else if (ok) Kit.toast('Đã gửi cho Claude. Claude trả lời trong comment.', 5000);
+      else if (ok) Kit.toast(Kit.sentText(ok), 5000);
       else Kit.toast(await Kit.copy(full) ? 'Chưa gửi thẳng được. Kết quả đã chép: dán vào chat cho Claude.' : 'Chưa gửi thẳng được. Chép kết quả trong ô bên dưới rồi dán vào chat cho Claude.', 9000);
     };
     const st = $('stage');
