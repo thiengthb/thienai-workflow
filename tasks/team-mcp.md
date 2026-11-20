@@ -1,7 +1,7 @@
 # KH10 MCP cho nhóm SEP490: ga 2, viết máy chủ MCP trong thienai-core/mcp/
 
 Repo: thiengthb/thienai-workflow · Nhánh: mcp-server (thienai-core) · PR: thienai-core#1 (thien merge); nuc-infra#155 (risk:high, thien merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaWbaWTa8usSfceZqS · Cập nhật: 2026-11-20T07:58Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaWbaWTa8usSfceZqS · Cập nhật: 2026-11-20T08:08Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -36,13 +36,17 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 
 - 20/11 14:53 thien thử connector trên claude.ai (chat ngoài project, nick khác): rules chạy đúng (15 chủ đề, cuoi-phien một đoạn), plan_page hiện trang trong chat. Lỗi: bấm link "#..." (Câu hỏi/Bối cảnh/Nhật ký) thì trang trắng (srcdoc lấy địa chỉ trang ngoài). Sửa thienai-core#4, merge theo lời thien; cần thien build lại image trên máy rồi thử lại bước 5 (Gửi cho Claude).
 
+- 20/11 15:07 thien build lại image (sha-e8119f2), NUC tự kéo, thử lại trên claude.ai: link # không còn trắng, "Gửi cho Claude" vào chat. Ga 2: 5/7 việc có bằng chứng, PR thienai-workflow#173.
+
 ## Bước tiếp theo
-1. thien chạy `sudo nuc-approve traefik-routes` rồi `sudo nuc-apply run traefik-routes --agent claude` trên NUC; kiểm `https://team-kit.thientnse.site/health`.
-2. thien gắn connector `https://team-kit.thientnse.site/mcp` (Settings → Connectors → Add custom connector) bằng một nick Claude khác, đăng nhập GitHub thiengthb, gọi rules và plan_page: đó là bằng chứng "Xong khi" ga 2; tick việc ga 2 (đăng nhập, máy chủ, MCP Apps, đưa lên NUC) và M5 bước 4, 5.
-3. Sau: thêm tài khoản nhóm vào allowlist, trang "Gắn connector", M5 bước 6 (backup volume, restore drill), Workers dự phòng.
+1. Thêm tài khoản GitHub của nhóm vào `/data/allowlist.txt` (lệnh ở `apps/team-kit/README.md` của nuc-infra) khi thien gửi tên.
+2. Trang một màn hình "Gắn connector" cho nhóm (link, các bước bấm, ảnh), dựng từ Design hay Docs; rồi ga 3.
+3. Việc nhỏ: mục lục không bám đầu màn trong khung MCP Apps; chữ "Claude trả lời trong comment" sau khi gửi (sửa ở kit của thienai-workflow); M5 bước 6 (backup volume team-kit_data, restore drill), `docs/state/` sau khi cài.
+4. Workers dự phòng: làm sau cùng, bỏ được nếu máy chạy ổn hai tuần.
 
 ## Đang chờ thien
-- Cài route trên NUC (nuc-approve, nuc-apply traefik-routes) rồi thử gắn connector.
+- Merge thienai-workflow#173 (bằng chứng ga 2).
+- Gửi tên GitHub của các bạn trong nhóm.
 
 ## Lưu ý
 - Câu 4 đã chốt ("Tách repo mới") hiểu là repo **private**; đừng tạo repo public.
