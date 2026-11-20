@@ -12,7 +12,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
-| KH10 · [MCP cho nhóm SEP490](plans/2026-11-20-team-mcp.md) | Duyệt 20/11 (cả 5 đề xuất); thien trả lời 4 câu đầu 20/11 (Claude web/desktop, quy trình chung và lệnh dựng trang, ghi repo đồ án, tách repo mới); 10:46 duyệt hướng hai lớp: repo lõi private, chỉ MCP mở ra ngoài, trang bằng MCP Apps; host trên miniserver qua Cloudflare Tunnel, Workers dự phòng (chốt 11:15); NUC đã có tunnel, Traefik và tên miền (đọc nuc-infra); ga 2: mã máy chủ MCP đã vào thienai-core, connector đổi tên "Team Kit", Team Kit chạy trên NUC, thien thử trọn luồng trên claude.ai 20/11; trang "Gắn connector" cho nhóm đã dựng (chờ thien xem); còn Workers dự phòng; ga 3 xong: GitHub App, thien thử ghi STATUS và sổ bàn giao vào repo đồ án SEP490 (20/11 19:25); tới ga 4: nhóm dùng thử | 13/16 |
+| KH10 · [MCP cho nhóm SEP490](plans/2026-11-20-team-mcp.md) | Duyệt 20/11 (cả 5 đề xuất); thien trả lời 4 câu đầu 20/11 (Claude web/desktop, quy trình chung và lệnh dựng trang, ghi repo đồ án, tách repo mới); 10:46 duyệt hướng hai lớp: repo lõi private, chỉ MCP mở ra ngoài, trang bằng MCP Apps; host trên miniserver qua Cloudflare Tunnel, Workers dự phòng (chốt 11:15); NUC đã có tunnel, Traefik và tên miền (đọc nuc-infra); ga 2: mã máy chủ MCP đã vào thienai-core, connector đổi tên "Team Kit", Team Kit chạy trên NUC, thien thử trọn luồng trên claude.ai 20/11; trang "Gắn connector" cho nhóm đã dựng (chờ thien xem); còn Workers dự phòng; ga 3: GitHub App chạy, thien thử ghi STATUS và sổ bàn giao vào repo đồ án SEP490 (20/11 19:25); còn chờ một bạn trong nhóm tự ghi thử, làm cùng ga 4 (nhóm dùng thử) | 13/17 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
