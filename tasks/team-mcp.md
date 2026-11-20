@@ -1,7 +1,7 @@
 # KH10 MCP cho nhóm SEP490: ga 2, viết máy chủ MCP trong thienai-core/mcp/
 
 Repo: thiengthb/thienai-workflow · Nhánh: mcp-server (thienai-core) · PR: thienai-core#1 (thien merge); nuc-infra#155 (risk:high, thien merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaWbaWTa8usSfceZqS · Cập nhật: 2026-11-20T07:28Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaWbaWTa8usSfceZqS · Cập nhật: 2026-11-20T07:32Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -29,6 +29,8 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 - 20/11 13:44 thien: "ok bạn merge giúp mình mình đã tạo oauth app như trên". Sửa góp ý CodeRabbit (bỏ đường dẫn life/ trong hướng dẫn), merge thienai-core#2 (e987339), thienai-workflow#171 (a360580). M5: thien bấm "Nhờ Claude merge" → nuc-infra#155 merge c780647. Mở: nuc-infra#158 (mảng team-kit, sửa M5 bỏ .snapshot; risk:high), nuc-infra#159 (apps/team-kit compose, env, README; risk:medium, cần phiên khác review), thienai-core#3 (tag sha-, ghim action), thienai-workflow#172 (tick M5).
 
 - 20/11 14:19 thien build image trên máy và đẩy lên ghcr (lần đầu lỗi unauthenticated vì bỏ qua docker login; làm lại ổn). Mình viết `scripts/apps/team-kit-setup.sh` (bước 4 M5, chạy bằng thi3n) và component `[team-kit]` interactive. thien bấm "Nhờ Claude merge cả 4": nuc-infra#158 (8a128c0), #159 (7a04b4c), thienai-core#3 (e05aae1), thienai-workflow#172 (08ef91c). CI nuc-infra và thienai-core không chạy (billing); `scripts/verify` PASS trên máy làm việc.
+
+- 20/11 14:30 script chạy lần đầu dừng ở `docker pull` (thi3n không có login ghcr; token chỉ đọc ở `/etc/miniserver/docker`). Sửa ở nuc-infra#161 (issue #160), thien duyệt thay review, merge 68c3ba5. Lần đầu: `sudo DOCKER_CONFIG=/etc/miniserver/docker docker pull ...` rồi chạy lại script.
 
 ## Bước tiếp theo
 1. thien chạy script cài lần đầu trên NUC (cách gọi ở đầu `scripts/apps/team-kit-setup.sh`). Thien gửi log thì kiểm: healthy, /mcp 401, .autodeploy.
