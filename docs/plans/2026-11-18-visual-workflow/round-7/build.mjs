@@ -6,10 +6,9 @@
 import { readFileSync, writeFileSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { execFileSync } from 'node:child_process';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { chromium as findChromium } from '../../../../artifacts/kit/shoot.mjs';
-import { build as buildPlan } from '../../../../artifacts/plan/make-plan.mjs';
-import { fill, SAMPLE_CARDS } from '../../../../artifacts/lesson/make-lesson.mjs';
 
 const dir = dirname(fileURLToPath(import.meta.url)), repo = join(dir, '../../../..');
 const out = join(dir, 'shots'), pages = join(out, 'pages');
@@ -20,11 +19,19 @@ export const TONES = [
   { key: 'c', name: 'C · Màu theo nghĩa' },
 ];
 const tones = readFileSync(join(dir, 'tones.css'), 'utf8');
+// Đóng băng: dựng từ main lúc làm vòng 7 (BASE, trước khi bản B vào kit), không từ cây đang làm; nếu không, bản A
+// "như hiện nay" sẽ ra màu của B. Lấy artifacts/, learning/ và templates/ (parse-plan dùng progress-page.mjs) của BASE bằng git archive (clone nông thì
+// git fetch --depth=1 origin <BASE> trước).
+const BASE = 'abd04f7bb8042ca8734c4eabce1d49533c651492';
+const root = mkdtempSync(join(tmpdir(), 'round7-base-'));
 const tmp = mkdtempSync(join(tmpdir(), 'round7-'));
-process.on('exit', () => rmSync(tmp, { recursive: true, force: true }));
-buildPlan(join(repo, 'artifacts/plan/fixture-running.md'), tmp, { today: '2026-11-20' });
+process.on('exit', () => { rmSync(tmp, { recursive: true, force: true }); rmSync(root, { recursive: true, force: true }); });
+execFileSync('tar', ['-x', '-C', root], { input: execFileSync('git', ['-C', repo, 'archive', BASE, 'artifacts', 'learning', 'templates'], { maxBuffer: 1 << 28 }) });
+const { build: buildPlan } = await import(pathToFileURL(join(root, 'artifacts/plan/make-plan.mjs')).href);
+const { fill, SAMPLE_CARDS } = await import(pathToFileURL(join(root, 'artifacts/lesson/make-lesson.mjs')).href);
+buildPlan(join(root, 'artifacts/plan/fixture-running.md'), tmp, { today: '2026-11-20' });
 const planHtml = readFileSync(join(tmp, 'index.html'), 'utf8');
-const lessonSrc = join(repo, 'learning/frontend/pages/lesson-10.html');
+const lessonSrc = join(root, 'learning/frontend/pages/lesson-10.html');
 const lessonHtml = fill(readFileSync(lessonSrc, 'utf8'), '', lessonSrc, { cards: SAMPLE_CARDS });
 
 // make-plan ra phần thân trang (không có <html>): bọc lại như vòng 6 bọc trang ôn thẻ.
