@@ -1,7 +1,7 @@
 # KH10 MCP cho nhóm SEP490: ga 2, viết máy chủ MCP trong thienai-core/mcp/
 
 Repo: thiengthb/thienai-workflow · Nhánh: mcp-server (thienai-core) · PR: thienai-core#1 (thien merge); nuc-infra#155 (risk:high, thien merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaWbaWTa8usSfceZqS · Cập nhật: 2026-11-20T06:36Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaWbaWTa8usSfceZqS · Cập nhật: 2026-11-20T06:53Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -26,16 +26,17 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 
 - 20/11 13:25 thien bảo merge và đổi tên: merge thienai-core#1 (1ff9b6f) và thienai-workflow#170 (1097e75) theo lời thien (CI thienai-core không chạy vì billing, test máy làm việc xanh). thien chọn tên "Team Kit" bằng nút. Đổi tên: thienai-core#2 (kèm hướng dẫn `mcp/docs/github-oauth-app.md`, bỏ scope read:user), thienai-workflow#171 (kế hoạch, STATUS, names.md), nuc-infra#155 (file thành `plans/M5-team-kit.md`, callback GitHub đúng, bỏ SQLite; `scripts/verify` PASS). Lệnh tự merge PR đổi tên bị công cụ chặn: thien merge.
 
+- 20/11 13:44 thien: "ok bạn merge giúp mình mình đã tạo oauth app như trên". Sửa góp ý CodeRabbit (bỏ đường dẫn life/ trong hướng dẫn), merge thienai-core#2 (e987339), thienai-workflow#171 (a360580). M5: thien bấm "Nhờ Claude merge" → nuc-infra#155 merge c780647. Mở: nuc-infra#158 (mảng team-kit, sửa M5 bỏ .snapshot; risk:high), nuc-infra#159 (apps/team-kit compose, env, README; risk:medium, cần phiên khác review), thienai-core#3 (tag sha-, ghim action), thienai-workflow#172 (tick M5).
+
 ## Bước tiếp theo
-1. Chờ thien merge thienai-core#2 rồi thienai-workflow#171 (merge sau core#2); thien tạo GitHub OAuth App theo hướng dẫn.
-2. Khi thien merge nuc-infra#155: tick việc "Đề xuất milestone" ở KH10, làm bước 2 của M5 (mảng `team-kit` trong `docs/ownership.md`), rồi PR đưa lên NUC theo `runbooks/02-add-app.md` (compose `/opt/apps/sep490-kit/`, volume `/data` có `allowlist.txt`, env theo `mcp/README.md`, route `team-kit.thientnse.site`).
-3. Sau khi chạy trên NUC: thien thêm connector bằng một nick khác để kiểm "Xong khi" của ga 2; rồi trang "Gắn connector" cho nhóm; dự phòng Workers làm sau cùng.
-4. Chữ trong kit còn ghi "Claude trả lời trong comment" sau khi gửi; trong connector tin vào chat. Sửa ở thienai-workflow (`artifacts/kit/kit.js`) nếu thien thấy vướng.
+1. Image: Action của thienai-core không chạy (billing). Chờ thien chọn: sửa billing/spending limit GitHub Actions rồi chạy lại workflow MCP, hay build trên máy thien (`docker build -f mcp/Dockerfile -t ghcr.io/thiengthb/thienai-core-mcp:latest .` rồi push).
+2. nuc-infra#159 cần một phiên khác review (`Review: OK`), merge sau #158.
+3. Có image và #159 merge: viết hướng dẫn bước 4 của M5 cho thien (mkdir /opt/apps/team-kit, .env, allowlist, compose up --wait, .autodeploy, component interactive), rồi PR route bước 5 (risk:high).
+4. Sau khi chạy: thien thêm connector bằng nick khác để kiểm "Xong khi" ga 2; trang "Gắn connector"; Workers dự phòng sau cùng.
 
 ## Đang chờ thien
-- Merge thienai-core#2: https://github.com/thiengthb/thienai-core/pull/2, rồi thienai-workflow#171.
-- Tạo GitHub OAuth App theo `mcp/docs/github-oauth-app.md` (thienai-core), lưu vào mục `team-kit-github-oauth`.
-- Duyệt milestone M5: https://github.com/thiengthb/nuc-infra/pull/155
+- Chọn cách có image Team Kit (sửa billing Actions hay build trên máy).
+- Merge nuc-infra#158, thienai-core#3, thienai-workflow#172.
 
 ## Lưu ý
 - Câu 4 đã chốt ("Tách repo mới") hiểu là repo **private**; đừng tạo repo public.
