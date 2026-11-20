@@ -17,7 +17,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
 |---|---|---|---|
-| KH10 Team Kit: một bạn trong nhóm ghi thử (ga 3 việc cuối) và nhóm dùng thử (ga 4) | `docs/plans/2026-11-20-team-mcp.md` | 2026-11-20 | Chờ nhóm SEP490 rảnh (thien 20/11: chưa có ngày); thien build lại image `3592492`; PR nhỏ ở nuc-infra ghi `TOKEN_KEY`, `ADMIN_LOGINS` vào `apps/team-kit/env.example` |
+| KH10 Team Kit: một bạn trong nhóm ghi thử (ga 3 việc cuối) và nhóm dùng thử (ga 4) | `docs/plans/2026-11-20-team-mcp.md` | 2026-11-20 | Chờ nhóm SEP490 rảnh (thien 20/11: chưa có ngày); PR nhỏ ở nuc-infra ghi `TOKEN_KEY`, `ADMIN_LOGINS` vào `apps/team-kit/env.example` |
 | Thử CodeRabbit CLI gói Free (3 lần mỗi giờ) | quyết định 002 | 2026-11-14 | Sau 24/11; [chưa kiểm] chạy không cần trình duyệt có cần Agentic API key và Usage-based add-on không |
 
 ## Vừa xong
@@ -32,7 +32,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 6. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- KH10: build lại image Team Kit (thienai-core main `3592492`); khi nhóm rảnh, gửi tên GitHub của 2 bạn thử trước.
+- KH10: build lại image Team Kit một lần nữa (thienai-core main mới nhất, có bộ màu theo claude.ai; bản `3592492` thien đã build 20/11 20:05); merge thienai-core PR 8; khi nhóm rảnh, gửi tên GitHub của 2 bạn thử trước.
 - Ngày 01/12 chuyển repo này lại private. Từ 19/11 repo public tạm vì bản private hết phút CI miễn phí; đã đặt lịch nhắc. Tới lúc đó không ghi thông tin riêng mới vào repo.
 
 ## Đang vướng
