@@ -1,7 +1,7 @@
 # KH9 kit lắp ghép: ga 4 (vòng gu 6: ôn thẻ và trang học ở khổ nửa màn hình)
 
 Repo: thiengthb/thienai-workflow · Nhánh: wide-layouts · PR: #164 đã merge 20/11 (squash f9468e2)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-19T23:43Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-20T09:10Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -87,7 +87,7 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6
 - 20/11 06:38 thien nhắn "merge": thêm commit STATUS/KH9 ghi đã merge, CI xanh, squash merge #164 thành f9468e2, xoá nhánh wide-layouts.
 
 ## Bước tiếp theo
-1. Trang ôn thẻ link cố định (L612hHx2…) đổi bố cục ở lần dựng lại sau (`make-review.mjs --url`), nick nào có trang đó thì đăng đè.
+1. Trang ôn thẻ link cố định (L612hHx2…) đổi bố cục ở lần dựng lại sau (`make-review.mjs --url`), nick nào có trang đó thì đăng đè. Đã kiểm 20/11 16:10: không ở nick tnt697 (get_artifact báo not found), README ghi không ở tnt628, nên còn lại tnt024.
 2. Luật vòng gu hai tuần một lần vào `artifacts/README.md` (việc 2 ga 4); vòng sau khoảng 04/12. Rồi kế hoạch MCP cho nhóm SEP490.
 
 ## Đang chờ thien
