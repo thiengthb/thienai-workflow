@@ -1,7 +1,7 @@
 # KH10 MCP cho nhóm SEP490: ga 2, viết máy chủ MCP trong thienai-core/mcp/
 
 Repo: thiengthb/thienai-workflow · Nhánh: mcp-server (thienai-core) · PR: thienai-core#1 (thien merge); nuc-infra#155 (risk:high, thien merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX4Ame5mi3wE9qmgsT · Cập nhật: 2026-11-20T08:59Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX4Ame5mi3wE9qmgsT · Cập nhật: 2026-11-20T09:05Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -42,15 +42,18 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 
 - 20/11 15:45: thien bảo merge #174 (eaad9d1). thien chê chữ artifact to và lệch font với app Claude: trang Gắn connector hạ chữ và dùng font hệ thống như claude.ai; kit chung đổi theo ở PR #175 (cỡ chữ cả bộ theo `html { font-size: 14px }` của kit.css, bỏ Onest); thien bảo merge 15:50, merge 3184863.
 
+- 20/11 16:00 (tnt697, chat https://claude.ai/code/session_01WXAvBX4Ame5mi3wE9qmgsT): "tiếp tục", nhận việc. Làm việc nhỏ ở bước 3: thienai-workflow#176 (kit báo "Claude trả lời trong chat" khi ở Team Kit; `sendToClaude` trả 'comment'/'chat', commit 513ed5b) và thienai-core#5 (khung MCP chặn chiều cao theo containerDimensions hay 70% màn hình để mục lục bám đầu; nút "Mở to"/"Thu nhỏ" khi host có fullscreen; commit 1be49aa). `npm test` và `shell.browser.mjs` (Chrome thật, host giả) xanh. Chờ thien merge #176 trước rồi core#5, build lại image, thử trên claude.ai.
+
 ## Bước tiếp theo
 1. Thêm tài khoản GitHub của nhóm vào `/data/allowlist.txt` (lệnh ở `apps/team-kit/README.md` của nuc-infra) khi thien gửi tên.
 2. thien xem trang "Gắn connector", sửa theo góp ý; rồi ga 3 (ghi vào repo đồ án).
-3. Việc nhỏ: mục lục không bám đầu màn trong khung MCP Apps; chữ "Claude trả lời trong comment" sau khi gửi (sửa ở kit của thienai-workflow); M5 bước 6 (backup volume team-kit_data, restore drill), `docs/state/` sau khi cài.
+3. Việc nhỏ: sau khi thien merge #176 rồi core#5 và build lại image: thử trên claude.ai (khung có cao vừa không, có nút Mở to không, câu báo "trong chat"); chạy lại `shell.browser.mjs` khi upstream đã có kit mới. Còn: M5 bước 6 (backup volume team-kit_data, restore drill), `docs/state/` sau khi cài.
 4. Workers dự phòng: làm sau cùng, bỏ được nếu máy chạy ổn hai tuần.
 
 ## Đang chờ thien
 - Thêm tài khoản GitHub của nhóm vào danh sách: thien nói 20/11 15:20 sẽ tự làm sau.
 - Xem trang "Gắn connector" (chữ đã nhỏ lại), góp ý nếu cần.
+- Merge thienai-workflow#176 trước, rồi thienai-core#5; build lại image Team Kit và thử.
 
 ## Lưu ý
 - Câu 4 đã chốt ("Tách repo mới") hiểu là repo **private**; đừng tạo repo public.
