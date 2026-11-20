@@ -1,7 +1,7 @@
 # KH10 MCP cho nhóm SEP490: ga 2, viết máy chủ MCP trong thienai-core/mcp/
 
 Repo: thiengthb/thienai-workflow · Nhánh: mcp-server (thienai-core) · PR: thienai-core#1 (thien merge); nuc-infra#155 (risk:high, thien merge)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaWbaWTa8usSfceZqS · Cập nhật: 2026-11-20T07:32Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBaWbaWTa8usSfceZqS · Cập nhật: 2026-11-20T07:41Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -32,14 +32,15 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 
 - 20/11 14:30 script chạy lần đầu dừng ở `docker pull` (thi3n không có login ghcr; token chỉ đọc ở `/etc/miniserver/docker`). Sửa ở nuc-infra#161 (issue #160), thien duyệt thay review, merge 68c3ba5. Lần đầu: `sudo DOCKER_CONFIG=/etc/miniserver/docker docker pull ...` rồi chạy lại script.
 
+- 20/11 14:39 thien chạy script: team-kit healthy trên NUC, /mcp 401, allowlist 1 tài khoản (thiengthb), .autodeploy bật. Route: nuc-infra#163 (issue #162, kèm dòng architecture.md), thien bấm "Nhờ Claude merge", merge f9373d3.
+
 ## Bước tiếp theo
-1. thien chạy script cài lần đầu trên NUC (cách gọi ở đầu `scripts/apps/team-kit-setup.sh`). Thien gửi log thì kiểm: healthy, /mcp 401, .autodeploy.
-2. Bước 5 M5: PR route `team-kit` trong `infra/traefik/dynamic.yml` (risk:high), thien merge, `nuc-approve traefik-routes`, rồi `nuc-apply run traefik-routes` (agent trên NUC) hay thien chạy. Kiểm `curl -sI https://team-kit.thientnse.site/health`.
-3. thien thêm connector `https://team-kit.thientnse.site/mcp` bằng nick khác để kiểm "Xong khi" ga 2; tick việc ga 2 có bằng chứng.
-4. Sau: trang "Gắn connector", bước 6, 7 của M5, Workers dự phòng.
+1. thien chạy `sudo nuc-approve traefik-routes` rồi `sudo nuc-apply run traefik-routes --agent claude` trên NUC; kiểm `https://team-kit.thientnse.site/health`.
+2. thien gắn connector `https://team-kit.thientnse.site/mcp` (Settings → Connectors → Add custom connector) bằng một nick Claude khác, đăng nhập GitHub thiengthb, gọi rules và plan_page: đó là bằng chứng "Xong khi" ga 2; tick việc ga 2 (đăng nhập, máy chủ, MCP Apps, đưa lên NUC) và M5 bước 4, 5.
+3. Sau: thêm tài khoản nhóm vào allowlist, trang "Gắn connector", M5 bước 6 (backup volume, restore drill), Workers dự phòng.
 
 ## Đang chờ thien
-- Chạy script cài Team Kit trên NUC rồi gửi log.
+- Cài route trên NUC (nuc-approve, nuc-apply traefik-routes) rồi thử gắn connector.
 
 ## Lưu ý
 - Câu 4 đã chốt ("Tách repo mới") hiểu là repo **private**; đừng tạo repo public.
