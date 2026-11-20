@@ -1,20 +1,23 @@
 /* Lõi chung cho mọi trang artifact của thien (xem artifacts/README.md).
    Sửa ở đây; make-round.mjs và các script dựng trang chép file này vào trang lúc dựng.
-   Gu: chữ hệ thống như app Claude, trắng đen. Nền và thẻ trắng tinh, tách nhau bằng viền xám mảnh; chữ, nút, tab đang chọn màu gần đen.
-   Màu chỉ để báo: xanh lá là xong, đỏ là lỗi, vàng là cảnh báo. Hình và sơ đồ dùng ba mức xám thay cho mực màu.
+   Gu: chữ hệ thống như app Claude. Nền và thẻ trắng (tối: nền khung chat), tách nhau bằng viền xám mảnh; chữ gần đen.
+   Màu nhấn như chính app Claude (vòng gu 7, thien chọn B · Nhấn như app, 20/11/2026): xanh dương cho thứ bấm được, đang chọn,
+   đang chạy và thanh tiến độ; cam cho nút chính (Gửi, Tiếp); xanh lá xong, vàng cảnh báo, đỏ lỗi theo bảng màu của app.
+   Hình và sơ đồ: xám cho khái niệm, ga đã qua (--ink-1); xanh dương cho điểm cần làm, ga đang chạy (--ink-2).
    thien chọn 2026-11-19 23:56: "màu chính là màu trắng, mình không muốn chạy đua với màu sắc nữa" (thay xanh petrol của vòng gu 2
    và mực xanh, cam của vòng gu 3; các vòng cũ ở docs/plans/2026-11-18-visual-workflow/round-2/, round-3/).
    Xám trung tính đo từ claude.ai ngày 20/11/2026 (bảng màu v2 của app: nền chat sáng #fff, tối #191919, chữ đen 90%, trắng 93%,
    xám phụ #666 và #959595 (kit dùng #9b9b9b để chữ phụ trên nền màu báo đạt 4.5:1), viền đen hay trắng khoảng 10%), thay bộ xám hơi ấm cũ, vì thien thấy trang lệch màu với app xung quanh. */
 :root {
   --bg: #ffffff; --card: #ffffff; --soft: #f3f3f3; --line: #e6e6e6; --line-strong: #d1d1d1; --ink: #1a1a1a; --muted: #666666;
-  --accent: #1a1a1a; --accent-soft: #efefef; --accent-ink: #1a1a1a;
-  --good: #277a4c; --good-soft: #e6f3eb; --bad: #c2410c; --bad-soft: #fdeee6; --warn: #8a5a12; --warn-soft: #f6ecd6;
-  --accent-fill: #1a1a1a; --on-accent: #fff; --primary-fill: var(--ink);   /* nền đặc màu nhấn (nút Gửi, nút đang chọn) và chữ trên nền đặc nhấn, đúng, sai */
+  --accent: #2370cd; --accent-soft: #e8f0fb; --accent-ink: #1f66bf;
+  --good: #11782b; --good-soft: #e4f4e5; --bad: #c4282b; --bad-soft: #fdeceb; --warn: #8a5a00; --warn-soft: #fbefd6;
+  /* Cam nút chính: cam của app #d97757 chỉ đạt 3,1:1 với chữ trắng, nên ở nền sáng làm đậm thành #b4532f (4,98:1). */
+  --accent-fill: #2370cd; --on-accent: #fff; --primary-fill: #b4532f;   /* nền đặc màu nhấn (nút Gửi, nút đang chọn) và chữ trên nền đặc nhấn, đúng, sai */
   /* Mực hình: giữ ba tên cũ để mọi mẫu không phải sửa, nay là ba mức xám (thien 19/11, trắng đen).
      --ink-1 xám vừa = khái niệm, công cụ, dữ liệu, ga đã xong; --ink-2 gần đen = người học, điểm cần làm, ga đang chạy (đậm nhất);
      --ink-3 xám nhạt = loạt thứ ba của biểu đồ. Phân biệt bằng độ đậm, nét liền hay đứt, chữ, không bằng màu. Không dùng làm màu nút. */
-  --ink-1: #6b6b6b; --ink-2: #1a1a1a; --ink-3: #a4a4a4;
+  --ink-1: #6b6b6b; --ink-2: #2370cd; --ink-3: #a4a4a4;
   --shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 6px 18px rgba(0, 0, 0, .06);
   --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; /* dãy font dự phòng của claude.ai (font riêng anthropicSans không nhúng được), để artifact không lệch chữ với app */
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -22,17 +25,17 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #191919; --card: #202020; --soft: #262626; --line: #303030; --line-strong: #474747; --ink: #eeeeee; --muted: #9b9b9b;
-  --accent: #eeeeee; --accent-soft: #2c2c2c; --accent-ink: #eeeeee;
-  --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
-  --accent-fill: #eeeeee; --on-accent: #191919; --primary-fill: #eeeeee;
-  --ink-1: #8f8f8f; --ink-2: #eeeeee; --ink-3: #5e5e5e;
+  --accent: #519ced; --accent-soft: #16304f; --accent-ink: #7db5f2;
+  --good: #7fd17f; --good-soft: #15321a; --bad: #f28b8b; --bad-soft: #3d1818; --warn: #fbb315; --warn-soft: #3a2a08;
+  --accent-fill: #519ced; --on-accent: #0b0b0b; --primary-fill: #d97757;
+  --ink-1: #8f8f8f; --ink-2: #6aabf1; --ink-3: #5e5e5e;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #191919; --card: #202020; --soft: #262626; --line: #303030; --line-strong: #474747; --ink: #eeeeee; --muted: #9b9b9b;
-  --accent: #eeeeee; --accent-soft: #2c2c2c; --accent-ink: #eeeeee;
-  --good: #4fb07a; --good-soft: #1c3125; --bad: #f0763f; --bad-soft: #3b2219; --warn: #e9c27a; --warn-soft: #3a2f1a;
-  --accent-fill: #eeeeee; --on-accent: #191919; --primary-fill: #eeeeee;
-  --ink-1: #8f8f8f; --ink-2: #eeeeee; --ink-3: #5e5e5e;
+  --accent: #519ced; --accent-soft: #16304f; --accent-ink: #7db5f2;
+  --good: #7fd17f; --good-soft: #15321a; --bad: #f28b8b; --bad-soft: #3d1818; --warn: #fbb315; --warn-soft: #3a2a08;
+  --accent-fill: #519ced; --on-accent: #0b0b0b; --primary-fill: #d97757;
+  --ink-1: #8f8f8f; --ink-2: #6aabf1; --ink-3: #5e5e5e;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25); color-scheme: dark; }
 /* Bộ token thứ hai, như nhau ở sáng và tối. Mọi màu của các mẫu (lesson, it, war, review, decide, compare) lấy từ đây hay từ trên;
    check-tokens.mjs báo khi có mã màu viết thẳng ngoài file này. Riêng màu của màn mô phỏng và địa hình trong từng bài là nội dung bài. */
