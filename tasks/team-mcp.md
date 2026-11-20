@@ -1,7 +1,7 @@
-# KH10 MCP cho nhóm SEP490: ga 1, sửa khoá cho Action sync-core
+# KH10 MCP cho nhóm SEP490: ga 1, chờ thien dán lại secret CORE_DEPLOY_KEY
 
-Repo: thiengthb/thienai-workflow · Nhánh: sync-core-key · PR: #167 đã merge (950ce56), #168 chờ thien nhắn merge
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-20T05:11Z
+Repo: thiengthb/thienai-workflow · Nhánh: chưa có · PR: #167, #168 đã merge (c39d293)
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-20T05:21Z
 
 ## thien muốn gì
 Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình chung và lệnh dựng trang qua một connector, không lộ đồ riêng; 20/11 10:41 thêm: "control cái thienai workflow mà vẫn cho người khác sử dụng được ... chỉ ẩn nhất để không bị mất công nghệ lỗi [lõi] thôi". Duyệt hướng hai lớp 10:46: "ok bạn hãy làm theo đề xuất".
@@ -16,13 +16,14 @@ Nhóm SEP490 (5 người, dùng Claude web/desktop) dùng được quy trình ch
 - 20/11 11:17 thien bảo merge (#165 merge 26abd88) và đọc repo `nuc-infra`. Đã gắn và đọc: NUC Essential 14, N150, RAM 8GB, Ubuntu 26.04, 24/7; đã có Cloudflare Tunnel `*.thientnse.site` → Traefik, quy trình thêm app `runbooks/02-add-app.md`, route Internet là risk:high (thien merge, `nuc-approve`), việc ngoài milestone phải đề xuất. Ga 2 sửa theo, PR #166 (CI xanh); lệnh tự merge bị công cụ chặn.
 - 20/11 11:31 thien bảo merge (#166 merge c9d03a3) và đã tạo repo `thienai-core`. Claude đẩy commit đầu vào thienai-core main (`991dd6c`, repo trống nên không có PR): `AGENTS.md`, `CLAUDE.md`, `README.md`, `team/AGENTS.md` (luật mẫu cho repo đồ án, bỏ mọi link profile/), `upstream/` (lần chép đầu, 33 file). PR #167 ở thienai-workflow: `templates/core-files.txt`, `templates/sync-core.mjs` (quét rồi chép), test trong CI, Action `sync-core.yml` (cần secret `CORE_DEPLOY_KEY`). Kế hoạch tick 2 việc ga 1.
 - 20/11 12:06 thien tạo xong deploy key và secret, bảo merge: #167 merge 950ce56. Action chạy lần đầu đỏ (run 44678809847): "Load key: error in libcrypto", nghi khoá dán từ Windows có \r. PR #168: bỏ \r, kiểm đầu cuối và ssh-keygen -y, thêm file Action vào paths để merge là chạy lại. CI xanh.
+- 20/11 12:20 #168 merge c39d293. Run 44680379911 đỏ với lỗi mới: CORE_DEPLOY_KEY không có dòng BEGIN/END của khoá riêng (dán nhầm file .pub hay thiếu dòng). Đã nhờ thien dán lại bằng `Get-Content sync-core -Raw | Set-Clipboard`.
 
 ## Bước tiếp theo
-1. thien nhắn merge #168 (sửa .github nên phải hỏi). Sau merge xem run mới của sync-core: xanh và có commit "sync: thienai-workflow@..." ở thienai-core thì tick việc "Danh sách file lõi và lệnh đồng bộ". Vẫn đỏ với lỗi "không phải khoá riêng đầy đủ" thì nhờ thien dán lại secret (cả file sync-core, gồm dòng BEGIN và END).
+1. thien cập nhật secret → chạy lại run 44680379911 (`gh api -X POST repos/thiengthb/thienai-workflow/actions/runs/44680379911/rerun` hay thien bấm "Re-run jobs"). Xanh và thienai-core có commit "sync: thienai-workflow@..." thì tick việc "Danh sách file lõi và lệnh đồng bộ" (PR nhỏ docs/plans).
 2. Ga 2: đề xuất milestone "SEP490 Kit" trong `nuc-infra/plans/`.
 
 ## Đang chờ thien
-- Nhắn merge PR #168: https://github.com/thiengthb/thienai-workflow/pull/168
+- Dán lại secret `CORE_DEPLOY_KEY` (thienai-workflow → Settings → Secrets and variables → Actions → CORE_DEPLOY_KEY → Update): cả file `sync-core`, không phải `.pub`.
 
 ## Lưu ý
 - Câu 4 đã chốt ("Tách repo mới") hiểu là repo **private**; đừng tạo repo public.
