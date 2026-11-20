@@ -1,7 +1,7 @@
 # KH9 kit lắp ghép: ga 4 (vòng gu 6: ôn thẻ và trang học ở khổ nửa màn hình)
 
 Repo: thiengthb/thienai-workflow · Nhánh: wide-layouts · PR: #164 đã merge 20/11 (squash f9468e2)
-Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6T · Cập nhật: 2026-11-20T09:10Z
+Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBX4Ame5mi3wE9qmgsT · Cập nhật: 2026-11-20T10:26Z
 
 ## thien muốn gì
 "hoàn thiện các mẫu artifact hiện có trong workflow và mở rộng artifact và tool ... dễ nắm bắt cho tôi, một người cần nhiều tính năng tương tác, hình ảnh, bố cục, sơ đồ, luồng, hơn chỉ là chữ ... gu của tôi phát triển và hoàn thiện theo từng ngày, chứ không giữ vĩnh viễn". Duyệt kế hoạch 2026-11-18: "ok, duyệt theo cả 4 đề xuất" (kế hoạch `docs/plans/2026-11-18-visual-workflow.md`, PR #123 đã merge).
@@ -86,12 +86,14 @@ Ghi bởi: Claude tnt697, https://claude.ai/code/session_01WXAvBYqmwzr7tB4gqM4F6
 - 20/11 06:30 thien nhắn "ok bạn hãy thực hiện": sửa 6 ý CodeRabbit ở ebb06d5 (it.css bàn thử cuộn được ở 760–899px; round-6 dựng từ e99afaa bằng git archive, bản A giống hệt trang đã đăng; ba lỗi nhỏ ở biến thể), trả lời từng ý trên PR.
 - 20/11 06:38 thien nhắn "merge": thêm commit STATUS/KH9 ghi đã merge, CI xanh, squash merge #164 thành f9468e2, xoá nhánh wide-layouts.
 
+- 20/11 16:25 (tnt697, chat https://claude.ai/code/session_01WXAvBX4Ame5mi3wE9qmgsT): thien "hoàn thiện nốt kh9", chọn bằng nút "Ghi ngay, tính vào mốc 01/12". PR #178 (nhánh kh9-taste-rounds): mục "Vòng thử gu" trong artifacts/README.md, KH9 10/10 trạng thái xong, STATUS bỏ dòng KH9 và thêm vòng gu 7 (~04/12) và trang ôn thẻ vào "Việc tiếp theo". Trang KH9 đăng đè bằng bố cục thẻ kết quả (9f8VSi8…, nick tnt697). Chờ thien merge #178 (artifacts/README.md ngoài danh sách tự merge).
+
 ## Bước tiếp theo
 1. Trang ôn thẻ link cố định (L612hHx2…) đổi bố cục ở lần dựng lại sau (`make-review.mjs --url`), nick nào có trang đó thì đăng đè. Đã kiểm 20/11 16:10: không ở nick tnt697 (get_artifact báo not found), README ghi không ở tnt628, nên còn lại tnt024.
-2. Luật vòng gu hai tuần một lần vào `artifacts/README.md` (việc 2 ga 4); vòng sau khoảng 04/12. Rồi kế hoạch MCP cho nhóm SEP490.
+2. thien merge #178 thì `done` sổ này (hai việc còn lại đã nằm ở STATUS "Việc tiếp theo").
 
 ## Đang chờ thien
-- Chưa có.
+- Merge PR #178.
 
 ## Lưu ý
 - Không thêm dòng luật nào trước mốc 01/12 (luật gom vào checkpoint 5).
