@@ -5,7 +5,9 @@
    Kit.saveFile(n, text) đưa file cho người xem lưu (khả năng downloads); không có thì chép.
    Kit.store(key, path)  nháp trong máy (localStorage) + bản trong db của trang ở `path`, để Claude đọc lại.
    Kit.put(path, obj)    ghi một document một lần (không qua hàng đợi), ví dụ bản chụp của lần gửi.
-   Kit.sendToClaude(text, el)  gửi một comment cho Claude (người sửa được trang); trả về true nếu đã gửi.
+   Kit.sendToClaude(text, el)  gửi một comment cho Claude (người sửa được trang); trả về chỗ Claude trả lời ('comment', hay 'chat'
+                               khi trang nằm trong khung MCP Apps của Team Kit), false nếu chưa gửi được.
+   Kit.sentText(where)         câu báo đã gửi, theo chỗ Claude trả lời.
    Kit.sendBox(o)        khối "Chép, Gửi cho Claude, dòng báo" dùng chung (KH9): gửi không được thì tự chép; trả về { clear() }.
    Kit.ask(prompt, out, opts)  hỏi Claude ngay trên trang (khả năng sample), chữ hiện dần vào out; trả về câu trả lời hoặc null.
    Kit.askJson(prompt, out, opts)  như ask nhưng Claude trả về một giá trị JSON; out chỉ hiện chữ chờ và lỗi.
@@ -124,9 +126,11 @@
       if ((await c.canSendToClaude()) !== 'available') return false;
       const anchor = await c.anchorFor(el || document.body);
       await c.sendToClaude({ anchor, text: text.slice(0, 3900) });
-      return true;
+      // Khung MCP Apps (Team Kit) gửi thành tin nhắn trong chat và đặt replyIn = 'chat'; trang artifact thì trả lời trong comment.
+      return c.replyIn === 'chat' ? 'chat' : 'comment';
     } catch (e) { return false; }
   }
+  const sentText = (where) => 'Đã gửi cho Claude. Claude trả lời trong ' + (where === 'chat' ? 'chat.' : 'comment.');
 
   /** Khối gửi dùng chung (KH9, 2026-11-19; trước đó bốn mẫu mỗi mẫu tự viết một bản):
       o.copy, o.send: hai nút; o.status: dòng báo (không có thì báo bằng toast); o.text(st): chữ gửi đi;
@@ -151,7 +155,8 @@
         const st = snap(true);
         if (o.save) await o.save(st, true);
         const text = o.text(st);
-        if (await sendToClaude(text, o.anchor)) say(my, o.sent || 'Đã gửi cho Claude. Claude trả lời trong comment.', 5000);
+        const where = await sendToClaude(text, o.anchor);
+        if (where) say(my, o.sent || sentText(where), 5000);
         else say(my, (await copy(text)) ? 'Chưa gửi thẳng được, đã chép: dán vào chat cho Claude.' : 'Chưa gửi thẳng được. Chép đoạn trong ô hiện ra rồi dán vào chat.', 8000);
       } finally { o.send.disabled = false; }
     });
@@ -345,5 +350,5 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', autoInit); else autoInit();
 
-  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude, sendBox, ask, askJson, dictate, micRow, listen, icon, tabs, reveal };
+  window.Kit = { cap, toast, copy, saveFile, store, put, sendToClaude, sentText, sendBox, ask, askJson, dictate, micRow, listen, icon, tabs, reveal };
 })();
