@@ -72,7 +72,7 @@ thien muốn các trang "thông minh" hơn. Trang khai báo khả năng `sample`
 - Mỗi màn chỉ một bước, có thanh tiến độ và số bước ("3/7") ở trên cùng.
 - Chưa làm xong bước thì nút "Tiếp" mờ đi, không bắt đọc hướng dẫn dài.
 - Kết quả tự lưu vào db của artifact và gửi cho Claude bằng nút "Gửi cho Claude" (hay "Xong buổi học"); không gửi được thì có nút chép kết quả.
-- Font Onest, nền trắng ngà, chữ gần đen, một màu nhấn (xanh teal) cho thứ đúng hoặc quan trọng. Theo gu ở repo [thienui](https://github.com/thiengthb/thienui), file `docs/taste.md`.
+- Chữ cùng họ với app Claude (dãy font hệ thống claude.ai dùng, ra Segoe UI trên Windows), cỡ chữ cả bộ theo một dòng `html { font-size }` trong `kit/kit.css` (14px từ 20/11/2026: thien chê chữ to hơn app). Nền trắng, chữ gần đen, màu chỉ để báo xong, lỗi, cảnh báo. Theo gu ở repo [thienui](https://github.com/thiengthb/thienui), file `docs/taste.md`, và [`learning/frontend/taste-queue.md`](../learning/frontend/taste-queue.md).
 - Tiếng Việt tự nhiên, giọng người kèm học thân thiện, thuật ngữ tiếng Anh giữ nguyên và giải thích một lần.
 
 ## Thêm hoặc bỏ mẫu
