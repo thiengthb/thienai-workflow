@@ -5,7 +5,7 @@ name: sync-core
 on:
   push:
     branches: [main]
-    paths: ['templates/**', 'artifacts/**']
+    paths: ['templates/**', 'artifacts/**', '.github/workflows/sync-core.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -42,7 +42,18 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          printf '%s\n' "$KEY" > ~/.ssh/core && chmod 600 ~/.ssh/core
+          # Dán từ Windows (Get-Content | Set-Clipboard) thì có \r ở cuối dòng: ssh báo "error in libcrypto". Bỏ \r,
+          # bỏ khoảng trắng thừa đầu cuối, và báo rõ khi thứ dán vào không phải khoá riêng.
+          printf '%s\n' "$KEY" | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | sed '/^$/d' > ~/.ssh/core
+          chmod 600 ~/.ssh/core
+          if ! head -1 ~/.ssh/core | grep -q -- '-----BEGIN OPENSSH PRIVATE KEY-----' || ! tail -1 ~/.ssh/core | grep -q -- '-----END OPENSSH PRIVATE KEY-----'; then
+            echo "::error::CORE_DEPLOY_KEY không phải khoá riêng đầy đủ: phải dán cả file sync-core (không phải sync-core.pub), từ dòng -----BEGIN OPENSSH PRIVATE KEY----- tới dòng -----END OPENSSH PRIVATE KEY-----."
+            exit 1
+          fi
+          if ! ssh-keygen -y -f ~/.ssh/core > /dev/null; then
+            echo "::error::CORE_DEPLOY_KEY có đủ đầu cuối nhưng ssh không đọc được: dán lại nguyên file sync-core."
+            exit 1
+          fi
           # Khoá host của GitHub ghi cứng (docs.github.com, "GitHub's SSH key fingerprints"), không tin ssh-keyscan lúc chạy.
           echo 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' >> ~/.ssh/known_hosts
           export GIT_SSH_COMMAND="ssh -i ~/.ssh/core -o IdentitiesOnly=yes"
