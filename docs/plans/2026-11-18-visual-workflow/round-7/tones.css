@@ -1,0 +1,43 @@
+/* Vòng gu 7 (20/11/2026): màu nhấn theo claude.ai. Chỉ đổi biến màu của kit (bản C thêm vài quy tắc), không đổi bố cục.
+   Màu đo trong app đã đăng nhập ngày 20/11: xanh dương sáng #2370cd, tối #519ced (thanh usage #257de0); cam #d97757 (nút gửi);
+   xanh lá, vàng, đỏ theo bảng success, warning, danger của app. Cam nền chữ trắng ở chế độ sáng làm đậm thành #b4532f cho đạt 4.5:1.
+   B · Nhấn như app: xanh dương cho thứ bấm được, đang chạy và thanh tiến độ; cam cho nút chính; xanh lá, vàng, đỏ để báo.
+   C · Màu theo nghĩa: như B, thêm màu cho nội dung: xong là xanh lá, đang chạy là xanh dương, việc của bạn là cam, ô số có nền màu. */
+html[data-tone="b"], html[data-tone="c"] {
+  --accent: #2370cd; --accent-ink: #1f66bf; --accent-soft: #e8f0fb; --accent-fill: #2370cd; --on-accent: #fff;
+  --primary-fill: #b4532f; --ink-2: #2370cd;
+  --good: #11782b; --good-soft: #e4f4e5; --bad: #c4282b; --bad-soft: #fdeceb; --warn: #8a5a00; --warn-soft: #fbefd6;
+}
+html[data-tone="c"] { --ink-1: #2f8a46; --brand: #b4532f; --brand-soft: #fbece5; }
+@media (prefers-color-scheme: dark) {
+  html[data-tone="b"]:not([data-theme="light"]), html[data-tone="c"]:not([data-theme="light"]) {
+    --accent: #519ced; --accent-ink: #7db5f2; --accent-soft: #16304f; --accent-fill: #519ced; --on-accent: #0b0b0b;
+    --primary-fill: #d97757; --ink-2: #6aabf1;
+    --good: #7fd17f; --good-soft: #15321a; --bad: #f28b8b; --bad-soft: #3d1818; --warn: #fbb315; --warn-soft: #3a2a08;
+  }
+  html[data-tone="c"]:not([data-theme="light"]) { --ink-1: #3d9a50; --brand: #e08a6c; --brand-soft: #3a2119; }
+}
+html[data-tone="b"][data-theme="dark"], html[data-tone="c"][data-theme="dark"] {
+  --accent: #519ced; --accent-ink: #7db5f2; --accent-soft: #16304f; --accent-fill: #519ced; --on-accent: #0b0b0b;
+  --primary-fill: #d97757; --ink-2: #6aabf1;
+  --good: #7fd17f; --good-soft: #15321a; --bad: #f28b8b; --bad-soft: #3d1818; --warn: #fbb315; --warn-soft: #3a2a08;
+}
+html[data-tone="c"][data-theme="dark"] { --ink-1: #3d9a50; --brand: #e08a6c; --brand-soft: #3a2119; }
+
+/* B và C: thứ đang chọn, link trong chữ dùng xanh dương như app */
+html[data-tone="b"] nav.toc a.on, html[data-tone="c"] nav.toc a.on { color: var(--accent-ink); }
+html[data-tone="b"] .opt[aria-pressed="true"], html[data-tone="c"] .opt[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: var(--accent-soft); }
+
+/* C: màu theo nghĩa trên nội dung */
+html[data-tone="c"] .label { color: var(--accent-ink); }
+html[data-tone="c"] .tiles .tile:nth-child(1) { background: var(--good-soft); border-color: transparent; }
+html[data-tone="c"] .tiles .tile:nth-child(1) .bar > span { background: var(--good); }
+html[data-tone="c"] .tiles .tile:nth-child(2) { background: var(--accent-soft); border-color: transparent; }
+html[data-tone="c"] .tiles .tile:nth-child(3) { background: var(--warn-soft); border-color: transparent; }
+html[data-tone="c"] .tiles .tile:nth-child(1) .label { color: var(--good); }
+html[data-tone="c"] .tiles .tile:nth-child(3) .label { color: var(--warn); }
+html[data-tone="c"] .tile.ask { border-color: var(--brand); background: var(--brand-soft); }
+html[data-tone="c"] .tile.ask .label { color: var(--brand); }
+html[data-tone="c"] nav.toc a.on { background: var(--accent-soft); box-shadow: none; }
+html[data-tone="c"] .say { border-left: 3px solid var(--accent); }
+html[data-tone="c"] .top .bar > span { background: var(--accent); }

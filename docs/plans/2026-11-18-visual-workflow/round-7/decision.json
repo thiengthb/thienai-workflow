@@ -1,0 +1,27 @@
+{
+  "id": "kit-tone-r7",
+  "title": "Vòng 7 · màu nhấn theo claude.ai",
+  "question": "Artifact nên phối màu thế nào để hợp với app Claude mà không chán?",
+  "context": "Bạn thấy trắng đen \"hơi plain, nhìn chán, không muốn đọc\", trong khi app Claude dùng xanh dương, vàng, đỏ cho thanh usage và cam cho nút gửi. Màu dưới đây đo trong app đã đăng nhập ngày 20/11: xanh dương #2370cd (sáng) và #519ced (tối), cam #d97757, xanh lá, vàng, đỏ theo bảng của app. Mỗi ảnh: trái là trang kế hoạch ở chế độ tối, phải là trang học (bước có bàn thử) ở chế độ sáng, cùng khổ nửa màn hình 860px, nền ngoài là màu khung chat claude.ai. Bố cục giữ nguyên, chỉ đổi màu.",
+  "options": [
+    { "key": "a", "name": "A · Như hiện nay", "short": "Như hiện nay", "image": "shots/tone-a.png", "scale": 2,
+      "summary": "Trắng đen, các mức xám đúng claude.ai (PR 183). Thanh tiến độ, ga đang chạy, nút chính đều đen hay trắng; màu chỉ ở chỗ báo xong, lỗi, cảnh báo.",
+      "pros": ["Yên, không có gì tranh mắt", "Đúng lựa chọn 19/11"],
+      "cons": ["Bạn thấy chán, không muốn đọc", "Thứ quan trọng (ga đang chạy, việc của bạn) chỉ khác bằng độ đậm, phải đọc mới thấy", "Không có màu nhấn như app nên vẫn lạc tông khi đặt cạnh nút gửi cam, thanh usage xanh"] },
+    { "key": "b", "name": "B · Nhấn như app", "short": "Như app", "image": "shots/tone-b.png", "scale": 2,
+      "summary": "Phối như chính app Claude: xanh dương cho thứ bấm được, đang chọn, đang chạy và thanh tiến độ; cam cho nút chính (Gửi, Tiếp, nút đang chọn trên bàn thử); xanh lá, vàng, đỏ để báo. Nền và chữ vẫn trắng đen.",
+      "pros": ["Giống app nhất: cùng xanh của thanh usage, cùng cam của nút gửi", "Liếc là thấy chỗ đang chạy và chỗ cần bấm", "Ít màu nên đọc lâu không mỏi"],
+      "cons": ["Phần nội dung (ô số, bảng) vẫn chủ yếu trắng đen", "Cam ở chế độ sáng phải đậm hơn cam của app (#b4532f) để chữ trắng trên nút đọc được"] },
+    { "key": "c", "name": "C · Màu theo nghĩa", "short": "Theo nghĩa", "image": "shots/tone-c.png", "scale": 2,
+      "summary": "Như B, thêm màu cho nội dung theo nghĩa: việc xong và ga đã qua màu xanh lá, đang chạy xanh dương, còn lại vàng, việc của bạn cam; ô số có nền màu nhạt; nhãn mục màu xanh.",
+      "pros": ["Sống động nhất, nhìn là muốn đọc", "Màu mang nghĩa nên đọc lướt cũng hiểu: xanh lá xong, cam là phần bạn"],
+      "cons": ["Bốn ô số bốn màu tranh nhau, khó biết nhìn ô nào trước", "Ở chế độ tối các nền màu đậm làm trang nặng hơn app", "Thêm màu thì phải giữ nghĩa màu đúng ở mọi mẫu, lệch một chỗ là rối"] }
+  ],
+  "criteria": [
+    { "name": "Hợp với app Claude", "values": { "a": "vừa", "b": "tốt", "c": "vừa" } },
+    { "name": "Không chán, muốn đọc", "values": { "a": "kém", "b": "vừa", "c": "tốt" } },
+    { "name": "Thấy ngay chỗ quan trọng", "values": { "a": "kém", "b": "tốt", "c": "tốt" } },
+    { "name": "Đọc lâu không mỏi, không rối", "values": { "a": "tốt", "b": "tốt", "c": "vừa" } }
+  ],
+  "recommend": { "key": "b", "why": "Bạn tả đúng cách app Claude phối màu: xanh dương cho tiến độ và thứ bấm được, cam cho nút gửi, vàng đỏ để báo. B làm đúng như vậy nên đặt cạnh app là liền mạch. C vui mắt hơn nhưng bốn ô số bốn màu tranh nhau, và ở chế độ tối nặng hơn app. Nếu sau một thời gian B vẫn thấy nhạt, có thể thêm riêng nền màu cho ô số của trang kế hoạch." }
+}
