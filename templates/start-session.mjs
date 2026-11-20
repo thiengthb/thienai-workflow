@@ -2,7 +2,8 @@
 // Start of a session in one command, so a new chat costs 3 turns instead of ~12 (plan docs/plans/2026-11-15-claude-usage.md,
 // checkpoint 2). Runs, in order: the setup check (setup-check.mjs), the handoff book of every repo (handoff.mjs list),
 // with --claim the newest task (or --task) claimed and printed in full, its working branch compared with the book,
-// then the parts of docs/STATUS.md a session needs and the branches not merged yet (check-open-work.mjs).
+// then the parts of docs/STATUS.md a session needs, the branches not merged yet (check-open-work.mjs)
+// and last the rules for switching chats, read from profile/CHATS.md (chatRules).
 // Everything is printed even when the setup check finds something missing; the exit code is 1 then.
 //
 //   node templates/start-session.mjs --project <tên> --instructions "<đoạn instructions>"|none|unseen
@@ -41,6 +42,32 @@ export function statusParts(md) {
   const head = (md.match(/^Cập nhật lần cuối:.*$/m) || [''])[0];
   const parts = md.split(/^(?=## )/m).filter((p) => STATUS_PARTS.some((h) => p.startsWith('## ' + h + '\n')));
   return [head, ...parts.map((p) => p.trim())].filter(Boolean).join('\n\n');
+}
+
+/**
+ * The rules for switching chats, read from profile/CHATS.md so the printed block never drifts from the file.
+ * Printed because long chats never opened that file and never said "mở chat mới" (20/11: one chat ran 344 turns).
+ * Old projects: the goal line at the start, the stay-or-switch table with its bullets, and the closing line.
+ * --beta: the bold rules of "Project bản beta" (one thread per checkpoint). Returns '' when a section is missing,
+ * so a renamed heading is caught by the test that reads the real file.
+ */
+export const CHAT_PARTS = { start: 'Đầu chat', done: 'Khi xong mục tiêu', next: 'Việc kế tiếp: ở lại hay mở chat mới', beta: 'Project bản beta' };
+export function chatRules(md, { beta = false } = {}) {
+  md = normalize(md);
+  const part = (h) => (md.match(new RegExp(`^## ${h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'm')) || [])[1];
+  const bullets = (s) => s.split('\n').filter((l) => /^- /.test(l));
+  if (beta) {
+    const b = part(CHAT_PARTS.beta);
+    const rules = b ? bullets(b).filter((l) => /^- \*\*/.test(l)) : [];
+    return rules.length ? rules.join('\n') : '';
+  }
+  const start = part(CHAT_PARTS.start), done = part(CHAT_PARTS.done), next = part(CHAT_PARTS.next);
+  if (!start || !done || !next) return '';
+  const goal = bullets(start)[0];
+  const close = (done.match(/^4\. .*$/m) || [])[0];
+  const table = next.split('\n').filter((l) => /^\|/.test(l));
+  if (!goal || !close || !table.length) return '';
+  return [goal, close.replace(/^4\. /, '- '), '', ...table, '', ...bullets(next)].join('\n');
 }
 
 /** The "## Đang ở đâu" section of a plan file, where its waiting lines live. */
@@ -262,6 +289,14 @@ function main(argv) {
   // A fresh --depth 1 clone sometimes fails the first fetch through the session proxy (seen 2026-11-15); one retry.
   if (open.stale && !noFetch) { spawnSync('sleep', ['5']); open = openWork({ fetch: true, cwd: here }); }
   console.log(report(open));
+
+  // 5. Chat switching, last so it is the freshest thing read before work starts (profile/CHATS.md).
+  const chats = join(here, 'profile/CHATS.md');
+  const rules = existsSync(chats) ? chatRules(readFileSync(chats, 'utf8'), { beta }) : '';
+  console.log('\n## Đổi chat (profile/CHATS.md)');
+  console.log(rules
+    ? (beta ? '' : 'Đếm lượt của chat này. Trước mỗi việc mới, tra bảng dưới; phải đổi thì nói câu mẫu, không đợi thien hỏi.\n') + rules
+    : 'nhắc: không đọc được luật đổi chat trong profile/CHATS.md (mục đổi tên?). Mở file đó đọc mục "Việc kế tiếp", rồi sửa chatRules trong start-session.mjs.');
   return code;
 }
 
