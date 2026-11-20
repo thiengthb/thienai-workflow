@@ -58,7 +58,7 @@ body { font-size: 1.0667rem; line-height: 1.55; -webkit-text-size-adjust: 100%; 
 .opt:active:not([disabled]) { transform: scale(.995); }
 .opt[disabled] { cursor: default; }
 .opt::after { margin-left: auto; font-size: 0.8rem; font-weight: 700; flex: none; }
-.opt[aria-pressed="true"] { border-color: var(--ink); background: var(--soft); box-shadow: inset 0 0 0 1px var(--ink); }
+.opt[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
 .opt[aria-pressed="true"]::after { content: "Đã chọn"; }
 .opt.right { border-color: var(--good); background: var(--good-soft); box-shadow: inset 0 0 0 1px var(--good); }
 .opt.right::after { content: "Đúng"; color: var(--good); }

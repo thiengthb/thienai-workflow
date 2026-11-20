@@ -33,7 +33,7 @@ nav.toc { position: sticky; top: 0; z-index: 6; background: color-mix(in srgb, v
 nav.toc .in { max-width: 760px; margin: 0 auto; padding: 6px 12px; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
 nav.toc a { font: 500 0.9rem/1 var(--font); color: var(--muted); text-decoration: none; padding: 10px 10px; border-radius: var(--r); white-space: nowrap; }
 nav.toc a:hover { color: var(--ink); }
-nav.toc a.on { background: var(--card); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
+nav.toc a.on { background: var(--card); color: var(--accent-ink); box-shadow: 0 0 0 1px var(--line); }
 nav.toc { transition: transform var(--t-base) var(--ease-out); }
 nav.toc.away { transform: translateY(-100%); }
 @media (prefers-reduced-motion: reduce) { nav.toc { transition: none; } }
@@ -46,7 +46,7 @@ nav.toc.away { transform: translateY(-100%); }
     background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border: 0; display: flex; flex-direction: column; gap: 24px; }
   nav.toc .in { flex-direction: column; margin: 0; padding: 0; gap: 0; overflow: visible; }
   nav.toc a { padding: 9px 12px; border-left: 2px solid var(--line); border-radius: 0 var(--r) var(--r) 0; white-space: normal; line-height: 1.3; }
-  nav.toc a.on { box-shadow: none; border-left-color: var(--accent); background: var(--card); color: var(--ink); font-weight: 600; }
+  nav.toc a.on { box-shadow: none; border-left-color: var(--accent); background: var(--card); color: var(--accent-ink); font-weight: 600; }
   .side-prog { display: grid; gap: 6px; padding-left: 14px; color: var(--muted); }
 }
 
@@ -163,7 +163,7 @@ ul.tasks li.done > span:last-child { color: var(--muted); }
 /* Chờ duyệt · Phiếu hỏi trước (vòng gu 5, thien chọn B 2026-11-19): câu hỏi là phiếu ngay dưới tên, dải số nhảy tới câu;
    tuyến ga nằm dưới, gọi là bối cảnh. Trắng đen: phiếu phân biệt bằng nền xám nhạt và viền trên đậm, không bằng màu. */
 #cau-hoi.phieu { background: var(--soft); border: 1px solid var(--line); border-top: 3px solid var(--ink-2); border-radius: var(--r-lg); padding: 20px 20px 22px; gap: 16px; }
-#cau-hoi.phieu > .label { color: var(--ink-2); }
+#cau-hoi.phieu > .label { color: var(--accent-ink); }
 #cau-hoi.phieu #h-q { font-size: 1.6rem; }
 .phieu-note { color: var(--muted); font-size: 0.9667rem; }
 .phieu-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
@@ -194,7 +194,7 @@ nav.toc.wide { --main-w: 960px; }
 .tile .big small { font-size: 0.9333rem; font-weight: 500; color: var(--muted); margin-left: 3px; letter-spacing: 0; }
 .tile.ask { border-color: var(--ink-2); color: var(--ink); text-decoration: none; line-height: 1.4; }
 a.tile.ask:hover { background: var(--soft); }
-.tile.ask .label { color: var(--ink-2); }
+.tile.ask .label { color: var(--accent-ink); }
 /* Gập còn bốn dòng chỉ khi ô là link tới dòng đầy đủ ở Đang ở đâu; không có khối đó thì hiện hết (PR #163 review). */
 a.tile.ask .small { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 @media (max-width: 720px) { .tiles { grid-template-columns: 1fr 1fr; } .tile .big { font-size: 1.7333rem; } }

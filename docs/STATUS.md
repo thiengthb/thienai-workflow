@@ -27,7 +27,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 1. Buổi học kế tiếp: Chiến tranh 8, rồi Frontend 11. Lỗi "Xem Claude làm" lấy nhầm track đã sửa (PR #146 đã merge). BA 6 cần ngắn lại (BA 5 tốn 60 phút, "dài", "khó"). Ngày 17/11 thien học 7 buổi, quá nhịp 4 buổi một tuần: tuần này không cần thêm buổi.
 2. Dùng mẫu so sánh cho vòng duyệt giao diện kế tiếp ở sakubun, ghi lại chỗ còn vướng.
 3. Mốc 13/12: AI soạn bản chấm lại `profile/SKILL-LEVEL.md` từ nhật ký, thien duyệt; trong vòng học sau 22/11 có một buổi kiểu "Viết luật cho thienui" (chuyển từ KH2, KH8 câu 10).
-4. Vòng thử gu 7 khoảng 04/12 (KH9 đã đóng; luật ở `artifacts/README.md` mục "Vòng thử gu"); mẫu lâu chưa thử nhất: luồng hay so sánh.
+4. Vòng thử gu 7 xong 20/11 (màu nhấn: thien chọn B · Nhấn như app, PR #185); vòng 8 khoảng 04/12 (luật ở `artifacts/README.md` mục "Vòng thử gu"), mẫu lâu chưa thử nhất: luồng hay so sánh.
 5. Đăng lại trang ôn thẻ link cố định (L612hHx2…) theo bố cục hai nửa thẻ: `make-review.mjs --url` ở nick có trang đó (không ở tnt697, tnt628; nhiều khả năng tnt024).
 6. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
