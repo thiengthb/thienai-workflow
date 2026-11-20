@@ -1,6 +1,6 @@
 # Tiến độ
 
-Cập nhật lần cuối: 2026-11-20 · Claude nick tnt697 (project Claude, KH10 MCP cho nhóm: ga 2, mã máy chủ đã merge, đổi tên Team Kit) · Trang tiến độ: https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n (trang tổng quan, tab thienai-workflow)
+Cập nhật lần cuối: 2026-11-20 · Claude nick tnt697 (project Claude, KH10 MCP cho nhóm: Team Kit chạy trên NUC) · Trang tiến độ: https://claude.ai/artifact/SZGp85NU46SDp9k6i7Lb9n (trang tổng quan, tab thienai-workflow)
 
 File này để bất kỳ ai (thành viên khác, AI khác, thien sau một tuần) mở ra là biết repo này đang ở đâu. Lịch sử nằm trong git và PR, không ghi ở đây. Cả file tối đa 40 dòng, tối đa 3 việc chờ thien.
 
@@ -13,7 +13,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 | Kế hoạch | Đang ở checkpoint | Đã tick |
 |---|---|---|
 | KH9 · [Kit lắp ghép, bố cục theo nội dung](plans/2026-11-19-modular-kit.md) | Duyệt 19/11, làm trước kế hoạch MCP; 1: khối dùng chung đã vào kit (PR #156 đã merge), thien đã xem trang mẫu thành phần (20/11), ga đóng; 2: trang dựng từ danh sách khối, kit bỏ khối không dùng, check-pages báo vượt cỡ gốc 20% (PR #158 đã merge); 3: thien chọn B cả ba loại (phiếu hỏi trước, bảng tiến độ, thẻ kết quả) ở vòng gu 5 (PR #160 đã merge); kit đổi sang trắng đen (PR #161 đã merge); ba bản B thành mặc định của `artifacts/plan/` theo trạng thái, trang KH9 dựng lại bằng bảng tiến độ (PR #163 đã merge); 4: vòng gu hai tuần một lần (mốc); vòng 6: thien chọn ôn thẻ hai nửa thẻ, trang học tuyến bước, đã vào mẫu (PR #164 đã merge) | 9/10 |
-| KH10 · [MCP cho nhóm SEP490](plans/2026-11-20-team-mcp.md) | Duyệt 20/11 (cả 5 đề xuất); thien trả lời 4 câu đầu 20/11 (Claude web/desktop, quy trình chung và lệnh dựng trang, ghi repo đồ án, tách repo mới); 10:46 duyệt hướng hai lớp: repo lõi private, chỉ MCP mở ra ngoài, trang bằng MCP Apps; host trên miniserver qua Cloudflare Tunnel, Workers dự phòng (chốt 11:15); NUC đã có tunnel, Traefik và tên miền (đọc nuc-infra); ga 2: mã máy chủ MCP đã vào thienai-core (#1), connector đổi tên "Team Kit" (#2, đã merge), OAuth App đã tạo, image đã lên ghcr (build trên máy), M5 đã duyệt; chờ cài lên NUC | 5/16 |
+| KH10 · [MCP cho nhóm SEP490](plans/2026-11-20-team-mcp.md) | Duyệt 20/11 (cả 5 đề xuất); thien trả lời 4 câu đầu 20/11 (Claude web/desktop, quy trình chung và lệnh dựng trang, ghi repo đồ án, tách repo mới); 10:46 duyệt hướng hai lớp: repo lõi private, chỉ MCP mở ra ngoài, trang bằng MCP Apps; host trên miniserver qua Cloudflare Tunnel, Workers dự phòng (chốt 11:15); NUC đã có tunnel, Traefik và tên miền (đọc nuc-infra); ga 2: mã máy chủ MCP đã vào thienai-core (#1), connector đổi tên "Team Kit" (#2, đã merge), Team Kit chạy trên NUC, thien thử trọn luồng trên claude.ai 20/11; còn trang "Gắn connector" và Workers dự phòng | 9/16 |
 
 ## Việc dở
 | Việc | Nhánh hoặc PR | Dở từ | Còn thiếu gì |
@@ -30,7 +30,7 @@ Chi tiết trong `docs/plans/`. Luật ở `profile/PLANNING.md`.
 4. sakubun: thêm `.gitattributes` và chép lại `scripts/check-status.mjs` bản đọc được CRLF (bản cũ ở đó vẫn hỏng trên Windows).
 
 ## Đang chờ thien
-- KH10: chạy script cài Team Kit trên NUC (`scripts/apps/team-kit-setup.sh` của nuc-infra).
+- KH10: gửi tên GitHub của nhóm để thêm vào danh sách Team Kit.
 - Ngày 01/12 chuyển repo này lại private. Từ 19/11 repo public tạm vì bản private hết phút CI miễn phí; đã đặt lịch nhắc. Tới lúc đó không ghi thông tin riêng mới vào repo.
 
 ## Đang vướng
